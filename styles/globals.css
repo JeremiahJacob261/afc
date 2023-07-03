@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Poor+Story&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@1,200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Zen+Antique&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Secular+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Marhey:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Changa:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nerko+One&display=swap');
+html{
+  scroll-behavior: smooth;
+}
+@media screen and (min-width: 720px) {
+.large{
+  visibility: visible;
+}
+.small{
+  visibility: hidden;
+}
+}
+@media screen and (max-width: 720px) {
+  .large{
+    visibility: hidden;
+    height: 0px;
+  }
+  .small{
+    visibility: visible;
+  }
+}
+.glass{
+  width:fit-content;
+  margin-left:"12px";
+background: rgba(218, 224, 255, 0.32);
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(7.4px);
+-webkit-backdrop-filter: blur(7.4px);
+border: 1px solid rgba(218, 224, 255, 0.31);
+}
+.top{
+  background: rgb(14,16,93);
+  background: radial-gradient(circle, rgba(14,16,93,1) 14%, rgba(9,86,227,1) 100%);
+border-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(7.4px);
+-webkit-backdrop-filter: blur(7.4px);
+border: 1px solid rgba(218, 224, 255, 0.31);
+padding: 8px;
+}
+.me{
+background: rgba(227, 228, 243, 0.34);
+border-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(7.1px);
+-webkit-backdrop-filter: blur(7.1px);
+border: 1px solid rgba(227, 228, 243, 0.27);
+margin:5px;
+padding:4px;
+}
+.matchglass{
+  /* From https://css.glass */
+background: rgba(255, 255, 255, 0.56);
+border-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(9.2px);
+-webkit-backdrop-filter: blur(9.2px);
+border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.glasses{
+  background: rgba(255, 255, 255, 0.1);
+border-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(4.4px);
+-webkit-backdrop-filter: blur(4.4px);
+border: 1px solid rgba(255, 255, 255, 0.3);
+}

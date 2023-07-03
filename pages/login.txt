@@ -1,0 +1,171 @@
+import React, { useState } from "react";
+import Head from "next/head";
+import { Avatar, Box, Stack,OutlinedInput,Button, Typography } from "@mui/material";
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import {supabase} from './api/supabase'
+import { getDoc ,doc} from "firebase/firestore";
+import {db,app} from './api/firebase'
+import { useContext } from "react";
+import {AppContext} from "./api/Context";
+import Link from "next/link";
+import {getDatabase, useDatabase} from 'firebase/database'
+import SimpleDialog from './modal'
+import { useRouter } from 'next/router'
+import { getCookie, setCookie, removeCookies } from 'cookies-next';
+import LOGO from '../public/logo_afc.ico'
+import Image from 'next/image'
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useEffect } from "react";
+export default function Login() {
+  const dbs = getDatabase(app);
+  const [username,setUsername] = useState("")
+const {info,setInfo} = useContext(AppContext);
+const [open, setOpen] = React.useState(false);
+const router = useRouter();
+const handleClickOpen = () => {
+  setOpen(true);
+};
+
+const handleClose = (value) => {
+  setOpen(false);
+};
+const [values, setValues] = React.useState({
+  amount: '',
+  password: '',
+  weight: '',
+  weightRange: '',
+  showPassword: false,
+});
+
+const handleChange = (prop) => (event) => {
+  setValues({ ...values, [prop]: event.target.value });
+};
+
+const handleClickShowPassword = () => {
+  setValues({
+    ...values,
+    showPassword: !values.showPassword,
+  });
+};
+
+const handleMouseDownPassword = (event) => {
+  event.preventDefault();
+};
+
+if(getCookie('logged') === true){
+  router.push("/user")
+}
+    const logins=async()=>{
+      const docRef = doc(db, "users", username);
+      const docSnap = await getDoc(docRef);
+      
+      if (docSnap.exists()) {
+       var data = docSnap.data();
+       if(data.password === values.password){
+ setInfo({"logged":true,"username":username,"phone":data.phone,"refer":data.newRefer})
+         setOpen(true)
+         setCookie('logged', info);
+         router.push("/user")
+       }else{
+        alert("wrong password")
+       }
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("Account does not exist");
+      }
+      
+   }
+   useEffect(()=>{
+ const smooth =async()=>{
+    const { data, error } = await supabase
+  .from('users')
+  .select()
+  .eq('username', 'Jeremiahx')
+  console.log(data)
+  console.log(error)
+   }
+   smooth();
+   },[])
+  
+    return(
+        <Stack 
+        direction="column" 
+        justifyContent="center"
+        alignItems="center"
+        spacing={2}
+        style={{backgroundColor:" #8BC6EC",
+          backgroundImage:"",padding:"15px",
+          overflowX: "hidden",
+          maxWidth:"100%",
+          height:"100%"
+          }}>
+       <Head>
+        <title>Login</title>
+        <meta name="description" content="Login to your Account to see whats up with your bets" />
+        <link rel="icon" href="/logo_afc.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+       </Head>
+       <Box>
+       <SimpleDialog
+        open={open}
+        onClose={handleClose}
+      />
+       
+        <Stack direction="column" 
+        justifyContent="center"
+        alignItems="center"
+        spacing={2}
+        className="glass"
+        sx={{minWidth:"300px",height:"100%",padding:"10px", overflowX: "hidden",
+        maxWidth:"100%"}}><Image src={LOGO} alt='loginimg' width='50' height='65' />
+          <Typography variant="h3" style={{fontFamily: 'Marhey, cursive',color:"#4062BB"}}>ATALANTA </Typography>
+      <Typography variant='caption' sx={{fontFamily: 'Work Sans, sans-serif',fontSize:"20px"}}>
+        FOOTBALL CLUB</Typography>
+            
+        <TextField id="outlined-basic" label="Username" variant="outlined" 
+        style={{width:"100%"}}
+      value={username}
+      onChange={(e)=>{
+        setUsername(e.target.value)
+      }}
+      />
+ <FormControl sx={{ m: 1,width:"100%" }} variant="outlined">
+          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-password"
+            type={values.showPassword ? 'text' : 'password'}
+            value={values.password}
+            onChange={handleChange('password')}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
+          />
+        </FormControl>
+        <Button variant="contained" sx={{padding:"6px",width:"100%"}} onClick={logins}>
+        <Typography sx={{fontFamily: 'Zen Antique, serif',marginLeft:"3px"}}>Login</Typography>
+        </Button>
+       
+          <Typography>Dont have an Account yet ? 
+             <Link href="/register/070836" style={{textDecoration:"none",color:"black"}}>Sign Up
+            </Link></Typography>
+        </Stack>
+       </Box>
+        </Stack>
+    )
+}

@@ -1,0 +1,244 @@
+import React, { useState } from "react";
+import Head from "next/head";
+import Link from 'next/link'
+import { Avatar, Box, Stack,OutlinedInput,Button, Typography } from "@mui/material";
+import MenuItem from '@mui/material/MenuItem';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import Input from '@mui/material/Input';
+import EmailIcon from '@mui/icons-material/Email';
+import LoginIcon from '@mui/icons-material/Login';
+import { writeBatch,doc, setDoc,getDocs,getDoc ,collection} from "firebase/firestore"; 
+import {db} from '../api/firebase'
+import Spinner from 'react-bootstrap/Spinner';
+import {Form as Farm} from 'react-bootstrap'
+import SimpleDialog from '../modal'
+import { getCookies, getCookie, setCookie,setCookies, removeCookies } from 'cookies-next';
+import LOGO from '../../public/logo_afc.ico'
+import Image from 'next/image'
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+export default function Register({refer}) {
+  const [password,setPassword] = useState("")
+  const [cpassword,setcPassword] = useState("")
+  const [phone,setPhone] = useState()
+  const [username,setUsername ] = useState("")
+  const [open, setOpen] = React.useState(false);
+  const [age,setAge] = useState();
+  const [info,setInfo] = useState();
+  const [idR,setidR] = useState(refer);
+  const [values, setValues] = React.useState({
+    amount: '',
+    password: '',
+    weight: '',
+    weightRange: '',
+    showPassword: false,
+  });
+
+  const handleChange = (prop) => (event) => {
+    setValues({ ...values, [prop]: event.target.value });
+  };
+
+  const handleClickShowPassword = () => {
+    setValues({
+      ...values,
+      showPassword: !values.showPassword,
+    });
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+const handleClickOpen = () => {
+  setOpen(true);
+};
+
+const handleClose = (value) => {
+  setOpen(false);
+};
+    const signUp=async()=>{
+      console.log(values.password)
+      if(values.password.length || password.length >= 6 ){
+         if(cpassword === values.password){
+         const batch = writeBatch(db);
+       const createAcc =  doc(db, "users", username);
+      const nRef = Math.random().toString().slice(2,8);
+       batch.set(createAcc, { 
+        password: values.password,
+        phone: phone,
+        refer:refer,
+        balance:0,
+        newRefer:nRef});
+        const sfRef = doc(db, "referral", nRef);
+        batch.set(sfRef, {"count": 0});
+        const docRef = doc(db, "referral", refer);
+        const docSnap = await getDoc(docRef);
+       var data = docSnap.data();
+        const updateRef = doc(db, "referral", refer);
+batch.set(updateRef, {"count": data.count+1});
+         await batch.commit();
+         setInfo({"logged":true,"username":username,"phone":data.phone,"refer":data.newRefer,"balance":data.balance})
+         
+   setCookie('logged', info);
+         setOpen(true);
+        console.log(getCookie('logged'))
+      }else{
+        alert("Please ensure the both Passwords are the Same")
+      }
+     
+      }else{
+        alert("The Password must have atleast 6 characters !")
+      }
+     
+   }
+  
+    return(
+        <Stack justifyContent="center" alignItems="center" style={{backdropFilter:"blur(30px)",
+        backgroundColor: "#0093E9",
+        backgroundImage:" linear-gradient(160deg, #0093E9 0%, #80D0C7 100%)",
+        padding:"20px"
+         }}>
+       <Head>
+        <title>Register</title>
+        <meta name="description" content="Register With us to get the latest betting market and fantantic Bonus" />
+        <link rel="icon" href="/logo_afc.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+       </Head>
+       <Box >
+       <SimpleDialog
+        open={open}
+        onClose={handleClose}
+      />
+       
+        <Stack direction="column" 
+        justifyContent="center"
+        alignItems="center"
+        spacing={2}
+        className="glass"
+        sx={{height:"100%",marginTop:"15px",padding:"10px"}}> 
+        <Image src={LOGO} width='50' height='75' style={{borderRadius:"15px"}}/>
+        <Typography variant="h4" style={{fontFamily: 'Xanh Mono, monospace'}}>Welcome 🙌 </Typography>
+      <Typography variant='subtitle' sx={{fontFamily: 'Work Sans, sans-serif'}}>
+      Sign Up now to get all the Amazing Sports Market and Odds</Typography>
+           
+      <TextField id="outlined-basic" label="Username" variant="outlined" 
+      value={username}
+      onChange={(e)=>{
+        setUsername(e.target.value)
+      }}
+      style={{width:"100%"}}
+      />
+      <TextField id="outlined-basic" label="Invite Code" variant="outlined" 
+       value={idR}
+       style={{width:"100%"}}
+            onChange={(e)=>{
+              setidR(e.target.value)
+            }}/>
+        <Stack direction="row" sx={{ width: '42%',minWidth:"240px"}}>  
+        <FormControl fullWidth>
+  <InputLabel id="demo-simple-select-label">Code</InputLabel>
+  <Select
+    labelId="demo-simple-select-label"
+    id="demo-simple-select"
+    value={age}
+    label="Code"
+    style={{width:"10ch"}}
+    onChange={(e)=>{
+       setAge(e.target.value);
+    }}
+  >
+      <MenuItem value={1}>+39</MenuItem>
+      <MenuItem value={2}>Other</MenuItem>
+ </Select>
+</FormControl>
+<TextField id="outlined-basic" label="Phone" variant="outlined" 
+        value={phone}
+            onChange={(e)=>{
+              setPhone(e.target.value);
+            }} />
+         </Stack>
+      
+        <Farm.Check
+            type="checkbox"
+            label="I agree I am 18 years old and I agree to the Terms and Conditions"
+            id="age"
+            value={true}
+          />
+          
+          <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
+          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-password"
+            type={values.showPassword ? 'text' : 'password'}
+            value={values.password}
+            onChange={handleChange('password')}
+            style={{width:"100%"}}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
+          />
+        </FormControl>
+        <TextField
+          required
+          id="outlined-required"
+          label="Confirm Password"
+          type="password"
+          style={{width:"100%"}}
+           value={cpassword}
+            onChange={(e)=>{
+              setcPassword(e.target.value);
+            }}
+        />
+        <Button variant="outlined" sx={{padding:"8px"}} onClick={signUp}>  
+ <Spinner
+          as="span"
+          animation="grow"
+          size="sm"
+          role="status"
+          aria-hidden="true"
+        />
+        <Typography sx={{fontFamily: 'Zen Antique, serif',marginLeft:"3px"}}>Sign Up</Typography>
+        </Button>
+       
+          <Typography>Already have an Account ? <Link href="/login" style={{textDecoration:"none",color:"#054A91"}}>Login</Link></Typography> 
+         
+        </Stack>
+       </Box>
+        </Stack>
+    )
+}
+export async function getStaticPaths() {
+  const usersCollectionRef = collection(db, "users");
+      const data = await getDocs(usersCollectionRef);
+      const referral = data.docs.map((ref) => ({ ...ref.data(), id: ref.id }));
+      const paths = referral.map((ref) => ({
+        params: { id: ref.newRefer},
+      }))
+      return { paths, fallback: true }
+}
+
+// This also gets called at build time
+export async function getStaticProps({ params }) {
+  // params contains the post `id`.
+  // If the route is like /posts/1, then params.id is 1
+  let refer = params.id;
+ 
+  // Pass post data to the page via props
+  return { props: { refer} }
+}
