@@ -236,7 +236,7 @@ export default function Register({ refer }) {
                 .from('users')
                 .select('*', { count: 'exact', head: true })
                 .eq('username', username)
-                console.log(count);
+              console.log(count);
               if (count > 0) {
                 alert("Username Already Exist!");
               } else {
