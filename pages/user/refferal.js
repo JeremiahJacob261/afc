@@ -48,18 +48,20 @@ const columns = [
   <tr>
     <th style={{width:'50px',color:'white'}}>S/N</th>
     <th style={{width:'100px',color:'white'}}>Username</th>
-    <th style={{width:'50px',color:'white'}}>Date</th>
+    <th style={{width:'50px',color:'white'}}>Date/Time</th>
     <th style={{width:'50px',color:'white'}}>Level</th>
     <th style={{width:'50px',color:'white'}}>Amount</th>
   </tr>
   {
       refs.map((r)=>{
           sn++;
+          var dts = new Date(r.crdate);
+          console.log(dts.getDate());
           return(
             <tr key={r.username}>
             <th style={{width:'50px',color:'white'}}>{sn}</th>
             <th style={{width:'100px',color:'white'}}>{r.username}</th>
-            <th style={{width:'100px',color:'white'}}>dates</th>
+            <th style={{width:'100px',color:'white'}}>{dts.getDate()+'/'+dts.getMonth()+'/'+dts.getFullYear()+' '+dts.getHours()+':'+dts.getMinutes()}</th>
             <th style={{width:'50px',color:'white'}}>{r.level}</th>
             <th style={{width:'50px',color:'white'}}>{r.balance}</th>
           </tr>

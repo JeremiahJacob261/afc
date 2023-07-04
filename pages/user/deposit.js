@@ -5,6 +5,8 @@ import { AppContext } from "../api/Context";
 import React, { useState } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import Image from "next/image";
+import barcode from '../../public/barcode.jpg'
 export default function Deposit() {
   const { info, setInfo } = useContext(AppContext)
   const [amount, setAmount] = useState(0)
@@ -17,7 +19,6 @@ export default function Deposit() {
   const [deb, setDeb] = useState("hidden")
 
   const [dean, setDean] = useState(200)
-  const [debn, setDebn] = useState(0)
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
@@ -91,17 +92,18 @@ export default function Deposit() {
                 setDea('hidden')
                 setDeb('visible')
                 setDean(0)
-                setDebn(400)
               }
 
             }}>Next</Button>
         </Stack>
         <Stack direction="column" spacing={3} sx={{
           visibility: deb,
-          height:debn
         }}>
                  <Typography style={{color:"whitesmoke"}}>ADDRESS NETWORK: TRC20</Typography>
           <Typography  style={{color:"whitesmoke"}}>Send Your USDT to this Address :  </Typography>
+          <div style={{display:'flex',justifyContent:'center'}}>
+          <Image src={barcode} width={200} height={200} alt='TRC20 Address' style={{padding:'12px',background:'whitesmoke',borderRadius:'5px'}}
+          /></div>
           <Typography style={{ color: "black", background: "whitesmoke", padding: "4px", cursor: "pointer" }} onClick={() => {
             navigator.clipboard.writeText("TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o")
             setMessages("Address Copied")
@@ -111,6 +113,7 @@ export default function Deposit() {
           <Typography variant="caption" sx={{ color: "whitesmoke" }}>Click the Address to Copy</Typography>
           <Typography variant="caption" sx={{ color: "#FFE74C" }}>The Minimum Deposit is 10 USDT ,
             Deposits less than 10 USDT will be ignored.
+            After making the Transaction, Please upload a screenshot of the successful Transaction.
           </Typography>
 
           <TextField variant="standard" label="Your USDT Address"
@@ -119,6 +122,7 @@ export default function Deposit() {
               setAddress(a.target.value)
             }}
           />
+          <input type='file'/>
           <Button variant='contained' style={{ color: "white" }} onClick={() => {
             checkDepo()
             setDea('visible')
