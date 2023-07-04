@@ -1,7 +1,7 @@
-import { Button, Stack, TextField } from "@mui/material";
+import { Button, Stack, TextField,Typography } from "@mui/material";
 import React, { useState ,useContext} from "react";
-import {supabase} from './api/supabase'
-import {AppContext} from './api/Context'
+import {supabase} from '../api/supabase'
+import {AppContext} from '../api/Context'
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 export default function Deposit() {
@@ -50,6 +50,13 @@ export default function Deposit() {
       //end of snackbar2
     return(
         <Stack spacing={3}>
+             <div style={{display:'flex',justifyContent:"center"}}>
+        <Typography variant="h3" align='center' style={{color:'white'}}>
+          Withdrawal
+        </Typography></div>
+        <Typography  style={{color:'white'}}>
+          Please note that the minimum withdraw is 20 USDT and maximum WithDrawal is 100USDT
+        </Typography>
             <Sncks message={messages}/>
             <TextField variant="standard" label='Enter Your USDT Address' style={{color:"white"}}
             value={address}

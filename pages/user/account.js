@@ -15,7 +15,6 @@ export default function Account() {
   const [info, setInfo] = useState({});
   const { bets, setBets } = useContext(BetContext);
   const { slip, setSlip } = useContext(SlipContext)
-  const [Referrals, setReferrals] = useState(0)
   const [balance, setBalance] = useState(0);
   //snackbar1
   const [messages, setMessages] = useState("")
@@ -47,14 +46,7 @@ export default function Account() {
       setInfo(data[0])
     }
     GET();
-    
-    const getrefCount = async () => {
-      const { data, error } = await supabase
-        .from('referral')
-        .select('count')
-        .eq('refer', info.newRefer)
-      setReferrals(data[0].count)
-    }
+    try{
     const getBalance = async () => {
       const { data, error } = await supabase
         .from('users')
@@ -64,7 +56,9 @@ export default function Account() {
       console.log(data);
     }
     getrefCount();
-    getBalance()
+    getBalance()}catch(e){
+
+    }
   }
   }, [info]);
   //snackbar2
@@ -107,17 +101,20 @@ export default function Account() {
             <Divider />
 
             <Typography sx={{ padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }}
-            >Your Number Of Referrals : {Referrals} </Typography> <Divider />
+            onClick={()=>{
+              router.push("/user/refferal")
+            }}
+            >Referral Details </Typography> <Divider />
             <Typography sx={{ padding: "6px", color: "white", fontSize: "14px", cursor: "pointer", fontFamily: 'PT Sans, sans-serif' }}
               onClick={() => {
-                router.push("/user/balance")
+                router.push("/user/deposit")
               }
               }
             >Deposit</Typography>
             <Divider />
             <Typography sx={{ padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }}
               onClick={() => {
-                router.push("/user/balance")
+                router.push("/user/withdraw")
               }
               }
             >WithDrawal</Typography>
