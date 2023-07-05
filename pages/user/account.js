@@ -44,21 +44,9 @@ export default function Account() {
         .select()
         .eq('username', localStorage.getItem('me'))
       setInfo(data[0])
+setBalance(data[0].balance);
     }
     GET();
-    try{
-    const getBalance = async () => {
-      const { data, error } = await supabase
-        .from('users')
-        .select('balance')
-        .eq('username', info.username)
-      setBalance(data[0].balance);
-      console.log(data);
-    }
-    getrefCount();
-    getBalance()}catch(e){
-
-    }
   }
   }, [info]);
   //snackbar2

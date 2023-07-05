@@ -1,17 +1,21 @@
 import { Stack, TextField, Typography, Button, Box } from "@mui/material";
 import { supabase } from '../api/supabase'
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AppContext } from "../api/Context";
 import React, { useState } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Image from "next/image";
+import { v4 } from "uuid";
 import barcode from '../../public/barcode.jpg'
 export default function Deposit() {
-  const { info, setInfo } = useContext(AppContext)
+  const [info, setInfo] = useState({})
   const [amount, setAmount] = useState(0)
   const [address, setAddress] = useState("")
   const [amthelp, setAmthelp] = useState("")
+  const [file, setfile] = useState([]);
+  const [imgpath,setImgpath] = useState();
+  const [imgurl,setImgurl] = useState();
   //snackbar1
   const [messages, setMessages] = useState("")
   const [opened, setOpened] = useState(false)
@@ -23,16 +27,63 @@ export default function Deposit() {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
   //end of snackbar1
+useEffect(()=>{
 
-  const checkDepo = async () => {
-    const { error } = await supabase
-      .from('notification')
-      .insert({ address: address, username: info.username, amount: amount, sent: false, type: "deposit" })
-    setAddress("")
-    setAmount("")
-    setMessages("The Deposit will reflect in your balance soon")
-    handleClick();
-  }
+  try{
+    if (localStorage.getItem('me') === null) {
+      router.push("/login")
+    }else{
+    const GET = async () => {
+      const { data, error } = await supabase
+        .from('users')
+        .select()
+        .eq('username', localStorage.getItem('me'))
+      setInfo(data[0])
+    }
+    GET();
+    }}catch(e){
+    
+    }
+},[]);
+//file upload
+
+const checkDepo = async () => {
+  const { error } = await supabase
+    .from('notification')
+    .insert({ address: imgurl, username: info.username, amount: amount, sent: false, type: "deposit" })
+  setAddress("")
+  setAmount("")
+  setMessages("The Deposit will reflect in your balance soon")
+  handleClick();
+  console.log(error)
+}
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  // upload image
+const { data, error } = await supabase
+  .storage
+  .from('trcreceipt')
+  .upload(`public/${v4()+file.name}`, file, {
+    cacheControl: '3600',
+    upsert: false
+  })
+  setImgpath(data.path);
+const getUrl=async()=>{
+
+const { data } = await supabase
+.storage
+.from('trcreceipt')
+.getPublicUrl(imgpath);
+setImgurl(data.publicUrl);
+
+console.log(data)
+}
+getUrl();
+  checkDepo();
+  setfile([]);
+};
+
+//end fileupload
   //snackbar2
   const handleClick = () => {
     setOpened(true);
@@ -115,20 +166,18 @@ export default function Deposit() {
             Deposits less than 10 USDT will be ignored.
             After making the Transaction, Please upload a screenshot of the successful Transaction.
           </Typography>
-
-          <TextField variant="standard" label="Your USDT Address"
-            value={address}
-            onChange={(a) => {
-              setAddress(a.target.value)
-            }}
-          />
-          <input type='file'/>
-          <Button variant='contained' style={{ color: "white" }} onClick={() => {
-            checkDepo()
+          <form onSubmit={handleSubmit}>
+      <input type="file" name="image" onChange={(e)=>{
+setfile(e.target.files[0]);
+      }} />
+      <Button variant='contained' type='submit' style={{ color: "white" }} onClick={() => {
+            
             setDea('visible')
             setDeb('hidden')
 
           }}>Verify Transaction</Button>
+    </form>
+         
           <Typography variant="caption" style={{ color: "white" }} >Click this Button within 20Mins after depositing to Verify.
             Failure To Verify the Transaction will result in Lost Funds</Typography>
         </Stack>
