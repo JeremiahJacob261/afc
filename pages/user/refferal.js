@@ -4,39 +4,23 @@ import { DataGrid } from '@mui/x-data-grid';
 import { supabase } from '../api/supabase'
 import Head from 'next/head';
 export default function Refferal(){
-    const [info, setInfo]  = useState({});
+    const {info, setInfo}  = useContext(AppContext);
     const [refs,setRefs]=useState([]);
-    var rows = [];
 useEffect(()=>{
-  try{
-  if (localStorage.getItem('me') === null) {
-    router.push("/login")
-  }else{
-  const GET = async () => {
-    const { data, error } = await supabase
-      .from('users')
-      .select()
-      .eq('username', localStorage.getItem('me'))
-    setInfo(data[0]);
-    console.log(info)
-  }
-  GET();
-  }}catch(e){
-  
-  }
+
     const getRefs=async()=>{
     const { data, error } = await supabase
     .from('users')
     .select()
-    .eq('refer', info.newRefer);
+    .eq('refer', info.refer);
 setRefs(data);
 console.log(info);
-console.log(data);
+console.log(error);
+
 }
 getRefs();
-
- rows = refs;
 },[])
+
 const columns = [
     { field: 'statId', headerName: 'ID', width: 50 },
     { field: 'username', headerName: 'Username', width: 130 },
@@ -54,6 +38,7 @@ const columns = [
         width: 100,
       },
   ];
+  const rows = refs;
   var sn = 0;
     return(
 <div>
