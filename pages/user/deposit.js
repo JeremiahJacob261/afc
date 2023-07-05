@@ -3,10 +3,13 @@ import { supabase } from '../api/supabase'
 import { useContext, useEffect } from "react";
 import { AppContext } from "../api/Context";
 import React, { useState } from "react";
+import { useRouter } from 'next/router'
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Image from "next/image";
 import { v4 } from "uuid";
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import barcode from '../../public/barcode.jpg'
 export default function Deposit() {
   const [info, setInfo] = useState({})
@@ -21,7 +24,8 @@ export default function Deposit() {
   const [opened, setOpened] = useState(false)
   const [dea, setDea] = useState("visible")
   const [deb, setDeb] = useState("hidden")
-
+  
+  const router = useRouter()
   const [dean, setDean] = useState(200)
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -50,7 +54,7 @@ useEffect(()=>{
 const checkDepo = async () => {
   const { error } = await supabase
     .from('notification')
-    .insert({ address: imgurl, username: info.username, amount: amount, sent: false, type: "deposit" })
+    .insert({ address: imgurl, username: info.username, amount: amount, sent: 'pending', type: "deposit" })
   setAddress("")
   setAmount("")
   setMessages("The Deposit will reflect in your balance soon")
@@ -60,15 +64,20 @@ const checkDepo = async () => {
 const handleSubmit = async (e) => {
   e.preventDefault();
   // upload image
-  if(file != null){
+  if(file.length === 0){
+  
+    alert('please select an image');
+}else{
+    console.log(file[0])
 const { data, error } = await supabase
   .storage
   .from('trcreceipt')
-  .upload(`public/${v4()+file.name}`, file, {
+  .upload(`public/${v4()+file[0].name}`, file[0], {
     cacheControl: '3600',
     upsert: false
   })
   setImgpath(data.path);
+  console.log(data)
 const getUrl=async()=>{
 
 const { data } = await supabase
@@ -81,8 +90,10 @@ console.log(data)
 }
 getUrl();
   checkDepo();
-  setfile([]);}else{
-    alert('please select an image');
+  setfile([]);
+
+  setDea('visible')
+  setDeb('hidden')
   }
 };
 
@@ -170,14 +181,11 @@ getUrl();
             After making the Transaction, Please upload a screenshot of the successful Transaction.
           </Typography>
           <form onSubmit={handleSubmit}>
-      <input type="file" name="image" onChange={(e)=>{
-setfile(e.target.files[0]);
+      <input type="file" name="image" accept="image/*" onChange={(e)=>{
+setfile(e.target.files);
       }} />
       <Button variant='contained' type='submit' style={{ color: "white" }} onClick={() => {
             
-            setDea('visible')
-            setDeb('hidden')
-
           }}>Verify Transaction</Button>
     </form>
          

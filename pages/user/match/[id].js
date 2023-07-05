@@ -17,7 +17,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 export default function Match({ matchDat }) {
     //backdrop
-    const [drop,setDrop]=useState(false)
+    const [drop, setDrop] = useState(false)
     //snackbar1
     const [messages, setMessages] = useState("")
     const [opened, setOpened] = useState(false)
@@ -252,12 +252,12 @@ export default function Match({ matchDat }) {
     //main ui
     return (
         <Stack style={{ width: "100%" }} alignItems="center">
-             <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={drop}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={drop}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <Sncks message={messages} />
             <Head>
                 <title>{matches.home} VS {matches.away}</title>
@@ -271,12 +271,14 @@ export default function Match({ matchDat }) {
                     <KeyboardBackspaceIcon sx={{ color: "white" }} onClick={() => {
                         setDrop(true)
                         router.push("/user/matches")
-                        
+
                         //back to home
                     }} />
                     <Typography sx={{ fontFamily: 'Marhey, cursive', color: "white" }}>{matches.home} VS {matches.away}</Typography>
+                    <Typography sx={{ color: "whitesmoke", fontSize: 15 }}>Match Id: {matches.match_id}</Typography>
+                </Stack>
 
-                </Stack></Paper>
+            </Paper>
 
             <Stack direction="row" spacing={3} justifyContent="center" alignItems="flex-start" sx={{ marginTop: "100px", width: "340px" }}>
                 <Stack direction="column">

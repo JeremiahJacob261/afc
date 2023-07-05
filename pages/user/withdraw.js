@@ -47,7 +47,7 @@ export default function Deposit() {
 
         const { error } = await supabase
         .from('notification')
-        .insert({ address: address,username:info.username, amount: amount,sent:false,type:"withdraw" })
+        .insert({ address: address,username:info.username, amount: amount,sent:'pending',type:"withdraw" })
         console.log(error)
         setAddress("")
         setAmount("")
