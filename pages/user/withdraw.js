@@ -91,7 +91,7 @@ export default function Deposit() {
           Withdrawal
         </Typography></div>
         <Typography  style={{color:'white'}}>
-          Please note that the minimum withdraw is 20 USDT and maximum WithDrawal is 100USDT.
+          Please note that the minimum withdraw is 20 USDT,
           there is a 5% fee charge on every Withdrawal.
         </Typography>
             <Sncks message={messages}/>
