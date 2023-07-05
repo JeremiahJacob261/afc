@@ -60,6 +60,7 @@ const checkDepo = async () => {
 const handleSubmit = async (e) => {
   e.preventDefault();
   // upload image
+  if(file != null){
 const { data, error } = await supabase
   .storage
   .from('trcreceipt')
@@ -80,7 +81,9 @@ console.log(data)
 }
 getUrl();
   checkDepo();
-  setfile([]);
+  setfile([]);}else{
+    alert('please select an image');
+  }
 };
 
 //end fileupload
