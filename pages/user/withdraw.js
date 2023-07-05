@@ -9,6 +9,8 @@ export default function Deposit() {
     const [info,setInfo] = useState({});
     const [address,setAddress] = useState("")
     const [amount,setAmount] = useState("")
+    const [warnad,setWarnad] = useState("");
+    const [warnab,setWarnab] = useState("");
     //snackbar1
     const [messages,setMessages] = useState("")
     const [opened,setOpened] = useState(false)
@@ -35,6 +37,14 @@ export default function Deposit() {
       },[]);
       //end of snackbar1
     const Withdrawal=async()=>{
+      if(amount < 100 ){
+       if(amount > 19){
+        setWarnab('')
+        if(address.length < 10){
+          setWarnad('invalid address')
+            }else{
+          setWarnad('')
+
         const { error } = await supabase
         .from('notification')
         .insert({ address: address,username:info.username, amount: amount,sent:false,type:"withdraw" })
@@ -43,6 +53,14 @@ export default function Deposit() {
         setAmount("")
         setMessages("Your Withdrawal Request is been Processed")
         handleClick();
+            }
+       }else{
+
+        setWarnab('Please Input a value between 20 and 100 USDT')
+       }
+          }else{
+        setWarnab('Please Input a value between 20 and 100 USDT')
+          }
     }
     //snackbar2
      const handleClick = () => {
@@ -77,17 +95,29 @@ export default function Deposit() {
           there is a 5% fee charge on every Withdrawal.
         </Typography>
             <Sncks message={messages}/>
-            <TextField variant="standard" label='Enter Your USDT Address' style={{color:"white"}}
+            <div style={{display:'grid',justifyContent:'center',minWidth:'300px'}}>
+              <TextField variant="standard" label='Enter Your USDT Address' 
+              style={{color:"white",minWidth:'300px'}}
             value={address}
+
+            helperText={warnad}
             onChange={(a)=>{
                 setAddress(a.target.value)
+                if(address.length < 10){
+              setWarnad('invalid address')
+                }else{
+              setWarnad('')
+                }
             }}
             />
-            <TextField variant="standard" label='Enter the Amount you wish to Withdraw' 
-            style={{color:"white",background:"#DADDD8"}}   value={amount}
+            <TextField variant="standard" label='Enter the Amount you wish to Withdraw'
+                helperText={warnab} 
+            style={{color:"white",background:"#DADDD8",minWidth:'300px'}}   value={amount}
             onChange={(a)=>{
                 setAmount(a.target.value)
-            }}/>
+                
+            }}/></div>
+            
             <Button variant="contained" style={{color:"white"}} onClick={Withdrawal}>Withdraw</Button>
         </Stack>
     )
