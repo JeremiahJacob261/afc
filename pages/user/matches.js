@@ -77,6 +77,7 @@ border: "1px solid rgba(255, 255, 255, 0.3)"
         <Typography variant="h4" sx={{ color: "#E8E5DA", margin: "8px", fontFamily: "'Barlow', sans-serif" }}>List Of Our Favourite Matches</Typography>
         {
           footDat.map((pro) => {
+            const league = (pro.league === 'others') ? pro.otherl : pro.league ;
             return (
               <Paper key={"match" + pro.home + pro.away}
                 style={{
@@ -86,7 +87,7 @@ border: "1px solid rgba(255, 255, 255, 0.3)"
                   router.push("/user/match/" + pro.match_id)
                 }}>
                 <Stack direction="column" alignItems="center">
-                  <h6 style={{ marginLeft: "8px" }}>{pro.league}</h6>
+                  <h6 style={{ marginLeft: "8px" }}>{league}</h6>
                   <Stack direction="row" spacing={4}>
                     <Stack alignItems="center">
                       <Image src={Ims} alt="home" width='35' height='35' />

@@ -130,7 +130,8 @@ export default function Match({ matchDat }) {
     };
     function DisplayDialog() {
         const [stake, setStake] = useState(0)
-        const [ball, setBall] = useState()
+        const [ball, setBall] = useState();
+        let profit = Number((display.odds * stake) / 100)+ Number(stake);
         const GET = async () => {
             const { data, error } = await supabase
                 .from('users')
@@ -163,8 +164,8 @@ export default function Match({ matchDat }) {
                                 setStake(ball)
                             }}>Bet all Balance</Typography>
                         </Button>
-                        <Typography>Profit : {Number(((display.odds * stake) / 100)).toFixed(2)} USDT</Typography>
-                        <Typography>Total Money to Be Made : {Number((stake + (display.odds * stake) / 100)).toFixed(2)} USDT</Typography>
+                        <Typography>Profit : {Math.round(Number(((display.odds * stake) / 100)))/100} USDT</Typography>
+                        <Typography>Total Money to Be Made : {profit} USDT</Typography>
                     </Stack>
                 </DialogContent>
                 <DialogActions>
@@ -192,8 +193,8 @@ export default function Match({ matchDat }) {
                                         'username': info.username,
                                         'started': false,
                                         'stake': stake,
-                                        'profit': Number(((display.odds * stake) / 100)).toFixed(2),
-                                        'aim': Number(stake + (display.odds * stake)).toFixed(2) / 100,
+                                        'profit': Math.round(Number(((display.odds * stake) / 100)))/100,
+                                        'aim': profit,
                                         "home": display.home,
                                         "away": display.away
                                     })
@@ -208,7 +209,7 @@ export default function Match({ matchDat }) {
                                         'user': localStorage.getItem('me'),
                                         'match_id': display.matchId,
                                         'stake': stake,
-                                        'profit': Number(((display.odds * stake) / 100)).toFixed(2),
+                                        'profit': Math.round(Number(((display.odds * stake) / 100)))/100,
                                         'market': display.market_picked
                                     })
                                 console.log(error)
