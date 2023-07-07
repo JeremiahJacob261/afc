@@ -8,12 +8,13 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Image from "next/image";
 import { v4 } from "uuid";
+import Head from 'next/head'
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import barcode from '../../public/barcode.jpg'
 export default function Deposit() {
   const [info, setInfo] = useState({})
-  const [amount, setAmount] = useState(0)
+  const [amount, setAmount] = useState()
   const [address, setAddress] = useState("")
   const [amthelp, setAmthelp] = useState("")
   const [file, setfile] = useState([]);
@@ -24,7 +25,7 @@ export default function Deposit() {
   const [opened, setOpened] = useState(false)
   const [dea, setDea] = useState("visible")
   const [deb, setDeb] = useState("hidden")
-
+  
   const router = useRouter()
   const [dean, setDean] = useState(200)
   const Alert = React.forwardRef(function Alert(props, ref) {
@@ -52,7 +53,7 @@ export default function Deposit() {
   }, []);
   //file upload
 
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     // upload image
@@ -71,24 +72,24 @@ export default function Deposit() {
       setImgpath(data.path);
       let imga = data.path;
       console.log(data);
-      const checkDepo = async ({url}) => {
-    const { error } = await supabase
-      .from('notification')
-      .insert({ address: url, username: info.username, amount: amount, sent: 'pending', type: "deposit" })
-    setAddress("")
-    setAmount("")
-    setMessages("The Deposit will reflect in your balance soon")
-    handleClick();
-    console.log(error)
-  }
+      const checkDepo = async (url) => {
+        const { error } = await supabase
+          .from('notification')
+          .insert({ address: url, username: info.username, amount: amount, sent: 'pending', type: "deposit" })
+        setAddress("")
+        setAmount("")
+        setMessages("The Deposit will reflect in your balance soon")
+        handleClick();
+        console.log(error)
+      }
       const getUrl = async () => {
         const { data, error } = await supabase
           .storage
           .from('trcreceipt')
           .getPublicUrl(imga);
         setImgurl(data.publicUrl);
-  console.log(data.publicUrl);
-      checkDepo(data.publicUrl);
+        console.log(data.publicUrl);
+        checkDepo(data.publicUrl);
       }
       getUrl();
       setfile([]);
@@ -123,10 +124,16 @@ export default function Deposit() {
   //end of snackbar2
   return (
     <div>
+       <Head>
+                <title>Deposit</title>
+                <meta name="description" content="Login to your Account to see whats up with your bets" />
+                <link rel="icon" href="/logo_afc.ico" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+            </Head>
       <Sncks message={messages} />
       <Stack direction="column" spacing={3}>
         <div style={{ display: 'flex', justifyContent: "center" }}>
-          <Typography variant="h3" align='center' style={{ color: 'white' }}>
+          <Typography align='center' style={{ color: 'white', fontFamily: 'Poppins, sans-serif',fontSize:'30px' }}>
             Deposit
           </Typography></div>
         <Typography style={{ color: 'white' }}>

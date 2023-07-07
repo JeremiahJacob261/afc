@@ -9,8 +9,10 @@ export default function Viewbets({ bets }) {
     const [bet,setBet] = useState({})
     const router = useRouter();
     const [info, setInfo] = useState({});
-    let stams;
-    let curren;
+    let stams = Date.parse(bet.date + " " + bet.time) / 1000;
+    let curren = new Date().getTime() / 1000;
+    const btn = (stams > curren) ? 'visible' : 'none' ;
+   
     useEffect(() => {
         bets.map((m) => {
             setBet(m);
@@ -28,6 +30,7 @@ export default function Viewbets({ bets }) {
             GET();
         }
         const getMatchDa = async () => {
+            try{
 
             const { data, error } = await supabase
                 .from('bets')
@@ -36,10 +39,12 @@ export default function Viewbets({ bets }) {
                 data.map((m) => {
                     setLeague(m);
                 })
+            }catch(e){
+                console.log(e)
+            }
         }
         getMatchDa();
-         stams = Date.parse(bet.date + " " + bet.time) / 1000;
- curren = new Date().getTime() / 1000;
+        
     }, [info, setLeague,stams,curren]);
     const Depositing = async (damount, dusername) => {
         const { data, error } = await supabase
@@ -69,7 +74,7 @@ export default function Viewbets({ bets }) {
 
                     <Typography style={{ color: 'yellow', fontFamily: 'Poppins, sans-serif', backgroundColor: '#F05D5E', padding: '5px', borderRadius: '8px', margin: '3px' }}>{(stams > curren) ? 'Not Started' : 'Processing'}</Typography>
                 </Stack>
-                <Button variant='standard' style={{ color: '#F05D5E', display: `${(stams > curren) ? 'visible' : 'none'}` }} onClick={() => {
+                <Button variant='standard' style={{ color: '#F05D5E', display:btn}} onClick={() => {
                     Depositing(bet.stake, info.username);
                     const rem = async () => {
 
