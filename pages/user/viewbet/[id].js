@@ -5,7 +5,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 export default function Viewbets({bets}){
 const [bet,setBet] = useState(bets[0]);
-const [league,setLeague] = useState('');
+const [league,setLeague] = useState({});
 
 const router = useRouter();
 const [info, setInfo] = useState({});
