@@ -2,7 +2,7 @@ import { Typography, Stack, Divider, Button, Paper, TextField } from "@mui/mater
 import { supabase } from "../../api/supabase"
 import {useState,useEffect} from 'react'
 import Head from "next/head";
-import { Router } from "next/router";
+import { useRouter } from "next/router";
 export default function Viewbets({bets}){
 const [bet,setBet] = useState(bets[0]);
 const [league,setLeague] = useState('');
