@@ -143,6 +143,8 @@ export default function Match({ matchDat }) {
         console.log(info.balance)
         return (
             <Dialog open={open} onClose={handleClose} style={{ minWidth: "300px", padding: "8px" }}>
+                <div style={{display:'flex',justifyContent:'center',color:'#F2E94E',padding:'5px',fontFamily: 'Poppins, sans-serif'}}>
+                <h3>{display.league}</h3></div>
                 <DialogTitle sx={{ color: "#1B5299", fontFamily: 'Caveat, cursive', fontSize: "25px" }}>{display.title}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>Match Id :
@@ -164,7 +166,7 @@ export default function Match({ matchDat }) {
                                 setStake(ball)
                             }}>Bet all Balance</Typography>
                         </Button>
-                        <Typography>Profit : {Math.round(Number(((display.odds * stake) / 100)))/100} USDT</Typography>
+                        <Typography>Profit : {Number(((display.odds * stake) / 100))} USDT</Typography>
                         <Typography>Total Money to Be Made : {profit} USDT</Typography>
                     </Stack>
                 </DialogContent>
@@ -192,8 +194,8 @@ export default function Match({ matchDat }) {
                                         'market': display.market_picked,
                                         'username': info.username,
                                         'started': false,
-                                        'stake': stake,
-                                        'profit': Math.round(Number(((display.odds * stake) / 100)))/100,
+                                        'stake': Number(stake),
+                                        'profit': Number(((display.odds * stake) / 100)),
                                         'aim': profit,
                                         "home": display.home,
                                         "away": display.away
@@ -208,8 +210,8 @@ export default function Match({ matchDat }) {
                                         'amount': stake + (display.odds * stake).toFixed(2) / 100,
                                         'user': localStorage.getItem('me'),
                                         'match_id': display.matchId,
-                                        'stake': stake,
-                                        'profit': Math.round(Number(((display.odds * stake) / 100)))/100,
+                                        'stake': Number(stake),
+                                        'profit': Number(((display.odds * stake) / 100)),
                                         'market': display.market_picked
                                     })
                                 console.log(error)
@@ -302,7 +304,8 @@ export default function Match({ matchDat }) {
                                                         "odds": matches[m.odds],
                                                         "matchId": matches.match_id,
                                                         "home": matches.home,
-                                                        "away": matches.away
+                                                        "away": matches.away,
+                                                        "league":matches.league
                                                     }
                                                 )
                                                 setOpen(true)

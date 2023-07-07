@@ -18,13 +18,16 @@ export default function Transaction() {
   var sn = 0;
     return(
         <Cover>
-
+ <div style={{display:'flex',justifyContent:"center"}}>
+        <Typography variant="h4" align='center' style={{color:'white',fontFamily: 'Poppins, sans-serif'}}>
+          Transaction History
+        </Typography></div>
         <Stack direction="column-reverse">
         <table>
   <tr>
-    <th style={{width:'80px',color:'white'}}>Date/Time</th>
-    <th style={{width:'150px',color:'white'}}>Description</th>
-    <th style={{width:'70px',color:'white'}}>Status</th>
+    <th style={{width:'80px',color:'#DBE9EE'}}>Date/Time</th>
+    <th style={{width:'150px',color:'#DBE9EE'}}>Description</th>
+    <th style={{width:'70px',color:'#DBE9EE'}}>Status</th>
   </tr>
   {
       trans.map((r)=>{

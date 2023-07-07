@@ -13,7 +13,8 @@ export default function Deposit() {
     const [warnab,setWarnab] = useState("");
     //snackbar1
     const [messages,setMessages] = useState("")
-    const [opened,setOpened] = useState(false)
+    const [opened,setOpened] = useState(false);
+    let total = Number(amount)+((amount*5)/100);
     const Alert = React.forwardRef(function Alert(props, ref) {
         return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
       });
@@ -87,19 +88,22 @@ export default function Deposit() {
     return(
         <Stack spacing={3}>
              <div style={{display:'flex',justifyContent:"center"}}>
-        <Typography variant="h3" align='center' style={{color:'white'}}>
+        <Typography variant="h4" align='center' style={{color:'white',fontFamily: 'Poppins, sans-serif'}}>
           Withdrawal
         </Typography></div>
-        <Typography  style={{color:'white'}}>
+        <Typography  style={{color:'white',fontFamily: 'Poppins, sans-serif'}}>
           Please note that the minimum withdraw is 20 USDT,
           there is a 5% fee charge on every Withdrawal.
         </Typography>
             <Sncks message={messages}/>
+            <Typography style={{color:'#DBE9EE',fontFamily: 'Poppins, sans-serif'}}>Requested Amount : {amount} USDT</Typography>
+            <Typography style={{color:'#DBE9EE',fontFamily: 'Poppins, sans-serif'}}>Charge Amount : {(amount*5)/100} USDT</Typography>
+            <Typography style={{color:'#DBE9EE',fontFamily: 'Poppins, sans-serif'}}>Total : {total} USDT</Typography>
+            <Typography style={{color:'#DBE9EE',fontFamily: 'Poppins, sans-serif'}}>Account Balance : {info.balance} USDT</Typography>
             <div style={{display:'grid',justifyContent:'center',minWidth:'300px'}}>
               <TextField variant="standard" label='Enter Your USDT Address' 
               style={{color:"white",minWidth:'300px'}}
             value={address}
-
             helperText={warnad}
             onChange={(a)=>{
                 setAddress(a.target.value)
@@ -112,13 +116,22 @@ export default function Deposit() {
             />
             <TextField variant="standard" label='Enter the Amount you wish to Withdraw'
                 helperText={warnab} 
-            style={{color:"white",background:"#DADDD8",minWidth:'300px'}}   value={amount}
+            style={{color:"white",background:"#DADDD8",minWidth:'300px'}}  
+            type="number"
+            value={amount}
             onChange={(a)=>{
                 setAmount(a.target.value)
                 
             }}/></div>
             
-            <Button variant="contained" style={{color:"white"}} onClick={Withdrawal}>Withdraw</Button>
+            <Button variant="contained" style={{color:"white"}} onClick={()=>{
+             if(info.balance < total){ 
+               alert('Insufficient Balance')
+            }else{
+
+               Withdrawal();
+            }
+            }}>Withdraw</Button>
         </Stack>
     )
 }

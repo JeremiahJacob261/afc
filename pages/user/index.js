@@ -89,6 +89,7 @@ export default function Home() {
             <Paper elevation={5} sx={{ background: "#4054A0", marginTop: "10px" }}>
             {
           footDat.map((pro) => {
+            const league = (pro.league === 'others') ? pro.otherl : pro.league ;
             return (
               <Paper key={"match" + pro.home + pro.away}
                 style={{
@@ -97,7 +98,7 @@ export default function Home() {
                   router.push("/user/match/" + pro.match_id)
                 }}>
                 <Stack direction="column" alignItems="center">
-                  <h6 style={{ marginLeft: "8px" }}>{pro.league}</h6>
+                  <h6 style={{ marginLeft: "8px" }}>{league}</h6>
                   <Stack direction="row" spacing={4}>
                     <Stack alignItems="center">
                       <Image src={Ims} alt="home" width='35' height='35' />

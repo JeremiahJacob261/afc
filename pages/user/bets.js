@@ -85,7 +85,9 @@ export default function Bets() {
           {
             bets.map((s) => {
               return (
-                <div key={s.betid}>
+                <div key={s.betid} onClick={()=>{
+                  router.push('/user/viewbet/'+s.betid);
+                }}>
                   <Paper sx={{ background: "#0B1723", padding: "4px", height: "max-content" }} >
                     <Stack direction="row" spacing={4} alignItems="center" justifyContent="space-around">
                       <Stack style={{ padding: "8px", width: "350px", height: "80px" }} direction="column" >
@@ -95,17 +97,7 @@ export default function Bets() {
                         <Typography sx={{
                           fontFamily: 'Changa, sans-serif', fontSize: "18px", color: "white"
                         }}>{s.stake} USDT</Typography></Stack>
-                      <CloseIcon sx={{ color: "white" }} onClick={() => {
-                        setDisplay({
-                          'match': s.match_id,
-                          'home': s.home,
-                          'away': s.away,
-                          'market': s.market,
-                          'id': s.betid
-                        })
-                        setOpen(true)
-
-                      }} />
+                      
                     </Stack>
                   </Paper>
                 </div>
