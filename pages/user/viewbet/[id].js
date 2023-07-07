@@ -7,6 +7,7 @@ export default function Viewbets({bets}){
 const [bet,setBet] = useState(bets[0]);
 const [league,setLeague] = useState('');
 
+const router = useRouter();
 const [info, setInfo] = useState({});
 let stams = Date.parse(bet.date + " " + bet.time) / 1000;
 let curren = new Date().getTime() / 1000
@@ -64,10 +65,14 @@ const Depositing = async(damount,dusername) => {
 </Stack>
 <Button variant='standard' style={{color:'#F05D5E',display:`${(stams>curren)?'visible':'none'}`}} onClick={()=>{
 Depositing(bet.stake,info.dusername);
+const rem=async()=>{
+
 const { error } = await supabase
   .from('placed')
   .delete()
   .eq('betid', bet.id);
+}
+rem();
   router.push('/user/bets');
 }}>Cancel this bet</Button>
         </Stack>
