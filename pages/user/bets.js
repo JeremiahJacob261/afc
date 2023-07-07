@@ -92,12 +92,14 @@ export default function Bets() {
                     <Stack direction="row" spacing={4} alignItems="center" justifyContent="space-around">
                       <Stack style={{ padding: "8px", width: "350px", height: "80px" }} direction="column" >
 
-                        <Typography sx={{ color: "white" }}>{s.home} vs {s.away}</Typography>
-                        <Typography variant="subbtitle2" sx={{ color: "white", fontSize: "18px" }}> {s.market}</Typography>
-                        <Typography sx={{
-                          fontFamily: 'Changa, sans-serif', fontSize: "18px", color: "white"
-                        }}>{s.stake} USDT</Typography></Stack>
-                      
+                        <Typography sx={{ color: "white",fontSize:'15px' }}>{s.home} vs {s.away}</Typography>
+                        <Typography variant="subbtitle2" sx={{ color: "white",fontSize:'15px' }}> {s.market}</Typography>
+                       </Stack>
+                       <Typography sx={{
+                          fontFamily: 'Changa, sans-serif',fontSize:'15px', color: "white"
+                        }}>{s.stake} USDT</Typography>
+<Typography style={{color:'white',fontFamily: 'Poppins, sans-serif',fontSize:'12px'}}>Time : {s.time}</Typography>
+<Typography style={{color:'white',fontFamily: 'Poppins, sans-serif',fontSize:'12px'}}>Date : {s.date} </Typography>
                     </Stack>
                   </Paper>
                 </div>

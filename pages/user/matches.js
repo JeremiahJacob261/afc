@@ -87,6 +87,8 @@ border: "1px solid rgba(255, 255, 255, 0.3)"
                   router.push("/user/match/" + pro.match_id)
                 }}>
                 <Stack direction="column" alignItems="center">
+                <Typography style={{color:'black',fontFamily: 'Poppins, sans-serif',fontSize:'12px'}}>{pro.date} </Typography>
+                 
                   <h6 style={{ marginLeft: "8px" }}>{league}</h6>
                   <Stack direction="row" spacing={4}>
                     <Stack alignItems="center">
@@ -95,11 +97,11 @@ border: "1px solid rgba(255, 255, 255, 0.3)"
                     </Stack>
                     <Stack spacing={2} alignItems="center" justifyContent="center">
                       <Typography>VS</Typography>
-                      <Typography>{pro.time}</Typography>
+                      <Typography style={{color:'black',fontFamily: 'Poppins, sans-serif',fontSize:'12px'}}>{pro.time} </Typography>
                     </Stack>
                     <Stack alignItems="center">
                       <Image src={Ims} alt="away" width='35' height='35' />
-                      <Typography>{pro.away}</Typography>
+                      <Typography style={{color:'black',fontFamily: 'Poppins, sans-serif',fontSize:'15px'}}>{pro.away}</Typography>
                     </Stack>
                   </Stack>
                 </Stack>

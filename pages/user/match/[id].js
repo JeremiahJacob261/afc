@@ -144,7 +144,7 @@ export default function Match({ matchDat }) {
         return (
             <Dialog open={open} onClose={handleClose} style={{ minWidth: "300px", padding: "8px" }}>
                 <div style={{display:'flex',justifyContent:'center',color:'#F2E94E',padding:'5px',fontFamily: 'Poppins, sans-serif'}}>
-                <h3>{display.league}</h3></div>
+                <h4>{display.league}</h4></div>
                 <DialogTitle sx={{ color: "#1B5299", fontFamily: 'Caveat, cursive', fontSize: "25px" }}>{display.title}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>Match Id :
@@ -198,7 +198,10 @@ export default function Match({ matchDat }) {
                                         'profit': Number(((display.odds * stake) / 100)),
                                         'aim': profit,
                                         "home": display.home,
-                                        "away": display.away
+                                        "away": display.away,
+                                        "time":display.time,
+                                        "date":display.date,
+                                        "odd":display.odds
                                     })
                                 console.log(error)
                             }
@@ -305,7 +308,9 @@ export default function Match({ matchDat }) {
                                                         "matchId": matches.match_id,
                                                         "home": matches.home,
                                                         "away": matches.away,
-                                                        "league":matches.league
+                                                        "league":(matches.league === 'others') ? matches.otherl : matches.league,
+                                                        "time":matches.time,
+                                                        "date":matches.date,
                                                     }
                                                 )
                                                 setOpen(true)
