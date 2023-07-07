@@ -1,6 +1,7 @@
 import { Typography, Stack, Divider, Button, Paper, TextField } from "@mui/material"
 import { supabase } from "../../api/supabase"
 import {useState,useEffect} from 'react'
+import Head from "next/head";
 export default function Viewbets({bets}){
 const [bet,setBet] = useState(bets[0]);
 const [league,setLeague] = useState('');
@@ -20,6 +21,12 @@ useEffect(()=>{
 },[])
     return(
         <div>
+             <Head>
+        <title>Bet Details</title>
+        <meta name="description" content="Login to your Account to see whats up with your bets" />
+        <link rel="icon" href="/logo_afc.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+       </Head>
         <Stack direction="column">
 <Typography style={{color:'white',fontFamily: 'Poppins, sans-serif'}}>Match Name : {bet.home} vs {bet.away}</Typography>
 <Typography style={{color:'white',fontFamily: 'Poppins, sans-serif'}}>League Name: {league}</Typography>
@@ -35,7 +42,7 @@ useEffect(()=>{
     
 <Typography style={{color:'yellow',fontFamily: 'Poppins, sans-serif',backgroundColor:'#F05D5E',padding:'5px',borderRadius:'8px',margin:'3px'}}>{(stams>curren)?'Not Started':'Processing'}</Typography>
 </Stack>
-<Button variant='outlined' style={{color:'white'}}>Cancel this bet</Button>
+<Button variant='standard' style={{color:'#F05D5E',display:`${(stams>curren)?'visible':'none'}`}}>Cancel this bet</Button>
         </Stack>
         </div>
     )
