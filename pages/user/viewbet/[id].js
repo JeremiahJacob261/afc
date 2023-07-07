@@ -2,13 +2,28 @@ import { Typography, Stack, Divider, Button, Paper, TextField } from "@mui/mater
 import { supabase } from "../../api/supabase"
 import {useState,useEffect} from 'react'
 import Head from "next/head";
+import { Router } from "next/router";
 export default function Viewbets({bets}){
 const [bet,setBet] = useState(bets[0]);
 const [league,setLeague] = useState('');
 
+const [info, setInfo] = useState({});
 let stams = Date.parse(bet.date + " " + bet.time) / 1000;
 let curren = new Date().getTime() / 1000
 useEffect(()=>{
+    if (localStorage.getItem('me') === null) {
+        router.push("/login")
+      }else{
+      const GET = async () => {
+        const { data, error } = await supabase
+          .from('users')
+          .select()
+          .eq('username', localStorage.getItem('me'))
+        setInfo(data[0])
+  setBalance(data[0].balance);
+      }
+      GET();
+    }
     const getMatchDa=async()=>{
 
     const { data, error } = await supabase
@@ -18,7 +33,12 @@ useEffect(()=>{
     setLeague((data[0].league === 'others') ? data[0].otherl : data[0].league);
     }
     getMatchDa();
-},[])
+},[info]);
+const Depositing = async(damount,dusername) => {
+    const { data, error } = await supabase
+    .rpc('depositor', { amount: damount, names: dusername })
+    console.log(error);
+  }
     return(
         <div>
              <Head>
@@ -42,7 +62,14 @@ useEffect(()=>{
     
 <Typography style={{color:'yellow',fontFamily: 'Poppins, sans-serif',backgroundColor:'#F05D5E',padding:'5px',borderRadius:'8px',margin:'3px'}}>{(stams>curren)?'Not Started':'Processing'}</Typography>
 </Stack>
-<Button variant='standard' style={{color:'#F05D5E',display:`${(stams>curren)?'visible':'none'}`}}>Cancel this bet</Button>
+<Button variant='standard' style={{color:'#F05D5E',display:`${(stams>curren)?'visible':'none'}`}} onClick={()=>{
+Depositing(bet.stake,info.dusername);
+const { error } = await supabase
+  .from('placed')
+  .delete()
+  .eq('betid', bet.id);
+  router.push('/user/bets');
+}}>Cancel this bet</Button>
         </Stack>
         </div>
     )
