@@ -14,7 +14,7 @@ export default function Deposit() {
     //snackbar1
     const [messages,setMessages] = useState("")
     const [opened,setOpened] = useState(false);
-    let total = Number(amount)+((amount*5)/100);
+    const [total,setTotal] = useState(Number(amount)+((amount*5)/100));
     const Alert = React.forwardRef(function Alert(props, ref) {
         return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
       });
@@ -48,7 +48,7 @@ export default function Deposit() {
 
         const { error } = await supabase
         .from('notification')
-        .insert({ address: address,username:info.username, amount: amount,sent:'pending',type:"withdraw" })
+        .insert({ address: address,username:info.username, amount: total,sent:'pending',type:"withdraw" })
         console.log(error)
         setAddress("")
         setAmount("")
