@@ -73,7 +73,7 @@ export default function Viewbets({ bets }) {
 
                     <Typography style={{ color: 'yellow', fontFamily: 'Poppins, sans-serif', backgroundColor: '#F05D5E', padding: '5px', borderRadius: '8px', margin: '3px' }}>{(stams > curren) ? 'Not Started' : 'Processing'}</Typography>
                 </Stack>
-                <Button variant='standard' style={{ color: '#F05D5E', display:{btn}}} onClick={() => {
+                <Button variant='standard' style={{ color: '#F05D5E', display:(stams > curren) ? 'visible' : 'none' }} onClick={() => {
                     Depositing(bet.stake, info.username);
                     const rem = async () => {
 
