@@ -73,21 +73,44 @@ export default function Viewbets({ bets }) {
 
                     <Typography style={{ color: 'yellow', fontFamily: 'Poppins, sans-serif', backgroundColor: '#F05D5E', padding: '5px', borderRadius: '8px', margin: '3px' }}>{(stams > curren) ? 'Not Started' : 'Processing'}</Typography>
                 </Stack>
-                <Button variant='standard' style={{ color: '#F05D5E', display:btn }} onClick={() => {
-                    Depositing(bet.stake, info.username);
-                    const rem = async () => {
-
-                        const { error } = await supabase
-                            .from('placed')
-                            .delete()
-                            .eq('betid', bet.betid);
-                    }
-                    rem();
-                    router.push('/user/bets');
-                }}>Cancel this bet</Button>
+               <Btns/>
             </Stack>
         </div>
     )
+    function Btns(){
+        if (stams<curren) {
+            return(
+             <Button variant='standard' style={{ color: '#F05D5E',display:'none' }} onClick={() => {
+                 Depositing(bet.stake, info.username);
+                 const rem = async () => {
+
+                     const { error } = await supabase
+                         .from('placed')
+                         .delete()
+                         .eq('betid', bet.betid);
+                 }
+                 rem();
+                 router.push('/user/bets');
+             }}>Cancel this bet</Button>
+            )
+        } else {
+            return(
+             <Button variant='standard' style={{ color: '#F05D5E', }} onClick={() => {
+                 Depositing(bet.stake, info.username);
+                 const rem = async () => {
+
+                     const { error } = await supabase
+                         .from('placed')
+                         .delete()
+                         .eq('betid', bet.betid);
+                 }
+                 rem();
+                 router.push('/user/bets');
+             }}>Cancel this bet</Button>
+            )
+            }
+    
+    }
 }
 export async function getStaticPaths() {
     const { data, error } = await supabase

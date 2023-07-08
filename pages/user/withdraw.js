@@ -121,7 +121,7 @@ export default function Deposit() {
             value={amount}
             onChange={(a)=>{
                 setAmount(a.target.value)
-                setTotal(Number(amount)+((amount*5)/100));
+                setTotal(Number(a.target.value)+((a.target.value*5)/100));
             }}/></div>
             
             <Button variant="contained" style={{color:"white"}} onClick={()=>{
