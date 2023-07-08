@@ -11,8 +11,7 @@ export default function Viewbets({ bets }) {
     const [info, setInfo] = useState({});
     let stams = Date.parse(bet.date + " " + bet.time) / 1000;
     let curren = new Date().getTime() / 1000;
-    const btn = (stams > curren) ? 'visible' : 'none' ;
-   
+   const [btn,setBtn] = useState((stams > curren) ? 'visible' : 'none' );
     useEffect(() => {
         bets.map((m) => {
             setBet(m);
@@ -74,7 +73,7 @@ export default function Viewbets({ bets }) {
 
                     <Typography style={{ color: 'yellow', fontFamily: 'Poppins, sans-serif', backgroundColor: '#F05D5E', padding: '5px', borderRadius: '8px', margin: '3px' }}>{(stams > curren) ? 'Not Started' : 'Processing'}</Typography>
                 </Stack>
-                <Button variant='standard' style={{ color: '#F05D5E', display:btn}} onClick={() => {
+                <Button variant='standard' style={{ color: '#F05D5E', display:{btn}}} onClick={() => {
                     Depositing(bet.stake, info.username);
                     const rem = async () => {
 
