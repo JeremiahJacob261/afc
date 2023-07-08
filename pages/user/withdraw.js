@@ -14,7 +14,7 @@ export default function Deposit() {
     //snackbar1
     const [messages,setMessages] = useState("")
     const [opened,setOpened] = useState(false);
-    const [total,setTotal] = useState(Number(amount)+((amount*5)/100));
+    const [total,setTotal] = useState(0);
     const Alert = React.forwardRef(function Alert(props, ref) {
         return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
       });
@@ -121,7 +121,7 @@ export default function Deposit() {
             value={amount}
             onChange={(a)=>{
                 setAmount(a.target.value)
-                
+                setTotal(Number(amount)+((amount*5)/100));
             }}/></div>
             
             <Button variant="contained" style={{color:"white"}} onClick={()=>{
