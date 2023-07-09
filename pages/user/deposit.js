@@ -14,7 +14,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import barcode from '../../public/barcode.jpg'
 export default function Deposit() {
   const [info, setInfo] = useState({})
-  const [amount, setAmount] = useState()
+  const [amount, setAmount] = useState('')
   const [address, setAddress] = useState("")
   const [amthelp, setAmthelp] = useState("")
   const [file, setfile] = useState([]);
@@ -160,7 +160,7 @@ export default function Deposit() {
           <Button
             variant="contained"
             onClick={() => {
-              if (amount < 10) {
+              if (amount < 10 || amount.length < 1) {
                 setAmthelp("The Minimum Deposit is 10 USDT")
               } else {
                 setDea('hidden')

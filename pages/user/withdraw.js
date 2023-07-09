@@ -37,12 +37,17 @@ export default function Deposit() {
           }
       },[]);
       //end of snackbar1
+      const wih = async (damount, dusername) => {
+        const { data, error } = await supabase
+          .rpc('withdrawer', { amount: damount, names: dusername })
+        console.log(error);
+      }
     const Withdrawal=async()=>{
       if(amount < 100 ){
        if(amount > 19){
         setWarnab('')
         if(address.length < 10){
-          setWarnad('invalid address')
+          setWarnad('Ensure the address is correct')
             }else{
           setWarnad('')
 
@@ -53,6 +58,7 @@ export default function Deposit() {
         setAddress("")
         setAmount("")
         setMessages("Your Withdrawal Request is been Processed")
+        wih(total,info.username);
         handleClick();
             }
        }else{
@@ -99,7 +105,7 @@ export default function Deposit() {
             <Typography style={{color:'#DBE9EE',fontFamily: 'Poppins, sans-serif'}}>Requested Amount : {amount} USDT</Typography>
             <Typography style={{color:'#DBE9EE',fontFamily: 'Poppins, sans-serif'}}>Charge Amount : {(amount*5)/100} USDT</Typography>
             <Typography style={{color:'#DBE9EE',fontFamily: 'Poppins, sans-serif'}}>Total : {total} USDT</Typography>
-            <Typography style={{color:'#DBE9EE',fontFamily: 'Poppins, sans-serif'}}>Account Balance : {info.balance} USDT</Typography>
+            <Typography style={{color:'#DBE9EE',fontFamily: 'Poppins, sans-serif'}}>Available Account Balance : {info.balance} USDT</Typography>
             <div style={{display:'grid',justifyContent:'center',minWidth:'300px'}}>
               <TextField variant="standard" label='Enter Your USDT Address' 
               style={{color:"white",minWidth:'300px'}}
@@ -108,7 +114,7 @@ export default function Deposit() {
             onChange={(a)=>{
                 setAddress(a.target.value)
                 if(address.length < 10){
-              setWarnad('invalid address')
+              setWarnad('Ensure the address is correct')
                 }else{
               setWarnad('')
                 }
