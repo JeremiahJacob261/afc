@@ -70,10 +70,10 @@ const handleMouseDownPassword = (event) => {
        let Cdata = data[0]
        if(Cdata.password === values.password){
         setDrop(true)
- setInfo({"logged":true,"username":username,"phone":Cdata.phone,"refer":Cdata.newRefer,"balance":Cdata.balance})
+ setInfo({"logged":true,"username":username,"phone":Cdata.phone,"refer":Cdata.newrefer,"balance":Cdata.balance})
          setOpen(true)
          localStorage.setItem('logged', 
-          {"logged":true,"username":username,"phone":Cdata.phone,"refer":Cdata.newRefer,"balance":Cdata.balance});
+          {"logged":true,"username":username,"phone":Cdata.phone,"refer":Cdata.newrefer,"balance":Cdata.balance});
           localStorage.setItem('me',username)
           console.log(username)
          router.push("/user")

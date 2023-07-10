@@ -86,8 +86,8 @@ useEffect(()=>{
         const {data,error} = await supabase
         .from('users')
         .select()
-        .eq('newRefer',idR)
-        setLvla(data[0].newRefer);
+        .eq('newrefer',idR)
+        setLvla(data[0].newrefer);
         setLvlb(data[0].refer);
         console.log(data);
         console.log(error);
@@ -113,7 +113,7 @@ useEffect(()=>{
             balance: 0,
             username: user,
             countrycode: age,
-            newRefer: nRef,
+            newrefer: nRef,
             lvla:lvla,
             lvlb:lvlb
           })
@@ -301,7 +301,7 @@ export async function getStaticPaths() {
     .from('users')
     .select()
   const paths = data.map((ref) => ({
-    params: { id: ref.newRefer },
+    params: { id: ref.newrefer },
   }))
   return { paths, fallback: true }
 }

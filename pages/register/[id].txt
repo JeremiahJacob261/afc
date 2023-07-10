@@ -74,7 +74,7 @@ const handleClose = (value) => {
         phone: phone,
         refer:refer,
         balance:0,
-        newRefer:nRef});
+        newrefer:nRef});
         const sfRef = doc(db, "referral", nRef);
         batch.set(sfRef, {"count": 0});
         const docRef = doc(db, "referral", refer);
@@ -83,7 +83,7 @@ const handleClose = (value) => {
         const updateRef = doc(db, "referral", refer);
 batch.set(updateRef, {"count": data.count+1});
          await batch.commit();
-         setInfo({"logged":true,"username":username,"phone":data.phone,"refer":data.newRefer,"balance":data.balance})
+         setInfo({"logged":true,"username":username,"phone":data.phone,"refer":data.newrefer,"balance":data.balance})
          
    setCookie('logged', info);
          setOpen(true);
@@ -228,7 +228,7 @@ export async function getStaticPaths() {
       const data = await getDocs(usersCollectionRef);
       const referral = data.docs.map((ref) => ({ ...ref.data(), id: ref.id }));
       const paths = referral.map((ref) => ({
-        params: { id: ref.newRefer},
+        params: { id: ref.newrefer},
       }))
       return { paths, fallback: true }
 }

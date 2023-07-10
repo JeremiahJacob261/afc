@@ -81,9 +81,9 @@ const Alert = React.forwardRef(function Alert(props, ref) {
         <Paper sx={{ background: "none" }} elevation={5}>
           <Stack direction="column" sx={{ background: "none", padding: "8px" }} >
             <Stack direction="row" >
-              <Typography sx={{ padding: "6px", cursor: "pointer", fontSize: "14px", color: "white", fontFamily: 'PT Sans, sans-serif' }} >Invite Code : https://afcfifa.com/register/{info.newRefer}</Typography>
+              <Typography sx={{ padding: "6px", cursor: "pointer", fontSize: "14px", color: "white", fontFamily: 'PT Sans, sans-serif' }} >Invite Code : https://afcfifa.com/register/{info.newrefer}</Typography>
               <ContentPasteIcon sx={{ color: "white" }} onClick={() => {
-                navigator.clipboard.writeText("https://afcfifa.com/register/" + info.newRefer)
+                navigator.clipboard.writeText("https://afcfifa.com/register/" + info.newrefer)
                 setMessages("Invite Link Copied")
                 handleClick();
               }} /></Stack>

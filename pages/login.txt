@@ -68,7 +68,7 @@ if(getCookie('logged') === true){
       if (docSnap.exists()) {
        var data = docSnap.data();
        if(data.password === values.password){
- setInfo({"logged":true,"username":username,"phone":data.phone,"refer":data.newRefer})
+ setInfo({"logged":true,"username":username,"phone":data.phone,"refer":data.newrefer})
          setOpen(true)
          setCookie('logged', info);
          router.push("/user")
