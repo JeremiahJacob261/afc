@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext,useEffect } from "react";
 import Head from "next/head";
 import Link from 'next/link'
 import { Avatar, Box, Stack, OutlinedInput, Button, Typography } from "@mui/material";
@@ -22,6 +22,8 @@ import Image from 'next/image'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { supabase } from '../api/supabase'
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 export default function Register({ refer }) {
   const [password, setPassword] = useState("")
   const [cpassword, setcPassword] = useState("")
@@ -30,8 +32,11 @@ export default function Register({ refer }) {
   const [username, setUsername] = useState("")
   const [open, setOpen] = React.useState(false);
   const [age, setAge] = useState("");
+  const [drop,setDrop]=useState(false);
   const [idR, setidR] = useState(refer);
-  const [agecheck, setAgecheck] = useState(false)
+  const [agecheck, setAgecheck] = useState(false);
+  const [lvla,setLvla] = useState('');
+  const [lvlb,setLvlb] = useState('');
   const [values, setValues] = React.useState({
     amount: '',
     password: '',
@@ -72,6 +77,28 @@ export default function Register({ refer }) {
     const { data, error } = await supabase
       .rpc('increment', { x: 1, row_id: idR })
   }
+useEffect(()=>{
+
+    //getlvl2
+    const lvl2=async()=>{
+      try{
+
+        const {data,error} = await supabase
+        .from('users')
+        .select()
+        .eq('newRefer',idR)
+        setLvla(data[0].newRefer);
+        setLvlb(data[0].refer);
+        console.log(data);
+        console.log(error);
+      }catch(e){
+
+      }
+  }
+    
+  lvl2();
+  
+},[setLvla,setLvlb,idR])
   const signUp = async () => {
     localStorage.clear()
     if (values.password.length || password.length >= 6) {
@@ -86,9 +113,11 @@ export default function Register({ refer }) {
             balance: 0,
             username: user,
             countrycode: age,
-            newRefer: nRef
+            newRefer: nRef,
+            lvla:lvla,
+            lvlb:lvlb
           })
-          .select()
+          console.log(error);
         updateRef()
         updateRefb()
         localStorage.setItem('logged',
@@ -102,7 +131,7 @@ export default function Register({ refer }) {
     } else {
       alert("The Password must have atleast 6 characters !")
     }
-
+setDrop(false);
   }
 
   return (
@@ -120,7 +149,12 @@ export default function Register({ refer }) {
           open={open}
           onClose={handleClose}
         />
-
+  <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={drop}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
         <Stack direction="column"
           justifyContent="center"
           alignItems="center"
@@ -243,6 +277,7 @@ export default function Register({ refer }) {
                 if (agecheck === false) {
                   alert('Please click the checkBox before you continue')
                 } else {
+                  setDrop(true);
                   signUp()
                 }
 

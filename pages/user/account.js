@@ -10,6 +10,8 @@ import MuiAlert from '@mui/material/Alert';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import { supabase } from '../api/supabase'
 import Head from 'next/head';
+
+
 export default function Account() {
   const router = useRouter()
   const [info, setInfo] = useState({});
@@ -19,20 +21,15 @@ export default function Account() {
   //snackbar1
   const [messages, setMessages] = useState("")
   const [opened, setOpened] = useState(false)
-  const Alert = React.forwardRef(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-  });
-  const handleClick = () => {
-    setOpened(true);
-  };
-
-  const handleClosed = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setOpened(false);
-  };
+const handleClosed = (event, reason) => {
+  if (reason === 'clickaway') {
+    return;
+  }
+  setOpened(false);
+};
+const handleClick = () => {
+  setOpened(true);
+};
   //end of snackbar1
   useEffect(() => {
     if (localStorage.getItem('me') === null) {
@@ -49,13 +46,17 @@ setBalance(data[0].balance);
     GET();
   }
   }, [info]);
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
   //snackbar2
 
-  function Sncks({ message }) {
+  function Sncks() {
     return (
       <Snackbar open={opened} autoHideDuration={6000} onClose={handleClosed}>
         <Alert onClose={handleClosed} severity="success" sx={{ width: '100%' }}>
-          {message}
+         Invite Link Copied
         </Alert>
       </Snackbar>
     )
@@ -63,7 +64,7 @@ setBalance(data[0].balance);
   //end of snackbar2
   return (
     <Cover style={{ width: "100%" }}>
-      <Sncks message={messages} />
+      <Sncks />
       <Head>
         <title>{info.username}&lsquo; Account</title>
         <link rel="icon" href="/logo_afc.ico" />
