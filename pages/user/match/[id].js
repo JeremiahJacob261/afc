@@ -132,15 +132,23 @@ export default function Match({ matchDat }) {
         const [stake, setStake] = useState(0)
         const [ball, setBall] = useState();
         let profit = Number((display.odds * stake) / 100)+ Number(stake);
+        useEffect(()=>{
+
         const GET = async () => {
-            const { data, error } = await supabase
+            try{
+const { data, error } = await supabase
                 .from('users')
                 .select('balance')
                 .eq('username', localStorage.getItem('me'))
             setBall(data[0].balance)
+        console.log(info[0].balance)
+            }catch(e){
+                
+            }
+            
         }
         GET();
-        console.log(info.balance)
+        },[setBall])
         return (
             <Dialog open={open} onClose={handleClose} style={{ minWidth: "300px", padding: "8px" }}>
                 <div style={{display:'flex',justifyContent:'center',color:'#F2E94E',padding:'5px',fontFamily: 'Poppins, sans-serif'}}>

@@ -44,18 +44,6 @@ border: "1px solid rgba(255, 255, 255, 0.3)"
       setInfo(data[0])
     }
     GET();
-    const options = {
-      method: 'GET',
-      headers: {
-        'X-RapidAPI-Key': '7939998216msh540c9956d3a0d42p1113fbjsn088965af1f71',
-        'X-RapidAPI-Host': 'live-score-api.p.rapidapi.com'
-      }
-    };
-    
-    fetch('https://live-score-api.p.rapidapi.com/scores/live.json?secret=gWB0yCsvz1JUAGvT2RCHwS1iaLrxJUn0&key=jllJFFgkMhJ9nYsQ', options)
-      .then(response => response.json())
-      .then(response => console.log(response))
-      .catch(err => console.error(err));
   }, [])
   return (
     <Cover>
