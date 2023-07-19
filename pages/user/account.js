@@ -138,7 +138,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
               }
             >Transaction History</Typography>
             <Divider />
-            < Link href='https://t.me/+geclbC4mphg2ZmU0'> <Typography sx={{ padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }}
+            < Link href='https://t.me/AFC_Customerservice1'> <Typography sx={{ padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }}
             > Contact Us on Telegram @AFC_Customerservice1{
                 //ellacruizfred60
               }</Typography></Link>
