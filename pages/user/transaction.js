@@ -3,18 +3,35 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import { supabase } from '../api/supabase'
 import Cover from './cover'
+import { app } from '../api/firebase';
+import { onAuthStateChanged } from "firebase/auth";
+import { getAuth,signOut } from "firebase/auth";
 export default function Transaction() {
     const [trans,setTrans] = useState([])
-    useEffect(()=>{
-        const getTran=async()=>{
-             const { data, error } = await supabase
-        .from('notification')
-        .select()
-        .eq('username',localStorage.getItem('me'))
-    setTrans(data);
+    const auth = getAuth(app)
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+        const uid = user.uid;
+        // ...
+        console.log(user)
+        const GET = async () => {
+          const { data, error } = await supabase
+            .from('notification')
+            .select()
+            .eq('username', user.displayName)
+          setTrans(data[0])
+          console.log(data)
         }
-       getTran()
-    },[])
+        GET();
+      } else {
+        // User is signed out
+        // ...
+        console.log('sign out');
+        router.push('/login');
+      }
+    });
   var sn = 0;
     return(
         <Cover>

@@ -2,12 +2,16 @@ import { Typography, Stack, Divider, Button, Paper, Backdrop,CircularProgress } 
 import { supabase } from "../../api/supabase"
 import { useState, useEffect } from 'react'
 import Head from "next/head";
+import { app } from '../../api/firebase';
+import { onAuthStateChanged } from "firebase/auth";
+import { getAuth,signOut } from "firebase/auth";
 import { useRouter } from "next/router";
 export default function Viewbets({ bets }) {
     const [drop, setDrop] = useState(false)
     const [league, setLeague] = useState([]);
     const [bet,setBet] = useState({})
     const router = useRouter();
+    const auth = getAuth(app);
     const [info, setInfo] = useState({});
     let stams = Date.parse(bet.date + " " + bet.time) / 1000;
     let curren = new Date().getTime() / 1000;
@@ -16,18 +20,31 @@ export default function Viewbets({ bets }) {
         bets.map((m) => {
             setBet(m);
         })
-        if (localStorage.getItem('me') === null) {
-            router.push("/login")
-        } else {
-            const GET = async () => {
-                const { data, error } = await supabase
+        useEffect(() => {
+            onAuthStateChanged(auth, (user) => {
+              if (user) {
+                // User is signed in, see docs for a list of available properties
+                // https://firebase.google.com/docs/reference/js/auth.user
+                const uid = user.uid;
+                // ...
+                console.log(user)
+                const GET = async () => {
+                  const { data, error } = await supabase
                     .from('users')
                     .select()
-                    .eq('username', localStorage.getItem('me'))
-                setInfo(data[0])
-            }
-            GET();
-        }
+                    .eq('userId', user.uid)
+                  setInfo(data[0])
+                  console.log(data)
+                }
+                GET();
+              } else {
+                // User is signed out
+                // ...
+                console.log('sign out');
+                router.push('/login');
+              }
+            });
+          }, []);
         const getMatchDa = async () => {
             try{
 

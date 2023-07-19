@@ -11,8 +11,12 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { app } from '../api/firebase';
+import { onAuthStateChanged } from "firebase/auth";
+import { getAuth,signOut } from "firebase/auth";
 
 export default function Bets() {
+  const auth = getAuth(app);
   const [open, setOpen] = useState(false)
   const { slip, setSlip } = useContext(SlipContext);
   const router = useRouter()
@@ -29,23 +33,38 @@ export default function Bets() {
   };
 
   useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+        const uid = user.uid;
+        // ...
+        console.log(user)
+        const getMyBet = async () => {
+          const { data, error } = await supabase
+            .from('placed')
+            .select()
+            .eq('username', user.displayName)
+          setBets(data)
+        }
+        const getNoOfBets = async () => {
+          const { count, error } = await supabase
+            .from('placed')
+            .select('*', { count: 'exact', head: true })
+            .eq('username',user.displayName)
+          setSlip(count)
+        }
 
-    const getMyBet = async () => {
-      const { data, error } = await supabase
-        .from('placed')
-        .select()
-        .eq('username', localStorage.getItem('me'))
-      setBets(data)
-    }
-    const getNoOfBets = async () => {
-      const { count, error } = await supabase
-        .from('placed')
-        .select('*', { count: 'exact', head: true })
-        .eq('username', localStorage.getItem('me'))
-      setSlip(count)
-    }
     getMyBet()
     getNoOfBets()
+      } else {
+        // User is signed out
+        // ...
+        console.log('sign out');
+        router.push('/login');
+      }
+    });
+   
   }, [info]);
   return (
     <Cover>

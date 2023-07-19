@@ -3,15 +3,41 @@ import { AppContext } from "../api/Context";
 import { DataGrid } from '@mui/x-data-grid';
 import { supabase } from '../api/supabase'
 import Head from 'next/head';
+import { app } from '../api/firebase';
+import { onAuthStateChanged } from "firebase/auth";
+import { getAuth,signOut } from "firebase/auth";
 import { Divider, Typography,Stack,Box } from "@mui/material";
 export default function Refferal(){
-    const {info, setInfo}  = useContext(AppContext);
+    const [info, setInfo]  = useState({});
     const [refs,setRefs]=useState([]);
     const [lvl1,setLvl1] = useState(0);
     const [lvl2,setLvl2] =useState(0) ;
+    const auth = getAuth(app);
     const [lvl3,setLvl3] = useState(0);
 useEffect(()=>{
-
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+      const uid = user.uid;
+      // ...
+      console.log(user)
+      const GET = async () => {
+        const { data, error } = await supabase
+          .from('users')
+          .select()
+          .eq('userId', user.uid)
+        setInfo(data[0])
+        console.log(data)
+      }
+      GET();
+    } else {
+      // User is signed out
+      // ...
+      console.log('sign out');
+      router.push('/login');
+    }
+  });
     const getRefs=async()=>{
     const { data, error } = await supabase
     .from('users')
@@ -24,35 +50,53 @@ console.log(error);
 getRefs();
 //get count 1
 const getLvla =async ()=>{
-
-    const { data, error } = await supabase
+  try{
+const { data, error } = await supabase
     .from('users')
     .select('*')
-    .eq('refer', info.refer)
+    .eq('refer', info.newrefer)
     setLvl1(data[0].count)
-  
+  console.log(error)
+  console.log(data)
+  }catch(e){
+    
+  }
+    
 }
 const getLvlb =async ()=>{
-
-  const { data, error } = await supabase
+  try{
+const { data, error } = await supabase
   .from('users')
   .select('*')
-  .eq('lvla', info.refer)
+  .eq('lvla', info.newrefer)
   setLvl1(data[0].count)
+  }catch(e){
+    
+  }
+  
 
 }
 const getLvlc =async ()=>{
-
-  const { data, error } = await supabase
+try{
+const { data, error } = await supabase
   .from('users')
   .select('*')
-  .eq('lvlb', info.refer)
+  .eq('lvlb', info.newrefer)
   setLvl1(data[0].count)
+}catch(e){
+  
+}
+  
 
 }
+try{
 getLvla();
 getLvlb();
 getLvlc();
+}catch(e){
+
+}
+
 },[])
 
 const columns = [

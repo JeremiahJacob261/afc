@@ -7,6 +7,9 @@ import { useRouter } from 'next/router'
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Image from "next/image";
+import { app } from '../api/firebase';
+import { onAuthStateChanged } from "firebase/auth";
+import { getAuth,signOut } from "firebase/auth";
 import { v4 } from "uuid";
 import Head from 'next/head'
 import Backdrop from '@mui/material/Backdrop';
@@ -25,7 +28,8 @@ export default function Deposit() {
   const [opened, setOpened] = useState(false)
   const [dea, setDea] = useState("visible")
   const [deb, setDeb] = useState("hidden")
-  
+  const auth = getAuth(app);
+  const [drop,setDrop] = useState(false)
   const router = useRouter()
   const [dean, setDean] = useState(200)
   const Alert = React.forwardRef(function Alert(props, ref) {
@@ -33,23 +37,29 @@ export default function Deposit() {
   });
   //end of snackbar1
   useEffect(() => {
-
-    try {
-      if (localStorage.getItem('me') === null) {
-        router.push("/login")
-      } else {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+        const uid = user.uid;
+        // ...
+        console.log(user)
         const GET = async () => {
           const { data, error } = await supabase
             .from('users')
             .select()
-            .eq('username', localStorage.getItem('me'))
+            .eq('userId', user.uid)
           setInfo(data[0])
+          console.log(data)
         }
         GET();
+      } else {
+        // User is signed out
+        // ...
+        console.log('sign out');
+        router.push('/login');
       }
-    } catch (e) {
-
-    }
+    });
   }, []);
   //file upload
 
@@ -89,13 +99,14 @@ export default function Deposit() {
           .getPublicUrl(imga);
         setImgurl(data.publicUrl);
         console.log(data.publicUrl);
+        console.log(error)
         checkDepo(data.publicUrl);
       }
       getUrl();
       setfile([]);
-
       setDea('visible')
       setDeb('hidden')
+      setDrop(false)
     }
   };
 
@@ -124,6 +135,12 @@ export default function Deposit() {
   //end of snackbar2
   return (
     <div>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={drop}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
        <Head>
                 <title>Deposit</title>
                 <meta name="description" content="Login to your Account to see whats up with your bets" />
@@ -194,7 +211,7 @@ export default function Deposit() {
               setfile(e.target.files);
             }} />
             <Button variant='contained' type='submit' style={{ color: "white" }} onClick={() => {
-
+setDrop(true)
             }}>Verify Transaction</Button>
           </form>
 

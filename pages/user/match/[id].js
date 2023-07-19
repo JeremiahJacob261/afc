@@ -15,6 +15,9 @@ import { AppContext, BetContext, SlipContext } from "../../api/Context";
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import { app } from '../../api/firebase';
+import { onAuthStateChanged } from "firebase/auth";
+import { getAuth,signOut } from "firebase/auth";
 export default function Match({ matchDat }) {
     //backdrop
     const [drop, setDrop] = useState(false)
@@ -31,24 +34,37 @@ export default function Match({ matchDat }) {
     const { bets, setBets } = useContext(BetContext)
     const [info, setInfo] = useState({});
     const { slip, setSlip } = useContext(SlipContext);
+const auth = getAuth(app);
+    
+useEffect(() => {
 
-    useEffect(() => {
+    matchDat.map((m) => {
+        setMatches(m)
+    })
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+        const uid = user.uid;
+        // ...
+        console.log(user)
         const GET = async () => {
-            const { data, error } = await supabase
-                .from('users')
-                .select()
-                .eq('username', localStorage.getItem('me'))
-            console.log(data[0])
-            setInfo(data[0])
+          const { data, error } = await supabase
+            .from('users')
+            .select()
+            .eq('userId', user.uid)
+          setInfo(data[0])
+          console.log(data)
         }
         GET();
-        matchDat.map((m) => {
-            setMatches(m)
-        })
-        if (localStorage.getItem('me') === null) {
-            router.push("/login")
-        }
-    }, [])
+      } else {
+        // User is signed out
+        // ...
+        console.log('sign out');
+        router.push('/login');
+      }
+    });
+  }, []);
     const router = useRouter()
     const markets = [
         {
@@ -130,24 +146,24 @@ export default function Match({ matchDat }) {
     };
     function DisplayDialog() {
         const [stake, setStake] = useState(0)
-        const [ball, setBall] = useState();
+        const [ball, setBall] = useState(info.balance);
         let profit = Number((display.odds * stake) / 100)+ Number(stake);
         useEffect(()=>{
 
-        const GET = async () => {
-            try{
-const { data, error } = await supabase
-                .from('users')
-                .select('balance')
-                .eq('username', localStorage.getItem('me'))
-            setBall(data[0].balance)
-        console.log(info[0].balance)
-            }catch(e){
+//         const GET = async () => {
+//             try{
+// const { data, error } = await supabase
+//                 .from('users')
+//                 .select('balance')
+//                 .eq('username', localStorage.getItem('me'))
+//             setBall(data[0].balance)
+//         console.log(info[0].balance)
+//             }catch(e){
                 
-            }
+//             }
             
-        }
-        GET();
+//         }
+//         GET();
         },[setBall])
         return (
             <Dialog open={open} onClose={handleClose} style={{ minWidth: "300px", padding: "8px" }}>
@@ -219,7 +235,7 @@ const { data, error } = await supabase
                                     .upsert({
                                         'type': 'bets',
                                         'amount': stake + (display.odds * stake).toFixed(2) / 100,
-                                        'user': localStorage.getItem('me'),
+                                        'user': info.username,
                                         'match_id': display.matchId,
                                         'stake': Number(stake),
                                         'profit': Number(((display.odds * stake) / 100)),

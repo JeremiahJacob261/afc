@@ -15,37 +15,43 @@ import { supabase } from '../api/supabase'
 import Ims from '../../public/ball.png'
 import Agent from '../../public/posters6.jpg'
 import WhatshotIcon from '@mui/icons-material/Whatshot';
+import { app } from '../api/firebase';
+import { onAuthStateChanged } from "firebase/auth";
+import { getAuth,signOut } from "firebase/auth";
 export default function Home() {
   const [footDat, setFootDat] = useState([])
   const { bets, setBets } = useContext(BetContext);
   const { slip, setSlip } = useContext(SlipContext)
   const [balance, setBalance] = useState(0)
   const [info, setInfo] = useState({})
-  const [me, setMe] = useState('')
-  const betting = (match, market, home, away, time) => {
-    setBets(bets.concat({
-      "match_id": match,
-      "market": market,
-      "home": home,
-      "away": away,
-      "time": time
-    }))
-    setSlip(slip + 1);
-  }
+  const auth = getAuth(app);
   
   useEffect(() => {
-    const getBalance = async () => {
-    const { data, error } = await supabase
-      .from('users')
-      .select('balance')
-      .eq('username', localStorage.getItem('me'))
-      setBalance(data[0].balance)
-  }
-  getBalance()
-    setMe(localStorage.getItem('me'))
-    if (localStorage.getItem('me') === null) {
-      router.push('/login')
-    }
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+        const uid = user.uid;
+        // ...
+        console.log(user)
+        const GET = async () => {
+          const { data, error } = await supabase
+            .from('users')
+            .select()
+            .eq('userId', user.uid)
+          setInfo(data[0])
+          console.log(data)
+    setBalance(data[0].balance);
+        }
+        GET();
+      } else {
+        // User is signed out
+        // ...
+        console.log('sign out');
+        router.push('/login');
+      }
+    });
+    
     const getUsers = async () => {
       const { data, error } = await supabase
         .from('bets')
@@ -54,17 +60,8 @@ export default function Home() {
         .limit(5)
       setFootDat(data);
     };
-    const GET = async () => {
-      const { data, error } = await supabase
-        .from('users')
-        .select()
-        .eq('username', localStorage.getItem('me'))
-      setInfo(data[0])
-    }
-    GET();
-    getUsers();
-
-  }, [footDat, setFootDat, info, me]);
+    getUsers()
+  }, [info,setFootDat]);
 
   const router = useRouter()
   return (
@@ -75,7 +72,7 @@ export default function Home() {
         <Paper elevation={5} style={{ position: "fixed", top: 0, margin: "4px", padding: "8px" }}>Your Balance is {info.balance} USDT</Paper>
       </Stack>
       <Cover>  <Head>
-        <title>Welcome -{me}</title>
+        <title>Welcome -{info.username}</title>
         <link rel="icon" href="/logo_afc.ico" />
       </Head>
         <Box sx={{ background: "#4054A0" }}>

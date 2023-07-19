@@ -35,16 +35,7 @@ WebkitBackdropFilter: "blur(9.2px)",
 border: "1px solid rgba(255, 255, 255, 0.3)"
   */
  
-  useEffect(() => {
-    const GET = async () => {
-      const { data, error } = await supabase
-        .from('users')
-        .select()
-        .eq('username', localStorage.getItem('me'))
-      setInfo(data[0])
-    }
-    GET();
-  }, [])
+ 
   return (
     <Cover>
         <Backdrop
