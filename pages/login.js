@@ -8,7 +8,7 @@ import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import {supabase} from './api/supabase'
-import {db,app} from './api/firebase'
+import {app} from './api/firebase'
 import { useContext } from "react";
 import {AppContext} from "./api/Context";
 import Link from "next/link";
@@ -23,6 +23,8 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useEffect } from "react";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {  onAuthStateChanged } from "firebase/auth";
 export default function Login() {
   const dbs = getDatabase(app);
   const [username,setUsername] = useState("")
@@ -30,6 +32,8 @@ const {info,setInfo} = useContext(AppContext);
 const [open, setOpen] = React.useState(false);
 const [drop,setDrop]=useState(false)
 const router = useRouter();
+const [email, setEmail] = useState('')
+const auth = getAuth(app);
 const handleClickOpen = () => {
   setOpen(true);
 };
@@ -59,33 +63,43 @@ const handleClickShowPassword = () => {
 const handleMouseDownPassword = (event) => {
   event.preventDefault();
 };
-    const logins=async()=>{
-      localStorage.clear()
-      let user = username.replace(/^\s+|\s+$/gm,'')
-      const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('username',user)
-      if (error === null) {
-       let Cdata = data[0]
-       if(Cdata.password === values.password){
-        setDrop(true)
- setInfo({"logged":true,"username":username,"phone":Cdata.phone,"refer":Cdata.newrefer,"balance":Cdata.balance})
-         setOpen(true)
-         localStorage.setItem('logged', 
-          {"logged":true,"username":username,"phone":Cdata.phone,"refer":Cdata.newrefer,"balance":Cdata.balance});
-          localStorage.setItem('me',username)
-          console.log(username)
-         router.push("/user")
-       }else{
-        alert("wrong password")
-       }
-      } else {
-        // doc.data() will be undefined in this case
-        console.log("Account does not exist");
-      }
-      
-   }
+useEffect(()=>{
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+      const uid = user.uid;
+      // ...
+      router.push('/user');
+    } else {
+      // User is signed out
+      // ...
+      console.log('sign out');
+    }
+  });
+},[])
+const login=async()=>{
+
+  setDrop(true)
+  localStorage.clear()
+  signInWithEmailAndPassword(auth, email, values.password)
+    .then((userCredential) => {
+      // Signed in 
+      const user = userCredential.user;
+      // ...
+  
+      alert('you are logged in');
+
+        setDrop(false)
+      router.push('/user');
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(error.message)
+    });
+    }
+    
   
     return(
         <Stack 
@@ -129,9 +143,9 @@ const handleMouseDownPassword = (event) => {
             
         <TextField id="outlined-basic" label="Username" variant="outlined" 
         style={{width:"100%",background:"whitesmoke"}}
-      value={username}
+      value={email}
       onChange={(e)=>{
-        setUsername(e.target.value)
+        setEmail(e.target.value)
       }}
       />
  <FormControl sx={{ m: 1,width:"100%",background:"whitesmoke" }} variant="outlined">
@@ -156,7 +170,7 @@ const handleMouseDownPassword = (event) => {
             label="Password"
           />
         </FormControl>
-        <Button variant="contained" sx={{padding:"6px",width:"100%"}} onClick={logins}>
+        <Button variant="contained" sx={{padding:"6px",width:"100%"}} onClick={login}>
         <Typography sx={{fontFamily: 'Zen Antique, serif',marginLeft:"3px",color:"whitesmoke"}}>Login</Typography>
         </Button>
        

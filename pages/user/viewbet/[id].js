@@ -1,10 +1,10 @@
-import { Typography, Stack, Divider, Button, Paper, TextField } from "@mui/material"
+import { Typography, Stack, Divider, Button, Paper, Backdrop,CircularProgress } from "@mui/material"
 import { supabase } from "../../api/supabase"
 import { useState, useEffect } from 'react'
 import Head from "next/head";
 import { useRouter } from "next/router";
 export default function Viewbets({ bets }) {
-  
+    const [drop, setDrop] = useState(false)
     const [league, setLeague] = useState([]);
     const [bet,setBet] = useState({})
     const router = useRouter();
@@ -52,6 +52,12 @@ export default function Viewbets({ bets }) {
     }
     return (
         <div>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={drop}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <Head>
                 <title>Bet Details</title>
                 <meta name="description" content="Login to your Account to see whats up with your bets" />
@@ -81,21 +87,24 @@ export default function Viewbets({ bets }) {
         if (stams<curren) {
             return(
              <Button variant='standard' style={{ color: '#F05D5E',display:'none' }} onClick={() => {
+                 setDrop(true);
                  Depositing(bet.stake, info.username);
                  const rem = async () => {
 
-                     const { error } = await supabase
-                         .from('placed')
-                         .delete()
-                         .eq('betid', bet.betid);
-                 }
-                 rem();
+                    const { error } = await supabase
+                        .from('placed')
+                        .delete()
+                        .eq('betid', bet.betid);
+                }
+                rem();
+                 setDrop(false);
                  router.push('/user/bets');
              }}>Cancel this bet</Button>
             )
         } else {
             return(
              <Button variant='standard' style={{ color: '#F05D5E', }} onClick={() => {
+                setDrop(true);
                  Depositing(bet.stake, info.username);
                  const rem = async () => {
 
@@ -105,6 +114,7 @@ export default function Viewbets({ bets }) {
                          .eq('betid', bet.betid);
                  }
                  rem();
+                setDrop(false);
                  router.push('/user/bets');
              }}>Cancel this bet</Button>
             )

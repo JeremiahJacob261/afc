@@ -10,9 +10,13 @@ import MuiAlert from '@mui/material/Alert';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import { supabase } from '../api/supabase'
 import Head from 'next/head';
+import { app } from '../api/firebase';
+import { onAuthStateChanged } from "firebase/auth";
+import { getAuth,signOut } from "firebase/auth";
 
 
 export default function Account() {
+  const auth = getAuth(app);
   const router = useRouter()
   const [info, setInfo] = useState({});
   const { bets, setBets } = useContext(BetContext);
@@ -32,19 +36,31 @@ const handleClick = () => {
 };
   //end of snackbar1
   useEffect(() => {
-    if (localStorage.getItem('me') === null) {
-      router.push("/login")
-    }else{
-    const GET = async () => {
-      const { data, error } = await supabase
-        .from('users')
-        .select()
-        .eq('username', localStorage.getItem('me'))
-      setInfo(data[0])
-setBalance(data[0].balance);
-    }
-    GET();
-  }
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+        const uid = user.uid;
+        // ...
+        console.log(user)
+        const GET = async () => {
+          const { data, error } = await supabase
+            .from('users')
+            .select()
+            .eq('userId', user.uid)
+          setInfo(data[0])
+          console.log(data)
+    setBalance(data[0].balance);
+        }
+        GET();
+      } else {
+        // User is signed out
+        // ...
+        console.log('sign out');
+        router.push('/login');
+      }
+    });
+   
   }, [info]);
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -123,16 +139,16 @@ const Alert = React.forwardRef(function Alert(props, ref) {
             >Transaction History</Typography>
             <Divider />
             < Link href='https://t.me/+geclbC4mphg2ZmU0'> <Typography sx={{ padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }}
-            > Contact Us on Telegram @AFC_customerservice{
+            > Contact Us on Telegram @AFC_Customerservice1{
                 //ellacruizfred60
               }</Typography></Link>
            
             <Typography sx={{ padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }} onClick={() => {
-              deleteCookie('logged')
-              router.push("/login")
-              setInfo({})
-              setBets([])
-              setSlip(0)
+              
+              signOut(auth).then(()=>{
+          
+                router.push('/login');
+              })
             }
             }>Log Out</Typography>
           </Stack>

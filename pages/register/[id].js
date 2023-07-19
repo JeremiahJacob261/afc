@@ -1,8 +1,9 @@
-import React, { useState, useContext,useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Head from "next/head";
 import Link from 'next/link'
 import { Avatar, Box, Stack, OutlinedInput, Button, Typography } from "@mui/material";
 import MenuItem from '@mui/material/MenuItem';
+import { useRouter } from 'next/router'
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -22,21 +23,27 @@ import Image from 'next/image'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { supabase } from '../api/supabase'
+import { app } from '../api/firebase'
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, updateProfile } from "firebase/auth";
+import { async } from "@firebase/util";
 export default function Register({ refer }) {
   const [password, setPassword] = useState("")
   const [cpassword, setcPassword] = useState("")
+  const route = useRouter();
   const [phone, setPhone] = useState("")
   const { info, setInfo } = useContext(AppContext);
   const [username, setUsername] = useState("")
   const [open, setOpen] = React.useState(false);
   const [age, setAge] = useState("");
-  const [drop,setDrop]=useState(false);
+  const [drop, setDrop] = useState(false);
   const [idR, setidR] = useState(refer);
   const [agecheck, setAgecheck] = useState(false);
-  const [lvla,setLvla] = useState('');
-  const [lvlb,setLvlb] = useState('');
+  const [lvla, setLvla] = useState('');
+  const [lvlb, setLvlb] = useState('');
+  const [email, setEmail] = useState('')
+  const auth = getAuth(app);
   const [values, setValues] = React.useState({
     amount: '',
     password: '',
@@ -77,62 +84,96 @@ export default function Register({ refer }) {
     const { data, error } = await supabase
       .rpc('increment', { x: 1, row_id: idR })
   }
-useEffect(()=>{
-
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+        const uid = user.uid;
+        // ...
+        console.log(user)
+        route.push('/user');
+      } else {
+        // User is signed out
+        // ...
+        console.log('sign out');
+      }
+    });
     //getlvl2
-    const lvl2=async()=>{
-      try{
+    const lvl2 = async () => {
+      try {
 
-        const {data,error} = await supabase
-        .from('users')
-        .select()
-        .eq('newrefer',idR)
+        const { data, error } = await supabase
+          .from('users')
+          .select()
+          .eq('newrefer', idR)
         setLvla(data[0].newrefer);
         setLvlb(data[0].refer);
         console.log(data);
         console.log(error);
-      }catch(e){
+      } catch (e) {
 
       }
-  }
-    
-  lvl2();
-  
-},[setLvla,setLvlb,idR])
-  const signUp = async () => {
-    localStorage.clear()
-    if (values.password.length || password.length >= 6) {
-      if (cpassword === values.password) {
-        let user = username.replace(/^\s+|\s+$/gm, '')
-        const { data, error } = await supabase
+    }
+
+    lvl2();
+
+  }, [setLvla, setLvlb, idR])
+  const signup = async () => {
+
+    let usern = username.replace(/^\s+|\s+$/gm, '')
+    createUserWithEmailAndPassword(auth, email, values.password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        // ...
+        console.log(user.uid);
+        const upload =async()=>{
+          const { data, error } = await supabase
           .from('users')
           .insert({
+            userId:user.uid,
             password: values.password,
             phone: phone,
             refer: idR,
-            balance: 0,
-            username: user,
+            username: username,
             countrycode: age,
             newrefer: nRef,
-            lvla:lvla,
-            lvlb:lvlb
+            lvla: lvla,
+            lvlb: lvlb,
+            email:email
           })
-          console.log(error);
+        console.log(error);
+        console.log(data);
+        }
+        upload()
         updateRef()
         updateRefb()
-        localStorage.setItem('logged',
-          { "logged": true, "username": username, "phone": phone, "refer": idR, "balance": 0 });
-        localStorage.setItem('me', username)
-        setOpen(true);
-      } else {
-        alert("Please ensure the both Passwords are the Same")
-      }
+        setDrop(false);
+        updateProfile(auth.currentUser, {
+          displayName: username,
+          phoneNumber: phone
+        }).then(async () => {
+          
+        })
 
-    } else {
-      alert("The Password must have atleast 6 characters !")
-    }
-setDrop(false);
+        setOpen(true);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+        console.log(error.code);
+        setDrop(false);
+        if(errorCode === 'auth/email-already-in-use'){
+
+        alert('this email is already registered')
+        }else if( errorCode === 'auth/weak-password'){
+          alert('Your password is weak, please use atleast 6 characters')
+        }
+      });
   }
+
 
   return (
     <Stack justifyContent="center" alignItems="center" style={{
@@ -149,12 +190,12 @@ setDrop(false);
           open={open}
           onClose={handleClose}
         />
-  <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={drop}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={drop}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
         <Stack direction="column"
           justifyContent="center"
           alignItems="center"
@@ -173,19 +214,21 @@ setDrop(false);
             }}
             style={{ width: "100%", background: "whitesmoke" }}
           />
+          <TextField id="outlined-basic" label="Email" variant="outlined"
+            value={email}
+            type='email'
+            onChange={(e) => {
+              setEmail(e.target.value)
+            }}
+            style={{ width: "100%", background: "whitesmoke" }}
+          />
           <TextField id="outlined-basic" label="Invite Code" variant="outlined"
             value={idR}
             style={{ width: "100%", background: "whitesmoke" }}
             onChange={(e) => {
               setidR(e.target.value)
             }} />
-          <TextField id="outlined-basic" value={age}
-            label="Country"
-            style={{ width: "100%", background: "whitesmoke" }}
-            onChange={(e) => {
-              setAge(e.target.value);
-            }} />
-          <Stack direction="row" sx={{ width: '42%', minWidth: "240px" }}>
+          <Stack direction="row" justifyContent="stretch" sx={{ width: '42%', minWidth: "240px",display:'flex' }}>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Code</InputLabel>
               <Select
@@ -209,25 +252,15 @@ setDrop(false);
               </Select>
             </FormControl>
             <TextField id="outlined-basic" label="Phone"
-              type="phone"
+              type="number"
               variant="outlined"
-              style={{ background: "whitesmoke" }}
+              style={{ background: "whitesmoke",width:'100%' }}
               value={phone}
               onChange={(e) => {
                 setPhone(e.target.value);
               }} />
           </Stack>
 
-          <Farm.Check
-            type="checkbox"
-            label="I agree I am 18 years old and I agree to the Terms and Conditions"
-            id="age"
-            value={agecheck}
-            onChange={(a) => {
-              setAgecheck(a.target.value)
-            }}
-            style={{ color: "white" }}
-          />
 
           <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
             <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
@@ -263,6 +296,17 @@ setDrop(false);
               setcPassword(e.target.value);
             }}
           />
+
+          <Farm.Check
+            type="checkbox"
+            label="Do you accept our Terms and Conditions ?"
+            id="age"
+            value={agecheck}
+            onChange={(a) => {
+              setAgecheck(a.target.value)
+            }}
+            style={{ color: "white" }}
+          />
           <Button variant="contained" sx={{ padding: "8px" }} onClick={() => {
 
             const checkDuplicate = async () => {
@@ -278,7 +322,7 @@ setDrop(false);
                   alert('Please click the checkBox before you continue')
                 } else {
                   setDrop(true);
-                  signUp()
+                  signup()
                 }
 
               }
