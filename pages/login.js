@@ -97,6 +97,8 @@ const login=async()=>{
       const errorCode = error.code;
       const errorMessage = error.message;
       console.log(error.message)
+      alert(errorCode);
+      setDrop(false)
     });
     }
     
@@ -141,7 +143,7 @@ const login=async()=>{
       <Typography variant='caption' sx={{fontFamily: 'Work Sans, sans-serif',fontSize:"20px",color:"white"}}>
         Investment Bet</Typography>
             
-        <TextField id="outlined-basic" label="Username" variant="outlined" 
+        <TextField id="outlined-basic" label="Email" variant="outlined" 
         style={{width:"100%",background:"whitesmoke"}}
       value={email}
       onChange={(e)=>{
