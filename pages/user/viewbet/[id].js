@@ -20,7 +20,6 @@ export default function Viewbets({ bets }) {
         bets.map((m) => {
             setBet(m);
         })
-        useEffect(() => {
             onAuthStateChanged(auth, (user) => {
               if (user) {
                 // User is signed in, see docs for a list of available properties
@@ -44,7 +43,7 @@ export default function Viewbets({ bets }) {
                 router.push('/login');
               }
             });
-          }, []);
+         
         const getMatchDa = async () => {
             try{
 
