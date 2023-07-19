@@ -42,7 +42,7 @@ useEffect(()=>{
     const { data, error } = await supabase
     .from('users')
     .select()
-    .eq('refer', info.refer);
+    .eq('refer', info.newrefer);
 setRefs(data);
 console.log(info);
 console.log(error);
