@@ -4,29 +4,16 @@ import { useContext, useEffect, useState } from "react";
 import { Paper, Stack, Typography, Button } from '@mui/material'
 import Image from "next/image";
 import Head from 'next/head'
-import { BetContext, SlipContext } from "../api/Context";
 import Ims from '../../public/ball.png'
 import { useRouter } from "next/router";
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 export default function Matches({ footDat }) {
   const [drop,setDrop] = useState(false)
-  const { bets, setBets } = useContext(BetContext);
-  const { slip, setSlip } = useContext(SlipContext)
   const [info, setInfo] = useState({})
   
   const router = useRouter()
-  const betting = (match, market, home, away, time, odds) => {
-    setBets(bets.concat({
-      "match_id": match,
-      "market": market,
-      "home": home,
-      "away": away,
-      "time": time,
-      "odds": odds
-    }))
-    setSlip(slip + 1);
-  }
+  
   /*
    background: "rgba(255, 255, 255, 0.56)",
 borderRadius: "16px",
