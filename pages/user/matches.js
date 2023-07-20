@@ -14,6 +14,7 @@ export default function Matches({ footDat }) {
   const { bets, setBets } = useContext(BetContext);
   const { slip, setSlip } = useContext(SlipContext)
   const [info, setInfo] = useState({})
+  
   const router = useRouter()
   const betting = (match, market, home, away, time, odds) => {
     setBets(bets.concat({
@@ -56,11 +57,14 @@ border: "1px solid rgba(255, 255, 255, 0.3)"
         <Typography variant="h4" sx={{ color: "#E8E5DA", margin: "8px", fontFamily: "'Barlow', sans-serif" }}>List Of Our Favourite Matches</Typography>
         {
           footDat.map((pro) => {
+            let stams = Date.parse(pro.date + " " + pro.time) / 1000;
+            let curren = new Date().getTime() / 1000;
             const league = (pro.league === 'others') ? pro.otherl : pro.league ;
             return (
               <Paper key={"match" + pro.home + pro.away}
                 style={{
-                  marginBottom: "8px", padding: "4px"
+                  marginBottom: "8px", padding: "4px",
+                  display:(stams<curren) ? 'none':'visible'
                 }} onClick={() => {
                   setDrop(true)
                   router.push("/user/match/" + pro.match_id)

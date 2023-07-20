@@ -1,0 +1,30 @@
+{
+    "countries": [
+      { "name": "India", "code": "+91" },
+      { "name": "United Kingdom", "code": "+44" },
+      { "name": "Canada", "code": "+1" },
+      { "name": "Australia", "code": "+61" },
+      { "name": "Ireland", "code": "+353" },
+      { "name": "New Zealand", "code": "+64" },
+      { "name": "South Africa", "code": "+27" },
+      { "name": "Nigeria", "code": "+234" },
+      { "name": "Singapore", "code": "+65" },
+      { "name": "Malaysia", "code": "+60" },
+      { "name": "Ghana", "code": "+233" },
+      { "name": "Kenya", "code": "+254" },
+      { "name": "Philippines", "code": "+63" },
+      { "name": "New Zealand", "code": "+64" },
+      { "name": "Pakistan", "code": "+92" },
+      { "name": "Nepal", "code": "+977" },
+      { "name": "Zimbabwe", "code": "+263" },
+      { "name": "Guyana", "code": "+592" },
+      { "name": "Belize", "code": "+501" },
+      { "name": "Fiji", "code": "+679" },
+      { "name": "Malta", "code": "+356" },
+      { "name": "Gambia", "code": "+220" },
+      { "name": "Uganda", "code": "+256" },
+      { "name": "Cameroon", "code": "+237" },
+      { "name": "Liberia", "code": "+231" }
+    ]
+  }
+  

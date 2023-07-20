@@ -33,7 +33,6 @@ export default function Home() {
         // https://firebase.google.com/docs/reference/js/auth.user
         const uid = user.uid;
         // ...
-        console.log(user)
         const GET = async () => {
           const { data, error } = await supabase
             .from('users')
@@ -86,11 +85,14 @@ export default function Home() {
             <Paper elevation={5} sx={{ background: "#4054A0", marginTop: "10px" }}>
             {
           footDat.map((pro) => {
+            let stams = Date.parse(pro.date + " " + pro.time) / 1000;
+            let curren = new Date().getTime() / 1000;
             const league = (pro.league === 'others') ? pro.otherl : pro.league ;
             return (
               <Paper key={"match" + pro.home + pro.away}
                 style={{
-                  marginBottom: "8px", padding: "4px"
+                  marginBottom: "8px", padding: "4px",
+                  display:(stams<curren) ? 'none':'visible'
                 }} onClick={() => {
                   router.push("/user/match/" + pro.match_id)
                 }}>

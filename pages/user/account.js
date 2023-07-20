@@ -42,14 +42,12 @@ const handleClick = () => {
         // https://firebase.google.com/docs/reference/js/auth.user
         const uid = user.uid;
         // ...
-        console.log(user)
         const GET = async () => {
           const { data, error } = await supabase
             .from('users')
             .select()
             .eq('userId', user.uid)
           setInfo(data[0])
-          console.log(data)
     setBalance(data[0].balance);
         }
         GET();

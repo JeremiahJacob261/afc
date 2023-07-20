@@ -28,6 +28,7 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, updateProfile } from "firebase/auth";
 import { async } from "@firebase/util";
+import codes from '../api/codes.json'
 export default function Register({ refer }) {
   const [password, setPassword] = useState("")
   const [cpassword, setcPassword] = useState("")
@@ -36,7 +37,7 @@ export default function Register({ refer }) {
   const { info, setInfo } = useContext(AppContext);
   const [username, setUsername] = useState("")
   const [open, setOpen] = React.useState(false);
-  const [age, setAge] = useState("");
+  const [age, setAge] = useState("+91");
   const [drop, setDrop] = useState(false);
   const [idR, setidR] = useState(refer);
   const [agecheck, setAgecheck] = useState(false);
@@ -235,20 +236,29 @@ export default function Register({ refer }) {
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={age}
-                label="+39"
+                label="+91"
                 style={{ width: "10ch", background: "whitesmoke" }}
                 onChange={(e) => {
                   setAge(e.target.value);
                 }}
               >
-                <MenuItem value='+39'>+39</MenuItem>
-                <MenuItem value='+1'>+1</MenuItem>
+                
+                {
+                  codes.countries.map((c)=>{
+                    return(
+                      <MenuItem value={c.code}>{c.code}</MenuItem>
+                    )
+                  })
+                }
+                {/* {<MenuItem value='+1'>+1</MenuItem>
                 <MenuItem value='+255'>+255</MenuItem>
                 <MenuItem value='+55'>+55</MenuItem>
                 <MenuItem value='+52'>+52</MenuItem>
                 <MenuItem value='+54'>+54</MenuItem>
                 <MenuItem value='+234'>+234</MenuItem>
-                <MenuItem value='+62'>+62</MenuItem>
+                <MenuItem value='+62'>+62</MenuItem> */
+                }
+                
               </Select>
             </FormControl>
             <TextField id="outlined-basic" label="Phone"

@@ -11,7 +11,9 @@ export default function Refferal(){
     const [info, setInfo]  = useState({});
     const [refs,setRefs]=useState([]);
     const [lvl1,setLvl1] = useState(0);
-    const [lvl2,setLvl2] =useState(0) ;
+    const [lvl2,setLvl2] =useState(0);
+    const [lvlo,setLvlo] = useState([]);
+    const [lvll,setLvll] = useState([]);
     const auth = getAuth(app);
     const [lvl3,setLvl3] = useState(0);
 useEffect(()=>{
@@ -21,14 +23,12 @@ useEffect(()=>{
       // https://firebase.google.com/docs/reference/js/auth.user
       const uid = user.uid;
       // ...
-      console.log(user)
       const GET = async () => {
         const { data, error } = await supabase
           .from('users')
           .select()
           .eq('userId', user.uid)
         setInfo(data[0])
-        console.log(data)
       }
       GET();
     } else {
@@ -38,66 +38,53 @@ useEffect(()=>{
       router.push('/login');
     }
   });
-    const getRefs=async()=>{
-    const { data, error } = await supabase
-    .from('users')
-    .select()
-    .eq('refer', info.newrefer);
+   //get refs
+const getRefs=async()=>{
+  const { data, error } = await supabase
+  .from('users')
+  .select('*')
+  .eq('refer', info.newrefer);
 setRefs(data);
-console.log(info);
-console.log(error);
+try {
+
+setLvl1(data[0].count + 1)
+
+} catch (error) {
+
+}
+}
+const getLvl0=async()=>{
+const { data, error } = await supabase
+.from('users')
+.select()
+.eq('lvla', info.newrefer);
+setLvlo(data);
+try {
+
+setLvl2(data[0].count + 1)
+} catch (error) {
+  
+}
+}
+const getLvll=async()=>{
+const { data, error } = await supabase
+.from('users')
+.select()
+.eq('lvlb', info.newrefer);
+setLvll(data);
+try {  
+setLvl3(data[0].count + 1)
+} catch (error) {
+  
+}
+console.log(data);
 }
 getRefs();
-//get count 1
-const getLvla =async ()=>{
-  try{
-const { data, error } = await supabase
-    .from('users')
-    .select('*')
-    .eq('refer', info.newrefer)
-    setLvl1(data[0].count)
-  console.log(error)
-  console.log(data)
-  }catch(e){
-    
-  }
-    
-}
-const getLvlb =async ()=>{
-  try{
-const { data, error } = await supabase
-  .from('users')
-  .select('*')
-  .eq('lvla', info.newrefer)
-  setLvl1(data[0].count)
-  }catch(e){
-    
-  }
-  
+getLvl0();
+getLvll();
+//end refs
 
-}
-const getLvlc =async ()=>{
-try{
-const { data, error } = await supabase
-  .from('users')
-  .select('*')
-  .eq('lvlb', info.newrefer)
-  setLvl1(data[0].count)
-}catch(e){
-  
-}
-  
-
-}
-try{
-getLvla();
-getLvlb();
-getLvlc();
-}catch(e){
-
-}
-
-},[])
+},[lvl3,lvl2,lvl1,lvll,lvlo,refs])
 
 const columns = [
     { field: 'statId', headerName: 'ID', width: 50 },
@@ -131,40 +118,74 @@ const columns = [
 <Typography>{lvl1}</Typography></Box>
       <Divider style={{background:'white'}}/>
       <Box>
-<Typography>level 1</Typography>
+<Typography>level 2</Typography>
 <Typography>{lvl2}</Typography></Box>
       <Divider style={{background:'white'}}/>
       <Box>
-<Typography>level 1</Typography>
+<Typography>level 3</Typography>
 <Typography>{lvl3}</Typography></Box>
       <Divider style={{background:'white'}}/>
       </Stack>
 <Typography>Total : {lvl1+lvl2+lvl3} </Typography>
       <Divider style={{background:'white'}}/>
       <table>
+        <tbody>
   <tr>
     <th style={{width:'50px',color:'white'}}>S/N</th>
     <th style={{width:'100px',color:'white'}}>Username</th>
     <th style={{width:'50px',color:'white'}}>Date/Time</th>
     <th style={{width:'50px',color:'white'}}>Level</th>
-    <th style={{width:'50px',color:'white'}}>Amount</th>
+    <th style={{width:'50px',color:'white'}}>Balance</th>
   </tr>
   {
       refs.map((r)=>{
           sn++;
           var dts = new Date(r.crdate);
-          console.log(dts.getDate());
+         
           return(
             <tr key={r.username}>
             <th style={{width:'50px',color:'white',fontSize:'14px'}}>{sn}</th>
             <th style={{width:'100px',color:'white',fontSize:'14px'}}>{r.username}</th>
             <th style={{width:'100px',color:'white',fontSize:'14px'}}>{dts.getDate()+'/'+dts.getMonth()+'/'+dts.getFullYear()+' '+dts.getHours()+':'+dts.getMinutes()}</th>
-            <th style={{width:'50px',color:'white',fontSize:'14px'}}>{r.level}</th>
+            <th style={{width:'50px',color:'white',fontSize:'14px'}}>1</th>
             <th style={{width:'50px',color:'white',fontSize:'14px'}}>{r.balance}</th>
           </tr>
           )
       })
   }
+  {
+      lvlo.map((r)=>{
+          sn++;
+          var dts = new Date(r.crdate);
+         
+          return(
+            <tr key={r.username}>
+            <th style={{width:'50px',color:'white',fontSize:'14px'}}>{sn}</th>
+            <th style={{width:'100px',color:'white',fontSize:'14px'}}>{r.username}</th>
+            <th style={{width:'100px',color:'white',fontSize:'14px'}}>{dts.getDate()+'/'+dts.getMonth()+'/'+dts.getFullYear()+' '+dts.getHours()+':'+dts.getMinutes()}</th>
+            <th style={{width:'50px',color:'white',fontSize:'14px'}}>2</th>
+            <th style={{width:'50px',color:'white',fontSize:'14px'}}>{r.balance}</th>
+          </tr>
+          )
+      })
+  }
+  {
+      lvll.map((r)=>{
+          sn++;
+          var dts = new Date(r.crdate);
+         
+          return(
+            <tr key={r.username}>
+            <th style={{width:'50px',color:'white',fontSize:'14px'}}>{sn}</th>
+            <th style={{width:'100px',color:'white',fontSize:'14px'}}>{r.username}</th>
+            <th style={{width:'100px',color:'white',fontSize:'14px'}}>{dts.getDate()+'/'+dts.getMonth()+'/'+dts.getFullYear()+' '+dts.getHours()+':'+dts.getMinutes()}</th>
+            <th style={{width:'50px',color:'white',fontSize:'14px'}}>3</th>
+            <th style={{width:'50px',color:'white',fontSize:'14px'}}>{r.balance}</th>
+          </tr>
+          )
+      })
+  }
+  </tbody>
 </table>
 </div>
     );

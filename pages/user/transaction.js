@@ -9,6 +9,8 @@ import { getAuth,signOut } from "firebase/auth";
 export default function Transaction() {
     const [trans,setTrans] = useState([])
     const auth = getAuth(app)
+    useEffect(()=>{
+
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
@@ -21,8 +23,8 @@ export default function Transaction() {
             .from('notification')
             .select()
             .eq('username', user.displayName)
-          setTrans(data[0])
-          console.log(data)
+          setTrans(data)
+          console.log(data.length)
         }
         GET();
       } else {
@@ -32,6 +34,7 @@ export default function Transaction() {
         router.push('/login');
       }
     });
+    },[trans])
   var sn = 0;
     return(
         <Cover>
@@ -47,17 +50,18 @@ export default function Transaction() {
     <th style={{width:'70px',color:'#DBE9EE'}}>Status</th>
   </tr>
   {
-      trans.map((r)=>{
-          var dts = new Date(r.time);
-          console.log(dts.getDate());
-          return(
-            <tr key={r.uid}>
-            <th style={{width:'80px',color:'white'}}>{dts.getDate()+'/'+dts.getMonth()+'/'+dts.getFullYear()+' '+dts.getHours()+':'+dts.getMinutes()}</th>
-            <th style={{width:'150px',color:'white'}}>Your {r.type} claim of {r.amount} USDT</th>
-            <th style={{width:'70px',color:'white'}}>{r.sent}</th>
-          </tr>
-          )
-      })
+     trans.map((r)=>{
+      var dts = new Date(r.time);
+      console.log(dts.getDate());
+      return(
+        <tr key={r.uid}>
+        <th style={{width:'80px',color:'white'}}>{dts.getDate()+'/'+dts.getMonth()+'/'+dts.getFullYear()+' '+dts.getHours()+':'+dts.getMinutes()}</th>
+        <th style={{width:'150px',color:'white'}}>Your {r.type} claim of {r.amount} USDT</th>
+        <th style={{width:'70px',color:'white'}}>{r.sent}</th>
+      </tr>
+      )
+  })
+     
   }
 </table>
         </Stack>
