@@ -244,7 +244,7 @@ export default function Register({ refer }) {
                 {
                   codes.countries.map((c)=>{
                     return(
-                      <MenuItem value={c.code}>{c.code}</MenuItem>
+                      <MenuItem value={c.code} key={c.name}>{c.code}</MenuItem>
                     )
                   })
                 }
