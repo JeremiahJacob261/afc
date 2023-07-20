@@ -10,7 +10,6 @@ import IconButton from '@mui/material/IconButton';
 import {supabase} from './api/supabase'
 import {app} from './api/firebase'
 import { useContext } from "react";
-import {AppContext} from "./api/Context";
 import Link from "next/link";
 import {getDatabase} from 'firebase/database'
 import SimpleDialog from './modal'
@@ -28,7 +27,6 @@ import {  onAuthStateChanged } from "firebase/auth";
 export default function Login() {
   const dbs = getDatabase(app);
   const [username,setUsername] = useState("")
-const {info,setInfo} = useContext(AppContext);
 const [open, setOpen] = React.useState(false);
 const [drop,setDrop]=useState(false)
 const router = useRouter();

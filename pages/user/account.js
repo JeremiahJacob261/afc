@@ -1,7 +1,6 @@
 import { Avatar, Paper, Typography, Box, Stack, Button, Divider } from '@mui/material'
 import Cover from './cover'
 import React, { useContext, useEffect, useState } from "react";
-import { AppContext, SlipContext, BetContext } from "../api/Context";
 import { getCookies, getCookie, setCookies, deleteCookie } from 'cookies-next';
 import { useRouter } from 'next/router'
 import Link from 'next/link';
@@ -19,8 +18,6 @@ export default function Account() {
   const auth = getAuth(app);
   const router = useRouter()
   const [info, setInfo] = useState({});
-  const { bets, setBets } = useContext(BetContext);
-  const { slip, setSlip } = useContext(SlipContext)
   const [balance, setBalance] = useState(0);
   //snackbar1
   const [messages, setMessages] = useState("")

@@ -2,7 +2,6 @@ import Cover from './cover'
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useState } from "react";
 import Head from 'next/head'
-import { AppContext, BetContext, SlipContext } from "../api/Context";
 import { Stack, Typography, Button, Paper } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { supabase } from '../api/supabase';
@@ -18,10 +17,8 @@ import { getAuth,signOut } from "firebase/auth";
 export default function Bets() {
   const auth = getAuth(app);
   const [open, setOpen] = useState(false)
-  const { slip, setSlip } = useContext(SlipContext);
   const router = useRouter()
   const [bets, setBets] = useState([])
-  const { info, setInfo } = useContext(AppContext);
   const [matchD, setMatchD] = useState({})
   const [display, setDisplay] = useState({})
   const handleClickOpen = () => {

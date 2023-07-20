@@ -16,7 +16,6 @@ import { db } from '../api/firebase'
 import Spinner from 'react-bootstrap/Spinner';
 import { Form as Farm } from 'react-bootstrap'
 import SimpleDialog from '../modal'
-import { AppContext } from "../api/Context";
 import { getCookies, getCookie, setCookie, setCookies, removeCookies } from 'cookies-next';
 import LOGO from '../../public/logo_afc.ico'
 import Image from 'next/image'
@@ -34,7 +33,6 @@ export default function Register({ refer }) {
   const [cpassword, setcPassword] = useState("")
   const route = useRouter();
   const [phone, setPhone] = useState("")
-  const { info, setInfo } = useContext(AppContext);
   const [username, setUsername] = useState("")
   const [open, setOpen] = React.useState(false);
   const [age, setAge] = useState("+91");

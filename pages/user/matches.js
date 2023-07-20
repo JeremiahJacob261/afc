@@ -67,6 +67,7 @@ border: "1px solid rgba(255, 255, 255, 0.3)"
                   display:(stams<curren) ? 'none':'visible'
                 }} onClick={() => {
                   setDrop(true)
+                  //register/40985
                   router.push("/user/match/" + pro.match_id)
                 }}>
                 <Stack direction="column" alignItems="center">

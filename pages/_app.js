@@ -13,20 +13,10 @@ function MyApp({ Component, pageProps }) {
   const [bets, setBets] = useState([])
   const [slip, setSlip] = useState(0)
   return (
-    <Stack justifyContent="center" alignItems="center" style={{
-      overflowX: "hidden", padding: "8px", minHeight: "720px",
-      background: "#4054A0"
-    }}>
-      <SlipContext.Provider value={{ slip, setSlip }}>
-        <BetContext.Provider value={{ bets, setBets }}>
-          <AppContext.Provider
-            value={{ info, setInfo }}
-          ><Component {...pageProps} style={{ background: "#4054A0" }} />
-            <Footer />
-          </AppContext.Provider>
-        </BetContext.Provider>
-      </SlipContext.Provider>
-    </Stack>
+    <div style={{background: "#03045E"}}>
+      <Component {...pageProps} style={{ background: "#03045E" ,width:"100%",display:'flex'}} />
+      <Footer/>
+    </div>
   )
 }
 
