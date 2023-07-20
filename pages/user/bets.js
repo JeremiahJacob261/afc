@@ -44,16 +44,8 @@ export default function Bets() {
             .eq('username', user.displayName)
           setBets(data)
         }
-        const getNoOfBets = async () => {
-          const { count, error } = await supabase
-            .from('placed')
-            .select('*', { count: 'exact', head: true })
-            .eq('username',user.displayName)
-          setSlip(count)
-        }
 
     getMyBet()
-    getNoOfBets()
       } else {
         // User is signed out
         // ...
@@ -62,7 +54,7 @@ export default function Bets() {
       }
     });
    
-  }, [info]);
+  }, []);
   return (
     <Cover>
       <Head>

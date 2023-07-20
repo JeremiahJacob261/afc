@@ -1,5 +1,4 @@
 import { useContext, useEffect } from "react";
-import { AppContext, BetContext, SlipContext } from "../api/Context";
 import { useRouter } from 'next/router'
 import Head from "next/head";
 import Cover from './cover'
@@ -20,8 +19,6 @@ import { onAuthStateChanged } from "firebase/auth";
 import { getAuth,signOut } from "firebase/auth";
 export default function Home() {
   const [footDat, setFootDat] = useState([])
-  const { bets, setBets } = useContext(BetContext);
-  const { slip, setSlip } = useContext(SlipContext)
   const [balance, setBalance] = useState(0)
   const [info, setInfo] = useState({})
   const auth = getAuth(app);

@@ -11,7 +11,6 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import { AppContext, BetContext, SlipContext } from "../../api/Context";
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -31,9 +30,7 @@ export default function Match({ matchDat }) {
     const [matches, setMatches] = useState({})
     const [display, setDisplay] = useState({})
     const [open, setOpen] = useState(false)
-    const { bets, setBets } = useContext(BetContext)
     const [info, setInfo] = useState({});
-    const { slip, setSlip } = useContext(SlipContext);
 const auth = getAuth(app);
     
 useEffect(() => {
