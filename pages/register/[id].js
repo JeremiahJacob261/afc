@@ -73,7 +73,14 @@ export default function Register({ refer }) {
   const handleClose = (value) => {
     setOpen(false);
   };
-  const nRef = Math.random().toString().slice(2, 8);
+  function generateRandomSevenDigitNumber() {
+    const min = 1000000; // Smallest 7-digit number (1,000,000)
+    const max = 9999999; // Largest 7-digit number (9,999,999)
+    const randomSevenDigitNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+    return randomSevenDigitNumber;
+  }
+  const nRef = generateRandomSevenDigitNumber().toString();
+  console.log(nRef)
   const updateRef = async () => {
     const { data, error } = await supabase
       .from('referral')

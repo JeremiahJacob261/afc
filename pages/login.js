@@ -24,6 +24,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useEffect } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
+import { async } from "@firebase/util";
 export default function Login() {
   const dbs = getDatabase(app);
   const [username, setUsername] = useState("")
@@ -76,11 +77,17 @@ export default function Login() {
       }
     });
   }, [])
+  
   const login = async () => {
-
-    setDrop(true)
-    localStorage.clear()
-    signInWithEmailAndPassword(auth, email, values.password)
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    async function findemail(){
+      const {data,error} = await supabase
+      .from('users')
+      .select('email')
+      .eq('username',email)
+      signInWithEmailAndPassword(auth, data[0].email, values.password)
       .then((userCredential) => {
         // Signed in 
         const user = userCredential.user;
@@ -98,6 +105,34 @@ export default function Login() {
         alert(errorCode);
         setDrop(false)
       });
+    }
+setDrop(true)
+    localStorage.clear()
+    if(!email.includes("@")){
+      findemail()
+      console.log(email)
+    }else{
+      signInWithEmailAndPassword(auth, email, values.password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        // ...
+
+        alert('you are logged in');
+
+        setDrop(false)
+        router.push('/user');
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(error.message)
+        alert(errorCode);
+        setDrop(false)
+      });
+    }
+    
+    
   }
 
 
@@ -133,21 +168,19 @@ export default function Login() {
 <Typography variant="h1" style={{ fontFamily: 'Poppins, sans-serif', color: "#1A1B72",fontWeight:'900',fontSize:'64px' }}>AFCFIFA </Typography>
        
         </Link>
-         <Typography variant='subtitle2' sx={{ fontFamily: 'Poppins, sans-serif', fontSize: "10px", color: "#1A1B72" }}>
+         <Typography variant='subtitle' sx={{ fontFamily: 'Poppins, sans-serif', fontSize: "15px", color: "#1A1B72" }}>
           Investment Bet</Typography>
           <Typography variant="h1" style={{ fontFamily: 'Poppins, sans-serif', color: "white",fontWeight:'900',fontSize:'32px' }}>LOGIN </Typography>
         
-        <TextField id="outlined-basic" label="Email" variant="filled"
-        inputProps={{ style: { color: "white" } }}
-          sx={{ width: "100%", background: "#1A1B72"}}
+        <TextField id="outlined-basic" label="Email Or Username" variant="filled"
+          sx={{ width: "100%", background: "#F2F4CB"}}
           value={email}
           onChange={(e) => {
             setEmail(e.target.value)
           }}
         />
                 <FormControl 
-                inputProps={{ style: { color: "white" } }}
-                sx={{ m: 1, width: "100%", background: "#1A1B72"}} variant="filled">
+                sx={{ m: 1, width: "100%", background: "#F2F4CB"}} variant="filled">
           <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
           <OutlinedInput
             id="outlined-adornment-password"
@@ -170,7 +203,7 @@ export default function Login() {
           />
         </FormControl>
        
-        <Typography style={{ textDecoration: "none", color: "#DFA100",fontSize:'15px',fontWeight:'400' }}>forgotten password</Typography>
+        <Typography style={{ textDecoration: "none", color: "#7BB2D9",fontSize:'15px',fontWeight:'400' }}>forgotten password</Typography>
         <Button variant="contained" sx={{ width:'191px',height:'65px',background:'#21227A'  }} onClick={login}>
           <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "whitesmoke"}}>Login</Typography>
         </Button>
