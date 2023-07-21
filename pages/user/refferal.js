@@ -46,20 +46,23 @@ const getRefs=async()=>{
   .or(`refer.eq.${info.newrefer},lvla.eq.${info.newrefer},lvlb.eq.${info.newrefer}`);
 setRefs(data);
 try {
-  refs.map((r)=>{
-    if(r.refer === info.newrefer){
-setLvl1(lvl1++)
+  for (let i = 0; i < refs.length; i++) {
+    console.log(i)
+    if(refs[i].refer === info.newrefer){
+setLvl1(i+1)
     }else{
-      if(r.lvla === info.newrefer){
-        setLvl2(lvl2++)
+      if(refs[i].lvla === info.newrefer){
+        setLvl2(i+1)
             }else{
-              setLvl3(lvl3++)
+              setLvl3(i+1)
             }
     }
-  })
+    
+  }
+    
 
 } catch (error) {
-
+console.log(error)
 }
 }
 getRefs();
