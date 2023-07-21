@@ -65,7 +65,7 @@ export default function Home() {
       style={{ background: "#03045E", marginBottom: "50px", padding: "8px" }}
     >
       <Stack sx={{ width: "100%" }} justifyContent="center" alignItems="center" >
-        <Paper elevation={5} style={{ position: "fixed", top: 0, margin: "4px", padding: "8px" }}>Your Balance is {info.balance} USDT</Paper>
+        <Paper elevation={5} style={{ position: "fixed", top: 0, margin: "4px", padding: "8px" }}>Your Balance is {balance} USDT</Paper>
       </Stack>
       <Cover>  <Head>
         <title>Welcome -{info.username}</title>
