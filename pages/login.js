@@ -169,6 +169,8 @@ export default function Login() {
             label="Password"
           />
         </FormControl>
+       
+        <Typography style={{ textDecoration: "none", color: "#DFA100",fontSize:'15px',fontWeight:'400' }}>forgotten password</Typography>
         <Button variant="contained" sx={{ width:'191px',height:'65px',background:'#21227A'  }} onClick={login}>
           <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "whitesmoke"}}>Login</Typography>
         </Button>

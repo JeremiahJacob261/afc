@@ -65,6 +65,7 @@ export default function Bets() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div style={{ color: "#03045E", height: '100vh' }}>
+
         <Typography variant="h4" sx={{ color: "#E8E5DA", margin: "8px", fontFamily: "'Barlow', sans-serif" }}>Bets</Typography>
 
         <Stack direction="column"

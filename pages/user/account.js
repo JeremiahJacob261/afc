@@ -81,7 +81,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
         <link rel="icon" href="/logo_afc.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Box sx={{ padding: "8px", background: "#03045E",width:'100%' }}>
+      <Box sx={{ padding: "8px", background: "#03045E",width:'100%',minHeight:'80vh' }}>
         <div sx={{ padding: "8px", background: "none" }} >
           <Stack>
             <Avatar>{info.username}</Avatar>

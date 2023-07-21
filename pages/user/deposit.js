@@ -4,6 +4,7 @@ import { useContext, useEffect } from "react";
 import { AppContext } from "../api/Context";
 import React, { useState } from "react";
 import { useRouter } from 'next/router'
+import CloseIcon from '@mui/icons-material/Close';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Image from "next/image";
@@ -148,8 +149,14 @@ export default function Deposit() {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
       <Sncks message={messages} />
-      <Stack direction="column" spacing={3}>
-        <div style={{ display: 'flex', justifyContent: "center" }}>
+      <Stack direction="column" spacing={3} alignItems= "center">
+ <CloseIcon style={{color:'white',margin:'12px',width:'50px',height:'50px'}}
+      onClick={()=>{
+        router.push('/user/account')
+      }}
+      />
+        <div style={{ display: 'flex', justifyContent: "center",padding:'5px' }}>
+     
           <Typography align='center' style={{ color: 'white', fontFamily: 'Poppins, sans-serif',fontSize:'30px' }}>
             Deposit
           </Typography></div>
