@@ -53,7 +53,7 @@ export default function Refferal() {
           if (refs[i].refer === info.newrefer) {
             setLvl1(i + 1)
           } else {
-            if (refs[i].lvla === info.newrefer) {
+            if (refs[i].lvlb != info.newrefer) {
               setLvl2(i + 1)
             } else {
               setLvl3(i + 1)
