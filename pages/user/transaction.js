@@ -38,7 +38,7 @@ export default function Transaction() {
   var sn = 0;
     return(
         <Cover>
- <div style={{display:'flex',justifyContent:"center"}}>
+ <div style={{display:'flex',justifyContent:"center",minHeight:'90vh'}}>
         <Typography variant="h4" align='center' style={{color:'white',fontFamily: 'Poppins, sans-serif'}}>
           Transaction History
         </Typography></div>
