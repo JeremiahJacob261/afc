@@ -2,7 +2,7 @@ import { Divider, Typography,Stack } from "@mui/material";
 import TelegramIcon from '@mui/icons-material/Telegram';
 export default function Footer(){
     return(
-        <div style={{background:"none",width:"360px",padding:"8px"}}>
+        <div style={{background:"none",width:"100%",padding:"8px"}}>
             <Divider sx={{background:"whitesmoke"}}/>
             <Stack direction="column" alignItems="center">
         <Typography sx={{color:"#EEF0F2",fontFamily:"Nerko One, cursive",fontSize:"20px"}}>ATALANTA INVESTMENT BET</Typography>

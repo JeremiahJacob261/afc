@@ -39,7 +39,7 @@ border: "1px solid rgba(255, 255, 255, 0.3)"
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div style={{
-        maxWidth: "350px", background: "#4054A0"
+        maxWidth: "350px", background: "#03045E",minHeight:'100vh'
       }}>
         <Typography variant="h4" sx={{ color: "#E8E5DA", margin: "8px", fontFamily: "'Barlow', sans-serif" }}>List Of Our Favourite Matches</Typography>
         {

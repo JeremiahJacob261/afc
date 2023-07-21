@@ -33,7 +33,7 @@ function BottomNavi() {
         onChange={(event, newValue) => {
           setValue(newValue);
         }}
-        sx={{ borderRadius: "10px" ,background:"#0B1723"}}
+        sx={{ borderRadius: "10px" ,background:'#1A1B72'}}
       >
         <BottomNavigationAction label="Top" onClick={home} icon={<HomeIcon style={{width:"20px"}}/>} sx={{width:"40px",color:"white"}}/>
         <BottomNavigationAction label="Matches" onClick={matches} icon={<SportsSoccerIcon />} sx={{width:"40px",color:"white"}}/>

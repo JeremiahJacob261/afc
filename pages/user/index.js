@@ -62,7 +62,7 @@ export default function Home() {
   const router = useRouter()
   return (
     <Stack justifyContent="center" alignItems="center"
-      style={{ background: "#4054A0", marginBottom: "50px", padding: "8px" }}
+      style={{ background: "#03045E", marginBottom: "50px", padding: "8px" }}
     >
       <Stack sx={{ width: "100%" }} justifyContent="center" alignItems="center" >
         <Paper elevation={5} style={{ position: "fixed", top: 0, margin: "4px", padding: "8px" }}>Your Balance is {info.balance} USDT</Paper>
@@ -71,15 +71,15 @@ export default function Home() {
         <title>Welcome -{info.username}</title>
         <link rel="icon" href="/logo_afc.ico" />
       </Head>
-        <Box sx={{ background: "#4054A0" }}>
+        <Box sx={{ background: "#03045E" }}>
           <Image src={ads2} width='350' height='200' alt="firstimg" />
 
-          <Stack direction="column" spacing={2} sx={{ background: "#4054A0" }}>
+          <Stack direction="column" spacing={2} sx={{ background: "#03045E" }}>
             <Stack direction="row" alignItems="center"> <WhatshotIcon sx={{color:"whitesmoke",width:"30px",height:"30px"}}/>
             <Typography variant="h5" sx={{ marginLeft: "10px", marginTop: "10px", fontFamily: 'Poppins, sans-serif', color: "white", }}>Hot Matches</Typography>
             </Stack>
          <Typography variant="caption" sx={{ marginLeft: "25px", color: "white", }}> View the latest events and matches happening in Real-Time</Typography>
-            <Paper elevation={5} sx={{ background: "#4054A0", marginTop: "10px" }}>
+            <Paper elevation={5} sx={{ background: "#03045E", marginTop: "10px" }}>
             {
           footDat.map((pro) => {
             let stams = Date.parse(pro.date + " " + pro.time) / 1000;

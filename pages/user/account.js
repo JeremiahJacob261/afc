@@ -81,15 +81,15 @@ const Alert = React.forwardRef(function Alert(props, ref) {
         <link rel="icon" href="/logo_afc.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Box sx={{ padding: "8px", background: "#4054A0" }}>
-        <Paper sx={{ padding: "8px", background: "none" }} elevation={4}>
+      <Box sx={{ padding: "8px", background: "#03045E",width:'100%' }}>
+        <div sx={{ padding: "8px", background: "none" }} >
           <Stack>
             <Avatar>{info.username}</Avatar>
             <Typography variant="h4" sx={{ color: "white", fontFamily: 'PT Sans, sans-serif' }}>Welcome, {info.username}</Typography>
           </Stack>
           <Typography sx={{ color: "white", fontFamily: 'PT Sans, sans-serif' }}>{balance} USDT</Typography>
-        </Paper>
-        <Paper sx={{ background: "none" }} elevation={5}>
+        </div>
+        <div sx={{ background: "none" }} >
           <Stack direction="column" sx={{ background: "none", padding: "8px" }} >
             <Stack direction="row" >
               <Typography sx={{ padding: "6px", cursor: "pointer", fontSize: "14px", color: "white", fontFamily: 'PT Sans, sans-serif' }} >Invite Code : https://afcfifa.com/register/{info.newrefer}</Typography>
@@ -100,50 +100,50 @@ const Alert = React.forwardRef(function Alert(props, ref) {
               }} /></Stack>
             <Divider />
 
-            <Typography sx={{ padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }}
+            <Typography sx={{ background:'#1A1B72',padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }}
             onClick={()=>{
               router.push("/user/refferal")
             }}
             >Referral Details </Typography> <Divider />
-            <Typography sx={{ padding: "6px", color: "white", fontSize: "14px", cursor: "pointer", fontFamily: 'PT Sans, sans-serif' }}
+            <Typography sx={{ background:'#1A1B72',padding: "6px", color: "white", fontSize: "14px", cursor: "pointer", fontFamily: 'PT Sans, sans-serif' }}
               onClick={() => {
                 router.push("/user/deposit")
               }
               }
             >Deposit</Typography>
             <Divider />
-            <Typography sx={{ padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }}
+            <Typography sx={{ background:'#1A1B72',padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }}
               onClick={() => {
                 router.push("/user/withdraw")
               }
               }
             >WithDrawal</Typography>
             <Divider />
-            <Typography sx={{ padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }}
+            <Typography sx={{ background:'#1A1B72',padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }}
               onClick={() => {
                 router.push("/user/bets")
               }
               }>
               My Bets</Typography>
             <Divider />
-            <Typography sx={{ padding: "6px", color: "white", fontSize: "14px", cursor: "pointer", fontFamily: 'PT Sans, sans-serif' }}
+            <Typography sx={{ background:'#1A1B72',padding: "6px", color: "white", fontSize: "14px", cursor: "pointer", fontFamily: 'PT Sans, sans-serif' }}
               onClick={() => {
                 router.push("/user/transaction")
               }
               }
             >Transaction History</Typography>
             <Divider />
-            < Link href='https://t.me/AFC_Customerservice1'> <Typography sx={{ padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }}
+            < Link href='https://t.me/AFC_Customerservice1'> <Typography sx={{ background:'#1A1B72',padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }}
             > Contact Us on Telegram @AFC_Customerservice1{
                 //ellacruizfred60
               }</Typography></Link>
            <Divider />
-            < Link href='https://t.me/+tlIgo-59H4A1NjRk'> <Typography sx={{ padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }}
+            < Link href='https://t.me/+tlIgo-59H4A1NjRk'> <Typography sx={{ background:'#1A1B72',padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }}
             > Join Our Telegram Group {
                 //ellacruizfred60
               }</Typography></Link>
-           
-            <Typography sx={{ padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }} onClick={() => {
+           <Divider/>
+            <Typography sx={{ background:'#1A1B72',padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }} onClick={() => {
               
               signOut(auth).then(()=>{
           
@@ -152,7 +152,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
             }
             }>Log Out</Typography>
           </Stack>
-        </Paper>
+        </div>
       </Box>
     </Cover>
   )

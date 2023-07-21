@@ -278,7 +278,7 @@ useEffect(() => {
     }
     //main ui
     return (
-        <Stack style={{ width: "100%" }} alignItems="center">
+        <Stack style={{ width: "100%",height:'100%',background:'#03045E' }} alignItems="center">
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                 open={drop}
@@ -294,7 +294,7 @@ useEffect(() => {
             </Head>
             <DisplayDialog />
             <Paper elevation={4} sx={{ width: "100%" }}>
-                <Stack style={{ background: "#1B5299", width: "100%", padding: "8px" }} alignItems="center">
+                <Stack style={{ background: "#1A1B72", width: "100%", padding: "8px" }} alignItems="center">
                     <KeyboardBackspaceIcon sx={{ color: "white" }} onClick={() => {
                         setDrop(true)
                         router.push("/user/matches")

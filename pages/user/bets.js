@@ -12,7 +12,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { app } from '../api/firebase';
 import { onAuthStateChanged } from "firebase/auth";
-import { getAuth,signOut } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 
 export default function Bets() {
   const auth = getAuth(app);
@@ -43,9 +43,10 @@ export default function Bets() {
             .select()
             .eq('username', user.displayName)
           setBets(data)
+          console.log(data.length)
         }
 
-    getMyBet()
+        getMyBet()
       } else {
         // User is signed out
         // ...
@@ -53,7 +54,7 @@ export default function Bets() {
         router.push('/login');
       }
     });
-   
+
   }, []);
   return (
     <Cover>
@@ -63,56 +64,37 @@ export default function Bets() {
         <link rel="icon" href="/logo_afc.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <div style={{ color: "#F9F9F9" }}>
-        <Dialog open={open} onClose={handleClose} style={{ minWidth: "300px", padding: "8px" }}>
-          <DialogTitle sx={{ color: "#1B5299", fontFamily: 'Caveat, cursive', fontSize: "25px" }}>DELETE Bet</DialogTitle>
-          <DialogContent>
-            <DialogContentText>Match Id :{display.match}</DialogContentText>
-            <Stack direction="column" spacing={3}>
-              <Typography>{display.home} VS {display.away}</Typography>
-              <Typography>{display.market}</Typography>
-            </Stack>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Exit</Button>
-            <Button onClick={() => {
-              const del = async () => {
-                const { error } = await supabase
-                  .from('placed')
-                  .delete()
-                  .eq('betid', display.id)
-              }
-              del();
-              handleClose()
+      <div style={{ color: "#03045E", height: '100vh' }}>
+        <Typography variant="h4" sx={{ color: "#E8E5DA", margin: "8px", fontFamily: "'Barlow', sans-serif" }}>Bets</Typography>
 
-            }}>Delete Bet</Button>
-          </DialogActions>
-        </Dialog>
         <Stack direction="column"
-          spacing={2} style={{ maxWidth: "350px" }}>
-          {
+          spacing={2} style={{ maxWidth: "350px", background: 'none' }}>
+          {function () {
+
             bets.map((s) => {
               return (
-                <div key={s.betid} onClick={()=>{
-                  router.push('/user/viewbet/'+s.betid);
+                <div key={s.betid} onClick={() => {
+                  router.push('/user/viewbet/' + s.betid);
                 }}>
                   <Paper sx={{ background: "#0B1723", padding: "4px", height: "max-content" }} >
                     <Stack direction="row" spacing={4} alignItems="center" justifyContent="space-around">
                       <Stack style={{ padding: "8px", width: "350px", height: "80px" }} direction="column" >
 
-                        <Typography sx={{ color: "white",fontSize:'15px' }}>{s.home} vs {s.away}</Typography>
-                        <Typography variant="subbtitle2" sx={{ color: "white",fontSize:'15px' }}> {s.market}</Typography>
-                       </Stack>
-                       <Typography sx={{
-                          fontFamily: 'Changa, sans-serif',fontSize:'15px', color: "white"
-                        }}>{s.stake} USDT</Typography>
-<Typography style={{color:'white',fontFamily: 'Poppins, sans-serif',fontSize:'12px'}}>Time : {s.time}</Typography>
-<Typography style={{color:'white',fontFamily: 'Poppins, sans-serif',fontSize:'12px'}}>Date : {s.date} </Typography>
+                        <Typography sx={{ color: "white", fontSize: '15px' }}>{s.home} vs {s.away}</Typography>
+                        <Typography variant="subbtitle2" sx={{ color: "white", fontSize: '15px' }}> {s.market}</Typography>
+                      </Stack>
+                      <Typography sx={{
+                        fontFamily: 'Changa, sans-serif', fontSize: '15px', color: "white"
+                      }}>{s.stake} USDT</Typography>
+                      <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Time : {s.time}</Typography>
+                      <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Date : {s.date} </Typography>
                     </Stack>
                   </Paper>
                 </div>
               )
             })
+          }
+
           }
         </Stack>
       </div>
