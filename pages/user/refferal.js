@@ -110,20 +110,20 @@ const columns = [
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Stack direction="row" spacing={5}>
-        <Box>
-<Typography>level 1</Typography>
-<Typography>{lvl1}</Typography></Box>
+        <Box >
+<Typography style={{width:'50px',color:'white',fontSize:'14px'}}>level 1</Typography>
+<Typography style={{width:'50px',color:'white',fontSize:'14px'}}>{lvl1}</Typography></Box>
       <Divider style={{background:'white'}}/>
       <Box>
-<Typography>level 2</Typography>
-<Typography>{lvl2}</Typography></Box>
+<Typography style={{width:'50px',color:'white',fontSize:'14px'}}>level 2</Typography>
+<Typography style={{width:'50px',color:'white',fontSize:'14px'}}>{lvl2}</Typography></Box>
       <Divider style={{background:'white'}}/>
       <Box>
-<Typography>level 3</Typography>
-<Typography>{lvl3}</Typography></Box>
+<Typography style={{width:'50px',color:'white',fontSize:'14px'}}>level 3</Typography>
+<Typography style={{width:'50px',color:'white',fontSize:'14px'}}>{lvl3}</Typography></Box>
       <Divider style={{background:'white'}}/>
       </Stack>
-<Typography>Total : {lvl1+lvl2+lvl3} </Typography>
+<Typography style={{width:'50px',color:'white',fontSize:'14px'}}>Total : {lvl1+lvl2+lvl3} </Typography>
       <Divider style={{background:'white'}}/>
       <table>
         <tbody>
@@ -144,7 +144,7 @@ const columns = [
             <th style={{width:'50px',color:'white',fontSize:'14px'}}>{sn}</th>
             <th style={{width:'100px',color:'white',fontSize:'14px'}}>{r.username}</th>
             <th style={{width:'100px',color:'white',fontSize:'14px'}}>{dts.getDate()+'/'+dts.getMonth()+'/'+dts.getFullYear()+' '+dts.getHours()+':'+dts.getMinutes()}</th>
-            <th style={{width:'50px',color:'white',fontSize:'14px'}}>1</th>
+            <th style={{width:'50px',color:'white',fontSize:'14px'}}>{(info.newrefer === r.refer) ? 1 : (info.newrefer === r.lvla) ? 2 : 3}</th>
             <th style={{width:'50px',color:'white',fontSize:'14px'}}>{r.balance}</th>
           </tr>
           )
