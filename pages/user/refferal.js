@@ -43,11 +43,11 @@ const getRefs=async()=>{
   const { data, error } = await supabase
   .from('users')
   .select('*')
-  .eq('refer', info.newrefer);
+  .or(`refer.eq.${info.newrefer},lvla.eq.${info.newrefer},lvlb.eq.${info.newrefer}`);
 setRefs(data);
 try {
-
-setLvl1(data[0].count + 1)
+  
+setLvl1(data.length)
 
 } catch (error) {
 
@@ -77,11 +77,8 @@ setLvl3(data[0].count + 1)
 } catch (error) {
   
 }
-console.log(data);
 }
 getRefs();
-getLvl0();
-getLvll();
 //end refs
 
 },[lvl3,lvl2,lvl1,lvll,lvlo,refs])
