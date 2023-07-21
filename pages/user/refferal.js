@@ -46,36 +46,20 @@ const getRefs=async()=>{
   .or(`refer.eq.${info.newrefer},lvla.eq.${info.newrefer},lvlb.eq.${info.newrefer}`);
 setRefs(data);
 try {
-  
-setLvl1(data.length)
+  refs.map((r)=>{
+    if(r.refer === info.newrefer){
+setLvl1(lvl1++)
+    }else{
+      if(r.lvla === info.newrefer){
+        setLvl2(lvl2++)
+            }else{
+              setLvl3(lvl3++)
+            }
+    }
+  })
 
 } catch (error) {
 
-}
-}
-const getLvl0=async()=>{
-const { data, error } = await supabase
-.from('users')
-.select()
-.eq('lvla', info.newrefer);
-setLvlo(data);
-try {
-
-setLvl2(data[0].count + 1)
-} catch (error) {
-  
-}
-}
-const getLvll=async()=>{
-const { data, error } = await supabase
-.from('users')
-.select()
-.eq('lvlb', info.newrefer);
-setLvll(data);
-try {  
-setLvl3(data[0].count + 1)
-} catch (error) {
-  
 }
 }
 getRefs();
@@ -145,38 +129,6 @@ const columns = [
             <th style={{width:'100px',color:'white',fontSize:'14px'}}>{r.username}</th>
             <th style={{width:'100px',color:'white',fontSize:'14px'}}>{dts.getDate()+'/'+dts.getMonth()+'/'+dts.getFullYear()+' '+dts.getHours()+':'+dts.getMinutes()}</th>
             <th style={{width:'50px',color:'white',fontSize:'14px'}}>{(info.newrefer === r.refer) ? 1 : (info.newrefer === r.lvla) ? 2 : 3}</th>
-            <th style={{width:'50px',color:'white',fontSize:'14px'}}>{r.balance}</th>
-          </tr>
-          )
-      })
-  }
-  {
-      lvlo.map((r)=>{
-          sn++;
-          var dts = new Date(r.crdate);
-         
-          return(
-            <tr key={r.username}>
-            <th style={{width:'50px',color:'white',fontSize:'14px'}}>{sn}</th>
-            <th style={{width:'100px',color:'white',fontSize:'14px'}}>{r.username}</th>
-            <th style={{width:'100px',color:'white',fontSize:'14px'}}>{dts.getDate()+'/'+dts.getMonth()+'/'+dts.getFullYear()+' '+dts.getHours()+':'+dts.getMinutes()}</th>
-            <th style={{width:'50px',color:'white',fontSize:'14px'}}>2</th>
-            <th style={{width:'50px',color:'white',fontSize:'14px'}}>{r.balance}</th>
-          </tr>
-          )
-      })
-  }
-  {
-      lvll.map((r)=>{
-          sn++;
-          var dts = new Date(r.crdate);
-         
-          return(
-            <tr key={r.username}>
-            <th style={{width:'50px',color:'white',fontSize:'14px'}}>{sn}</th>
-            <th style={{width:'100px',color:'white',fontSize:'14px'}}>{r.username}</th>
-            <th style={{width:'100px',color:'white',fontSize:'14px'}}>{dts.getDate()+'/'+dts.getMonth()+'/'+dts.getFullYear()+' '+dts.getHours()+':'+dts.getMinutes()}</th>
-            <th style={{width:'50px',color:'white',fontSize:'14px'}}>3</th>
             <th style={{width:'50px',color:'white',fontSize:'14px'}}>{r.balance}</th>
           </tr>
           )
