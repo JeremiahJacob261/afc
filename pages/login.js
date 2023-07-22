@@ -79,9 +79,7 @@ export default function Login() {
   }, [])
   
   const login = async () => {
-    function delay(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
+   
     async function findemail(){
       const {data,error} = await supabase
       .from('users')
@@ -109,8 +107,18 @@ export default function Login() {
 setDrop(true)
     localStorage.clear()
     if(!email.includes("@")){
+      const { count, error } = await supabase
+      .from('users')
+      .select('*', { count: 'exact', head: true })
+      .eq('username', username)
+    console.log(count);
+    if (count > 0) {
+      
       findemail()
-      console.log(email)
+    }else{
+alert('username does not exist')
+setDrop(false)
+    }
     }else{
       signInWithEmailAndPassword(auth, email, values.password)
       .then((userCredential) => {

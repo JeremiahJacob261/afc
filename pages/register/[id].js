@@ -125,8 +125,6 @@ export default function Register({ refer }) {
 
   const signup = async () => {
 
-    const nRef = generateRandomSevenDigitNumber().toString();
-    console.log(nRef)
     lvl2();
     let usern = username.replace(/^\s+|\s+$/gm, '')
     createUserWithEmailAndPassword(auth, email, values.password)
@@ -136,6 +134,9 @@ export default function Register({ refer }) {
         // ...
         console.log(user.uid);
         const upload = async () => {
+
+  const nRef = generateRandomSevenDigitNumber().toString();
+  console.log(nRef)
           const { data, error } = await supabase
             .from('users')
             .insert({
@@ -322,27 +323,31 @@ export default function Register({ refer }) {
             style={{ color: "white" }}
           />
           <Button variant="contained" sx={{ padding: "10px",width:'100%',background:'#EE8F00' }} onClick={() => {
+            if(phone.length >= 9){
 
-            const checkDuplicate = async () => {
-              const { count, error } = await supabase
-                .from('users')
-                .select('*', { count: 'exact', head: true })
-                .eq('username', username)
-              console.log(count);
-              if (count > 0) {
-                alert("Username Already Exist!");
-              } else {
-                if (agecheck === false) {
-                  alert('Please click the checkBox before you continue')
+              const checkDuplicate = async () => {
+                const { count, error } = await supabase
+                  .from('users')
+                  .select('*', { count: 'exact', head: true })
+                  .eq('username', username)
+                console.log(count);
+                if (count > 0) {
+                  alert("Username Already Exist!");
                 } else {
-                  setDrop(true);
-                  signup()
+                  if (agecheck === false) {
+                    alert('Please click the checkBox before you continue')
+                  } else {
+                    setDrop(true);
+                    signup()
+                  }
+  
                 }
-
               }
+              checkDuplicate()
+  
+            }else{
+              alert('Please Input a Complete Phone Number! at least 9 digits')
             }
-            checkDuplicate()
-
           }}>
             <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px",color:'#03045E' }}>Sign Up</Typography>
           </Button>
