@@ -79,8 +79,6 @@ export default function Register({ refer }) {
     const randomSevenDigitNumber = Math.floor(Math.random() * (max - min + 1)) + min;
     return randomSevenDigitNumber;
   }
-  const nRef = generateRandomSevenDigitNumber().toString();
-  console.log(nRef)
   const updateRef = async () => {
     const { data, error } = await supabase
       .from('referral')
@@ -105,28 +103,31 @@ export default function Register({ refer }) {
         console.log('sign out');
       }
     });
-    //getlvl2
-    const lvl2 = async () => {
-      try {
 
-        const { data, error } = await supabase
-          .from('users')
-          .select()
-          .eq('newrefer', idR)
-        setLvla(data[0].newrefer);
-        setLvlb(data[0].refer);
-        console.log(data);
-        console.log(error);
-      } catch (e) {
 
-      }
+  }, [ idR])
+  //getlvl2
+  const lvl2 = async () => {
+    try {
+
+      const { data, error } = await supabase
+        .from('users')
+        .select()
+        .eq('newrefer', idR)
+      setLvla(data[0].newrefer);
+      setLvlb(data[0].refer);
+      console.log(data);
+      console.log(error);
+    } catch (e) {
+
     }
+  }
 
-    lvl2();
-
-  }, [setLvla, setLvlb, idR])
   const signup = async () => {
 
+    const nRef = generateRandomSevenDigitNumber().toString();
+    console.log(nRef)
+    lvl2();
     let usern = username.replace(/^\s+|\s+$/gm, '')
     createUserWithEmailAndPassword(auth, email, values.password)
       .then((userCredential) => {
@@ -134,23 +135,23 @@ export default function Register({ refer }) {
         const user = userCredential.user;
         // ...
         console.log(user.uid);
-        const upload =async()=>{
+        const upload = async () => {
           const { data, error } = await supabase
-          .from('users')
-          .insert({
-            userId:user.uid,
-            password: values.password,
-            phone: phone,
-            refer: idR,
-            username: username,
-            countrycode: age,
-            newrefer: nRef,
-            lvla: lvla,
-            lvlb: lvlb,
-            email:email
-          })
-        console.log(error);
-        console.log(data);
+            .from('users')
+            .insert({
+              userId: user.uid,
+              password: values.password,
+              phone: phone,
+              refer: idR,
+              username: username,
+              countrycode: age,
+              newrefer: nRef,
+              lvla: lvla,
+              lvlb: lvlb,
+              email: email
+            })
+          console.log(error);
+          console.log(data);
         }
         upload()
         updateRef()
@@ -160,7 +161,7 @@ export default function Register({ refer }) {
           displayName: username,
           phoneNumber: phone
         }).then(async () => {
-          
+
         })
 
         setOpen(true);
@@ -171,10 +172,10 @@ export default function Register({ refer }) {
         // ..
         console.log(error.code);
         setDrop(false);
-        if(errorCode === 'auth/email-already-in-use'){
+        if (errorCode === 'auth/email-already-in-use') {
 
-        alert('this email is already registered')
-        }else if( errorCode === 'auth/weak-password'){
+          alert('this email is already registered')
+        } else if (errorCode === 'auth/weak-password') {
           alert('Your password is weak, please use atleast 6 characters')
         }
       });
@@ -183,7 +184,7 @@ export default function Register({ refer }) {
 
   return (
     <Stack justifyContent="center" alignItems="center" style={{
-      background: "none", maxWidth: "350px"
+      background: "none", width: '100%'
     }}>
       <Head>
         <title>Register</title>
@@ -208,17 +209,18 @@ export default function Register({ refer }) {
           spacing={2}
           className="glass"
           sx={{ height: "100%", marginTop: "15px", padding: "10px", backgound: "#495265" }}>
-          <Image src={LOGO} width='50' height='75' style={{ borderRadius: "15px" }} />
-          <Typography variant="h4" style={{ fontFamily: 'Xanh Mono, monospace', color: "white" }}>Welcome 🙌 </Typography>
-          <Typography variant='subtitle' sx={{ fontFamily: 'Work Sans, sans-serif', color: "white" }}>
-            Sign Up now to get all the Amazing Sports Market and Odds</Typography>
+          <Link href="/" style={{ textDecoration: "none" }}>
+            <Typography variant="h1" style={{ fontFamily: 'Poppins, sans-serif', color: "#181AA9", fontWeight: '900', fontSize: '64px' }}>AFCFIFA </Typography>
 
+          </Link>
+          <Typography variant='subtitle' sx={{ fontFamily: 'Poppins, sans-serif', fontSize: "15px", color: "#181AA9" }}>
+            Investment Bet</Typography>
           <TextField id="outlined-basic" label="Username" variant="outlined"
             value={username}
             onChange={(e) => {
               setUsername(e.target.value)
             }}
-            style={{ width: "100%", background: "whitesmoke" }}
+            style={{ width: "100%", background: "#F2F4CB" }}
           />
           <TextField id="outlined-basic" label="Email" variant="outlined"
             value={email}
@@ -226,15 +228,14 @@ export default function Register({ refer }) {
             onChange={(e) => {
               setEmail(e.target.value)
             }}
-            style={{ width: "100%", background: "whitesmoke" }}
+            style={{ width: "100%", background: "#F2F4CB" }}
           />
           <TextField id="outlined-basic" label="Invite Code" variant="outlined"
             value={idR}
-            style={{ width: "100%", background: "whitesmoke" }}
+            style={{ width: "100%", background: "#F2F4CB" }}
             onChange={(e) => {
               setidR(e.target.value)
             }} />
-          <Stack direction="row" justifyContent="stretch" sx={{ width: '42%', minWidth: "240px",display:'flex' }}>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Code</InputLabel>
               <Select
@@ -242,15 +243,15 @@ export default function Register({ refer }) {
                 id="demo-simple-select"
                 value={age}
                 label="+91"
-                style={{ width: "10ch", background: "whitesmoke" }}
+                style={{ width:'100%', background: "#F2F4CB"  }}
                 onChange={(e) => {
                   setAge(e.target.value);
                 }}
               >
-                
+
                 {
-                  codes.countries.map((c)=>{
-                    return(
+                  codes.countries.map((c) => {
+                    return (
                       <MenuItem value={c.code} key={c.name}>{c.code}</MenuItem>
                     )
                   })
@@ -263,19 +264,17 @@ export default function Register({ refer }) {
                 <MenuItem value='+234'>+234</MenuItem>
                 <MenuItem value='+62'>+62</MenuItem> */
                 }
-                
+
               </Select>
             </FormControl>
             <TextField id="outlined-basic" label="Phone"
               type="number"
               variant="outlined"
-              style={{ background: "whitesmoke",width:'100%' }}
+              style={{  width:'100%',background: "#F2F4CB" ,}}
               value={phone}
               onChange={(e) => {
                 setPhone(e.target.value);
               }} />
-          </Stack>
-
 
           <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
             <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
@@ -284,7 +283,7 @@ export default function Register({ refer }) {
               type={values.showPassword ? 'text' : 'password'}
               value={values.password}
               onChange={handleChange('password')}
-              style={{ width: "100%", background: "whitesmoke" }}
+              style={{ width: "100%", background: "#F2F4CB"  }}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -305,7 +304,7 @@ export default function Register({ refer }) {
             id="outlined-required"
             label="Confirm Password"
             type="password"
-            style={{ width: "100%", background: "whitesmoke" }}
+            style={{ width: "100%", background: "#F2F4CB" }}
             value={cpassword}
             onChange={(e) => {
               setcPassword(e.target.value);
@@ -322,7 +321,7 @@ export default function Register({ refer }) {
             }}
             style={{ color: "white" }}
           />
-          <Button variant="contained" sx={{ padding: "8px" }} onClick={() => {
+          <Button variant="contained" sx={{ padding: "10px",width:'100%',background:'#EE8F00' }} onClick={() => {
 
             const checkDuplicate = async () => {
               const { count, error } = await supabase
@@ -345,10 +344,10 @@ export default function Register({ refer }) {
             checkDuplicate()
 
           }}>
-            <Typography sx={{ fontFamily: 'Zen Antique, serif', marginLeft: "3px", color: "white" }}>Sign Up</Typography>
+            <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px",color:'#03045E' }}>Sign Up</Typography>
           </Button>
 
-          <Typography sx={{ color: "white" }}>Already have an Account ? <Link href="/login" style={{ textDecoration: "none", color: "whitesmoke" }}>Login</Link></Typography>
+          <Typography sx={{ color: "#EE8F00" }}>Already have an Account ? <Link href="/login" style={{ textDecoration: "none", color: "whitesmoke" }}>Login</Link></Typography>
 
         </Stack>
       </Box>

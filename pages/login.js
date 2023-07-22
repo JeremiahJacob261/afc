@@ -165,10 +165,10 @@ setDrop(true)
           onClose={handleClose}
         />
         <Link href="/" style={{ textDecoration: "none"}}>
-<Typography variant="h1" style={{ fontFamily: 'Poppins, sans-serif', color: "#1A1B72",fontWeight:'900',fontSize:'64px' }}>AFCFIFA </Typography>
+<Typography variant="h1" style={{ fontFamily: 'Poppins, sans-serif', color: "#181AA9",fontWeight:'900',fontSize:'64px' }}>AFCFIFA </Typography>
        
         </Link>
-         <Typography variant='subtitle' sx={{ fontFamily: 'Poppins, sans-serif', fontSize: "15px", color: "#1A1B72" }}>
+         <Typography variant='subtitle' sx={{ fontFamily: 'Poppins, sans-serif', fontSize: "15px", color: "#181AA9" }}>
           Investment Bet</Typography>
           <Typography variant="h1" style={{ fontFamily: 'Poppins, sans-serif', color: "white",fontWeight:'900',fontSize:'32px' }}>LOGIN </Typography>
         
@@ -202,8 +202,8 @@ setDrop(true)
             label="Password"
           />
         </FormControl>
-       
-        <Typography style={{ textDecoration: "none", color: "#7BB2D9",fontSize:'15px',fontWeight:'400' }}>forgotten password</Typography>
+       <Link href="/passwordreset" style={{textDecoration:'none'}}> <Typography style={{ textDecoration: "none", color: "#9D9EF1",fontSize:'15px',fontWeight:'400' }}>forgotten password</Typography>
+       </Link>
         <Button variant="contained" sx={{ width:'191px',height:'65px',background:'#21227A'  }} onClick={login}>
           <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "whitesmoke"}}>Login</Typography>
         </Button>

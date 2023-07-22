@@ -3,13 +3,16 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import { supabase } from '../api/supabase'
 import Cover from './cover'
+import { useRouter } from 'next/router'
+import CloseIcon from '@mui/icons-material/Close';
 import { app } from '../api/firebase';
 import { onAuthStateChanged } from "firebase/auth";
-import { getAuth,signOut } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 export default function Transaction() {
-    const [trans,setTrans] = useState([])
-    const auth = getAuth(app)
-    useEffect(()=>{
+  const [trans, setTrans] = useState([])
+  const router = useRouter()
+  const auth = getAuth(app)
+  useEffect(() => {
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -34,37 +37,44 @@ export default function Transaction() {
         router.push('/login');
       }
     });
-    },[trans])
+  }, [trans])
   var sn = 0;
-    return(
-        <Cover>
- <div style={{display:'flex',justifyContent:"center",minHeight:'90vh'}}>
-        <Typography variant="h4" align='center' style={{color:'white',fontFamily: 'Poppins, sans-serif'}}>
-          Transaction History
-        </Typography></div>
+  return (
+    <Cover>
+      <Stack alignItems="center" style={{ minHeight: '90vh', width: '100%' }}>
+      <CloseIcon style={{color:'white',margin:'12px',width:'50px',height:'50px'}}
+      onClick={()=>{
+        router.push('/user/account')
+      }}
+      />
+        <div style={{ display: 'flex', justifyContent: "center", }}>
+          <Typography variant="h4" align='center' style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>
+            Transaction History
+          </Typography></div>
         <Stack direction="column-reverse">
-        <table>
-  <tr>
-    <th style={{width:'80px',color:'#DBE9EE'}}>Date/Time</th>
-    <th style={{width:'150px',color:'#DBE9EE'}}>Description</th>
-    <th style={{width:'70px',color:'#DBE9EE'}}>Status</th>
-  </tr>
-  {
-     trans.map((r)=>{
-      var dts = new Date(r.time);
-      console.log(dts.getDate());
-      return(
-        <tr key={r.uid}>
-        <th style={{width:'80px',color:'white'}}>{dts.getDate()+'/'+dts.getMonth()+'/'+dts.getFullYear()+' '+dts.getHours()+':'+dts.getMinutes()}</th>
-        <th style={{width:'150px',color:'white'}}>Your {r.type} claim of {r.amount} USDT</th>
-        <th style={{width:'70px',color:'white'}}>{r.sent}</th>
-      </tr>
-      )
-  })
-     
-  }
-</table>
+          <table>
+            <tr>
+              <th style={{ width: '80px', color: '#DBE9EE' }}>Date/Time</th>
+              <th style={{ width: '150px', color: '#DBE9EE' }}>Description</th>
+              <th style={{ width: '70px', color: '#DBE9EE' }}>Status</th>
+            </tr>
+            {
+              trans.map((r) => {
+                var dts = new Date(r.time);
+                console.log(dts.getDate());
+                return (
+                  <tr key={r.uid}>
+                    <th style={{ width: '80px', color: 'white' }}>{dts.getDate() + '/' + dts.getMonth() + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</th>
+                    <th style={{ width: '150px', color: 'white' }}>Your {r.type} claim of {r.amount} USDT</th>
+                    <th style={{ width: '70px', color: 'white' }}>{r.sent}</th>
+                  </tr>
+                )
+              })
+
+            }
+          </table>
         </Stack>
-        </Cover>
-    )
+      </Stack>
+    </Cover>
+  )
 }

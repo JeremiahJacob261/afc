@@ -195,6 +195,9 @@ useEffect(() => {
                     <Button onClick={handleClose}>exit</Button>
                     <Button variant="contained" onClick={() => {
                         if (stake - 1 < ball) {
+                           if(stake < 1){
+                            alert('You do not have sufficient balance for this transaction')
+                           }else{
                             handleClose()
                             setBall(ball - stake)
                             let balls = ball - stake;
@@ -244,6 +247,7 @@ useEffect(() => {
                             deductBet()
                             saveToDB()
 
+                           }
                         } else {
                             alert("You do not have Enough USDT to Complete this BET");
                         }

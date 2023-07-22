@@ -36,7 +36,6 @@ export default function Home() {
             .select()
             .eq('userId', user.uid)
           setInfo(data[0])
-          console.log(data)
     setBalance(data[0].balance);
         }
         GET();

@@ -70,7 +70,7 @@ export default function Bets() {
 
         <Stack direction="column"
           spacing={2} style={{ maxWidth: "350px", background: 'none' }}>
-          {function () {
+          {
 
             bets.map((s) => {
               return (
@@ -94,7 +94,7 @@ export default function Bets() {
                 </div>
               )
             })
-          }
+          
 
           }
         </Stack>
