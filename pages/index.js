@@ -62,50 +62,54 @@ export default function Home() {
           <Typography style={{ width: '308px', height: '151px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
             Get rewarded for sharing the love! Introduce your friends to AFCFIFA and receive exclusive bonuses for you and your referred friends.
             Start spreading the word and unlock exciting rewards today!</Typography>
-          <Button style={{ border: '1px solid #03045E' ,color:'white'}}>Unlock Rewards</Button>
+            <Link href="/register/40985" style={{ textDecoration: 'none' }}>
+          <Button style={{ border: '1px solid #03045E', color: 'white' }}>Unlock Rewards</Button></Link>
         </div>
         {
           //end
         }
-         <div style={{ background: '#1A1B72', padding: '8px', borderRadius: '5px' }}>
+        <div style={{ background: '#1A1B72', padding: '8px', borderRadius: '5px' }}>
           <Image src={kik} width={331} height={157} alt='invitation bonus' />
-            <Typography style={{ width: '308px', height: '175px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
+          <Typography style={{ width: '308px', height: '175px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
             We have a wide range of betting markets, with odds from our best bookmakers. You can find all the latest Premier League fixtures and live scores at AFC football betting page.
             Start spreading the word and unlock exciting rewards today!</Typography>
-          <Button style={{ fontFamily: 'Poppins, sans-serif',background:'#03045E',color:'white' ,width:'100%'}}>TRY OUR ODDS</Button>
+            <Link href="/register/40985" style={{ textDecoration: 'none' }}>  <Button style={{ fontFamily: 'Poppins, sans-serif', background: '#03045E', color: 'white', width: '100%' }}>TRY OUR ODDS</Button>
+        </Link>
         </div>
-        <Typography style={{ color: '#FFFFFF', fontSize: '20px', margin: '4px', fontWeight: 'bold', fontFamily: 'Poppins, sans-serif',width:'350px' }}>
-        Earn More on Our Platform On Referrals and First Deposits
+        <Typography style={{ color: '#FFFFFF', fontSize: '20px', margin: '4px', fontWeight: 'bold', fontFamily: 'Poppins, sans-serif', width: '350px' }}>
+          Earn More on Our Platform On Referrals and First Deposits
         </Typography>
         <div style={{ background: '#1A1B72', padding: '8px', borderRadius: '5px' }}>
           <Image src={ref} width={331} height={175} alt='invitation bonus' />
           <div>
 
-            <Typography style={{ fontSize:'15px',width: '308px', height: '55px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
-            You get 6% on the first deposit of your level 1 members!</Typography>
-            <Typography style={{ fontSize:'15px',width: '308px', height: '55px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
-            You get 3% on the first deposit of your level 2 members!</Typography>
-            <Typography style={{ fontSize:'15px',width: '308px', height: '55px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
-            You get 1% on the first deposit of 
-your level 3 members</Typography>
+            <Typography style={{ fontSize: '15px', width: '308px', height: '55px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
+              You get 6% on the first deposit of your level 1 members!</Typography>
+            <Typography style={{ fontSize: '15px', width: '308px', height: '55px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
+              You get 3% on the first deposit of your level 2 members!</Typography>
+            <Typography style={{ fontSize: '15px', width: '308px', height: '55px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
+              You get 1% on the first deposit of
+              your level 3 members</Typography>
           </div>
-          <Button style={{ fontFamily: 'Poppins, sans-serif',background:'#03045E',color:'white' ,width:'100%'}}>JOIN NOW TO START EARNING</Button>
+          <Link href="/register/40985" style={{ textDecoration: 'none' }}>  <Button style={{ fontFamily: 'Poppins, sans-serif', background: '#03045E', color: 'white', width: '100%' }}>JOIN NOW TO START EARNING</Button>
+        </Link>
         </div>
-        <Typography style={{ color: '#FFFFFF',textAlign:'center', fontSize: '15px', margin: '4px', fontWeight: 'normal', fontFamily: 'Poppins, sans-serif',width:'290px' }}>
-        Also Earn massively from Large Number of Referrals
+        <Typography style={{ color: '#FFFFFF', textAlign: 'center', fontSize: '15px', margin: '4px', fontWeight: 'normal', fontFamily: 'Poppins, sans-serif', width: '290px' }}>
+          Also Earn massively from Large Number of Referrals
         </Typography>
         <div style={{ background: '#1A1B72', padding: '8px', borderRadius: '5px' }}>
           <Image src={sal} width={326} height={382} alt='invitation bonus' />
-            <Typography style={{ width: '308px', fontSize:'15px',textAlign:'center',height: '50px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
+          <Typography style={{ width: '308px', fontSize: '15px', textAlign: 'center', height: '50px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
             Take a Step Forward to becoming Rich by Build Your Team</Typography>
-            <Button style={{ fontFamily: 'Poppins, sans-serif',background:'#03045E',color:'white' ,width:'100%',padding:'8px'}}>Build Team</Button>
-         </div>
-         <Typography style={{ color: '#FFFFFF',textAlign:'center', fontSize: '24px', margin: '4px', fontWeight: 'bolder', fontFamily: 'Poppins, sans-serif' }}>
-           WE ARE CERTIFIED
-         </Typography>
-         <Image src={afc1} width={326} height={382} alt='invitation bonus' />
-         <Image src={afc2} width={326} height={382} alt='invitation bonus' />
-         <Image src={afc3} width={326} height={382} alt='invitation bonus' />
+            <Link href="/register/40985" style={{ textDecoration: 'none' }}>  <Button style={{ fontFamily: 'Poppins, sans-serif', background: '#03045E', color: 'white', width: '100%', padding: '8px' }}>Build Team</Button>
+        </Link>
+        </div>
+        <Typography style={{ color: '#FFFFFF', textAlign: 'center', fontSize: '24px', margin: '4px', fontWeight: 'bolder', fontFamily: 'Poppins, sans-serif' }}>
+          WE ARE CERTIFIED
+        </Typography>
+        <Image src={afc1} width={326} height={382} alt='invitation bonus' />
+        <Image src={afc2} width={326} height={382} alt='invitation bonus' />
+        <Image src={afc3} width={326} height={382} alt='invitation bonus' />
       </Stack>
     </div>
   )

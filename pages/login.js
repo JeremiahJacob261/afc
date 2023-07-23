@@ -110,7 +110,7 @@ setDrop(true)
       const { count, error } = await supabase
       .from('users')
       .select('*', { count: 'exact', head: true })
-      .eq('username', username)
+      .eq('username', email)
     console.log(count);
     if (count > 0) {
       
