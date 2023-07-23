@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { Paper, Stack, Typography, Button } from '@mui/material'
 import Image from "next/image";
 import Head from 'next/head'
-import Ims from '../../public/ball.png'
+import Ims from '../../public/simps/ball.png'
 import { useRouter } from "next/router";
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -48,37 +48,38 @@ border: "1px solid rgba(255, 255, 255, 0.3)"
             let curren = new Date().getTime() / 1000;
             const league = (pro.league === 'others') ? pro.otherl : pro.league ;
             return (
-              <Paper key={"match" + pro.home + pro.away}
+              
+                <Stack direction="column" alignItems="center"
+                key={"match" + pro.home + pro.away}
                 style={{
                   marginBottom: "8px", padding: "4px",
-                  display:(stams<curren) ? 'none':'visible'
+                  display:(stams<curren) ? 'none':'visible',
+                  background:'#1A1B72',
+                  width:'100%',
+                  borderRadius:'5px'
                 }} onClick={() => {
                   setDrop(true)
                   //register/40985
                   router.push("/user/match/" + pro.match_id)
                 }}>
-                <Stack direction="column" alignItems="center">
-                <Typography style={{color:'black',fontFamily: 'Poppins, sans-serif',fontSize:'12px'}}>{pro.date} </Typography>
+                <Typography style={{color:'#DFA100',fontFamily: 'Poppins, sans-serif',fontSize:'12px'}}>{pro.date} </Typography>
                  
-                  <h6 style={{ marginLeft: "8px" }}>{league}</h6>
                   <Stack direction="row" spacing={4}>
                     <Stack alignItems="center">
-                      <Image src={Ims} alt="home" width='35' height='35' />
-                      <Typography>{pro.home}</Typography>
+                      <Image src={Ims} alt="home" width='53' height='53' />
+                      <Typography style={{color:'white',fontFamily: 'Poppins, sans-serif',fontSize:'13px',height:'44px',padding:'4px',width:'104px',textAlign:'center'}}>{pro.home}</Typography>
                     </Stack>
                     <Stack spacing={2} alignItems="center" justifyContent="center">
-                      <Typography>VS</Typography>
-                      <Typography style={{color:'black',fontFamily: 'Poppins, sans-serif',fontSize:'12px'}}>{pro.time} </Typography>
+                      <Typography style={{color:'#181AA9',fontWeight:'800',fontSize:'24'}}>VS</Typography>
+                      <Typography style={{color:'white',fontWeight:'bold',fontFamily: 'Poppins, sans-serif',fontSize:'12px'}}>{pro.time} </Typography>
                     </Stack>
                     <Stack alignItems="center">
-                      <Image src={Ims} alt="away" width='35' height='35' />
-                      <Typography style={{color:'black',fontFamily: 'Poppins, sans-serif',fontSize:'15px'}}>{pro.away}</Typography>
+                      <Image src={Ims} alt="away" width='53' height='53' />
+                      <Typography style={{color:'white',fontFamily: 'Poppins, sans-serif',fontSize:'13px',height:'44px',padding:'4px',width:'104px',textAlign:'center'}}>{pro.away}</Typography>
                     </Stack>
                   </Stack>
+                  <Typography style={{ textAlign:'center',color:'#9D9EF1',fontSize:'13px',width:'100%' }}>{league}</Typography>
                 </Stack>
-
-
-              </Paper>
             )
           })
         }</div>
