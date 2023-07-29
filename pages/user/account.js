@@ -128,7 +128,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
               <Divider />
             <Typography sx={{ background:'#1A1B72',padding: "6px", color: "white", fontSize: "14px", cursor: "pointer", fontFamily: 'PT Sans, sans-serif' }}
               onClick={() => {
-                router.push("/user/transaction")
+                router.push("/user/faq")
               }
               }
             >FAQ</Typography>
