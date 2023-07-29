@@ -15,11 +15,15 @@ export default function Faq() {
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
-
+const router = useRouter();
   return (
     <div stylle={{minHeight:'80vh'}}>
       <Stack direction="row" justifyContent="left">
-        <CloseIcon style={{ color: 'white', width: '30px', height: '30px', margin: '8px' }} />
+        <CloseIcon style={{ color: 'white', width: '30px', height: '30px', margin: '8px' }}
+        onClick={()=>{
+          router.push('/user/account')
+        }}
+        />
       </Stack>
       <Typography sx={{ width: '100%', height: '91px', color: '#D9D9D9', textAlign: 'center', fontSize: '32px', fontWeight: '900' }}>
         FREQUENTLY ASKED QUESTIONS
