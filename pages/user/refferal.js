@@ -140,7 +140,7 @@ export default function Refferal() {
     </div>
   );
   function Tabx() {
-    const [value, setValue] = React.useState('1');
+    const [value, setValue] = useState('1');
 
     const handleChange = (event, newValue) => {
       setValue(newValue);
