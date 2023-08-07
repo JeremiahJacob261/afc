@@ -80,7 +80,7 @@ export default function Home() {
         <Typography style={{ fontSize: '24px', fontWeight: '800', color: '#181AA9', margin: '4px', fontFamily: 'Poppins, sans-serif' }}>AFCFIFA</Typography>
         <div style={{ display: 'inline-flex', alignItems: 'center' }}>
           <Link href='/user/account' style={{ textDecoration: 'none' }}>
-          <NotificationsNoneSharpIcon sx={{color:'white'}}/>
+          <NotificationsNoneSharpIcon sx={{color:'blue'}}/>
      </Link>
 
         </div> </Stack>

@@ -13,7 +13,11 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 export default function Refferal() {
- 
+  const [value, setValue] = useState('1');
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   const [info, setInfo] = useState({});
   const [refs, setRefs] = useState([]);
@@ -140,18 +144,14 @@ export default function Refferal() {
     </div>
   );
   function Tabx() {
-    const [value, setValue] = useState('1');
-
-    const handleChange = (event, newValue) => {
-      setValue(newValue);
-    };
+    
     return (
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="Level 1" value="1" />
-            <Tab label="Level 2" value="2" />
-            <Tab label="Level 3" value="3" />
+            <Tab label="Level 1" value="1" color="white"/>
+            <Tab label="Level 2" value="2" color="white"/>
+            <Tab label="Level 3" value="3" color="white"/>
           </TabList>
         </Box>
         <TabPanel value="1">
