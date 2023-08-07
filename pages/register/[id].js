@@ -104,28 +104,24 @@ export default function Register({ refer }) {
       }
     });
 
-
-  }, [ idR])
-  //getlvl2
-  const lvl2 = async () => {
-    try {
-
+    //getlvl2
+    async function lvl2() {
       const { data, error } = await supabase
         .from('users')
         .select()
-        .eq('newrefer', idR)
-      setLvla(data[0].newrefer);
-      setLvlb(data[0].refer);
+        .eq('newrefer', refer)
       console.log(data);
-      console.log(error);
-    } catch (e) {
+      console.log(1+refer);
+      setLvla(data[0].refer);
+      setLvlb(data[0].lvla);
 
     }
-  }
+
+    lvl2();
+  }, [idR])
 
   const signup = async () => {
 
-    lvl2();
     let usern = username.replace(/^\s+|\s+$/gm, '')
     createUserWithEmailAndPassword(auth, email, values.password)
       .then((userCredential) => {
@@ -135,8 +131,8 @@ export default function Register({ refer }) {
         console.log(user.uid);
         const upload = async () => {
 
-  const nRef = generateRandomSevenDigitNumber().toString();
-  console.log(nRef)
+          const nRef = generateRandomSevenDigitNumber().toString();
+          console.log(nRef)
           const { data, error } = await supabase
             .from('users')
             .insert({
@@ -237,45 +233,45 @@ export default function Register({ refer }) {
             onChange={(e) => {
               setidR(e.target.value)
             }} />
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Code</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={age}
-                label="+91"
-                style={{ width:'100%', background: "#F2F4CB"  }}
-                onChange={(e) => {
-                  setAge(e.target.value);
-                }}
-              >
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Code</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={age}
+              label="+91"
+              style={{ width: '100%', background: "#F2F4CB" }}
+              onChange={(e) => {
+                setAge(e.target.value);
+              }}
+            >
 
-                {
-                  codes.countries.map((c) => {
-                    return (
-                      <MenuItem value={c.code} key={c.name}>{c.code}</MenuItem>
-                    )
-                  })
-                }
-                {/* {<MenuItem value='+1'>+1</MenuItem>
+              {
+                codes.countries.map((c) => {
+                  return (
+                    <MenuItem value={c.code} key={c.name}>{c.code} {c.name}</MenuItem>
+                  )
+                })
+              }
+              {/* {<MenuItem value='+1'>+1</MenuItem>
                 <MenuItem value='+255'>+255</MenuItem>
                 <MenuItem value='+55'>+55</MenuItem>
                 <MenuItem value='+52'>+52</MenuItem>
                 <MenuItem value='+54'>+54</MenuItem>
                 <MenuItem value='+234'>+234</MenuItem>
                 <MenuItem value='+62'>+62</MenuItem> */
-                }
+              }
 
-              </Select>
-            </FormControl>
-            <TextField id="outlined-basic" label="Phone"
-              type="number"
-              variant="outlined"
-              style={{  width:'100%',background: "#F2F4CB" ,}}
-              value={phone}
-              onChange={(e) => {
-                setPhone(e.target.value);
-              }} />
+            </Select>
+          </FormControl>
+          <TextField id="outlined-basic" label="Phone"
+            type="number"
+            variant="outlined"
+            style={{ width: '100%', background: "#F2F4CB", }}
+            value={phone}
+            onChange={(e) => {
+              setPhone(e.target.value);
+            }} />
 
           <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
             <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
@@ -284,7 +280,7 @@ export default function Register({ refer }) {
               type={values.showPassword ? 'text' : 'password'}
               value={values.password}
               onChange={handleChange('password')}
-              style={{ width: "100%", background: "#F2F4CB"  }}
+              style={{ width: "100%", background: "#F2F4CB" }}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -322,8 +318,8 @@ export default function Register({ refer }) {
             }}
             style={{ color: "white" }}
           />
-          <Button variant="contained" sx={{ padding: "10px",width:'100%',background:'#EE8F00' }} onClick={() => {
-            if(phone.length >= 9){
+          <Button variant="contained" sx={{ padding: "10px", width: '100%', background: '#EE8F00' }} onClick={() => {
+            if (phone.length >= 9) {
 
               const checkDuplicate = async () => {
                 const { count, error } = await supabase
@@ -340,16 +336,16 @@ export default function Register({ refer }) {
                     setDrop(true);
                     signup()
                   }
-  
+
                 }
               }
               checkDuplicate()
-  
-            }else{
+
+            } else {
               alert('Please Input a Complete Phone Number! at least 9 digits')
             }
           }}>
-            <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px",color:'#03045E' }}>Sign Up</Typography>
+            <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: '#03045E' }}>Sign Up</Typography>
           </Button>
 
           <Typography sx={{ color: "#EE8F00" }}>Already have an Account ? <Link href="/login" style={{ textDecoration: "none", color: "whitesmoke" }}>Login</Link></Typography>

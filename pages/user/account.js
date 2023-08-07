@@ -28,9 +28,6 @@ const handleClosed = (event, reason) => {
   }
   setOpened(false);
 };
-const handleClick = () => {
-  setOpened(true);
-};
   //end of snackbar1
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -96,7 +93,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
               <ContentPasteIcon sx={{ color: "white" }} onClick={() => {
                 navigator.clipboard.writeText("https://afcfifa.com/register/" + info.newrefer)
                 setMessages("Invite Link Copied")
-                handleClick();
+                setOpened(true);
               }} /></Stack>
             <Divider />
 

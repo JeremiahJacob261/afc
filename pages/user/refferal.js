@@ -21,13 +21,13 @@ export default function Refferal() {
 
   const [info, setInfo] = useState({});
   const [refs, setRefs] = useState([]);
-  const [lvl1, setLvl1] = useState(0);
-  const [lvl2, setLvl2] = useState(0);
+  const [lvl1, setLvl1] = useState([]);
+  const [lvl2, setLvl2] = useState([]);
   const [lvlo, setLvlo] = useState([]);
   const router = useRouter()
   const [lvll, setLvll] = useState([]);
   const auth = getAuth(app);
-  const [lvl3, setLvl3] = useState(0);
+  const [lvl3, setLvl3] = useState([]);
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -58,37 +58,35 @@ export default function Refferal() {
         .or(`refer.eq.${info.newrefer},lvla.eq.${info.newrefer},lvlb.eq.${info.newrefer}`);
       setRefs(data);
     }
-    async function getCo1() {
-      const { data, count } = await supabase
-        .from('users')
-        .select('*', { count: 'exact', head: true })
-        .eq('refer', info.newrefer)
-      console.log(data)
-      setLvl1(count)
-    }
-    getCo1()
-    async function getCo2() {
-      const { data, count } = await supabase
-        .from('users')
-        .select('*', { count: 'exact', head: true })
-        .eq('lvla', info.newrefer)
-      console.log(data)
-      setLvl2(count)
-    }
-    getCo2()
-    async function getCo3() {
-      const { data, count } = await supabase
-        .from('users')
-        .select('*', { count: 'exact', head: true })
-        .eq('lvlb', info.newrefer)
-      setLvl3(count)
-    }
-    getCo3()
+    
     getRefs();
     //end refs
-
-  }, [lvl3, lvl2, lvl1, lvll, lvlo, refs])
-
+const getCo1=async()=> {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('refer', info.newrefer)
+    setLvl1(data)
+  }
+  getCo1()
+  async function getCo2() {
+    const { data, count } = await supabase
+      .from('users')
+      .select('*')
+      .eq('lvla', info.newrefer)
+    setLvl2(data)
+  }
+  getCo2()
+  async function getCo3() {
+    const { data, count } = await supabase
+      .from('users')
+      .select('*')
+      .eq('lvlb', info.newrefer)
+    setLvl3(data)
+  }
+  getCo3()
+  }, [ lvll, lvlo, refs])
+  
   const columns = [
     { field: 'statId', headerName: 'ID', width: 50 },
     { field: 'username', headerName: 'Username', width: 130 },
@@ -125,17 +123,17 @@ export default function Refferal() {
         <Stack direction="row" spacing={3}>
           <Box >
             <Typography style={{ width: '50px', color: 'white', fontSize: '14px' }}>level 1</Typography>
-            <Typography style={{ width: '50px', color: 'white', fontSize: '14px' }}>{lvl1}</Typography></Box>
+            <Typography style={{ width: '50px', color: 'white', fontSize: '14px' }}>{lvl1.length}</Typography></Box>
           <Divider style={{ background: 'white' }} />
           <Box>
             <Typography style={{ width: '50px', color: 'white', fontSize: '14px' }}>level 2</Typography>
-            <Typography style={{ width: '50px', color: 'white', fontSize: '14px' }}>{lvl2}</Typography></Box>
+            <Typography style={{ width: '50px', color: 'white', fontSize: '14px' }}>{lvl2.length}</Typography></Box>
           <Divider style={{ background: 'white' }} />
           <Box>
             <Typography style={{ width: '50px', color: 'white', fontSize: '14px' }}>level 3</Typography>
-            <Typography style={{ width: '50px', color: 'white', fontSize: '14px' }}>{lvl3}</Typography></Box>
+            <Typography style={{ width: '50px', color: 'white', fontSize: '14px' }}>{lvl3.length}</Typography></Box>
           <Divider style={{ background: 'white' }} />
-          <Typography style={{ width: '50px', color: 'white', fontSize: '14px' }}>Total : {lvl1 + lvl2 + lvl3} </Typography>
+          <Typography style={{ width: '50px', color: 'white', fontSize: '14px' }}>Total : {lvl1.length + lvl2.length + lvl3.length} </Typography>
 
         </Stack>
         <Divider style={{ background: 'white' }} />
@@ -149,9 +147,9 @@ export default function Refferal() {
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="Level 1" value="1" color="white"/>
-            <Tab label="Level 2" value="2" color="white"/>
-            <Tab label="Level 3" value="3" color="white"/>
+            <Tab label="Level 1" value="1"  sx={{ color:'white'}}/>
+            <Tab label="Level 2" value="2" sx={{ color:'white'}}/>
+            <Tab label="Level 3" value="3" sx={{ color:'white'}}/>
           </TabList>
         </Box>
         <TabPanel value="1">
@@ -164,7 +162,7 @@ export default function Refferal() {
                 <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Balance</th>
               </tr>
               {
-                refs.map((r) => {
+                lvl1.map((r) => {
                   sn++;
                   var dts = new Date(r.crdate);
 
@@ -191,11 +189,10 @@ export default function Refferal() {
                 <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>S/N</th>
                 <th style={{ width: '100px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Username</th>
                 <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Date/Time</th>
-                <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Level</th>
                 <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Balance</th>
               </tr>
               {
-                refs.map((r) => {
+                lvl2.map((r) => {
                   sn++;
                   var dts = new Date(r.crdate);
 
@@ -204,7 +201,6 @@ export default function Refferal() {
                       <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{sn}</th>
                       <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{r.username}</th>
                       <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{dts.getDate() + '/' + dts.getMonth() + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</th>
-                      <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{(info.newrefer === r.refer) ? 1 : (info.newrefer === r.lvla) ? 2 : 3}</th>
                       <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{r.balance}</th>
                     </tr>
                   )
@@ -223,11 +219,10 @@ export default function Refferal() {
                 <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>S/N</th>
                 <th style={{ width: '100px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Username</th>
                 <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Date/Time</th>
-                <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Level</th>
                 <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Balance</th>
               </tr>
               {
-                refs.map((r) => {
+                lvl3.map((r) => {
                   sn++;
                   var dts = new Date(r.crdate);
 
@@ -236,7 +231,6 @@ export default function Refferal() {
                       <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{sn}</th>
                       <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{r.username}</th>
                       <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{dts.getDate() + '/' + dts.getMonth() + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</th>
-                      <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{(info.newrefer === r.refer) ? 1 : (info.newrefer === r.lvla) ? 2 : 3}</th>
                       <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{r.balance}</th>
                     </tr>
                   )
