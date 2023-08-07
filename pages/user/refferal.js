@@ -13,6 +13,12 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 export default function Refferal() {
+  const [value, setValue] = React.useState('1');
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   const [info, setInfo] = useState({});
   const [refs, setRefs] = useState([]);
   const [lvl1, setLvl1] = useState(0);
