@@ -26,7 +26,17 @@ import Ims from '../../public/simps/ball.png'
 import { app } from '../api/firebase';
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 export default function Home() {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const openr = Boolean(anchorEl);
+  const handleClickr = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloser = () => {
+    setAnchorEl(null);
+  };
   const [footDat, setFootDat] = useState([])
   const [balance, setBalance] = useState(0)
   const [info, setInfo] = useState({})
@@ -72,6 +82,19 @@ export default function Home() {
     <Stack justifyContent="center" alignItems="center"
       style={{ background: "#03045E", marginBottom: "50px" }}
     >
+       <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={openr}
+        onClose={handleCloser}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem onClick={handleCloser}>Notification 1</MenuItem>
+        <MenuItem onClick={handleCloser}>Notification 1</MenuItem>
+        <MenuItem onClick={handleCloser}>Notification 1</MenuItem>
+      </Menu>
       <Stack direction="row" style={{ background: '#F5F5F5', width: '100%', height: '64px', padding: '5px' }}
         alignItems='center' justifyContent="space-between">
         <div style={{ display: 'inline-flex', alignItems: 'center' }}>
@@ -79,10 +102,14 @@ export default function Home() {
         </div>
         <Typography style={{ fontSize: '24px', fontWeight: '800', color: '#181AA9', margin: '4px', fontFamily: 'Poppins, sans-serif' }}>AFCFIFA</Typography>
         <div style={{ display: 'inline-flex', alignItems: 'center' }}>
-          <Link href='/user/account' style={{ textDecoration: 'none',padding:'8px' }}>
-          <NotificationsNoneSharpIcon sx={{color:'blue'}}/>
-     </Link>
-
+          
+          <NotificationsNoneSharpIcon sx={{color:'blue'}}
+           id="basic-button"
+          aria-controls={openr ? 'basic-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={openr ? 'true' : undefined}
+          onClick={handleClickr}
+          />
         </div> </Stack>
       <Cover>  <Head>
         <title>Welcome -{info.username}</title>
