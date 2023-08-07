@@ -21,7 +21,7 @@ import { Button, Typography, Paper, Container } from "@mui/material";
 import { supabase } from '../api/supabase'
 import Agent from '../../public/posters6.jpg'
 import WhatshotIcon from '@mui/icons-material/Whatshot';
-
+import NotificationsNoneSharpIcon from '@mui/icons-material/NotificationsNoneSharp';
 import Ims from '../../public/simps/ball.png'
 import { app } from '../api/firebase';
 import { onAuthStateChanged } from "firebase/auth";
@@ -80,7 +80,8 @@ export default function Home() {
         <Typography style={{ fontSize: '24px', fontWeight: '800', color: '#181AA9', margin: '4px', fontFamily: 'Poppins, sans-serif' }}>AFCFIFA</Typography>
         <div style={{ display: 'inline-flex', alignItems: 'center' }}>
           <Link href='/user/account' style={{ textDecoration: 'none' }}>
-            <Typography style={{ fontSize: '13px', fontWeight: '600', color: '#03045E', margin: '4px', fontFamily: 'Poppins, sans-serif' }}>ME</Typography></Link>
+          <NotificationsNoneSharpIcon sx={{color:'white'}}/>
+     </Link>
 
         </div> </Stack>
       <Cover>  <Head>

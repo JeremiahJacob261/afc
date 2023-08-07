@@ -8,7 +8,10 @@ import { getAuth, signOut } from "firebase/auth";
 import { Divider, Typography, Stack, Box } from "@mui/material";
 import { useRouter } from 'next/router'
 import CloseIcon from '@mui/icons-material/Close';
-import { async } from "@firebase/util";
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
 export default function Refferal() {
   const [info, setInfo] = useState({});
   const [refs, setRefs] = useState([]);
@@ -49,32 +52,32 @@ export default function Refferal() {
         .or(`refer.eq.${info.newrefer},lvla.eq.${info.newrefer},lvlb.eq.${info.newrefer}`);
       setRefs(data);
     }
-      async function getCo1() {
-        const { data, count } = await supabase
-          .from('users')
-          .select('*', { count: 'exact', head: true })
-         .eq('refer',info.newrefer)
-        console.log(count)
-        setLvl1(count)
-      }
-      getCo1()
-      async function getCo2() {
-        const { data, count } = await supabase
-          .from('users')
-          .select('*', { count: 'exact', head: true })
-         .eq('lvla',info.newrefer)
-        console.log(count)
-        setLvl2(count)
-      }
-      getCo2()
-      async function getCo3() {
-        const { data, count } = await supabase
-          .from('users')
-          .select('*', { count: 'exact', head: true })
-         .eq('lvlb',info.newrefer)
-        setLvl3(count)
-      }
-      getCo3()
+    async function getCo1() {
+      const { data, count } = await supabase
+        .from('users')
+        .select('*', { count: 'exact', head: true })
+        .eq('refer', info.newrefer)
+      console.log(data)
+      setLvl1(count)
+    }
+    getCo1()
+    async function getCo2() {
+      const { data, count } = await supabase
+        .from('users')
+        .select('*', { count: 'exact', head: true })
+        .eq('lvla', info.newrefer)
+      console.log(data)
+      setLvl2(count)
+    }
+    getCo2()
+    async function getCo3() {
+      const { data, count } = await supabase
+        .from('users')
+        .select('*', { count: 'exact', head: true })
+        .eq('lvlb', info.newrefer)
+      setLvl3(count)
+    }
+    getCo3()
     getRefs();
     //end refs
 
@@ -130,34 +133,112 @@ export default function Refferal() {
 
         </Stack>
         <Divider style={{ background: 'white' }} />
-        <table>
-          <tbody>
-            <tr>
-              <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>S/N</th>
-              <th style={{ width: '100px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Username</th>
-              <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Date/Time</th>
-              <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Level</th>
-              <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Balance</th>
-            </tr>
-            {
-              refs.map((r) => {
-                sn++;
-                var dts = new Date(r.crdate);
-
-                return (
-                  <tr key={r.username}>
-                    <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{sn}</th>
-                    <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{r.username}</th>
-                    <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{dts.getDate() + '/' + dts.getMonth() + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</th>
-                    <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{(info.newrefer === r.refer) ? 1 : (info.newrefer === r.lvla) ? 2 : 3}</th>
-                    <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{r.balance}</th>
-                  </tr>
-                )
-              })
-            }
-          </tbody>
-        </table>
+        <Tabx />
       </Stack>
     </div>
   );
+  function Tabx() {
+
+    return (
+      <TabContext value={value}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <TabList onChange={handleChange} aria-label="lab API tabs example">
+            <Tab label="Level 1" value="1" />
+            <Tab label="Level 2" value="2" />
+            <Tab label="Level 3" value="3" />
+          </TabList>
+        </Box>
+        <TabPanel value="1">
+          <table>
+            <tbody>
+              <tr>
+                <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>S/N</th>
+                <th style={{ width: '100px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Username</th>
+                <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Date/Time</th>
+                <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Balance</th>
+              </tr>
+              {
+                refs.map((r) => {
+                  sn++;
+                  var dts = new Date(r.crdate);
+
+                  return (
+                    <tr key={r.username}>
+                      <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{sn}</th>
+                      <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{r.username}</th>
+                      <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{dts.getDate() + '/' + dts.getMonth() + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</th>
+                      <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{r.balance}</th>
+                    </tr>
+                  )
+                })
+              }
+            </tbody>
+          </table>
+        </TabPanel>
+        {
+          //tab 2
+        }
+        <TabPanel value="2">
+          <table>
+            <tbody>
+              <tr>
+                <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>S/N</th>
+                <th style={{ width: '100px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Username</th>
+                <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Date/Time</th>
+                <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Level</th>
+                <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Balance</th>
+              </tr>
+              {
+                refs.map((r) => {
+                  sn++;
+                  var dts = new Date(r.crdate);
+
+                  return (
+                    <tr key={r.username}>
+                      <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{sn}</th>
+                      <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{r.username}</th>
+                      <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{dts.getDate() + '/' + dts.getMonth() + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</th>
+                      <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{(info.newrefer === r.refer) ? 1 : (info.newrefer === r.lvla) ? 2 : 3}</th>
+                      <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{r.balance}</th>
+                    </tr>
+                  )
+                })
+              }
+            </tbody>
+          </table>
+        </TabPanel>
+        {
+          //tab three
+        }
+        <TabPanel value="3">
+          <table>
+            <tbody>
+              <tr>
+                <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>S/N</th>
+                <th style={{ width: '100px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Username</th>
+                <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Date/Time</th>
+                <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Level</th>
+                <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Balance</th>
+              </tr>
+              {
+                refs.map((r) => {
+                  sn++;
+                  var dts = new Date(r.crdate);
+
+                  return (
+                    <tr key={r.username}>
+                      <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{sn}</th>
+                      <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{r.username}</th>
+                      <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{dts.getDate() + '/' + dts.getMonth() + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</th>
+                      <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{(info.newrefer === r.refer) ? 1 : (info.newrefer === r.lvla) ? 2 : 3}</th>
+                      <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{r.balance}</th>
+                    </tr>
+                  )
+                })
+              }
+            </tbody>
+          </table>
+        </TabPanel>
+      </TabContext>);
+  }
 }
