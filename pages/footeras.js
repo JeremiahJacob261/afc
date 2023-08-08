@@ -10,18 +10,19 @@ export default function Footer() {
                 <div>
                     <Stack direction="row">
                         <Stack direction='column'>
-                            <Typography style={{ color: '#181AA9', fontWeight: '900' ,fontFamily: "Poppins, sans-serif", fontSize: '24px' }}>
+                            <Typography style={{ color: '#3B60E4', fontWeight: '900' ,fontFamily: "Poppins, sans-serif", fontSize: '24px' }}>
                                 AFCFIFA
                             </Typography>
-                            <Typography  style={{width:'193px', color: '#181AA9',fontWeight: '100', fontFamily: "Poppins, sans-serif", fontSize: '10px' }}>
+                            <Typography  style={{width:'193px', color: '#3B60E4',fontWeight: '100', fontFamily: "Poppins, sans-serif", fontSize: '10px' }}>
                                 Afc football investment is licenced by the national futures association
                             </Typography>
                             <Typography style={{ color: '#EE5600', fontWeight: '900' ,fontFamily: "Poppins, sans-serif", fontSize: '24px' }}>
                                 +18
                             </Typography>
-                            <Typography  style={{width:'193px', color: '#DFA100',fontWeight: '100', fontFamily: "Poppins, sans-serif", fontSize: '10px' }}>
-                            Players must be 18 or older to register or play at AFCFIFA. Please note that gambles may have negative effects if not made with temperance.
-                            </Typography>
+                            <Typography  style={{width:'193px', color: '#FFE066',fontWeight: '100', fontFamily: "Poppins, sans-serif", fontSize: '10px' }}>
+                            Players must be 18 or older to register or play at AFCFIFA. Plase ensure that users follow the company daily release game plan to ensure return of investment fund when the game is lost.
+                            
+                                           </Typography>
                             <Typography  style={{width:'193px', color: 'white',fontWeight: '400', fontFamily: "Poppins, sans-serif", fontSize: '14px' }}>
                          Payment Methods
                             </Typography>

@@ -108,7 +108,7 @@ export default function Home() {
           trans.map((r)=>{
             return(
 
-        <MenuItem >
+        <MenuItem key={r.keyf}>
         <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{padding:'4px'}}>
         <TbMailDollar color="#03045E"/>
           <Typography style={{fontFamily:'Poppins,sans-serif',fontSize:'10px',fontWeight:'lighter'}}>Your {r.type} claim of <br/>{r.amount} USDT was Successful
@@ -202,7 +202,11 @@ export default function Home() {
             )
           })
         }
-        <Button style={{background:'#181AA9',color:'white',borderRadius:'5px',width:'100%',height:'57px'}}>
+        <Button style={{background:'#181AA9',color:'white',borderRadius:'5px',width:'100%',height:'57px'}}
+        onClick={()=>{
+          router.push('/user/matches')
+        }}
+        >
           See More Matches
         </Button>
         <Stack>
