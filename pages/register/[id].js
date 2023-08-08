@@ -104,20 +104,6 @@ export default function Register({ refer }) {
       }
     });
 
-    //getlvl2
-    async function lvl2() {
-      const { data, error } = await supabase
-        .from('users')
-        .select()
-        .eq('newrefer', refer)
-      console.log(data);
-      console.log(1+refer);
-      setLvla(data[0].refer);
-      setLvlb(data[0].lvla);
-
-    }
-
-    lvl2();
   }, [idR])
 
   const signup = async () => {
@@ -129,7 +115,19 @@ export default function Register({ refer }) {
         const user = userCredential.user;
         // ...
         console.log(user.uid);
-        const upload = async () => {
+        const lvls=async()=> {
+          const { data, error } = await supabase
+            .from('users')
+            .select()
+            .eq('newrefer', idR)
+          console.log(data);
+          console.log(refer);
+          let lvlas = data[0].refer;
+          let lvlbs = data[0].lvla;
+            upload(lvlas,lvlbs)
+    }
+        lvls();
+        const upload = async (lvlas,lvlbs) => {
 
           const nRef = generateRandomSevenDigitNumber().toString();
           console.log(nRef)
@@ -143,14 +141,15 @@ export default function Register({ refer }) {
               username: username,
               countrycode: age,
               newrefer: nRef,
-              lvla: lvla,
-              lvlb: lvlb,
+              lvla: lvlas,
+              lvlb: lvlbs,
               email: email
             })
           console.log(error);
           console.log(data);
         }
-        upload()
+         //getlvl2
+
         updateRef()
         updateRefb()
         setDrop(false);

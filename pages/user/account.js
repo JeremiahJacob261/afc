@@ -12,12 +12,12 @@ import Head from 'next/head';
 import { app } from '../api/firebase';
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth,signOut } from "firebase/auth";
-
+import { redirect } from 'next/navigation'
 
 export default function Account() {
   const auth = getAuth(app);
   const router = useRouter()
-  const [info, setInfo] = useState({});
+  const [info, setInfo] = useState(null);
   const [balance, setBalance] = useState(0);
   //snackbar1
   const [messages, setMessages] = useState("")
@@ -74,22 +74,22 @@ const Alert = React.forwardRef(function Alert(props, ref) {
     <Cover style={{ width: "100%" }}>
       <Sncks />
       <Head>
-        <title>{info.username}&lsquo; Account</title>
+        <title>{info ? `${info.username}` : 'Loading...'}&lsquo; Account</title>
         <link rel="icon" href="/logo_afc.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Box sx={{ padding: "8px", background: "#03045E",width:'100%',minHeight:'80vh' }}>
         <div sx={{ padding: "8px", background: "none" }} >
           <Stack>
-            <Avatar>{info.username}</Avatar>
-            <Typography variant="h4" sx={{ color: "white", fontFamily: 'PT Sans, sans-serif' }}>Welcome, {info.username}</Typography>
+            <Avatar>{info ? `${info.username}` : 'Loading...'}</Avatar>
+            <Typography variant="h4" sx={{ color: "white", fontFamily: 'PT Sans, sans-serif' }}>Welcome, {info ? ` ${info.username}` : 'Loading...'}</Typography>
           </Stack>
           <Typography sx={{ color: "white", fontFamily: 'PT Sans, sans-serif' }}>{balance} USDT</Typography>
         </div>
         <div sx={{ background: "none" }} >
           <Stack direction="column" sx={{ background: "none", padding: "8px" }} >
             <Stack direction="row" >
-              <Typography sx={{ padding: "6px", cursor: "pointer", fontSize: "14px", color: "white", fontFamily: 'PT Sans, sans-serif' }} >Invite Code : https://afcfifa.com/register/{info.newrefer}</Typography>
+              <Typography sx={{ padding: "6px", cursor: "pointer", fontSize: "14px", color: "white", fontFamily: 'PT Sans, sans-serif' }} >Invite Code : https://afcfifa.com/register/{info ? `${info.newrefer}` : 'Loading...'}</Typography>
               <ContentPasteIcon sx={{ color: "white" }} onClick={() => {
                 navigator.clipboard.writeText("https://afcfifa.com/register/" + info.newrefer)
                 setMessages("Invite Link Copied")
@@ -161,3 +161,31 @@ const Alert = React.forwardRef(function Alert(props, ref) {
     </Cover>
   )
 }
+
+// export async function getServerSideProps(){
+//   const auth = getAuth(app);
+//   onAuthStateChanged(auth, (user) => {
+//     if (user) {
+//       // User is signed in, see docs for a list of available properties
+//       // https://firebase.google.com/docs/reference/js/auth.user
+//       const uid = user;
+//       // ...
+    
+//        const Get=async()=>{
+//           const { data, error } = await supabase
+//           .from('users')
+//           .select()
+//           .eq('userId', user.uid)
+//           let datas = data[0];
+//           return datas;
+//         }
+//     } else {
+//       // User is signed out
+//       // ...
+//       console.log('sign out');
+//       redirect('/login')
+//     }
+
+//   });
+//   return { props: { Get } }
+// }

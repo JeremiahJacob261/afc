@@ -92,8 +92,6 @@ export default function Home() {
         }}
       >
         <MenuItem onClick={handleCloser}>Notification 1</MenuItem>
-        <MenuItem onClick={handleCloser}>Notification 1</MenuItem>
-        <MenuItem onClick={handleCloser}>Notification 1</MenuItem>
       </Menu>
       <Stack direction="row" style={{ background: '#F5F5F5', width: '100%', height: '64px', padding: '5px' }}
         alignItems='center' justifyContent="space-between">
