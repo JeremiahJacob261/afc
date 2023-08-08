@@ -28,6 +28,8 @@ import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { FaCircleDollarToSlot } from 'react-icons/fa';
+import {TbMailDollar} from 'react-icons/tb'
 export default function Home() {
   const [anchorEl, setAnchorEl] = useState(null);
   const openr = Boolean(anchorEl);
@@ -40,6 +42,7 @@ export default function Home() {
   const [footDat, setFootDat] = useState([])
   const [balance, setBalance] = useState(0)
   const [info, setInfo] = useState({})
+  const [trans,setTrans] = useState([])
   const auth = getAuth(app);
 
   useEffect(() => {
@@ -57,6 +60,16 @@ export default function Home() {
           setInfo(data[0])
           setBalance(data[0].balance);
         }
+        const GETs = async () => {
+          const { data, error } = await supabase
+            .from('notification')
+            .select()
+            .or(`username.eq.${user.displayName}`, `sent.neq.${'failed'}`)
+            .limit(10);
+          setTrans(data)
+          console.log(data.length)
+        }
+        GETs();
         GET();
       } else {
         // User is signed out
@@ -91,7 +104,25 @@ export default function Home() {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={handleCloser}>Notification 1</MenuItem>
+        {
+          trans.map((r)=>{
+            return(
+
+        <MenuItem >
+        <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{padding:'4px'}}>
+        <TbMailDollar color="#03045E"/>
+          <Typography style={{fontFamily:'Poppins,sans-serif',fontSize:'10px',fontWeight:'lighter'}}>Your {r.type} claim of <br/>{r.amount} USDT was Successful
+          </Typography>
+        </Stack></MenuItem>
+            );
+          })
+        }
+        <Stack justifyContent="center" alignItems="center">
+
+        <Button variant="contained" sx={{  width: '80%', background: '#EE8F00' }}>
+        <Typography sx={{fontFamily:'Poppins,sans-serif',fontSize:'10px',fontWeight:'lighter', marginLeft: "3px", color: '#03045E' }}>See More</Typography>
+        </Button>
+        </Stack>
       </Menu>
       <Stack direction="row" style={{ background: '#F5F5F5', width: '100%', height: '64px', padding: '5px' }}
         alignItems='center' justifyContent="space-between">
@@ -122,6 +153,7 @@ export default function Home() {
             <Typography style={{ width: '308px', height: '74px', color: 'white', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
               On the Account Page, copy the invite link and share to your friends to earn Invitation Bonus
             </Typography>
+
             <Link href='/user/account'>
               <Button style={{ border: '1px solid #03045E', color: 'white', width: '100%' }}>Go To Account Page</Button></Link>
           </div>
