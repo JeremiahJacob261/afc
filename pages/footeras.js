@@ -37,7 +37,7 @@ export default function Footer() {
                     </Stack>
                 </div>
                 <div>
-                    <Typography variant="subtitle" sx={{ color: "#3839C5", fontSize: '10px', fontWeight: '100', fontFamily: "Poppins, sans-serif" }}>
+                    <Typography variant="subtitle" sx={{ color: "#3B60E4", fontSize: '10px', fontWeight: '100', fontFamily: "Poppins, sans-serif" }}>
                         © 2023 AfcFifa. All rights reserved.
                     </Typography>
 

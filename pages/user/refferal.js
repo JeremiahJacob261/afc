@@ -110,7 +110,7 @@ const getCo1=async()=> {
     <div style={{ minHeight: '85vh', width: '100%', overflowX: 'hidden' }}>
       <Stack alignItems="center" style={{ minHeight: '85vh', width: '100%' }}>
         <Head>
-          <title>Refferal Details</title>
+          <title>Referral Details</title>
           <link rel="icon" href="/logo_afc.ico" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
@@ -119,7 +119,7 @@ const getCo1=async()=> {
             router.push('/user/account')
           }}
         />
-        <Typography style={{ color: 'white', fontSize: '18px', fontWeight: 'bolder', fontFamily: 'Poppins,sans-serif' }}>Refferal Details</Typography>
+        <Typography style={{ color: 'white', fontSize: '18px', fontWeight: 'bolder', fontFamily: 'Poppins,sans-serif' }}>Referral Details</Typography>
         <Stack direction="row" spacing={3}>
           <Box >
             <Typography style={{ width: '50px', color: 'white', fontSize: '14px' }}>level 1</Typography>

@@ -23,7 +23,26 @@
       { "name": "Gambia", "code": "+220" },
       { "name": "Uganda", "code": "+256" },
       { "name": "Cameroon", "code": "+237" },
-      { "name": "Liberia", "code": "+231" }
+      { "name": "Liberia", "code": "+231" },
+        { "name": "Italy", "code": "+39" },
+        { "name": "France", "code": "+33" },
+        { "name": "Germany", "code": "+49" },
+        { "name": "Greece", "code": "+30" },
+        { "name": "Switzerland", "code": "+41" },
+        { "name": "Netherlands", "code": "+31" },
+        { "name": "Croatia", "code": "+385" },
+        { "name": "Sweden", "code": "+46" },
+        { "name": "Slovenia", "code": "+386" },
+        { "name": "Slovakia", "code": "+421" },
+        { "name": "Estonia", "code": "+372" },
+        { "name": "Bulgaria", "code": "+359" },
+        { "name": "Romania", "code": "+40" },
+        { "name": "Belgium", "code": "+32" },
+        { "name": "Norway", "code": "+47" },
+        { "name": "Serbia", "code": "+381" },
+        { "name": "Poland", "code": "+48" },
+        { "name": "Austria", "code": "+43" },
+        { "name": "Denmark", "code": "+45" }      
     ]
   }
   
