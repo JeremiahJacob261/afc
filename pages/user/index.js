@@ -29,10 +29,14 @@ import { getAuth, signOut } from "firebase/auth";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { FaCircleDollarToSlot } from 'react-icons/fa';
-import {TbMailDollar} from 'react-icons/tb'
+import { TbMailDollar } from 'react-icons/tb'
+
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 export default function Home() {
   const [anchorEl, setAnchorEl] = useState(null);
   const openr = Boolean(anchorEl);
+  const [drop,setDrop] = useState(false);
   const handleClickr = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -42,7 +46,7 @@ export default function Home() {
   const [footDat, setFootDat] = useState([])
   const [balance, setBalance] = useState(0)
   const [info, setInfo] = useState({})
-  const [trans,setTrans] = useState([])
+  const [trans, setTrans] = useState([])
   const auth = getAuth(app);
 
   useEffect(() => {
@@ -95,7 +99,7 @@ export default function Home() {
     <Stack justifyContent="center" alignItems="center"
       style={{ background: "#03045E", marginBottom: "50px" }}
     >
-       <Menu
+      <Menu
         id="basic-menu"
         anchorEl={anchorEl}
         open={openr}
@@ -105,23 +109,23 @@ export default function Home() {
         }}
       >
         {
-          trans.map((r)=>{
-            return(
+          trans.map((r) => {
+            return (
 
-        <MenuItem key={r.keyf}>
-        <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{padding:'4px'}}>
-        <TbMailDollar color="#03045E"/>
-          <Typography style={{fontFamily:'Poppins,sans-serif',fontSize:'10px',fontWeight:'lighter'}}>Your {r.type} claim of <br/>{r.amount} USDT was Successful
-          </Typography>
-        </Stack></MenuItem>
+              <MenuItem key={r.keyf}>
+                <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '4px' }}>
+                  <TbMailDollar color="#03045E" />
+                  <Typography style={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter' }}>Your {r.type} claim of <br />{r.amount} USDT was Successful
+                  </Typography>
+                </Stack></MenuItem>
             );
           })
         }
         <Stack justifyContent="center" alignItems="center">
 
-        <Button variant="contained" sx={{  width: '80%', background: '#EE8F00' }}>
-        <Typography sx={{fontFamily:'Poppins,sans-serif',fontSize:'10px',fontWeight:'lighter', marginLeft: "3px", color: '#03045E' }}>See More</Typography>
-        </Button>
+          <Button variant="contained" sx={{ width: '80%', background: '#EE8F00' }}>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter', marginLeft: "3px", color: '#03045E' }}>See More</Typography>
+          </Button>
         </Stack>
       </Menu>
       <Stack direction="row" style={{ background: '#F5F5F5', width: '100%', height: '64px', padding: '5px' }}
@@ -131,16 +135,23 @@ export default function Home() {
         </div>
         <Typography style={{ fontSize: '24px', fontWeight: '800', color: '#181AA9', margin: '4px', fontFamily: 'Poppins, sans-serif' }}>AFCFIFA</Typography>
         <div style={{ display: 'inline-flex', alignItems: 'center' }}>
-          
-          <NotificationsNoneSharpIcon sx={{color:'blue'}}
-           id="basic-button"
-          aria-controls={openr ? 'basic-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={openr ? 'true' : undefined}
-          onClick={handleClickr}
+
+          <NotificationsNoneSharpIcon sx={{ color: 'blue' }}
+            id="basic-button"
+            aria-controls={openr ? 'basic-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={openr ? 'true' : undefined}
+            onClick={handleClickr}
           />
         </div> </Stack>
-      <Cover>  <Head>
+      <Cover> 
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={drop}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+         <Head>
         <title>Welcome -{info.username}</title>
         <link rel="icon" href="/logo_afc.ico" />
       </Head>
@@ -158,9 +169,9 @@ export default function Home() {
               <Button style={{ border: '1px solid #03045E', color: 'white', width: '100%' }}>Go To Account Page</Button></Link>
           </div>
           <Typography style={{ fontSize: '32px', fontWeight: '900', fontFamily: 'Poppins, sans-serif', height: '51px', padding: '5px', width: '100%', textAlign: 'left', color: 'white' }}>Top Matches</Typography>
-          <Typography style={{ width: '308px', height: '30px', fontSize:'13px',color: 'white', fontFamily: 'Poppins, sans-serif', fontWeight: '200', padding: '2px', margin: '4px' }}>
-          See some of our matches with the best odds
-            </Typography>
+          <Typography style={{ width: '308px', height: '30px', fontSize: '13px', color: 'white', fontFamily: 'Poppins, sans-serif', fontWeight: '200', padding: '2px', margin: '4px' }}>
+            See some of our matches with the best odds
+          </Typography>
           {
           footDat.map((pro) => {
             let stams = Date.parse(pro.date + " " + pro.time) / 1000;
@@ -202,16 +213,16 @@ export default function Home() {
             )
           })
         }
-        <Button style={{background:'#181AA9',color:'white',borderRadius:'5px',width:'100%',height:'57px'}}
-        onClick={()=>{
-          router.push('/user/matches')
-        }}
-        >
-          See More Matches
-        </Button>
-        <Stack>
-          
-        </Stack>
+          <Button style={{ background: '#181AA9', color: 'white', borderRadius: '5px', width: '100%', height: '57px' }}
+            onClick={() => {
+              router.push('/user/matches')
+            }}
+          >
+            See More Matches
+          </Button>
+          <Stack>
+
+          </Stack>
         </Stack>
       </Cover>
     </Stack>

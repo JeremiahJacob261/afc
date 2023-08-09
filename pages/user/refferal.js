@@ -165,12 +165,12 @@ const getCo1=async()=> {
                 lvl1.map((r) => {
                   sn++;
                   var dts = new Date(r.crdate);
-
+                  console.log(dts)
                   return (
                     <tr key={r.username}>
                       <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{sn}</th>
                       <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{r.username}</th>
-                      <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{dts.getDate() + '/' + dts.getMonth() + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</th>
+                      <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{dts.getDate() + '/' + parseInt(dts.getMonth() +1) + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</th>
                       <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{r.balance}</th>
                     </tr>
                   )
@@ -200,7 +200,7 @@ const getCo1=async()=> {
                     <tr key={r.username}>
                       <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{sn}</th>
                       <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{r.username}</th>
-                      <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{dts.getDate() + '/' + dts.getMonth() + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</th>
+                      <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{dts.getDate() + '/' + parseInt(dts.getMonth() +1) + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</th>
                       <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{r.balance}</th>
                     </tr>
                   )
@@ -230,7 +230,7 @@ const getCo1=async()=> {
                     <tr key={r.username}>
                       <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{sn}</th>
                       <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{r.username}</th>
-                      <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{dts.getDate() + '/' + dts.getMonth() + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</th>
+                      <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{dts.getDate() + '/' + parseInt(dts.getMonth() +1) + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</th>
                       <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{r.balance}</th>
                     </tr>
                   )
