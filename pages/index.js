@@ -13,13 +13,14 @@ import ref from '../public/simps/Referral Bonus.jpg'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { getCookies, getCookie, setCookies, removeCookies } from 'cookies-next';
-import { useTranslation } from 'react-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
 export default function Home() {
-  const { t } = useTranslation();
-
+  const { t } = useTranslation('common')
+  
   let user = getCookies('logged');
-
-  const router = useRouter()
+  const {locale, locales,push} = useRouter()
+  const router = useRouter();
   if (user.logged === "true") {
     router.push("/user")
   } else {
@@ -38,34 +39,36 @@ export default function Home() {
           alignItems='center' justifyContent="space-between">
           <div style={{ display: 'inline-flex', alignItems: 'center' }}>
             <Image src={Logos} width={30} height={46} alt='logo' />
-            <Typography style={{ fontSize: '13px', fontWeight: '600', color: 'black', margin: '4px', fontFamily: 'Poppins, sans-serif' }}>AFCFIFA</Typography></div>
+            <Typography style={{ fontSize: '13px', fontWeight: '600', color: 'black', margin: '4px', fontFamily: 'Poppins, sans-serif' }}
+             onClick={()=>{
+              push('/',undefined,{locale:'es'})
+            }}>
+              AFCFIFA</Typography></div>
           <div style={{ display: 'inline-flex', alignItems: 'center' }}>
             <Link href='/login' style={{ textDecoration: 'none' }}>
-              <Typography style={{ fontSize: '13px', fontWeight: '600', color: '#03045E', margin: '4px', fontFamily: 'Poppins, sans-serif' }}>Login</Typography></Link>
+              <Typography style={{ fontSize: '13px', fontWeight: '600', color: '#03045E', margin: '4px', fontFamily: 'Poppins, sans-serif' }}>{t('login')}</Typography></Link>
             <Link href="/register/40985" style={{ textDecoration: 'none' }}>
               <Typography style={{ fontSize: '13px', fontWeight: '600', padding: '8px', borderRadius: '5px', color: '#F5F5F5', margin: '4px', background: '#03045E', fontFamily: 'Poppins, sans-serif' }}>
-              {t('Registration')}</Typography>
+              {t('registration')}</Typography>
 
             </Link>
           </div> </Stack>
         <div>
           <Typography style={{ color: '#FFFFFF', fontSize: '24px', margin: '4px', fontWeight: 'bolder', fontFamily: 'Poppins, sans-serif' }}>
-            Welcome to <br />
+          {t('welcome_to')}<br />
             AFCFIFA
           </Typography>
           <Typography style={{ width: '308px', height: '111px', fontFamily: 'Poppins, sans-serif', fontWeight: '500' }}>
-            The king of cryptocurrency betting sites that combines
-            the excitement of gaming with the security of blockchain technology.
+          {t('site_description')}
           </Typography></div>
         {
           //page
         }
         <div style={{ background: '#1A1B72', padding: '8px', borderRadius: '5px' }}>
           <Image src={iv} width={331} height={157} alt='invitation bonus' />
-          <Typography style={{ width: '308px', fontFamily: 'Poppins, sans-serif', fontWeight: 'bold', padding: '8px' }}>Unlimited Invitation Bonus</Typography>
-          <Typography style={{ width: '308px', height: '151px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
-            Get rewarded for sharing the love! Introduce your friends to AFCFIFA and receive exclusive bonuses for you and your referred friends.
-            Start spreading the word and unlock exciting rewards today!</Typography>
+          <Typography style={{ width: '308px', fontFamily: 'Poppins, sans-serif', fontWeight: 'bold', padding: '8px' }}>{t('invitation_bonus')}</Typography>
+          <Typography style={{ width: '308px', height: '165px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
+          {t('invitation_bonus_description')}</Typography>
             <Link href="/register/40985" style={{ textDecoration: 'none' }}>
           <Button style={{ border: '1px solid #03045E', color: 'white' }}>Unlock Rewards</Button></Link>
         </div>
@@ -117,4 +120,15 @@ export default function Home() {
       </Stack>
     </div>
   )
+}
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, [
+        'common',
+      ])),
+      // Will be passed to the page component as props
+    },
+  }
 }

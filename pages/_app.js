@@ -6,8 +6,7 @@ import { useCookies } from "react-cookie"
 import { Stack } from '@mui/material';
 import Footer from './footeras';
 import { BetContext } from './api/Context'
-import { I18nextProvider } from 'react-i18next';
-import i18n from './i18n';
+import { appWithTranslation } from 'next-i18next'
 function MyApp({ Component, pageProps }) {
 
   const [cookie, setCookie] = useCookies(["user"])
@@ -16,12 +15,10 @@ function MyApp({ Component, pageProps }) {
   const [slip, setSlip] = useState(0)
   return (
     <div style={{background: "#03045E",height:'100%'}}>
-      <I18nextProvider i18n={i18n}>
       <Component {...pageProps} style={{ background: "#03045E" ,width:"100%",display:'flex'}} />
       <Footer/>
-      </I18nextProvider>
 </div>
   )
 }
 
-export default MyApp
+export default appWithTranslation(MyApp)

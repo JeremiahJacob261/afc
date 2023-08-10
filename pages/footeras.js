@@ -3,7 +3,9 @@ import TelegramIcon from '@mui/icons-material/Telegram';
 import gpay from '../public/simps/gpay.png'
 import usdt from '../public/simps/tether.png'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 export default function Footer() {
+    const {locale, locales,push} = useRouter()
     return (
         <div style={{ background: "#1A1B72", width: "100%", padding: "8px",marginTop:'8px',borderTopLeftRadius:'8px',borderTopRightRadius:'8px' }}>
             <Stack direction="column" alignItems="center">
@@ -32,9 +34,14 @@ export default function Footer() {
                             <Image src={gpay} alt='gpay' width={25} height={25}/>
                             </Stack>
                         </Stack>
-                        <TelegramIcon sx={{ color: "whitesmoke" }} />
-                        <Typography variant="subtitle" sx={{ color: "#EEF0F2", fontFamily: "Quicksand, san-serif" }}>Find US on Telegram</Typography>
-                    </Stack>
+                        <Stack direction='column' spacing={1}>
+                            <Typography variant="subtitle" sx={{ color: "#EEF0F2", fontFamily: "Poppins, san-serif",fontSize:'11px',fontWeight:'400' }} >General</Typography>
+                            <Typography variant="subtitle" sx={{ color: "#EEF0F2", fontFamily: "Poppins, san-serif",fontSize:'11px',fontWeight:'400' }}onClick={()=>{push('/',undefined,{locale:'en'})}}>English</Typography>
+                            <Typography variant="subtitle" sx={{ color: "#EEF0F2", fontFamily: "Poppins, san-serif",fontSize:'11px',fontWeight:'400' }}onClick={()=>{push('/',undefined,{locale:'es'})}}>Spanish</Typography>
+                            <Typography variant="subtitle" sx={{ color: "#EEF0F2", fontFamily: "Poppins, san-serif",fontSize:'11px',fontWeight:'400' }}onClick={()=>{push('/',undefined,{locale:'it'})}}>Italian</Typography>
+                            <Typography variant="subtitle" sx={{ color: "#EEF0F2", fontFamily: "Poppins, san-serif",fontSize:'11px',fontWeight:'400' }}onClick={()=>{push('/',undefined,{locale:'hi'})}}>Hindi</Typography>
+                        </Stack>
+                       </Stack>
                 </div>
                 <div>
                     <Typography variant="subtitle" sx={{ color: "#3B60E4", fontSize: '10px', fontWeight: '100', fontFamily: "Poppins, sans-serif" }}>
