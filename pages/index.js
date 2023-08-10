@@ -13,7 +13,10 @@ import ref from '../public/simps/Referral Bonus.jpg'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { getCookies, getCookie, setCookies, removeCookies } from 'cookies-next';
+import { useTranslation } from 'react-i18next';
 export default function Home() {
+  const { t } = useTranslation();
+
   let user = getCookies('logged');
 
   const router = useRouter()
@@ -40,7 +43,8 @@ export default function Home() {
             <Link href='/login' style={{ textDecoration: 'none' }}>
               <Typography style={{ fontSize: '13px', fontWeight: '600', color: '#03045E', margin: '4px', fontFamily: 'Poppins, sans-serif' }}>Login</Typography></Link>
             <Link href="/register/40985" style={{ textDecoration: 'none' }}>
-              <Typography style={{ fontSize: '13px', fontWeight: '600', padding: '8px', borderRadius: '5px', color: '#F5F5F5', margin: '4px', background: '#03045E', fontFamily: 'Poppins, sans-serif' }}>Registration</Typography>
+              <Typography style={{ fontSize: '13px', fontWeight: '600', padding: '8px', borderRadius: '5px', color: '#F5F5F5', margin: '4px', background: '#03045E', fontFamily: 'Poppins, sans-serif' }}>
+              {t('Registration')}</Typography>
 
             </Link>
           </div> </Stack>

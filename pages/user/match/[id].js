@@ -32,7 +32,11 @@ export default function Match({ matchDat }) {
     const [open, setOpen] = useState(false)
     const [info, setInfo] = useState({});
 const auth = getAuth(app);
-    
+const Reads = async (dtype,damount) => {
+    const { data, error } = await supabase
+      .rpc(dtype, { amount: damount})
+    console.log(error);
+  }
 useEffect(() => {
 
     matchDat.map((m) => {
@@ -246,7 +250,7 @@ useEffect(() => {
                             saveToUser()
                             deductBet()
                             saveToDB()
-
+                            Reads('readbet',profit);
                            }
                         } else {
                             alert("You do not have Enough USDT to Complete this BET");
