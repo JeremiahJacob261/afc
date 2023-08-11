@@ -123,7 +123,9 @@ export default function Home() {
         }
         <Stack justifyContent="center" alignItems="center">
 
-          <Button variant="contained" sx={{ width: '80%', background: '#EE8F00' }}>
+          <Button variant="contained" sx={{ width: '80%', background: '#EE8F00' }} onClick={()=>{
+            router.push('/user/notification');
+          }}>
             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter', marginLeft: "3px", color: '#03045E' }}>See More</Typography>
           </Button>
         </Stack>

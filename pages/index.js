@@ -1,4 +1,4 @@
-import { Box, Stack, Typography, Grid, Button, Divider } from '@mui/material'
+import { Stack, Typography, Button } from '@mui/material'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
@@ -12,20 +12,12 @@ import sal from '../public/simps/Monthly salary.png'
 import ref from '../public/simps/Referral Bonus.jpg'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { getCookies, getCookie, setCookies, removeCookies } from 'cookies-next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 export default function Home() {
   const { t } = useTranslation('common')
-  
-  let user = getCookies('logged');
   const {locale, locales,push} = useRouter()
   const router = useRouter();
-  if (user.logged === "true") {
-    router.push("/user")
-  } else {
-    console.log("no")
-  }
   return (
     <div className={styles.container} style={{ background: "#03045E", width: "100%", minHeight: "750px", color: "white", opacity: "0.9", padding: "1px", backdropFilter: "blur(8px)" }}>
       <Head>
@@ -67,7 +59,7 @@ export default function Home() {
         <div style={{ background: '#1A1B72', padding: '8px', borderRadius: '5px' }}>
           <Image src={iv} width={331} height={157} alt='invitation bonus' />
           <Typography style={{ width: '308px', fontFamily: 'Poppins, sans-serif', fontWeight: 'bold', padding: '8px' }}>{t('invitation_bonus')}</Typography>
-          <Typography style={{ width: '308px', height: '165px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
+          <Typography style={{ width: '308px', height: '185px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
           {t('invitation_bonus_description')}</Typography>
             <Link href="/register/40985" style={{ textDecoration: 'none' }}>
           <Button style={{ border: '1px solid #03045E', color: 'white' }}>{t('unlock_rewards')}</Button></Link>
@@ -77,7 +69,7 @@ export default function Home() {
         }
         <div style={{ background: '#1A1B72', padding: '8px', borderRadius: '5px' }}>
           <Image src={kik} width={331} height={157} alt='invitation bonus' />
-          <Typography style={{ width: '308px', height: '175px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
+          <Typography style={{ width: '308px', height: '245px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
           {t('betting_markets')}
             </Typography>
             <Link href="/register/40985" style={{ textDecoration: 'none' }}>  <Button style={{ fontFamily: 'Poppins, sans-serif', background: '#03045E', color: 'white', width: '100%' }}>{t('try_our_odds')}</Button>
