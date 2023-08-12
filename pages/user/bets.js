@@ -30,32 +30,38 @@ export default function Bets() {
   };
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
+    const useri =  localStorage.getItem('signedIn');
+    if (useri) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+
+      const uid =  localStorage.getItem('signUid');
+      const name =  localStorage.getItem('signName');
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
-        const uid = user.uid;
+       
         // ...
-        console.log(user)
-        const getMyBet = async () => {
+        const GET = async () => {
           const { data, error } = await supabase
             .from('placed')
             .select()
-            .eq('username', user.displayName)
+            .eq('username',name)
           setBets(data)
-          console.log(data.length)
         }
-
-        getMyBet()
+        GET();
       } else {
         // User is signed out
         // ...
+        signOut(auth);
         console.log('sign out');
+        localStorage.removeItem('signedIn');
+        localStorage.removeItem('signUid');
+        localStorage.removeItem('signName');
         router.push('/login');
       }
-    });
-
-  }, []);
+  
+   
+  }, [bets]);
   return (
     <Cover>
       <Head>

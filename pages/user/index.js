@@ -48,7 +48,7 @@ export default function Home() {
   const [info, setInfo] = useState({})
   const [trans, setTrans] = useState([])
   const auth = getAuth(app);
-
+ let loads = 0;
   useEffect(() => {
   const useri =  localStorage.getItem('signedIn');
       if (useri) {
@@ -58,7 +58,10 @@ export default function Home() {
         const uid =  localStorage.getItem('signUid');
         const name =  localStorage.getItem('signName');
         // ...
-        const GET = async () => {
+          console.log(loads)
+        if(loads === 0){
+          loads++;
+const GET = async () => {
           const { data, error } = await supabase
             .from('users')
             .select()
@@ -77,10 +80,16 @@ export default function Home() {
         }
         GETs();
         GET();
+        }
+        
       } else {
         // User is signed out
         // ...
+        signOut(auth);
         console.log('sign out');
+        localStorage.removeItem('signedIn');
+        localStorage.removeItem('signUid');
+        localStorage.removeItem('signName');
         router.push('/login');
       }
     
@@ -94,7 +103,7 @@ export default function Home() {
       setFootDat(data);
     };
     getUsers()
-  }, [info, setFootDat]);
+  }, [balance]);
 
   const router = useRouter()
   return (

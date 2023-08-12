@@ -20,6 +20,7 @@ import barcode from '../../public/barcode.jpg'
 import gpay from '../../public/simps/gpay.png'
 import usdt from '../../public/simps/tether.png'
 export default function Deposit() {
+  let loads = 0;
   const [info, setInfo] = useState({})
   const [amount, setAmount] = useState('')
   const [address, setAddress] = useState("")
@@ -42,30 +43,43 @@ export default function Deposit() {
   });
   //end of snackbar1
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
+    const useri =  localStorage.getItem('signedIn');
+    if (useri) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+
+      const uid =  localStorage.getItem('signUid');
+      const name =  localStorage.getItem('signName');
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
-        const uid = user.uid;
+       
         // ...
-        console.log(user)
+        if(loads === 0){
+          loads++;
         const GET = async () => {
           const { data, error } = await supabase
-            .from('users')
+            .from('placed')
             .select()
-            .eq('userId', user.uid)
+            .eq('username',name)
           setInfo(data[0])
-          console.log(data)
+          console.log('...')
         }
         GET();
+        }
+        console.log(loads)
       } else {
         // User is signed out
         // ...
+        signOut(auth);
         console.log('sign out');
+        localStorage.removeItem('signedIn');
+        localStorage.removeItem('signUid');
+        localStorage.removeItem('signName');
         router.push('/login');
       }
-    });
-  }, []);
+  
+   
+  }, [info]);
   //file upload
 
 
@@ -275,7 +289,7 @@ export default function Deposit() {
           <Button 
             sx={{ background: '#1A1B72', width: '145px', height: '136px', borderRadius: '5px' }}
           >
-            <Stack direction="column" spacing={2} justifyContent="center" alignITems='center'>
+            <Stack direction="column" spacing={2} justifyContent="center" alignItems='center'>
 
               <Image src={gpay} alt='gpay' width={60} height={60} />
               <Typography sx={{ color: 'white' }}>

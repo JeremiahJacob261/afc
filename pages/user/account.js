@@ -28,32 +28,46 @@ const handleClosed = (event, reason) => {
   }
   setOpened(false);
 };
+let loads = 0;
   //end of snackbar1
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
+    const useri =  localStorage.getItem('signedIn');
+    if (useri) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+
+      const uid =  localStorage.getItem('signUid');
+      const name =  localStorage.getItem('signName');
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
-        const uid = user.uid;
+       console.log('...')
         // ...
+        if(loads === 0){
+          loads++;
         const GET = async () => {
           const { data, error } = await supabase
             .from('users')
             .select()
-            .eq('userId', user.uid)
+            .eq('userId',uid)
           setInfo(data[0])
-    setBalance(data[0].balance);
+          setBalance(data[0].balance);
         }
         GET();
+        }
+        
       } else {
         // User is signed out
         // ...
+        signOut(auth);
         console.log('sign out');
+        localStorage.removeItem('signedIn');
+        localStorage.removeItem('signUid');
+        localStorage.removeItem('signName');
         router.push('/login');
       }
-    });
+  
    
-  }, [info]);
+  }, [balance]);
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;

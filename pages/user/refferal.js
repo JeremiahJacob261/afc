@@ -28,28 +28,51 @@ export default function Refferal() {
   const [lvll, setLvll] = useState([]);
   const auth = getAuth(app);
   const [lvl3, setLvl3] = useState([]);
+  let loads = 0;
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
+   
+    const useri =  localStorage.getItem('signedIn');
+    if (useri) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+
+      const uid =  localStorage.getItem('signUid');
+      const name =  localStorage.getItem('signName');
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
-        const uid = user.uid;
+       
         // ...
-        const GET = async () => {
+          console.log(info.length)
+          
+       if(loads === 0){
+         const GET = async () => {
           const { data, error } = await supabase
             .from('users')
             .select()
-            .eq('userId', user.uid)
+            .eq('username',name)
           setInfo(data[0])
         }
         GET();
+
+      loads++;
+
+       }
+        
+     
+        
+        console.log(loads)
       } else {
         // User is signed out
         // ...
+        signOut(auth);
         console.log('sign out');
+        localStorage.removeItem('signedIn');
+        localStorage.removeItem('signUid');
+        localStorage.removeItem('signName');
         router.push('/login');
       }
-    });
+  
+   
     //get refs
     const getRefs = async () => {
       const { data, error } = await supabase
@@ -84,9 +107,9 @@ const getCo1=async()=> {
       .eq('lvlb', info.newrefer)
     setLvl3(data)
   }
-  getCo3()
-  }, [ lvll, lvlo, refs])
-  
+  getCo3();
+  }, [ info])
+     
   const columns = [
     { field: 'statId', headerName: 'ID', width: 50 },
     { field: 'username', headerName: 'Username', width: 130 },
@@ -165,7 +188,6 @@ const getCo1=async()=> {
                 lvl1.map((r) => {
                   sn++;
                   var dts = new Date(r.crdate);
-                  console.log(dts)
                   return (
                     <tr key={r.username}>
                       <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{sn}</th>
