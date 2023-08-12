@@ -25,6 +25,7 @@ import { useEffect } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
 import { async } from "@firebase/util";
+import Cookies from 'js-cookie'
 export default function Login() {
   const dbs = getDatabase(app);
   const [username, setUsername] = useState("")
@@ -69,11 +70,18 @@ export default function Login() {
         // https://firebase.google.com/docs/reference/js/auth.user
         const uid = user.uid;
         // ...
+        console.log(localStorage.getItem('signInfo'))
+        localStorage.setItem('signedIn',true);
+        localStorage.setItem('signUid',uid);
+        localStorage.setItem('signName',user.displayName);
         router.push('/user');
       } else {
         // User is signed out
         // ...
         console.log('sign out');
+        localStorage.removeItem('signedIn');
+        localStorage.removeItem('signUid');
+        localStorage.removeItem('signName');
       }
     });
   }, [])
@@ -92,7 +100,9 @@ export default function Login() {
         // ...
 
         alert('you are logged in');
-
+        localStorage.setItem('signedIn',true);
+        localStorage.setItem('signUid',user.uid);
+        localStorage.setItem('signName',user.displayName);
         setDrop(false)
         router.push('/user');
       })

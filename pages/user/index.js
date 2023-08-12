@@ -50,17 +50,19 @@ export default function Home() {
   const auth = getAuth(app);
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
+  const useri =  localStorage.getItem('signedIn');
+      if (useri) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
-        const uid = user.uid;
+  
+        const uid =  localStorage.getItem('signUid');
+        const name =  localStorage.getItem('signName');
         // ...
         const GET = async () => {
           const { data, error } = await supabase
             .from('users')
             .select()
-            .eq('userId', user.uid)
+            .eq('userId', uid)
           setInfo(data[0])
           setBalance(data[0].balance);
         }
@@ -68,7 +70,7 @@ export default function Home() {
           const { data, error } = await supabase
             .from('notification')
             .select()
-            .or(`username.eq.${user.displayName}`, `sent.neq.${'failed'}`)
+            .or(`username.eq.${name}`, `sent.neq.${'failed'}`)
             .limit(10);
           setTrans(data)
           console.log(data.length)
@@ -81,7 +83,7 @@ export default function Home() {
         console.log('sign out');
         router.push('/login');
       }
-    });
+    
 
     const getUsers = async () => {
       const { data, error } = await supabase
@@ -154,7 +156,7 @@ export default function Home() {
         <CircularProgress color="inherit" />
       </Backdrop>
          <Head>
-        <title>Welcome -{info.username}</title>
+        <title>Welcome - {info ? `${info.username}` : 'Loading...'}</title>
         <link rel="icon" href="/logo_afc.ico" />
       </Head>
         <Stack sx={{ background: "#03045E", marginTop: '10px' }} spacing={4} justifyContent='center' alignItems='center'>

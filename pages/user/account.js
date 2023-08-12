@@ -150,7 +150,10 @@ const Alert = React.forwardRef(function Alert(props, ref) {
             <Typography sx={{ background:'#1A1B72',padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }} onClick={() => {
               
               signOut(auth).then(()=>{
-          
+                
+        localStorage.removeItem('signedIn');
+        localStorage.removeItem('signUid');
+        localStorage.removeItem('signName');
                 router.push('/login');
               })
             }
