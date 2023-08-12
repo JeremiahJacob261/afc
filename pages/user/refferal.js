@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import { DataGrid } from '@mui/x-data-grid';
 import { supabase } from '../api/supabase'
 import Head from 'next/head';
@@ -28,7 +28,7 @@ export default function Refferal() {
   const [lvll, setLvll] = useState([]);
   const auth = getAuth(app);
   const [lvl3, setLvl3] = useState([]);
-  let loads = 0;
+  const isMounted = useRef(true);
   useEffect(() => {
    
     const useri =  localStorage.getItem('signedIn');
@@ -44,7 +44,7 @@ export default function Refferal() {
         // ...
           console.log(info.length)
           
-       if(loads === 0){
+          if (isMounted.current) {
          const GET = async () => {
           const { data, error } = await supabase
             .from('users')
@@ -54,13 +54,14 @@ export default function Refferal() {
         }
         GET();
 
-      loads++;
+        isMounted.current = false;
+
+       }else{
+
 
        }
         
      
-        
-        console.log(loads)
       } else {
         // User is signed out
         // ...
@@ -73,43 +74,46 @@ export default function Refferal() {
       }
   
    
-    //get refs
-    const getRefs = async () => {
-      const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .or(`refer.eq.${info.newrefer},lvla.eq.${info.newrefer},lvlb.eq.${info.newrefer}`);
-      setRefs(data);
-    }
-    
-    getRefs();
-    //end refs
+   
+  return () => {
+    isMounted.current = true;
+  };
+  }, [])
+      //get refs
+ const getRefs = async () => {
+  const { data, error } = await supabase
+    .from('users')
+    .select('*')
+    .or(`refer.eq.${info.newrefer},lvla.eq.${info.newrefer},lvlb.eq.${info.newrefer}`);
+  setRefs(data);
+}
+
+getRefs();
+//end refs
 const getCo1=async()=> {
-    const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('refer', info.newrefer)
-    setLvl1(data)
-  }
-  getCo1()
-  async function getCo2() {
-    const { data, count } = await supabase
-      .from('users')
-      .select('*')
-      .eq('lvla', info.newrefer)
-    setLvl2(data)
-  }
-  getCo2()
-  async function getCo3() {
-    const { data, count } = await supabase
-      .from('users')
-      .select('*')
-      .eq('lvlb', info.newrefer)
-    setLvl3(data)
-  }
-  getCo3();
-  }, [ info])
-     
+const { data, error } = await supabase
+  .from('users')
+  .select('*')
+  .eq('refer', info.newrefer)
+setLvl1(data)
+}
+getCo1()
+async function getCo2() {
+const { data, count } = await supabase
+  .from('users')
+  .select('*')
+  .eq('lvla', info.newrefer)
+setLvl2(data)
+}
+getCo2()
+async function getCo3() {
+const { data, count } = await supabase
+  .from('users')
+  .select('*')
+  .eq('lvlb', info.newrefer)
+setLvl3(data)
+}
+getCo3();
   const columns = [
     { field: 'statId', headerName: 'ID', width: 50 },
     { field: 'username', headerName: 'Username', width: 130 },
