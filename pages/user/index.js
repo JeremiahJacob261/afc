@@ -71,9 +71,9 @@ const GET = async () => {
         }
         const GETs = async () => {
           const { data, error } = await supabase
-            .from('notification')
+            .from('activa')
             .select()
-            .or(`username.eq.${name}`, `sent.neq.${'failed'}`)
+            .eq('code',info.newrefer)
             .limit(10);
           setTrans(data)
           console.log(data.length)
@@ -123,10 +123,10 @@ const GET = async () => {
           trans.map((r) => {
             return (
 
-              <MenuItem key={r.keyf}>
+              <MenuItem key={r.id}>
                 <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '4px' }}>
                   <TbMailDollar color="#03045E" />
-                  <Typography style={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter' }}>Your {r.type} claim of <br />{r.amount} USDT was Successful
+                  <Typography style={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter' }}>You Recieved {r.amount} USDT from <br />{r.username} as Referral Bonus. 
                   </Typography>
                 </Stack></MenuItem>
             );
