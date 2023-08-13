@@ -95,12 +95,18 @@ export default function Register({ refer }) {
         // https://firebase.google.com/docs/reference/js/auth.user
         const uid = user.uid;
         // ...
-        console.log(user)
-        route.push('/user');
+        console.log(localStorage.getItem('signInfo'))
+        localStorage.setItem('signedIn',true);
+        localStorage.setItem('signUid',uid);
+        localStorage.setItem('signName',user.displayName);
+        router.push('/user');
       } else {
         // User is signed out
         // ...
         console.log('sign out');
+        localStorage.removeItem('signedIn');
+        localStorage.removeItem('signUid');
+        localStorage.removeItem('signName');
       }
     });
 
