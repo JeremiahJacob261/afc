@@ -20,7 +20,6 @@ export default function Refferal() {
   };
 
   const [info, setInfo] = useState({});
-  const [refs, setRefs] = useState([]);
   const [lvl1, setLvl1] = useState([]);
   const [lvl2, setLvl2] = useState([]);
   const [lvlo, setLvlo] = useState([]);
@@ -51,13 +50,37 @@ export default function Refferal() {
             .select()
             .eq('username',name)
           setInfo(data[0])
+          console.log(data);
         }
         GET();
 
         isMounted.current = false;
 
        }else{
-
+        async function getCo1() {
+          const { data, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('refer', info.newrefer)
+          setLvl1(data)
+          }
+          getCo1()
+          async function getCo2() {
+          const { data, count } = await supabase
+            .from('users')
+            .select('*')
+            .eq('lvla', info.newrefer)
+          setLvl2(data)
+          }
+          getCo2()
+          async function getCo3() {
+          const { data, count } = await supabase
+            .from('users')
+            .select('*')
+            .eq('lvlb', info.newrefer)
+          setLvl3(data)
+          }
+          getCo3();
 
        }
         
@@ -79,41 +102,9 @@ export default function Refferal() {
     isMounted.current = true;
   };
   }, [])
-      //get refs
- const getRefs = async () => {
-  const { data, error } = await supabase
-    .from('users')
-    .select('*')
-    .or(`refer.eq.${info.newrefer},lvla.eq.${info.newrefer},lvlb.eq.${info.newrefer}`);
-  setRefs(data);
-}
+     
+ 
 
-getRefs();
-//end refs
-const getCo1=async()=> {
-const { data, error } = await supabase
-  .from('users')
-  .select('*')
-  .eq('refer', info.newrefer)
-setLvl1(data)
-}
-getCo1()
-async function getCo2() {
-const { data, count } = await supabase
-  .from('users')
-  .select('*')
-  .eq('lvla', info.newrefer)
-setLvl2(data)
-}
-getCo2()
-async function getCo3() {
-const { data, count } = await supabase
-  .from('users')
-  .select('*')
-  .eq('lvlb', info.newrefer)
-setLvl3(data)
-}
-getCo3();
   const columns = [
     { field: 'statId', headerName: 'ID', width: 50 },
     { field: 'username', headerName: 'Username', width: 130 },
@@ -131,7 +122,7 @@ getCo3();
       width: 100,
     },
   ];
-  const rows = refs;
+  
   var sn = 0;
   return (
     <div style={{ minHeight: '85vh', width: '100%', overflowX: 'hidden' }}>

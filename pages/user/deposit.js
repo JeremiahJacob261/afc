@@ -2,7 +2,7 @@ import { Stack, TextField, Typography, Button, Box } from "@mui/material";
 import { supabase } from '../api/supabase'
 import { useContext, useEffect } from "react";
 import { AppContext } from "../api/Context";
-import React, { useState } from "react";
+import React, { useState,useRef } from "react";
 import { useRouter } from 'next/router'
 import CloseIcon from '@mui/icons-material/Close';
 import Snackbar from '@mui/material/Snackbar';
@@ -42,6 +42,7 @@ export default function Deposit() {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
   //end of snackbar1
+  const isMounted = useRef(true);
   useEffect(() => {
     const useri =  localStorage.getItem('signedIn');
     if (useri) {
@@ -54,7 +55,7 @@ export default function Deposit() {
         // https://firebase.google.com/docs/reference/js/auth.user
        
         // ...
-        
+        if (isMounted.current) {
         const GET = async () => {
           const { data, error } = await supabase
             .from('users')
@@ -64,8 +65,10 @@ export default function Deposit() {
           console.log(data)
         }
         GET();
-        
-        console.log(loads)
+        isMounted.current = false;
+      }else{
+
+      }
       } else {
         // User is signed out
         // ...
@@ -276,7 +279,7 @@ export default function Deposit() {
           }}
             sx={{ background: '#1A1B72', width: '145px', height: '136px', borderRadius: '5px' }}
           >
-            <Stack direction="column" spacing={2} justifyContent="center" alignITems='center'>
+            <Stack direction="column" spacing={2} justifyContent="center" alignItems='center'>
 
               <Image src={usdt} alt='usdt' width={90} height={70} />
               <Typography sx={{ color: 'white' }}>

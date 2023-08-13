@@ -36,7 +36,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 export default function Home() {
   const [anchorEl, setAnchorEl] = useState(null);
   const openr = Boolean(anchorEl);
-  const [drop,setDrop] = useState(false);
+  const [drop, setDrop] = useState(false);
   const handleClickr = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -48,20 +48,20 @@ export default function Home() {
   const [info, setInfo] = useState({})
   const [trans, setTrans] = useState([])
   const auth = getAuth(app);
- let loads = 0;
+  let loads = 0;
   useEffect(() => {
-  const useri =  localStorage.getItem('signedIn');
-      if (useri) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/auth.user
-  
-        const uid =  localStorage.getItem('signUid');
-        const name =  localStorage.getItem('signName');
-        // ...
-          console.log(loads)
-        if(loads === 0){
-          loads++;
-const GET = async () => {
+    const useri = localStorage.getItem('signedIn');
+    if (useri) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+
+      const uid = localStorage.getItem('signUid');
+      const name = localStorage.getItem('signName');
+      // ...
+      console.log(loads)
+      if (loads === 0) {
+        loads++;
+        const GET = async () => {
           const { data, error } = await supabase
             .from('users')
             .select()
@@ -73,26 +73,26 @@ const GET = async () => {
           const { data, error } = await supabase
             .from('activa')
             .select()
-            .eq('code',info.newrefer)
+            .eq('code', info.newrefer)
             .limit(10);
           setTrans(data)
           console.log(data.length)
         }
         GETs();
         GET();
-        }
-        
-      } else {
-        // User is signed out
-        // ...
-        signOut(auth);
-        console.log('sign out');
-        localStorage.removeItem('signedIn');
-        localStorage.removeItem('signUid');
-        localStorage.removeItem('signName');
-        router.push('/login');
       }
-    
+
+    } else {
+      // User is signed out
+      // ...
+      signOut(auth);
+      console.log('sign out');
+      localStorage.removeItem('signedIn');
+      localStorage.removeItem('signUid');
+      localStorage.removeItem('signName');
+      router.push('/login');
+    }
+
 
     const getUsers = async () => {
       const { data, error } = await supabase
@@ -126,7 +126,7 @@ const GET = async () => {
               <MenuItem key={r.id}>
                 <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '4px' }}>
                   <TbMailDollar color="#03045E" />
-                  <Typography style={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter' }}>You Recieved {r.amount} USDT from <br />{r.username} as Referral Bonus. 
+                  <Typography style={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter' }}>You Recieved {r.amount} USDT from <br />{r.username} as Referral Bonus.
                   </Typography>
                 </Stack></MenuItem>
             );
@@ -134,7 +134,7 @@ const GET = async () => {
         }
         <Stack justifyContent="center" alignItems="center">
 
-          <Button variant="contained" sx={{ width: '80%', background: '#EE8F00' }} onClick={()=>{
+          <Button variant="contained" sx={{ width: '80%', background: '#EE8F00' }} onClick={() => {
             router.push('/user/notification');
           }}>
             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter', marginLeft: "3px", color: '#03045E' }}>See More</Typography>
@@ -157,17 +157,17 @@ const GET = async () => {
             onClick={handleClickr}
           />
         </div> </Stack>
-      <Cover> 
-      <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={drop}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
-         <Head>
-        <title>Welcome - {info ? `${info.username}` : 'Loading...'}</title>
-        <link rel="icon" href="/logo_afc.ico" />
-      </Head>
+      <Cover>
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={drop}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+        <Head>
+          <title>Welcome - {info ? `${info.username}` : 'Loading...'}</title>
+          <link rel="icon" href="/logo_afc.ico" />
+        </Head>
         <Stack sx={{ background: "#03045E", marginTop: '10px' }} spacing={4} justifyContent='center' alignItems='center'>
           <Typography style={{ fontSize: '32px', fontWeight: '900', fontFamily: 'Poppins, sans-serif', height: '99px', padding: '5px', width: '100%', textAlign: 'left', color: 'white' }}>Welcome, <br /> {info.username}</Typography>
           <Typography style={{ fontSize: '16px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'white' }}>Current Balance: {info.balance} USDT</Typography>
@@ -186,46 +186,46 @@ const GET = async () => {
             See some of our matches with the best odds
           </Typography>
           {
-          footDat.map((pro) => {
-            let stams = Date.parse(pro.date + " " + pro.time) / 1000;
-            let curren = new Date().getTime() / 1000;
-            const league = (pro.league === 'others') ? pro.otherl : pro.league ;
-            return (
-              
+            footDat.map((pro) => {
+              let stams = Date.parse(pro.date + " " + pro.time) / 1000;
+              let curren = new Date().getTime() / 1000;
+              const league = (pro.league === 'others') ? pro.otherl : pro.league;
+              return (
+
                 <Stack direction="column" alignItems="center"
-                key={"match" + pro.home + pro.away}
-                style={{
-                  marginBottom: "8px", padding: "4px",
-                  display:(stams<curren) ? 'none':'visible',
-                  background:'#1A1B72',
-                  width:'100%',
-                  borderRadius:'5px'
-                }} onClick={() => {
-                  setDrop(true)
-                  //register/40985
-                  router.push("/user/match/" + pro.match_id)
-                }}>
-                <Typography style={{color:'#DFA100',fontFamily: 'Poppins, sans-serif',fontSize:'12px'}}>{pro.date} </Typography>
-                 
+                  key={"match" + pro.home + pro.away}
+                  style={{
+                    marginBottom: "8px", padding: "4px",
+                    display: (stams < curren) ? 'none' : 'visible',
+                    background: '#1A1B72',
+                    width: '100%',
+                    borderRadius: '5px'
+                  }} onClick={() => {
+                    setDrop(true)
+                    //register/40985
+                    router.push("/user/match/" + pro.match_id)
+                  }}>
+                  <Typography style={{ color: '#DFA100', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{pro.date} </Typography>
+
                   <Stack direction="row" spacing={4}>
                     <Stack alignItems="center">
                       <Image src={Ims} alt="home" width='53' height='53' />
-                      <Typography style={{color:'white',fontFamily: 'Poppins, sans-serif',fontSize:'13px',height:'44px',padding:'4px',width:'104px',textAlign:'center'}}>{pro.home}</Typography>
+                      <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif', fontSize: '13px', height: '44px', padding: '4px', width: '104px', textAlign: 'center' }}>{pro.home}</Typography>
                     </Stack>
                     <Stack spacing={2} alignItems="center" justifyContent="center">
-                      <Typography style={{color:'#181AA9',fontWeight:'800',fontSize:'24'}}>VS</Typography>
-                      <Typography style={{color:'white',fontWeight:'bold',fontFamily: 'Poppins, sans-serif',fontSize:'12px'}}>{pro.time} </Typography>
+                      <Typography style={{ color: '#181AA9', fontWeight: '800', fontSize: '24' }}>VS</Typography>
+                      <Typography style={{ color: 'white', fontWeight: 'bold', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{pro.time} </Typography>
                     </Stack>
                     <Stack alignItems="center">
                       <Image src={Ims} alt="away" width='53' height='53' />
-                      <Typography style={{color:'white',fontFamily: 'Poppins, sans-serif',fontSize:'13px',height:'44px',padding:'4px',width:'104px',textAlign:'center'}}>{pro.away}</Typography>
+                      <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif', fontSize: '13px', height: '44px', padding: '4px', width: '104px', textAlign: 'center' }}>{pro.away}</Typography>
                     </Stack>
                   </Stack>
-                  <Typography style={{ textAlign:'center',color:'#9D9EF1',fontSize:'13px',width:'100%' }}>{league}</Typography>
+                  <Typography style={{ textAlign: 'center', color: '#9D9EF1', fontSize: '13px', width: '100%' }}>{league}</Typography>
                 </Stack>
-            )
-          })
-        }
+              )
+            })
+          }
           <Button style={{ background: '#181AA9', color: 'white', borderRadius: '5px', width: '100%', height: '57px' }}
             onClick={() => {
               router.push('/user/matches')
