@@ -57,7 +57,7 @@ export default function Deposit() {
         
         const GET = async () => {
           const { data, error } = await supabase
-            .from('placed')
+            .from('users')
             .select()
             .eq('username',name)
           setInfo(data[0])
