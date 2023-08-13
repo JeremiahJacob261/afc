@@ -99,7 +99,7 @@ export default function Register({ refer }) {
         localStorage.setItem('signedIn',true);
         localStorage.setItem('signUid',uid);
         localStorage.setItem('signName',user.displayName);
-        router.push('/user');
+        route.push('/user');
       } else {
         // User is signed out
         // ...
