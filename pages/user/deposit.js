@@ -54,18 +54,17 @@ export default function Deposit() {
         // https://firebase.google.com/docs/reference/js/auth.user
        
         // ...
-        if(loads === 0){
-          loads++;
+        
         const GET = async () => {
           const { data, error } = await supabase
             .from('placed')
             .select()
             .eq('username',name)
           setInfo(data[0])
-          console.log('...')
+          console.log(data)
         }
         GET();
-        }
+        
         console.log(loads)
       } else {
         // User is signed out
