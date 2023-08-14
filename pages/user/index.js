@@ -74,7 +74,8 @@ export default function Home() {
             .from('activa')
             .select()
             .eq('code', info.newrefer)
-            .limit(10);
+            .limit(10)
+            .order('id', { ascending: false });
           setTrans(data)
           console.log(data.length)
         }

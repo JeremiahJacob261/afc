@@ -36,16 +36,17 @@ export default function Notification() {
 
         }
         }
-        const GETs = async () => {
-                const { data, error } = await supabase
-                  .from('activa')
-                  .select()
-                  .eq('code',info.newrefer);
-                  setNot(data);
-                console.log(data)
-              }
-              GETs();
-    },[])
+        
+    },[]);
+      async function GETs(){
+      const { data, error } = await supabase
+        .from('activa')
+        .select()
+        .eq('code',info.newrefer);
+        setNot(data);
+      console.log(data)
+    }
+    GETs();
     return(
         <Stack direction="column" sx={{height:'80vh'}}>
             <Stack direction="row"  alignItems='center' sx={{position:'top',top:'0',padding:'8px',background:'#1A1B72'}}>

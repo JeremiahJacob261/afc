@@ -247,10 +247,10 @@ useEffect(() => {
                                     })
                                 console.log(error)
                             }
-                            saveToUser()
-                            deductBet()
-                            saveToDB()
-                            Reads('readbet',profit);
+                            saveToUser();
+                            deductBet();
+                            saveToDB();
+                            Reads('readbet',stake);
                            }
                         } else {
                             alert("You do not have Enough USDT to Complete this BET");
