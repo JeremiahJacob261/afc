@@ -59,7 +59,7 @@ border: "1px solid rgba(255, 255, 255, 0.3)"
                   borderRadius:'5px'
                 }} onClick={() => {
                   setDrop(true)
-                  //register/40985
+                  //register/000208
                   router.push("/user/match/" + pro.match_id)
                 }}>
                 <Typography style={{color:'#DFA100',fontFamily: 'Poppins, sans-serif',fontSize:'12px'}}>{pro.date} </Typography>

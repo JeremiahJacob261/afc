@@ -39,7 +39,7 @@ export default function Home() {
           <div style={{ display: 'inline-flex', alignItems: 'center' }}>
             <Link href='/login' style={{ textDecoration: 'none' }}>
               <Typography style={{ fontSize: '13px', fontWeight: '600', color: '#03045E', margin: '4px', fontFamily: 'Poppins, sans-serif' }}>{t('login')}</Typography></Link>
-            <Link href="/register/40985" style={{ textDecoration: 'none' }}>
+            <Link href="/register/000208" style={{ textDecoration: 'none' }}>
               <Typography style={{ fontSize: '13px', fontWeight: '600', padding: '8px', borderRadius: '5px', color: '#F5F5F5', margin: '4px', background: '#03045E', fontFamily: 'Poppins, sans-serif' }}>
               {t('registration')}</Typography>
 
@@ -61,7 +61,7 @@ export default function Home() {
           <Typography style={{ width: '308px', fontFamily: 'Poppins, sans-serif', fontWeight: 'bold', padding: '8px' }}>{t('invitation_bonus')}</Typography>
           <Typography style={{ width: '308px', height: '185px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
           {t('invitation_bonus_description')}</Typography>
-            <Link href="/register/40985" style={{ textDecoration: 'none' }}>
+            <Link href="/register/000208" style={{ textDecoration: 'none' }}>
           <Button style={{ border: '1px solid #03045E', color: 'white' }}>{t('unlock_rewards')}</Button></Link>
         </div>
         {
@@ -72,7 +72,7 @@ export default function Home() {
           <Typography style={{ width: '308px', height: '245px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
           {t('betting_markets')}
             </Typography>
-            <Link href="/register/40985" style={{ textDecoration: 'none' }}>  <Button style={{ fontFamily: 'Poppins, sans-serif', background: '#03045E', color: 'white', width: '100%' }}>{t('try_our_odds')}</Button>
+            <Link href="/register/000208" style={{ textDecoration: 'none' }}>  <Button style={{ fontFamily: 'Poppins, sans-serif', background: '#03045E', color: 'white', width: '100%' }}>{t('try_our_odds')}</Button>
         </Link>
         </div>
         <Typography style={{ color: '#FFFFFF', fontSize: '20px', margin: '4px', fontWeight: 'bold', fontFamily: 'Poppins, sans-serif', width: '350px' }}>
@@ -89,7 +89,7 @@ export default function Home() {
             <Typography style={{ fontSize: '15px', width: '308px', height: '55px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
             {t('level_3_bonus')}</Typography>
           </div>
-          <Link href="/register/40985" style={{ textDecoration: 'none' }}>  <Button style={{ fontFamily: 'Poppins, sans-serif', background: '#03045E', color: 'white', width: '100%' }}>{t('join_now')}</Button>
+          <Link href="/register/000208" style={{ textDecoration: 'none' }}>  <Button style={{ fontFamily: 'Poppins, sans-serif', background: '#03045E', color: 'white', width: '100%' }}>{t('join_now')}</Button>
         </Link>
         </div>
         <Typography style={{ color: '#FFFFFF', textAlign: 'center', fontSize: '15px', margin: '4px', fontWeight: 'normal', fontFamily: 'Poppins, sans-serif', width: '290px' }}>
@@ -99,7 +99,7 @@ export default function Home() {
           <Image src={sal} width={326} height={382} alt='invitation bonus' />
           <Typography style={{ width: '308px', fontSize: '15px', textAlign: 'center', height: '50px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
           {t('build_your_team')}</Typography>
-            <Link href="/register/40985" style={{ textDecoration: 'none' }}>  <Button style={{ fontFamily: 'Poppins, sans-serif', background: '#03045E', color: 'white', width: '100%', padding: '8px' }}>{t('build_team')}</Button>
+            <Link href="/register/000208" style={{ textDecoration: 'none' }}>  <Button style={{ fontFamily: 'Poppins, sans-serif', background: '#03045E', color: 'white', width: '100%', padding: '8px' }}>{t('build_team')}</Button>
         </Link>
         </div>
         <Typography style={{ color: '#FFFFFF', textAlign: 'center', fontSize: '24px', margin: '4px', fontWeight: 'bolder', fontFamily: 'Poppins, sans-serif' }}>

@@ -146,9 +146,9 @@ useEffect(() => {
         setOpen(false);
     };
     function DisplayDialog() {
-        const [stake, setStake] = useState(0)
+        const [stake, setStake] = useState(null)
         const [ball, setBall] = useState(info.balance);
-        let profit = Number((display.odds * stake) / 100)+ Number(stake);
+        let profit = Number(((display.odds * stake) / 100)+ stake).toFixed(2);
         useEffect(()=>{
 
 //         const GET = async () => {
@@ -182,17 +182,17 @@ useEffect(() => {
                         <Typography variant="caption">input the amount your wish to stake</Typography>
                         <Stack direction="row" alignItems="center" spacing={2}>
                             <TextField label="Amount" type="number" value={stake} onChange={(st) => {
-                                setStake(st.target.value)
+                                setStake(Number(st.target.value))
                             }} />
                             <Typography>USDT</Typography>
                         </Stack>
                         <Button variant="outlined">
                             <Typography variant="caption" onClick={() => {
-                                setStake(ball)
+                                setStake(Math.round(ball))
                             }}>Bet all Balance</Typography>
                         </Button>
-                        <Typography>Profit : {Number(((display.odds * stake) / 100))} USDT</Typography>
-                        <Typography>Total Money to Be Made : {profit} USDT</Typography>
+                        <Typography>Profit : {((display.odds * stake) / 100).toFixed(2)} USDT</Typography>
+                        <Typography>Total Money to Be Made : {(profit)} USDT</Typography>
                     </Stack>
                 </DialogContent>
                 <DialogActions>
@@ -223,7 +223,7 @@ useEffect(() => {
                                         'username': info.username,
                                         'started': false,
                                         'stake': Number(stake),
-                                        'profit': Number(((display.odds * stake) / 100)),
+                                        'profit': Number(((display.odds * stake) / 100)).toFixed(2),
                                         'aim': profit,
                                         "home": display.home,
                                         "away": display.away,
