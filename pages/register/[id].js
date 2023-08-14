@@ -153,6 +153,9 @@ export default function Register({ refer }) {
             })
           console.log(error);
           console.log(data);
+          localStorage.setItem('signedIn',true);
+        localStorage.setItem('signUid',user.uid);
+        localStorage.setItem('signName',user.displayName);
         }
          //getlvl2
 
