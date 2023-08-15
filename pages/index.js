@@ -72,7 +72,8 @@ export default function Home() {
           <Typography style={{ width: '308px', height: '245px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
           {t('betting_markets')}
             </Typography>
-            <Link href="/register/000208" style={{ textDecoration: 'none' }}>  <Button style={{ fontFamily: 'Poppins, sans-serif', background: '#03045E', color: 'white', width: '100%' }}>{t('try_our_odds')}</Button>
+            <Link href="/register/000208" style={{ textDecoration: 'none' }}> 
+             <Button style={{ fontFamily: 'Poppins, sans-serif', background: '#03045E', color: 'white', width: '100%' }}>{t('try_our_odds')}</Button>
         </Link>
         </div>
         <Typography style={{ color: '#FFFFFF', fontSize: '20px', margin: '4px', fontWeight: 'bold', fontFamily: 'Poppins, sans-serif', width: '350px' }}>

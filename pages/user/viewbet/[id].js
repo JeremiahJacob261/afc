@@ -81,7 +81,8 @@ export default function Viewbets({ bets }) {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
             <Stack direction="column">
-                <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>Match Name :{bet.home} vs {bet.away}</Typography>
+                <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>Match Name :</Typography>
+                <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>{bet.home} vs {bet.away}</Typography>
                 <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>Stake : {bet.stake} USDT</Typography>
                 <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>Time : {bet.time}</Typography>
                 <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>Date : {bet.date} </Typography>
