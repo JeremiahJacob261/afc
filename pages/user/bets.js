@@ -61,7 +61,7 @@ export default function Bets() {
     }
 
 
-  }, [bets]);
+  }, []);
   return (
     <Cover>
       <Head>
@@ -70,7 +70,7 @@ export default function Bets() {
         <link rel="icon" href="/logo_afc.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <div style={{ color: "#03045E", height: '100vh' }}>
+      <div style={{ color: "#03045E", minHeight: '90vh' }}>
 
         <Typography variant="h4" sx={{ color: "#E8E5DA", margin: "8px", fontFamily: "'Barlow', sans-serif" }}>Bets</Typography>
 
