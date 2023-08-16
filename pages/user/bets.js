@@ -2,7 +2,7 @@ import Cover from './cover'
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useState } from "react";
 import Head from 'next/head'
-import { Stack, Typography, Button, Paper } from '@mui/material';
+import { Stack, Typography, Box, Paper } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { supabase } from '../api/supabase';
 import Dialog from '@mui/material/Dialog';
@@ -85,27 +85,27 @@ export default function Bets() {
                 <div key={s.betid} onClick={() => {
                   router.push('/user/viewbet/' + s.betid);
                 }}>
-                  <Paper sx={{ background: "#0B1723", padding: "4px", height: "max-content" }} >
+                  <Box sx={{ background: "#1A1B72", padding: "4px", height: "max-content" }} >
                     <Stack direction="row" spacing={4} alignItems="center" justifyContent="space-around">
-                      <Stack style={{ padding: "8px", width: "350px", height: "80px" }} direction="column" >
-
-                        <Typography sx={{ color: "white", fontSize: '15px' }}>{s.home} vs {s.away}</Typography>
-                        <Typography variant="subbtitle2" sx={{ color: "white", fontSize: '15px' }}> {s.market}</Typography>
+                      <Stack style={{ padding: "8px", width: "350px", height: "80px" }} direction="column" justifyContent='space-between' >
+                        <Typography sx={{ color: "white",padding: "6px", fontSize: '14px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', width: '165px' }}>{s.home}</Typography>
+                        <Typography sx={{ color: "white", padding: "6px",fontSize: '14px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', width: '165px' }}>{s.away}</Typography>
                       </Stack>
-                      <Typography sx={{
-                        fontFamily: 'Changa, sans-serif', fontSize: '15px', color: "white"
-                      }}>{s.stake} USDT</Typography>
-                      <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Time : {s.time}</Typography>
-                      <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Date : {s.date} </Typography>
+                      <Stack direction='column'>
+                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', color: "#C7C5C0" }}>{s.stake} USDT</Typography>
+                        <Typography variant="subtitle2" sx={{ color: "#EE8F00", fontSize: '15px' }}> {s.market}</Typography>
+                        <Typography style={{ color: '#2426F8', fontFamily: 'Poppins, sans-serif', fontSize: '12px', width: '151px', fontWeight: '200' }}>{s.time} {s.date}</Typography>
+
+                      </Stack>
                     </Stack>
-                  </Paper>
+                  </Box>
                 </div>
               )
             })
 
 
           }
-          
+
         </Stack>
       </div>
     </Cover>

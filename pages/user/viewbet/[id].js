@@ -20,30 +20,41 @@ export default function Viewbets({ bets }) {
         bets.map((m) => {
             setBet(m);
         })
-            onAuthStateChanged(auth, (user) => {
-              if (user) {
-                // User is signed in, see docs for a list of available properties
-                // https://firebase.google.com/docs/reference/js/auth.user
-                const uid = user.uid;
-                // ...
-                console.log(user)
-                const GET = async () => {
-                  const { data, error } = await supabase
-                    .from('users')
-                    .select()
-                    .eq('userId', user.uid)
-                  setInfo(data[0])
-                  console.log(data)
-                }
-                GET();
-              } else {
-                // User is signed out
-                // ...
-                console.log('sign out');
-                router.push('/login');
-              }
-            });
-         
+        const useri =  localStorage.getItem('signedIn');
+        if (useri) {
+          // User is signed in, see docs for a list of available properties
+          // https://firebase.google.com/docs/reference/js/auth.user
+    
+          const uid =  localStorage.getItem('signUid');
+          const name =  localStorage.getItem('signName');
+            // User is signed in, see docs for a list of available properties
+            // https://firebase.google.com/docs/reference/js/auth.user
+           console.log('...')
+            // ...
+            
+            const GET = async () => {
+              const { data, error } = await supabase
+                .from('users')
+                .select()
+                .eq('userId',uid)
+              setInfo(data[0]);
+              console.log(data)
+            }
+            GET();
+            
+            
+          } else {
+            // User is signed out
+            // ...
+            signOut(auth);
+            console.log('sign out');
+            localStorage.removeItem('signedIn');
+            localStorage.removeItem('signUid');
+            localStorage.removeItem('signName');
+            router.push('/login');
+          }
+      
+       
         const getMatchDa = async () => {
             try{
 
@@ -60,7 +71,7 @@ export default function Viewbets({ bets }) {
         }
         getMatchDa();
         
-    }, [info, setLeague,stams,curren]);
+    }, []);
     const Depositing = async (damount, dusername) => {
         const { data, error } = await supabase
             .rpc('depositor', { amount: damount, names: dusername })
@@ -80,7 +91,7 @@ export default function Viewbets({ bets }) {
                 <link rel="icon" href="/logo_afc.ico" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
-            <Stack direction="column">
+            <Stack direction="column" sx={{padding:'10px'}}>
                 <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>Match Name :</Typography>
                 <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>{bet.home} vs {bet.away}</Typography>
                 <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>Stake : {bet.stake} USDT</Typography>
