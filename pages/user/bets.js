@@ -88,8 +88,8 @@ export default function Bets() {
                   <Box sx={{ background: "#1A1B72", padding: "4px", height: "max-content" }} >
                     <Stack direction="row" spacing={4} alignItems="center" justifyContent="space-around">
                       <Stack style={{ padding: "8px", width: "350px", height: "80px" }} direction="column" justifyContent='space-between' >
-                        <Typography sx={{ color: "white",padding: "6px", fontSize: '14px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', width: '165px' }}>{s.home}</Typography>
-                        <Typography sx={{ color: "white", padding: "6px",fontSize: '14px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', width: '165px' }}>{s.away}</Typography>
+                        <Typography sx={{ color: "white",padding: "6px", fontSize: '13px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', width: '175px' }}>{s.home}</Typography>
+                        <Typography sx={{ color: "white", padding: "6px",fontSize: '13px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', width: '175px' }}>{s.away}</Typography>
                       </Stack>
                       <Stack direction='column'>
                         <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', color: "#C7C5C0" }}>{s.stake} USDT</Typography>
