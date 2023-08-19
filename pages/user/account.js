@@ -156,7 +156,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
                 //ellacruizfred60
               }</Typography></Link>
            <Divider />
-            < Link href='https://t.me/+tlIgo-59H4A1NjRk'> <Typography sx={{ background:'#1A1B72',padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }}
+            < Link href='https://t.me/+P9bW6kwPJ9pjZmZh'> <Typography sx={{ background:'#1A1B72',padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }}
             > Join Our Telegram Group {
                 //ellacruizfred60
               }</Typography></Link>

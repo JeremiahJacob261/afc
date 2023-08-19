@@ -93,7 +93,8 @@ export default function Viewbets({ bets }) {
                 <link rel="icon" href="/logo_afc.ico" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
-            <Stack direction="column" sx={{padding:'10px'}}>
+            <Stack direction="column" sx={{padding:'10px',minHeight:'80vh'}}>
+                <Typography style={{color:'#EE8F00',fontFamily:'Poppins,sans-serif',width:'100%',textAlign:'center',fontSize:'20px'}}>Bet Details</Typography>
                 <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>Match Name :</Typography>
                 <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>{bet.home} vs {bet.away}</Typography>
                 <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>Stake : {bet.stake} USDT</Typography>
