@@ -78,7 +78,6 @@ export default function Viewbets({ bets }) {
             .rpc('depositor', { amount: damount, names: dusername })
         console.log(error);
     }
-    {(stams > curren) ? 'Not Started' : ((bet.won === 'null') ? 'Processing' : ((bet.won === 'true') ? 'Won' : 'Lost'))}
     if(stams > curren){
         setStatus('Not Started');
     }else{
@@ -90,6 +89,7 @@ export default function Viewbets({ bets }) {
             }else{
                   setStatus('Lost');
             }
+    }
     }
     return (
         <div>
