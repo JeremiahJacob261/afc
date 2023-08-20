@@ -171,7 +171,7 @@ export default function Home() {
         </Head>
         <Stack sx={{ background: "#03045E", marginTop: '10px' }} spacing={4} justifyContent='center' alignItems='center'>
           <Typography style={{ fontSize: '32px', fontWeight: '900', fontFamily: 'Poppins, sans-serif', height: '99px', padding: '5px', width: '100%', textAlign: 'left', color: 'white' }}>Welcome, <br /> {info.username}</Typography>
-          <Typography style={{ fontSize: '16px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'white' }}>Current Balance: {info.balance} USDT</Typography>
+          <Typography style={{ fontSize: '16px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'white' }}>Current Balance: {info.balance.toFixed(2)} USDT</Typography>
           <div style={{ background: '#1A1B72', padding: '8px', borderRadius: '5px' }}>
             <Image src={iv} width={331} height={157} alt='invitation bonus' />
             <Typography style={{ width: '308px', fontFamily: 'Poppins, sans-serif', color: 'white', fontWeight: 'bold', padding: '8px' }}>Unlimited Invitation Bonus</Typography>

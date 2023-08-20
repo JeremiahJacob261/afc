@@ -147,7 +147,7 @@ useEffect(() => {
     };
     function DisplayDialog() {
         const [stake, setStake] = useState(null)
-        const [ball, setBall] = useState(info.balance);
+        const [ball, setBall] = useState(Number(info.balance).toFixed(2));
         let profit = Number(((display.odds * stake) / 100)+ stake).toFixed(2);
         useEffect(()=>{
 

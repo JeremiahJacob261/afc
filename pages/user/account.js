@@ -98,7 +98,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
             <Avatar>{info ? `${info.username}` : 'Loading...'}</Avatar>
             <Typography variant="h4" sx={{ color: "white", fontFamily: 'PT Sans, sans-serif' }}>Welcome, {info ? ` ${info.username}` : 'Loading...'}</Typography>
           </Stack>
-          <Typography sx={{ color: "white", fontFamily: 'PT Sans, sans-serif' }}>{balance} USDT</Typography>
+          <Typography sx={{ color: "white", fontFamily: 'PT Sans, sans-serif' }}>{balance.toFixed(2)} USDT</Typography>
         </div>
         <div sx={{ background: "none" }} >
           <Stack direction="column" sx={{ background: "none", padding: "8px" }} >

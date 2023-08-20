@@ -188,7 +188,7 @@ export default function Refferal() {
                       <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{sn}</th>
                       <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{r.username}</th>
                       <th style={{ width: '100px', color: 'white', fontSize: '13px' }}>{dts.getDate() + '/' + parseInt(dts.getMonth() +1) + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</th>
-                      <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{r.balance}</th>
+                      <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{r.balance.toFixed(2)}</th>
                     </tr>
                   )
                 })
@@ -218,7 +218,7 @@ export default function Refferal() {
                       <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{sn}</th>
                       <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{r.username}</th>
                       <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{dts.getDate() + '/' + parseInt(dts.getMonth() +1) + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</th>
-                      <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{r.balance}</th>
+                      <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{r.balance.toFixed(2)}</th>
                     </tr>
                   )
                 })
@@ -248,7 +248,7 @@ export default function Refferal() {
                       <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{sn}</th>
                       <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{r.username}</th>
                       <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{dts.getDate() + '/' + parseInt(dts.getMonth() +1) + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</th>
-                      <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{r.balance}</th>
+                      <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{r.balance.toFixed(2)}</th>
                     </tr>
                   )
                 })

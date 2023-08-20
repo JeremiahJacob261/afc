@@ -126,7 +126,7 @@ export default function Deposit() {
         <Typography style={{ color: '#DBE9EE', fontFamily: 'Poppins, sans-serif' }}>Requested Amount : {amount} USDT</Typography>
         <Typography style={{ color: '#DBE9EE', fontFamily: 'Poppins, sans-serif' }}>Charge Amount : {(amount * 5) / 100} USDT</Typography>
         <Typography style={{ color: '#DBE9EE', fontFamily: 'Poppins, sans-serif' }}>Total : {total} USDT</Typography>
-        <Typography style={{ color: '#DBE9EE', fontFamily: 'Poppins, sans-serif' }}>Available Account Balance : {info.balance} USDT</Typography>
+        <Typography style={{ color: '#DBE9EE', fontFamily: 'Poppins, sans-serif' }}>Available Account Balance : {info.balance.toFixed(2)} USDT</Typography>
         <div style={{ display: 'grid', justifyContent: 'center', minWidth: '300px' }}>
           <TextField variant="standard" label='Enter Your USDT Address'
             style={{ color: "white", minWidth: '300px' }}
