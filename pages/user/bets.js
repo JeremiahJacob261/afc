@@ -2,7 +2,7 @@ import Cover from './cover'
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useState } from "react";
 import Head from 'next/head'
-import { Stack, Typography, Box, Paper } from '@mui/material';
+import { Stack, Typography, Box, Paper, Divider } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { supabase } from '../api/supabase';
 import Dialog from '@mui/material/Dialog';
@@ -19,6 +19,7 @@ export default function Bets() {
   const [open, setOpen] = useState(false)
   const router = useRouter()
   const [bets, setBets] = useState([])
+  const [fina,setFina] = useState([])
   const [matchD, setMatchD] = useState({})
   const [display, setDisplay] = useState({})
   const handleClickOpen = () => {
@@ -45,10 +46,20 @@ export default function Bets() {
         const { data, error } = await supabase
           .from('placed')
           .select()
-          .eq('username', name)
+          .match({ username: name, won: 'null' });
         setBets(data)
+        console.log(data)
       }
       GET();
+      const GETn = async () => {
+        const { data, error } = await supabase
+          .from('placed')
+          .select()
+          .match({ username: name });
+        setFina(data)
+        console.log(data)
+      }
+      GETn();
     } else {
       // User is signed out
       // ...
@@ -81,6 +92,40 @@ export default function Bets() {
           {
 
             bets.map((s) => {
+              return (
+                <div key={s.betid} onClick={() => {
+                  router.push('/user/viewbet/' + s.betid);
+                }}>
+                  <Box sx={{ background: "#1A1B72", padding: "4px", height: "max-content" }} >
+                    <Stack direction="row" spacing={4} alignItems="center" justifyContent="space-around">
+                      <Stack style={{ padding: "8px", width: "350px", height: "80px" }} direction="column" justifyContent='space-between' >
+                        <Typography sx={{ color: "white",padding: "6px", fontSize: '13px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', width: '175px' }}>{s.home}</Typography>
+                        <Typography sx={{ color: "white", padding: "6px",fontSize: '13px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', width: '175px' }}>{s.away}</Typography>
+                      </Stack>
+                      <Stack direction='column'>
+                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', color: "#C7C5C0" }}>{s.stake} USDT</Typography>
+                        <Typography variant="subtitle2" sx={{ color: "#EE8F00", fontSize: '15px' }}> {s.market}</Typography>
+                        <Typography style={{ color: '#2426F8', fontFamily: 'Poppins, sans-serif', fontSize: '12px', width: '151px', fontWeight: '200' }}>{s.time} {s.date}</Typography>
+
+                      </Stack>
+                    </Stack>
+                  </Box>
+                </div>
+              )
+            })
+
+
+          }
+
+        </Stack>
+       <Divider sx={{background:'whitesmoke'}}/>
+       <Stack direction="column"
+          spacing={2} style={{ maxWidth: "350px", background: 'none' }}>
+          <Typography variant="h6" sx={{ color: "whitesmoke", margin: "8px", fontFamily: "'Barlow', sans-serif" }}>Active</Typography>
+
+          {
+
+            fina.map((s) => {
               return (
                 <div key={s.betid} onClick={() => {
                   router.push('/user/viewbet/' + s.betid);

@@ -51,6 +51,7 @@ let loads = 0;
             .eq('userId',uid)
           setInfo(data[0])
           setBalance(data[0].balance);
+          localStorage.setItem('signRef',data[0].newrefer);
         }
         GET();
         }
@@ -63,6 +64,7 @@ let loads = 0;
         localStorage.removeItem('signedIn');
         localStorage.removeItem('signUid');
         localStorage.removeItem('signName');
+        localStorage.removeItem('signRef');
         router.push('/login');
       }
   
@@ -164,7 +166,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
             <Typography sx={{ background:'#1A1B72',padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }} onClick={() => {
               
               signOut(auth).then(()=>{
-                
+                localStorage.removeItem('signRef');
         localStorage.removeItem('signedIn');
         localStorage.removeItem('signUid');
         localStorage.removeItem('signName');

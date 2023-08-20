@@ -28,6 +28,7 @@ export default function Refferal() {
   const auth = getAuth(app);
   const [lvl3, setLvl3] = useState([]);
   const isMounted = useRef(true);
+
   useEffect(() => {
    
     const useri =  localStorage.getItem('signedIn');
@@ -41,27 +42,12 @@ export default function Refferal() {
         // https://firebase.google.com/docs/reference/js/auth.user
        
         // ...
-          console.log(info.length)
-          
-          if (isMounted.current) {
-         const GET = async () => {
-          const { data, error } = await supabase
-            .from('users')
-            .select()
-            .eq('username',name)
-          setInfo(data[0])
-          console.log(data);
-        }
-        GET();
-
-        isMounted.current = false;
-
-       }else{
+        const refers = localStorage.getItem('signRef');
         async function getCo1() {
           const { data, error } = await supabase
             .from('users')
             .select('*')
-            .eq('refer', info.newrefer)
+            .eq('refer', refers)
           setLvl1(data)
           }
           getCo1()
@@ -69,7 +55,7 @@ export default function Refferal() {
           const { data, count } = await supabase
             .from('users')
             .select('*')
-            .eq('lvla', info.newrefer)
+            .eq('lvla', refers)
           setLvl2(data)
           }
           getCo2()
@@ -77,12 +63,12 @@ export default function Refferal() {
           const { data, count } = await supabase
             .from('users')
             .select('*')
-            .eq('lvlb', info.newrefer)
+            .eq('lvlb', refers)
           setLvl3(data)
           }
           getCo3();
 
-       }
+       
         
      
       } else {
@@ -96,11 +82,6 @@ export default function Refferal() {
         router.push('/login');
       }
   
-   
-   
-  return () => {
-    isMounted.current = true;
-  };
   }, [])
      
  

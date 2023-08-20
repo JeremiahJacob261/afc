@@ -95,6 +95,15 @@ export default function Register({ refer }) {
         // https://firebase.google.com/docs/reference/js/auth.user
         const uid = user.uid;
         // ...
+        async function GET() {
+          const { data, error } = await supabase
+            .from('users')
+            .select()
+            .eq('username', user.displayName);
+           localStorage.setItem('signRef',data[0].newrefer);
+          console.log(data);
+        }
+    GET();
         console.log(localStorage.getItem('signInfo'))
         localStorage.setItem('signedIn',true);
         localStorage.setItem('signUid',uid);
@@ -107,6 +116,8 @@ export default function Register({ refer }) {
         localStorage.removeItem('signedIn');
         localStorage.removeItem('signUid');
         localStorage.removeItem('signName');
+        
+        localStorage.removeItem('signRef');
       }
     });
 
@@ -156,6 +167,7 @@ export default function Register({ refer }) {
           localStorage.setItem('signedIn',true);
         localStorage.setItem('signUid',user.uid);
         localStorage.setItem('signName',user.displayName);
+        localStorage.setItem('signRef',nRef);
         }
          //getlvl2
 
