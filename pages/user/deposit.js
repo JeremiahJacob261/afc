@@ -106,7 +106,7 @@ export default function Deposit() {
       const checkDepo = async (url) => {
         const { error } = await supabase
           .from('notification')
-          .insert({ address: url, username: info.username, amount: amount, sent: 'pending', type: "deposit" })
+          .insert({ address: url, username: info.username, amount: amount, sent: 'pending', type: "deposit",method:'usdt' })
         setAddress("")
         setAmount("")
         setMessages("The Deposit will reflect in your balance soon")

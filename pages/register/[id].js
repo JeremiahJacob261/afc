@@ -116,7 +116,6 @@ export default function Register({ refer }) {
         localStorage.removeItem('signedIn');
         localStorage.removeItem('signUid');
         localStorage.removeItem('signName');
-        
         localStorage.removeItem('signRef');
       }
     });
