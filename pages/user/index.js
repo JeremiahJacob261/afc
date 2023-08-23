@@ -74,11 +74,11 @@ export default function Home() {
             const { data, error } = await supabase
               .from('activa')
               .select()
-              .eq('code', info.newrefer)
+              .or(`code.eq.${info.newrefer},code.eq.broadcast`)
               .limit(10)
               .order('id', { ascending: false });
             setTrans(data)
-            console.log(data.length)
+            console.log(data)
           } catch (e) {
             console.log(e);
           }

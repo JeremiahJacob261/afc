@@ -26,6 +26,7 @@ export default function Transaction() {
             .from('notification')
             .select()
             .eq('username', user.displayName)
+            .order('id', { ascending: false });
           setTrans(data)
           console.log(data.length)
         }
@@ -37,42 +38,40 @@ export default function Transaction() {
         router.push('/login');
       }
     });
-  }, [trans])
+  }, [])
   var sn = 0;
   return (
     <Cover>
-      <Stack alignItems="center" style={{ minHeight: '90vh', width: '100%' }}>
-      <CloseIcon style={{color:'white',margin:'12px',width:'50px',height:'50px'}}
-      onClick={()=>{
-        router.push('/user/account')
-      }}
-      />
+      <Stack alignItems="center" style={{ minHeight: '85vh', width: '100%' }}>
+        <CloseIcon style={{ color: 'white', margin: '12px', width: '50px', height: '50px' }}
+          onClick={() => {
+            router.push('/user/account')
+          }}
+        />
         <div style={{ display: 'flex', justifyContent: "center", }}>
           <Typography variant="h4" align='center' style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>
             Transaction History
           </Typography></div>
-        <Stack direction="column-reverse">
-          <table>
-            <tr>
-              <th style={{ width: '80px', color: '#DBE9EE' }}>Date/Time</th>
-              <th style={{ width: '150px', color: '#DBE9EE' }}>Description</th>
-              <th style={{ width: '70px', color: '#DBE9EE' }}>Status</th>
-            </tr>
-            {
-              trans.map((r) => {
-                var dts = new Date(r.time);
-                console.log(dts.getDate());
-                return (
-                  <tr key={r.uid}>
-                    <th style={{ width: '80px', color: 'white' }}>{dts.getDate() + '/' + dts.getMonth() + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</th>
-                    <th style={{ width: '150px', color: 'white' }}>Your {r.type} claim of {r.amount} USDT</th>
-                    <th style={{ width: '70px', color: 'white' }}>{r.sent}</th>
-                  </tr>
-                )
-              })
+        <Stack direction="column" sx={{ width: '100%' }} spacing={1}>
+          <Stack direction="row" justifyContent='space-between'>
+            <Typography sx={{ color: 'white' }}>Date/Time</Typography>
+            <Typography sx={{ color: 'white' }}>Description</Typography>
+            <Typography sx={{ color: 'white' }}>Status</Typography>
+          </Stack>
+          {
+            trans.map((r) => {
+              var dts = new Date(r.time);
+              console.log(dts.getDate());
+              return (
+                <Stack direction="row" key={r.uid} justifyContent='space-around' alignItems="center" sx={{ background: '#1A1B72',padding:'5px' }}>
+                  <Typography sx={{ color: 'white' ,textAlign:'center',fontSize:'15px',fontWeight:'300'}}>{dts.getDate() + '/' + parseInt(dts.getMonth() + 1) + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</Typography>
+                  <Typography sx={{ color: 'white' ,textAlign:'center',fontSize:'15px',fontWeight:'300',width:'150px'}}>Your {r.type} claim of {r.amount} USDT</Typography>
+                  <Typography sx={{ color: 'white' ,textAlign:'center',fontSize:'15px',fontWeight:'300'}}>{r.sent}</Typography>
+                </Stack>
+              )
+            })
 
-            }
-          </table>
+          }
         </Stack>
       </Stack>
     </Cover>

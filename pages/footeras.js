@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 export default function Footer() {
     const {locale, locales,push} = useRouter()
     return (
-        <div style={{ background: "#1A1B72", width: "100%", padding: "8px",marginTop:'8px',borderTopLeftRadius:'8px',borderTopRightRadius:'8px' }}>
+        <div style={{ background: "#1A1B72", width: "100%", padding: "8px",marginTop:'8px',borderTopLeftRadius:'8px',borderTopRightRadius:'8px',marginBottom:"6vh" }}>
             <Stack direction="column" alignItems="center">
                 <div>
                     <Stack direction="row">

@@ -129,7 +129,7 @@ export default function Deposit() {
         <Typography style={{ color: '#DBE9EE', fontFamily: 'Poppins, sans-serif' }}>Available Account Balance : {Number(info.balance).toFixed(2)} USDT</Typography>
         <div style={{ display: 'grid', justifyContent: 'center', minWidth: '300px' }}>
           <TextField variant="standard" label='Enter Your USDT Address'
-            style={{ color: "white", minWidth: '300px' }}
+            style={{ color: "white", background: "#DADDD8", minWidth: '300px',margin:'8px',padding:'5px',fontFamily:'Poppins,sans-serif' }}
             value={address}
             helperText={warnad}
             onChange={(a) => {
@@ -143,7 +143,7 @@ export default function Deposit() {
           />
           <TextField variant="standard" label='Enter the Amount you wish to Withdraw'
             helperText={warnab}
-            style={{ color: "white", background: "#DADDD8", minWidth: '300px' }}
+            style={{ color: "white", background: "#DADDD8", minWidth: '300px',margin:'8px',padding:'5px',fontFamily:'Poppins,sans-serif' }}
             type="number"
             value={amount}
             onChange={(a) => {
