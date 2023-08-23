@@ -70,19 +70,19 @@ export default function Home() {
           setBalance(data[0].balance);
         }
         const GETs = async () => {
-          try{
- const { data, error } = await supabase
-            .from('activa')
-            .select()
-            .eq('code', info.newrefer)
-            .limit(10)
-            .order('id', { ascending: false });
-          setTrans(data)
-          console.log(data.length)
-          }catch(e){
+          try {
+            const { data, error } = await supabase
+              .from('activa')
+              .select()
+              .eq('code', info.newrefer)
+              .limit(10)
+              .order('id', { ascending: false });
+            setTrans(data)
+            console.log(data.length)
+          } catch (e) {
             console.log(e);
           }
-         
+
         }
         GETs();
         GET();
@@ -106,6 +106,7 @@ export default function Home() {
         .select()
         .eq('verified', false)
         .limit(5)
+        .order('id', { ascending: false });
       setFootDat(data);
     };
     getUsers()
@@ -127,15 +128,30 @@ export default function Home() {
       >
         {
           trans.map((r) => {
-            return (
+            if(r.code === 'broadcast'){
+              return (
+
+                <MenuItem key={r.id}>
+                  <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '4px' }}>
+                    <TbMailDollar color="#03045E" />
+                    <Typography style={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter' }}>{r.username}
+                    </Typography>
+                  </Stack>
+                </MenuItem>
+              );
+            }else{
+              return (
 
               <MenuItem key={r.id}>
                 <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '4px' }}>
                   <TbMailDollar color="#03045E" />
                   <Typography style={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter' }}>You Recieved {r.amount} USDT from <br />{r.username} as Referral Bonus.
                   </Typography>
-                </Stack></MenuItem>
+                </Stack>
+              </MenuItem>
             );
+            }
+            
           })
         }
         <Stack justifyContent="center" alignItems="center">
@@ -147,6 +163,9 @@ export default function Home() {
           </Button>
         </Stack>
       </Menu>
+      {
+        //end of menu 
+      }
       <Stack direction="row" style={{ background: '#F5F5F5', width: '100%', height: '64px', padding: '5px' }}
         alignItems='center' justifyContent="space-between">
         <div style={{ display: 'inline-flex', alignItems: 'center' }}>
