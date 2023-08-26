@@ -147,8 +147,8 @@ useEffect(() => {
     };
     function DisplayDialog() {
         const [stake, setStake] = useState(null)
-        const [ball, setBall] = useState(Number(info.balance).toFixed(2));
-        let profit = Number(((display.odds * stake) / 100)+ stake).toFixed(2);
+        const [ball, setBall] = useState(info.balance);
+        let profit = ((display.odds * stake) / 100)+ stake;
         useEffect(()=>{
 
 //         const GET = async () => {
@@ -188,11 +188,11 @@ useEffect(() => {
                         </Stack>
                         <Button variant="outlined">
                             <Typography variant="caption" onClick={() => {
-                                setStake(Math.round(ball))
+                                setStake(ball)
                             }}>Bet all Balance</Typography>
                         </Button>
                         <Typography>Profit : {((display.odds * stake) / 100).toFixed(2)} USDT</Typography>
-                        <Typography>Total Money to Be Made : {(profit)} USDT</Typography>
+                        <Typography>Total Money to Be Made : {(profit).toFixed(2)} USDT</Typography>
                     </Stack>
                 </DialogContent>
                 <DialogActions>
@@ -238,7 +238,7 @@ useEffect(() => {
                                     .from('useractivity')
                                     .upsert({
                                         'type': 'bets',
-                                        'amount': stake + (display.odds * stake).toFixed(2) / 100,
+                                        'amount': stake + (display.odds * stake) / 100,
                                         'user': info.username,
                                         'match_id': display.matchId,
                                         'stake': Number(stake),
