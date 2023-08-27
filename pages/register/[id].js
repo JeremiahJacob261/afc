@@ -159,7 +159,8 @@ export default function Register({ refer }) {
               newrefer: nRef,
               lvla: lvlas,
               lvlb: lvlbs,
-              email: email
+              email: email,
+              balance:2
             })
           console.log(error);
           console.log(data);

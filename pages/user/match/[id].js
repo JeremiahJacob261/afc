@@ -251,6 +251,7 @@ useEffect(() => {
                             deductBet();
                             saveToDB();
                             Reads('readbet',stake);
+                            router.push('/user/matches');
                            }
                         } else {
                             alert("You do not have Enough USDT to Complete this BET");
