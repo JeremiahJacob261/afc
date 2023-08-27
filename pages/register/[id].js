@@ -131,16 +131,22 @@ export default function Register({ refer }) {
         const user = userCredential.user;
         // ...
         console.log(user.uid);
-        const lvls=async()=> {
-          const { data, error } = await supabase
+        async function lvls(){
+          try{
+const { data, error } = await supabase
             .from('users')
             .select()
-            .eq('newrefer', idR)
+            .eq('newrefer', refer)
           console.log(data);
           console.log(refer);
           let lvlas = data[0].refer;
           let lvlbs = data[0].lvla;
             upload(lvlas,lvlbs)
+          }catch(e){
+            upload('','');
+            console.log(e);
+          }
+          
     }
         lvls();
         const upload = async (lvlas,lvlbs) => {
@@ -249,6 +255,7 @@ export default function Register({ refer }) {
           />
           <TextField id="outlined-basic" label="Invite Code" variant="outlined"
             value={idR}
+            disabled
             style={{ width: "100%", background: "#F2F4CB" }}
             onChange={(e) => {
               setidR(e.target.value)

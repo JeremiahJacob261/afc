@@ -2,7 +2,7 @@ import { Stack, TextField, Typography, Button, Box } from "@mui/material";
 import { supabase } from '../api/supabase'
 import { useContext, useEffect } from "react";
 import { AppContext } from "../api/Context";
-import React, { useState,useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useRouter } from 'next/router'
 import CloseIcon from '@mui/icons-material/Close';
 import Snackbar from '@mui/material/Snackbar';
@@ -44,46 +44,65 @@ export default function Deposit() {
   //end of snackbar1
   const isMounted = useRef(true);
   useEffect(() => {
-    const useri =  localStorage.getItem('signedIn');
+    const useri = localStorage.getItem('signedIn');
     if (useri) {
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/auth.user
 
-      const uid =  localStorage.getItem('signUid');
-      const name =  localStorage.getItem('signName');
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/auth.user
-       
-        // ...
-        if (isMounted.current) {
+      const uid = localStorage.getItem('signUid');
+      const name = localStorage.getItem('signName');
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+
+      // ...
+      if (isMounted.current) {
         const GET = async () => {
           const { data, error } = await supabase
             .from('users')
             .select()
-            .eq('username',name)
+            .eq('username', name)
           setInfo(data[0])
           console.log(data)
         }
         GET();
         isMounted.current = false;
-      }else{
+      } else {
 
       }
-      } else {
-        // User is signed out
-        // ...
-        signOut(auth);
-        console.log('sign out');
-        localStorage.removeItem('signedIn');
-        localStorage.removeItem('signUid');
-        localStorage.removeItem('signName');
-        router.push('/login');
-      }
-  
-   
+    } else {
+      // User is signed out
+      // ...
+      signOut(auth);
+      console.log('sign out');
+      localStorage.removeItem('signedIn');
+      localStorage.removeItem('signUid');
+      localStorage.removeItem('signName');
+      router.push('/login');
+    }
+
+
   }, []);
   //file upload
-
+  const checkDepo = async (url) => {
+    const { error } = await supabase
+      .from('notification')
+      .insert({ address: url, username: info.username, amount: amount, sent: 'pending', type: "deposit", method: 'usdt' })
+    setAddress("")
+    setAmount("")
+    setMessages("The Deposit will reflect in your balance soon")
+    handleClick();
+    console.log(error)
+  }
+  async function getUrl(ads) {
+    const { data, error } = supabase
+      .storage
+      .from('trcreceipt')
+      .getPublicUrl(ads);
+    setImgurl(data.publicUrl);
+    console.log(data.publicUrl);
+    console.log(error)
+    checkDepo(data.publicUrl);
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -91,7 +110,7 @@ export default function Deposit() {
     if (file.length === 0) {
 
       alert('please select an image');
-      
+
       setDrop(false)
     } else {
       console.log(file[0])
@@ -104,33 +123,15 @@ export default function Deposit() {
         })
       setImgpath(data.path);
       let imga = data.path;
+      getUrl(imga);
       console.log(data);
-      const checkDepo = async (url) => {
-        const { error } = await supabase
-          .from('notification')
-          .insert({ address: url, username: info.username, amount: amount, sent: 'pending', type: "deposit",method:'usdt' })
-        setAddress("")
-        setAmount("")
-        setMessages("The Deposit will reflect in your balance soon")
-        handleClick();
-        console.log(error)
-      }
-      const getUrl = async () => {
-        const { data, error } = await supabase
-          .storage
-          .from('trcreceipt')
-          .getPublicUrl(imga);
-        setImgurl(data.publicUrl);
-        console.log(data.publicUrl);
-        console.log(error)
-        checkDepo(data.publicUrl);
-      }
-      getUrl();
+      
+      
       setfile([]);
       setDea('visible')
       setDeb('hidden')
       setDrop(false)
-      router.push('/user/account')
+      setBottom(false)
     }
   };
 
@@ -291,7 +292,7 @@ export default function Deposit() {
             </Stack>
           </Button>
 
-          <Button 
+          <Button
             sx={{ background: '#1A1B72', width: '145px', height: '136px', borderRadius: '5px' }}
           >
             <Stack direction="column" spacing={2} justifyContent="center" alignItems='center'>

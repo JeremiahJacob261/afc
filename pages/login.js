@@ -238,9 +238,7 @@ setDrop(false)
         <Button variant="contained" sx={{ width:'191px',height:'65px',background:'#21227A'  }} onClick={login}>
           <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "whitesmoke"}}>Login</Typography>
         </Button>
-
-       
-          <Link href="/register/697667" style={{ textDecoration: "none", color: "#DFA100",fontSize:'15px',fontWeight:'400' }}>Dont have an Account ? <br/>
+ <Link href="/register/000208" style={{ textDecoration: "none", color: "#DFA100",fontSize:'15px',fontWeight:'400' }}>Dont have an Account ? <br/>
 Create Account
 
           </Link>
