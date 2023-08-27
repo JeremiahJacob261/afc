@@ -91,6 +91,8 @@ export default function Deposit() {
     if (file.length === 0) {
 
       alert('please select an image');
+      
+      setDrop(false)
     } else {
       console.log(file[0])
       const { data, error } = await supabase
@@ -128,6 +130,7 @@ export default function Deposit() {
       setDea('visible')
       setDeb('hidden')
       setDrop(false)
+      router.push('/user/account')
     }
   };
 
