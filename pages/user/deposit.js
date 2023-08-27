@@ -252,7 +252,7 @@ export default function Deposit() {
       </Backdrop>
       <Head>
         <title>Deposit</title>
-        <meta name="description" content="Login to your Account to see whats up with your bets" />
+        <meta name="description" content="Get a percentage bonus on your first deposit" />
         <link rel="icon" href="/logo_afc.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

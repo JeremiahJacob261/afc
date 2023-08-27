@@ -1,171 +1,187 @@
-import React, { useState } from "react";
-import Head from "next/head";
-import { Avatar, Box, Stack,OutlinedInput,Button, Typography } from "@mui/material";
+import { Button, Stack, TextField, Typography,MenuItem } from "@mui/material";
+import React, { useState, useContext, useEffect } from "react";
+import { supabase } from '../api/supabase'
+import { AppContext } from '../api/Context'
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import { app } from '../api/firebase';
+import { onAuthStateChanged } from "firebase/auth";
+import { useRouter } from 'next/router'
+import CloseIcon from '@mui/icons-material/Close';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
-import {supabase} from './api/supabase'
-import { getDoc ,doc} from "firebase/firestore";
-import {db,app} from './api/firebase'
-import { useContext } from "react";
-import {AppContext} from "./api/Context";
-import Link from "next/link";
-import {getDatabase, useDatabase} from 'firebase/database'
-import SimpleDialog from './modal'
-import { useRouter } from 'next/router'
-import { getCookie, setCookie, removeCookies } from 'cookies-next';
-import LOGO from '../public/logo_afc.ico'
-import Image from 'next/image'
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { useEffect } from "react";
-export default function Login() {
-  const dbs = getDatabase(app);
-  const [username,setUsername] = useState("")
-const {info,setInfo} = useContext(AppContext);
-const [open, setOpen] = React.useState(false);
-const router = useRouter();
-const handleClickOpen = () => {
-  setOpen(true);
-};
-
-const handleClose = (value) => {
-  setOpen(false);
-};
-const [values, setValues] = React.useState({
-  amount: '',
-  password: '',
-  weight: '',
-  weightRange: '',
-  showPassword: false,
-});
-
-const handleChange = (prop) => (event) => {
-  setValues({ ...values, [prop]: event.target.value });
-};
-
-const handleClickShowPassword = () => {
-  setValues({
-    ...values,
-    showPassword: !values.showPassword,
+import { getAuth, signOut } from "firebase/auth";
+export default function Deposit() {
+  //86f36a9d-c8e8-41cb-a8aa-3bbe7b66d0a5
+  const [info, setInfo] = useState({});
+  const [address, setAddress] = useState("")
+  const [amount, setAmount] = useState("")
+  const [warnad, setWarnad] = useState("");
+  const [warnab, setWarnab] = useState("");
+  const [method,setMethod] = useState('USDT')
+  const auth = getAuth(app);
+  const router = useRouter();
+  //snackbar1
+  const [messages, setMessages] = useState("")
+  const [opened, setOpened] = useState(false);
+  const [total, setTotal] = useState(0);
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
-};
+  useEffect(() => {
 
-const handleMouseDownPassword = (event) => {
-  event.preventDefault();
-};
-
-if(getCookie('logged') === true){
-  router.push("/user")
-}
-    const logins=async()=>{
-      const docRef = doc(db, "users", username);
-      const docSnap = await getDoc(docRef);
-      
-      if (docSnap.exists()) {
-       var data = docSnap.data();
-       if(data.password === values.password){
- setInfo({"logged":true,"username":username,"phone":data.phone,"refer":data.newrefer})
-         setOpen(true)
-         setCookie('logged', info);
-         router.push("/user")
-       }else{
-        alert("wrong password")
-       }
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+        const uid = user.uid;
+        // ...
+        console.log(user)
+        const GET = async () => {
+          const { data, error } = await supabase
+            .from('users')
+            .select()
+            .eq('userId', user.uid)
+          setInfo(data[0])
+          console.log(data)
+        }
+        GET();
       } else {
-        // doc.data() will be undefined in this case
-        console.log("Account does not exist");
+        // User is signed out
+        // ...
+        console.log('sign out');
+        router.push('/login');
       }
-      
-   }
-   useEffect(()=>{
- const smooth =async()=>{
+    });
+  }, []);
+  //end of snackbar1
+  const wih = async (damount, dusername) => {
     const { data, error } = await supabase
-  .from('users')
-  .select()
-  .eq('username', 'Jeremiahx')
-  console.log(data)
-  console.log(error)
-   }
-   smooth();
-   },[])
-  
-    return(
-        <Stack 
-        direction="column" 
-        justifyContent="center"
-        alignItems="center"
-        spacing={2}
-        style={{backgroundColor:" #8BC6EC",
-          backgroundImage:"",padding:"15px",
-          overflowX: "hidden",
-          maxWidth:"100%",
-          height:"100%"
-          }}>
-       <Head>
-        <title>Login</title>
-        <meta name="description" content="Login to your Account to see whats up with your bets" />
-        <link rel="icon" href="/logo_afc.ico" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-       </Head>
-       <Box>
-       <SimpleDialog
-        open={open}
-        onClose={handleClose}
-      />
-       
-        <Stack direction="column" 
-        justifyContent="center"
-        alignItems="center"
-        spacing={2}
-        className="glass"
-        sx={{minWidth:"300px",height:"100%",padding:"10px", overflowX: "hidden",
-        maxWidth:"100%"}}><Image src={LOGO} alt='loginimg' width='50' height='65' />
-          <Typography variant="h3" style={{fontFamily: 'Marhey, cursive',color:"#4062BB"}}>ATALANTA </Typography>
-      <Typography variant='caption' sx={{fontFamily: 'Work Sans, sans-serif',fontSize:"20px"}}>
-        FOOTBALL CLUB</Typography>
-            
-        <TextField id="outlined-basic" label="Username" variant="outlined" 
-        style={{width:"100%"}}
-      value={username}
-      onChange={(e)=>{
-        setUsername(e.target.value)
-      }}
-      />
- <FormControl sx={{ m: 1,width:"100%" }} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-password"
-            type={values.showPassword ? 'text' : 'password'}
-            value={values.password}
-            onChange={handleChange('password')}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Password"
-          />
-        </FormControl>
-        <Button variant="contained" sx={{padding:"6px",width:"100%"}} onClick={logins}>
-        <Typography sx={{fontFamily: 'Zen Antique, serif',marginLeft:"3px"}}>Login</Typography>
-        </Button>
-       
-          <Typography>Dont have an Account yet ? 
-             <Link href="/register/070836" style={{textDecoration:"none",color:"black"}}>Sign Up
-            </Link></Typography>
-        </Stack>
-       </Box>
-        </Stack>
+      .rpc('withdrawer', { amount: damount, names: dusername })
+    console.log(error);
+  }
+  const Withdrawal = async () => {
+    if (amount < 100) {
+      if (amount > 19) {
+        setWarnab('')
+        if (address.length < 10) {
+          setWarnad('Ensure the address is correct')
+        } else {
+          setWarnad('')
+
+          const { error } = await supabase
+            .from('notification')
+            .insert({ address: address, username: info.username, amount: total, sent: 'pending', type: "withdraw",method:method })
+          console.log(error)
+          setAddress("")
+          setAmount("")
+          setMessages("Your Withdrawal Request is been Processed")
+          wih(total, info.username);
+          handleClick();
+        }
+      } else {
+
+        setWarnab('Please Input a value between 20 and 100 USDT')
+      }
+    } else {
+      setWarnab('Please Input a value between 20 and 100 USDT')
+    }
+  }
+  //snackbar2
+  const handleClick = () => {
+    setOpened(true);
+  };
+
+  const handleClosed = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpened(false);
+  };
+  function Sncks({ message }) {
+    return (
+      <Snackbar open={opened} autoHideDuration={6000} onClose={handleClosed}>
+        <Alert onClose={handleClosed} severity="success" sx={{ width: '100%' }}>
+          {message}
+        </Alert>
+      </Snackbar>
     )
+  }
+  //end of snackbar2
+  return (
+    <Stack spacing={3} sx={{ padding: '8px' }}>
+      <CloseIcon style={{ color: 'white', margin: '12px', width: '50px', height: '50px' }}
+        onClick={() => {
+          router.push('/user/account')
+        }}
+      />
+      <div style={{ display: 'flex', justifyContent: "center" }}>
+
+        <Typography variant="h4" align='center' style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>
+          Withdrawal
+        </Typography></div>
+      <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>
+        Please note that the minimum withdraw is 20 USDT,
+        there is a 5% fee charge on every Withdrawal.
+      </Typography>
+      <Sncks message={messages} />
+      <Typography style={{ color: '#DBE9EE', fontFamily: 'Poppyins, sans-serif' }}>Requested Amount : {amount} USDT</Typography>
+      <Typography style={{ color: '#DBE9EE', fontFamily: 'Poppins, sans-serif' }}>Charge Amount : {(amount * 5) / 100} USDT</Typography>
+      <Typography style={{ color: '#DBE9EE', fontFamily: 'Poppins, sans-serif' }}>Total : {total} USDT</Typography>
+      <Typography style={{ color: '#DBE9EE', fontFamily: 'Poppins, sans-serif' }}>Available Account Balance : {Number(info.balance).toFixed(2)} USDT</Typography>
+      <div style={{ display: 'grid', justifyContent: 'center', minWidth: '300px' }}>
+        <TextField variant="standard" label='Enter Your USDT Address or Gpay account number'
+          style={{ color: "white", background: "#DADDD8", minWidth: '300px', margin: '8px', padding: '5px', fontFamily: 'Poppins,sans-serif', fontSize: '14px' }}
+          value={address}
+          helperText={warnad}
+          onChange={(a) => {
+            setAddress(a.target.value)
+            if (address.length < 10) {
+              setWarnad('Ensure the address is correct')
+            } else {
+              setWarnad('')
+            }
+          }}
+        />
+        <TextField variant="standard" label='Enter the Amount you wish to Withdraw'
+          helperText={warnab}
+          style={{ color: "white", background: "#DADDD8", minWidth: '300px', margin: '8px', padding: '5px', fontFamily: 'Poppins,sans-serif', fontSize: '14px' }}
+          type="number"
+          value={amount}
+          onChange={(a) => {
+            setAmount(a.target.value)
+            setTotal(Number(a.target.value) + ((a.target.value * 5) / 100));
+          }} />
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Select your Withdrawal Method</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={method}
+              style={{ width: '100%', background: "#F2F4CB", margin: '8px' }}
+              onChange={(e) => {
+               console.log(e.target.value)
+               setMethod(e.target.value);
+              }}
+            >
+<MenuItem value='usdt'> USDT (TRC20)</MenuItem>
+<MenuItem value='gpay'>GPAY</MenuItem>
+            </Select>
+          </FormControl>
+      </div>
+
+      <Button variant="contained" style={{ color: "white" }} onClick={() => {
+        if (info.balance < total) {
+          alert('Insufficient Balance')
+        } else {
+
+          Withdrawal();
+        }
+      }}>Withdraw</Button>
+    </Stack>
+  )
 }

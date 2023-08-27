@@ -74,7 +74,7 @@ export default function Home() {
             const { data, error } = await supabase
               .from('activa')
               .select()
-              .or(`code.eq.${info.newrefer},code.eq.broadcast`)
+              .or(`code.eq.${info.newrefer},code.eq.broadcast,username.eq.${info.username}`)
               .limit(10)
               .order('id', { ascending: false });
             setTrans(data)
@@ -134,12 +134,29 @@ export default function Home() {
                 <MenuItem key={r.id}>
                   <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '4px' }}>
                     <TbMailDollar color="#03045E" />
-                    <Typography style={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter' }}>{r.username}
+                    <Typography style={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter',overflowX: "hidden",
+    textOverflow: "ellipsis",
+    display: "-webkit-box",
+    WebkitLineClamp: "2",
+    WebkitBoxOrient: "vertical", }}>{r.username}
                     </Typography>
                   </Stack>
                 </MenuItem>
               );
             }else{
+              if(r.username === info.username){
+             return(
+              <MenuItem key={r.id}>
+                <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '4px' }}>
+                  <TbMailDollar color="#03045E" />
+                  <Typography style={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter' }}>You Recieved {r.amount} USDT from <br />admin as {r.code}.
+                  </Typography>
+                </Stack>
+              </MenuItem>
+             )
+              }else{
+
+              
               return (
 
               <MenuItem key={r.id}>
@@ -150,6 +167,7 @@ export default function Home() {
                 </Stack>
               </MenuItem>
             );
+          }
             }
             
           })
