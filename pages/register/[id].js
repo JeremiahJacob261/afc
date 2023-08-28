@@ -119,11 +119,28 @@ export default function Register({ refer }) {
         localStorage.removeItem('signRef');
       }
     });
-
-  }, [idR])
+    async function lvls(){
+      try{
+const { data, error } = await supabase
+        .from('users')
+        .select()
+        .eq('newrefer', refer)
+      console.log(data);
+      console.log(refer);
+      setLvla(data[0].refer);
+      setLvlb(data[0].lvla);
+      }catch(e){
+        console.log(e);
+        setLvla('');
+      setLvlb('');
+      }
+      
+}
+    lvls();
+  }, []);
 
   const signup = async () => {
-
+    setDrop(true);
     let usern = username.replace(/^\s+|\s+$/gm, '')
     createUserWithEmailAndPassword(auth, email, values.password)
       .then((userCredential) => {
@@ -131,25 +148,8 @@ export default function Register({ refer }) {
         const user = userCredential.user;
         // ...
         console.log(user.uid);
-        async function lvls(){
-          try{
-const { data, error } = await supabase
-            .from('users')
-            .select()
-            .eq('newrefer', refer)
-          console.log(data);
-          console.log(refer);
-          let lvlas = data[0].refer;
-          let lvlbs = data[0].lvla;
-            upload(lvlas,lvlbs)
-          }catch(e){
-            upload('','');
-            console.log(e);
-          }
-          
-    }
-        lvls();
-        const upload = async (lvlas,lvlbs) => {
+        
+        const upload = async () => {
 
           const nRef = generateRandomSevenDigitNumber().toString();
           console.log(nRef)
@@ -163,8 +163,8 @@ const { data, error } = await supabase
               username: username,
               countrycode: age,
               newrefer: nRef,
-              lvla: lvlas,
-              lvlb: lvlbs,
+              lvla: lvla,
+              lvlb: lvlb,
               email: email,
             })
           console.log(error);
@@ -175,9 +175,9 @@ const { data, error } = await supabase
         localStorage.setItem('signRef',nRef);
         }
          //getlvl2
-
-        updateRef()
-        updateRefb()
+        upload();
+        updateRef();
+        updateRefb();
         setDrop(false);
         updateProfile(auth.currentUser, {
           displayName: username,
@@ -359,8 +359,13 @@ const { data, error } = await supabase
                   if (agecheck === false) {
                     alert('Please click the checkBox before you continue')
                   } else {
-                    setDrop(true);
+                    if(cpassword === values.password){
+                      
                     signup()
+                    }else{
+                      alert('ensure the passowords are same')
+                    }
+                    
                   }
 
                 }
