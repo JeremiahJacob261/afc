@@ -89,9 +89,11 @@ export default function Deposit() {
   }, []);
   //file upload
   const checkDepo = async (url) => {
+    try{
+    const uer= localStorage.getItem('signName');
     const { error } = await supabase
       .from('notification')
-      .insert({ address: url, username: info.username, amount: amount, sent: 'pending', type: "deposit", method: method } )
+      .insert({ address: url, username: uer , amount: amount, sent: 'pending', type: "deposit", method: method } )
     setAddress("")
     setAmount("")
     setMessages("The Deposit will reflect in your balance soon")
@@ -102,6 +104,11 @@ export default function Deposit() {
       setDeb('hidden')
       setDrop(false)
       setBottom(false)
+    }catch(e){
+      
+      setDrop(false)
+      alert('Please Try again or check your internet connection')
+    }
   }
   //firebase
   async function Upload(){
