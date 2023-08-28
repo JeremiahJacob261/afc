@@ -161,7 +161,7 @@ checkDepo(url);
               Deposit
             </Typography></div>
           <Typography style={{ color: 'white' }}>
-            {(method === 'usdt') ? 'Please note that the minimum deposit is 10 USDT' : 'Please note that the minimum deposit is 826.30 ₹'}
+            {(method === 'usdt') ? 'Please note that the minimum deposit is 10 USDT' : 'Please note that the minimum deposit is 830 ₹'}
            
           </Typography>
           <Stack
@@ -186,7 +186,7 @@ checkDepo(url);
             <Button
               variant="contained"
               onClick={() => {
-                if (amount < 10 || amount.length < 1) {
+                if (amount < (method === 'usdt') ? 10 : 830 || amount.length < 1) {
                   setAmthelp((method === 'usdt') ? 'The Minimum Deposit is 10 USDT' : 'The Minimum Deposit is 830 ₹');
                 } else {
                   setDea('hidden')
@@ -205,10 +205,10 @@ checkDepo(url);
               <Image src={(method === 'usdt') ? barcode : gpaypay } width={200} height={200} alt='TRC20 Address' style={{ padding: '12px', background: 'whitesmoke', borderRadius: '5px' }}
               /></div>
             <Typography style={{ color: "black", background: "whitesmoke", padding: "4px", cursor: "pointer" }} onClick={() => {
-              navigator.clipboard.writeText((method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : 'naggyforyou-1@oksbi')
+              navigator.clipboard.writeText((method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : '7084444000@paytm')
               setMessages("Address Copied")
               handleClick();
-            }}>{(method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : 'naggyforyou-1@oksbi'}</Typography>
+            }}>{(method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : '7084444000@paytm'}</Typography>
 
             <Typography variant="caption" sx={{ color: "whitesmoke" }}>Click the Address to Copy</Typography>
             <Typography variant="caption" sx={{ color: "#FFE74C" }}>
