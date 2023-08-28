@@ -29,6 +29,7 @@ export default function Deposit() {
   const [imgpath, setImgpath] = useState();
   const [imgurl, setImgurl] = useState();
   const [bottom, setBottom] = useState(false)
+  
   //snackbar1
   const [messages, setMessages] = useState("")
   const [opened, setOpened] = useState(false)
@@ -125,8 +126,8 @@ export default function Deposit() {
       let imga = data.path;
       getUrl(imga);
       console.log(data);
-      
-      
+
+
       setfile([]);
       setDea('visible')
       setDeb('hidden')
@@ -160,14 +161,16 @@ export default function Deposit() {
   //end of snackbar2
   return (
     <div style={{ minHeight: '80vh' }}>
+      {
+        //start of drawers
+      }
       <Drawer
         anchor='bottom'
         open={bottom}
         onClose={() => {
           setBottom(false)
         }}
-        style={{ background: '#1A1B72', padding: '8px' }}
-      >
+        style={{ background: '#1A1B72', padding: '8px' }} >
         <Stack style={{ background: '#1A1B72', padding: '8px', }} direction="column" alignItems='center'>
           <CloseIcon style={{ color: '#EE8F00', margin: '12px', width: '30px', height: '30px' }}
             onClick={() => {
@@ -248,6 +251,9 @@ export default function Deposit() {
         </Stack>
 
       </Drawer>
+      {
+        //end of drawers
+      }
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={drop}
