@@ -166,7 +166,6 @@ const { data, error } = await supabase
               lvla: lvlas,
               lvlb: lvlbs,
               email: email,
-              balance:2
             })
           console.log(error);
           console.log(data);
