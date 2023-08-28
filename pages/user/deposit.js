@@ -39,6 +39,7 @@ export default function Deposit() {
   const [drop, setDrop] = useState(false)
   const router = useRouter()
   const [dean, setDean] = useState(200)
+  const [method,setMethod] = useState()
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
@@ -162,7 +163,7 @@ export default function Deposit() {
   return (
     <div style={{ minHeight: '80vh' }}>
       {
-        //start of drawers
+        //start of usdt drawers
       }
       <Drawer
         anchor='bottom'
@@ -252,8 +253,9 @@ export default function Deposit() {
 
       </Drawer>
       {
-        //end of drawers
+        //end of usdt drawers
       }
+     
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={drop}
