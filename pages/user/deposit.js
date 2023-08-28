@@ -19,6 +19,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import barcode from '../../public/barcode.jpg'
 import gpay from '../../public/simps/gpay.png'
 import usdt from '../../public/simps/tether.png'
+import gpaypay from '../../public/simps/Capture.PNG'
 import { getStorage, ref, uploadBytes,getDownloadURL }from "firebase/storage";
 export default function Deposit() {
   let loads = 0;
@@ -90,7 +91,7 @@ export default function Deposit() {
   const checkDepo = async (url) => {
     const { error } = await supabase
       .from('notification')
-      .insert({ address: url, username: info.username, amount: amount, sent: 'pending', type: "deposit", method: 'usdt' })
+      .insert({ address: url, username: info.username, amount: amount, sent: 'pending', type: "deposit", method: method } )
     setAddress("")
     setAmount("")
     setMessages("The Deposit will reflect in your balance soon")
@@ -160,7 +161,8 @@ checkDepo(url);
               Deposit
             </Typography></div>
           <Typography style={{ color: 'white' }}>
-            Please note that the minimum deposit is 10 USDT
+            {(method === 'usdt') ? 'Please note that the minimum deposit is 10 USDT' : 'Please note that the minimum deposit is 826.30 ₹'}
+           
           </Typography>
           <Stack
             direction="column" spacing={3}
@@ -185,7 +187,7 @@ checkDepo(url);
               variant="contained"
               onClick={() => {
                 if (amount < 10 || amount.length < 1) {
-                  setAmthelp("The Minimum Deposit is 10 USDT")
+                  setAmthelp((method === 'usdt') ? 'The Minimum Deposit is 10 USDT' : 'The Minimum Deposit is 830 ₹');
                 } else {
                   setDea('hidden')
                   setDeb('visible')
@@ -197,20 +199,21 @@ checkDepo(url);
           <Stack direction="column" spacing={3} sx={{
             visibility: deb,
           }}>
-            <Typography style={{ color: "whitesmoke" }}>ADDRESS NETWORK: TRC20</Typography>
-            <Typography style={{ color: "whitesmoke" }}>Send Your USDT to this Address :  </Typography>
+            <Typography style={{color: "whitesmoke",display:(method === 'usdt') ? 'visible' : 'none'}}>ADDRESS NETWORK: TRC20</Typography>
+            <Typography style={{ color: "whitesmoke" }}> {(method === 'usdt') ? 'Send Your USDT to this Address : ' : 'Send Your Indian Rupees to this Address :'} </Typography>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <Image src={barcode} width={200} height={200} alt='TRC20 Address' style={{ padding: '12px', background: 'whitesmoke', borderRadius: '5px' }}
+              <Image src={(method === 'usdt') ? barcode : gpaypay } width={200} height={200} alt='TRC20 Address' style={{ padding: '12px', background: 'whitesmoke', borderRadius: '5px' }}
               /></div>
             <Typography style={{ color: "black", background: "whitesmoke", padding: "4px", cursor: "pointer" }} onClick={() => {
-              navigator.clipboard.writeText("TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o")
+              navigator.clipboard.writeText((method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : 'naggyforyou-1@oksbi')
               setMessages("Address Copied")
               handleClick();
-            }}>TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o</Typography>
+            }}>{(method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : 'naggyforyou-1@oksbi'}</Typography>
 
             <Typography variant="caption" sx={{ color: "whitesmoke" }}>Click the Address to Copy</Typography>
-            <Typography variant="caption" sx={{ color: "#FFE74C" }}>The Minimum Deposit is 10 USDT ,
-              Deposits less than 10 USDT will be ignored.
+            <Typography variant="caption" sx={{ color: "#FFE74C" }}>
+              
+              {(method === 'usdt') ? 'The Minimum Deposit is 10 USDT ,Deposits less than 10 USDT will be ignored.' : 'The Minimum Deposit is 830 ₹, Deposits less than 830 ₹ will be ignored.'}
               After making the Transaction, Please upload a screenshot of the successful Transaction.
             </Typography>
               <input type="file" name="image" accept="image/*" onChange={(e) => {
