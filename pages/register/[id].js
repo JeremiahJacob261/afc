@@ -43,6 +43,8 @@ export default function Register({ refer }) {
   const [lvlb, setLvlb] = useState('');
   const [email, setEmail] = useState('')
   const auth = getAuth(app);
+  
+          const nRef = generateRandomSevenDigitNumber().toString();
   const [values, setValues] = React.useState({
     amount: '',
     password: '',
@@ -151,7 +153,6 @@ const { data, error } = await supabase
         
         const upload = async () => {
 
-          const nRef = generateRandomSevenDigitNumber().toString();
           console.log(nRef)
           const { data, error } = await supabase
             .from('users')
@@ -159,7 +160,7 @@ const { data, error } = await supabase
               userId: user.uid,
               password: values.password,
               phone: phone,
-              refer: idR,
+              refer: refer,
               username: username,
               countrycode: age,
               newrefer: nRef,
