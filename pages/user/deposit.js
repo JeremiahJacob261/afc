@@ -19,6 +19,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import barcode from '../../public/barcode.jpg'
 import gpay from '../../public/simps/gpay.png'
 import usdt from '../../public/simps/tether.png'
+import { getStorage, ref, uploadBytes,getDownloadURL }from "firebase/storage";
 export default function Deposit() {
   let loads = 0;
   const [info, setInfo] = useState({})
@@ -36,6 +37,7 @@ export default function Deposit() {
   const [dea, setDea] = useState("visible")
   const [deb, setDeb] = useState("hidden")
   const auth = getAuth(app);
+  const storage =  getStorage(app,"gs://atalanta-77824.appspot.com");
   const [drop, setDrop] = useState(false)
   const router = useRouter()
   const [dean, setDean] = useState(200)
@@ -94,50 +96,24 @@ export default function Deposit() {
     setMessages("The Deposit will reflect in your balance soon")
     handleClick();
     console.log(error)
-  }
-  async function getUrl(ads) {
-    const { data, error } = supabase
-      .storage
-      .from('trcreceipt')
-      .getPublicUrl(ads);
-    setImgurl(data.publicUrl);
-    console.log(data.publicUrl);
-    console.log(error)
-    checkDepo(data.publicUrl);
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // upload image
-    if (file.length === 0) {
-
-      alert('please select an image');
-
-      setDrop(false)
-    } else {
-      console.log(file[0])
-      const { data, error } = await supabase
-        .storage
-        .from('trcreceipt')
-        .upload(`public/${v4() + file[0].name}`, file[0], {
-          cacheControl: '3600',
-          upsert: false
-        })
-      setImgpath(data.path);
-      let imga = data.path;
-      getUrl(imga);
-      console.log(data);
-
-
-      setfile([]);
+    setfile([]);
       setDea('visible')
       setDeb('hidden')
       setDrop(false)
       setBottom(false)
-    }
-  };
-
-  //end fileupload
+  }
+  //firebase
+  async function Upload(){
+    if (file == null) return;
+    const imageRef = ref(storage, `deposit/${v4() + file.name}`);
+    uploadBytes(imageRef, file).then(async () => {
+        alert("image uploaded");
+         getDownloadURL(ref(storage, imageRef)).then(async (url) => {
+console.log(url)
+checkDepo(url);
+         })
+        })
+  }
   //snackbar2
   const handleClick = () => {
     setOpened(true);
@@ -237,14 +213,20 @@ export default function Deposit() {
               Deposits less than 10 USDT will be ignored.
               After making the Transaction, Please upload a screenshot of the successful Transaction.
             </Typography>
-            <form onSubmit={handleSubmit}>
               <input type="file" name="image" accept="image/*" onChange={(e) => {
-                setfile(e.target.files);
+                setfile(e.target.files[0]);
+                console.log(e.target.files[0].name);
               }} />
-              <Button variant='contained' type='submit' style={{ color: "white" }} onClick={() => {
-                setDrop(true)
+              <Button variant='contained'  style={{ color: "white" }} onClick={() => {
+                if(file.length === 0){
+                  alert('Please Upload an Image')
+                }else{
+                  console.log(file)
+                  console.log(file.length);
+                  setDrop(true)
+                Upload();
+                }
               }}>Verify Transaction</Button>
-            </form>
 
             <Typography variant="caption" style={{ color: "white" }} >Click this Button within 20Mins after depositing to Verify.
               Failure To Verify the Transaction will result in Lost Funds</Typography>
@@ -288,6 +270,7 @@ export default function Deposit() {
         <Stack direction="row" justifyContent='space-around' spacing={4}>
           <Button onClick={() => {
             setBottom(true)
+            setMethod('usdt')
           }}
             sx={{ background: '#1A1B72', width: '145px', height: '136px', borderRadius: '5px' }}
           >
@@ -302,6 +285,10 @@ export default function Deposit() {
 
           <Button
             sx={{ background: '#1A1B72', width: '145px', height: '136px', borderRadius: '5px' }}
+            onClick={() => {
+              setBottom(true)
+              setMethod('gpay')
+            }}
           >
             <Stack direction="column" spacing={2} justifyContent="center" alignItems='center'>
 
@@ -317,7 +304,7 @@ export default function Deposit() {
           variant="caption"
           sx={{ color: '#DFA100' }}
         >
-          GPay is currently unavailable at the moment
+          GPay is now available !
         </Typography>
       </Stack>
     </div>
