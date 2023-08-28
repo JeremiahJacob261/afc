@@ -186,13 +186,24 @@ checkDepo(url);
             <Button
               variant="contained"
               onClick={() => {
-                if (amount < (method === 'usdt') ? 10 : 830 || amount.length < 1) {
+                if(method === 'usdt'){
+                  if (amount < 10 ) {
                   setAmthelp((method === 'usdt') ? 'The Minimum Deposit is 10 USDT' : 'The Minimum Deposit is 830 ₹');
                 } else {
                   setDea('hidden')
                   setDeb('visible')
                   setDean(0)
                 }
+                }else{
+                   if (amount < 830 ) {
+                  setAmthelp((method === 'usdt') ? 'The Minimum Deposit is 10 USDT' : 'The Minimum Deposit is 830 ₹');
+                } else {
+                  setDea('hidden')
+                  setDeb('visible')
+                  setDean(0)
+                }
+                }
+                
 
               }}>Next</Button>
           </Stack>
