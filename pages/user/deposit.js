@@ -19,7 +19,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import barcode from '../../public/barcode.jpg'
 import gpay from '../../public/simps/gpay.png'
 import usdt from '../../public/simps/tether.png'
-import gpaypay from '../../public/simps/Capture.PNG'
+import gpaypay from '../../public/simps/gpay.jpg'
 import { getStorage, ref, uploadBytes,getDownloadURL }from "firebase/storage";
 export default function Deposit() {
   let loads = 0;
