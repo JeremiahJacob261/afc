@@ -2,15 +2,18 @@
   "countries": [
     {
       "name": "Australia",
-      "code": "+61"
+      "code": "+61",
+      "image": "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/AU.svg"
     },
     {
       "name": "Austria",
-      "code": "+43"
+      "code": "+43",
+      "image": "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/AT.svg"
     },
     {
       "name": "Belgium",
-      "code": "+32"
+      "code": "+32",
+      "image": "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/BE.svg"
     },
     {
       "name": "Belize",

@@ -207,7 +207,7 @@ const { data, error } = await supabase
 
   return (
     <Stack justifyContent="center" alignItems="center" style={{
-      background: "none", width: '100%'
+      background: "#172242", width: '100%'
     }}>
       <Head>
         <title>Register</title>
