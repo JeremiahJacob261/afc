@@ -121,18 +121,18 @@ export default function Refferal() {
         <Typography style={{ color: 'white', fontSize: '18px', fontWeight: 'bolder', fontFamily: 'Poppins,sans-serif' }}>Referral Details</Typography>
         <Stack direction="row" spacing={3}>
           <Box >
-            <Typography style={{ width: '50px', color: 'white', fontSize: '14px' }}>level 1</Typography>
-            <Typography style={{ width: '50px', color: 'white', fontSize: '14px' }}>{lvl1.length}</Typography></Box>
+            <Typography style={{ width: '50px', color: 'black', fontSize: '14px' }}>level 1</Typography>
+            <Typography style={{ width: '50px', color: 'black', fontSize: '14px' }}>{lvl1.length}</Typography></Box>
+          <Divider style={{ background: 'black' }} />
+          <Box>
+            <Typography style={{ width: '50px', color: 'black', fontSize: '14px' }}>level 2</Typography>
+            <Typography style={{ width: '50px', color: 'black', fontSize: '14px' }}>{lvl2.length}</Typography></Box>
           <Divider style={{ background: 'white' }} />
           <Box>
-            <Typography style={{ width: '50px', color: 'white', fontSize: '14px' }}>level 2</Typography>
-            <Typography style={{ width: '50px', color: 'white', fontSize: '14px' }}>{lvl2.length}</Typography></Box>
-          <Divider style={{ background: 'white' }} />
-          <Box>
-            <Typography style={{ width: '50px', color: 'white', fontSize: '14px' }}>level 3</Typography>
-            <Typography style={{ width: '50px', color: 'white', fontSize: '14px' }}>{lvl3.length}</Typography></Box>
-          <Divider style={{ background: 'white' }} />
-          <Typography style={{ width: '50px', color: 'white', fontSize: '14px' }}>Total : {lvl1.length + lvl2.length + lvl3.length} </Typography>
+            <Typography style={{ width: '50px', color: 'black', fontSize: '14px' }}>level 3</Typography>
+            <Typography style={{ width: '50px', color: 'black', fontSize: '14px' }}>{lvl3.length}</Typography></Box>
+          <Divider style={{ background: 'black' }} />
+          <Typography style={{ width: '50px', color: 'black', fontSize: '14px' }}>Total : {lvl1.length + lvl2.length + lvl3.length} </Typography>
 
         </Stack>
         <Divider style={{ background: 'white' }} />
@@ -184,10 +184,10 @@ export default function Refferal() {
           <table>
             <tbody>
               <tr>
-                <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>S/N</th>
-                <th style={{ width: '100px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Username</th>
-                <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Date/Time</th>
-                <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Balance</th>
+                <th style={{ width: '50px', color: 'black', fontFamily: 'Poppins,sans-serif' }}>S/N</th>
+                <th style={{ width: '100px', color: 'black', fontFamily: 'Poppins,sans-serif' }}>Username</th>
+                <th style={{ width: '50px', color: 'black', fontFamily: 'Poppins,sans-serif' }}>Date/Time</th>
+                <th style={{ width: '50px', color: 'black', fontFamily: 'Poppins,sans-serif' }}>Balance</th>
               </tr>
               {
                 lvl2.map((r) => {
@@ -196,10 +196,10 @@ export default function Refferal() {
 
                   return (
                     <tr key={r.username}>
-                      <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{sn}</th>
-                      <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{r.username}</th>
-                      <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{dts.getDate() + '/' + parseInt(dts.getMonth() +1) + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</th>
-                      <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{r.balance.toFixed(2)}</th>
+                      <th style={{ width: '50px', color: 'black', fontSize: '14px' }}>{sn}</th>
+                      <th style={{ width: '100px', color: 'black', fontSize: '14px' }}>{r.username}</th>
+                      <th style={{ width: '100px', color: 'black', fontSize: '14px' }}>{dts.getDate() + '/' + parseInt(dts.getMonth() +1) + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</th>
+                      <th style={{ width: '50px', color: 'black', fontSize: '14px' }}>{r.balance.toFixed(2)}</th>
                     </tr>
                   )
                 })
@@ -214,10 +214,10 @@ export default function Refferal() {
           <table>
             <tbody>
               <tr>
-                <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>S/N</th>
-                <th style={{ width: '100px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Username</th>
-                <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Date/Time</th>
-                <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Balance</th>
+                <th style={{ width: '50px', color: 'black', fontFamily: 'Poppins,sans-serif' }}>S/N</th>
+                <th style={{ width: '100px', color: 'black', fontFamily: 'Poppins,sans-serif' }}>Username</th>
+                <th style={{ width: '50px', color: 'black', fontFamily: 'Poppins,sans-serif' }}>Date/Time</th>
+                <th style={{ width: '50px', color: 'black', fontFamily: 'Poppins,sans-serif' }}>Balance</th>
               </tr>
               {
                 lvl3.map((r) => {
@@ -226,10 +226,10 @@ export default function Refferal() {
 
                   return (
                     <tr key={r.username}>
-                      <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{sn}</th>
-                      <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{r.username}</th>
-                      <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{dts.getDate() + '/' + parseInt(dts.getMonth() +1) + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</th>
-                      <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{r.balance.toFixed(2)}</th>
+                      <th style={{ width: '50px', color: 'black', fontSize: '14px' }}>{sn}</th>
+                      <th style={{ width: '100px', color: 'black', fontSize: '14px' }}>{r.username}</th>
+                      <th style={{ width: '100px', color: 'black', fontSize: '14px' }}>{dts.getDate() + '/' + parseInt(dts.getMonth() +1) + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</th>
+                      <th style={{ width: '50px', color: 'black', fontSize: '14px' }}>{r.balance.toFixed(2)}</th>
                     </tr>
                   )
                 })
