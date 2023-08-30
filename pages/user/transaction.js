@@ -65,7 +65,7 @@ export default function Transaction() {
               return (
                 <Stack direction="row" key={r.uid} justifyContent='space-around' alignItems="center" sx={{ background: '#1A1B72',padding:'5px' }}>
                   <Typography sx={{ color: 'white' ,textAlign:'center',fontSize:'15px',fontWeight:'300'}}>{dts.getDate() + '/' + parseInt(dts.getMonth() + 1) + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</Typography>
-                  <Typography sx={{ color: 'white' ,textAlign:'center',fontSize:'15px',fontWeight:'300',width:'150px'}}>Your {r.type} claim of {r.amount} USDT</Typography>
+                  <Typography sx={{ color: 'white' ,textAlign:'center',fontSize:'15px',fontWeight:'300',width:'150px'}}>Your {r.type} claim of {r.amount} {(r.method === 'usdt') ? 'USDT' : 'Rupees'}</Typography>
                   <Typography sx={{ color: 'white' ,textAlign:'center',fontSize:'15px',fontWeight:'300'}}>{r.sent}</Typography>
                 </Stack>
               )
