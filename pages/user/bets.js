@@ -121,7 +121,7 @@ export default function Bets() {
        <Divider sx={{background:'whitesmoke'}}/>
        <Stack direction="column"
           spacing={2} style={{ maxWidth: "350px", background: 'none' }}>
-          <Typography variant="h6" sx={{ color: "whitesmoke", margin: "8px", fontFamily: "'Barlow', sans-serif" }}>Finished</Typography>
+          <Typography variant="h6" sx={{ color: "black", margin: "8px", fontFamily: "'Barlow', sans-serif" }}>Finished</Typography>
 
           {
 
