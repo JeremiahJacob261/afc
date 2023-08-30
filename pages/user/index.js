@@ -1,8 +1,9 @@
-import { useContext, useEffect } from "react";
+import  React,{ useContext, useEffect } from "react";
 import { useRouter } from 'next/router'
 import Head from "next/head";
 import Cover from './cover'
 import { Box, Stack } from "@mui/system";
+import Drawer from '@mui/material/Drawer';
 import { getCookies, getCookie, setCookies, removeCookies, setCookie } from 'cookies-next';
 import { useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
@@ -52,7 +53,8 @@ export default function Home() {
   const [info, setInfo] = useState({})
   const [trans, setTrans] = useState([])
   const auth = getAuth(app);
-  let loads = 0;
+  const [draw,setDraw] = useState(false);
+    let loads = 0;
   useEffect(() => {
     const useri = localStorage.getItem('signedIn');
     if (useri) {
@@ -121,6 +123,27 @@ export default function Home() {
     <Stack justifyContent="center" alignItems="center"
       style={{ background: "#03045E", marginBottom: "50px" }}
     >
+      {
+        //drawer layout
+      }
+      <React.Fragment >
+      <Drawer
+            anchor='left'
+            open={draw}
+            onClose={()=>{
+              setDraw(false)
+            }}
+          >
+          <Stack direction='column' sx={{padding:'12px'}}>
+          <Link href="/" style={{ textDecoration: "none" }}>
+            <Typography style={{ fontFamily: 'Noto Serif, serif', color: "black", fontWeight: '400', fontSize: '20px' }}>AFCFIFA </Typography>
+          </Link>
+          </Stack>
+          </Drawer>
+      </React.Fragment>
+      {
+        //drawer layout end
+      }
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
@@ -193,7 +216,9 @@ export default function Home() {
       <Stack direction="row" style={{ background: '#FFFFFF', width: '100%', height: '64px', padding: '5px' }}
         alignItems='center' justifyContent="space-between">
         <div style={{ display: 'inline-flex', alignItems: 'center' }}>
-          <CgMenuGridR color="black" style={{ width: '24px', height: '24px' }} />
+          <CgMenuGridR color="black" style={{ width: '24px', height: '24px' }} onClick={()=>{
+            setDraw(true)
+          }}/>
         </div>
         <Typography style={{ fontSize: '24px', fontWeight: '800', color: 'black', margin: '4px', fontFamily: 'Noto, serif' }}>AFCFIFA</Typography>
         <div style={{ display: 'inline-flex', alignItems: 'center' }}>
