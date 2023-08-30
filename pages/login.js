@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState,Suspense  } from "react";
 import Head from "next/head";
-import { Avatar, Box, Stack, OutlinedInput, Button, Typography } from "@mui/material";
+import { Avatar, Box, Stack, OutlinedInput, Button, Typography, Divider } from "@mui/material";
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -24,8 +24,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useEffect } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
-import { async } from "@firebase/util";
-import Cookies from 'js-cookie'
+import Loadingsc from "./overlays/loadingsc";
+import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 export default function Login() {
   const dbs = getDatabase(app);
   const [username, setUsername] = useState("")
@@ -184,7 +184,7 @@ export default function Login() {
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={drop}
       >
-        <CircularProgress color="inherit" />
+        <SportsSoccerIcon id='balls' sx={{marginLeft:'8px'}}/>
       </Backdrop>
       <Head>
         <title>Login</title>
@@ -245,15 +245,15 @@ export default function Login() {
        onClick={login}>
         <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "whitesmoke" }}>Login</Typography>
       </Button>
-      <Link href="/passwordreset" style={{ textDecoration: 'white' }}> <Typography style={{ color: "white", fontSize: '14px', fontWeight: '200',opacity:'0.7',fontFamily:'Poppins,sans-serif' }}>Forgotten Password ?</Typography>
+      <Link href="/passwordreset" style={{ textDecoration: 'white' }}>
+         <Typography style={{ color: "white", fontSize: '14px', fontWeight: '200',opacity:'0.7',fontFamily:'Poppins,sans-serif' }}>Forgotten Password ?</Typography>
+         <Divider sx={{background:'white'}}/>
       </Link>
       <Link href="/register/000208" style={{ width:'100%',textAlign:'center',textDecoration: "none", color: "white", fontSize: '15px', fontWeight: '400',fontFamily:'Poppins,sans-serif' }}>Dont have an Account ? 
         Create Account
 
       </Link>
       </Stack>
-     
-
-    </Stack>
+     </Stack>
   )
 }

@@ -99,8 +99,9 @@ export default function PasswordReset() {
       </Button>
       <Typography>
               <Link href="/login" style={{ textDecoration: "none", fontSize: '14px', fontWeight: '100', color: "white", opacity: '1.0', fontFamily: 'Poppins,sans-serif' }}>Return To Login</Link>
+              <Divider sx={{background:'white'}}/>
               </Typography>
-
+      
       </Stack>
       
 
