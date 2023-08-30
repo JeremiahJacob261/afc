@@ -118,7 +118,7 @@ export default function Refferal() {
             router.push('/user/account')
           }}
         />
-        <Typography style={{ color: 'white', fontSize: '18px', fontWeight: 'bolder', fontFamily: 'Poppins,sans-serif' }}>Referral Details</Typography>
+        <Typography style={{ color: 'black', fontSize: '18px', fontWeight: 'bolder', fontFamily: 'Poppins,sans-serif' }}>Referral Details</Typography>
         <Stack direction="row" spacing={3}>
           <Box >
             <Typography style={{ width: '50px', color: 'black', fontSize: '14px' }}>level 1</Typography>
