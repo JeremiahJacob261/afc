@@ -127,7 +127,7 @@ export default function Refferal() {
           <Box>
             <Typography style={{ width: '50px', color: 'black', fontSize: '14px' }}>level 2</Typography>
             <Typography style={{ width: '50px', color: 'black', fontSize: '14px' }}>{lvl2.length}</Typography></Box>
-          <Divider style={{ background: 'white' }} />
+          <Divider style={{ background: 'black' }} />
           <Box>
             <Typography style={{ width: '50px', color: 'black', fontSize: '14px' }}>level 3</Typography>
             <Typography style={{ width: '50px', color: 'black', fontSize: '14px' }}>{lvl3.length}</Typography></Box>
@@ -146,19 +146,19 @@ export default function Refferal() {
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="Level 1" value="1"  sx={{ color:'white'}}/>
-            <Tab label="Level 2" value="2" sx={{ color:'white'}}/>
-            <Tab label="Level 3" value="3" sx={{ color:'white'}}/>
+            <Tab label="Level 1" value="1"  sx={{ color:'black'}}/>
+            <Tab label="Level 2" value="2" sx={{ color:'black'}}/>
+            <Tab label="Level 3" value="3" sx={{ color:'black'}}/>
           </TabList>
         </Box>
         <TabPanel value="1">
           <table>
             <tbody>
               <tr>
-                <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>S/N</th>
-                <th style={{ width: '100px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Username</th>
-                <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Date/Time</th>
-                <th style={{ width: '50px', color: 'white', fontFamily: 'Poppins,sans-serif' }}>Balance</th>
+                <th style={{ width: '50px', color: 'black', fontFamily: 'Poppins,sans-serif' }}>S/N</th>
+                <th style={{ width: '100px', color: 'black', fontFamily: 'Poppins,sans-serif' }}>Username</th>
+                <th style={{ width: '50px', color: 'black', fontFamily: 'Poppins,sans-serif' }}>Date/Time</th>
+                <th style={{ width: '50px', color: 'black', fontFamily: 'Poppins,sans-serif' }}>Balance</th>
               </tr>
               {
                 lvl1.map((r) => {
@@ -166,10 +166,10 @@ export default function Refferal() {
                   var dts = new Date(r.crdate);
                   return (
                     <tr key={r.username}>
-                      <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{sn}</th>
-                      <th style={{ width: '100px', color: 'white', fontSize: '14px' }}>{r.username}</th>
-                      <th style={{ width: '100px', color: 'white', fontSize: '13px' }}>{dts.getDate() + '/' + parseInt(dts.getMonth() +1) + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</th>
-                      <th style={{ width: '50px', color: 'white', fontSize: '14px' }}>{r.balance.toFixed(2)}</th>
+                      <th style={{ width: '50px', color: 'black', fontSize: '14px' }}>{sn}</th>
+                      <th style={{ width: '100px', color: 'black', fontSize: '14px' }}>{r.username}</th>
+                      <th style={{ width: '100px', color: 'black', fontSize: '13px' }}>{dts.getDate() + '/' + parseInt(dts.getMonth() +1) + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</th>
+                      <th style={{ width: '50px', color: 'black', fontSize: '14px' }}>{r.balance.toFixed(2)}</th>
                     </tr>
                   )
                 })
