@@ -25,6 +25,7 @@ export default function Cover({children}){
     const [anchorEl, setAnchorEl] = useState(null);
     const openr = Boolean(anchorEl);
     const [drop, setDrop] = useState(false);
+    const auth = getAuth(app)
     const [info, setInfo] = useState({})
     const [trans, setTrans] = useState([])
     const handleClickr = (event) => {

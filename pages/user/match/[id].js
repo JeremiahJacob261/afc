@@ -18,6 +18,7 @@ import Cover from '../cover'
 import { app } from '../../api/firebase';
 import Image from 'next/image'
 import Ims from '../../../public/simps/ball.png'
+import Bal from '../../../public/bball.png'
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth,signOut } from "firebase/auth";
 export default function Match({ matchDat }) {
@@ -295,7 +296,7 @@ useEffect(() => {
     console.log(new Date(matches.time))
     let date = parseInt(new Date(matches.date).getMonth() + 1);
     let day = new Date(matches.date).getDate();
-    let time = matches.time.substring(0, matches.time.length - 3)
+    let time = matches.time;
     
     //main ui
     return (
@@ -325,7 +326,7 @@ useEffect(() => {
                   style={{
                     marginBottom: "8px", padding: "18.5px",
                     display: (stams < curren) ? 'none' : 'visible',
-                    background: '#EFEFEF',
+                    background: '#F5F5F5',
                     width: '343px',
                     borderRadius: '5px',
                     height: '204px'
@@ -353,19 +354,14 @@ useEffect(() => {
                     <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{matches.away}</Typography>
                   </Stack>
                   </Stack>
-                  <Stack direction='row' spacing={2} >
-                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{borderRadius:'5px',width:'96px',height:'40px',background:'#E6E8F3'}}>
-                      <Typography sx={{fontSize:'12px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>1-0</Typography>
-                      <Typography sx={{fontSize:'16px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>{matches.onenil}</Typography>
-                    </Stack>
-                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{borderRadius:'5px',width:'96px',height:'40px',background:'#E6E8F3'}}>
-                      <Typography sx={{fontSize:'12px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>1-1</Typography>
-                      <Typography sx={{fontSize:'16px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>{matches.oneone}</Typography>
-                    </Stack>
-                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{borderRadius:'5px',width:'96px',height:'40px',background:'#E6E8F3'}}>
-                      <Typography sx={{fontSize:'12px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>1-2</Typography>
-                      <Typography sx={{fontSize:'16px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>{matches.onetwo}</Typography>
-                    </Stack>
+                  <Divider sx={{background:'black',opacity:'0.7'}}/>
+                  <Stack direction='column'>
+                  <Stack direction='row'> 
+                  <Image src={Bal} width={24} height={24}/>
+                  <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Home Picks</Typography>
+                  </Stack>
+                    
+                    <Stack direction='row'> </Stack>
                   </Stack>
                 </Stack>
 
