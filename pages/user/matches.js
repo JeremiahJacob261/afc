@@ -42,47 +42,72 @@ border: "1px solid rgba(255, 255, 255, 0.3)"
         maxWidth: "350px", background: "#03045E",minHeight:'100vh'
       }}>
         <Typography variant="h4" sx={{ color: "#E8E5DA", margin: "8px", fontFamily: "'Barlow', sans-serif" }}>List Of Our Favourite Matches</Typography>
-        {
-          footDat.map((pro) => {
-            let stams = Date.parse(pro.date + " " + pro.time) / 1000;
-            let curren = new Date().getTime() / 1000;
-            const league = (pro.league === 'others') ? pro.otherl : pro.league ;
-            return (
-              
-                <Stack direction="column" alignItems="center"
-                key={"match" + pro.home + pro.away}
-                style={{
-                  marginBottom: "8px", padding: "4px",
-                  display:(stams<curren) ? 'none':'visible',
-                  background:'#1A1B72',
-                  width:'100%',
-                  borderRadius:'5px'
-                }} onClick={() => {
-                  setDrop(true)
-                  //register/000208
-                  router.push("/user/match/" + pro.match_id)
-                }}>
-                <Typography style={{color:'#DFA100',fontFamily: 'Poppins, sans-serif',fontSize:'12px'}}>{pro.date} </Typography>
-                 
-                  <Stack direction="row" spacing={4}>
-                    <Stack alignItems="center">
-                      <Image src={Ims} alt="home" width='53' height='53' />
-                      <Typography style={{color:'white',fontFamily: 'Poppins, sans-serif',fontSize:'13px',height:'44px',padding:'4px',width:'104px',textAlign:'center'}}>{pro.home}</Typography>
+        <Stack alignItems='center'>
+            {
+            footDat.map((pro) => {
+              let stams = Date.parse(pro.date + " " + pro.time) / 1000;
+              let curren = new Date().getTime() / 1000;
+              const league = (pro.league === 'others') ? pro.otherl : pro.league;
+              console.log(new Date(pro.date))
+              console.log(new Date(pro.time))
+              let date = parseInt(new Date(pro.date).getMonth() + 1);
+              let day = new Date(pro.date).getDate();
+              let time = pro.time.substring(0, pro.time.length - 3)
+              return (
+
+                <Stack direction="column" spacing={2} justifyContent='center' alignItems='center'
+                  key={"match" + pro.home + pro.away}
+                  style={{
+                    marginBottom: "8px", padding: "18.5px",
+                    display: (stams < curren) ? 'none' : 'visible',
+                    background: '#EFEFEF',
+                    width: '343px',
+                    borderRadius: '5px',
+                    height: '204px'
+                  }} onClick={() => {
+                    setDrop(true)
+                    //register/000208
+                    router.push("/user/match/" + pro.match_id)
+                  }}>
+                  <Stack direction='column'>
+                    <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{league} </Typography>
+                    <Divider sx={{ background: 'black' }} />
+                  </Stack>
+                  <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
+                  <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
+                    <Image src={Ims} width={50} height={50}/>
+                    <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
+                  </Stack>
+                  <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
+                    <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
+                   <p>|</p>
+                    <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
+                  </Stack>
+                  <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
+                    <Image src={Ims} width={50} height={50}/>
+                    <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{pro.away}</Typography>
+                  </Stack>
+                  </Stack>
+                  <Stack direction='row' spacing={2} >
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{borderRadius:'5px',width:'96px',height:'40px',background:'#E6E8F3'}}>
+                      <Typography sx={{fontSize:'12px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>1-0</Typography>
+                      <Typography sx={{fontSize:'16px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>{pro.onenil}</Typography>
                     </Stack>
-                    <Stack spacing={2} alignItems="center" justifyContent="center">
-                      <Typography style={{color:'#181AA9',fontWeight:'800',fontSize:'24'}}>VS</Typography>
-                      <Typography style={{color:'white',fontWeight:'bold',fontFamily: 'Poppins, sans-serif',fontSize:'12px'}}>{pro.time} </Typography>
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{borderRadius:'5px',width:'96px',height:'40px',background:'#E6E8F3'}}>
+                      <Typography sx={{fontSize:'12px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>1-1</Typography>
+                      <Typography sx={{fontSize:'16px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>{pro.oneone}</Typography>
                     </Stack>
-                    <Stack alignItems="center">
-                      <Image src={Ims} alt="away" width='53' height='53' />
-                      <Typography style={{color:'white',fontFamily: 'Poppins, sans-serif',fontSize:'13px',height:'44px',padding:'4px',width:'104px',textAlign:'center'}}>{pro.away}</Typography>
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{borderRadius:'5px',width:'96px',height:'40px',background:'#E6E8F3'}}>
+                      <Typography sx={{fontSize:'12px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>1-2</Typography>
+                      <Typography sx={{fontSize:'16px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>{pro.onetwo}</Typography>
                     </Stack>
                   </Stack>
-                  <Typography style={{ textAlign:'center',color:'#9D9EF1',fontSize:'13px',width:'100%' }}>{league}</Typography>
                 </Stack>
-            )
-          })
-        }</div>
+              )
+            })
+          }
+          </Stack>
+          </div>
     </Cover>
 
   )
