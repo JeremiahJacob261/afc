@@ -268,7 +268,7 @@ export default function Home() {
             </Stack>
             <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>see all</Typography>
           </Stack>
-          <Stack direction='row' spacing={3}>
+          <Stack direction='row' spacing={1}>
             <Stack sx={{ background: '#E6E8F3', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>This Week</Typography></Stack>
             <Stack sx={{ background: '#03045E', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: 'white', fontSize: '12px', fontWeight: '100' }}>Today</Typography></Stack>
             <Stack sx={{ background: '#E6E8F3', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>Next 3 hrs</Typography></Stack>
