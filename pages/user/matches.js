@@ -1,7 +1,7 @@
 import Cover from './cover'
 import { supabase } from '../api/supabase'
 import { useContext, useEffect, useState } from "react";
-import { Paper, Stack, Typography, Button } from '@mui/material'
+import { Paper, Stack, Typography, Button ,Divider} from '@mui/material'
 import Image from "next/image";
 import Head from 'next/head'
 import Ims from '../../public/simps/ball.png'
@@ -75,7 +75,7 @@ border: "1px solid rgba(255, 255, 255, 0.3)"
                   </Stack>
                   <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
                   <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                    <Image src={Ims} width={50} height={50}/>
+                    <Image src={Ims} width={50} height={50} alt='home'/>
                     <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
                   </Stack>
                   <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
@@ -84,7 +84,7 @@ border: "1px solid rgba(255, 255, 255, 0.3)"
                     <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
                   </Stack>
                   <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                    <Image src={Ims} width={50} height={50}/>
+                    <Image src={Ims} width={50} height={50} alt='away'/>
                     <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{pro.away}</Typography>
                   </Stack>
                   </Stack>
