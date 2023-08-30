@@ -207,7 +207,7 @@ export default function Register({ refer }) {
 
   return (
     <Stack justifyContent="center" alignItems="center" style={{
-      background: "#0B122C", width: '100%'
+      background: "#0B122C", width: '100%',minHeight:'100vh'
     }}>
       <Head>
         <title>Register</title>
@@ -389,7 +389,8 @@ export default function Register({ refer }) {
           </Button>
           <Stack direction="row" alignItems="center" justifyContent="center" sx={{ height: '22px' }} spacing={1}>
             <Typography sx={{ color: "white", fontSize: '14px', fontWeight: '100', opacity: '0.7', fontFamily: 'Poppins,sans-serif' }}>Already have an Account ? </Typography>
-            <Typography><Link href="/login" style={{ textDecoration: "none", fontSize: '14px', fontWeight: '100', color: "white", opacity: '1.0', fontFamily: 'Poppins,sans-serif' }}>Login</Link></Typography>
+            <Typography>
+              <Link href="/login" style={{ textDecoration: "none", fontSize: '14px', fontWeight: '100', color: "white", opacity: '1.0', fontFamily: 'Poppins,sans-serif' }}>Login</Link></Typography>
 
           </Stack>
 

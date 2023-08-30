@@ -201,7 +201,7 @@ export default function Login() {
               <Typography style={{ fontFamily: 'Noto Serif, serif', color: "white", fontWeight: '400', fontSize: '20px' }}>AFCFIFA </Typography>
             </Link>
             <Typography style={{ fontFamily: 'Poppins,sans-serif', color: 'white', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
-            Don’t miss a minute of the action! Sign in 
+            Dont miss a minute of the action! Sign in 
             </Typography>
             <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: 'white', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
             Enter the correct information provided to Login to your  account
@@ -240,12 +240,12 @@ export default function Login() {
         />
       </FormControl>
       </Stack>
-      <Stack direction="column" spacing={2} justifyContent='center' alignItems='center' sx={{width:'343px',position:'absolute',bottom:22}}>
+      <Stack direction="column" spacing={2} justifyContent='center' alignItems='center' sx={{width:'343px',position:'absolute',bottom:55}}>
          <Button variant="contained" sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', background: '#FE9D16' }}
        onClick={login}>
         <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "whitesmoke" }}>Login</Typography>
       </Button>
-      <Link href="/passwordreset" style={{ textDecoration: 'underline' }}> <Typography style={{ color: "white", fontSize: '14px', fontWeight: '200',opacity:'0.7',fontFamily:'Poppins,sans-serif' }}>Forgotten Password ?</Typography>
+      <Link href="/passwordreset" style={{ textDecoration: 'white' }}> <Typography style={{ color: "white", fontSize: '14px', fontWeight: '200',opacity:'0.7',fontFamily:'Poppins,sans-serif' }}>Forgotten Password ?</Typography>
       </Link>
       <Link href="/register/000208" style={{ width:'100%',textAlign:'center',textDecoration: "none", color: "white", fontSize: '15px', fontWeight: '400',fontFamily:'Poppins,sans-serif' }}>Dont have an Account ? 
         Create Account

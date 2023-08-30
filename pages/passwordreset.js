@@ -26,39 +26,40 @@ import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
 import { async } from "@firebase/util";
 export default function PasswordReset() {
- const [email,setEmail] = useState('')
- const auth = getAuth(app);
- const router = useRouter();
- const [drop, setDrop] = useState(false)
-async function reset(){
+  const [email, setEmail] = useState('')
+  const auth = getAuth(app);
+  const router = useRouter();
+  const [drop, setDrop] = useState(false)
+  async function reset() {
     setDrop(true)
     sendPasswordResetEmail(auth, email)
-    .then(() => {
+      .then(() => {
         alert('A message has been sent to your E-Mail, follow the instruction to change your password')
-      // Password reset email sent!
-      setDrop(false)
-      router.push('/login')
-      // ..
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // ..
-      alert(errorCode)
-      setDrop(false)
-    });
-}
+        // Password reset email sent!
+        setDrop(false)
+        router.push('/login')
+        // ..
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+        alert(errorCode)
+        setDrop(false)
+      });
+  }
   return (
     <Stack
       direction="column"
-      justifyContent="center"
       alignItems="center"
       spacing={2}
       style={{
         padding: "15px",
         overflowX: "hidden",
         maxWidth: "100%",
-        minHeight: "85vh"
+        minHeight: "100vh",
+        background: '#0B122C'
+        ,position:'relative'
       }}>
 
       <Backdrop
@@ -73,30 +74,36 @@ async function reset(){
         <link rel="icon" href="/logo_afc.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-        <Link href="/" style={{ textDecoration: "none"}}>
-<Typography variant="h1" style={{ fontFamily: 'Poppins, sans-serif', color: "#181AA9",fontWeight:'900',fontSize:'64px' }}>AFCFIFA </Typography>
-       
-        </Link>
-         <Typography variant='subtitle' sx={{ fontFamily: 'Poppins, sans-serif', fontSize: "15px", color: "#181AA9" }}>
-          Investment Bet</Typography>
-          <Typography variant="h1" style={{ fontFamily: 'Poppins, sans-serif', color: "white",fontWeight:'900',fontSize:'32px' }}>PASSWORD RESET </Typography>
-        
-        <TextField id="outlined-basic" label="Email" variant="filled"
-          sx={{ width: "100%", background: "#F2F4CB"}}
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value)
-          }}
-        />
-        <Button variant="contained" sx={{ width:'191px',height:'65px',background:'#21227A'  }} onClick={reset}>
-          <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "whitesmoke"}}>Reset Password</Typography>
-        </Button>
+      <Stack direction="column" spacing={4} justifyContent="center" alignItems="center">
+            <Link href="/" style={{ textDecoration: "none" }}>
+              <Typography style={{ fontFamily: 'Noto Serif, serif', color: "white", fontWeight: '400', fontSize: '20px' }}>AFCFIFA </Typography>
+            </Link>
+            <Typography style={{ fontFamily: 'Poppins,sans-serif', color: 'white', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
+            Forgot Password? Dont worry
+            </Typography>
+            <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: 'white', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
+            We would send you a link to your email so you can reset your password
+            </Typography>
+          </Stack>
+      <TextField id="outlined-basic" label="Email" variant="filled"
+        sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white', } }}
 
-       
-          <Link href="/register/697667" style={{ textDecoration: "none", color: "#DFA100",fontSize:'15px',fontWeight:'400' }}>Dont have an Account ? <br/>
-Create Account
+        value={email}
+        onChange={(e) => {
+          setEmail(e.target.value)
+        }}
+      />
+      <Stack direction="column" spacing={2} justifyContent='center' alignItems='center' sx={{width:'343px',position:'absolute',bottom:55}}>
+        <Button variant="contained"  sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', background: '#FE9D16' }} onClick={reset}>
+        <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "whitesmoke" }}>Send Email</Typography>
+      </Button>
+      <Typography>
+              <Link href="/login" style={{ textDecoration: "none", fontSize: '14px', fontWeight: '100', color: "white", opacity: '1.0', fontFamily: 'Poppins,sans-serif' }}>Return To Login</Link>
+              </Typography>
 
-          </Link>
+      </Stack>
+      
+
 
     </Stack>
   )
