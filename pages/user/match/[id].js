@@ -15,6 +15,7 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import Cover from '../cover'
+import { Drawer } from '@mui/material'
 import { app } from '../../api/firebase';
 import Image from 'next/image'
 import Ims from '../../../public/simps/ball.png'
@@ -34,6 +35,7 @@ export default function Match({ matchDat }) {
     const [matches, setMatches] = useState({})
     const [display, setDisplay] = useState({})
     const [open, setOpen] = useState(false)
+    const [bottom, setBottom] = useState(true)
     const [info, setInfo] = useState({});
     const auth = getAuth(app);
     const Reads = async (dtype, damount) => {
@@ -291,9 +293,8 @@ export default function Match({ matchDat }) {
     }
     let stams = Date.parse(matches.date + " " + matches.time) / 1000;
     let curren = new Date().getTime() / 1000;
-    const league = (matches.league === 'others') ? matches.otherl : matches.league;
     console.log(new Date(matches.date))
-    console.log(new Date(matches.time))
+    console.log(matches)
     let date = parseInt(new Date(matches.date).getMonth() + 1);
     let day = new Date(matches.date).getDate();
     let time = matches.time;
@@ -301,6 +302,7 @@ export default function Match({ matchDat }) {
     //main ui
     return (
         <Stack style={{ width: "100%", height: '100%', background: '#FFFFFF' }} alignItems="center">
+            <Draws />
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                 open={drop}
@@ -322,20 +324,15 @@ export default function Match({ matchDat }) {
 
 
             <Stack direction="column" spacing={2} justifyContent='center' alignItems='center'
-                key={"match" + matches.home + matches.away}
+
                 style={{
                     marginBottom: "8px", padding: "18.5px",
-                    display: (stams < curren) ? 'none' : 'visible',
                     background: '#F5F5F5',
                     width: '343px',
                     borderRadius: '5px',
-                }} onClick={() => {
-                    setDrop(true)
-                    //register/000208
-                    router.push("/user/match/" + matches.match_id)
-                }}>
+                }} >
                 <Stack direction='column'>
-                    <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{league} </Typography>
+                    <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{(matches.league === 'others') ? matches.otherl : matches.league} </Typography>
                     <Divider sx={{ background: 'black' }} />
                 </Stack>
                 <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
@@ -353,7 +350,7 @@ export default function Match({ matchDat }) {
                         <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{matches.away}</Typography>
                     </Stack>
                 </Stack>
-                <Divider sx={{ background: 'black'}} />
+                <Divider sx={{ background: 'black' }} />
                 <Stack direction='column' spacing={3}>
                     <Stack direction='row' alignItems='center' spacing={2}>
                         <Image src={Bal} width={24} height={24} alt='balls' />
@@ -503,8 +500,87 @@ export default function Match({ matchDat }) {
                 </Stack>
             </Stack>
         </Stack>
-    )
+    );
+    function Draws() {
+        return (
+            <Drawer
+                anchor='bottom'
+                open={bottom}
+                onClose={() => {
+                    setBottom(false)
+                }}
+            >
+                <Cover>
+                <Stack direction='column' spacing={2} style={{ background: 'white', padding: '8px', minHeight: '100vh',paddingBottom:'12px' }}>
+                    <Stack direction='row' sx={{ padding: '5px' }}>
+                        <KeyboardArrowLeftOutlinedIcon onClick={()=>{
+                            setBottom(false)
+                        }}/>
+                        <Typography sx={{ width: '100%', fontFamily: 'Poppins,sans-serif', textAlign: 'center' }}>Stake your bet</Typography>
+                    </Stack>
+                    <Stack direction='column' alignItems='center' justifyContent='center'>
+                    <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{ (matches.league === 'others') ? matches.otherl : matches.league} </Typography>
+                    <Divider sx={{ background: 'black' }} />
+                  </Stack>
+                    <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
+                        <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
+                            <Image src={Ims} width={50} height={50} alt='home' />
+                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{matches.home}</Typography>
+                        </Stack>
+                        <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
+                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
+                            <p>|</p>
+                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
+                        </Stack>
+                        <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
+                            <Image src={Ims} width={50} height={50} alt='away' />
+                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{matches.away}</Typography>
+                        </Stack>
+
+                    </Stack>
+                    <Divider sx={{ background: 'black' }} />
+                    <Stack direction='column' spacing={3}>
+                        <Stack direction='row' justifyContent='space-between' alignItems='center'>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: 'black' }}>Match ID</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'black' }}>{matches.match_id}</Typography>
+                        </Stack>
+                        <Stack direction='row' justifyContent='space-between' alignItems='center'>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: 'black' }}>Market</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'black' }}>Match ID</Typography>
+                        </Stack>
+                        <Stack direction='row' justifyContent='space-between' alignItems='center'>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: 'black' }}>Profit</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'black' }}>Match ID</Typography>
+                        </Stack>
+                    </Stack>
+                <Divider sx={{ background: 'black' }}/>
+                <Stack direction='row' justifyContent='space-between' alignItems='center'>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: 'black',width:'210px' }}>Enter the amount you wish to stake</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'black' }}>Match ID</Typography>
+                        </Stack>
+                        <Stack direction='row' justifyContent='space-between' alignItems='center'>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: 'black' }}>Account Balance</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'black' }}>{info.balance.toFixed(3)} USDT</Typography>
+                        </Stack>
+                        <TextField variant="outlined" label='stake' sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', background: 'white',color:'#03045E' }}/>
+                        <Stack direction='row' justifyContent='space-between' alignItems='center'>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: 'black' }}>Profit</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'black' }}>{info.balance.toFixed(3)} USDT</Typography>
+                        </Stack>
+                        <Stack direction='row' justifyContent='space-between' alignItems='center'>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: 'black' }}>Expected Profit</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: 'black' }}>{info.balance.toFixed(3)} USDT</Typography>
+                        </Stack>
+                        <Button sx={{fontFamily: 'Poppins,sans-serif',margin:'8px', fontSize: '16', fontWeight: '300', color: 'white',background:"#03045E"}}>
+                            Place Bet
+                        </Button>
+                </Stack>
+                </Cover>
+            </Drawer>
+        )
+    }
 }
+
 export async function getStaticPaths() {
     const { data, error } = await supabase
         .from('bets')
