@@ -20,7 +20,7 @@ import Image from 'next/image'
 import Ims from '../../../public/simps/ball.png'
 import Bal from '../../../public/bball.png'
 import { onAuthStateChanged } from "firebase/auth";
-import { getAuth,signOut } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 export default function Match({ matchDat }) {
     //backdrop
     const [drop, setDrop] = useState(false)
@@ -35,41 +35,41 @@ export default function Match({ matchDat }) {
     const [display, setDisplay] = useState({})
     const [open, setOpen] = useState(false)
     const [info, setInfo] = useState({});
-const auth = getAuth(app);
-const Reads = async (dtype,damount) => {
-    const { data, error } = await supabase
-      .rpc(dtype, { amount: damount})
-    console.log(error);
-  }
-useEffect(() => {
+    const auth = getAuth(app);
+    const Reads = async (dtype, damount) => {
+        const { data, error } = await supabase
+            .rpc(dtype, { amount: damount })
+        console.log(error);
+    }
+    useEffect(() => {
 
-    matchDat.map((m) => {
-        setMatches(m)
-    })
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/auth.user
-        const uid = user.uid;
-        // ...
-        console.log(user)
-        const GET = async () => {
-          const { data, error } = await supabase
-            .from('users')
-            .select()
-            .eq('userId', user.uid)
-          setInfo(data[0])
-          console.log(data)
-        }
-        GET();
-      } else {
-        // User is signed out
-        // ...
-        console.log('sign out');
-        router.push('/login');
-      }
-    });
-  }, []);
+        matchDat.map((m) => {
+            setMatches(m)
+        })
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in, see docs for a list of available properties
+                // https://firebase.google.com/docs/reference/js/auth.user
+                const uid = user.uid;
+                // ...
+                console.log(user)
+                const GET = async () => {
+                    const { data, error } = await supabase
+                        .from('users')
+                        .select()
+                        .eq('userId', user.uid)
+                    setInfo(data[0])
+                    console.log(data)
+                }
+                GET();
+            } else {
+                // User is signed out
+                // ...
+                console.log('sign out');
+                router.push('/login');
+            }
+        });
+    }, []);
     const router = useRouter()
     const markets = [
         {
@@ -152,28 +152,28 @@ useEffect(() => {
     function DisplayDialog() {
         const [stake, setStake] = useState(null)
         const [ball, setBall] = useState(info.balance);
-        let profit = ((display.odds * stake) / 100)+ stake;
-        useEffect(()=>{
+        let profit = ((display.odds * stake) / 100) + stake;
+        useEffect(() => {
 
-//         const GET = async () => {
-//             try{
-// const { data, error } = await supabase
-//                 .from('users')
-//                 .select('balance')
-//                 .eq('username', localStorage.getItem('me'))
-//             setBall(data[0].balance)
-//         console.log(info[0].balance)
-//             }catch(e){
-                
-//             }
-            
-//         }
-//         GET();
-        },[setBall])
+            //         const GET = async () => {
+            //             try{
+            // const { data, error } = await supabase
+            //                 .from('users')
+            //                 .select('balance')
+            //                 .eq('username', localStorage.getItem('me'))
+            //             setBall(data[0].balance)
+            //         console.log(info[0].balance)
+            //             }catch(e){
+
+            //             }
+
+            //         }
+            //         GET();
+        }, [setBall])
         return (
             <Dialog open={open} onClose={handleClose} style={{ minWidth: "300px", padding: "8px" }}>
-                <div style={{display:'flex',justifyContent:'center',color:'#F2E94E',padding:'5px',fontFamily: 'Poppins, sans-serif'}}>
-                <h4>{display.league}</h4></div>
+                <div style={{ display: 'flex', justifyContent: 'center', color: '#F2E94E', padding: '5px', fontFamily: 'Poppins, sans-serif' }}>
+                    <h4>{display.league}</h4></div>
                 <DialogTitle sx={{ color: "#1B5299", fontFamily: 'Caveat, cursive', fontSize: "25px" }}>{display.title}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>Match Id :
@@ -203,60 +203,60 @@ useEffect(() => {
                     <Button onClick={handleClose}>exit</Button>
                     <Button variant="contained" onClick={() => {
                         if (stake - 1 < ball) {
-                           if(stake < 1){
-                            alert('You do not have sufficient balance for this transaction')
-                           }else{
-                            handleClose()
-                            setBall(ball - stake)
-                            let balls = ball - stake;
-                            const deductBet = async () => {
-                                const { error } = await supabase
-                                    .from('users')
-                                    .update({ balance: balls })
-                                    .eq('username', info.username)
-                                console.log(error)
-                                setMessages("Bet Successful")
-                                handleClick();
+                            if (stake < 1) {
+                                alert('You do not have sufficient balance for this transaction')
+                            } else {
+                                handleClose()
+                                setBall(ball - stake)
+                                let balls = ball - stake;
+                                const deductBet = async () => {
+                                    const { error } = await supabase
+                                        .from('users')
+                                        .update({ balance: balls })
+                                        .eq('username', info.username)
+                                    console.log(error)
+                                    setMessages("Bet Successful")
+                                    handleClick();
+                                }
+                                const saveToDB = async () => {
+                                    const { error } = await supabase
+                                        .from('placed')
+                                        .upsert({
+                                            'match_id': display.matchId,
+                                            'market': display.market_picked,
+                                            'username': info.username,
+                                            'started': false,
+                                            'stake': Number(stake),
+                                            'profit': Number(((display.odds * stake) / 100)).toFixed(2),
+                                            'aim': profit,
+                                            "home": display.home,
+                                            "away": display.away,
+                                            "time": display.time,
+                                            "date": display.date,
+                                            "odd": display.odds
+                                        })
+                                    console.log(error)
+                                }
+                                const saveToUser = async () => {
+                                    const { error } = await supabase
+                                        .from('useractivity')
+                                        .upsert({
+                                            'type': 'bets',
+                                            'amount': stake + (display.odds * stake) / 100,
+                                            'user': info.username,
+                                            'match_id': display.matchId,
+                                            'stake': Number(stake),
+                                            'profit': Number(((display.odds * stake) / 100)),
+                                            'market': display.market_picked
+                                        })
+                                    console.log(error)
+                                }
+                                saveToUser();
+                                deductBet();
+                                saveToDB();
+                                Reads('readbet', stake);
+                                router.push('/user/matches');
                             }
-                            const saveToDB = async () => {
-                                const { error } = await supabase
-                                    .from('placed')
-                                    .upsert({
-                                        'match_id': display.matchId,
-                                        'market': display.market_picked,
-                                        'username': info.username,
-                                        'started': false,
-                                        'stake': Number(stake),
-                                        'profit': Number(((display.odds * stake) / 100)).toFixed(2),
-                                        'aim': profit,
-                                        "home": display.home,
-                                        "away": display.away,
-                                        "time":display.time,
-                                        "date":display.date,
-                                        "odd":display.odds
-                                    })
-                                console.log(error)
-                            }
-                            const saveToUser = async () => {
-                                const { error } = await supabase
-                                    .from('useractivity')
-                                    .upsert({
-                                        'type': 'bets',
-                                        'amount': stake + (display.odds * stake) / 100,
-                                        'user': info.username,
-                                        'match_id': display.matchId,
-                                        'stake': Number(stake),
-                                        'profit': Number(((display.odds * stake) / 100)),
-                                        'market': display.market_picked
-                                    })
-                                console.log(error)
-                            }
-                            saveToUser();
-                            deductBet();
-                            saveToDB();
-                            Reads('readbet',stake);
-                            router.push('/user/matches');
-                           }
                         } else {
                             alert("You do not have Enough USDT to Complete this BET");
                         }
@@ -297,10 +297,10 @@ useEffect(() => {
     let date = parseInt(new Date(matches.date).getMonth() + 1);
     let day = new Date(matches.date).getDate();
     let time = matches.time;
-    
+
     //main ui
     return (
-        <Stack style={{ width: "100%",height:'100%',background:'#FFFFFF' }} alignItems="center">
+        <Stack style={{ width: "100%", height: '100%', background: '#FFFFFF' }} alignItems="center">
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                 open={drop}
@@ -315,55 +315,151 @@ useEffect(() => {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
             <DisplayDialog />
-            <Stack direction='row' alignItems='center' spacing={1} sx={{padding:'5px',margin:'2px'}}>
-        <KeyboardArrowLeftOutlinedIcon sx={{width:'24px',height:'24px'}}/>
-        <Typography sx={{fontSize:'16px',fontFamily:'Poppins,sans-serif',fontWeight:'300',width:'90%',textAlign:'center'}}>Stake your bet</Typography>
-        </Stack>
-       
+            <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '5px', margin: '2px' }}>
+                <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} />
+                <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', width: '90%', textAlign: 'center' }}>Stake your bet</Typography>
+            </Stack>
 
-                <Stack direction="column" spacing={2} justifyContent='center' alignItems='center'
-                  key={"match" + matches.home + matches.away}
-                  style={{
+
+            <Stack direction="column" spacing={2} justifyContent='center' alignItems='center'
+                key={"match" + matches.home + matches.away}
+                style={{
                     marginBottom: "8px", padding: "18.5px",
                     display: (stams < curren) ? 'none' : 'visible',
                     background: '#F5F5F5',
                     width: '343px',
                     borderRadius: '5px',
-                    height: '204px'
-                  }} onClick={() => {
+                }} onClick={() => {
                     setDrop(true)
                     //register/000208
                     router.push("/user/match/" + matches.match_id)
-                  }}>
-                  <Stack direction='column'>
+                }}>
+                <Stack direction='column'>
                     <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{league} </Typography>
                     <Divider sx={{ background: 'black' }} />
-                  </Stack>
-                  <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
-                  <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                    <Image src={Ims} width={50} height={50} alt='home'/>
-                    <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{matches.home}</Typography>
-                  </Stack>
-                  <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                    <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
-                   <p>|</p>
-                    <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
-                  </Stack>
-                  <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                    <Image src={Ims} width={50} height={50} alt='away'/>
-                    <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{matches.away}</Typography>
-                  </Stack>
-                  </Stack>
-                  <Divider sx={{background:'black',opacity:'0.7'}}/>
-                  <Stack direction='column'>
-                  <Stack direction='row'> 
-                  <Image src={Bal} width={24} height={24}/>
-                  <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Home Picks</Typography>
-                  </Stack>
-                    
-                    <Stack direction='row'> </Stack>
-                  </Stack>
                 </Stack>
+                <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
+                    <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
+                        <Image src={Ims} width={50} height={50} alt='home' />
+                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{matches.home}</Typography>
+                    </Stack>
+                    <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
+                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
+                        <p>|</p>
+                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
+                    </Stack>
+                    <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
+                        <Image src={Ims} width={50} height={50} alt='away' />
+                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{matches.away}</Typography>
+                    </Stack>
+                </Stack>
+                <Divider sx={{ background: 'black'}} />
+                <Stack direction='column' spacing={3}>
+                    <Stack direction='row' alignItems='center' spacing={2}>
+                        <Image src={Bal} width={24} height={24} alt='balls' />
+                        <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Home Picks</Typography>
+                    </Stack>
+                    <Divider />
+                    <Stack direction='row' spacing={2} justifyContent='space-around'>
+                        <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>1-0</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{matches.onenil}</Typography>
+                        </Stack>
+                        <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>2-0</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{matches.twoone}</Typography>
+                        </Stack>
+                    </Stack>
+                    <Stack direction='row' spacing={2} >
+                        <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>3-0</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{matches.threenil}</Typography>
+                        </Stack>
+                        <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>2-1</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{matches.twoone}</Typography>
+                        </Stack>
+                    </Stack>
+                    <Stack direction='row' spacing={2} >
+                        <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>3-1</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{matches.threeone}</Typography>
+                        </Stack>
+                        <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>3-2</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{matches.threetwo}</Typography>
+                        </Stack>
+                    </Stack>
+
+                    <Stack direction='row' alignItems='center' spacing={2}>
+                        <Image src={Bal} width={24} height={24} alt='balls' />
+                        <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Away Picks</Typography>
+                    </Stack>
+                    <Divider />
+                    <Stack direction='row' spacing={2} justifyContent='space-around'>
+                        <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>0-1</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{matches.onenil}</Typography>
+                        </Stack>
+                        <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>0-2</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{matches.twoone}</Typography>
+                        </Stack>
+                    </Stack>
+                    <Stack direction='row' spacing={2} >
+                        <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>0-3</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{matches.threenil}</Typography>
+                        </Stack>
+                        <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>1-2</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{matches.twoone}</Typography>
+                        </Stack>
+                    </Stack>
+                    <Stack direction='row' spacing={2} >
+                        <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>1-3</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{matches.threeone}</Typography>
+                        </Stack>
+                        <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>2-3</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{matches.threetwo}</Typography>
+                        </Stack>
+                    </Stack>
+
+                    <Stack direction='row' alignItems='center' spacing={2}>
+                        <Image src={Bal} width={24} height={24} alt='balls' />
+                        <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Draw Picks</Typography>
+                    </Stack>
+                    <Divider />
+                    <Stack direction='row' spacing={2} justifyContent='space-around'>
+                        <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>0-0</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{matches.onenil}</Typography>
+                        </Stack>
+                        <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>1-1</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{matches.twoone}</Typography>
+                        </Stack>
+                    </Stack>
+                    <Stack direction='row' spacing={2} >
+                        <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>2-2</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{matches.threenil}</Typography>
+                        </Stack>
+                        <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>3-3</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{matches.twoone}</Typography>
+                        </Stack>
+                    </Stack>
+                    <Stack direction='row' spacing={2} >
+                        <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>Others</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{matches.threeone}</Typography>
+                        </Stack>
+                    </Stack>
+                </Stack>
+            </Stack>
 
             <Stack direction="row" spacing={3} justifyContent="center" alignItems="flex-start" sx={{ marginTop: "100px", width: "340px" }}>
                 <Stack direction="column">
@@ -387,9 +483,9 @@ useEffect(() => {
                                                         "matchId": matches.match_id,
                                                         "home": matches.home,
                                                         "away": matches.away,
-                                                        "league":(matches.league === 'others') ? matches.otherl : matches.league,
-                                                        "time":matches.time,
-                                                        "date":matches.date,
+                                                        "league": (matches.league === 'others') ? matches.otherl : matches.league,
+                                                        "time": matches.time,
+                                                        "date": matches.date,
                                                     }
                                                 )
                                                 setOpen(true)
