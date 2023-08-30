@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import Head from "next/head";
 import Cover from './cover'
 import { Box, Stack } from "@mui/system";
-import Drawer from '@mui/material/Drawer';
 import { getCookies, getCookie, setCookies, removeCookies, setCookie } from 'cookies-next';
 import { useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
@@ -28,6 +27,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import Ims from '../../public/simps/ball.png'
 import { app } from '../api/firebase';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
 import Menu from '@mui/material/Menu';
@@ -36,7 +36,11 @@ import { FaCircleDollarToSlot } from 'react-icons/fa';
 import { TbMailDollar } from 'react-icons/tb'
 import { CgMenuGridR } from 'react-icons/cg'
 import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
+import {BiTimer} from 'react-icons/bi'
+import {GiPayMoney,GiReceiveMoney} from 'react-icons/gi'
+import TranslateIcon from '@mui/icons-material/Translate';
+import {BsFillPersonFill} from 'react-icons/bs'
+import {BiSolidContact} from 'react-icons/bi'
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 export default function Home() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -123,115 +127,9 @@ export default function Home() {
     <Stack justifyContent="center" alignItems="center"
       style={{ background: "#03045E", marginBottom: "50px" }}
     >
-      {
-        //drawer layout
-      }
-      <React.Fragment >
-      <Drawer
-            anchor='left'
-            open={draw}
-            onClose={()=>{
-              setDraw(false)
-            }}
-          >
-          <Stack direction='column' sx={{padding:'12px'}}>
-          <Link href="/" style={{ textDecoration: "none" }}>
-            <Typography style={{ fontFamily: 'Noto Serif, serif', color: "black", fontWeight: '400', fontSize: '20px' }}>AFCFIFA </Typography>
-          </Link>
-          </Stack>
-          </Drawer>
-      </React.Fragment>
-      {
-        //drawer layout end
-      }
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={openr}
-        onClose={handleCloser}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}
-      >
-        {
-          trans.map((r) => {
-            if (r.code === 'broadcast') {
-              return (
-
-                <MenuItem key={r.id}>
-                  <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '4px' }}>
-                    <TbMailDollar color="#03045E" />
-                    <Typography style={{
-                      fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter', overflowX: "hidden",
-                      textOverflow: "ellipsis",
-                      display: "-webkit-box",
-                      WebkitLineClamp: "2",
-                      WebkitBoxOrient: "vertical",
-                    }}>{r.username}
-                    </Typography>
-                  </Stack>
-                </MenuItem>
-              );
-            } else {
-              if (r.username === info.username) {
-                return (
-                  <MenuItem key={r.id}>
-                    <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '4px' }}>
-                      <TbMailDollar color="#03045E" />
-                      <Typography style={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter' }}>You Recieved {r.amount} USDT from <br />admin as {r.code}.
-                      </Typography>
-                    </Stack>
-                  </MenuItem>
-                )
-              } else {
-
-
-                return (
-
-                  <MenuItem key={r.id}>
-                    <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '4px' }}>
-                      <TbMailDollar color="#03045E" />
-                      <Typography style={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter' }}>You Recieved {r.amount} USDT from <br />{r.username} as Referral Bonus.
-                      </Typography>
-                    </Stack>
-                  </MenuItem>
-                );
-              }
-            }
-
-          })
-        }
-        <Stack justifyContent="center" >
-
-          <Button variant="contained" sx={{ width: '80%', background: '#EE8F00' }} onClick={() => {
-            router.push('/user/notification');
-          }}>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter', marginLeft: "3px", color: '#03045E' }}>See More</Typography>
-          </Button>
-        </Stack>
-      </Menu>
-      {
-        //end of menu 
-      }
-      <Stack direction="row" style={{ background: '#FFFFFF', width: '100%', height: '64px', padding: '5px' }}
-        alignItems='center' justifyContent="space-between">
-        <div style={{ display: 'inline-flex', alignItems: 'center' }}>
-          <CgMenuGridR color="black" style={{ width: '24px', height: '24px' }} onClick={()=>{
-            setDraw(true)
-          }}/>
-        </div>
-        <Typography style={{ fontSize: '24px', fontWeight: '800', color: 'black', margin: '4px', fontFamily: 'Noto, serif' }}>AFCFIFA</Typography>
-        <div style={{ display: 'inline-flex', alignItems: 'center' }}>
-
-          <NotificationsIcon sx={{ color: 'black' }}
-            id="basic-button"
-            aria-controls={openr ? 'basic-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={openr ? 'true' : undefined}
-            onClick={handleClickr}
-          />
-        </div> </Stack>
-      <Cover>
+      
+      
+      <Cover sx={{background:'white',width:'100vh',height:'100vh'}}>
         <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={drop}

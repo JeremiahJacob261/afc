@@ -13,8 +13,11 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
-
+import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
+import Cover from '../cover'
 import { app } from '../../api/firebase';
+import Image from 'next/image'
+import Ims from '../../../public/simps/ball.png'
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth,signOut } from "firebase/auth";
 export default function Match({ matchDat }) {
@@ -285,9 +288,18 @@ useEffect(() => {
             </Snackbar>
         )
     }
+    let stams = Date.parse(matches.date + " " + matches.time) / 1000;
+    let curren = new Date().getTime() / 1000;
+    const league = (matches.league === 'others') ? matches.otherl : matches.league;
+    console.log(new Date(matches.date))
+    console.log(new Date(matches.time))
+    let date = parseInt(new Date(matches.date).getMonth() + 1);
+    let day = new Date(matches.date).getDate();
+    let time = matches.time.substring(0, matches.time.length - 3)
+    
     //main ui
     return (
-        <Stack style={{ width: "100%",height:'100%',background:'#03045E' }} alignItems="center">
+        <Stack style={{ width: "100%",height:'100%',background:'#FFFFFF' }} alignItems="center">
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                 open={drop}
@@ -302,19 +314,60 @@ useEffect(() => {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
             <DisplayDialog />
-            <Paper elevation={4} sx={{ width: "100%" }}>
-                <Stack style={{ background: "#1A1B72", width: "100%", padding: "8px" }} alignItems="center">
-                    <KeyboardBackspaceIcon sx={{ color: "white" }} onClick={() => {
-                        setDrop(true)
-                        router.push("/user/matches")
+            <Stack direction='row' alignItems='center' spacing={1} sx={{padding:'5px',margin:'2px'}}>
+        <KeyboardArrowLeftOutlinedIcon sx={{width:'24px',height:'24px'}}/>
+        <Typography sx={{fontSize:'16px',fontFamily:'Poppins,sans-serif',fontWeight:'300',width:'90%',textAlign:'center'}}>Stake your bet</Typography>
+        </Stack>
+       
 
-                        //back to home
-                    }} />
-                    <Typography sx={{ fontFamily: 'Marhey, cursive', color: "white" }}>{matches.home} VS {matches.away}</Typography>
-                    <Typography sx={{ color: "whitesmoke", fontSize: 15 }}>Match Id: {matches.match_id}</Typography>
+                <Stack direction="column" spacing={2} justifyContent='center' alignItems='center'
+                  key={"match" + matches.home + matches.away}
+                  style={{
+                    marginBottom: "8px", padding: "18.5px",
+                    display: (stams < curren) ? 'none' : 'visible',
+                    background: '#EFEFEF',
+                    width: '343px',
+                    borderRadius: '5px',
+                    height: '204px'
+                  }} onClick={() => {
+                    setDrop(true)
+                    //register/000208
+                    router.push("/user/match/" + matches.match_id)
+                  }}>
+                  <Stack direction='column'>
+                    <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{league} </Typography>
+                    <Divider sx={{ background: 'black' }} />
+                  </Stack>
+                  <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
+                  <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
+                    <Image src={Ims} width={50} height={50} alt='home'/>
+                    <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{matches.home}</Typography>
+                  </Stack>
+                  <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
+                    <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
+                   <p>|</p>
+                    <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
+                  </Stack>
+                  <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
+                    <Image src={Ims} width={50} height={50} alt='away'/>
+                    <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{matches.away}</Typography>
+                  </Stack>
+                  </Stack>
+                  <Stack direction='row' spacing={2} >
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{borderRadius:'5px',width:'96px',height:'40px',background:'#E6E8F3'}}>
+                      <Typography sx={{fontSize:'12px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>1-0</Typography>
+                      <Typography sx={{fontSize:'16px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>{matches.onenil}</Typography>
+                    </Stack>
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{borderRadius:'5px',width:'96px',height:'40px',background:'#E6E8F3'}}>
+                      <Typography sx={{fontSize:'12px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>1-1</Typography>
+                      <Typography sx={{fontSize:'16px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>{matches.oneone}</Typography>
+                    </Stack>
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{borderRadius:'5px',width:'96px',height:'40px',background:'#E6E8F3'}}>
+                      <Typography sx={{fontSize:'12px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>1-2</Typography>
+                      <Typography sx={{fontSize:'16px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>{matches.onetwo}</Typography>
+                    </Stack>
+                  </Stack>
                 </Stack>
-
-            </Paper>
 
             <Stack direction="row" spacing={3} justifyContent="center" alignItems="flex-start" sx={{ marginTop: "100px", width: "340px" }}>
                 <Stack direction="column">

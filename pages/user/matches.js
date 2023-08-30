@@ -8,6 +8,7 @@ import Ims from '../../public/simps/ball.png'
 import { useRouter } from "next/router";
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 export default function Matches({ footDat }) {
   const [drop,setDrop] = useState(false)
   const [info, setInfo] = useState({})
@@ -39,9 +40,12 @@ border: "1px solid rgba(255, 255, 255, 0.3)"
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div style={{
-        maxWidth: "350px", background: "#03045E",minHeight:'100vh'
+        maxWidth: "350px", background: "#FFFFFF",minHeight:'100vh'
       }}>
-        <Typography variant="h4" sx={{ color: "#E8E5DA", margin: "8px", fontFamily: "'Barlow', sans-serif" }}>List Of Our Favourite Matches</Typography>
+        <Stack direction='row' alignItems='center' spacing={1} sx={{padding:'5px',margin:'2px'}}>
+        <KeyboardArrowLeftOutlinedIcon sx={{width:'24px',height:'24px'}}/>
+        <Typography sx={{fontSize:'16px',fontFamily:'Poppins,sans-serif',fontWeight:'300'}}>Matches</Typography>
+        </Stack>
         <Stack alignItems='center'>
             {
             footDat.map((pro) => {
