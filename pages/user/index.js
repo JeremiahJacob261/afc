@@ -17,22 +17,26 @@ import sal from '../../public/simps/Monthly salary.png'
 import ref from '../../public/simps/Referral Bonus.jpg'
 import Logos from '../../public/logoclean.png'
 import ads2 from '../../public/adse2.png'
-import { Button, Typography, Paper, Container } from "@mui/material";
+import { Button, Typography, Paper, Divider } from "@mui/material";
 import { supabase } from '../api/supabase'
 import Agent from '../../public/posters6.jpg'
+import front from '../../public/front.png'
+import fire from '../../public/Group 2.png'
 import WhatshotIcon from '@mui/icons-material/Whatshot';
-import NotificationsNoneSharpIcon from '@mui/icons-material/NotificationsNoneSharp';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import Ims from '../../public/simps/ball.png'
 import { app } from '../api/firebase';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { FaCircleDollarToSlot } from 'react-icons/fa';
 import { TbMailDollar } from 'react-icons/tb'
-
+import { CgMenuGridR } from 'react-icons/cg'
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 export default function Home() {
   const [anchorEl, setAnchorEl] = useState(null);
   const openr = Boolean(anchorEl);
@@ -128,51 +132,53 @@ export default function Home() {
       >
         {
           trans.map((r) => {
-            if(r.code === 'broadcast'){
+            if (r.code === 'broadcast') {
               return (
 
                 <MenuItem key={r.id}>
                   <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '4px' }}>
                     <TbMailDollar color="#03045E" />
-                    <Typography style={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter',overflowX: "hidden",
-    textOverflow: "ellipsis",
-    display: "-webkit-box",
-    WebkitLineClamp: "2",
-    WebkitBoxOrient: "vertical", }}>{r.username}
+                    <Typography style={{
+                      fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter', overflowX: "hidden",
+                      textOverflow: "ellipsis",
+                      display: "-webkit-box",
+                      WebkitLineClamp: "2",
+                      WebkitBoxOrient: "vertical",
+                    }}>{r.username}
                     </Typography>
                   </Stack>
                 </MenuItem>
               );
-            }else{
-              if(r.username === info.username){
-             return(
-              <MenuItem key={r.id}>
-                <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '4px' }}>
-                  <TbMailDollar color="#03045E" />
-                  <Typography style={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter' }}>You Recieved {r.amount} USDT from <br />admin as {r.code}.
-                  </Typography>
-                </Stack>
-              </MenuItem>
-             )
-              }else{
+            } else {
+              if (r.username === info.username) {
+                return (
+                  <MenuItem key={r.id}>
+                    <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '4px' }}>
+                      <TbMailDollar color="#03045E" />
+                      <Typography style={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter' }}>You Recieved {r.amount} USDT from <br />admin as {r.code}.
+                      </Typography>
+                    </Stack>
+                  </MenuItem>
+                )
+              } else {
 
-              
-              return (
 
-              <MenuItem key={r.id}>
-                <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '4px' }}>
-                  <TbMailDollar color="#03045E" />
-                  <Typography style={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter' }}>You Recieved {r.amount} USDT from <br />{r.username} as Referral Bonus.
-                  </Typography>
-                </Stack>
-              </MenuItem>
-            );
-          }
+                return (
+
+                  <MenuItem key={r.id}>
+                    <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '4px' }}>
+                      <TbMailDollar color="#03045E" />
+                      <Typography style={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter' }}>You Recieved {r.amount} USDT from <br />{r.username} as Referral Bonus.
+                      </Typography>
+                    </Stack>
+                  </MenuItem>
+                );
+              }
             }
-            
+
           })
         }
-        <Stack justifyContent="center" alignItems="center">
+        <Stack justifyContent="center" >
 
           <Button variant="contained" sx={{ width: '80%', background: '#EE8F00' }} onClick={() => {
             router.push('/user/notification');
@@ -184,15 +190,15 @@ export default function Home() {
       {
         //end of menu 
       }
-      <Stack direction="row" style={{ background: '#F5F5F5', width: '100%', height: '64px', padding: '5px' }}
+      <Stack direction="row" style={{ background: '#FFFFFF', width: '100%', height: '64px', padding: '5px' }}
         alignItems='center' justifyContent="space-between">
         <div style={{ display: 'inline-flex', alignItems: 'center' }}>
-          <Image src={Logos} width={30} height={46} alt='logo' />
+          <CgMenuGridR color="black" style={{ width: '24px', height: '24px' }} />
         </div>
-        <Typography style={{ fontSize: '24px', fontWeight: '800', color: '#181AA9', margin: '4px', fontFamily: 'Poppins, sans-serif' }}>AFCFIFA</Typography>
+        <Typography style={{ fontSize: '24px', fontWeight: '800', color: 'black', margin: '4px', fontFamily: 'Noto, serif' }}>AFCFIFA</Typography>
         <div style={{ display: 'inline-flex', alignItems: 'center' }}>
 
-          <NotificationsNoneSharpIcon sx={{ color: 'blue' }}
+          <NotificationsIcon sx={{ color: 'black' }}
             id="basic-button"
             aria-controls={openr ? 'basic-menu' : undefined}
             aria-haspopup="true"
@@ -205,70 +211,110 @@ export default function Home() {
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={drop}
         >
-          <CircularProgress color="inherit" />
+          <SportsSoccerIcon id='balls' sx={{ marginLeft: '8px' }} />
         </Backdrop>
         <Head>
           <title>Welcome - {info ? `${info.username}` : 'Loading...'}</title>
           <link rel="icon" href="/logo_afc.ico" />
         </Head>
-        <Stack sx={{ background: "#03045E", marginTop: '10px' }} spacing={4} justifyContent='center' alignItems='center'>
-          <Typography style={{ fontSize: '32px', fontWeight: '900', fontFamily: 'Poppins, sans-serif', height: '99px', padding: '5px', width: '100%', textAlign: 'left', color: 'white' }}>Welcome, <br /> {info.username}</Typography>
-          <Typography style={{ fontSize: '16px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'white' }}>Current Balance: {Number(info.balance).toFixed(2)} USDT</Typography>
-          <div style={{ background: '#1A1B72', padding: '8px', borderRadius: '5px' }}>
-            <Image src={iv} width={331} height={157} alt='invitation bonus' />
-            <Typography style={{ width: '308px', fontFamily: 'Poppins, sans-serif', color: 'white', fontWeight: 'bold', padding: '8px' }}>Unlimited Invitation Bonus</Typography>
-            <Typography style={{ width: '308px', height: '74px', color: 'white', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
-              On the Account Page, copy the invite link and share to your friends to earn Invitation Bonus
-            </Typography>
-
-            <Link href='/user/account'>
-              <Button style={{ border: '1px solid #03045E', color: 'white', width: '100%' }}>Go To Account Page</Button></Link>
-          </div>
-          <Typography style={{ fontSize: '32px', fontWeight: '900', fontFamily: 'Poppins, sans-serif', height: '51px', padding: '5px', width: '100%', textAlign: 'left', color: 'white' }}>Top Matches</Typography>
-          <Typography style={{ width: '308px', height: '30px', fontSize: '13px', color: 'white', fontFamily: 'Poppins, sans-serif', fontWeight: '200', padding: '2px', margin: '4px' }}>
-            See some of our matches with the best odds
-          </Typography>
-          {
+        <Stack sx={{ background: "white", marginTop: '10px' }} spacing={4} justifyContent='center' >
+          <Typography style={{ fontSize: '16px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '5px', width: '100%', textAlign: 'left', color: 'black' }}>Hello {info.username}</Typography>
+          <Stack direction='row' justifyContent='space-between'>
+            <Stack>
+              <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'black' }}>Current Balance </Typography>
+              <Typography style={{ fontSize: '18px', fontWeight: '600', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'black' }}>{Number(info.balance).toFixed(2)} USDT</Typography>
+            </Stack>
+            <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#E6E8F3', borderRadius: '20px', padding: '8px', width: '95px' }}>
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300px', color: 'black', fontSize: '12px' }}>
+                Account
+              </Typography>
+              <KeyboardArrowRightIcon />
+            </Stack>
+          </Stack>
+          <Divider sx={{ background: 'black' }} />
+          <Stack justifyContent='center' alignItems='center'>
+            <Image src={front} width={344} height={137} alt='invitation bonus' />
+          </Stack>
+          
+          <Stack direction='row' justifyContent='space-between' alignItems='center'>
+            <Stack direction='row' spacing={1}>
+              <Image src={fire} width={24} height={24} />
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '16px', fontWeight: '600' }}>Top Football Matches</Typography>
+            </Stack>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>see all</Typography>
+          </Stack>
+          <Stack direction='row' spacing={3}>
+            <Stack sx={{ background: '#E6E8F3', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>This Week</Typography></Stack>
+            <Stack sx={{ background: '#03045E', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: 'white', fontSize: '12px', fontWeight: '100' }}>Today</Typography></Stack>
+            <Stack sx={{ background: '#E6E8F3', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>Next 3 hrs</Typography></Stack>
+            <Stack sx={{ background: '#E6E8F3', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>Next 30 mins</Typography></Stack>
+          </Stack>
+          <Stack alignItems='center'>
+            {
             footDat.map((pro) => {
               let stams = Date.parse(pro.date + " " + pro.time) / 1000;
               let curren = new Date().getTime() / 1000;
               const league = (pro.league === 'others') ? pro.otherl : pro.league;
+              console.log(new Date(pro.date))
+              console.log(new Date(pro.time))
+              let date = parseInt(new Date(pro.date).getMonth() + 1);
+              let day = new Date(pro.date).getDate();
+              let time = pro.time.substring(0, pro.time.length - 3)
               return (
 
-                <Stack direction="column" alignItems="center"
+                <Stack direction="column" spacing={2} justifyContent='center' alignItems='center'
                   key={"match" + pro.home + pro.away}
                   style={{
-                    marginBottom: "8px", padding: "4px",
+                    marginBottom: "8px", padding: "18.5px",
                     display: (stams < curren) ? 'none' : 'visible',
-                    background: '#1A1B72',
-                    width: '100%',
-                    borderRadius: '5px'
+                    background: '#EFEFEF',
+                    width: '343px',
+                    borderRadius: '5px',
+                    height: '204px'
                   }} onClick={() => {
                     setDrop(true)
                     //register/000208
                     router.push("/user/match/" + pro.match_id)
                   }}>
-                  <Typography style={{ color: '#DFA100', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{pro.date} </Typography>
-
-                  <Stack direction="row" spacing={4}>
-                    <Stack alignItems="center">
-                      <Image src={Ims} alt="home" width='53' height='53' />
-                      <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif', fontSize: '13px', height: '44px', padding: '4px', width: '104px', textAlign: 'center' }}>{pro.home}</Typography>
+                  <Stack direction='column'>
+                    <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{league} </Typography>
+                    <Divider sx={{ background: 'black' }} />
+                  </Stack>
+                  <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
+                  <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
+                    <Image src={Ims} width={50} height={50}/>
+                    <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
+                  </Stack>
+                  <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
+                    <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
+                   <p>|</p>
+                    <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
+                  </Stack>
+                  <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
+                    <Image src={Ims} width={50} height={50}/>
+                    <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{pro.away}</Typography>
+                  </Stack>
+                  </Stack>
+                  <Stack direction='row' spacing={2} >
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{borderRadius:'5px',width:'96px',height:'40px',background:'#E6E8F3'}}>
+                      <Typography sx={{fontSize:'12px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>1-0</Typography>
+                      <Typography sx={{fontSize:'16px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>{pro.onenil}</Typography>
                     </Stack>
-                    <Stack spacing={2} alignItems="center" justifyContent="center">
-                      <Typography style={{ color: '#181AA9', fontWeight: '800', fontSize: '24' }}>VS</Typography>
-                      <Typography style={{ color: 'white', fontWeight: 'bold', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{pro.time} </Typography>
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{borderRadius:'5px',width:'96px',height:'40px',background:'#E6E8F3'}}>
+                      <Typography sx={{fontSize:'12px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>1-1</Typography>
+                      <Typography sx={{fontSize:'16px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>{pro.oneone}</Typography>
                     </Stack>
-                    <Stack alignItems="center">
-                      <Image src={Ims} alt="away" width='53' height='53' />
-                      <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif', fontSize: '13px', height: '44px', padding: '4px', width: '104px', textAlign: 'center' }}>{pro.away}</Typography>
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{borderRadius:'5px',width:'96px',height:'40px',background:'#E6E8F3'}}>
+                      <Typography sx={{fontSize:'12px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>1-2</Typography>
+                      <Typography sx={{fontSize:'16px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'black'}}>{pro.onetwo}</Typography>
                     </Stack>
                   </Stack>
-                  <Typography style={{ textAlign: 'center', color: '#9D9EF1', fontSize: '13px', width: '100%' }}>{league}</Typography>
                 </Stack>
               )
             })
           }
+          </Stack>
+          
           <Button style={{ background: '#181AA9', color: 'white', borderRadius: '5px', width: '100%', height: '57px' }}
             onClick={() => {
               router.push('/user/matches')

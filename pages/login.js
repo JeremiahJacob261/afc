@@ -1,4 +1,4 @@
-import React, { useState,Suspense  } from "react";
+import React, { useState, Suspense } from "react";
 import Head from "next/head";
 import { Avatar, Box, Stack, OutlinedInput, Button, Typography, Divider } from "@mui/material";
 import InputLabel from '@mui/material/InputLabel';
@@ -171,20 +171,20 @@ export default function Login() {
     <Stack
       direction="column"
       alignItems="center"
-      spacing={2}
+      spacing={10}
       style={{
         padding: "15px",
         overflowX: "hidden",
         maxWidth: "100%",
         minHeight: "100vh",
         background: '#0B122C'
-        ,position:'relative'
+        , position: 'relative'
       }}>
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={drop}
       >
-        <SportsSoccerIcon id='balls' sx={{marginLeft:'8px'}}/>
+        <SportsSoccerIcon id='balls' sx={{ marginLeft: '8px' }} />
       </Backdrop>
       <Head>
         <title>Login</title>
@@ -196,64 +196,66 @@ export default function Login() {
         open={open}
         onClose={handleClose}
       />
-  <Stack direction="column" spacing={4} justifyContent="center" alignItems="center">
-            <Link href="/" style={{ textDecoration: "none" }}>
-              <Typography style={{ fontFamily: 'Noto Serif, serif', color: "white", fontWeight: '400', fontSize: '20px' }}>AFCFIFA </Typography>
-            </Link>
-            <Typography style={{ fontFamily: 'Poppins,sans-serif', color: 'white', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
-            Dont miss a minute of the action! Sign in 
-            </Typography>
-            <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: 'white', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
+      <Stack direction='column' spacing={3}>
+        <Stack direction="column" spacing={2} justifyContent="center" alignItems="center">
+          <Link href="/" style={{ textDecoration: "none" }}>
+            <Typography style={{ fontFamily: 'Noto Serif, serif', color: "white", fontWeight: '400', fontSize: '20px' }}>AFCFIFA </Typography>
+          </Link>
+          <Typography style={{ fontFamily: 'Poppins,sans-serif', color: 'white', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
+            Dont miss a minute of the action! Sign in
+          </Typography>
+          <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: 'white', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
             Enter the correct information provided to Login to your  account
-            </Typography>
-          </Stack>
-      <Stack direction="column" spacing={4} sx={{width:'343px'}}>
-      <TextField id="outlined-basic" label="Email Or Username" variant="filled"
-       sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white', } }}
-       value={email}
-        onChange={(e) => {
-          setEmail(e.target.value)
-        }}
-      />
-      <FormControl
-       sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white', } }}
-       variant="filled">
-        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-        <OutlinedInput
-          id="outlined-adornment-password"
-          type={values.showPassword ? 'text' : 'password'}
-          value={values.password}
-          onChange={handleChange('password')}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleClickShowPassword}
-                onMouseDown={handleMouseDownPassword}
-                edge="end"
-              >
-                {values.showPassword ? <VisibilityOff sx={{color:'whitesmoke'}} /> : <Visibility sx={{color:'white'}} />}
-              </IconButton>
-            </InputAdornment>
-          }
-          label="Password"
-        />
-      </FormControl>
+          </Typography>
+        </Stack>
+        <Stack direction="column" spacing={4} sx={{ width: '343px' }}>
+          <TextField id="outlined-basic" label="Email Or Username" variant="filled"
+            sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white', } }}
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value)
+            }}
+          />
+          <FormControl
+            sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white', } }}
+            variant="filled">
+            <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-password"
+              type={values.showPassword ? 'text' : 'password'}
+              value={values.password}
+              onChange={handleChange('password')}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {values.showPassword ? <VisibilityOff sx={{ color: 'whitesmoke' }} /> : <Visibility sx={{ color: 'white' }} />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="Password"
+            />
+          </FormControl>
+        </Stack>
       </Stack>
-      <Stack direction="column" spacing={2} justifyContent='center' alignItems='center' sx={{width:'343px',position:'absolute',bottom:55}}>
-         <Button variant="contained" sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', background: '#FE9D16' }}
-       onClick={login}>
-        <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "whitesmoke" }}>Login</Typography>
-      </Button>
-      <Link href="/passwordreset" style={{ textDecoration: 'white' }}>
-         <Typography style={{ color: "white", fontSize: '14px', fontWeight: '200',opacity:'0.7',fontFamily:'Poppins,sans-serif' }}>Forgotten Password ?</Typography>
-         <Divider sx={{background:'white'}}/>
-      </Link>
-      <Link href="/register/000208" style={{ width:'100%',textAlign:'center',textDecoration: "none", color: "white", fontSize: '15px', fontWeight: '400',fontFamily:'Poppins,sans-serif' }}>Dont have an Account ? 
-        Create Account
+      <Stack direction="column" spacing={2} justifyContent='center' alignItems='center' sx={{ width: '343px', marginTop: '200px' }}>
+        <Button variant="contained" sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%',fontWeight:'400', background: '#FE9D16' }}
+          onClick={login}>
+          <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "whitesmoke" }}>Login</Typography>
+        </Button>
+        <Link href="/passwordreset" style={{ textDecoration: 'white' }}>
+          <Typography style={{ color: "white", fontSize: '14px', fontWeight: '200', opacity: '0.7', fontFamily: 'Poppins,sans-serif' }}>Forgotten Password ?</Typography>
+          <Divider sx={{ background: 'white' }} />
+        </Link>
+        <Link href="/register/000208" style={{ width: '100%', textAlign: 'center', textDecoration: "none", color: "white", fontSize: '15px', fontWeight: '400', fontFamily: 'Poppins,sans-serif' }}>Dont have an Account ?
+          Create Account
 
-      </Link>
+        </Link>
       </Stack>
-     </Stack>
+    </Stack>
   )
 }

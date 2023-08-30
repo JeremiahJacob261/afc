@@ -206,9 +206,11 @@ export default function Register({ refer }) {
 
 
   return (
-    <Stack justifyContent="center" alignItems="center" style={{
-      background: "#0B122C", width: '100%',minHeight:'100vh'
-    }}>
+    <Stack justifyContent="center" alignItems="center"
+      spacing={5}
+      style={{
+        background: "#0B122C", width: '100%', minHeight: '100vh'
+      }}>
       <Head>
         <title>Register</title>
         <meta name="description" content="Register With us to get the latest betting market and fantantic Bonus" />
@@ -226,122 +228,124 @@ export default function Register({ refer }) {
         >
           <CircularProgress color="inherit" />
         </Backdrop>
-        <Stack direction="column"
-          justifyContent="center"
-          alignItems="center"
-          spacing={2}
-          className="glass"
-          sx={{ height: "100%", marginTop: "15px", padding: "10px", backgound: "#495265" }}>
-          <Stack direction="column" spacing={4} justifyContent="center" alignItems="center">
-            <Link href="/" style={{ textDecoration: "none" }}>
-              <Typography style={{ fontFamily: 'Noto Serif, serif', color: "white", fontWeight: '400', fontSize: '20px' }}>AFCFIFA </Typography>
-            </Link>
-            <Typography style={{ fontFamily: 'Poppins,sans-serif', color: 'white', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
-              Sign up now and get a welcome bonus!
-            </Typography>
-            <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: 'white', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
-              Enter the correct information provided to create an account
-            </Typography>
-          </Stack>
+        <Stack spacing={5} sx={{padding:'8px'}}>
+          <Stack direction="column"
+            justifyContent="center"
+            alignItems="center"
+            spacing={2}
+            className="glass"
+            sx={{ height: "100%", marginTop: "15px", padding: "10px", backgound: "#495265" }}>
+            <Stack direction="column" spacing={4} justifyContent="center" alignItems="center">
+              <Link href="/" style={{ textDecoration: "none" }}>
+                <Typography style={{ fontFamily: 'Noto Serif, serif', color: "white", fontWeight: '400', fontSize: '20px' }}>AFCFIFA </Typography>
+              </Link>
+              <Typography style={{ fontFamily: 'Poppins,sans-serif', color: 'white', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
+                Sign up now and get a welcome bonus!
+              </Typography>
+              <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: 'white', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
+                Enter the correct information provided to create an account
+              </Typography>
+            </Stack>
 
-          <TextField id="outlined-basic" label="Username" variant="outlined"
-            sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white', } }}
-            value={username}
-            onChange={(e) => {
-              setUsername(e.target.value)
-            }}
-          />
-          <TextField id="outlined-basic" label="Email" variant="outlined"
-            sx={{ fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white' } }}
-            value={email}
-            type='email'
-            onChange={(e) => {
-              setEmail(e.target.value)
-            }}
-          />
-          <TextField id="outlined-basic" label="Invite Code" variant="outlined"
-            value={idR}
-            disabled
-            sx={{ fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white' } }}
-            onChange={(e) => {
-              setidR(e.target.value)
-            }} />
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Code</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={age}
-              label="+91"
-              sx={{ fontSize: '14', color: 'white', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white' } }}
+            <TextField id="outlined-basic" label="Username" variant="outlined"
+              sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white', } }}
+              value={username}
               onChange={(e) => {
-                setAge(e.target.value);
+                setUsername(e.target.value)
               }}
-            >
+            />
+            <TextField id="outlined-basic" label="Email" variant="outlined"
+              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white' } }}
+              value={email}
+              type='email'
+              onChange={(e) => {
+                setEmail(e.target.value)
+              }}
+            />
+            <TextField id="outlined-basic" label="Invite Code" variant="outlined"
+              value={idR}
+              disabled
+              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white' } }}
+              onChange={(e) => {
+                setidR(e.target.value)
+              }} />
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Code</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={age}
+                label="+91"
+                sx={{ fontSize: '14', color: 'white', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white' } }}
+                onChange={(e) => {
+                  setAge(e.target.value);
+                }}
+              >
 
-              {
-                codes.countries.map((c) => {
-                  return (
-                    <MenuItem value={c.code} key={c.name} sx={{ color: 'white', background: '#172242' }}>{c.code} {c.name}</MenuItem>
-                  )
-                })
-              }
-              {/* {<MenuItem value='+1'>+1</MenuItem>
+                {
+                  codes.countries.map((c) => {
+                    return (
+                      <MenuItem value={c.code} key={c.name} sx={{ color: 'white', background: '#172242' }}>{c.code} {c.name}</MenuItem>
+                    )
+                  })
+                }
+                {/* {<MenuItem value='+1'>+1</MenuItem>
                 <MenuItem value='+255'>+255</MenuItem>
                 <MenuItem value='+55'>+55</MenuItem>
                 <MenuItem value='+52'>+52</MenuItem>
                 <MenuItem value='+54'>+54</MenuItem>
                 <MenuItem value='+234'>+234</MenuItem>
                 <MenuItem value='+62'>+62</MenuItem> */
-              }
+                }
 
-            </Select>
-          </FormControl>
-          <TextField id="outlined-basic" label="Phone"
-            type="number"
-            variant="outlined"
-            sx={{ fontSize: '14', fontWeight: '300', border: '1px solid white', color: 'white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white' } }}
-            value={phone}
-            onChange={(e) => {
-              setPhone(e.target.value);
-            }} />
+              </Select>
+            </FormControl>
+            <TextField id="outlined-basic" label="Phone"
+              type="number"
+              variant="outlined"
+              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid white', color: 'white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white' } }}
+              value={phone}
+              onChange={(e) => {
+                setPhone(e.target.value);
+              }} />
 
-          <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
-            <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-            <OutlinedInput
-              id="outlined-adornment-password"
-              type={values.showPassword ? 'text' : 'password'}
-              value={values.password}
-              onChange={handleChange('password')}
+            <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-password"
+                type={values.showPassword ? 'text' : 'password'}
+                value={values.password}
+                onChange={handleChange('password')}
+                sx={{ fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white' } }}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {values.showPassword ? <VisibilityOff sx={{ color: 'whitesmoke' }} /> : <Visibility sx={{ color: 'white' }} />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Enter Password"
+              />
+            </FormControl>
+            <TextField
+              required
+              id="outlined-required"
+              label="Confirm Password"
+              type="password"
               sx={{ fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white' } }}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Enter Password"
+              value={cpassword}
+              onChange={(e) => {
+                setcPassword(e.target.value);
+              }}
             />
-          </FormControl>
-          <TextField
-            required
-            id="outlined-required"
-            label="Confirm Password"
-            type="password"
-            sx={{ fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white' } }}
-            value={cpassword}
-            onChange={(e) => {
-              setcPassword(e.target.value);
-            }}
-          />
-
-          <Farm.Check
+          </Stack>
+          <Stack spacing={3} sx={{margin:'8px',padding:'8px'}}>
+            <Farm.Check
             type="checkbox"
             label="Do you accept our Terms and Conditions ?"
             id="age"
@@ -393,6 +397,8 @@ export default function Register({ refer }) {
               <Link href="/login" style={{ textDecoration: "none", fontSize: '14px', fontWeight: '100', color: "white", opacity: '1.0', fontFamily: 'Poppins,sans-serif' }}>Login</Link></Typography>
 
           </Stack>
+          </Stack>
+          
 
         </Stack>
       </Box>
