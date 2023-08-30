@@ -95,16 +95,16 @@ export default function Viewbets({ bets }) {
             </Head>
             <Stack direction="column" sx={{padding:'10px',minHeight:'80vh'}}>
                 <Typography style={{color:'#EE8F00',fontFamily:'Poppins,sans-serif',width:'100%',textAlign:'center',fontSize:'20px'}}>Bet Details</Typography>
-                <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>Match Name :</Typography>
-                <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>{bet.home} vs {bet.away}</Typography>
-                <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>Stake : {bet.stake} USDT</Typography>
-                <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>Time : {bet.time}</Typography>
-                <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>Date : {bet.date} </Typography>
-                <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>%odds : {bet.odd}%</Typography>
-                <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>League Name:{(league.league === 'other') ? league.league : league.otherl}</Typography>
+                <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif' }}>Match Name :</Typography>
+                <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif' }}>{bet.home} vs {bet.away}</Typography>
+                <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif' }}>Stake : {bet.stake} USDT</Typography>
+                <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif' }}>Time : {bet.time}</Typography>
+                <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif' }}>Date : {bet.date} </Typography>
+                <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif' }}>%odds : {bet.odd}%</Typography>
+                <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif' }}>League Name:{(league.league === 'other') ? league.league : league.otherl}</Typography>
                
-                <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>Market Chosen : {bet.market}</Typography>
-                <Typography style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>Potential Winnings : {bet.aim} USDT</Typography>
+                <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif' }}>Market Chosen : {bet.market}</Typography>
+                <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif' }}>Potential Winnings : {bet.aim} USDT</Typography>
                 <Stack direction="row" justifyContent="space-between">
                     <Typography direction="column" style={{ color: 'yellow', fontFamily: 'Poppins, sans-serif' }}>Results</Typography>
 
