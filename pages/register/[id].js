@@ -43,8 +43,8 @@ export default function Register({ refer }) {
   const [lvlb, setLvlb] = useState('');
   const [email, setEmail] = useState('')
   const auth = getAuth(app);
-  
-          const nRef = generateRandomSevenDigitNumber().toString();
+
+  const nRef = generateRandomSevenDigitNumber().toString();
   const [values, setValues] = React.useState({
     amount: '',
     password: '',
@@ -102,14 +102,14 @@ export default function Register({ refer }) {
             .from('users')
             .select()
             .eq('username', user.displayName);
-           localStorage.setItem('signRef',data[0].newrefer);
+          localStorage.setItem('signRef', data[0].newrefer);
           console.log(data);
         }
-    GET();
+        GET();
         console.log(localStorage.getItem('signInfo'))
-        localStorage.setItem('signedIn',true);
-        localStorage.setItem('signUid',uid);
-        localStorage.setItem('signName',user.displayName);
+        localStorage.setItem('signedIn', true);
+        localStorage.setItem('signUid', uid);
+        localStorage.setItem('signName', user.displayName);
         route.push('/user');
       } else {
         // User is signed out
@@ -121,23 +121,23 @@ export default function Register({ refer }) {
         localStorage.removeItem('signRef');
       }
     });
-    async function lvls(){
-      try{
-const { data, error } = await supabase
-        .from('users')
-        .select()
-        .eq('newrefer', refer)
-      console.log(data);
-      console.log(refer);
-      setLvla(data[0].refer);
-      setLvlb(data[0].lvla);
-      }catch(e){
+    async function lvls() {
+      try {
+        const { data, error } = await supabase
+          .from('users')
+          .select()
+          .eq('newrefer', refer)
+        console.log(data);
+        console.log(refer);
+        setLvla(data[0].refer);
+        setLvlb(data[0].lvla);
+      } catch (e) {
         console.log(e);
         setLvla('');
-      setLvlb('');
+        setLvlb('');
       }
-      
-}
+
+    }
     lvls();
   }, []);
 
@@ -150,7 +150,7 @@ const { data, error } = await supabase
         const user = userCredential.user;
         // ...
         console.log(user.uid);
-        
+
         const upload = async () => {
 
           console.log(nRef)
@@ -170,12 +170,12 @@ const { data, error } = await supabase
             })
           console.log(error);
           console.log(data);
-          localStorage.setItem('signedIn',true);
-        localStorage.setItem('signUid',user.uid);
-        localStorage.setItem('signName',user.displayName);
-        localStorage.setItem('signRef',nRef);
+          localStorage.setItem('signedIn', true);
+          localStorage.setItem('signUid', user.uid);
+          localStorage.setItem('signName', user.displayName);
+          localStorage.setItem('signRef', nRef);
         }
-         //getlvl2
+        //getlvl2
         upload();
         updateRef();
         updateRefb();
@@ -207,7 +207,7 @@ const { data, error } = await supabase
 
   return (
     <Stack justifyContent="center" alignItems="center" style={{
-      background: "#172242", width: '100%'
+      background: "#0B122C", width: '100%'
     }}>
       <Head>
         <title>Register</title>
@@ -232,31 +232,37 @@ const { data, error } = await supabase
           spacing={2}
           className="glass"
           sx={{ height: "100%", marginTop: "15px", padding: "10px", backgound: "#495265" }}>
-          <Link href="/" style={{ textDecoration: "none" }}>
-            <Typography variant="h1" style={{ fontFamily: 'Poppins, sans-serif', color: "#181AA9", fontWeight: '900', fontSize: '64px' }}>AFCFIFA </Typography>
+          <Stack direction="column" spacing={4} justifyContent="center" alignItems="center">
+            <Link href="/" style={{ textDecoration: "none" }}>
+              <Typography style={{ fontFamily: 'Noto Serif, serif', color: "white", fontWeight: '400', fontSize: '20px' }}>AFCFIFA </Typography>
+            </Link>
+            <Typography style={{ fontFamily: 'Poppins,sans-serif', color: 'white', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
+              Sign up now and get a welcome bonus!
+            </Typography>
+            <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: 'white', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
+              Enter the correct information provided to create an account
+            </Typography>
+          </Stack>
 
-          </Link>
-          <Typography variant='subtitle' sx={{ fontFamily: 'Poppins, sans-serif', fontSize: "15px", color: "#181AA9" }}>
-            Investment Bet</Typography>
           <TextField id="outlined-basic" label="Username" variant="outlined"
+            sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white', } }}
             value={username}
             onChange={(e) => {
               setUsername(e.target.value)
             }}
-            style={{ width: "100%", background: "#F2F4CB" }}
           />
           <TextField id="outlined-basic" label="Email" variant="outlined"
+            sx={{ fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white' } }}
             value={email}
             type='email'
             onChange={(e) => {
               setEmail(e.target.value)
             }}
-            style={{ width: "100%", background: "#F2F4CB" }}
           />
           <TextField id="outlined-basic" label="Invite Code" variant="outlined"
             value={idR}
             disabled
-            style={{ width: "100%", background: "#F2F4CB" }}
+            sx={{ fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white' } }}
             onChange={(e) => {
               setidR(e.target.value)
             }} />
@@ -267,7 +273,7 @@ const { data, error } = await supabase
               id="demo-simple-select"
               value={age}
               label="+91"
-              style={{ width: '100%', background: "#F2F4CB" }}
+              sx={{ fontSize: '14', color: 'white', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white' } }}
               onChange={(e) => {
                 setAge(e.target.value);
               }}
@@ -276,7 +282,7 @@ const { data, error } = await supabase
               {
                 codes.countries.map((c) => {
                   return (
-                    <MenuItem value={c.code} key={c.name}>{c.code} {c.name}</MenuItem>
+                    <MenuItem value={c.code} key={c.name} sx={{ color: 'white', background: '#172242' }}>{c.code} {c.name}</MenuItem>
                   )
                 })
               }
@@ -294,7 +300,7 @@ const { data, error } = await supabase
           <TextField id="outlined-basic" label="Phone"
             type="number"
             variant="outlined"
-            style={{ width: '100%', background: "#F2F4CB", }}
+            sx={{ fontSize: '14', fontWeight: '300', border: '1px solid white', color: 'white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white' } }}
             value={phone}
             onChange={(e) => {
               setPhone(e.target.value);
@@ -307,7 +313,7 @@ const { data, error } = await supabase
               type={values.showPassword ? 'text' : 'password'}
               value={values.password}
               onChange={handleChange('password')}
-              style={{ width: "100%", background: "#F2F4CB" }}
+              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white' } }}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -320,7 +326,7 @@ const { data, error } = await supabase
                   </IconButton>
                 </InputAdornment>
               }
-              label="Password"
+              label="Enter Password"
             />
           </FormControl>
           <TextField
@@ -328,7 +334,7 @@ const { data, error } = await supabase
             id="outlined-required"
             label="Confirm Password"
             type="password"
-            style={{ width: "100%", background: "#F2F4CB" }}
+            sx={{ fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white' } }}
             value={cpassword}
             onChange={(e) => {
               setcPassword(e.target.value);
@@ -339,48 +345,53 @@ const { data, error } = await supabase
             type="checkbox"
             label="Do you accept our Terms and Conditions ?"
             id="age"
+            sx={{ fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif' }}
             value={agecheck}
             onChange={(a) => {
               setAgecheck(a.target.value)
             }}
             style={{ color: "white" }}
           />
-          <Button variant="contained" sx={{ padding: "10px", width: '100%', background: '#EE8F00' }} onClick={() => {
-            if (phone.length >= 9) {
+          <Button variant="contained" sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', background: '#FE9D16' }}
+            onClick={() => {
+              if (phone.length >= 9) {
 
-              const checkDuplicate = async () => {
-                const { count, error } = await supabase
-                  .from('users')
-                  .select('*', { count: 'exact', head: true })
-                  .eq('username', username)
-                console.log(count);
-                if (count > 0) {
-                  alert("Username Already Exist!");
-                } else {
-                  if (agecheck === false) {
-                    alert('Please click the checkBox before you continue')
+                const checkDuplicate = async () => {
+                  const { count, error } = await supabase
+                    .from('users')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('username', username)
+                  console.log(count);
+                  if (count > 0) {
+                    alert("Username Already Exist!");
                   } else {
-                    if(cpassword === values.password){
-                      
-                    signup()
-                    }else{
-                      alert('ensure the passowords are same')
+                    if (agecheck === false) {
+                      alert('Please click the checkBox before you continue')
+                    } else {
+                      if (cpassword === values.password) {
+
+                        signup()
+                      } else {
+                        alert('ensure the passowords are same')
+                      }
+
                     }
-                    
+
                   }
-
                 }
+                checkDuplicate()
+
+              } else {
+                alert('Please Input a Complete Phone Number! at least 9 digits')
               }
-              checkDuplicate()
-
-            } else {
-              alert('Please Input a Complete Phone Number! at least 9 digits')
-            }
-          }}>
-            <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: '#03045E' }}>Sign Up</Typography>
+            }}>
+            <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: '#03045E', fontSize: '14px', color: 'white' }}>Register</Typography>
           </Button>
+          <Stack direction="row" alignItems="center" justifyContent="center" sx={{ height: '22px' }} spacing={1}>
+            <Typography sx={{ color: "white", fontSize: '14px', fontWeight: '100', opacity: '0.7', fontFamily: 'Poppins,sans-serif' }}>Already have an Account ? </Typography>
+            <Typography><Link href="/login" style={{ textDecoration: "none", fontSize: '14px', fontWeight: '100', color: "white", opacity: '1.0', fontFamily: 'Poppins,sans-serif' }}>Login</Link></Typography>
 
-          <Typography sx={{ color: "#EE8F00" }}>Already have an Account ? <Link href="/login" style={{ textDecoration: "none", color: "whitesmoke" }}>Login</Link></Typography>
+          </Stack>
 
         </Stack>
       </Box>

@@ -75,16 +75,16 @@ export default function Login() {
             .from('users')
             .select()
             .eq('username', user.displayName);
-           localStorage.setItem('signRef',data[0].newrefer);
+          localStorage.setItem('signRef', data[0].newrefer);
           console.log(data);
         }
-    GET();
+        GET();
 
         console.log(localStorage.getItem('signInfo'))
-        localStorage.setItem('signedIn',true);
-        localStorage.setItem('signUid',uid);
-        localStorage.setItem('signName',user.displayName);
-       
+        localStorage.setItem('signedIn', true);
+        localStorage.setItem('signUid', uid);
+        localStorage.setItem('signName', user.displayName);
+
         router.push('/user');
       } else {
         // User is signed out
@@ -97,87 +97,88 @@ export default function Login() {
       }
     });
   }, [])
-  
+
   const login = async () => {
-   
-    async function findemail(){
-      const {data,error} = await supabase
-      .from('users')
-      .select('email')
-      .eq('username',email)
+
+    async function findemail() {
+      const { data, error } = await supabase
+        .from('users')
+        .select('email')
+        .eq('username', email)
       signInWithEmailAndPassword(auth, data[0].email, values.password)
-      .then((userCredential) => {
-        // Signed in 
-        const user = userCredential.user;
-        // ...
+        .then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+          // ...
 
-        alert('you are logged in');
-        localStorage.setItem('signedIn',true);
-        localStorage.setItem('signUid',user.uid);
-        localStorage.setItem('signName',user.displayName);
-        localStorage.setItem('signRef',data[0].newrefer);
-        setDrop(false)
-        router.push('/user');
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(error.message)
-        alert(errorCode);
-        setDrop(false)
-      });
+          alert('you are logged in');
+          localStorage.setItem('signedIn', true);
+          localStorage.setItem('signUid', user.uid);
+          localStorage.setItem('signName', user.displayName);
+          localStorage.setItem('signRef', data[0].newrefer);
+          setDrop(false)
+          router.push('/user');
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(error.message)
+          alert(errorCode);
+          setDrop(false)
+        });
     }
-setDrop(true)
+    setDrop(true)
     localStorage.clear()
-    if(!email.includes("@")){
+    if (!email.includes("@")) {
       const { count, error } = await supabase
-      .from('users')
-      .select('*', { count: 'exact', head: true })
-      .eq('username', email)
-    console.log(count);
-    if (count > 0) {
-      
-      findemail()
-    }else{
-alert('username does not exist')
-setDrop(false)
-    }
-    }else{
+        .from('users')
+        .select('*', { count: 'exact', head: true })
+        .eq('username', email)
+      console.log(count);
+      if (count > 0) {
+
+        findemail()
+      } else {
+        alert('username does not exist')
+        setDrop(false)
+      }
+    } else {
       signInWithEmailAndPassword(auth, email, values.password)
-      .then((userCredential) => {
-        // Signed in 
-        const user = userCredential.user;
-        // ...
+        .then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+          // ...
 
-        alert('you are logged in');
+          alert('you are logged in');
 
-        setDrop(false)
-        router.push('/user');
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(error.message)
-        alert(errorCode);
-        setDrop(false)
-      });
+          setDrop(false)
+          router.push('/user');
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(error.message)
+          alert(errorCode);
+          setDrop(false)
+        });
     }
-    
-    
+
+
   }
 
 
   return (
     <Stack
       direction="column"
-      justifyContent="center"
       alignItems="center"
       spacing={2}
       style={{
         padding: "15px",
         overflowX: "hidden",
         maxWidth: "100%",
-        minHeight: "85vh"
+        minHeight: "100vh",
+        background: '#0B122C'
+        ,position:'relative'
       }}>
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -191,57 +192,67 @@ setDrop(false)
         <link rel="icon" href="/logo_afc.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-        <SimpleDialog
-          open={open}
-          onClose={handleClose}
+      <SimpleDialog
+        open={open}
+        onClose={handleClose}
+      />
+  <Stack direction="column" spacing={4} justifyContent="center" alignItems="center">
+            <Link href="/" style={{ textDecoration: "none" }}>
+              <Typography style={{ fontFamily: 'Noto Serif, serif', color: "white", fontWeight: '400', fontSize: '20px' }}>AFCFIFA </Typography>
+            </Link>
+            <Typography style={{ fontFamily: 'Poppins,sans-serif', color: 'white', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
+            Don’t miss a minute of the action! Sign in 
+            </Typography>
+            <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: 'white', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
+            Enter the correct information provided to Login to your  account
+            </Typography>
+          </Stack>
+      <Stack direction="column" spacing={4} sx={{width:'343px'}}>
+      <TextField id="outlined-basic" label="Email Or Username" variant="filled"
+       sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white', } }}
+       value={email}
+        onChange={(e) => {
+          setEmail(e.target.value)
+        }}
+      />
+      <FormControl
+       sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white', } }}
+       variant="filled">
+        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+        <OutlinedInput
+          id="outlined-adornment-password"
+          type={values.showPassword ? 'text' : 'password'}
+          value={values.password}
+          onChange={handleChange('password')}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+                onMouseDown={handleMouseDownPassword}
+                edge="end"
+              >
+                {values.showPassword ? <VisibilityOff sx={{color:'whitesmoke'}} /> : <Visibility sx={{color:'white'}} />}
+              </IconButton>
+            </InputAdornment>
+          }
+          label="Password"
         />
-        <Link href="/" style={{ textDecoration: "none"}}>
-<Typography variant="h1" style={{ fontFamily: 'Poppins, sans-serif', color: "#181AA9",fontWeight:'900',fontSize:'64px' }}>AFCFIFA </Typography>
-       
-        </Link>
-         <Typography variant='subtitle' sx={{ fontFamily: 'Poppins, sans-serif', fontSize: "15px", color: "#181AA9" }}>
-          Investment Bet</Typography>
-          <Typography variant="h1" style={{ fontFamily: 'Poppins, sans-serif', color: "white",fontWeight:'900',fontSize:'32px' }}>LOGIN </Typography>
-        
-        <TextField id="outlined-basic" label="Email Or Username" variant="filled"
-          sx={{ width: "100%", background: "#F2F4CB"}}
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value)
-          }}
-        />
-                <FormControl 
-                sx={{ m: 1, width: "100%", background: "#F2F4CB"}} variant="filled">
-          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-password"
-            type={values.showPassword ? 'text' : 'password'}
-            value={values.password}
-            onChange={handleChange('password')}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Password"
-          />
-        </FormControl>
-       <Link href="/passwordreset" style={{textDecoration:'none'}}> <Typography style={{ textDecoration: "none", color: "#9D9EF1",fontSize:'15px',fontWeight:'400' }}>forgotten password</Typography>
-       </Link>
-        <Button variant="contained" sx={{ width:'191px',height:'65px',background:'#21227A'  }} onClick={login}>
-          <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "whitesmoke"}}>Login</Typography>
-        </Button>
- <Link href="/register/000208" style={{ textDecoration: "none", color: "#DFA100",fontSize:'15px',fontWeight:'400' }}>Dont have an Account ? <br/>
-Create Account
+      </FormControl>
+      </Stack>
+      <Stack direction="column" spacing={2} justifyContent='center' alignItems='center' sx={{width:'343px',position:'absolute',bottom:22}}>
+         <Button variant="contained" sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', background: '#FE9D16' }}
+       onClick={login}>
+        <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "whitesmoke" }}>Login</Typography>
+      </Button>
+      <Link href="/passwordreset" style={{ textDecoration: 'underline' }}> <Typography style={{ color: "white", fontSize: '14px', fontWeight: '200',opacity:'0.7',fontFamily:'Poppins,sans-serif' }}>Forgotten Password ?</Typography>
+      </Link>
+      <Link href="/register/000208" style={{ width:'100%',textAlign:'center',textDecoration: "none", color: "white", fontSize: '15px', fontWeight: '400',fontFamily:'Poppins,sans-serif' }}>Dont have an Account ? 
+        Create Account
 
-          </Link>
+      </Link>
+      </Stack>
+     
 
     </Stack>
   )
