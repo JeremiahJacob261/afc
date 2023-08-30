@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Head from "next/head";
-import { Avatar, Box, Stack, OutlinedInput, Button, Typography } from "@mui/material";
+import { Avatar, Box, Stack, OutlinedInput, Button, Typography,Divider } from "@mui/material";
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
