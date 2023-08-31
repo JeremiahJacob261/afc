@@ -466,7 +466,7 @@ export default function Match({ matchDat }) {
                                                 'username': info.username,
                                                 'started': false,
                                                 'stake': Number(stake),
-                                                'profit': Number(((odds * stake) / 100)).toFixed(2),
+                                                'profit': Number(((matches[picked] * stake) / 100)).toFixed(2),
                                                 'aim': profit,
                                                 "home": matches.home,
                                                 "away": matches.away,
