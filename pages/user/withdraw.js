@@ -1,4 +1,4 @@
-import { Button, Stack, TextField, Typography, MenuItem } from "@mui/material";
+import { Button, Stack, TextField, Typography, MenuItem,Divider } from "@mui/material";
 import React, { useState, useContext, useEffect } from "react";
 import { supabase } from '../api/supabase'
 import { AppContext } from '../api/Context'
@@ -12,10 +12,13 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
+import Modal from '@mui/material/Modal';
 import Cover from './cover'
 import FormControl from '@mui/material/FormControl';
 import { getAuth, signOut } from "firebase/auth";
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
+import Wig from '../../public/icon/wig.png'
+import Image from 'next/image'
 export default function Deposit() {
   //86f36a9d-c8e8-41cb-a8aa-3bbe7b66d0a5
   const [info, setInfo] = useState({});
@@ -23,9 +26,11 @@ export default function Deposit() {
   const [amount, setAmount] = useState("")
   const [warnad, setWarnad] = useState("");
   const [warnab, setWarnab] = useState("");
-  const [method, setMethod] = useState('USDT')
+  const [method, setMethod] = useState('USDT');
+  const [open,setOpen] = useState(false)
   const auth = getAuth(app);
   const router = useRouter();
+  const [ale,setAle] = useState('')
   //snackbar1
   const [messages, setMessages] = useState("")
   const [opened, setOpened] = useState(false);
@@ -113,9 +118,14 @@ export default function Deposit() {
       </Snackbar>
     )
   }
+  const Alerts = (m) =>{
+    setAle(m)
+    setOpen(true)
+  }
   //end of snackbar2
   return (
     <Cover>
+      <Alertz/>
       <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '8px', margin: '2px' }}>
         <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
           router.push('/user/account')
@@ -127,7 +137,7 @@ export default function Deposit() {
         <Stack sx={{width:'344px',height:'110px',background:'#EFEFEF',padding:'8px',borderRadius:'5px'}} direction='column' spacing={2} justifyContent='center'>
         <Stack direction='row' alignItems='center' justifyContent='space-between'>
         <Typography sx={{fontSize:'12px',fontWeight:'300',fontFamily:'Poppins,sans-serif'}}>Current Balance</Typography>
-        <Typography sx={{fontSize:'14px',fontWeight:'500',fontFamily:'Poppins,sans-serif'}}>{info.balance.toFixed(4)} USDT</Typography>
+        <Typography sx={{fontSize:'14px',fontWeight:'500',fontFamily:'Poppins,sans-serif'}}>{info.balance} USDT</Typography>
         </Stack>
         <Stack direction='row' alignItems='center' justifyContent='space-between'>
         <Typography sx={{fontSize:'12px',fontWeight:'300',fontFamily:'Poppins,sans-serif'}}>Charge Amount</Typography>
@@ -142,7 +152,7 @@ export default function Deposit() {
         <Stack direction="column" spacing={3}>
           <Stack spacing={1}> 
             <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'black'}}>Enter Gpay or USDT Wallet Address</Typography>
-            <TextField  onChange={(a) => {
+            <TextField  sx={{color:'#03045E'}} value={address} onChange={(a) => {
               setAddress(a.target.value)
             }}/>
             </Stack>
@@ -150,6 +160,7 @@ export default function Deposit() {
             <Stack spacing={1}> 
             <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'black'}}>Enter Amount You Wish to Withdraw</Typography>
             <TextField 
+            sx={{color:'#03045E'}}
             type="number"
             value={amount}
             onChange={(a) => {
@@ -159,7 +170,7 @@ export default function Deposit() {
             </Stack>
 
             <Stack spacing={1}> 
-            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'black'}}>Choose Prefered Payment Method</Typography>
+            <Typography sx={{fontSize:'12px',color:'#03045E',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'black'}}>Choose Prefered Payment Method</Typography>
             <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Select your Withdrawal Method</InputLabel>
             <Select
@@ -179,8 +190,9 @@ export default function Deposit() {
             </Stack>
         <Button variant="contained" style={{ color: "white",height:'50px',background:'#03045E' }} onClick={() => {
           if (info.balance < total) {
-            alert('Insufficient Balance')
+            alert('Insufficient Balance');
           } else {
+            Alerts('Insufficient Balance');
             
             if (address.length < 10) {
               alert('Ensure the address is correct')
@@ -194,4 +206,35 @@ export default function Deposit() {
       </Stack>
     </Cover>
   )
+  function Alertz(){
+    return(
+    <Modal
+  open={open}
+  onClose={()=>{setOpen(false)}}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+>
+  <Stack alignItems='center' sx={{background:'white',width:'290px',height:'330px',borderRadius:'20px',
+position: 'absolute',
+top: '50%',
+left: '50%',
+transform: 'translate(-50%, -50%)',
+padding:'12px'
+}}>
+  <Image src={Wig} width={120} height={120} alt='widh'/>
+    <Typography id="modal-modal-title" sx={{fontFamily:'Poppins,sans-serif',fontSize:'20px',fontWeight:'500'}}>
+     Eh Sorry!
+    </Typography>
+    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+     {ale}
+    </Typography>
+    <Divider sx={{background:'black'}}/>
+    <Button sx={{color:'white',background:'#03045E',padding:'8px'}} onClick={()=>{
+      setOpen(false)
+    }}>Okay</Button>
+  </Stack>
+    
+</Modal>)
+  }
+
 }
