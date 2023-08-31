@@ -116,6 +116,8 @@ export default function Bets() {
           </TabList>
         </Stack>
         <TabPanel value="1">
+          <Stack spacing={2}>
+            
           {
 
             bets.map((s) => {
@@ -170,6 +172,7 @@ export default function Bets() {
 
 
           }
+          </Stack>
         </TabPanel>
         {
           //tab 2

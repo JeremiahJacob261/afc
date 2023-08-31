@@ -440,7 +440,7 @@ export default function Match({ matchDat }) {
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: 'black' }}>Expected Profit</Typography>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: 'black' }}>{expext} USDT</Typography>
                         </Stack>
-                        <Button sx={{fontFamily: 'Poppins,sans-serif',margin:'8px', fontSize: '16', fontWeight: '300', color: 'white',background:"#03045E"}} 
+                        <Button sx={{fontFamily: 'Poppins,sans-serif',margin:'8px', fontSize: '16', fontWeight: '300', color: 'white',background:"#03045E",padding:'10px'}} 
                         onClick={()=>{
                             if (stake - 1 < info.balance) {
                                 if (stake < 1) {
@@ -466,7 +466,7 @@ export default function Match({ matchDat }) {
                                                 'username': info.username,
                                                 'started': false,
                                                 'stake': Number(stake),
-                                                'profit': Number(((odds * stake) / 100)).toFixed(2),
+                                                'profit': Number(((odds * stake) / 100)),
                                                 'aim': profit,
                                                 "home": matches.home,
                                                 "away": matches.away,

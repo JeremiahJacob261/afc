@@ -3,20 +3,9 @@ import { useRouter } from 'next/router'
 import Head from "next/head";
 import Cover from './cover'
 import { Box, Stack } from "@mui/system";
-import { getCookies, getCookie, setCookies, removeCookies, setCookie } from 'cookies-next';
 import { useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
 import Image from "next/image";
 import Link from 'next/link'
-import afc1 from '../../public/simps/AFC.jpg'
-import afc2 from '../../public/simps/AFC2.jpg'
-import afc3 from '../../public/simps/AFC3.jpg'
-import iv from '../../public/simps/Invitation Bonus.jpg'
-import kik from '../../public/simps/kick.png'
-import sal from '../../public/simps/Monthly salary.png'
-import ref from '../../public/simps/Referral Bonus.jpg'
-import Logos from '../../public/logoclean.png'
-import ads2 from '../../public/adse2.png'
 import { Button, Typography, Paper, Divider } from "@mui/material";
 import { supabase } from '../api/supabase'
 import Agent from '../../public/posters6.jpg'
@@ -147,12 +136,14 @@ export default function Home() {
               <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'black' }}>Current Balance </Typography>
               <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'black' }}>{Number(info.balance).toFixed(2)} USDT</Typography>
             </Stack>
+            <Link href='/user/deposit'>
             <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#E6E8F3', borderRadius: '20px', padding: '8px', width: '95px',height:'32px' }}>
               <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: 'black', fontSize: '12px' }}>
                 Deposit
               </Typography>
               <KeyboardArrowRightIcon sx={{width:'16px',height:'16px'}}/>
             </Stack>
+            </Link>
           </Stack>
           <Divider sx={{ background: 'black' }} />
           <Stack justifyContent='center' alignItems='center'>
