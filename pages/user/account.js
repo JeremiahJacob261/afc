@@ -9,18 +9,24 @@ import MuiAlert from '@mui/material/Alert';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import { supabase } from '../api/supabase'
 import Head from 'next/head';
+import Image from 'next/image';
 import { app } from '../api/firebase';
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth,signOut } from "firebase/auth";
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import LinkIcon from '@mui/icons-material/Link';
-import MoneyIcon from '@mui/icons-material/Money';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import PaymentsIcon from '@mui/icons-material/Payments';
-import SportsKabaddiIcon from '@mui/icons-material/SportsKabaddi';
-import VpnKeyOutlinedIcon from '@mui/icons-material/VpnKeyOutlined';
-import TimerIcon from '@mui/icons-material/Timer';
+import iLink from '../../public/icon/ant-design_link-outlined.png'
+import iCopy from '../../public/icon/ion_copy.png'
+import iNT from '../../public/icon/inter.png'
+import St from '../../public/icon/steam.png'
+import Lk from '../../public/icon/lock.png'
+import Sw from '../../public/icon/steamw.png'
+import Vec from '../../public/icon/Vector.png'
+import Bt from '../../public/icon/bet.png'
+import Ot from '../../public/icon/out.png'
+import Tel from '../../public/icon/tel.png'
+import Fq from '../../public/icon/faq.png'
 export default function Account() {
   const auth = getAuth(app);
   const router = useRouter()
@@ -108,144 +114,171 @@ const Alert = React.forwardRef(function Alert(props, ref) {
         }} />
         <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Profile</Typography>
       </Stack>
-        <div sx={{ padding: "8px", background: "none" }} >
+      {
+        //start of profile
+      }
+      <Stack spacing={4} sx={{minWidth:'344px'}}>
           <Stack direction='row' spacing={2}>
             <Avatar>{info ? `${info.username}` : 'Loading...'}</Avatar>
             <Stack direction='column'>
-               <Typography sx={{ color: "black",fontSize:'16px',fontWeight:'400', fontFamily: 'Poppins, sans-serif' }}>Hello {info ? ` ${info.username}` : 'Loading...'}</Typography>
-            <Typography sx={{ color: "black",fontSize:'16px',fontWeight:'400', fontFamily: 'Poppins, sans-serif' }}>Level 1</Typography>
+               <Typography sx={{ color: "black",fontSize:'14px',fontWeight:'500', fontFamily: 'Poppins, sans-serif' }}>Hello {info ? ` ${info.username}` : 'Loading...'}</Typography>
+            <Typography sx={{ color: "black",fontSize:'14px',fontWeight:'300', fontFamily: 'Poppins, sans-serif' }}>Level 1</Typography>
             </Stack>
            </Stack>
-           <Stack direction='row' justifyContent='space-between' sx={{margin:'8px'}}>
-            <Stack>
-              <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px',  width: '100%', color: 'black' }}>Current Balance </Typography>
-              <Typography style={{ fontSize: '18px', fontWeight: '600', fontFamily: 'Poppins, sans-serif', height: '24px', width: '100%', color: 'black' }}>{balance.toFixed(3)} USDT</Typography>
-            </Stack>
-            <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#E6E8F3', borderRadius: '20px', padding: '8px', width: '95px',height:'32px' }}>
-              <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300px', color: 'black', fontSize: '12px' }}>
-                Deposit
-              </Typography>
-              <KeyboardArrowRightIcon sx={{width:'16px',height:'16px'}}/>
-            </Stack>
+           {
+            //deposit
+           }
+        <Stack direction='column'> 
+           <Typography sx={{ color: "black",fontSize:'16px',fontWeight:'400',fontFamily:'Inter,sans-serif' }}>Referral</Typography>
+           <Divider/>
+           <Stack direction='row' justifyContent='space-between' sx={{padding:'8px'}}> 
+           <Stack direction='row' spacing={1} justifyContent='start'>
+            <Image src={iLink} width={24} height={24} alt='ilink'/>
+            <Typography sx={{ color:'black',fontSize:'14px',fontWeight:300,fontFamily:'Inter,sans-serif'}}>https://afcfifa/register/{info ? `${info.newrefer}` : 'Loading...'}</Typography>
           </Stack>
-          <Typography style={{ fontSize: '16px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', width: '100%', color: 'black' }}>Referral</Typography>
-          <Divider sx={{background:'black'}}/>
-          <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{padding:'8px'}}>
-        <LinkIcon color='black' sx={{width:'24px',height:'24px'}}/>
-        <Typography style={{ fontSize: '14px', fontWeight: '200', fontFamily: 'Poppins, sans-serif', color: 'black' }}>https://afcfifa.com/register/{info ? `${info.newrefer}` : 'Loading...'}</Typography>
-        <ContentCopyIcon color='black' sx={{width:'24px',height:'24px'}} onClick={() => {
+          <Image src={iCopy} width={20} height={20} alt='icopy' onClick={() => {
                 navigator.clipboard.writeText("https://afcfifa.com/register/" + info.newrefer)
                 setMessages("Invite Link Copied")
                 setOpened(true);
               }}/>
-          </Stack>
+           </Stack>
 
-          <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{padding:'8px'}} onClick={()=>{
-              router.push("/user/refferal")
-            }}>
-            <Stack direction='row' spacing={1}  alignItems='center'><SportsKabaddiIcon color='black' sx={{width:'24px',height:'24px'}}/>
-        <Typography style={{ fontSize: '14px', fontWeight: '200', fontFamily: 'Poppins, sans-serif', color: 'black' }}>All Referrals</Typography>
-        </Stack>
-        <KeyboardArrowRightIcon color='black' sx={{width:'24px',height:'24px'}}/>
+           <Stack direction='row' justifyContent='space-between' sx={{padding:'8px'}} 
+           onClick={()=>{
+            router.push('/user/refferal');
+           }}> 
+           <Stack direction='row' spacing={1} justifyContent='start'>
+            <Image src={iNT} width={24} height={24} alt='int'/>
+            <Typography sx={{ color:'black',fontSize:'14px',fontWeight:300,fontFamily:'Inter,sans-serif'}}>All Referral</Typography>
           </Stack>
+          <KeyboardArrowRightIcon width={24} height={24}/>
+           </Stack>
+        </Stack>
+        {
+          //end of deposit
+        }
+        {
+            //fun
+           }
+        <Stack direction='column'> 
+           <Typography sx={{ color: "black",fontSize:'16px',fontWeight:'400',fontFamily:'Inter,sans-serif' }}>Deposit</Typography>
+           <Divider/>
+           <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{padding:'8px'}} onClick={()=>{
+            router.push('/user/deposit');
+           }}> 
+           <Stack direction='row' spacing={1} justifyContent='start' >
+            <Image src={St} width={24} height={24} alt='ilink'/>
+            <Typography sx={{ color:'black',verticallyAlign:'center',fontSize:'14px',fontWeight:300,fontFamily:'Inter,sans-serif'}}>Fund Account</Typography>
+          </Stack>
+          <KeyboardArrowRightIcon width={24} height={24}/>
+           </Stack>
+        </Stack>
+        {
+          //end of fund
+        }
+        {
+            //withdraw
+           }
+        <Stack direction='column'> 
+           <Typography sx={{ color: "black",fontSize:'16px',fontWeight:'400',fontFamily:'Inter,sans-serif' }}>Withdrawal</Typography>
+           <Divider/>
+           <Stack direction='row' justifyContent='space-between' sx={{padding:'8px'}} onClick={()=>{
+            router.push('/user/withdraw');
+           }}> 
+           <Stack direction='row' spacing={1} justifyContent='start'>
+            <Image src={Sw} width={24} height={24} alt='ilink'/>
+            <Typography sx={{ color:'black',fontSize:'14px',fontWeight:300,fontFamily:'Inter,sans-serif'}}>Withdraw</Typography>
+          </Stack>
+          <KeyboardArrowRightIcon width={24} height={24}/>
+           </Stack>
 
-          <Typography style={{ fontSize: '16px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', width: '100%', color: 'black' }}>Deposit</Typography>
-          <Divider sx={{background:'black'}}/>
-          <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{padding:'8px'}}>
-            <Stack direction='row' spacing={1}  alignItems='center' onClick={() => {
-                router.push("/user/deposit")
-              }}>
-              <MoneyIcon color='black' sx={{width:'24px',height:'24px'}}/>
-        <Typography style={{ fontSize: '14px', fontWeight: '200', fontFamily: 'Poppins, sans-serif', color: 'black' }}>Fund Account</Typography>
-        </Stack>
-        <KeyboardArrowRightIcon color='black' sx={{width:'24px',height:'24px'}}/>
+           <Stack direction='row' justifyContent='space-between' sx={{padding:'8px'}} onClick={()=>{
+            router.push('/user/transaction');
+           }}> 
+           <Stack direction='row' spacing={1} justifyContent='start'>
+            <Image src={Vec} width={24} height={24} alt='ilink'/>
+            <Typography sx={{ color:'black',fontSize:'14px',fontWeight:300,fontFamily:'Inter,sans-serif'}}>History</Typography>
           </Stack>
+          <KeyboardArrowRightIcon width={24} height={24}/>
+           </Stack>
 
-          <Typography style={{ fontSize: '16px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', width: '100%', color: 'black' }}>WithDrawal</Typography>
-          <Divider sx={{background:'black'}}/>
-          <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{padding:'8px'}} onClick={() => {
-                router.push("/user/withdraw")
-              }
-              }>
-            <Stack direction='row' spacing={1}  alignItems='center'><PaymentsIcon color='black' sx={{width:'24px',height:'24px'}}/>
-        <Typography style={{ fontSize: '14px', fontWeight: '200', fontFamily: 'Poppins, sans-serif', color: 'black' }}>Withdraw</Typography>
-        </Stack>
-        <KeyboardArrowRightIcon color='black' sx={{width:'24px',height:'24px'}}/>
+           <Stack direction='row' justifyContent='space-between' sx={{padding:'8px'}} > 
+           <Stack direction='row' spacing={1} justifyContent='start'>
+            <Image src={Lk} width={24} height={24} alt='ilink'/>
+            <Typography sx={{ color:'black',fontSize:'14px',fontWeight:300,fontFamily:'Inter,sans-serif'}}>Code Setting</Typography>
           </Stack>
-          <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{padding:'8px'}} onClick={() => {
-                router.push("/user/transaction")
-              }
-              }>
-            <Stack direction='row' spacing={1}  alignItems='center'><TimerIcon color='black' sx={{width:'24px',height:'24px'}}/>
-        <Typography style={{ fontSize: '14px', fontWeight: '200', fontFamily: 'Poppins, sans-serif', color: 'black' }}>History</Typography>
+          <KeyboardArrowRightIcon width={24} height={24}/>
+           </Stack>
         </Stack>
-        <KeyboardArrowRightIcon color='black' sx={{width:'24px',height:'24px'}}/>
+        {
+          //end of withdraw
+        }
+        {
+            //fun
+           }
+        <Stack direction='column'> 
+           <Typography sx={{ color: "black",fontSize:'16px',fontWeight:'400',fontFamily:'Inter,sans-serif' }}>Bets</Typography>
+           <Divider/>
+           <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{padding:'8px'}} onClick={()=>{
+            router.push('/user/bets');
+           }}> 
+           <Stack direction='row' spacing={1} justifyContent='start' >
+            <Image src={Bt} width={24} height={24} alt='ilink'/>
+            <Typography sx={{ color:'black',verticallyAlign:'center',fontSize:'14px',fontWeight:300,fontFamily:'Inter,sans-serif'}}>My Bets</Typography>
           </Stack>
-          <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{padding:'8px'}}>
-            <Stack direction='row' spacing={1}  alignItems='center'><SportsKabaddiIcon color='black' sx={{width:'24px',height:'24px'}}/>
-        <Typography style={{ fontSize: '14px', fontWeight: '200', fontFamily: 'Poppins, sans-serif', color: 'black' }}>Code Setting</Typography>
+          <KeyboardArrowRightIcon width={24} height={24}/>
+           </Stack>
         </Stack>
-        <KeyboardArrowRightIcon color='black' sx={{width:'24px',height:'24px'}}/>
-          </Stack>
-        </div>
-        <div sx={{ background: "none" }} >
-          <Stack direction="column" sx={{ background: "none", padding: "8px" }} >
-            <Stack direction="row" >
-              <Typography sx={{ padding: "6px", cursor: "pointer", fontSize: "14px", color: "white", fontFamily: 'PT Sans, sans-serif' }} >Invite Code : https://afcfifa.com/register/{info ? `${info.newrefer}` : 'Loading...'}</Typography>
-              <ContentPasteIcon sx={{ color: "white" }}  /></Stack>
-            <Divider />
-
-            <Typography sx={{ background:'#1A1B72',padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }}
-            onClick={()=>{
-              router.push("/user/refferal")
-            }}
-            >Referral Details </Typography> <Divider />
-            <Typography sx={{ background:'#1A1B72',padding: "6px", color: "white", fontSize: "14px", cursor: "pointer", fontFamily: 'PT Sans, sans-serif' }}
-              onClick={() => {
-                router.push("/user/deposit")
-              }
-              }
-            >Deposit</Typography>
-            <Divider />
-            <Typography sx={{ background:'#1A1B72',padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }}
-              onClick={() => {
-                router.push("/user/withdraw")
-              }
-              }
-            >WithDrawal</Typography>
-            <Divider />
-            <Typography sx={{ background:'#1A1B72',padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }}
-              onClick={() => {
-                router.push("/user/bets")
-              }
-              }>
-              My Bets</Typography>
-              <Divider />
-            <Typography sx={{ background:'#1A1B72',padding: "6px", color: "white", fontSize: "14px", cursor: "pointer", fontFamily: 'PT Sans, sans-serif' }}
-              onClick={() => {
+        {
+          //end of fund
+        }
+                {
+            //About
+           }
+        <Stack direction='column'> 
+           <Typography sx={{ color: "black",fontSize:'16px',fontWeight:'400',fontFamily:'Inter,sans-serif' }}>About</Typography>
+           <Divider/>
+           <Stack direction='row' justifyContent='space-between' sx={{padding:'8px'}}  onClick={() => {
                 router.push("/user/faq")
               }
-              }
-            >FAQ</Typography>
-            <Divider />
-            <Typography sx={{ background:'#1A1B72',padding: "6px", color: "white", fontSize: "14px", cursor: "pointer", fontFamily: 'PT Sans, sans-serif' }}
-              onClick={() => {
-                router.push("/user/transaction")
-              }
-              }
-            >Transaction History</Typography>
-            <Divider />
-            < Link href='https://t.me/AFC_Customerservice1'> <Typography sx={{ background:'#1A1B72',padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }}
-            > Contact Us on Telegram @AFC_Customerservice1{
-                //ellacruizfred60
-              }</Typography></Link>
-           <Divider />
-            < Link href='https://t.me/+P9bW6kwPJ9pjZmZh'> <Typography sx={{ background:'#1A1B72',padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }}
-            > Join Our Telegram Group {
-                //ellacruizfred60
-              }</Typography></Link>
+              }> 
+           <Stack direction='row' spacing={1} justifyContent='start'>
+            <Image src={Fq} width={24} height={24} alt='ilink'/>
+            <Typography sx={{ color:'black',fontSize:'14px',fontWeight:300,fontFamily:'Inter,sans-serif'}}>FAQ</Typography>
+          </Stack>
+          <KeyboardArrowRightIcon width={24} height={24}/>
+           </Stack>
+           
+           < Link href='https://t.me/+P9bW6kwPJ9pjZmZh'>
+           <Stack direction='row' justifyContent='space-between' sx={{padding:'8px'}} > 
+           <Stack direction='row' spacing={1} justifyContent='start'>
+            <Image src={Tel} width={24} height={24} alt='ilink'/>
+            <Typography sx={{ color:'black',fontSize:'14px',fontWeight:300,fontFamily:'Inter,sans-serif'}}>Telegram</Typography>
+          </Stack>
+          <KeyboardArrowRightIcon width={24} height={24}/>
+           </Stack>
+           </Link>
+           < Link href='https://t.me/AFC_Customerservice1'>
+           <Stack direction='row' justifyContent='space-between' sx={{padding:'8px'}} > 
+           <Stack direction='row' spacing={1} justifyContent='start'>
+            <Image src={Tel} width={24} height={24} alt='ilink'/>
+            <Typography sx={{ color:'black',fontSize:'14px',fontWeight:300,fontFamily:'Inter,sans-serif'}}>Contact</Typography>
+          </Stack>
+          <KeyboardArrowRightIcon width={24} height={24}/>
+           </Stack>
+           </Link>
+        </Stack>
+        {
+          //end of About
+        }
+        {
+            //close
+           }
+        <Stack direction='column'> 
+           <Typography sx={{ color: "black",fontSize:'16px',fontWeight:'400',fontFamily:'Inter,sans-serif' }}>Closure</Typography>
            <Divider/>
-            <Typography sx={{ background:'#1A1B72',padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }} onClick={() => {
+           <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{padding:'8px'}} 
+           onClick={() => {
               
               signOut(auth).then(()=>{
                 localStorage.removeItem('signRef');
@@ -255,38 +288,22 @@ const Alert = React.forwardRef(function Alert(props, ref) {
                 router.push('/login');
               })
             }
-            }>Log Out</Typography>
+            }> 
+           <Stack direction='row' spacing={1} justifyContent='start' >
+            <Image src={Ot} width={24} height={24} alt='ilink'/>
+            <Typography sx={{ color:'black',verticallyAlign:'center',fontSize:'14px',fontWeight:300,fontFamily:'Inter,sans-serif'}}>Sign out</Typography>
           </Stack>
-        </div>
+          <KeyboardArrowRightIcon width={24} height={24}/>
+           </Stack>
+        </Stack>
+        {
+          //end of close
+        }
+        </Stack>
+        {
+          //end of profile
+        }
       </Box>
     </Cover>
   )
 }
-
-// export async function getServerSideProps(){
-//   const auth = getAuth(app);
-//   onAuthStateChanged(auth, (user) => {
-//     if (user) {
-//       // User is signed in, see docs for a list of available properties
-//       // https://firebase.google.com/docs/reference/js/auth.user
-//       const uid = user;
-//       // ...
-    
-//        const Get=async()=>{
-//           const { data, error } = await supabase
-//           .from('users')
-//           .select()
-//           .eq('userId', user.uid)
-//           let datas = data[0];
-//           return datas;
-//         }
-//     } else {
-//       // User is signed out
-//       // ...
-//       console.log('sign out');
-//       redirect('/login')
-//     }
-
-//   });
-//   return { props: { Get } }
-// }
