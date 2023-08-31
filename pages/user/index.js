@@ -142,16 +142,16 @@ export default function Home() {
         </Head>
         <Stack sx={{ background: "white", marginTop: '10px' }} spacing={4} justifyContent='center' >
           <Typography style={{ fontSize: '16px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '5px', width: '100%', textAlign: 'left', color: 'black' }}>Hello {info.username}</Typography>
-          <Stack direction='row' justifyContent='space-between'>
+          <Stack direction='row' justifyContent='space-between' alignItems='center'>
             <Stack>
               <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'black' }}>Current Balance </Typography>
-              <Typography style={{ fontSize: '18px', fontWeight: '600', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'black' }}>{Number(info.balance).toFixed(2)} USDT</Typography>
+              <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'black' }}>{Number(info.balance).toFixed(2)} USDT</Typography>
             </Stack>
-            <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#E6E8F3', borderRadius: '20px', padding: '8px', width: '95px' }}>
-              <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300px', color: 'black', fontSize: '12px' }}>
-                Account
+            <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#E6E8F3', borderRadius: '20px', padding: '8px', width: '95px',height:'32px' }}>
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: 'black', fontSize: '12px' }}>
+                Deposit
               </Typography>
-              <KeyboardArrowRightIcon />
+              <KeyboardArrowRightIcon sx={{width:'16px',height:'16px'}}/>
             </Stack>
           </Stack>
           <Divider sx={{ background: 'black' }} />

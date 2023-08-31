@@ -12,8 +12,15 @@ import Head from 'next/head';
 import { app } from '../api/firebase';
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth,signOut } from "firebase/auth";
-import { redirect } from 'next/navigation'
-
+import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import LinkIcon from '@mui/icons-material/Link';
+import MoneyIcon from '@mui/icons-material/Money';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import PaymentsIcon from '@mui/icons-material/Payments';
+import SportsKabaddiIcon from '@mui/icons-material/SportsKabaddi';
+import VpnKeyOutlinedIcon from '@mui/icons-material/VpnKeyOutlined';
+import TimerIcon from '@mui/icons-material/Timer';
 export default function Account() {
   const auth = getAuth(app);
   const router = useRouter()
@@ -94,23 +101,98 @@ const Alert = React.forwardRef(function Alert(props, ref) {
         <link rel="icon" href="/logo_afc.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Box sx={{ padding: "8px", background: "#03045E",width:'100%',minHeight:'80vh' }}>
+      <Box sx={{ padding: "8px", background: "#FFFFFF",width:'100%',minHeight:'80vh' }}>
+      <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '5px', margin: '2px' }}>
+        <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
+          router.push('/user')
+        }} />
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Profile</Typography>
+      </Stack>
         <div sx={{ padding: "8px", background: "none" }} >
-          <Stack>
+          <Stack direction='row' spacing={2}>
             <Avatar>{info ? `${info.username}` : 'Loading...'}</Avatar>
-            <Typography variant="h4" sx={{ color: "white", fontFamily: 'PT Sans, sans-serif' }}>Welcome, {info ? ` ${info.username}` : 'Loading...'}</Typography>
+            <Stack direction='column'>
+               <Typography sx={{ color: "black",fontSize:'16px',fontWeight:'400', fontFamily: 'Poppins, sans-serif' }}>Hello {info ? ` ${info.username}` : 'Loading...'}</Typography>
+            <Typography sx={{ color: "black",fontSize:'16px',fontWeight:'400', fontFamily: 'Poppins, sans-serif' }}>Level 1</Typography>
+            </Stack>
+           </Stack>
+           <Stack direction='row' justifyContent='space-between' sx={{margin:'8px'}}>
+            <Stack>
+              <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px',  width: '100%', color: 'black' }}>Current Balance </Typography>
+              <Typography style={{ fontSize: '18px', fontWeight: '600', fontFamily: 'Poppins, sans-serif', height: '24px', width: '100%', color: 'black' }}>{balance.toFixed(3)} USDT</Typography>
+            </Stack>
+            <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#E6E8F3', borderRadius: '20px', padding: '8px', width: '95px',height:'32px' }}>
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300px', color: 'black', fontSize: '12px' }}>
+                Deposit
+              </Typography>
+              <KeyboardArrowRightIcon sx={{width:'16px',height:'16px'}}/>
+            </Stack>
           </Stack>
-          <Typography sx={{ color: "white", fontFamily: 'PT Sans, sans-serif' }}>{balance.toFixed(2)} USDT</Typography>
+          <Typography style={{ fontSize: '16px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', width: '100%', color: 'black' }}>Referral</Typography>
+          <Divider sx={{background:'black'}}/>
+          <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{padding:'8px'}}>
+        <LinkIcon color='black' sx={{width:'24px',height:'24px'}}/>
+        <Typography style={{ fontSize: '14px', fontWeight: '200', fontFamily: 'Poppins, sans-serif', color: 'black' }}>https://afcfifa.com/register/{info ? `${info.newrefer}` : 'Loading...'}</Typography>
+        <ContentCopyIcon color='black' sx={{width:'24px',height:'24px'}} onClick={() => {
+                navigator.clipboard.writeText("https://afcfifa.com/register/" + info.newrefer)
+                setMessages("Invite Link Copied")
+                setOpened(true);
+              }}/>
+          </Stack>
+
+          <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{padding:'8px'}} onClick={()=>{
+              router.push("/user/refferal")
+            }}>
+            <Stack direction='row' spacing={1}  alignItems='center'><SportsKabaddiIcon color='black' sx={{width:'24px',height:'24px'}}/>
+        <Typography style={{ fontSize: '14px', fontWeight: '200', fontFamily: 'Poppins, sans-serif', color: 'black' }}>All Referrals</Typography>
+        </Stack>
+        <KeyboardArrowRightIcon color='black' sx={{width:'24px',height:'24px'}}/>
+          </Stack>
+
+          <Typography style={{ fontSize: '16px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', width: '100%', color: 'black' }}>Deposit</Typography>
+          <Divider sx={{background:'black'}}/>
+          <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{padding:'8px'}}>
+            <Stack direction='row' spacing={1}  alignItems='center' onClick={() => {
+                router.push("/user/deposit")
+              }}>
+              <MoneyIcon color='black' sx={{width:'24px',height:'24px'}}/>
+        <Typography style={{ fontSize: '14px', fontWeight: '200', fontFamily: 'Poppins, sans-serif', color: 'black' }}>Fund Account</Typography>
+        </Stack>
+        <KeyboardArrowRightIcon color='black' sx={{width:'24px',height:'24px'}}/>
+          </Stack>
+
+          <Typography style={{ fontSize: '16px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', width: '100%', color: 'black' }}>WithDrawal</Typography>
+          <Divider sx={{background:'black'}}/>
+          <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{padding:'8px'}} onClick={() => {
+                router.push("/user/withdraw")
+              }
+              }>
+            <Stack direction='row' spacing={1}  alignItems='center'><PaymentsIcon color='black' sx={{width:'24px',height:'24px'}}/>
+        <Typography style={{ fontSize: '14px', fontWeight: '200', fontFamily: 'Poppins, sans-serif', color: 'black' }}>Withdraw</Typography>
+        </Stack>
+        <KeyboardArrowRightIcon color='black' sx={{width:'24px',height:'24px'}}/>
+          </Stack>
+          <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{padding:'8px'}} onClick={() => {
+                router.push("/user/transaction")
+              }
+              }>
+            <Stack direction='row' spacing={1}  alignItems='center'><TimerIcon color='black' sx={{width:'24px',height:'24px'}}/>
+        <Typography style={{ fontSize: '14px', fontWeight: '200', fontFamily: 'Poppins, sans-serif', color: 'black' }}>History</Typography>
+        </Stack>
+        <KeyboardArrowRightIcon color='black' sx={{width:'24px',height:'24px'}}/>
+          </Stack>
+          <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{padding:'8px'}}>
+            <Stack direction='row' spacing={1}  alignItems='center'><SportsKabaddiIcon color='black' sx={{width:'24px',height:'24px'}}/>
+        <Typography style={{ fontSize: '14px', fontWeight: '200', fontFamily: 'Poppins, sans-serif', color: 'black' }}>Code Setting</Typography>
+        </Stack>
+        <KeyboardArrowRightIcon color='black' sx={{width:'24px',height:'24px'}}/>
+          </Stack>
         </div>
         <div sx={{ background: "none" }} >
           <Stack direction="column" sx={{ background: "none", padding: "8px" }} >
             <Stack direction="row" >
               <Typography sx={{ padding: "6px", cursor: "pointer", fontSize: "14px", color: "white", fontFamily: 'PT Sans, sans-serif' }} >Invite Code : https://afcfifa.com/register/{info ? `${info.newrefer}` : 'Loading...'}</Typography>
-              <ContentPasteIcon sx={{ color: "white" }} onClick={() => {
-                navigator.clipboard.writeText("https://afcfifa.com/register/" + info.newrefer)
-                setMessages("Invite Link Copied")
-                setOpened(true);
-              }} /></Stack>
+              <ContentPasteIcon sx={{ color: "white" }}  /></Stack>
             <Divider />
 
             <Typography sx={{ background:'#1A1B72',padding: "6px", cursor: "pointer", color: "white", fontSize: "14px", fontFamily: 'PT Sans, sans-serif' }}
