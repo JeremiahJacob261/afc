@@ -1,7 +1,7 @@
 import { Stack, TextField, Typography, Button, Box } from "@mui/material";
 import { supabase } from '../api/supabase'
 import { useContext, useEffect } from "react";
-import { AppContext } from "../api/Context";
+import Cover from "./cover";
 import React, { useState, useRef } from "react";
 import { useRouter } from 'next/router'
 import CloseIcon from '@mui/icons-material/Close';
@@ -145,6 +145,7 @@ checkDepo(url);
   }
   //end of snackbar2
   return (
+    <Cover>
     <div style={{ minHeight: '80vh' }}>
       {
         //start of usdt drawers
@@ -333,5 +334,6 @@ checkDepo(url);
         </Typography>
       </Stack>
     </div>
+      </Cover>
   )
 }
