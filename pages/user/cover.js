@@ -20,6 +20,7 @@ import { app } from '../api/firebase';
 import { supabase } from '../api/supabase'
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { getAuth, signOut } from "firebase/auth";
+import { useRouter } from "next/router";
 export default function Cover({children}){
     const [draw,setDraw] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -28,6 +29,7 @@ export default function Cover({children}){
     const auth = getAuth(app)
     const [info, setInfo] = useState({})
     const [trans, setTrans] = useState([])
+    const router = useRouter();
     const handleClickr = (event) => {
       setAnchorEl(event.currentTarget);
     };

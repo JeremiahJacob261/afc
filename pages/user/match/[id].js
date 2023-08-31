@@ -371,6 +371,7 @@ export default function Match({ matchDat }) {
                     setBottom(false)
                 }}
             >
+                
                 <Cover>
                 <Stack direction='column' spacing={2} style={{ background: 'white', padding: '8px', minHeight: '100vh',paddingBottom:'12px' }}>
                     <Stack direction='row' sx={{ padding: '5px' }}>
@@ -493,7 +494,7 @@ export default function Match({ matchDat }) {
                                     deductBet();
                                     saveToDB();
                                     Reads('readbet', stake);
-                                    
+
                                     router.push('/user/matches');
                                 }
                             } else {

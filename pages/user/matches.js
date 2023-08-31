@@ -43,7 +43,9 @@ border: "1px solid rgba(255, 255, 255, 0.3)"
         maxWidth: "350px", background: "#FFFFFF",minHeight:'100vh'
       }}>
         <Stack direction='row' alignItems='center' spacing={1} sx={{padding:'5px',margin:'2px'}}>
-        <KeyboardArrowLeftOutlinedIcon sx={{width:'24px',height:'24px'}}/>
+        <KeyboardArrowLeftOutlinedIcon sx={{width:'24px',height:'24px'}} onClick={()=>{
+          router.push('/user')
+        }}/>
         <Typography sx={{fontSize:'16px',fontFamily:'Poppins,sans-serif',fontWeight:'300'}}>Matches</Typography>
         </Stack>
         <Stack alignItems='center'>

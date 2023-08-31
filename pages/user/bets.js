@@ -13,15 +13,22 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { app } from '../api/firebase';
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
-
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import Image from 'next/image';
+import Ims from '../../public/simps/ball.png'
+import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
 export default function Bets() {
   const auth = getAuth(app);
   const [open, setOpen] = useState(false)
   const router = useRouter()
   const [bets, setBets] = useState([])
-  const [fina,setFina] = useState([])
+  const [fina, setFina] = useState([])
   const [matchD, setMatchD] = useState({})
   const [display, setDisplay] = useState({})
+  
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -29,7 +36,11 @@ export default function Bets() {
   const handleClose = () => {
     setOpen(false);
   };
+  const [value, setValue] = useState('1');
 
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   useEffect(() => {
     const useri = localStorage.getItem('signedIn');
     if (useri) {
@@ -81,78 +92,148 @@ export default function Bets() {
         <link rel="icon" href="/logo_afc.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
+      <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '5px', margin: '2px' }}>
+        <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
+          router.push('/user')
+        }} />
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Bet History</Typography>
+      </Stack>
       <div style={{ color: "#03045E", minHeight: '90vh' }}>
 
-        <Typography variant="h4" sx={{ color: "#E8E5DA", margin: "8px", fontFamily: "'Barlow', sans-serif" }}>Bets</Typography>
+        <Tabx />
 
-        <Stack direction="column"
-          spacing={2} style={{ maxWidth: "350px", background: 'none' }}>
-          <Typography variant="h6" sx={{ color: "#EE8F00", margin: "8px", fontFamily: "'Barlow', sans-serif" }}>Active</Typography>
-
-          {
-
-            bets.map((s) => {
-              return (
-                <div key={s.betid} onClick={() => {
-                  router.push('/user/viewbet/' + s.betid);
-                }}>
-                  <Box sx={{ background: "#1A1B72", padding: "4px", height: "max-content" }} >
-                    <Stack direction="row" spacing={4} alignItems="center" justifyContent="space-around">
-                      <Stack style={{ padding: "8px", width: "350px", height: "80px" }} direction="column" justifyContent='space-between' >
-                        <Typography sx={{ color: "white",padding: "6px", fontSize: '13px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', width: '175px' }}>{s.home}</Typography>
-                        <Typography sx={{ color: "white", padding: "6px",fontSize: '13px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', width: '175px' }}>{s.away}</Typography>
-                      </Stack>
-                      <Stack direction='column'>
-                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', color: "#C7C5C0" }}>{s.stake} USDT</Typography>
-                        <Typography variant="subtitle2" sx={{ color: "#EE8F00", fontSize: '15px' }}> {s.market}</Typography>
-                        <Typography style={{ color: '#2426F8', fontFamily: 'Poppins, sans-serif', fontSize: '12px', width: '151px', fontWeight: '200' }}>{s.time} {s.date}</Typography>
-
-                      </Stack>
-                    </Stack>
-                  </Box>
-                </div>
-              )
-            })
-
-
-          }
-
-        </Stack>
-       <Divider sx={{background:'whitesmoke'}}/>
-       <Stack direction="column"
-          spacing={2} style={{ maxWidth: "350px", background: 'none' }}>
-          <Typography variant="h6" sx={{ color: "black", margin: "8px", fontFamily: "'Barlow', sans-serif" }}>Finished</Typography>
-
-          {
-
-            fina.map((s) => {
-              return (
-                <div key={s.betid} onClick={() => {
-                  router.push('/user/viewbet/' + s.betid);
-                }}>
-                  <Box sx={{ background: "#1A1B72", padding: "4px", height: "max-content" }} >
-                    <Stack direction="row" spacing={4} alignItems="center" justifyContent="space-around">
-                      <Stack style={{ padding: "8px", width: "350px", height: "80px" }} direction="column" justifyContent='space-between' >
-                        <Typography sx={{ color: "white",padding: "6px", fontSize: '13px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', width: '175px' }}>{s.home}</Typography>
-                        <Typography sx={{ color: "white", padding: "6px",fontSize: '13px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', width: '175px' }}>{s.away}</Typography>
-                      </Stack>
-                      <Stack direction='column'>
-                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', color: "#C7C5C0" }}>{s.stake} USDT</Typography>
-                        <Typography variant="subtitle2" sx={{ color: "#EE8F00", fontSize: '15px' }}> {s.market}</Typography>
-                        <Typography style={{ color: '#2426F8', fontFamily: 'Poppins, sans-serif', fontSize: '12px', width: '151px', fontWeight: '200' }}>{s.time} {s.date}</Typography>
-
-                      </Stack>
-                    </Stack>
-                  </Box>
-                </div>
-              )
-            })
-
-
-          }
-
-        </Stack>
       </div>
     </Cover>
   )
+  function Tabx() {
+
+    return (
+      <TabContext value={value}>
+        <Stack sx={{ borderBottom: 1, borderColor: 'divider' }} justifyContent='center'>
+          <TabList onChange={handleChange} aria-label="lab API tabs example">
+            <Tab label="Active Bets" value="1" sx={{ color: 'black', width: '50%' }} />
+            <Tab label="Finished Bets" value="2" sx={{ color: 'black', width: '50%' }} />
+          </TabList>
+        </Stack>
+        <TabPanel value="1">
+          {
+
+            bets.map((s) => {
+              console.log(s)
+              let stams = Date.parse(s.date + " " + s.time) / 1000;
+    let curren = new Date().getTime() / 1000;
+              return (
+                <div key={s.betid} onClick={() => {
+                  router.push('/user/viewbet/' + s.betid);
+                }}>
+                  <Box sx={{ background: "#EFEFEF", padding: "8px", height: "max-content", width: '341px', height: '313px', borderRadius: '10px' }} >
+            
+                    <Stack direction="row" spacing={3} alignItems="center" justifyContent="center" marginBottom='20px' marginTop='20px'>
+                      <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
+                        <Image src={Ims} width={20} height={20} alt='home' />
+                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '300',maxWidth:'91px' }}>{s.home}</Typography>
+            
+                      </Stack>
+                      <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '300' }}>VS</Typography>
+                      <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-around">
+                        <Image src={Ims} width={20} height={20} alt='away' />
+                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '300',maxWidth:'91px' }}>{s.away}</Typography>
+            
+                      </Stack>
+                    </Stack>
+                    <Stack direction='column' spacing={2}>
+                      <Stack direction='row' justifyContent='space-between' alignItems='center'>
+                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: 'black' }}>Market</Typography>
+                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: 'black' }}>{s.market}</Typography>
+                      </Stack>
+                      <Stack direction='row' justifyContent='space-between' alignItems='center'>
+                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: 'black' }}>Odds</Typography>
+                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: 'black' }}>{s.odd} USDT</Typography>
+                      </Stack>
+                      <Stack direction='row' justifyContent='space-between' alignItems='center'>
+                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: 'black' }}>Stake</Typography>
+                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: 'black' }}>{s.stake} USDT</Typography>
+                      </Stack>
+                      <Stack direction='row' justifyContent='space-between' alignItems='center'>
+                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: 'black' }}>Profit</Typography>
+                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: 'black' }}>{s.stake + s.profit} USDT</Typography>
+                      </Stack>
+                      <Stack direction='row' justifyContent='space-between' alignItems='center'>
+                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: 'black' }}> Status</Typography>
+                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: 'black' }}> {(stams > curren) ? 'Not Started' : (s.won === 'null') ? 'Ongoing' : (s.won === 'true') ? 'Won' : 'Lost'}</Typography>
+                      </Stack>
+                    </Stack>
+                  </Box>
+                </div>
+              )
+            })
+
+
+          }
+        </TabPanel>
+        {
+          //tab 2
+        }
+        <TabPanel value="2">
+          <Stack spacing={3}>
+
+        
+        {
+
+fina.map((s) => {
+  console.log(s)
+  let stams = Date.parse(s.date + " " + s.time) / 1000;
+let curren = new Date().getTime() / 1000;
+  return (
+    <div key={s.betid} onClick={() => {
+      router.push('/user/viewbet/' + s.betid);
+    }}>
+      <Box sx={{ background: "#EFEFEF", padding: "8px", height: "max-content", width: '341px', height: '313px', borderRadius: '10px' }} >
+
+        <Stack direction="row" spacing={3} alignItems="center" justifyContent="center" marginBottom='20px' marginTop='20px'>
+          <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
+            <Image src={Ims} width={20} height={20} alt='home' />
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '300',maxWidth:'91px' }}>{s.home}</Typography>
+
+          </Stack>
+          <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '300' }}>VS</Typography>
+          <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-around">
+            <Image src={Ims} width={20} height={20} alt='away' />
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '300',maxWidth:'91px' }}>{s.away}</Typography>
+
+          </Stack>
+        </Stack>
+        <Stack direction='column' spacing={2}>
+          <Stack direction='row' justifyContent='space-between' alignItems='center'>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: 'black' }}>Market</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: 'black' }}>{s.market}</Typography>
+          </Stack>
+          <Stack direction='row' justifyContent='space-between' alignItems='center'>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: 'black' }}>Odds</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: 'black' }}>{s.odd} USDT</Typography>
+          </Stack>
+          <Stack direction='row' justifyContent='space-between' alignItems='center'>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: 'black' }}>Stake</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: 'black' }}>{s.stake} USDT</Typography>
+          </Stack>
+          <Stack direction='row' justifyContent='space-between' alignItems='center'>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: 'black' }}>Profit</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: 'black' }}>{s.stake + s.profit} USDT</Typography>
+          </Stack>
+          <Stack direction='row' justifyContent='space-between' alignItems='center'>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: 'black' }}> Status</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: 'black' }}> {(stams > curren) ? 'Not Started' : (s.won === 'null') ? 'Ongoing' : (s.won === 'true') ? 'Won' : 'Lost'}</Typography>
+          </Stack>
+        </Stack>
+      </Box>
+    </div>
+  )
+})
+
+
+}   
+</Stack>
+     </TabPanel>
+      </TabContext>);
+  }
 }
