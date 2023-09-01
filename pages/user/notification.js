@@ -5,6 +5,9 @@ import { useEffect,useState,useRef } from 'react';
 import { supabase } from '../api/supabase';
 import { TbMailDollar } from 'react-icons/tb'
 import NotificationsNoneSharpIcon from '@mui/icons-material/NotificationsNoneSharp';
+import Image from 'next/image'
+import Rd from '../../public/icon/rounds.png'
+import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 export default function Notification() {
     const router = useRouter();
     const [not,setNot] = useState([]);
@@ -18,19 +21,28 @@ export default function Notification() {
     
           const uid = localStorage.getItem('signUid');
           const name = localStorage.getItem('signName');
+          const ref = localStorage.removeItem('signRef');
           // ...
           if (isMounted.current) {
          
+            async function GETs(){
+              const { data, error } = await supabase
+                .from('activa')
+                .select()
+                .or(`code.eq.${ref},code.eq.broadcast,username.eq.${name}`)
+                .order('id', { ascending: false });
+                setNot(data);
+              console.log(data)
+            }
+            GETs();
             const GET = async () => {
               const { data, error } = await supabase
                 .from('users')
                 .select()
-                .eq('userId', uid)
+                .eq('username',name)
               setInfo(data[0])
-              console.log(data)
             }
             GET();
-            
               isMounted.current = false;
         }else{
 
@@ -38,47 +50,68 @@ export default function Notification() {
         }
         
     },[]);
-      async function GETs(){
-      const { data, error } = await supabase
-        .from('activa')
-        .select()
-        .eq('code',info.newrefer);
-        setNot(data);
-      console.log(data)
-    }
-    GETs();
+      
     return(
-        <Stack direction="column" sx={{height:'80vh'}}>
-            <Stack direction="row"  alignItems='center' sx={{position:'top',top:'0',padding:'8px',background:'#1A1B72'}}>
-                <ArrowBackIosNewIcon sx={{color:'white'}} onClick={()=>{
-            router.push('/user');
-          }}/>
-
-                <Typography sx={{width:'100%',textAlign:'center',color:'#F5F5F5',fontSize: '24px', fontWeight: '800', margin: '4px', fontFamily: 'Poppins, sans-serif' }}>
-                    NOTIFICATION
-                </Typography>
-                 </Stack>
+        <Stack direction="column" sx={{minHeight:'80vh'}}>
+            <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '8px', margin: '2px' }}>
+        <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
+          router.push('/user')
+        }} />
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Notifications</Typography>
+      </Stack>
+      <Stack direction="row">
+<Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '500',padding:'8px' }}>Notification ({not.length})</Typography>
+      
+      </Stack>
                  <Stack direction='column'>
                  {
           not.map((r) => {
               if(r.type === 'bonus'){
+                let date = new Date(r.created_at);
+                let dates = date.getDate() + '-' + parseInt(date.getMonth() + 1) + '-' + date.getFullYear()
               return (
 
                 <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '8px' }} key={r.id}>
-                  <TbMailDollar color="#EE8F00" />
-                  <Typography style={{ color:'white',fontFamily: 'Poppins,sans-serif', fontSize: '15px', fontWeight: 'lighter' }}>You Recieved {r.amount} USDT from {r.username} as Referral Bonus.
+                 <Image src={Rd} width={40} height={40} alt='rounds'/>
+                 <Stack direction='column' sx={{width:'196px'}}>
+<Typography style={{ color:'black',fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>You Recieved Referral Bonus from {r.username} .
                   </Typography>
+                  <Typography style={{ color:'black',fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{r.amount} USDT</Typography>
+                 </Stack>
+                 <Typography style={{ color:'black',fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
                 </Stack>
             );    
               }else{
+              if(r.username === info.username){
+                let date = new Date(r.created_at);
+                let dates = date.getDate() + '-' + parseInt(date.getMonth() + 1) + '-' + date.getFullYear()
+                return (
+                  <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '8px' }} key={r.id}>
+                  <Image src={Rd} width={40} height={40} alt='rounds'/>
+                  <Stack direction='column' sx={{width:'196px'}}>
+ <Typography style={{ color:'black',fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>You Recieved {r.code} from admin  
+                   </Typography>
+                   <Typography style={{ color:'black',fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{r.amount} USDT</Typography>
+                  </Stack>
+                  <Typography style={{ color:'black',fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
+                 </Stack>
+                )
+              }else{
+                let date = new Date(r.created_at);
+                let dates = date.getDate() + '-' + parseInt(date.getMonth() + 1) + '-' + date.getFullYear()
                 return (
 
-                    <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '8px' }} key={r.id}>
-                      <NotificationsNoneSharpIcon color="#EE8F00" />
-                      <Typography style={{ color:'white',fontFamily: 'Poppins,sans-serif', fontSize: '15px', fontWeight: 'lighter' }}>You Recieved {r.amount} USDT from {r.username} as Referral Bonus.
-                      </Typography>
-                    </Stack>
-                );  
+                  <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '8px' }} key={r.id}>
+                  <Image src={Rd} width={40} height={40} alt='rounds'/>
+                  <Stack direction='column' sx={{width:'196px'}}>
+ <Typography style={{ color:'black',fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>{r.username}
+                   </Typography>
+                  </Stack>
+                  <Typography style={{ color:'black',fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
+                 </Stack>
+                );
+              }
+                  
               }
             
           })

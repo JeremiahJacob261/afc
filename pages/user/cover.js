@@ -101,7 +101,7 @@ export default function Cover({children}){
           </Stack>
           
           <Stack  direction='column'>
-            <Link href='/user/matches' style={{ textDecoration: "none" }}>
+            <Link href='/user/matches' style={{ textDecoration: "none",color:'black' }}>
             <Stack  direction='row' alignItems='center' justifyContent='space-between' sx={{width:'224px',height:'41px'}}>
             <Stack direction='row' spacing={2}>
               <SportsSoccerIcon sx={{width:'20px',height:'20px'}}/>
@@ -110,7 +110,7 @@ export default function Cover({children}){
             <ArrowForwardIosIcon sx={{width:'20px',height:'20px'}}/>
             </Stack></Link>
           
-            <Link href='/user/bets' style={{ textDecoration: "none" }}>
+            <Link href='/user/bets' style={{ textDecoration: "none",color:'black' }}>
             <Stack  direction='row' alignItems='center' justifyContent='space-between' sx={{width:'224px',height:'41px'}}>
             <Stack direction='row' spacing={2}>
               <BiTimer sx={{width:'20px',height:'20px'}}/>
@@ -120,7 +120,7 @@ export default function Cover({children}){
             </Stack>
 </Link>
 
-<Link href='/user/desposit' style={{ textDecoration: "none" }}>
+<Link href='/user/desposit' style={{ textDecoration: "none",color:'black' }}>
             <Stack  direction='row' alignItems='center' justifyContent='space-between' sx={{width:'224px',height:'41px'}}>
             <Stack direction='row' spacing={2}>
               <GiPayMoney sx={{width:'20px',height:'20px'}}/>
@@ -129,7 +129,7 @@ export default function Cover({children}){
             <ArrowForwardIosIcon sx={{width:'20px',height:'20px'}}/>
             </Stack></Link>
 
-            <Link href='/user/withdraw' style={{ textDecoration: "none" }}>
+            <Link href='/user/withdraw' style={{ textDecoration: "none",color:'black' }}>
             <Stack  direction='row' alignItems='center' justifyContent='space-between' sx={{width:'224px',height:'41px'}}>
             <Stack direction='row' spacing={2}>
               <GiReceiveMoney sx={{width:'20px',height:'20px'}}/>
@@ -138,7 +138,7 @@ export default function Cover({children}){
             <ArrowForwardIosIcon sx={{width:'20px',height:'20px'}}/>
             </Stack></Link>
 
-            <Link href='/user/account' style={{ textDecoration: "none" }}>
+            <Link href='/user/account' style={{ textDecoration: "none" ,color:'black'}}>
             <Stack  direction='row' alignItems='center' justifyContent='space-between' sx={{width:'224px',height:'41px'}}>
             <Stack direction='row' spacing={2}>
               <BsFillPersonFill sx={{width:'20px',height:'20px'}}/>
@@ -147,7 +147,7 @@ export default function Cover({children}){
             <ArrowForwardIosIcon sx={{width:'20px',height:'20px'}}/>
             </Stack></Link>
 
-            <Link href='https://t.me/+P9bW6kwPJ9pjZmZh' style={{ textDecoration: "none" }}>
+            <Link href='https://t.me/+P9bW6kwPJ9pjZmZh' style={{ textDecoration: "none",color:'black' }}>
             <Stack  direction='row' alignItems='center' justifyContent='space-between' sx={{width:'224px',height:'41px'}}>
             <Stack direction='row' spacing={2}>
               <BiSolidContact sx={{width:'20px',height:'20px'}}/>
@@ -170,77 +170,7 @@ export default function Cover({children}){
       {
         //drawer layout end
       }
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={openr}
-        onClose={handleCloser}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}
-      >
-        {
-          trans.map((r) => {
-            if (r.code === 'broadcast') {
-              return (
-
-                <MenuItem key={r.id}>
-                  <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '4px' }}>
-                    <TbMailDollar color="#03045E" />
-                    <Typography style={{
-                      fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter', overflowX: "hidden",
-                      textOverflow: "ellipsis",
-                      display: "-webkit-box",
-                      color:"black",
-                      WebkitLineClamp: "2",
-                      WebkitBoxOrient: "vertical",
-                    }}>{r.username}
-                    </Typography>
-                  </Stack>
-                </MenuItem>
-              );
-            } else {
-              if (r.username === info.username) {
-                return (
-                  <MenuItem key={r.id}>
-                    <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '4px' }}>
-                      <TbMailDollar color="#03045E" />
-                      <Typography style={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter' }}>You Recieved {r.amount} USDT from <br />admin as {r.code}.
-                      </Typography>
-                    </Stack>
-                  </MenuItem>
-                )
-              } else {
-
-
-                return (
-
-                  <MenuItem key={r.id}>
-                    <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '4px' }}>
-                      <TbMailDollar color="#03045E" />
-                      <Typography style={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter' }}>You Recieved {r.amount} USDT from <br />{r.username} as Referral Bonus.
-                      </Typography>
-                    </Stack>
-                  </MenuItem>
-                );
-              }
-            }
-
-          })
-        }
-        <Stack justifyContent="center" >
-
-          <Button variant="contained" sx={{ width: '80%', background: '#EE8F00' }} onClick={() => {
-            router.push('/user/notification');
-          }}>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter', marginLeft: "3px", color: '#03045E' }}>See More</Typography>
-          </Button>
-        </Stack>
-      </Menu>
-      {
-        //end of menu 
-      }
-      <Stack direction="row" style={{ background: '#FFFFFF', width: '100%', height: '64px', padding: '5px' }}
+           <Stack direction="row" style={{ background: '#FFFFFF', width: '100%', height: '64px', padding: '5px' }}
         alignItems='center' justifyContent="space-between">
         <div style={{ display: 'inline-flex', alignItems: 'center' }}>
           <CgMenuGridR color="black" style={{ width: '24px', height: '24px' }} onClick={()=>{
@@ -255,7 +185,9 @@ export default function Cover({children}){
             aria-controls={openr ? 'basic-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={openr ? 'true' : undefined}
-            onClick={handleClickr}
+            onClick={()=>{
+              router.push('/user/notification');
+            }}
           />
         </div> </Stack>
             <div style={{paddingBottom:"50px"}}>  {children}</div>

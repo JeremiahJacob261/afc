@@ -3,11 +3,15 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import { supabase } from '../api/supabase'
 import Cover from './cover'
+import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import { useRouter } from 'next/router'
 import CloseIcon from '@mui/icons-material/Close';
 import { app } from '../api/firebase';
+import Image from 'next/image'
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
+import Sg from '../../public/icon/sgpay.png'
+import Su from '../../public/icon/susdt.png'
 export default function Transaction() {
   const [trans, setTrans] = useState([])
   const router = useRouter()
@@ -43,37 +47,18 @@ export default function Transaction() {
   return (
     <Cover>
       <Stack alignItems="center" style={{ minHeight: '85vh', width: '100%' }}>
-        <CloseIcon style={{ color: 'white', margin: '12px', width: '50px', height: '50px' }}
-          onClick={() => {
-            router.push('/user/account')
-          }}
-        />
-        <div style={{ display: 'flex', justifyContent: "center", }}>
-          <Typography variant="h4" align='center' style={{ color: 'white', fontFamily: 'Poppins, sans-serif' }}>
-            Transaction History
-          </Typography></div>
-        <Stack direction="column" sx={{ width: '100%' }} spacing={1}>
-          <Stack direction="row" justifyContent='space-between'>
-            <Typography sx={{ color: 'white' }}>Date/Time</Typography>
-            <Typography sx={{ color: 'white' }}>Description</Typography>
-            <Typography sx={{ color: 'white' }}>Status</Typography>
-          </Stack>
-          {
-            trans.map((r) => {
-              var dts = new Date(r.time);
-              console.log(dts.getDate());
-              return (
-                <Stack direction="row" key={r.uid} justifyContent='space-around' alignItems="center" sx={{ background: '#1A1B72',padding:'5px' }}>
-                  <Typography sx={{ color: 'white' ,textAlign:'center',fontSize:'15px',fontWeight:'300'}}>{dts.getDate() + '/' + parseInt(dts.getMonth() + 1) + '/' + dts.getFullYear() + ' ' + dts.getHours() + ':' + dts.getMinutes()}</Typography>
-                  <Typography sx={{ color: 'white' ,textAlign:'center',fontSize:'15px',fontWeight:'300',width:'150px'}}>Your {r.type} claim of {r.amount} {(r.method === 'usdt') ? 'USDT' : 'Rupees'}</Typography>
-                  <Typography sx={{ color: 'white' ,textAlign:'center',fontSize:'15px',fontWeight:'300'}}>{r.sent}</Typography>
-                </Stack>
-              )
-            })
-
-          }
-        </Stack>
+      <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '8px', margin: '2px' }}>
+        <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
+          router.push('/user')
+        }} />
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Choose Payment Method</Typography>
       </Stack>
+        
+        <Stack direction="row">
+<Image src={Su} width={255} height={145} alt='su'/>
+<Image src={Sg} width={255} height={145} alt='su'/>
+        </Stack>
+              </Stack>
     </Cover>
   )
 }
