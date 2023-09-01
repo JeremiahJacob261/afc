@@ -191,6 +191,7 @@ export default function Cover({children}){
                       fontFamily: 'Poppins,sans-serif', fontSize: '10px', fontWeight: 'lighter', overflowX: "hidden",
                       textOverflow: "ellipsis",
                       display: "-webkit-box",
+                      color:"black",
                       WebkitLineClamp: "2",
                       WebkitBoxOrient: "vertical",
                     }}>{r.username}
