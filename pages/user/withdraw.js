@@ -19,6 +19,9 @@ import { getAuth, signOut } from "firebase/auth";
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import Wig from '../../public/icon/wig.png'
 import Image from 'next/image'
+
+import Big from '../../public/icon/badge.png'
+import { DriveFileRenameOutlineRounded } from "@mui/icons-material";
 export default function Deposit() {
   //86f36a9d-c8e8-41cb-a8aa-3bbe7b66d0a5
   const [info, setInfo] = useState({});
@@ -31,6 +34,7 @@ export default function Deposit() {
   const auth = getAuth(app);
   const router = useRouter();
   const [ale,setAle] = useState('')
+  const [aleT,setAleT] = useState(false)
   //snackbar1
   const [messages, setMessages] = useState("")
   const [opened, setOpened] = useState(false);
@@ -69,13 +73,15 @@ export default function Deposit() {
     const { data, error } = await supabase
       .rpc('withdrawer', { amount: damount, names: dusername })
     console.log(error);
+    Alerts('Your Withdrawal Request is been processed',true);
+    localStorage.setItem('wm',damount);
   }
   const Withdrawal = async () => {
     if (amount < 100) {
       if (amount > 19) {
         setWarnab('')
         if (address.length < 10) {
-          setWarnad('Ensure the address is correct')
+          Alerts('Ensure the address is correct',false)
         } else {
           setWarnad('')
 
@@ -91,10 +97,10 @@ export default function Deposit() {
         }
       } else {
 
-        setWarnab('Please Input a value between 20 and 100 USDT')
+        Alerts('Please Input a value between 20 and 100 USDT',false)
       }
     } else {
-      setWarnab('Please Input a value between 20 and 100 USDT')
+      Alerts('Please Input a value between 20 and 100 USDT',false)
     }
   }
   //snackbar2
@@ -118,8 +124,9 @@ export default function Deposit() {
       </Snackbar>
     )
   }
-  const Alerts = (m) =>{
+  const Alerts = (m,t) =>{
     setAle(m)
+    setAleT(t)
     setOpen(true)
   }
   //end of snackbar2
@@ -190,11 +197,11 @@ export default function Deposit() {
             </Stack>
         <Button variant="contained" style={{ color: "white",height:'50px',background:'#03045E' }} onClick={() => {
           if (info.balance < total) {
-            Alerts('Insufficient Balance');
+            Alerts('Insufficient Balance',false);
           } else {
             
             if (address.length < 10) {
-              Alerts('Ensure the address is correct');
+              Alerts('Ensure the address is correct',false);
             } else {
             Withdrawal();
             }
@@ -209,7 +216,14 @@ export default function Deposit() {
     return(
     <Modal
   open={open}
-  onClose={()=>{setOpen(false)}}
+  onClose={()=>{
+    if(aleT){
+      setOpen(false)
+      router.push('/user/withdrawsuccess')
+    }else{
+      setOpen(false)
+    }
+    }}
   aria-labelledby="modal-modal-title"
   aria-describedby="modal-modal-description"
 >
@@ -220,16 +234,22 @@ left: '50%',
 transform: 'translate(-50%, -50%)',
 padding:'12px'
 }}>
-  <Image src={Wig} width={120} height={120} alt='widh'/>
+  <Image src={aleT ? Big : Wig} width={120} height={120} alt='widh'/>
     <Typography id="modal-modal-title" sx={{fontFamily:'Poppins,sans-serif',fontSize:'20px',fontWeight:'500'}}>
-     Eh Sorry!
+    
+     {aleT ? 'Success' : 'Eh Sorry!'}
     </Typography>
-    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+    <Typography id="modal-modal-description" sx={{mt: 2,fontSize:'14px',fontWeight:'300'}}>
      {ale}
     </Typography>
     <Divider sx={{background:'black'}}/>
-    <Button sx={{color:'white',background:'#03045E',padding:'8px',width:'100%'}} onClick={()=>{
-      setOpen(false)
+    <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'white',background:'#03045E',padding:'8px',width:'100%'}} onClick={()=>{
+      if(aleT){
+        setOpen(false)
+        router.push('/user/withdrawsuccess')
+      }else{
+        setOpen(false)
+      }
     }}>Okay</Button>
   </Stack>
     

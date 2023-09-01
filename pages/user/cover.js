@@ -101,15 +101,16 @@ export default function Cover({children}){
           </Stack>
           
           <Stack  direction='column'>
-            
+            <Link href='/user/matches'>
             <Stack  direction='row' alignItems='center' justifyContent='space-between' sx={{width:'224px',height:'41px'}}>
             <Stack direction='row' spacing={2}>
               <SportsSoccerIcon sx={{width:'20px',height:'20px'}}/>
             <Typography sx={{fontFamily:'Poppins,sans-serif',fontSize:'14px',fontWeight:'500',color:'black'}}>Matches</Typography>
             </Stack>
             <ArrowForwardIosIcon sx={{width:'20px',height:'20px'}}/>
-            </Stack>
+            </Stack></Link>
           
+            <Link href='/user/bets'>
             <Stack  direction='row' alignItems='center' justifyContent='space-between' sx={{width:'224px',height:'41px'}}>
             <Stack direction='row' spacing={2}>
               <BiTimer sx={{width:'20px',height:'20px'}}/>
@@ -117,38 +118,43 @@ export default function Cover({children}){
             </Stack>
             <ArrowForwardIosIcon sx={{width:'20px',height:'20px'}}/>
             </Stack>
+</Link>
 
+<Link href='/user/desposit'>
             <Stack  direction='row' alignItems='center' justifyContent='space-between' sx={{width:'224px',height:'41px'}}>
             <Stack direction='row' spacing={2}>
               <GiPayMoney sx={{width:'20px',height:'20px'}}/>
             <Typography sx={{fontFamily:'Poppins,sans-serif',fontSize:'14px',fontWeight:'500',color:'black'}}>Deposit</Typography>
             </Stack>
             <ArrowForwardIosIcon sx={{width:'20px',height:'20px'}}/>
-            </Stack>
+            </Stack></Link>
 
+            <Link href='/user/withdraw'>
             <Stack  direction='row' alignItems='center' justifyContent='space-between' sx={{width:'224px',height:'41px'}}>
             <Stack direction='row' spacing={2}>
               <GiReceiveMoney sx={{width:'20px',height:'20px'}}/>
             <Typography sx={{fontFamily:'Poppins,sans-serif',fontSize:'14px',fontWeight:'500',color:'black'}}>Withdraw</Typography>
             </Stack>
             <ArrowForwardIosIcon sx={{width:'20px',height:'20px'}}/>
-            </Stack>
+            </Stack></Link>
 
+            <Link href='/user/account'>
             <Stack  direction='row' alignItems='center' justifyContent='space-between' sx={{width:'224px',height:'41px'}}>
             <Stack direction='row' spacing={2}>
               <BsFillPersonFill sx={{width:'20px',height:'20px'}}/>
             <Typography sx={{fontFamily:'Poppins,sans-serif',fontSize:'14px',fontWeight:'500',color:'black'}}>Profile</Typography>
             </Stack>
             <ArrowForwardIosIcon sx={{width:'20px',height:'20px'}}/>
-            </Stack>
+            </Stack></Link>
 
+            <Link href='https://t.me/+P9bW6kwPJ9pjZmZh'>
             <Stack  direction='row' alignItems='center' justifyContent='space-between' sx={{width:'224px',height:'41px'}}>
             <Stack direction='row' spacing={2}>
               <BiSolidContact sx={{width:'20px',height:'20px'}}/>
             <Typography sx={{fontFamily:'Poppins,sans-serif',fontSize:'14px',fontWeight:'500',color:'black'}}>Contact</Typography>
             </Stack>
             <ArrowForwardIosIcon sx={{width:'20px',height:'20px'}}/>
-            </Stack>
+            </Stack></Link>
 
             <Stack  direction='row' alignItems='center' justifyContent='space-between' sx={{width:'224px',height:'41px'}}>
             <Stack direction='row' spacing={2}>
