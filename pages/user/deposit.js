@@ -16,7 +16,7 @@ import Drawer from '@mui/material/Drawer';
 import Head from 'next/head'
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
-import barcode from '../../public/barcode.jpg'
+import barcode from '../../public/barcode1.jpg'
 import gpay from '../../public/simps/gpay.png'
 import usdt from '../../public/simps/tether.png'
 import gpaypay from '../../public/simps/gpay.jpg'
@@ -223,15 +223,15 @@ checkDepo(url);
             visibility: deb,
           }}>
             <Typography style={{color: "whitesmoke",display:(method === 'usdt') ? 'visible' : 'none'}}>ADDRESS NETWORK: TRC20</Typography>
-            <Typography style={{ color: "whitesmoke" }}> {(method === 'usdt') ? 'Send Your USDT to this Address : ' : 'Send Your Indian Rupees to this Address :'} </Typography>
+            <Typography style={{ color: "whitesmoke" }}> {(method === 'usdt') ? 'Send Your USDT to this Address : ' : 'Scan this Barcode to deposit your Indian Rupees :'} </Typography>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <Image src={(method === 'usdt') ? barcode : gpaypay } width={200} height={200} alt='TRC20 Address' style={{ padding: '12px', background: 'whitesmoke', borderRadius: '5px' }}
               /></div>
             <Typography style={{ color: "black", background: "whitesmoke", padding: "4px", cursor: "pointer" }} onClick={() => {
-              navigator.clipboard.writeText((method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : '7084444000@paytm')
+              navigator.clipboard.writeText((method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : 'Scan Barcode')
               setMessages("Address Copied")
               handleClick();
-            }}>{(method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : '7084444000@paytm'}</Typography>
+            }}>{(method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : 'Scan Barcode to pay' }</Typography>
 
             <Typography variant="caption" sx={{ color: "whitesmoke" }}>Click the Address to Copy</Typography>
             <Typography variant="caption" sx={{ color: "#FFE74C" }}>
