@@ -73,7 +73,6 @@ export default function Deposit() {
     const { data, error } = await supabase
       .rpc('withdrawer', { amount: damount, names: dusername })
     console.log(error);
-    Alerts('Your Withdrawal Request is been processed',true);
     localStorage.setItem('wm',damount);
   }
   const Withdrawal = async () => {
@@ -92,6 +91,7 @@ export default function Deposit() {
           setAddress("")
           setAmount("")
           setMessages("Your Withdrawal Request is been Processed")
+          Alerts('Your Withdrawal Request is been processed',true);
           wih(total, info.username);
           handleClick();
         }
