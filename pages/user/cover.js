@@ -101,7 +101,7 @@ export default function Cover({children}){
           </Stack>
           
           <Stack  direction='column'>
-            <Link href='/user/matches'>
+            <Link href='/user/matches' style={{ textDecoration: "none" }}>
             <Stack  direction='row' alignItems='center' justifyContent='space-between' sx={{width:'224px',height:'41px'}}>
             <Stack direction='row' spacing={2}>
               <SportsSoccerIcon sx={{width:'20px',height:'20px'}}/>
@@ -110,7 +110,7 @@ export default function Cover({children}){
             <ArrowForwardIosIcon sx={{width:'20px',height:'20px'}}/>
             </Stack></Link>
           
-            <Link href='/user/bets'>
+            <Link href='/user/bets' style={{ textDecoration: "none" }}>
             <Stack  direction='row' alignItems='center' justifyContent='space-between' sx={{width:'224px',height:'41px'}}>
             <Stack direction='row' spacing={2}>
               <BiTimer sx={{width:'20px',height:'20px'}}/>
@@ -120,7 +120,7 @@ export default function Cover({children}){
             </Stack>
 </Link>
 
-<Link href='/user/desposit'>
+<Link href='/user/desposit' style={{ textDecoration: "none" }}>
             <Stack  direction='row' alignItems='center' justifyContent='space-between' sx={{width:'224px',height:'41px'}}>
             <Stack direction='row' spacing={2}>
               <GiPayMoney sx={{width:'20px',height:'20px'}}/>
@@ -129,7 +129,7 @@ export default function Cover({children}){
             <ArrowForwardIosIcon sx={{width:'20px',height:'20px'}}/>
             </Stack></Link>
 
-            <Link href='/user/withdraw'>
+            <Link href='/user/withdraw' style={{ textDecoration: "none" }}>
             <Stack  direction='row' alignItems='center' justifyContent='space-between' sx={{width:'224px',height:'41px'}}>
             <Stack direction='row' spacing={2}>
               <GiReceiveMoney sx={{width:'20px',height:'20px'}}/>
@@ -138,7 +138,7 @@ export default function Cover({children}){
             <ArrowForwardIosIcon sx={{width:'20px',height:'20px'}}/>
             </Stack></Link>
 
-            <Link href='/user/account'>
+            <Link href='/user/account' style={{ textDecoration: "none" }}>
             <Stack  direction='row' alignItems='center' justifyContent='space-between' sx={{width:'224px',height:'41px'}}>
             <Stack direction='row' spacing={2}>
               <BsFillPersonFill sx={{width:'20px',height:'20px'}}/>
@@ -147,7 +147,7 @@ export default function Cover({children}){
             <ArrowForwardIosIcon sx={{width:'20px',height:'20px'}}/>
             </Stack></Link>
 
-            <Link href='https://t.me/+P9bW6kwPJ9pjZmZh'>
+            <Link href='https://t.me/+P9bW6kwPJ9pjZmZh' style={{ textDecoration: "none" }}>
             <Stack  direction='row' alignItems='center' justifyContent='space-between' sx={{width:'224px',height:'41px'}}>
             <Stack direction='row' spacing={2}>
               <BiSolidContact sx={{width:'20px',height:'20px'}}/>
