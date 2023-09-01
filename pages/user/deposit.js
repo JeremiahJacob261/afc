@@ -278,7 +278,7 @@ checkDepo(url);
       </Head>
       <Sncks message={messages} />
       <Stack direction="column" spacing={3} alignItems="center">
-        <CloseIcon style={{ color: 'white', margin: '12px', width: '50px', height: '50px' }}
+        <CloseIcon style={{ color: 'black', margin: '12px', width: '50px', height: '50px' }}
           onClick={() => {
             router.push('/user/account')
           }}
@@ -286,10 +286,10 @@ checkDepo(url);
         <Stack>
           <div style={{ display: 'flex', justifyContent: "center", padding: '5px' }}>
 
-            <Typography align='center' style={{ color: '#181AA9', fontFamily: 'Poppins, sans-serif', fontSize: '36px', fontWeight: 'bold' }}>
+            <Typography align='center' style={{ color: 'black', fontFamily: 'Poppins, sans-serif', fontSize: '36px', fontWeight: 'bold' }}>
               DEPOSIT
             </Typography></div>
-          <Typography align='center' style={{ color: 'white', fontFamily: 'Poppins, sans-serif', fontSize: '16px' }}>
+          <Typography align='center' style={{ color: 'black', fontFamily: 'Poppins, sans-serif', fontSize: '16px' }}>
             Choose Preferred Payment Method
           </Typography>
         </Stack>
@@ -303,7 +303,7 @@ checkDepo(url);
             <Stack direction="column" spacing={2} justifyContent="center" alignItems='center'>
 
               <Image src={usdt} alt='usdt' width={90} height={70} />
-              <Typography sx={{ color: 'white' }}>
+              <Typography sx={{ color: 'black' }}>
                 USDT
               </Typography>
             </Stack>
