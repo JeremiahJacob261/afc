@@ -16,10 +16,10 @@ import Drawer from '@mui/material/Drawer';
 import Head from 'next/head'
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
-import barcode from '../../public/barcode1.jpg'
+import barcode from '../../public/barcode.jpg'
 import gpay from '../../public/simps/gpay.png'
 import usdt from '../../public/simps/tether.png'
-import gpaypay from '../../public/simps/gpay.jpg'
+import gpaypay from '../../public/barcode1.jpg'
 import { getStorage, ref, uploadBytes,getDownloadURL }from "firebase/storage";
 export default function Deposit() {
   let loads = 0;
