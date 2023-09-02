@@ -8,7 +8,7 @@ export default function Funds() {
   const router = useRouter();
     return(
         <Cover>
-        <Stack direction='column' alignItems='center' justifyContent='center' sx={{minHeight:'90vh',padding:'12px',position:'relative'}}>
+        <Stack direction='column' justifyContent='center' alignItems='center' sx={{minHeight:'90vh',padding:'12px',position:'relative'}}>
             <Stack sx={{width:'240px',height:'305px',padding:'8px'}} alignItems='center' justifyContent='center' spacing={2}>
                  <Image src={WS} width={250} height={115} alt='ws'/>
          <Typography sx={{fontSize:'18px',fontWeight:'600',color:'black'}}>Make a Deposit</Typography>
