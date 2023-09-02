@@ -4,10 +4,15 @@ import Cover from './cover'
 import React from 'react'
 import { useRouter } from 'next/router'
 import WS from '../../public/icon/vault.png'
+import Head from 'next/head'
 export default function Funds() {
   const router = useRouter();
     return(
         <Cover>
+            <Head>
+          <title>Deposit - Enter Amount</title>
+          <link rel="icon" href="/logo_afc.ico" />
+        </Head>
         <Stack direction='column' justifyContent='center' alignItems='center' sx={{minHeight:'90vh',padding:'12px',position:'relative'}} spacing={3}>
             <Stack sx={{width:'240px',height:'305px',padding:'8px'}} alignItems='center' justifyContent='center' spacing={2}>
                  <Image src={WS} width={250} height={115} alt='ws'/>

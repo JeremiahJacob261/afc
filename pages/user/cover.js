@@ -120,7 +120,7 @@ export default function Cover({children}){
             </Stack>
 </Link>
 
-<Link href='/user/desposit' style={{ textDecoration: "none",color:'black' }}>
+<Link href='/user/fund' style={{ textDecoration: "none",color:'black' }}>
             <Stack  direction='row' alignItems='center' justifyContent='space-between' sx={{width:'224px',height:'41px'}}>
             <Stack direction='row' spacing={2}>
               <GiPayMoney sx={{width:'20px',height:'20px'}}/>

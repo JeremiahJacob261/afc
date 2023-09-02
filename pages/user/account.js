@@ -178,7 +178,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
            <Typography sx={{ color: "black",fontSize:'16px',fontWeight:'400',fontFamily:'Inter,sans-serif' }}>Deposit</Typography>
            <Divider/>
            <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{padding:'8px'}} onClick={()=>{
-            router.push('/user/deposit');
+            router.push('/user/fund');
            }}> 
            <Stack direction='row' spacing={1} justifyContent='start' >
             <Image src={St} width={24} height={24} alt='ilink'/>
@@ -216,7 +216,9 @@ const Alert = React.forwardRef(function Alert(props, ref) {
           <KeyboardArrowRightIcon width={24} height={24}/>
            </Stack>
 
-           <Stack direction='row' justifyContent='space-between' sx={{padding:'8px'}} > 
+           <Stack direction='row' justifyContent='space-between' sx={{padding:'8px'}} onClick={()=>{
+            router.push('/user/codesetting');
+           }}> 
            <Stack direction='row' spacing={1} justifyContent='start'>
             <Image src={Lk} width={24} height={24} alt='ilink'/>
             <Typography sx={{ color:'black',fontSize:'14px',fontWeight:300,fontFamily:'Inter,sans-serif'}}>Code Setting</Typography>
