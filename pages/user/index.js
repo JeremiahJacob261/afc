@@ -19,17 +19,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import { FaCircleDollarToSlot } from 'react-icons/fa';
-import { TbMailDollar } from 'react-icons/tb'
-import { CgMenuGridR } from 'react-icons/cg'
 import Backdrop from '@mui/material/Backdrop';
-import {BiTimer} from 'react-icons/bi'
-import {GiPayMoney,GiReceiveMoney} from 'react-icons/gi'
-import TranslateIcon from '@mui/icons-material/Translate';
-import {BsFillPersonFill} from 'react-icons/bs'
-import {BiSolidContact} from 'react-icons/bi'
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 export default function Home() {
   const [anchorEl, setAnchorEl] = useState(null);

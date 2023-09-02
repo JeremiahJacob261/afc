@@ -8,7 +8,7 @@ export default function Funds() {
   const router = useRouter();
     return(
         <Cover>
-        <Stack direction='column' justifyContent='center' alignItems='center' sx={{minHeight:'90vh',padding:'12px',position:'relative'}}>
+        <Stack direction='column' justifyContent='center' alignItems='center' sx={{minHeight:'90vh',padding:'12px',position:'relative'}} spacing={3}>
             <Stack sx={{width:'240px',height:'305px',padding:'8px'}} alignItems='center' justifyContent='center' spacing={2}>
                  <Image src={WS} width={250} height={115} alt='ws'/>
          <Typography sx={{fontSize:'18px',fontWeight:'600',color:'black'}}>Make a Deposit</Typography>
@@ -16,7 +16,7 @@ export default function Funds() {
          Deposit money into your account in 3 easy steps
     </Typography>
             </Stack>
-        <Button variant='contained' sx={{position:'absolute',bottom:100,fontFamily:'Poppins,sans-serif',color:'white',background:'#03045E',padding:'8px',width:'343px',height:'50px'}} onClick={()=>{
+        <Button variant='contained' sx={{position:'absolute',bottom:90,fontFamily:'Poppins,sans-serif',color:'white',background:'#03045E',padding:'8px',width:'343px',height:'50px'}} onClick={()=>{
      
         router.push('/user/transaction')
       

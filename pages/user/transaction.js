@@ -9,7 +9,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import { app } from '../api/firebase';
 import Image from 'next/image'
 import { onAuthStateChanged } from "firebase/auth";
-
 import Rd from '../../public/icon/rounds.png'
 import { getAuth, signOut } from "firebase/auth";
 import Sg from '../../public/icon/sgpay.png'
@@ -57,7 +56,7 @@ export default function Transaction() {
       <Stack style={{ minHeight: '85vh', width: '100%' }} spacing={2}>
       <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '8px', margin: '2px' }}>
         <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
-          router.push('/user')
+          router.push('/user/fund')
         }} />
         <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Choose Payment Method</Typography>
       </Stack>
@@ -65,11 +64,11 @@ export default function Transaction() {
         <Stack direction="row" sx={{overflowX:'auto',maxWidth:'360px'}} spacing={2}>
 <Image src={Su} width={255} height={145} alt='su' onClick={()=>{
   localStorage.setItem('dm','usdt');
-  router.push('/user/deposit')
+  router.push('/user/inputvalue')
 }}/>
 <Image src={Sg} width={255} height={145} alt='su' onClick={()=>{
   localStorage.setItem('dm','gpay');
-  router.push('/user/deposit')
+  router.push('/user/inputvalue')
 }}/>
         </Stack>
         <Stack direction='row' justifyContent='space-between'>

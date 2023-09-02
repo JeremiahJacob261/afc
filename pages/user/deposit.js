@@ -1,109 +1,55 @@
-import { Stack, TextField, Typography, Button, Box } from "@mui/material";
-import { supabase } from '../api/supabase'
-import { useContext, useEffect } from "react";
 import Cover from "./cover";
-import React, { useState, useRef } from "react";
-import { useRouter } from 'next/router'
-import CloseIcon from '@mui/icons-material/Close';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
+import { Stack,Typography,Button,Modal,Divider } from '@mui/material'
+import Tet from '../../public/icon/tshow.png'
+import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
+import PriorityHighRoundedIcon from '@mui/icons-material/PriorityHighRounded';
 import Image from "next/image";
+import ClearIcon from '@mui/icons-material/Clear';
+import ubarcode from '../../public/barcode.jpg'
+import gbarcode from '../../public/barcode1.jpg'
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import iCopy from '../../public/icon/ion_copy.png'
+import { useState,useRef,useEffect } from "react";
+import { getStorage, ref, uploadBytes,getDownloadURL }from "firebase/storage";
 import { app } from '../api/firebase';
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
 import { v4 } from "uuid";
-import Drawer from '@mui/material/Drawer';
-import Head from 'next/head'
+import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
+import Wig from '../../public/icon/wig.png'
+import { supabase } from '../api/supabase'
+import Big from '../../public/icon/badge.png'
 import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
-import barcode from '../../public/barcode.jpg'
-import gpay from '../../public/simps/gpay.png'
-import usdt from '../../public/simps/tether.png'
-import gpaypay from '../../public/barcode1.jpg'
-import { getStorage, ref, uploadBytes,getDownloadURL }from "firebase/storage";
-export default function Deposit() {
-  let loads = 0;
-  const [info, setInfo] = useState({})
-  const [amount, setAmount] = useState('')
-  const [address, setAddress] = useState("")
-  const [amthelp, setAmthelp] = useState("")
-  const [file, setfile] = useState([]);
-  const [imgpath, setImgpath] = useState();
-  const [imgurl, setImgurl] = useState();
-  const [bottom, setBottom] = useState(false)
-  
-  //snackbar1
-  const [messages, setMessages] = useState("")
-  const [opened, setOpened] = useState(false)
-  const [dea, setDea] = useState("visible")
-  const [deb, setDeb] = useState("hidden")
+export default function Deposit(){
+  const [drop,setDrop] = useState(false);
+  //alerts
+  const [ale,setAle] = useState('')
+  const [open,setOpen] = useState(false)
+  const [aleT,setAleT] = useState(false)
+  const Alerts = (m,t) =>{
+      setAle(m)
+      setAleT(t)
+      setOpen(true)
+    }
+  //end
+  const [file,setfile] = useState([])
+  //from stackoverflow
+  const inputFile = useRef(null); 
+  //end
+  const method = localStorage.getItem('dm');
+  const amount = localStorage.getItem('amo');
   const auth = getAuth(app);
   const storage =  getStorage(app,"gs://atalanta-77824.appspot.com");
-  const [drop, setDrop] = useState(false)
-  const router = useRouter()
-  const [dean, setDean] = useState(200)
-  const [method,setMethod] = useState()
-  const Alert = React.forwardRef(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-  });
-  //end of snackbar1
-  const isMounted = useRef(true);
-  useEffect(() => {
-    const useri = localStorage.getItem('signedIn');
-    if (useri) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
-
-      const uid = localStorage.getItem('signUid');
-      const name = localStorage.getItem('signName');
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
-
-      // ...
-      if (isMounted.current) {
-        const GET = async () => {
-          const { data, error } = await supabase
-            .from('users')
-            .select()
-            .eq('username', name)
-          setInfo(data[0])
-          console.log(data)
-        }
-        GET();
-        isMounted.current = false;
-      } else {
-
-      }
-    } else {
-      // User is signed out
-      // ...
-      signOut(auth);
-      console.log('sign out');
-      localStorage.removeItem('signedIn');
-      localStorage.removeItem('signUid');
-      localStorage.removeItem('signName');
-      router.push('/login');
-    }
-
-
-  }, []);
-  //file upload
-  const checkDepo = async (url) => {
+  // {(method === 'usdt') ? 'USDT' : 'Gpay' }
+   //file upload
+   const checkDepo = async (url) => {
     try{
     const uer= localStorage.getItem('signName');
     const { error } = await supabase
       .from('notification')
       .insert({ address: url, username: uer , amount: amount, sent: 'pending', type: "deposit", method: method } )
-    setAddress("")
-    setAmount("")
-    setMessages("The Deposit will reflect in your balance soon")
-    handleClick();
     console.log(error)
     setfile([]);
-      setDea('visible')
-      setDeb('hidden')
-      setDrop(false)
-      setBottom(false)
     }catch(e){
       
       setDrop(false)
@@ -122,218 +68,157 @@ checkDepo(url);
          })
         })
   }
-  //snackbar2
-  const handleClick = () => {
-    setOpened(true);
-  };
+  const checkFile = () =>{
+    if(file.length === 0){
+      Alerts('Please Upload an Image',false)
+    }else{
+      console.log(file)
+      console.log(file.length);
+    Upload();
+    }
+  }
+  useEffect(() => {
+    const useri = localStorage.getItem('signedIn');
+    if (useri) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
 
-  const handleClosed = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
+      const uid = localStorage.getItem('signUid');
+      const name = localStorage.getItem('signName');
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+
+    } else {
+      // User is signed out
+      // ...
+      signOut(auth);
+      console.log('sign out');
+      localStorage.removeItem('signedIn');
+      localStorage.removeItem('signUid');
+      localStorage.removeItem('signName');
+      router.push('/login');
     }
 
-    setOpened(false);
-  };
-  function Sncks({ message }) {
-    return (
-      <Snackbar open={opened} autoHideDuration={6000} onClose={handleClosed}>
-        <Alert onClose={handleClosed} severity="success" sx={{ width: '100%' }}>
-          {message}
-        </Alert>
-      </Snackbar>
-    )
-  }
-  //end of snackbar2
-  return (
+
+  }, []);
+ 
+  return(
     <Cover>
-    <div style={{ minHeight: '80vh' }}>
-      {
-        //start of usdt drawers
-      }
-      <Drawer
-        anchor='bottom'
-        open={bottom}
-        onClose={() => {
-          setBottom(false)
-        }}
-        style={{ background: '#1A1B72', padding: '8px' }} >
-        <Stack style={{ background: '#1A1B72', padding: '8px', }} direction="column" alignItems='center'>
-          <CloseIcon style={{ color: '#EE8F00', margin: '12px', width: '30px', height: '30px' }}
-            onClick={() => {
-              setBottom(false)
-            }}
-          />
-          <div style={{ display: 'flex', justifyContent: "center", padding: '5px', background: '#1A1B72' }}>
-
-            <Typography align='center' style={{ color: 'white', fontFamily: 'Poppins, sans-serif', fontSize: '30px' }}>
-              Deposit
-            </Typography></div>
-          <Typography style={{ color: 'white' }}>
-            {(method === 'usdt') ? 'Please note that the minimum deposit is 10 USDT' : 'Please note that the minimum deposit is 830 ₹'}
-           
-          </Typography>
-          <Stack
-            direction="column" spacing={3}
-            sx={{
-              visibility: dea,
-              height: dean,
-              background: '#1A1B72'
-            }}>
-            <TextField variant="standard"
-              label="Enter Amount You Wish To Deposit"
-              value={amount}
-              type="number"
-              onChange={(a) => {
-                setAmount(a.target.value)
-              }}
-              helperText={amthelp}
-              sx={{
-                background: "whitesmoke"
-              }}
-            />
-            <Button
-              variant="contained"
-              onClick={() => {
-                if(method === 'usdt'){
-                  if (amount < 10 ) {
-                  setAmthelp('The Minimum Deposit is 10 USDT');
-                     console.log(amount)
-                } else {
-                    console.log(amount)
-                  setDea('hidden')
-                  setDeb('visible')
-                  setDean(0)
-                }
-                }else{
-                   if (amount < 830 ) {
-                  setAmthelp('The Minimum Deposit is 830 ₹');
-                      console.log(amount)
-                } else {
-                      console.log(amount)
-                  setDea('hidden')
-                  setDeb('visible')
-                  setDean(0)
-                }
-                }
-                
-
-              }}>Next</Button>
-          </Stack>
-          <Stack direction="column" spacing={3} sx={{
-            visibility: deb,
-          }}>
-            <Typography style={{color: "whitesmoke",display:(method === 'usdt') ? 'visible' : 'none'}}>ADDRESS NETWORK: TRC20</Typography>
-            <Typography style={{ color: "whitesmoke" }}> {(method === 'usdt') ? 'Send Your USDT to this Address : ' : 'Scan this Barcode to deposit your Indian Rupees :'} </Typography>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <Image src={(method === 'usdt') ? barcode : gpaypay } width={200} height={200} alt='TRC20 Address' style={{ padding: '12px', background: 'whitesmoke', borderRadius: '5px' }}
-              /></div>
-            <Typography style={{ color: "black", background: "whitesmoke", padding: "4px", cursor: "pointer" }} onClick={() => {
-              navigator.clipboard.writeText((method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : 'Scan Barcode')
-              setMessages("Address Copied")
-              handleClick();
-            }}>{(method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : 'Scan Barcode to pay' }</Typography>
-
-            <Typography variant="caption" sx={{ color: "whitesmoke" }}>Click the Address to Copy</Typography>
-            <Typography variant="caption" sx={{ color: "#FFE74C" }}>
-              
-              {(method === 'usdt') ? 'The Minimum Deposit is 10 USDT ,Deposits less than 10 USDT will be ignored.' : 'The Minimum Deposit is 830 ₹, Deposits less than 830 ₹ will be ignored.'}
-              After making the Transaction, Please upload a screenshot of the successful Transaction.
-            </Typography>
-              <input type="file" name="image" accept="image/*" onChange={(e) => {
-                setfile(e.target.files[0]);
-                console.log(e.target.files[0].name);
-              }} />
-              <Button variant='contained'  style={{ color: "white" }} onClick={() => {
-                if(file.length === 0){
-                  alert('Please Upload an Image')
-                }else{
-                  console.log(file)
-                  console.log(file.length);
-                  setDrop(true)
-                Upload();
-                }
-              }}>Verify Transaction</Button>
-
-            <Typography variant="caption" style={{ color: "white" }} >Click this Button within 20Mins after depositing to Verify.
-              Failure To Verify the Transaction will result in Lost Funds</Typography>
-          </Stack>
-        </Stack>
-
-      </Drawer>
-      {
-        //end of usdt drawers
-      }
-     
+      <Alertz/>
       <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={drop}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
-      <Head>
-        <title>Deposit</title>
-        <meta name="description" content="Get a percentage bonus on your first deposit" />
-        <link rel="icon" href="/logo_afc.ico" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-      <Sncks message={messages} />
-      <Stack direction="column" spacing={3} alignItems="center">
-        <CloseIcon style={{ color: 'black', margin: '12px', width: '50px', height: '50px' }}
-          onClick={() => {
-            router.push('/user/account')
-          }}
-        />
-        <Stack>
-          <div style={{ display: 'flex', justifyContent: "center", padding: '5px' }}>
-
-            <Typography align='center' style={{ color: 'black', fontFamily: 'Poppins, sans-serif', fontSize: '36px', fontWeight: 'bold' }}>
-              DEPOSIT
-            </Typography></div>
-          <Typography align='center' style={{ color: 'black', fontFamily: 'Poppins, sans-serif', fontSize: '16px' }}>
-            Choose Preferred Payment Method
-          </Typography>
-        </Stack>
-        <Stack direction="row" justifyContent='space-around' spacing={4}>
-          <Button onClick={() => {
-            setBottom(true)
-            setMethod('usdt')
-          }}
-            sx={{ background: '#1A1B72', width: '145px', height: '136px', borderRadius: '5px' }}
-          >
-            <Stack direction="column" spacing={2} justifyContent="center" alignItems='center'>
-
-              <Image src={usdt} alt='usdt' width={90} height={70} />
-              <Typography sx={{ color: 'black' }}>
-                USDT
-              </Typography>
-            </Stack>
-          </Button>
-
-          <Button
-            sx={{ background: '#1A1B72', width: '145px', height: '136px', borderRadius: '5px' }}
-            onClick={() => {
-              setBottom(true)
-              setMethod('gpay')
-            }}
-          >
-            <Stack direction="column" spacing={2} justifyContent="center" alignItems='center'>
-
-              <Image src={gpay} alt='gpay' width={60} height={60} />
-              <Typography sx={{ color: 'white' }}>
-                Gpay
-              </Typography>
-            </Stack>
-          </Button>
-        </Stack>
-
-        <Typography
-          variant="caption"
-          sx={{ color: '#DFA100' }}
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={drop}
         >
-          GPay is now available !
-        </Typography>
+          <SportsSoccerIcon id='balls' sx={{ marginLeft: '8px' }} />
+        </Backdrop>
+      <Stack direction='column' spacing={2} alignItems='center'>
+      <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '8px', margin: '2px' }}>
+        <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
+          router.push('/user/transaction')
+        }} />
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Deposit</Typography>
       </Stack>
-    </div>
-      </Cover>
+      <Stack direction='row' className='warning' justifyContent='center' alignItems='center' sx={{height:'58px',background:'#FBEFEF',borderRadius:'5px',padding:'16px'}} spacing={2}>
+      <PriorityHighRoundedIcon sx={{color:'white',background:'#E94E55',width:'20px',height:'20px',borderRadius:'10px'}}/>
+      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#E94E55' }}>Please note that the minimum deposit is 10 USDT</Typography>
+      </Stack>
+        <Stack direction='column' spacing={1}>
+          <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'black'}}>Wallet Network Address</Typography>
+          <Stack direction="row" spacing={2}  alignItems='center' sx={{ padding: '8px',background:'#EFEFEF',borderRadius:'10px' }}>
+                  <Image src={Tet} width={40} height={40} alt='rounds'/>
+                  <Stack direction='column' justifyContent='start' sx={{width:'196px'}}>
+ <Typography style={{ color:'black',fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>{(method === 'usdt') ? 'USDT' : 'Gpay' }
+                   </Typography>
+                   <Typography style={{ color:'black',fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{(method === 'usdt') ? 'TRC 20 Network' : 'UPI ID' }</Typography>
+                 </Stack>
+                 </Stack>
+        </Stack>
+        <Stack direction='column' spacing={2} className='barcode'>
+        <Typography style={{ color:'black',fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>Send {(method === 'usdt') ? 'USDT' : 'Gpay' } to this Address</Typography>
+        <Image src={(method === 'usdt') ? ubarcode : gbarcode } width={184} height={156} alt='barcode'/>
+        </Stack>
+        <Stack className='address' spacing={1}>
+           <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'black' }}>Address link</Typography>
+           <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{height:'58px',background:'#EFEFEF',borderRadius:'5px',padding:'16px'}} spacing={2}>
+      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'black' }}>{(method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : 'Ashhar Jamal Jafri' }</Typography>
+      <Image src={iCopy} width={20} height={20} alt='icopy' onClick={()=>{
+        navigator.clipboard.writeText((method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : 'Ashhar Jamal Jafri' )
+      }}/>
+      </Stack>
+        </Stack>
+        <Stack className='upload' spacing={1}>
+           <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'black' }}>Upload Transaction Details</Typography>
+          <Stack justifyContent='center' alignItems='center' sx={{ width:'343px',height:'87px',background:'white',borderStyle:'dashed',borderRadius:'10px',border:'2px dashed #EFEFEF'}} 
+          onClick={()=>{
+             inputFile.current.click();
+          }}> 
+          <InsertDriveFileIcon sx={{color:'black', fontFamily: 'Poppins,sans-serif'}}/>
+          <input type='file' id='file' ref={inputFile} style={{display: 'none'}} 
+          accept="image/*" onChange={(e) => {
+                setfile(e.target.files[0]);
+                console.log(e.target.files[0]);
+              }}/>
+          <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '500',color:'#03045E' }} onClick={()=>{
+             inputFile.current.click();
+          }}>Browse</Typography>
+          </Stack>
+           <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{height:'58px',background:'#EFEFEF',borderRadius:'5px',padding:'16px'}} spacing={2}>
+           <InsertDriveFileIcon sx={{color:'#03045E', fontFamily: 'Poppins,sans-serif'}}/>
+      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'black' }}>{(method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : 'Ashhar Jamal Jafri' }</Typography>
+      <ClearIcon sx={{width:'24px',height:'24px',color:'black'}}/>
+      </Stack>
+        </Stack>
+        <Stack direction='row' className='warning' justifyContent='center' alignItems='center' sx={{height:'58px',background:'#FBEFEF',borderRadius:'5px',padding:'16px'}} spacing={2}>
+      <PriorityHighRoundedIcon sx={{color:'white',background:'#E94E55',width:'20px',height:'20px',borderRadius:'10px'}}/>
+      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#E94E55' }}>Verify in 20 minutes as faiure to do so may lead to decine in transaction</Typography>
+      </Stack>
+      <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'white',background:'#03045E',padding:'8px',width:'343px',height:'50px'}} onClick={checkFile}>Verify</Button>
+           
+      </Stack>
+    </Cover>
   )
+  function Alertz(){
+    return(
+    <Modal
+  open={open}
+  onClose={()=>{
+    if(aleT){
+      setOpen(false)
+      router.push('/user/withdrawsuccess')
+    }else{
+      setOpen(false)
+    }
+    }}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+>
+  <Stack alignItems='center' justifyContent='space-evenly' sx={{background:'white',width:'290px',height:'330px',borderRadius:'20px',
+position: 'absolute',
+top: '50%',
+left: '50%',
+transform: 'translate(-50%, -50%)',
+padding:'12px'
+}}>
+  <Image src={aleT ? Big : Wig} width={120} height={120} alt='widh'/>
+    <Typography id="modal-modal-title" sx={{fontFamily:'Poppins,sans-serif',fontSize:'20px',fontWeight:'500'}}>
+    
+     {aleT ? 'Success' : 'Eh Sorry!'}
+    </Typography>
+    <Typography id="modal-modal-description" sx={{fontFamily:'Poppins,sans-serif',mt: 2,fontSize:'14px',fontWeight:'300'}}>
+     {ale}
+    </Typography>
+    <Divider sx={{background:'black'}}/>
+    <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'white',background:'#03045E',padding:'8px',width:'100%'}} onClick={()=>{
+      if(aleT){
+        setOpen(false)
+        router.push('/user/account')
+      }else{
+
+        setOpen(false)
+      }
+    }}>Okay</Button>
+  </Stack>
+    
+</Modal>)
+  }
 }
