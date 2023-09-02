@@ -42,9 +42,13 @@ const handleClosed = (event, reason) => {
   setOpened(false);
 };
 let loads = 0;
+const [usern,setUsern] = useState('')
+const [userR,setUserR] = useState('')
   //end of snackbar1
   useEffect(() => {
     const useri =  localStorage.getItem('signedIn');
+    setUsern(localStorage.getItem('signName'));
+    setUserR(localStorage.getItem('signRef'));
     if (useri) {
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/auth.user
@@ -119,9 +123,9 @@ const Alert = React.forwardRef(function Alert(props, ref) {
       }
       <Stack spacing={4} sx={{minWidth:'344px'}}>
           <Stack direction='row' spacing={2}>
-            <Avatar>{info ? `${info.username}` : 'Loading...'}</Avatar>
+            <Avatar>{info ? `${info.username}` : usern }</Avatar>
             <Stack direction='column'>
-               <Typography sx={{ color: "black",fontSize:'14px',fontWeight:'500', fontFamily: 'Poppins, sans-serif' }}>Hello {info ? ` ${info.username}` : 'Loading...'}</Typography>
+               <Typography sx={{ color: "black",fontSize:'14px',fontWeight:'500', fontFamily: 'Poppins, sans-serif' }}>Hello {info ? `${info.username}` : usern }</Typography>
             <Typography sx={{ color: "black",fontSize:'14px',fontWeight:'300', fontFamily: 'Poppins, sans-serif' }}>Level 1</Typography>
             </Stack>
            </Stack>
@@ -148,7 +152,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
            <Stack direction='row' justifyContent='space-between' sx={{padding:'8px'}}> 
            <Stack direction='row' spacing={1} justifyContent='start'>
             <Image src={iLink} width={24} height={24} alt='ilink'/>
-            <Typography sx={{ color:'black',fontSize:'14px',fontWeight:300,fontFamily:'Inter,sans-serif'}}>https://afcfifa/register/{info ? `${info.newrefer}` : 'Loading...'}</Typography>
+            <Typography sx={{ color:'black',fontSize:'14px',fontWeight:300,fontFamily:'Inter,sans-serif'}}>https://afcfifa/register/{info ? info.newrefer : userR }</Typography>
           </Stack>
           <Image src={iCopy} width={20} height={20} alt='icopy' onClick={() => {
                 navigator.clipboard.writeText("https://afcfifa.com/register/" + info.newrefer)
