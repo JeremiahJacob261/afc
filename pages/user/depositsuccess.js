@@ -1,12 +1,15 @@
 import {Stack,Button, Typography} from '@mui/material'
 import Image from 'next/image'
 import Cover from './cover'
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { useRouter } from 'next/router'
 import WS from '../../public/icon/depos.png'
 export default function Dsuccess() {
   const router = useRouter();
-  const [amo,setAmo] = useState(localStorage.getItem('amo'));
+  const [amo,setAmo] = useState();
+  useEffect(()=>{
+    setAmo(localStorage.getItem('amo'))
+  },[])
     return(
         <Cover>
         <Stack direction='column' alignItems='center' justifyContent='center' sx={{minHeight:'90vh',padding:'12px',position:'relative'}}>

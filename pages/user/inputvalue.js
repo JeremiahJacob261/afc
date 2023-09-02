@@ -2,7 +2,7 @@ import Cover from "./cover";
 import { Stack,Typography,TextField,Button,Divider }   from '@mui/material'
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import PriorityHighRoundedIcon from '@mui/icons-material/PriorityHighRounded';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import Modal from '@mui/material/Modal';
@@ -14,7 +14,7 @@ export default function InputValue() {
     const [open,setOpen] = useState(false)
     const [aleT,setAleT] = useState(false)
     const [amount,setAmount] = useState('')
-    const [method,setMethod] = useState(localStorage.getItem('dm'));
+    const [method,setMethod] = useState();
     const Alerts = (m,t) =>{
         setAle(m)
         setAleT(t)
@@ -39,6 +39,9 @@ export default function InputValue() {
             }
         
     }
+    useEffect(()=>{
+      setMethod(localStorage.getItem('dm'));
+    },[])
     return(
         <Cover>
             <Alertz/>
