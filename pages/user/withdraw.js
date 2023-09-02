@@ -27,6 +27,7 @@ export default function Deposit() {
   const [info, setInfo] = useState({});
   const [address, setAddress] = useState("")
   const [amount, setAmount] = useState("")
+  const [pin, setPin] = useState("");
   const [warnad, setWarnad] = useState("");
   const [warnab, setWarnab] = useState("");
   const [method, setMethod] = useState('USDT');
@@ -175,6 +176,16 @@ export default function Deposit() {
               setTotal(Number(a.target.value) + ((a.target.value * 5) / 100));
             }}/>
             </Stack>
+            <Stack spacing={1}> 
+            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'black'}}>Transaction Pin</Typography>
+            <TextField 
+            sx={{color:'#03045E'}}
+            type="password"
+            value={pin}
+            onChange={(a) => {
+              setPin(a.target.value)
+            }}/>
+            </Stack>
 
             <Stack spacing={1}> 
             <Typography sx={{fontSize:'12px',color:'#03045E',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'black'}}>Choose Prefered Payment Method</Typography>
@@ -203,7 +214,17 @@ export default function Deposit() {
             if (address.length < 10) {
               Alerts('Ensure the address is correct',false);
             } else {
+              if(!info.codeset){
+                Alerts('Your Need To Set a Transaction Pin',false);
+                router.push('/user/codesetting');
+              }else{
+                if(info.pin == pin){
+
             Withdrawal();
+                }else{
+                  Alerts('Incorrect Pin',false);
+                }
+              }
             }
           }
         }}>Withdraw</Button>

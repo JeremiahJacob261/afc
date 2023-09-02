@@ -57,6 +57,8 @@ export default function Home() {
             .eq('userId', uid)
           setInfo(data[0])
           setBalance(data[0].balance);
+          
+          localStorage.setItem('signRef', data[0].newrefer);
         }
         const GETs = async () => {
           try {

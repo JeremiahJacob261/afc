@@ -112,10 +112,10 @@ export default function Login() {
           // ...
 
           alert('you are logged in');
+          localStorage.setItem('signRef', data[0].newrefer);
           localStorage.setItem('signedIn', true);
           localStorage.setItem('signUid', user.uid);
           localStorage.setItem('signName', user.displayName);
-          localStorage.setItem('signRef', data[0].newrefer);
           setDrop(false)
           router.push('/user');
         })

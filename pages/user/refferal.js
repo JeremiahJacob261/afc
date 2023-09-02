@@ -32,16 +32,17 @@ export default function Refferal() {
   const [lvl2, setLvl2] = useState([]);
   const [lvlo, setLvlo] = useState([]);
   const router = useRouter()
-  const [refers,setRefers] = useState('')
   const [lvll, setLvll] = useState([]);
   const auth = getAuth(app);
   const [lvl3, setLvl3] = useState([]);
   const isMounted = useRef(true);
 
   useEffect(() => {
+        refers = localStorage.getItem('signRef');
    
     const useri =  localStorage.getItem('signedIn');
     if (useri) {
+        console.log(refers)
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/auth.user
 
@@ -51,21 +52,13 @@ export default function Refferal() {
         // https://firebase.google.com/docs/reference/js/auth.user
        
         // ...
-        setRefers(localStorage.getItem('signRef'));
-        async function getCo() {
-          const { data, error } = await supabase
-            .from('users')
-            .select('*')
-          .or(`refer.eq.${refers},lvla.eq.${refers},lvlb.eq.${refers}`)
-          setLvl(data)
-          }
-          getCo();
         async function getCo1() {
           const { data, error } = await supabase
             .from('users')
             .select('*')
             .eq('refer', refers)
           setLvl1(data)
+          console.log(data)
           }
           getCo1()
           async function getCo2() {
@@ -74,6 +67,7 @@ export default function Refferal() {
             .select('*')
             .eq('lvla', refers)
           setLvl2(data)
+          console.log(data)
           }
           getCo2()
           async function getCo3() {
@@ -82,10 +76,13 @@ export default function Refferal() {
             .select('*')
             .eq('lvlb', refers)
           setLvl3(data)
+          console.log(data)
           }
           getCo3();
+          const merged = lvl1.concat(lvl2, lvl3);
+    merged.sort((a, b) => new Date(a.crdate) - new Date(b.crdate));
+    setLvl(merged);
 
-       
         
      
       } else {
@@ -152,12 +149,12 @@ export default function Refferal() {
           let dates = date.getDate() + '-' + parseInt(date.getMonth() + 1) + '-' + date.getFullYear()
           let month = months[date.getMonth()];
           let time = date.getHours()+ ':'+date.getMinutes()
-          let balance = t.balance.toFixed(2)
+          let balance = t.balance.toFixed(2);
           return(
-            <Stack direction="row" spacing={2} justifyContent="space-between" alignItems='center' sx={{ padding: '8px' }} key={t.id}>
+            <Stack direction="row" spacing={2} justifyContent="space-between" alignItems='center' sx={{ padding: '8px' }} key={t.keyf}>
                   <Image src={Rd} width={40} height={40} alt='rounds'/>
                   <Stack direction='column' alignItems='start' sx={{width:'196px'}}>
-                    <Stack direction='row' alignItems='center' spacing={1}>
+                    <Stack direction='row' alignItems='center' spacing={1} justifyContent='stretch'>
  <Typography style={{ color:'black',fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '500' }}>{t.username}
                    </Typography> 
                    <Typography sx={{color:'#808080'}}>•</Typography>
