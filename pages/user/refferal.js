@@ -39,7 +39,7 @@ export default function Refferal() {
   const [refers,setRefers] = useState('')
   useEffect(() => {
     
-   
+   const refs = localStorage.getItem('signRef');
     const useri =  localStorage.getItem('signedIn');
     if (useri) {
       // User is signed in, see docs for a list of available properties
@@ -51,8 +51,16 @@ export default function Refferal() {
         // https://firebase.google.com/docs/reference/js/auth.user
        
         // ...
-          
-     
+          console.log(`refer.eq.${refs}`)
+      async function getRef(){
+        const {data,error} = await supabase
+        .from('users')
+        .select('*')
+        .or(`refer.eq.${refs},lvla.eq.${refs},lvlb.eq.${refs}`)
+        console.log(data)
+        setLvl(data)
+      }
+      getRef();
       } else {
         // User is signed out
         // ...
@@ -63,13 +71,7 @@ export default function Refferal() {
         localStorage.removeItem('signName');
         router.push('/login');
       }
-  const Gref = async ( dusername) => {
-    const { data, error } = await supabase
-        .rpc('gef', { newref: dusername })
-    console.log(data);
-    console.log(error);
-}
-Gref(refers);
+ 
   }, [])
   
 
