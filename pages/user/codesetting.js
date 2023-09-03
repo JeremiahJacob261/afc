@@ -5,6 +5,7 @@ import PriorityHighRoundedIcon from '@mui/icons-material/PriorityHighRounded';
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
+import Big from '../../public/icon/badge.png'
 import Modal from '@mui/material/Modal';
 import Wig from '../../public/icon/wig.png'
 import Image from 'next/image'
@@ -13,6 +14,7 @@ export default function Code(){
     const [pin,setPin] = useState('')
     const [cpin,setCPin] = useState('')
     const [name,setName] = useState('')
+    const router = useRouter();
     const [open,setOpen] = useState(false)
     const [ale,setAle] = useState(false)
     const [aleT,setAleT] = useState(false)
@@ -26,16 +28,20 @@ export default function Code(){
     },[])
     const nextPage = () => {
         if(pin === cpin){
-           Alerts('Make the Both Pins are Correct',false);
-        }else{
             async function Update() {
                 const { data,error} = await supabase
                 .from('users')
-                .update('pin',pin)
+                .update(
+                  {
+                    'pin':pin,
+                    'codeset':true
+                  })
                 .eq('username',name);
                 Alerts('You have successfully set a new Pin',true)
             }
             Update();
+        }else{
+           Alerts('Make the Both Pins are Correct',false);
         }
     }
     return(

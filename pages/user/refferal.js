@@ -36,54 +36,22 @@ export default function Refferal() {
   const auth = getAuth(app);
   const [lvl3, setLvl3] = useState([]);
   const isMounted = useRef(true);
-
+  const [refers,setRefers] = useState('')
   useEffect(() => {
-        refers = localStorage.getItem('signRef');
+    
    
     const useri =  localStorage.getItem('signedIn');
     if (useri) {
-        console.log(refers)
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/auth.user
-
+      setRefers(localStorage.getItem('signRef'))
       const uid =  localStorage.getItem('signUid');
       const name =  localStorage.getItem('signName');
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
        
         // ...
-        async function getCo1() {
-          const { data, error } = await supabase
-            .from('users')
-            .select('*')
-            .eq('refer', refers)
-          setLvl1(data)
-          console.log(data)
-          }
-          getCo1()
-          async function getCo2() {
-          const { data, count } = await supabase
-            .from('users')
-            .select('*')
-            .eq('lvla', refers)
-          setLvl2(data)
-          console.log(data)
-          }
-          getCo2()
-          async function getCo3() {
-          const { data, count } = await supabase
-            .from('users')
-            .select('*')
-            .eq('lvlb', refers)
-          setLvl3(data)
-          console.log(data)
-          }
-          getCo3();
-          const merged = lvl1.concat(lvl2, lvl3);
-    merged.sort((a, b) => new Date(a.crdate) - new Date(b.crdate));
-    setLvl(merged);
-
-        
+          
      
       } else {
         // User is signed out
@@ -95,10 +63,15 @@ export default function Refferal() {
         localStorage.removeItem('signName');
         router.push('/login');
       }
-  
+  const Gref = async ( dusername) => {
+    const { data, error } = await supabase
+        .rpc('gef', { newref: dusername })
+    console.log(data);
+    console.log(error);
+}
+Gref(refers);
   }, [])
-     
- 
+  
 
   const columns = [
     { field: 'statId', headerName: 'ID', width: 50 },
