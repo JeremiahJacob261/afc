@@ -71,12 +71,17 @@ export default function Login() {
         const uid = user.uid;
         // ...
         async function GET() {
-          const { data, error } = await supabase
+          try{
+ const { data, error } = await supabase
             .from('users')
             .select()
             .eq('username', user.displayName);
           localStorage.setItem('signRef', data[0].newrefer);
           console.log(data);
+          }catch(e){
+
+          }
+         
         }
         GET();
 
