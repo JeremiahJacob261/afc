@@ -80,7 +80,7 @@ export default function Cover({children}){
     return(
         <Stack direction="column"
         justifyContent="center"
-        alignItems="center" style={{width:'100%',background:"#FFFFFF"}}>
+        alignItems="center" style={{width:'100%',background:"#E5E7EB"}}>
             {
         //drawer layout
       }
@@ -170,7 +170,7 @@ export default function Cover({children}){
       {
         //drawer layout end
       }
-           <Stack direction="row" style={{ background: '#FFFFFF', width: '100%', height: '64px', padding: '5px' }}
+           <Stack direction="row" style={{ background: '#E5E7EB', width: '100%', height: '64px', padding: '5px' }}
         alignItems='center' justifyContent="space-between">
         <div style={{ display: 'inline-flex', alignItems: 'center' }}>
           <CgMenuGridR color="black" style={{ width: '24px', height: '24px' }} onClick={()=>{
