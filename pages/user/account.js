@@ -111,7 +111,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
         <link rel="icon" href="/logo_afc.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Box sx={{ padding: "8px", background: "#FFFFFF",width:'100%',minHeight:'80vh' }}>
+      <Box sx={{ padding: "8px", background: "#E5E7EB",width:'100%',minHeight:'80vh' }}>
       <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '5px', margin: '2px' }}>
         <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
           router.push('/user')

@@ -138,7 +138,7 @@ export default function Match({ matchDat }) {
     //main ui
     return (
         <Cover>
-        <Stack style={{ width: "100%", minHeight: '100vh', background: '#FFFFFF' }} alignItems="center">
+        <Stack style={{ width: "100%", minHeight: '100vh', background: '#E5E7EB' }} alignItems="center">
             <Draws />
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -373,7 +373,7 @@ export default function Match({ matchDat }) {
             >
                 
                 <Cover>
-                <Stack direction='column' spacing={2} style={{ background: 'white', padding: '8px', minHeight: '100vh',paddingBottom:'12px' }}>
+                <Stack direction='column' spacing={2} style={{ background: '#E5E7EB', padding: '8px', minHeight: '100vh',paddingBottom:'12px' }}>
                     <Stack direction='row' sx={{ padding: '5px' }}>
                         <KeyboardArrowLeftOutlinedIcon onClick={()=>{
                             setBottom(false)
@@ -426,7 +426,7 @@ export default function Match({ matchDat }) {
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: 'black' }}>Account Balance</Typography>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'black' }}>{info.balance} USDT</Typography>
                         </Stack>
-                        <TextField variant="outlined" label='stake' type='number' sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', background: 'white',color:'#03045E' }}
+                        <TextField variant="outlined" label='stake' type='number' sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', background: '#E5E7EB',color:'#03045E' }}
                         value={stake}
                         onChange={(e)=>{
                             setStake(e.target.value)
@@ -440,7 +440,7 @@ export default function Match({ matchDat }) {
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: 'black' }}>Expected Profit</Typography>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: 'black' }}>{expext} USDT</Typography>
                         </Stack>
-                        <Button sx={{fontFamily: 'Poppins,sans-serif',margin:'8px', fontSize: '16', fontWeight: '300', color: 'white',background:"#03045E",padding:'10px'}} 
+                        <Button sx={{fontFamily: 'Poppins,sans-serif',margin:'8px', fontSize: '16', fontWeight: '300', color: '#E5E7EB',background:"#03045E",padding:'10px'}} 
                         onClick={()=>{
                             if (stake - 1 < info.balance) {
                                 if (stake < 1) {

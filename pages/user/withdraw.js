@@ -195,7 +195,7 @@ export default function Deposit() {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={method}
-              style={{  background: "#FFFFFF"}}
+              style={{  background: "#E5E7EB"}}
               onChange={(e) => {
                 console.log(e.target.value)
                 setMethod(e.target.value);
@@ -206,7 +206,7 @@ export default function Deposit() {
             </Select>
           </FormControl>
             </Stack>
-        <Button variant="contained" style={{ color: "white",height:'50px',background:'#03045E' }} onClick={() => {
+        <Button variant="contained" style={{ color: "#E5E7EB",height:'50px',background:'#03045E' }} onClick={() => {
           if (info.balance < total) {
             Alerts('Insufficient Balance',false);
           } else {
@@ -248,7 +248,7 @@ export default function Deposit() {
   aria-labelledby="modal-modal-title"
   aria-describedby="modal-modal-description"
 >
-  <Stack alignItems='center' justifyContent='space-evenly' sx={{background:'white',width:'290px',height:'330px',borderRadius:'20px',
+  <Stack alignItems='center' justifyContent='space-evenly' sx={{background:'#E5E7EB',width:'290px',height:'330px',borderRadius:'20px',
 position: 'absolute',
 top: '50%',
 left: '50%',
@@ -264,7 +264,7 @@ padding:'12px'
      {ale}
     </Typography>
     <Divider sx={{background:'black'}}/>
-    <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'white',background:'#03045E',padding:'8px',width:'100%'}} onClick={()=>{
+    <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'#E5E7EB',background:'#03045E',padding:'8px',width:'100%'}} onClick={()=>{
       if(aleT){
         setOpen(false)
         router.push('/user/withdrawsuccess')

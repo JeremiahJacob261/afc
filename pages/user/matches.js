@@ -40,7 +40,7 @@ border: "1px solid rgba(255, 255, 255, 0.3)"
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div style={{
-        maxWidth: "350px", background: "#FFFFFF",minHeight:'100vh'
+        maxWidth: "350px", background: "#E5E7EB",minHeight:'100vh'
       }}>
         <Stack direction='row' alignItems='center' spacing={1} sx={{padding:'5px',margin:'2px'}}>
         <KeyboardArrowLeftOutlinedIcon sx={{width:'24px',height:'24px'}} onClick={()=>{

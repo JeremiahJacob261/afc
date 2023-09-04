@@ -16,7 +16,7 @@ export default function Wsuccess() {
          Your Withdrawal Request is successfully sent
     </Typography>
             </Stack>
-        <Button variant='contained' sx={{position:'absolute',bottom:100,fontFamily:'Poppins,sans-serif',color:'white',background:'#03045E',padding:'8px',width:'343px',height:'50px'}} onClick={()=>{
+        <Button variant='contained' sx={{position:'absolute',bottom:100,fontFamily:'Poppins,sans-serif',color:'#E5E7EB',background:'#03045E',padding:'8px',width:'343px',height:'50px'}} onClick={()=>{
      
         router.push('/user/account')
       
