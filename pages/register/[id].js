@@ -161,7 +161,7 @@ export default function Register({ refer }) {
               password: values.password,
               phone: phone,
               refer: refer,
-              username: usern,
+              username: username,
               countrycode: age,
               newrefer: nRef,
               lvla: lvla,
@@ -181,7 +181,7 @@ export default function Register({ refer }) {
         updateRefb();
         setDrop(false);
         updateProfile(auth.currentUser, {
-          displayName: usern,
+          displayName: username,
           phoneNumber: phone
         }).then(async () => {
 
