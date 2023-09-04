@@ -135,10 +135,11 @@ export default function Login() {
     setDrop(true)
     localStorage.clear()
     if (!email.includes("@")) {
+      let usern = email.replace(/^\s+|\s+$/gm, '')
       const { count, error } = await supabase
         .from('users')
         .select('*', { count: 'exact', head: true })
-        .eq('username', email)
+        .eq('username', usern)
       console.log(count);
       if (count > 0) {
 
