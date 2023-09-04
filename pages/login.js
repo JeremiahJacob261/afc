@@ -205,25 +205,25 @@ export default function Login() {
       <Stack direction='column' spacing={3}>
         <Stack direction="column" spacing={2} justifyContent="center" alignItems="center">
           <Link href="/" style={{ textDecoration: "none" }}>
-            <Typography style={{ fontFamily: 'Noto Serif, serif', color: "white", fontWeight: '400', fontSize: '20px' }}>AFCFIFA </Typography>
+            <Typography style={{ fontFamily: 'Noto Serif, serif', color: "#E5E7EB", fontWeight: '400', fontSize: '20px' }}>AFCFIFA </Typography>
           </Link>
-          <Typography style={{ fontFamily: 'Poppins,sans-serif', color: 'white', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
+          <Typography style={{ fontFamily: 'Poppins,sans-serif', color: '#E5E7EB', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
             Dont miss a minute of the action! Sign in
           </Typography>
-          <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: 'white', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
+          <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: '#E5E7EB', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
             Enter the correct information provided to Login to your  account
           </Typography>
         </Stack>
         <Stack direction="column" spacing={4} sx={{ width: '343px' }}>
           <TextField id="outlined-basic" label="Email Or Username" variant="filled"
-            sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white', } }}
+            sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #E5E7EB', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#E5E7EB', } }}
             value={email}
             onChange={(e) => {
               setEmail(e.target.value)
             }}
           />
           <FormControl
-            sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white', } }}
+            sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #E5E7EB', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#E5E7EB', } }}
             variant="filled">
             <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
             <OutlinedInput
@@ -239,7 +239,7 @@ export default function Login() {
                     onMouseDown={handleMouseDownPassword}
                     edge="end"
                   >
-                    {values.showPassword ? <VisibilityOff sx={{ color: 'whitesmoke' }} /> : <Visibility sx={{ color: 'white' }} />}
+                    {values.showPassword ? <VisibilityOff sx={{ color: '#E5E7EBsmoke' }} /> : <Visibility sx={{ color: '#E5E7EB' }} />}
                   </IconButton>
                 </InputAdornment>
               }
@@ -251,13 +251,13 @@ export default function Login() {
       <Stack direction="column" spacing={2} justifyContent='center' alignItems='center' sx={{ width: '343px', marginTop: '200px' }}>
         <Button variant="contained" sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%',fontWeight:'400', background: '#FE9D16' }}
           onClick={login}>
-          <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "whitesmoke" }}>Login</Typography>
+          <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "#E5E7EBsmoke" }}>Login</Typography>
         </Button>
-        <Link href="/passwordreset" style={{ textDecoration: 'white' }}>
-          <Typography style={{ color: "white", fontSize: '14px', fontWeight: '200', opacity: '0.7', fontFamily: 'Poppins,sans-serif' }}>Forgotten Password ?</Typography>
-          <Divider sx={{ background: 'white' }} />
+        <Link href="/passwordreset" style={{ textDecoration: '#E5E7EB' }}>
+          <Typography style={{ color: "#E5E7EB", fontSize: '14px', fontWeight: '200', opacity: '0.7', fontFamily: 'Poppins,sans-serif' }}>Forgotten Password ?</Typography>
+          <Divider sx={{ background: '#E5E7EB' }} />
         </Link>
-        <Link href="/register/000208" style={{ width: '100%', textAlign: 'center', textDecoration: "none", color: "white", fontSize: '15px', fontWeight: '400', fontFamily: 'Poppins,sans-serif' }}>Dont have an Account ?
+        <Link href="/register/000208" style={{ width: '100%', textAlign: 'center', textDecoration: "none", color: "#E5E7EB", fontSize: '15px', fontWeight: '400', fontFamily: 'Poppins,sans-serif' }}>Dont have an Account ?
           Create Account
 
         </Link>

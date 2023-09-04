@@ -76,17 +76,17 @@ export default function PasswordReset() {
       </Head>
       <Stack direction="column" spacing={4} justifyContent="center" alignItems="center">
             <Link href="/" style={{ textDecoration: "none" }}>
-              <Typography style={{ fontFamily: 'Noto Serif, serif', color: "white", fontWeight: '400', fontSize: '20px' }}>AFCFIFA </Typography>
+              <Typography style={{ fontFamily: 'Noto Serif, serif', color: "#E5E7EB", fontWeight: '400', fontSize: '20px' }}>AFCFIFA </Typography>
             </Link>
-            <Typography style={{ fontFamily: 'Poppins,sans-serif', color: 'white', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
+            <Typography style={{ fontFamily: 'Poppins,sans-serif', color: '#E5E7EB', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
             Forgot Password? Dont worry
             </Typography>
-            <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: 'white', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
+            <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: '#E5E7EB', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
             We would send you a link to your email so you can reset your password
             </Typography>
           </Stack>
       <TextField id="outlined-basic" label="Email" variant="filled"
-        sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid white', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: 'white', } }}
+        sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #E5E7EB', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#E5E7EB', } }}
 
         value={email}
         onChange={(e) => {
@@ -95,11 +95,11 @@ export default function PasswordReset() {
       />
       <Stack direction="column" spacing={2} justifyContent='center' alignItems='center' sx={{width:'343px',position:'absolute',bottom:55}}>
         <Button variant="contained"  sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', background: '#FE9D16' }} onClick={reset}>
-        <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "whitesmoke" }}>Send Email</Typography>
+        <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "#E5E7EBsmoke" }}>Send Email</Typography>
       </Button>
       <Typography>
-              <Link href="/login" style={{ textDecoration: "none", fontSize: '14px', fontWeight: '100', color: "white", opacity: '1.0', fontFamily: 'Poppins,sans-serif' }}>Return To Login</Link>
-              <Divider sx={{background:'white'}}/>
+              <Link href="/login" style={{ textDecoration: "none", fontSize: '14px', fontWeight: '100', color: "#E5E7EB", opacity: '1.0', fontFamily: 'Poppins,sans-serif' }}>Return To Login</Link>
+              <Divider sx={{background:'#E5E7EB'}}/>
               </Typography>
       
       </Stack>

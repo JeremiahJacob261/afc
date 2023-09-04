@@ -134,7 +134,7 @@ checkDepo(url);
         <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Deposit</Typography>
       </Stack>
       <Stack direction='row' className='warning' justifyContent='center' alignItems='center' sx={{height:'58px',background:'#FBEFEF',borderRadius:'5px',padding:'16px'}} spacing={2}>
-      <PriorityHighRoundedIcon sx={{color:'white',background:'#E94E55',width:'20px',height:'20px',borderRadius:'10px'}}/>
+      <PriorityHighRoundedIcon sx={{color:'#E5E7EB',background:'#E94E55',width:'20px',height:'20px',borderRadius:'10px'}}/>
       <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#E94E55' }}>Please note that the minimum deposit is 10 USDT</Typography>
       </Stack>
         <Stack direction='column' spacing={1} sx={{minWidth:'344px'}}>
@@ -163,7 +163,7 @@ checkDepo(url);
         </Stack>
         <Stack className='upload' spacing={1} sx={{minWidth:'344px'}}>
            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'black' }}>Upload Transaction Details</Typography>
-          <Stack justifyContent='center' alignItems='center' sx={{ width:'343px',height:'87px',background:'white',borderStyle:'dashed',borderRadius:'10px',border:'2px dashed #EFEFEF'}} 
+          <Stack justifyContent='center' alignItems='center' sx={{ width:'343px',height:'87px',background:'#E5E7EB',borderStyle:'dashed',borderRadius:'10px',border:'2px dashed #EFEFEF'}} 
           onClick={()=>{
              inputFile.current.click();
           }}> 
@@ -190,10 +190,10 @@ checkDepo(url);
       </Stack>
         </Stack>
         <Stack direction='row' className='warning' justifyContent='center' alignItems='center' sx={{height:'58px',background:'#FBEFEF',borderRadius:'5px',padding:'16px'}} spacing={2}>
-      <PriorityHighRoundedIcon sx={{color:'white',background:'#E94E55',width:'20px',height:'20px',borderRadius:'10px'}}/>
+      <PriorityHighRoundedIcon sx={{color:'#E5E7EB',background:'#E94E55',width:'20px',height:'20px',borderRadius:'10px'}}/>
       <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#E94E55' }}>Verify in 20 minutes as faiure to do so may lead to decine in transaction</Typography>
       </Stack>
-      <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'white',background:'#03045E',padding:'8px',width:'343px',height:'50px'}} onClick={checkFile}>Verify</Button>
+      <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'#E5E7EB',background:'#03045E',padding:'8px',width:'343px',height:'50px'}} onClick={checkFile}>Verify</Button>
            
       </Stack>
     </Cover>
@@ -213,7 +213,7 @@ checkDepo(url);
   aria-labelledby="modal-modal-title"
   aria-describedby="modal-modal-description"
 >
-  <Stack alignItems='center' justifyContent='space-evenly' sx={{background:'white',width:'290px',height:'330px',borderRadius:'20px',
+  <Stack alignItems='center' justifyContent='space-evenly' sx={{background:'#E5E7EB',width:'290px',height:'330px',borderRadius:'20px',
 position: 'absolute',
 top: '50%',
 left: '50%',
@@ -229,7 +229,7 @@ padding:'12px'
      {ale}
     </Typography>
     <Divider sx={{background:'black'}}/>
-    <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'white',background:'#03045E',padding:'8px',width:'100%'}} onClick={()=>{
+    <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'#E5E7EB',background:'#03045E',padding:'8px',width:'100%'}} onClick={()=>{
       if(aleT){
         setOpen(false)
         router.push('/user/depositsuccess')

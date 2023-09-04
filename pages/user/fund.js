@@ -21,7 +21,7 @@ export default function Funds() {
          Deposit money into your account in 3 easy steps
     </Typography>
             </Stack>
-        <Button variant='contained' sx={{position:'absolute',bottom:90,fontFamily:'Poppins,sans-serif',color:'white',background:'#03045E',padding:'8px',width:'343px',height:'50px'}} onClick={()=>{
+        <Button variant='contained' sx={{position:'absolute',bottom:90,fontFamily:'Poppins,sans-serif',color:'#E5E7EB',background:'#03045E',padding:'8px',width:'343px',height:'50px'}} onClick={()=>{
      
         router.push('/user/transaction')
       

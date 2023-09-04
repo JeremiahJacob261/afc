@@ -166,10 +166,10 @@ checkDepo(url);
           />
           <div style={{ display: 'flex', justifyContent: "center", padding: '5px', background: '#1A1B72' }}>
 
-            <Typography align='center' style={{ color: 'white', fontFamily: 'Poppins, sans-serif', fontSize: '30px' }}>
+            <Typography align='center' style={{ color: '#E5E7EB', fontFamily: 'Poppins, sans-serif', fontSize: '30px' }}>
               Deposit
             </Typography></div>
-          <Typography style={{ color: 'white' }}>
+          <Typography style={{ color: '#E5E7EB' }}>
             {(method === 'usdt') ? 'Please note that the minimum deposit is 10 USDT' : 'Please note that the minimum deposit is 830 ₹'}
            
           </Typography>
@@ -189,7 +189,7 @@ checkDepo(url);
               }}
               helperText={amthelp}
               sx={{
-                background: "whitesmoke"
+                background: "#E5E7EBsmoke"
               }}
             />
             <Button
@@ -223,18 +223,18 @@ checkDepo(url);
           <Stack direction="column" spacing={3} sx={{
             visibility: deb,
           }}>
-            <Typography style={{color: "whitesmoke",display:(method === 'usdt') ? 'visible' : 'none'}}>ADDRESS NETWORK: TRC20</Typography>
-            <Typography style={{ color: "whitesmoke" }}> {(method === 'usdt') ? 'Send Your USDT to this Address : ' : 'Scan this Barcode to deposit your Indian Rupees :'} </Typography>
+            <Typography style={{color: "#E5E7EBsmoke",display:(method === 'usdt') ? 'visible' : 'none'}}>ADDRESS NETWORK: TRC20</Typography>
+            <Typography style={{ color: "#E5E7EBsmoke" }}> {(method === 'usdt') ? 'Send Your USDT to this Address : ' : 'Scan this Barcode to deposit your Indian Rupees :'} </Typography>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <Image src={(method === 'usdt') ? barcode : gpaypay } width={200} height={200} alt='TRC20 Address' style={{ padding: '12px', background: 'whitesmoke', borderRadius: '5px' }}
+              <Image src={(method === 'usdt') ? barcode : gpaypay } width={200} height={200} alt='TRC20 Address' style={{ padding: '12px', background: '#E5E7EBsmoke', borderRadius: '5px' }}
               /></div>
-            <Typography style={{ color: "black", background: "whitesmoke", padding: "4px", cursor: "pointer" }} onClick={() => {
+            <Typography style={{ color: "black", background: "#E5E7EBsmoke", padding: "4px", cursor: "pointer" }} onClick={() => {
               navigator.clipboard.writeText((method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : 'Scan Barcode')
               setMessages("Address Copied")
               handleClick();
             }}>{(method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : 'Scan Barcode to pay' }</Typography>
 
-            <Typography variant="caption" sx={{ color: "whitesmoke" }}>Click the Address to Copy</Typography>
+            <Typography variant="caption" sx={{ color: "#E5E7EBsmoke" }}>Click the Address to Copy</Typography>
             <Typography variant="caption" sx={{ color: "#FFE74C" }}>
               
               {(method === 'usdt') ? 'The Minimum Deposit is 10 USDT ,Deposits less than 10 USDT will be ignored.' : 'The Minimum Deposit is 830 ₹, Deposits less than 830 ₹ will be ignored.'}
@@ -244,7 +244,7 @@ checkDepo(url);
                 setfile(e.target.files[0]);
                 console.log(e.target.files[0].name);
               }} />
-              <Button variant='contained'  style={{ color: "white" }} onClick={() => {
+              <Button variant='contained'  style={{ color: "#E5E7EB" }} onClick={() => {
                 if(file.length === 0){
                   alert('Please Upload an Image')
                 }else{
@@ -255,7 +255,7 @@ checkDepo(url);
                 }
               }}>Verify Transaction</Button>
 
-            <Typography variant="caption" style={{ color: "white" }} >Click this Button within 20Mins after depositing to Verify.
+            <Typography variant="caption" style={{ color: "#E5E7EB" }} >Click this Button within 20Mins after depositing to Verify.
               Failure To Verify the Transaction will result in Lost Funds</Typography>
           </Stack>
         </Stack>
@@ -320,7 +320,7 @@ checkDepo(url);
             <Stack direction="column" spacing={2} justifyContent="center" alignItems='center'>
 
               <Image src={gpay} alt='gpay' width={60} height={60} />
-              <Typography sx={{ color: 'white' }}>
+              <Typography sx={{ color: '#E5E7EB' }}>
                 Gpay
               </Typography>
             </Stack>

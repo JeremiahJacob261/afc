@@ -55,7 +55,7 @@ export default function Code(){
         <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Deposit</Typography>
       </Stack>
       <Stack direction='row' justifyContent='center' alignItems='center' sx={{height:'58px',background:'#FBEFEF',borderRadius:'5px',padding:'16px',maxWidth:'344px'}} spacing={2}>
-      <PriorityHighRoundedIcon sx={{color:'white',background:'#E94E55',width:'20px',height:'20px',borderRadius:'10px'}}/>
+      <PriorityHighRoundedIcon sx={{color:'#E5E7EB',background:'#E94E55',width:'20px',height:'20px',borderRadius:'10px'}}/>
       <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#E94E55' }}>Please note that whatever pin you set is what you will always use to make withdrawals</Typography>
       </Stack>
       <Stack spacing={1} sx={{minWidth:'344px'}}> 
@@ -82,7 +82,7 @@ export default function Code(){
             }}
             />
             </Stack>
-            <Button variant='contained' sx={{position:'absolute',bottom:100,fontFamily:'Poppins,sans-serif',color:'white',background:'#03045E',padding:'8px',minWidth:'343px',height:'50px'}} onClick={nextPage}>Continue</Button>
+            <Button variant='contained' sx={{position:'absolute',bottom:100,fontFamily:'Poppins,sans-serif',color:'#E5E7EB',background:'#03045E',padding:'8px',minWidth:'343px',height:'50px'}} onClick={nextPage}>Continue</Button>
             </Stack>
         </Cover>
     )
@@ -100,7 +100,7 @@ export default function Code(){
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Stack alignItems='center' justifyContent='space-evenly' sx={{background:'white',width:'290px',height:'330px',borderRadius:'20px',
+      <Stack alignItems='center' justifyContent='space-evenly' sx={{background:'#E5E7EB',width:'290px',height:'330px',borderRadius:'20px',
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -116,7 +116,7 @@ export default function Code(){
          {ale}
         </Typography>
         <Divider sx={{background:'black'}}/>
-        <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'white',background:'#03045E',padding:'8px',width:'100%'}} onClick={()=>{
+        <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'#E5E7EB',background:'#03045E',padding:'8px',width:'100%'}} onClick={()=>{
           if(aleT){
             setOpen(false)
             router.push('/user/account')

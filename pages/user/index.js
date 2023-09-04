@@ -110,7 +110,7 @@ export default function Home() {
     >
       
       
-      <Cover sx={{background:'white',width:'100vh',height:'100vh'}}>
+      <Cover sx={{background:'#E5E7EB',width:'100vh',height:'100vh'}}>
         <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={drop}
@@ -121,7 +121,7 @@ export default function Home() {
           <title>Welcome - {info ? `${info.username}` : 'Loading...'}</title>
           <link rel="icon" href="/logo_afc.ico" />
         </Head>
-        <Stack sx={{ background: "white", marginTop: '10px' }} spacing={4} justifyContent='center' >
+        <Stack sx={{ background: "#E5E7EB", marginTop: '10px' }} spacing={4} justifyContent='center' >
           <Typography style={{ fontSize: '16px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '5px', width: '100%', textAlign: 'left', color: 'black' }}>Hello {info.username}</Typography>
           <Stack direction='row' justifyContent='space-between' alignItems='center'>
             <Stack>
@@ -151,7 +151,7 @@ export default function Home() {
           </Stack>
           <Stack direction='row' spacing={1}>
             <Stack sx={{ background: '#E6E8F3', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>This Week</Typography></Stack>
-            <Stack sx={{ background: '#03045E', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: 'white', fontSize: '12px', fontWeight: '100' }}>Today</Typography></Stack>
+            <Stack sx={{ background: '#03045E', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E5E7EB', fontSize: '12px', fontWeight: '100' }}>Today</Typography></Stack>
             <Stack sx={{ background: '#E6E8F3', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>Next 3 hrs</Typography></Stack>
             <Stack sx={{ background: '#E6E8F3', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>Next 30 mins</Typography></Stack>
           </Stack>
@@ -221,7 +221,7 @@ export default function Home() {
           }
           </Stack>
           
-          <Button style={{ background: '#181AA9', color: 'white', borderRadius: '5px', width: '100%', height: '57px' }}
+          <Button style={{ background: '#181AA9', color: '#E5E7EB', borderRadius: '5px', width: '100%', height: '57px' }}
             onClick={() => {
               router.push('/user/matches')
             }}
