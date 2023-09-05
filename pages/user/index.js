@@ -34,7 +34,6 @@ export default function Home() {
   const [footDat, setFootDat] = useState([])
   const [balance, setBalance] = useState(0)
   const [info, setInfo] = useState({})
-  const [trans, setTrans] = useState([])
   const auth = getAuth(app);
   const [draw,setDraw] = useState(false);
     let loads = 0;
@@ -48,37 +47,25 @@ export default function Home() {
       const name = localStorage.getItem('signName');
       // ...
       console.log(loads)
-      if (loads === 0) {
-        loads++;
+      
         const GET = async () => {
-          const { data, error } = await supabase
+          try{
+const { data, error } = await supabase
             .from('users')
             .select()
             .eq('userId', uid)
-          setInfo(data[0])
+          setInfo(data[0]);
           setBalance(data[0].balance);
           
           localStorage.setItem('signRef', data[0].newrefer);
-        }
-        const GETs = async () => {
-          try {
-            const { data, error } = await supabase
-              .from('activa')
-              .select()
-              .or(`code.eq.${info.newrefer},code.eq.broadcast,username.eq.${info.username}`)
-              .limit(10)
-              .order('id', { ascending: false });
-            setTrans(data)
-            console.log(data)
-          } catch (e) {
-            console.log(e);
+          }catch(e){
+            console.log(e)
+            alert('Please Check your Internet Connection and Refresh the Website')
           }
-
+          
         }
-        GETs();
         GET();
-      }
-
+      
     } else {
       // User is signed out
       // ...
@@ -106,7 +93,7 @@ export default function Home() {
   const router = useRouter()
   return (
     <Stack justifyContent="center" alignItems="center"
-      style={{ background: "#03045E", marginBottom: "50px" }}
+      style={{ background: "#E5E7EB", marginBottom: "50px" }}
     >
       
       
@@ -126,10 +113,10 @@ export default function Home() {
           <Stack direction='row' justifyContent='space-between' alignItems='center'>
             <Stack>
               <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'black' }}>Current Balance </Typography>
-              <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'black' }}>{Number(info.balance).toFixed(2)} USDT</Typography>
+              <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'black' }}>{info ? `${Number(info.balance).toFixed(2)}` : '0'} USDT</Typography>
             </Stack>
-            <Link href='/user/fund'>
-            <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#E6E8F3', borderRadius: '20px', padding: '8px', width: '95px',height:'32px' }}>
+            <Link href='/user/fund' sx={{textDecoration:'none',color:'black'}}>
+            <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#DDDDDD', borderRadius: '20px', padding: '8px', width: '95px',height:'32px' }}>
               <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: 'black', fontSize: '12px' }}>
                 Deposit
               </Typography>
@@ -176,7 +163,7 @@ export default function Home() {
                     background: '#EFEFEF',
                     width: '343px',
                     borderRadius: '5px',
-                    height: '204px'
+                    height: '210px'
                   }} onClick={() => {
                     setDrop(true)
                     //register/000208

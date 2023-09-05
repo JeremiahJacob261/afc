@@ -62,14 +62,14 @@ border: "1px solid rgba(255, 255, 255, 0.3)"
               return (
 
                 <Stack direction="column" spacing={2} justifyContent='center' alignItems='center'
-                  key={"match" + pro.home + pro.away}
+                  key={pro.match_id}
                   style={{
                     marginBottom: "8px", padding: "18.5px",
                     display: (stams < curren) ? 'none' : 'visible',
                     background: '#EFEFEF',
                     width: '343px',
                     borderRadius: '5px',
-                    height: '204px'
+                    height: '210px'
                   }} onClick={() => {
                     setDrop(true)
                     //register/000208

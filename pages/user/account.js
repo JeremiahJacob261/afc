@@ -135,7 +135,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
               <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'black' }}>{info ? ` ${info.balance.toFixed(3)}` : '0' } USDT</Typography>
             </Stack>
             <Link href='/user/fund' style={{ textDecoration: "none",color:'black' }}>
-            <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#E6E8F3', borderRadius: '20px', padding: '8px', width: '95px',height:'32px' }}>
+            <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#DFE1E7', borderRadius: '20px', padding: '8px', width: '95px',height:'32px' }}>
               <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: 'black', fontSize: '12px' }}>
                 Deposit
               </Typography>

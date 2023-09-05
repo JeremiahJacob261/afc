@@ -16,6 +16,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
 import TabPanel from '@mui/lab/TabPanel';
 export default function Refferal() {
   const [value, setValue] = useState('1');
@@ -53,12 +56,17 @@ export default function Refferal() {
         // ...
           console.log(`refer.eq.${refs}`)
       async function getRef(){
+        try{
         const {data,error} = await supabase
         .from('users')
         .select('*')
         .or(`refer.eq.${refs},lvla.eq.${refs},lvlb.eq.${refs}`)
         console.log(data)
         setLvl(data)
+        }catch(e){
+          console.log(e);
+        }
+        
       }
       getRef();
       } else {
@@ -109,12 +117,30 @@ export default function Refferal() {
         }} />
         <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Referral</Typography>
       </Stack>
+      <Accordion style={{background:'#E5E7EB',width:'341px'}}>
+        <AccordionSummary
+          expandIcon={
+             <KeyboardArrowDownIcon sx={{color:'black',fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300'}}/>
+          }
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Stack direction='row' justifyContent='space-between'>
+            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '500' }}>Referrals({lvl ? lvl.length : '0'})</Typography>
+            </Stack>
+           
+          </AccordionSummary>
+        <AccordionDetails>
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#03045E',padding:'8px' }}>All</Typography>
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#000000',opacity:'0.6',padding:'8px' }}>Level 1</Typography>
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#000000',opacity:'0.6',padding:'8px' }}>Level 2</Typography>
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#000000',opacity:'0.6',padding:'8px' }}>Level 3</Typography>
+          
+        </AccordionDetails>
+      </Accordion>
      <Stack direction='row' justifyContent='space-between' sx={{width:'100%'}}>
-        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '500' }}>Referrals({lvl.length})</Typography>
-     <Stack direction='row' alignItems='center'>
-     <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>All</Typography>
-     <KeyboardArrowDownIcon sx={{color:'black',fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300'}}/>
-     </Stack>
+      
+      
      </Stack>
      <Divider sx={{color:'black'}}/>
      <Stack direction='column'>

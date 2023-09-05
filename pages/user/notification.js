@@ -3,8 +3,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import {useRouter} from 'next/router';
 import { useEffect,useState,useRef } from 'react';
 import { supabase } from '../api/supabase';
-import { TbMailDollar } from 'react-icons/tb'
-import NotificationsNoneSharpIcon from '@mui/icons-material/NotificationsNoneSharp';
+import Head from 'next/head'
 import Image from 'next/image'
 import Rd from '../../public/icon/rounds.png'
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
@@ -53,6 +52,10 @@ export default function Notification() {
       
     return(
         <Stack direction="column" sx={{minHeight:'80vh'}}>
+          <Head>
+          <title>Notifications</title>
+          <link rel="icon" href="/logo_afc.ico" />
+        </Head>
             <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '8px', margin: '2px' }}>
         <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
           router.push('/user')

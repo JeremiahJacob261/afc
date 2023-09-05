@@ -145,7 +145,7 @@ export default function Login() {
 
         findemail()
       } else {
-        alert('username does not exist')
+        alert('username does not exist or check your internet connection')
         setDrop(false)
       }
     } else {

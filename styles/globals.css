@@ -42,3 +42,6 @@ html{
       transform:rotate(360deg); 
   } 
 }
+.MuiPaper-elevation{
+  box-shadow: none !important;
+}

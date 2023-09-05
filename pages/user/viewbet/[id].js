@@ -151,7 +151,6 @@ export default function Viewbets({ bets }) {
             return(
              <Button variant='standard' style={{ color: '#F05D5E', }} onClick={() => {
                 setDrop(true);
-                 Depositing(bet.stake, info.username);
                  const rem = async () => {
 
                      const { error } = await supabase
@@ -160,8 +159,9 @@ export default function Viewbets({ bets }) {
                          .eq('betid', bet.betid);
                  }
                  rem();
+                 Depositing(bet.stake, info.username);
                 setDrop(false);
-                 router.push('/user/bets');
+                 router.push('/user/matches');
              }}>Cancel this bet</Button>
             )
             }
