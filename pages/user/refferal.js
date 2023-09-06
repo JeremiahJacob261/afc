@@ -31,11 +31,9 @@ export default function Refferal() {
 
   const [info, setInfo] = useState({});
   const [lvl, setLvl] = useState([]);
-  const [lvl1, setLvl1] = useState([]);
-  const [lvl2, setLvl2] = useState([]);
-  const [lvlo, setLvlo] = useState([]);
+  const [lvlst, setLvlst] = useState([]);
   const router = useRouter()
-  const [lvll, setLvll] = useState([]);
+  const [fshow,setFshow] = useState('All')
   const auth = getAuth(app);
   const [lvl3, setLvl3] = useState([]);
   const isMounted = useRef(true);
@@ -63,6 +61,7 @@ export default function Refferal() {
         .or(`refer.eq.${refs},lvla.eq.${refs},lvlb.eq.${refs}`)
         console.log(data)
         setLvl(data)
+         setLvlst(data)
         }catch(e){
           console.log(e);
         }
@@ -80,8 +79,17 @@ export default function Refferal() {
         router.push('/login');
       }
  
-  }, [])
-  
+  }, []);
+  async function filterData(tofill){
+    setFshow((tofill === 'refer') ? 'Level 1' : (tofill === 'lvla') ? 'Level 2' : 'Level 3');
+    const fill = lvlst.filter(i => i[tofill] === refers);
+    setLvl(fill);
+    console.log(fill)
+  }
+   async function reMain(){
+    setLvl(lvlst)
+    setFshow('All')
+   }
 
   const columns = [
     { field: 'statId', headerName: 'ID', width: 50 },
@@ -125,16 +133,18 @@ export default function Refferal() {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Stack direction='row' justifyContent='space-between'>
+          <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{width:'100%'}}>
             <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '500' }}>Referrals({lvl ? lvl.length : '0'})</Typography>
+            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#03045E',padding:'8px' }}>{fshow}</Typography>
+        
             </Stack>
            
           </AccordionSummary>
         <AccordionDetails>
-        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#03045E',padding:'8px' }}>All</Typography>
-        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#000000',opacity:'0.6',padding:'8px' }}>Level 1</Typography>
-        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#000000',opacity:'0.6',padding:'8px' }}>Level 2</Typography>
-        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#000000',opacity:'0.6',padding:'8px' }}>Level 3</Typography>
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:(fshow === 'Level 1') ? '#808080' : (fshow === 'Level 2') ? '#808080' : (fshow === 'Level 3') ? '#808080' : '#03045E',padding:'8px' }} onClick={()=>{ reMain}}>All</Typography>
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:(fshow === 'Level 1') ? '#03045E' : (fshow === 'Level 2') ? '#808080' : '#808080',padding:'8px' }} onClick={()=>{ filterData('refer')}}>Level 1</Typography>
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:(fshow === 'Level 1') ? '#808080' : (fshow === 'Level 2') ? '#03045E' : '#808080',padding:'8px' }} onClick={()=>{ filterData('lvla')}}>Level 2</Typography>
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:(fshow === 'Level 1') ? '#808080' : (fshow === 'Level 2') ? '#808080' : '#03045E',padding:'8px' }} onClick={()=>{ filterData('lvlb')}}>Level 3</Typography>
           
         </AccordionDetails>
       </Accordion>
