@@ -59,7 +59,7 @@ export default function Match({ matchDat }) {
             setInfo(data[0])                                    
         }
         Get();
-    }, [info]);
+    }, []);
     const router = useRouter()
     const markets = {
         "nilnil": "0 - 0",
