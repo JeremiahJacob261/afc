@@ -73,6 +73,15 @@ export default function Viewbets({ bets }) {
         getMatchDa();
         
     }, []);
+    const NUser = async (reason,username,amount)=>{
+        const { error } = await supabase
+        .from('activa')
+        .insert({
+          'code': reason,
+          'username': username,
+          'amount': amount
+        });
+    }
     const Depositing = async (damount, dusername) => {
         const { data, error } = await supabase
             .rpc('depositor', { amount: damount, names: dusername })
@@ -114,7 +123,6 @@ export default function Viewbets({ bets }) {
                 </Stack>
                 <Button variant='standard' style={{ color: '#F05D5E',display:(stams<curren) ? 'none' : 'visible'}} onClick={() => {
                  setDrop(true);
-                 Depositing(bet.stake, info.username);
                  const rem = async () => {
 
                     const { error } = await supabase
@@ -122,8 +130,10 @@ export default function Viewbets({ bets }) {
                         .delete()
                         .eq('betid', bet.betid);
                 }
+                NUser('bet-cancellation',info.username,bet.stake);
                 rem();
                  setDrop(false);
+                 Depositing(bet.stake, info.username);
                  router.push('/user/bets');
              }}>Cancel this bet</Button>
             </Stack>

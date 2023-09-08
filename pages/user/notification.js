@@ -99,8 +99,18 @@ export default function Notification() {
                   <Typography style={{ color:'black',fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
                  </Stack>
                 )
-              }else{
-                let date = new Date(r.created_at);
+              }else{ 
+                if(r.code === 'bet-cancellation'){
+                  <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '8px' }} key={r.id}>
+                  <Image src={Rd} width={40} height={40} alt='rounds'/>
+                  <Stack direction='column' sx={{width:'196px'}}>
+ <Typography style={{ color:'black',fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>Your Bet of {r.amount} was successfully cancelled
+                   </Typography>
+                  </Stack>
+                  <Typography style={{ color:'black',fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
+                 </Stack>
+                }else{
+                   let date = new Date(r.created_at);
                 let dates = date.getDate() + '-' + parseInt(date.getMonth() + 1) + '-' + date.getFullYear()
                 return (
 
@@ -113,6 +123,8 @@ export default function Notification() {
                   <Typography style={{ color:'black',fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
                  </Stack>
                 );
+                }
+               
               }
                   
               }
