@@ -144,6 +144,7 @@ export default function Login() {
         }
       }
     })
+    //update email after migration
     const uidch = async () =>{
 
 const { error } = await supabase
@@ -179,6 +180,9 @@ const fire = async (emailer) => {
             console.log(error.message)
             setDrop(false)
               alert(error.code);
+              if(error.code === 'network-request-failed'){
+                alert('Please Check Your internet connection or Check your password')
+              }
           });
         }
         
@@ -189,33 +193,37 @@ const fire = async (emailer) => {
         .select('email')
         .eq('username', email)
 
-        //supabase sign in
-      async function sign(emailer) {
-        const { user, error } = await supabase.auth.signInWithPassword({
-          email: emailer,
-          password: values.password,
-        });
+        async function sign(emailer) {
 
-        if (error) {
-          // Handle authentication error
-          console.error(error);
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(error.message)
-          alert(errorCode);
-          setDrop(false)
-        } else {
-          // User successfully signed in
-          console.log(user);
-          alert('you are logged in');
-          localStorage.setItem('signRef', data[0].newrefer);
-          localStorage.setItem('signedIn', true);
-          localStorage.setItem('signUid', user.id);
-          localStorage.setItem('signName', user.user_metadata.displayName);
-          setDrop(false)
+          const { data, error } = await supabase.auth.signInWithPassword({
+            email: emailer,
+            password: values.password,
+          })
+          if (error) {
+            // Handle authentication error
+            console.error(error);
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(error.message)
+            if(error.message === 'Invalid login credentials'){
+             fire(emailer);
+            }else{
+              console.log(error.message)
+            }
+            setDrop(false)
+          } else {
+            // User successfully signed in
+            let user = data.user;
+            alert('you are logged in');
+            // localStorage.setItem('signRef', data[0].newrefer);
+            localStorage.setItem('signedIn', true);
+            localStorage.setItem('signUid', user.id);
+            localStorage.setItem('signName', user.user_metadata.displayName);
+            setDrop(false)
+            router.push('/user')
+          }
         }
-      }
-      sign(data[0].email);
+       sign(data[0].email);
       //end of supabase sgn in
   
       // signInWithEmailAndPassword(auth, data[0].email, values.password)
