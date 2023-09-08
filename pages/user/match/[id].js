@@ -53,38 +53,48 @@ export default function Match({ matchDat }) {
         })
         async function getSe() {
 
-            const { data, error } = await supabase.auth.getSession();
-            if (data.session != null) {
-              console.log(data.session)
-              let user = data.session.user;
-              async function GET() {
-                try {
-                  const { data, error } = await supabase
-                    .from('users')
-                    .select()
-                    .eq('username', user.user_metadata.displayName);
-                    setInfo(data[0]);
-                  localStorage.setItem('signRef', data[0].newrefer);
-                  console.log(data);
-                } catch (e) {
+            const useri = localStorage.getItem('signedIn');
+    if (useri) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+
+      const uid = localStorage.getItem('signUid');
+      const name = localStorage.getItem('signName');
+      // ...
+      console.log(loads)
       
+        const GET = async () => {
+          try{
+const { data, error } = await supabase
+            .from('users')
+            .select()
+            .eq('username', localStorage.getItem('signName'))
+          setInfo(data[0]);
+          
+          localStorage.setItem('signRef', data[0].newrefer);
+          }catch(e){
+            console.log(e)
+            alert('Please Check your Internet Connection and Refresh the Website')
+          }
+          
+        }
+        GET();
+      
+    } else {
+      // User is signed out
+      const sOut = async () => {
+        const { error } = await supabase.auth.signOut();
+                console.log('sign out');
+                console.log(error);
+                localStorage.removeItem('signedIn');
+                localStorage.removeItem('signUid');
+                localStorage.removeItem('signName');
+                localStorage.removeItem('signRef');
+                router.push('/login');
                 }
-      
-              }
-              GET();
-              localStorage.setItem('signedIn', true);
-              localStorage.setItem('signUid', user.id);
-              localStorage.setItem('signName', user.user_metadata.displayName);
-             
-            } else {
-      
-              console.log('sign out');
-              localStorage.removeItem('signedIn');
-              localStorage.removeItem('signUid');
-              localStorage.removeItem('signName');
-              localStorage.removeItem('signRef');
-              router.push('/login');
-            }
+                sOut();
+    }
+
           }
           getSe();
     }, []);
