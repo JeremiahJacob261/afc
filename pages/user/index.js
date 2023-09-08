@@ -46,7 +46,6 @@ export default function Home() {
       const uid = localStorage.getItem('signUid');
       const name = localStorage.getItem('signName');
       // ...
-      console.log(loads)
       
         const GET = async () => {
           try{

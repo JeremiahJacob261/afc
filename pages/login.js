@@ -133,6 +133,7 @@ export default function Login() {
     //         localStorage.removeItem('signName');
     //         localStorage.removeItem('signRef');
     //       }
+
   }, [])
   const supabaseMigrate = async (username, uid) => {
     const { data, error } = await supabase.auth.signUp({

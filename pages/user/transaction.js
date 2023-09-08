@@ -20,42 +20,46 @@ export default function Transaction() {
   const months = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"];
   useEffect(() => {
-    async function getSe() {
+    const useri = localStorage.getItem('signedIn');
+    if (useri) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
 
-      const { data, error } = await supabase.auth.getSession();
-      if (data.session != null) {
-        console.log(data.session)
-        let user = data.session.user;
-        const GET = async () => {
-          try {
-            const { data, error } = await supabase
-              .from('notification')
-              .select()
-              .eq('username', user.user_metadata.displayName)
-              .order('id', { ascending: false });
-            setTrans(data)
-            console.log(data.length)
-          } catch (e) {
-            console.log(e)
-          }
-
+      const uid = localStorage.getItem('signUid');
+      const name = localStorage.getItem('signName');
+      // ...
+      
+      const GET = async () => {
+        try {
+          const { data, error } = await supabase
+            .from('notification')
+            .select()
+            .eq('username',name)
+            .order('id', { ascending: false });
+          setTrans(data)
+          console.log(data.length)
+        } catch (e) {
+          console.log(e)
         }
-        GET();
-        localStorage.setItem('signedIn', true);
-        localStorage.setItem('signUid', user.id);
-        localStorage.setItem('signName', user.user_metadata.displayName);
-       
-      } else {
 
-        console.log('sign out');
-        localStorage.removeItem('signedIn');
-        localStorage.removeItem('signUid');
-        localStorage.removeItem('signName');
-        localStorage.removeItem('signRef');
-        router.push('/login');
       }
+      GET();
+      
+    } else {
+      // User is signed out
+      const sOut = async () => {
+        const { error } = await supabase.auth.signOut();
+                console.log('sign out');
+                console.log(error);
+                localStorage.removeItem('signedIn');
+                localStorage.removeItem('signUid');
+                localStorage.removeItem('signName');
+                localStorage.removeItem('signRef');
+                router.push('/login');
+                }
+                sOut();
     }
-    getSe();
+
   }, [])
   var sn = 0;
   return (
