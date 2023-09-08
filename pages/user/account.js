@@ -59,34 +59,41 @@ const [userR,setUserR] = useState('')
         // https://firebase.google.com/docs/reference/js/auth.user
        console.log('...')
         // ...
-        if(loads === 0){
-          loads++;
         const GET = async () => {
-          const { data, error } = await supabase
+          try{
+const { data, error } = await supabase
             .from('users')
             .select()
-            .eq('userId',uid)
+            .eq('username',localStorage.getItem('signName'))
           setInfo(data[0])
           setBalance(data[0].balance);
           localStorage.setItem('signRef',data[0].newrefer);
+          }catch(e){
+            console.log(e)
+          }
+          
         }
         GET();
-        }
+        
         
       } else {
         // User is signed out
         // ...
-        signOut(auth);
+        const sOut = async () => {
+const { error } = await supabase.auth.signOut();
         console.log('sign out');
+        console.log(error);
         localStorage.removeItem('signedIn');
         localStorage.removeItem('signUid');
         localStorage.removeItem('signName');
         localStorage.removeItem('signRef');
         router.push('/login');
+        }
+        sOut();
       }
   
    
-  }, [balance]);
+  }, []);
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -298,16 +305,18 @@ const Alert = React.forwardRef(function Alert(props, ref) {
            <Typography sx={{ color: "black",fontSize:'16px',fontWeight:'400',fontFamily:'Inter,sans-serif' }}>Closure</Typography>
            <Divider/>
            <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{padding:'8px'}} 
-           onClick={async() => {
-                signOut(auth).then(()=>{
-              })
-const { error } = await supabase.auth.signOut();
-                localStorage.removeItem('signRef');
-        localStorage.removeItem('signedIn');
-        localStorage.removeItem('signUid');
-        localStorage.removeItem('signName');
-                router.push('/login');
-            
+           onClick={() => {
+            const sOut = async () => {
+              const { error } = await supabase.auth.signOut();
+                      console.log('sign out');
+                      console.log(error);
+                      localStorage.removeItem('signedIn');
+                      localStorage.removeItem('signUid');
+                      localStorage.removeItem('signName');
+                      localStorage.removeItem('signRef');
+                      router.push('/login');
+                      }
+                      sOut();
             }
             }> 
            <Stack direction='row' spacing={1} justifyContent='start' >

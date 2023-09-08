@@ -156,7 +156,32 @@ const { error } = await supabase
 
   }
   const login = async () => {
-
+//firebase
+const fire = async (emailer) => {
+  signInWithEmailAndPassword(auth, emailer, values.password)
+          .then((userCredential) => {
+            // Signed in 
+            const user = userCredential.user;
+            // ...
+  
+            supabaseMigrate(user.displayName, user.uid);
+            alert('you are logged in');
+            localStorage.setItem('signedIn', true);
+            localStorage.setItem('signUid', user.uid);
+            localStorage.setItem('signName', user.displayName);
+            setDrop(false)
+            router.push('/user');
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(error.message)
+            setDrop(false)
+              alert(error.message);
+          });
+        }
+        
+          //end of firebase
     async function findemail() {
       const { data, error } = await supabase
         .from('users')
@@ -189,35 +214,9 @@ const { error } = await supabase
           setDrop(false)
         }
       }
+      sign(data[0].email);
       //end of supabase sgn in
-      //firebase
-      signInWithEmailAndPassword(auth, data[0].email, values.password)
-        .then((userCredential) => {
-          // Signed in 
-          const user = userCredential.user;
-          // ...
-
-          supabaseMigrate(user.displayName, user.uid);
-          alert('you are logged in');
-          localStorage.setItem('signedIn', true);
-          localStorage.setItem('signUid', user.uid);
-          localStorage.setItem('signName', user.displayName);
-          setDrop(false)
-          router.push('/user');
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(error.message)
-          setDrop(false)
-          if (errorCode === 'auth/user-not-found' || errorCode === 'auth/network-request-failed') {
-
-            sign(data[0].email)
-          } else {
-            alert(error.message);
-          }
-        });
-        //end of firebase
+  
       // signInWithEmailAndPassword(auth, data[0].email, values.password)
       //   .then((userCredential) => {
       //     // Signed in 
@@ -268,8 +267,47 @@ const { error } = await supabase
           console.error(error);
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.log(error)
-          alert(errorCode);
+          console.log(error.message)
+          if(error.message === 'Invalid login credentials'){
+            const { count, error } = await supabase
+            .from('users')
+            .select('*', { count: 'exact', head: true })
+            .eq('email', emailer)
+          console.log(count);
+          if (count > 0) {
+            alert('Incorrect password')
+          }else{
+           //use-firebase
+           //firebase
+const fire = async (emailer) => {
+  signInWithEmailAndPassword(auth, emailer, values.password)
+          .then((userCredential) => {
+            // Signed in 
+            const user = userCredential.user;
+            // ...
+  
+            supabaseMigrate(user.displayName, user.uid);
+            alert('you are logged in');
+            localStorage.setItem('signedIn', true);
+            localStorage.setItem('signUid', user.uid);
+            localStorage.setItem('signName', user.displayName);
+            setDrop(false)
+            router.push('/user');
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(error.message)
+            setDrop(false)
+              alert(error.message);
+          });
+        }
+        fire(emailer)
+        //end-of -firebase
+          }
+          }else{
+            console.log(error.message)
+          }
           setDrop(false)
         } else {
           // User successfully signed in
@@ -283,35 +321,7 @@ const { error } = await supabase
           router.push('/user')
         }
       }
-      //firebase
-      signInWithEmailAndPassword(auth, email, values.password)
-        .then((userCredential) => {
-          // Signed in 
-          const user = userCredential.user;
-          // ...
-
-          supabaseMigrate(user.displayName, user.uid);
-          alert('you are logged in');
-          localStorage.setItem('signedIn', true);
-          localStorage.setItem('signUid', user.uid);
-          localStorage.setItem('signName', user.displayName);
-          setDrop(false)
-          router.push('/user');
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(error.message)
-          alert(errorCode);
-          setDrop(false)
-          if (error.message === 'auth/user-not-found') {
-
-            sign(email);
-          } else {
-            alert(error.message);
-          }
-        });
-        //end of firebase
+     sign(email);
     }
 
 
