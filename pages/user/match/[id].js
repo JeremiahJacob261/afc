@@ -90,14 +90,9 @@ const { data, error } = await supabase
                 localStorage.removeItem('signUid');
                 localStorage.removeItem('signName');
                 localStorage.removeItem('signRef');
-                router.push('/login');
-                }
-                sOut();
-    }
-
-          }
+        }
           getSe();
-    }, []);
+    }, [info]);
     const router = useRouter()
     const markets = {
         "nilnil": "0 - 0",
