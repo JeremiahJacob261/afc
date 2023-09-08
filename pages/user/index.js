@@ -68,13 +68,17 @@ const { data, error } = await supabase
       
     } else {
       // User is signed out
-      // ...
-      signOut(auth);
-      console.log('sign out');
-      localStorage.removeItem('signedIn');
-      localStorage.removeItem('signUid');
-      localStorage.removeItem('signName');
-      router.push('/login');
+      const sOut = async () => {
+        const { error } = await supabase.auth.signOut();
+                console.log('sign out');
+                console.log(error);
+                localStorage.removeItem('signedIn');
+                localStorage.removeItem('signUid');
+                localStorage.removeItem('signName');
+                localStorage.removeItem('signRef');
+                router.push('/login');
+                }
+                sOut();
     }
 
 
