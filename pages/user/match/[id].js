@@ -51,7 +51,7 @@ export default function Match({ matchDat }) {
         matchDat.map((m) => {
             setMatches(m)
         })
-        const Get = () => {
+        const Get = async () => {
             const {data,error} = await supabase
             .from('users')
             .select()
