@@ -61,7 +61,6 @@ export default function Match({ matchDat }) {
       const uid = localStorage.getItem('signUid');
       const name = localStorage.getItem('signName');
       // ...
-      console.log(loads)
       
         const GET = async () => {
           try{
@@ -90,6 +89,7 @@ const { data, error } = await supabase
                 localStorage.removeItem('signUid');
                 localStorage.removeItem('signName');
                 localStorage.removeItem('signRef');
+        }
         }
           getSe();
     }, [info]);
