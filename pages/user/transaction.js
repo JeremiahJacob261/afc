@@ -44,7 +44,7 @@ export default function Transaction() {
         localStorage.setItem('signedIn', true);
         localStorage.setItem('signUid', user.id);
         localStorage.setItem('signName', user.user_metadata.displayName);
-        router.push('/user');
+       
       } else {
 
         console.log('sign out');
