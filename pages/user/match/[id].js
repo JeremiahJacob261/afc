@@ -51,47 +51,14 @@ export default function Match({ matchDat }) {
         matchDat.map((m) => {
             setMatches(m)
         })
-        async function getSe() {
-
-            const useri = localStorage.getItem('signedIn');
-    if (useri) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
-
-      const uid = localStorage.getItem('signUid');
-      const name = localStorage.getItem('signName');
-      // ...
-      
-        const GET = async () => {
-          try{
-const { data, error } = await supabase
+        const Get = () => {
+            const {data,error} = await supabase
             .from('users')
             .select()
-            .eq('username', localStorage.getItem('signName'))
-          setInfo(data[0]);
-          alert(data[0].balance)
-          localStorage.setItem('signRef', data[0].newrefer);
-          }catch(e){
-            console.log(e)
-            alert('Please Check your Internet Connection and Refresh the Website')
-          }
-          
+            .eq('úsername',localStorage.getItem('signName));
+            setInfo(data[0])                                    
         }
-        GET();
-      
-    } else {
-      // User is signed out
-      const sOut = async () => {
-        const { error } = await supabase.auth.signOut();
-                console.log('sign out');
-                console.log(error);
-                localStorage.removeItem('signedIn');
-                localStorage.removeItem('signUid');
-                localStorage.removeItem('signName');
-                localStorage.removeItem('signRef');
-        }
-        }
-          getSe();
+        Get();
     }, [info]);
     const router = useRouter()
     const markets = {
