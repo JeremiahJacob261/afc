@@ -210,7 +210,7 @@ const { error } = await supabase
           const errorMessage = error.message;
           console.log(error.message)
           setDrop(false)
-          if (errorCode === 'auth/user-not-found') {
+          if (errorCode === 'auth/user-not-found' || errorCode === 'auth/network-request-failed') {
 
             sign(data[0].email)
           } else {
