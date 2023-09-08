@@ -134,7 +134,7 @@ export default function Viewbets({ bets }) {
                 rem();
                  setDrop(false);
                  Depositing(bet.stake, info.username);
-                 router.push('/user/bets');
+                 router.push('/user/matches');
              }}>Cancel this bet</Button>
             </Stack>
         </div>
