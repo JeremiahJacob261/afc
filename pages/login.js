@@ -20,12 +20,12 @@ import Image from 'next/image'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Backdrop from '@mui/material/Backdrop';
+import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useEffect } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
 import Loadingsc from "./overlays/loadingsc";
-import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 export default function Login() {
   const dbs = getDatabase(app);
   const [username, setUsername] = useState("")
@@ -64,45 +64,98 @@ export default function Login() {
     event.preventDefault();
   };
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/auth.user
-        const uid = user.uid;
-        // ...
+    async function getSe() {
+
+      const { data, error } = await supabase.auth.getSession();
+      if (data.session != null) {
+        console.log(data.session)
+        let user = data.session.user;
         async function GET() {
-          try{
- const { data, error } = await supabase
-            .from('users')
-            .select()
-            .eq('username', user.displayName);
-          localStorage.setItem('signRef', data[0].newrefer);
-          console.log(data);
-          }catch(e){
+          try {
+            const { data, error } = await supabase
+              .from('users')
+              .select()
+              .eq('username', user.user_metadata.displayName);
+            localStorage.setItem('signRef', data[0].newrefer);
+            console.log(data);
+          } catch (e) {
 
           }
-         
+
         }
         GET();
-
-        console.log(localStorage.getItem('signInfo'))
         localStorage.setItem('signedIn', true);
-        localStorage.setItem('signUid', uid);
-        localStorage.setItem('signName', user.displayName);
-
+        localStorage.setItem('signUid', user.id);
+        localStorage.setItem('signName', user.user_metadata.displayName);
         router.push('/user');
       } else {
-        // User is signed out
-        // ...
+
         console.log('sign out');
         localStorage.removeItem('signedIn');
         localStorage.removeItem('signUid');
         localStorage.removeItem('signName');
         localStorage.removeItem('signRef');
+        router.push('/login');
       }
-    });
-  }, [])
+    }
+    getSe();
+    //       if (user) {
+    //         // User is signed in, see docs for a list of available properties
+    //         // https://firebase.google.com/docs/reference/js/auth.user
+    //         const uid = user.uid;
+    //         // ...
+    //         async function GET() {
+    //           try{
+    //  const { data, error } = await supabase
+    //             .from('users')
+    //             .select()
+    //             .eq('username', user.displayName);
+    //           localStorage.setItem('signRef', data[0].newrefer);
+    //           console.log(data);
+    //           }catch(e){
 
+    //           }
+
+    //         }
+    //         // GET();
+
+    //         console.log(localStorage.getItem('signInfo'))
+    //         localStorage.setItem('signedIn', true);
+    //         localStorage.setItem('signUid', uid);
+    //         localStorage.setItem('signName', user.displayName);
+    //         router.push('/user');
+    //       } else {
+    //         // User is signed out
+    //         // ...
+    //         console.log('sign out');b 
+    //         localStorage.removeItem('signedIn');
+    //         localStorage.removeItem('signUid');
+    //         localStorage.removeItem('signName');
+    //         localStorage.removeItem('signRef');
+    //       }
+  }, [])
+  const supabaseMigrate = async (username, uid) => {
+    const { data, error } = await supabase.auth.signUp({
+      email: email,
+      password: values.password,
+      options: {
+        data: {
+          displayName: username,
+          uid: uid,
+        }
+      }
+    })
+    const uidch = async () =>{
+
+const { error } = await supabase
+.from('users')
+.update({ userId: data.user.id })
+.eq('email', email);
+    }
+    uidch();
+    router.push('/user')
+
+  }
   const login = async () => {
 
     async function findemail() {
@@ -110,14 +163,43 @@ export default function Login() {
         .from('users')
         .select('email')
         .eq('username', email)
+
+        //supabase sign in
+      async function sign(emailer) {
+        const { user, error } = await supabase.auth.signInWithPassword({
+          email: emailer,
+          password: values.password,
+        });
+
+        if (error) {
+          // Handle authentication error
+          console.error(error);
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(error.message)
+          alert(errorCode);
+          setDrop(false)
+        } else {
+          // User successfully signed in
+          console.log(user);
+          alert('you are logged in');
+          localStorage.setItem('signRef', data[0].newrefer);
+          localStorage.setItem('signedIn', true);
+          localStorage.setItem('signUid', user.id);
+          localStorage.setItem('signName', user.user_metadata.displayName);
+          setDrop(false)
+        }
+      }
+      //end of supabase sgn in
+      //firebase
       signInWithEmailAndPassword(auth, data[0].email, values.password)
         .then((userCredential) => {
           // Signed in 
           const user = userCredential.user;
           // ...
 
+          supabaseMigrate(user.displayName, user.uid);
           alert('you are logged in');
-          localStorage.setItem('signRef', data[0].newrefer);
           localStorage.setItem('signedIn', true);
           localStorage.setItem('signUid', user.uid);
           localStorage.setItem('signName', user.displayName);
@@ -128,9 +210,36 @@ export default function Login() {
           const errorCode = error.code;
           const errorMessage = error.message;
           console.log(error.message)
-          alert(errorCode);
           setDrop(false)
+          if (errorCode === 'auth/user-not-found') {
+
+            sign(data[0].email)
+          } else {
+            alert(error.message);
+          }
         });
+        //end of firebase
+      // signInWithEmailAndPassword(auth, data[0].email, values.password)
+      //   .then((userCredential) => {
+      //     // Signed in 
+      //     const user = userCredential.user;
+      //     // ...
+
+      //     alert('you are logged in');
+      //     localStorage.setItem('signRef', data[0].newrefer);
+      //     localStorage.setItem('signedIn', true);
+      //     localStorage.setItem('signUid', user.uid);
+      //     localStorage.setItem('signName', user.displayName);
+      //     setDrop(false)
+      //     router.push('/user');
+      //   })
+      //   .catch((error) => {
+      //     const errorCode = error.code;
+      //     const errorMessage = error.message;
+      //     console.log(error.message)
+      //     alert(errorCode);
+      //     setDrop(false)
+      //   });
     }
     setDrop(true)
     localStorage.clear()
@@ -149,14 +258,44 @@ export default function Login() {
         setDrop(false)
       }
     } else {
+      async function sign(emailer) {
+
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: emailer,
+          password: values.password,
+        })
+        if (error) {
+          // Handle authentication error
+          console.error(error);
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(error)
+          alert(errorCode);
+          setDrop(false)
+        } else {
+          // User successfully signed in
+          let user = data.user;
+          alert('you are logged in');
+          // localStorage.setItem('signRef', data[0].newrefer);
+          localStorage.setItem('signedIn', true);
+          localStorage.setItem('signUid', user.id);
+          localStorage.setItem('signName', user.user_metadata.displayName);
+          setDrop(false)
+          router.push('/user')
+        }
+      }
+      //firebase
       signInWithEmailAndPassword(auth, email, values.password)
         .then((userCredential) => {
           // Signed in 
           const user = userCredential.user;
           // ...
 
+          supabaseMigrate(user.displayName, user.uid);
           alert('you are logged in');
-
+          localStorage.setItem('signedIn', true);
+          localStorage.setItem('signUid', user.uid);
+          localStorage.setItem('signName', user.displayName);
           setDrop(false)
           router.push('/user');
         })
@@ -166,7 +305,14 @@ export default function Login() {
           console.log(error.message)
           alert(errorCode);
           setDrop(false)
+          if (error.message === 'auth/user-not-found') {
+
+            sign(email);
+          } else {
+            alert(error.message);
+          }
         });
+        //end of firebase
     }
 
 
@@ -249,7 +395,7 @@ export default function Login() {
         </Stack>
       </Stack>
       <Stack direction="column" spacing={2} justifyContent='center' alignItems='center' sx={{ width: '343px', marginTop: '200px' }}>
-        <Button variant="contained" sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%',fontWeight:'400', background: '#FE9D16' }}
+        <Button variant="contained" sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', fontWeight: '400', background: '#FE9D16' }}
           onClick={login}>
           <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "#E5E7EBsmoke" }}>Login</Typography>
         </Button>

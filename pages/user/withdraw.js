@@ -45,29 +45,42 @@ export default function Deposit() {
   });
   useEffect(() => {
 
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/auth.user
-        const uid = user.uid;
-        // ...
-        console.log(user)
-        const GET = async () => {
-          const { data, error } = await supabase
-            .from('users')
-            .select()
-            .eq('userId', user.uid)
-          setInfo(data[0])
-          console.log(data)
+    async function getSe() {
+
+      const { data, error } = await supabase.auth.getSession();
+      if (data.session != null) {
+        console.log(data.session)
+        let user = data.session.user;
+        async function GET() {
+          try {
+            const { data, error } = await supabase
+              .from('users')
+              .select()
+              .eq('username', user.user_metadata.displayName);
+              setInfo(data[0]);
+            localStorage.setItem('signRef', data[0].newrefer);
+            console.log(data);
+          } catch (e) {
+
+          }
+
         }
         GET();
+        localStorage.setItem('signedIn', true);
+        localStorage.setItem('signUid', user.id);
+        localStorage.setItem('signName', user.user_metadata.displayName);
+        router.push('/user');
       } else {
-        // User is signed out
-        // ...
+
         console.log('sign out');
+        localStorage.removeItem('signedIn');
+        localStorage.removeItem('signUid');
+        localStorage.removeItem('signName');
+        localStorage.removeItem('signRef');
         router.push('/login');
       }
-    });
+    }
+    getSe();
   }, []);
   //end of snackbar1
   const wih = async (damount, dusername) => {

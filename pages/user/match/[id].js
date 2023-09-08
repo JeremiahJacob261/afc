@@ -51,29 +51,42 @@ export default function Match({ matchDat }) {
         matchDat.map((m) => {
             setMatches(m)
         })
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // User is signed in, see docs for a list of available properties
-                // https://firebase.google.com/docs/reference/js/auth.user
-                const uid = user.uid;
-                // ...
-                console.log(user)
-                const GET = async () => {
-                    const { data, error } = await supabase
-                        .from('users')
-                        .select()
-                        .eq('userId', user.uid)
-                    setInfo(data[0])
-                    console.log(data)
+        async function getSe() {
+
+            const { data, error } = await supabase.auth.getSession();
+            if (data.session != null) {
+              console.log(data.session)
+              let user = data.session.user;
+              async function GET() {
+                try {
+                  const { data, error } = await supabase
+                    .from('users')
+                    .select()
+                    .eq('username', user.user_metadata.displayName);
+                    setInfo(data[0]);
+                  localStorage.setItem('signRef', data[0].newrefer);
+                  console.log(data);
+                } catch (e) {
+      
                 }
-                GET();
+      
+              }
+              GET();
+              localStorage.setItem('signedIn', true);
+              localStorage.setItem('signUid', user.id);
+              localStorage.setItem('signName', user.user_metadata.displayName);
+              router.push('/user');
             } else {
-                // User is signed out
-                // ...
-                console.log('sign out');
-                router.push('/login');
+      
+              console.log('sign out');
+              localStorage.removeItem('signedIn');
+              localStorage.removeItem('signUid');
+              localStorage.removeItem('signName');
+              localStorage.removeItem('signRef');
+              router.push('/login');
             }
-        });
+          }
+          getSe();
     }, []);
     const router = useRouter()
     const markets = {
@@ -153,7 +166,7 @@ export default function Match({ matchDat }) {
                 <link rel="icon" href="/logo_afc.ico" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
-            <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '5px', margin: '2px' }}>
+            <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '5px', margin: '2px' }} onClick={()=>{ router.push('/user/matches') }}>
                 <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} />
                 <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', width: '90%', textAlign: 'center' }}>Stake your bet</Typography>
             </Stack>

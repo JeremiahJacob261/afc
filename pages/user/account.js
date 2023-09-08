@@ -298,15 +298,16 @@ const Alert = React.forwardRef(function Alert(props, ref) {
            <Typography sx={{ color: "black",fontSize:'16px',fontWeight:'400',fontFamily:'Inter,sans-serif' }}>Closure</Typography>
            <Divider/>
            <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{padding:'8px'}} 
-           onClick={() => {
-              
-              signOut(auth).then(()=>{
+           onClick={async() => {
+                signOut(auth).then(()=>{
+              })
+const { error } = await supabase.auth.signOut();
                 localStorage.removeItem('signRef');
         localStorage.removeItem('signedIn');
         localStorage.removeItem('signUid');
         localStorage.removeItem('signName');
                 router.push('/login');
-              })
+            
             }
             }> 
            <Stack direction='row' spacing={1} justifyContent='start' >

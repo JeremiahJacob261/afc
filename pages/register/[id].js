@@ -1,21 +1,18 @@
 import React, { useState, useContext, useEffect } from "react";
 import Head from "next/head";
 import Link from 'next/link'
-import { Avatar, Box, Stack, OutlinedInput, Button, Typography } from "@mui/material";
+import { Modal, Box, Stack, OutlinedInput, Button, Typography, Divider } from "@mui/material";
 import MenuItem from '@mui/material/MenuItem';
 import { useRouter } from 'next/router'
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
+import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
-import { getDocs, collection } from "firebase/firestore";
-import { db } from '../api/firebase'
-import Spinner from 'react-bootstrap/Spinner';
 import { Form as Farm } from 'react-bootstrap'
-import SimpleDialog from '../modal'
 import { getCookies, getCookie, setCookie, setCookies, removeCookies } from 'cookies-next';
 import LOGO from '../../public/logo_afc.ico'
 import Image from 'next/image'
@@ -24,7 +21,8 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { supabase } from '../api/supabase'
 import { app } from '../api/firebase'
 import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
+import Wig from '../../public/icon/wig.png'
+import Big from '../../public/icon/badge.png'
 import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, updateProfile } from "firebase/auth";
 import { async } from "@firebase/util";
 import codes from '../api/codes.json'
@@ -34,7 +32,6 @@ export default function Register({ refer }) {
   const route = useRouter();
   const [phone, setPhone] = useState("")
   const [username, setUsername] = useState("")
-  const [open, setOpen] = React.useState(false);
   const [age, setAge] = useState("+91");
   const [drop, setDrop] = useState(false);
   const [idR, setidR] = useState(refer);
@@ -43,7 +40,16 @@ export default function Register({ refer }) {
   const [lvlb, setLvlb] = useState('');
   const [email, setEmail] = useState('')
   const auth = getAuth(app);
-
+  //alerts
+  const [ale, setAle] = useState('')
+  const [open, setOpen] = useState(false)
+  const [aleT, setAleT] = useState(false)
+  const Alerts = (m, t) => {
+    setAle(m)
+    setAleT(t)
+    setOpen(true)
+  }
+  //end
   const nRef = generateRandomSevenDigitNumber().toString();
   const [values, setValues] = React.useState({
     amount: '',
@@ -91,36 +97,40 @@ export default function Register({ refer }) {
       .rpc('increment', { x: 1, row_id: idR })
   }
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/auth.user
-        const uid = user.uid;
-        // ...
+    async function getSe() {
+
+      const { data, error } = await supabase.auth.getSession();
+      if (data.session != null) {
+        console.log(data.session)
+        let user = data.session.user;
         async function GET() {
-          const { data, error } = await supabase
-            .from('users')
-            .select()
-            .eq('username', user.displayName);
-          localStorage.setItem('signRef', data[0].newrefer);
-          console.log(data);
+          try {
+            const { data, error } = await supabase
+              .from('users')
+              .select()
+              .eq('username', user.user_metadata.displayName);
+            localStorage.setItem('signRef', data[0].newrefer);
+            console.log(data);
+          } catch (e) {
+
+          }
+
         }
         GET();
-        console.log(localStorage.getItem('signInfo'))
         localStorage.setItem('signedIn', true);
-        localStorage.setItem('signUid', uid);
-        localStorage.setItem('signName', user.displayName);
+        localStorage.setItem('signUid', user.id);
+        localStorage.setItem('signName', user.user_metadata.displayName);
         route.push('/user');
       } else {
-        // User is signed out
-        // ...
+
         console.log('sign out');
         localStorage.removeItem('signedIn');
         localStorage.removeItem('signUid');
         localStorage.removeItem('signName');
         localStorage.removeItem('signRef');
       }
-    });
+    }
+    getSe();
     async function lvls() {
       try {
         const { data, error } = await supabase
@@ -143,65 +153,143 @@ export default function Register({ refer }) {
 
   const signup = async () => {
     setDrop(true);
-    let usern = username.replace(/^\s+|\s+$/gm, '')
-    createUserWithEmailAndPassword(auth, email, values.password)
-      .then((userCredential) => {
-        // Signed in 
-        const user = userCredential.user;
-        // ...
-        console.log(user.uid);
+    // let usern = username.replace(/^\s+|\s+$/gm, '')
+    // createUserWithEmailAndPassword(auth, email, values.password)
+    //   .then((userCredential) => {
+    //     // Signed in 
+    //     const user = userCredential.user;
+    //     // ...
+    //     console.log(user.uid);
 
-        const upload = async () => {
+    //     const upload = async () => {
 
-          console.log(nRef)
-          const { data, error } = await supabase
-            .from('users')
-            .insert({
-              userId: user.uid,
-              password: values.password,
-              phone: phone,
-              refer: refer,
-              username: username,
-              countrycode: age,
-              newrefer: nRef,
-              lvla: lvla,
-              lvlb: lvlb,
-              email: email,
-            })
-          console.log(error);
-          console.log(data);
-          localStorage.setItem('signedIn', true);
-          localStorage.setItem('signUid', user.uid);
-          localStorage.setItem('signName', user.displayName);
-          localStorage.setItem('signRef', nRef);
-        }
-        //getlvl2
-        upload();
-        updateRef();
-        updateRefb();
-        setDrop(false);
-        updateProfile(auth.currentUser, {
-          displayName: username,
-          phoneNumber: phone
-        }).then(async () => {
+    //       console.log(nRef)
+    //       const { data, error } = await supabase
+    //         .from('users')
+    //         .insert({
+    //           userId: user.uid,
+    //           password: values.password,
+    //           phone: phone,
+    //           refer: refer,
+    //           username: username,
+    //           countrycode: age,
+    //           newrefer: nRef,
+    //           lvla: lvla,
+    //           lvlb: lvlb,
+    //           email: email,
+    //         })
+    //       console.log(error);
+    //       console.log(data);
+    //       localStorage.setItem('signedIn', true);
+    //       localStorage.setItem('signUid', user.uid);
+    //       localStorage.setItem('signName', user.displayName);
+    //       localStorage.setItem('signRef', nRef);
+    //     }
+    //     //getlvl2
+    //     upload();
+    //     updateRef();
+    //     updateRefb();
+    //     setDrop(false);
+    //     updateProfile(auth.currentUser, {
+    //       displayName: username,
+    //       phoneNumber: phone
+    //     }).then(async () => {
 
+    //     })
+
+    //     setOpen(true);
+    //   })
+    //   .catch((error) => {
+    //     const errorCode = error.code;
+    //     const errorMessage = error.message;
+    //     // ..
+    //     console.log(error.code);
+    //     setDrop(false);
+    //     if (errorCode === 'auth/email-already-in-use') {
+
+    //       alert('this email is already registered')
+    //     } else if (errorCode === 'auth/weak-password') {
+    //       alert('Your password is weak, please use atleast 6 characters')
+    //     }
+    //   });
+    const upload = async (user) => {
+
+      try {
+        console.log(nRef)
+        const { data, error } = await supabase
+          .from('users')
+          .insert({
+            userId: user.id,
+            password: values.password,
+            phone: phone,
+            refer: refer,
+            username: username,
+            countrycode: age,
+            newrefer: nRef,
+            lvla: lvla,
+            lvlb: lvlb,
+            email: email,
+          })
+        console.log(error);
+        console.log(data);
+        localStorage.setItem('signedIn', true);
+        localStorage.setItem('signUid', user.id);
+        localStorage.setItem('signName', username);
+        localStorage.setItem('signRef', nRef);
+      } catch (e) {
+        console.log(e)
+      }
+    }
+    async function signUpWithEmail() {
+
+      try {
+        const { data, error } = await supabase.auth.signUp({
+          email: email,
+          password: values.password,
+          options: {
+            data: {
+              displayName: username,
+              phoneNumber: phone,
+            }
+          }
         })
+        console.log('User registered successfully:', data.user);
 
-        setOpen(true);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
-        console.log(error.code);
-        setDrop(false);
-        if (errorCode === 'auth/email-already-in-use') {
 
-          alert('this email is already registered')
-        } else if (errorCode === 'auth/weak-password') {
-          alert('Your password is weak, please use atleast 6 characters')
+        console.log(data)
+        if (error) {
+          throw error;
+        } else {
+          //getlvl2
+          upload(data.user);
+          updateRef();
+          updateRefb();
+          setDrop(false);
+          Alerts(`Welcome To AFCFIFA`, true);
         }
-      });
+      } catch (error) {
+        console.error('Error signing up:', error);
+        setDrop(false);
+        console.error('Error signing up:', error.message);
+        if (error.message === 'User already registered') {
+          Alerts('Email already exists!', false)
+        } else {
+          if (error.message === 'Password should be at least 6 characters') {
+            Alerts('For security reasons, please choose a stronger password. It should be at least 8 characters long and include a mix of letters, numbers, and symbols', false)
+          } else {
+            if (error.message === 'Unable to validate email address: invalid format') {
+              Alerts('Please enter a valid email address', false)
+            } else {
+
+              Alerts('Please Chcek Your internet connection and try again, if problem persist please contact support', false)
+            }
+          }
+        }
+      }
+    }
+    signUpWithEmail()
+
+
   }
 
 
@@ -211,6 +299,13 @@ export default function Register({ refer }) {
       style={{
         background: "#0B122C", width: '100%', minHeight: '100vh'
       }}>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={drop}
+      >
+        <SportsSoccerIcon id='balls' sx={{ marginLeft: '8px' }} />
+      </Backdrop>
+      <Alertz />
       <Head>
         <title>Register</title>
         <meta name="description" content="Register With us to get the latest betting market and fantantic Bonus" />
@@ -218,17 +313,8 @@ export default function Register({ refer }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Box >
-        <SimpleDialog
-          open={open}
-          onClose={handleClose}
-        />
-        <Backdrop
-          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={drop}
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
-        <Stack spacing={5} sx={{padding:'8px'}}>
+
+        <Stack spacing={5} sx={{ padding: '8px' }}>
           <Stack direction="column"
             justifyContent="center"
             alignItems="center"
@@ -344,66 +430,111 @@ export default function Register({ refer }) {
               }}
             />
           </Stack>
-          <Stack spacing={3} sx={{margin:'8px',padding:'8px'}}>
+          <Stack spacing={3} sx={{ margin: '8px', padding: '8px' }}>
             <Farm.Check
-            type="checkbox"
-            label="Do you accept our Terms and Conditions ?"
-            id="age"
-            sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #E5E7EB', borderRadius: '4px', fontFamily: 'Poppins, sans-serif' }}
-            value={agecheck}
-            onChange={(a) => {
-              setAgecheck(a.target.value)
-            }}
-            style={{ color: "#E5E7EB" }}
-          />
-          <Button variant="contained" sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', background: '#FE9D16' }}
-            onClick={() => {
-              if (phone.length >= 9) {
+              type="checkbox"
+              label="Do you accept our Terms and Conditions ?"
+              id="age"
+              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #E5E7EB', borderRadius: '4px', fontFamily: 'Poppins, sans-serif' }}
+              value={agecheck}
+              onChange={(a) => {
+                setAgecheck(a.target.value)
+              }}
+              style={{ color: "#E5E7EB" }}
+            />
+            <Button variant="contained" sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', background: '#FE9D16' }}
+              onClick={() => {
+                if (phone.length >= 9) {
 
-                const checkDuplicate = async () => {
-                  const { count, error } = await supabase
-                    .from('users')
-                    .select('*', { count: 'exact', head: true })
-                    .eq('username', username)
-                  console.log(count);
-                  if (count > 0) {
-                    alert("Username Already Exist!");
-                  } else {
-                    if (agecheck === false) {
-                      alert('Please click the checkBox before you continue')
+                  const checkDuplicate = async () => {
+                    const { count, error } = await supabase
+                      .from('users')
+                      .select('*', { count: 'exact', head: true })
+                      .eq('username', username)
+                    console.log(count);
+                    if (count > 0) {
+                      Alerts("Username Already Exist!", false);
                     } else {
-                      if (cpassword === values.password) {
-
-                        signup()
+                      if (agecheck === false) {
+                        Alerts('Please click the checkBox before you continue', false)
                       } else {
-                        alert('ensure the passowords are same')
+                        if (cpassword === values.password) {
+
+                          signup()
+                        } else {
+                          Alerts('ensure the passowords are same', false)
+                        }
+
                       }
 
                     }
-
                   }
+                  checkDuplicate()
+
+                } else {
+                  Alerts('Please Input a Complete Phone Number! at least 9 digits', false)
                 }
-                checkDuplicate()
+              }}>
+              <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: '#03045E', fontSize: '14px', color: '#E5E7EB' }}>Register</Typography>
+            </Button>
+            <Stack direction="row" alignItems="center" justifyContent="center" sx={{ height: '22px' }} spacing={1}>
+              <Typography sx={{ color: "#E5E7EB", fontSize: '14px', fontWeight: '100', opacity: '0.7', fontFamily: 'Poppins,sans-serif' }}>Already have an Account ? </Typography>
+              <Typography>
+                <Link href="/login" style={{ textDecoration: "none", fontSize: '14px', fontWeight: '100', color: "#E5E7EB", opacity: '1.0', fontFamily: 'Poppins,sans-serif' }}>Login</Link></Typography>
 
-              } else {
-                alert('Please Input a Complete Phone Number! at least 9 digits')
-              }
-            }}>
-            <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: '#03045E', fontSize: '14px', color: '#E5E7EB' }}>Register</Typography>
-          </Button>
-          <Stack direction="row" alignItems="center" justifyContent="center" sx={{ height: '22px' }} spacing={1}>
-            <Typography sx={{ color: "#E5E7EB", fontSize: '14px', fontWeight: '100', opacity: '0.7', fontFamily: 'Poppins,sans-serif' }}>Already have an Account ? </Typography>
-            <Typography>
-              <Link href="/login" style={{ textDecoration: "none", fontSize: '14px', fontWeight: '100', color: "#E5E7EB", opacity: '1.0', fontFamily: 'Poppins,sans-serif' }}>Login</Link></Typography>
+            </Stack>
+          </Stack>
 
-          </Stack>
-          </Stack>
-          
 
         </Stack>
       </Box>
     </Stack>
   )
+  function Alertz() {
+    return (
+      <Modal
+        open={open}
+        onClose={() => {
+          if (aleT) {
+            setOpen(false)
+            route.push('/user')
+          } else {
+            setOpen(false)
+          }
+        }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Stack alignItems='center' justifyContent='space-evenly' sx={{
+          background: '#E5E7EB', width: '290px', height: '330px', borderRadius: '20px',
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          padding: '12px'
+        }}>
+          <Image src={aleT ? Big : Wig} width={120} height={120} alt='widh' />
+          <Typography id="modal-modal-title" sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '20px', fontWeight: '500' }}>
+
+            {aleT ? 'Success' : 'Eh Sorry!'}
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ fontFamily: 'Poppins,sans-serif', mt: 2, fontSize: '14px', fontWeight: '300' }}>
+            {ale}
+          </Typography>
+          <Divider sx={{ background: 'black' }} />
+          <Button variant='contained' sx={{ fontFamily: 'Poppins,sans-serif', color: '#E5E7EB', background: '#03045E', padding: '8px', width: '100%' }} onClick={() => {
+            if (aleT) {
+              setOpen(false)
+              route.push('/user')
+            } else {
+
+              setOpen(false)
+            }
+          }}>Okay</Button>
+        </Stack>
+
+      </Modal>)
+  }
 }
 export async function getStaticPaths() {
   const { data, error } = await supabase

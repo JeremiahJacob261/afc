@@ -1,0 +1,7 @@
+hash_config {
+  algorithm: SCRYPT,
+  base64_signer_key: 54X+nsxtwryGGHbp1YhVC0DXoRSZQKKllq+iofxWpgBGhntq/05gg0lRMVEYOiP9FkGAQXrDFz3N4XoymnUm6Q==,
+  base64_salt_separator: Bw==,
+  rounds: 8,
+  mem_cost: 14,
+}
