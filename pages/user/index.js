@@ -53,7 +53,7 @@ export default function Home() {
 const { data, error } = await supabase
             .from('users')
             .select()
-            .eq('userId', uid)
+            .eq('username', localStorage.getItem('signName'))
           setInfo(data[0]);
           setBalance(data[0].balance);
           
