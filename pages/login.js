@@ -155,6 +155,7 @@ const { error } = await supabase
     router.push('/user')
 
   }
+ 
   const login = async () => {
 //firebase
 const fire = async (emailer) => {
@@ -177,7 +178,7 @@ const fire = async (emailer) => {
             const errorMessage = error.message;
             console.log(error.message)
             setDrop(false)
-              alert(error.message);
+              alert(error.code);
           });
         }
         
@@ -269,68 +270,7 @@ const fire = async (emailer) => {
           const errorMessage = error.message;
           console.log(error.message)
           if(error.message === 'Invalid login credentials'){
-            const { count, error } = await supabase
-            .from('users')
-            .select('*', { count: 'exact', head: true })
-            .eq('email', emailer)
-          console.log(count);
-          if (count > 0) {
-            alert('Incorrect password')
-            //firebase
-const fire = async (emailer) => {
-  signInWithEmailAndPassword(auth, emailer, values.password)
-          .then((userCredential) => {
-            // Signed in 
-            const user = userCredential.user;
-            // ...
-  
-            supabaseMigrate(user.displayName, user.uid);
-            alert('you are logged in');
-            localStorage.setItem('signedIn', true);
-            localStorage.setItem('signUid', user.uid);
-            localStorage.setItem('signName', user.displayName);
-            setDrop(false)
-            router.push('/user');
-          })
-          .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log(error.message)
-            setDrop(false)
-              alert(error.message);
-          });
-        }
-        fire(emailer)
-        //end-of -firebase
-          }else{
-           //use-firebase
-           //firebase
-const fire = async (emailer) => {
-  signInWithEmailAndPassword(auth, emailer, values.password)
-          .then((userCredential) => {
-            // Signed in 
-            const user = userCredential.user;
-            // ...
-  
-            supabaseMigrate(user.displayName, user.uid);
-            alert('you are logged in');
-            localStorage.setItem('signedIn', true);
-            localStorage.setItem('signUid', user.uid);
-            localStorage.setItem('signName', user.displayName);
-            setDrop(false)
-            router.push('/user');
-          })
-          .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log(error.message)
-            setDrop(false)
-              alert(error.message);
-          });
-        }
-        fire(emailer)
-        //end-of -firebase
-          }
+           fire(emailer);
           }else{
             console.log(error.message)
           }
