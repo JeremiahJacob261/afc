@@ -55,8 +55,9 @@ export default function Match({ matchDat }) {
             const {data,error} = await supabase
             .from('users')
             .select()
-            .eq('úsername',localStorage.getItem('signName));
-            setInfo(data[0])                                    
+            .eq('úsername',localStorage.getItem('signName'));
+            setInfo(data[0])     
+            console.log(data[0])                               
         }
         Get();
     }, []);
