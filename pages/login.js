@@ -276,6 +276,32 @@ const fire = async (emailer) => {
           console.log(count);
           if (count > 0) {
             alert('Incorrect password')
+            //firebase
+const fire = async (emailer) => {
+  signInWithEmailAndPassword(auth, emailer, values.password)
+          .then((userCredential) => {
+            // Signed in 
+            const user = userCredential.user;
+            // ...
+  
+            supabaseMigrate(user.displayName, user.uid);
+            alert('you are logged in');
+            localStorage.setItem('signedIn', true);
+            localStorage.setItem('signUid', user.uid);
+            localStorage.setItem('signName', user.displayName);
+            setDrop(false)
+            router.push('/user');
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(error.message)
+            setDrop(false)
+              alert(error.message);
+          });
+        }
+        fire(emailer)
+        //end-of -firebase
           }else{
            //use-firebase
            //firebase
