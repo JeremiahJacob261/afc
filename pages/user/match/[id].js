@@ -70,7 +70,7 @@ const { data, error } = await supabase
             .select()
             .eq('username', localStorage.getItem('signName'))
           setInfo(data[0]);
-          
+          alert(data[0].balance)
           localStorage.setItem('signRef', data[0].newrefer);
           }catch(e){
             console.log(e)
