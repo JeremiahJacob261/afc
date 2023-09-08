@@ -141,7 +141,6 @@ export default function Login() {
       options: {
         data: {
           displayName: username,
-          uid: uid,
         }
       }
     })
