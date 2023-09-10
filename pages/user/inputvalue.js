@@ -31,7 +31,7 @@ export default function InputValue() {
             }else{
              if(method === 'gpay'){
               if( amount.length < 1 || amount < 830 ){
-                Alerts((method === 'usdt') ? 'Please Input any Amount above 9 USDT' : (method === 'gpay') ? 'Please Input any Amount above 829 Indian Rupees' : 'Please Input any Amount above 208 Zambian Kwacha',false)
+                Alerts((method === 'usdt') ? 'Please Input any Amount above 9 USDT' : (method === 'gpay') ? 'Please Input any Amount above 829 Indian Rupees' : 'Please Input any Amount above 209 Zambian Kwacha',false)
               }else{
               localStorage.setItem('amo',amount)
                 router.push('/user/deposit')
@@ -62,7 +62,7 @@ export default function InputValue() {
       </Stack>
       <Stack direction='row' justifyContent='center' alignItems='center' sx={{height:'58px',background:'#FBEFEF',borderRadius:'5px',padding:'16px'}} spacing={2}>
       <PriorityHighRoundedIcon sx={{color:'#E5E7EB',background:'#E94E55',width:'20px',height:'20px',borderRadius:'10px'}}/>
-      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#E94E55' }}>Please note that the minimum deposit is {(method === 'usdt') ? '10 USDT' : (method === 'gpay') ? '830 Indian Rupees' : '208 Zambian Kwacha'}</Typography>
+      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#E94E55' }}>Please note that the minimum deposit is {(method === 'usdt') ? '10 USDT' : (method === 'gpay') ? '830 Indian Rupees' : '210 Zambian Kwacha'}</Typography>
       </Stack>
       <Stack spacing={1} sx={{minWidth:'344px'}}> 
             <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'black'}}>Enter Amount </Typography>
