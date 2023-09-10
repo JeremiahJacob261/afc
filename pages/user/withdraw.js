@@ -30,7 +30,7 @@ export default function Deposit() {
   const [pin, setPin] = useState("");
   const [warnad, setWarnad] = useState("");
   const [warnab, setWarnab] = useState("");
-  const [method, setMethod] = useState('USDT');
+  const [method, setMethod] = useState('usdt');
   const [open,setOpen] = useState(false)
   const auth = getAuth(app);
   const router = useRouter();
@@ -87,14 +87,18 @@ const { data, error } = await supabase
   }, []);
   //end of snackbar1
   const wih = async (damount, dusername) => {
+     let amo1 = (method === 'usdt') ? damount : (method === 'gpay') ? Number(damount/83) : Number(damount/21);
     const { data, error } = await supabase
-      .rpc('withdrawer', { amount: damount, names: dusername })
+      .rpc('withdrawer', { amount: amo1, names: dusername })
     console.log(error);
     localStorage.setItem('wm',damount);
   }
   const Withdrawal = async () => {
-    if (amount < 100) {
-      if (amount > 19) {
+    //santana1 is maximum while santana 2 is minimum
+    let santana1 = (method === 'usdt') ? 100 : (method === 'gpay') ? 8300 : 2100;
+    let santana2 = (method === 'usdt') ? 19 : (method === 'gpay') ? 1659 : 419;
+    if (amount < santana1) {
+      if (amount > santana2) {
         setWarnab('')
         if (address.length < 10) {
           Alerts('Ensure the address is correct',false)
@@ -175,7 +179,7 @@ const { data, error } = await supabase
 
         <Stack direction="column" spacing={3}>
           <Stack spacing={1}> 
-            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'black'}}>Enter Gpay or USDT Wallet Address</Typography>
+            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'black'}}>Enter Gpay or USDT Wallet Address or Airtel Money Account Number</Typography>
             <TextField  sx={{color:'#03045E'}} value={address} onChange={(a) => {
               setAddress(a.target.value)
             }}/>
@@ -219,6 +223,7 @@ const { data, error } = await supabase
             >
               <MenuItem value='usdt'> USDT (TRC20)</MenuItem>
               <MenuItem value='gpay'>GPAY</MenuItem>
+              <MenuItem value='airtel'>Airtel Money Zambia</MenuItem>
             </Select>
           </FormControl>
             </Stack>
