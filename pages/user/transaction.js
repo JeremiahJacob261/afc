@@ -12,6 +12,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import Rd from '../../public/icon/rounds.png'
 import { getAuth, signOut } from "firebase/auth";
 import Sg from '../../public/icon/sgpay.png'
+import AiZm from '../../public/icon/airtel.png'
 import Su from '../../public/icon/susdt.png'
 export default function Transaction() {
   const [trans, setTrans] = useState([])
@@ -79,6 +80,10 @@ export default function Transaction() {
           }} />
           <Image src={Sg} width={255} height={145} alt='su' onClick={() => {
             localStorage.setItem('dm', 'gpay');
+            router.push('/user/inputvalue')
+          }} />
+          <Image src={AiZm} width={255} height={145} alt='su' onClick={() => {
+            localStorage.setItem('dm', 'airtel');
             router.push('/user/inputvalue')
           }} />
         </Stack>
