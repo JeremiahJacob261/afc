@@ -122,20 +122,8 @@ export default function Viewbets({ bets }) {
                     </Typography>
                 </Stack>
                 <Button variant='standard' style={{ color: '#F05D5E',display:(stams<curren) ? 'none' : 'visible'}} onClick={() => {
-                 setDrop(true);
-                 const rem = async () => {
-
-                    const { error } = await supabase
-                        .from('placed')
-                        .delete()
-                        .eq('betid', bet.betid);
-                }
-                NUser('bet-cancellation',info.username,bet.stake);
-                rem();
-                 setDrop(false);
-                 Depositing(bet.stake, info.username);
-                 router.push('/user/matches');
-             }}>Cancel this bet</Button>
+                 
+             }}>Cancel this bet - Please Contact Admin to remove this bet</Button>
             </Stack>
         </div>
     )
@@ -143,36 +131,36 @@ export default function Viewbets({ bets }) {
         if (stams<curren) {
             return(
              <Button variant='standard' style={{ color: '#F05D5E',display:'none' }} onClick={() => {
-                 setDrop(true);
-                 Depositing(bet.stake, info.username);
-                 const rem = async () => {
+                //  setDrop(true);
+                //  Depositing(bet.stake, info.username);
+                //  const rem = async () => {
 
-                    const { error } = await supabase
-                        .from('placed')
-                        .delete()
-                        .eq('betid', bet.betid);
-                }
-                rem();
-                 setDrop(false);
-                 router.push('/user/bets');
-             }}>Cancel this bet</Button>
+                //     const { error } = await supabase
+                //         .from('placed')
+                //         .delete()
+                //         .eq('betid', bet.betid);
+                // }
+                // rem();
+                //  setDrop(false);
+                //  router.push('/user/bets');
+             }}>Cancel this bet - Please Contact Admin to remove this bet</Button>
             )
         } else {
             return(
              <Button variant='standard' style={{ color: '#F05D5E', }} onClick={() => {
-                setDrop(true);
-                 const rem = async () => {
+                // setDrop(true);
+                //  const rem = async () => {
 
-                     const { error } = await supabase
-                         .from('placed')
-                         .delete()
-                         .eq('betid', bet.betid);
-                 }
-                 rem();
-                 Depositing(bet.stake, info.username);
-                setDrop(false);
-                 router.push('/user/matches');
-             }}>Cancel this bet</Button>
+                //      const { error } = await supabase
+                //          .from('placed')
+                //          .delete()
+                //          .eq('betid', bet.betid);
+                //  }
+                //  rem();
+                //  Depositing(bet.stake, info.username);
+                // setDrop(false);
+                //  router.push('/user/matches');
+             }}>Cancel this bet - Please Contact Admin to remove this bet</Button>
             )
             }
     

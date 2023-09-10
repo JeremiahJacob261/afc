@@ -37,6 +37,7 @@ export default function Home() {
   const auth = getAuth(app);
   const [draw,setDraw] = useState(false);
     let loads = 0;
+    console.log(Number('45')+Number('45'))
   useEffect(() => {
     const useri = localStorage.getItem('signedIn');
     if (useri) {
