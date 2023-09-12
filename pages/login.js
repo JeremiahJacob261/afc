@@ -379,7 +379,16 @@ const fire = async (emailer) => {
         </Stack>
       </Stack>
       <Stack direction="column" spacing={2} justifyContent='center' alignItems='center' sx={{ width: '343px', marginTop: '200px' }}>
-        <Button variant="contained" sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', fontWeight: '400', background: '#FE9D16' }}
+        <Button variant="contained" 
+        onKeyDown={(event)=>{
+          if(
+            event.key === "Enter" ||
+            event.key === "Space"
+            ){
+              login()
+            }
+        }}
+        sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', fontWeight: '400', background: '#FE9D16' }}
           onClick={login}>
           <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "#E5E7EBsmoke" }}>Login</Typography>
         </Button>

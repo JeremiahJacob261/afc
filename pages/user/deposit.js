@@ -55,7 +55,6 @@ export default function Deposit(){
     setfile([]);
     Alerts('Your Deposit was Successful',true);
     }catch(e){
-      
       setDrop(false)
       alert('Please Try again or check your internet connection')
     }
@@ -149,11 +148,11 @@ checkDepo(url);
                  </Stack>
         </Stack>
         <Stack direction='column' spacing={2} className='barcode' sx={{display:(method === 'usdt') ? 'visible' : (method === 'gpay') ? 'visible' : 'hidden'}}>
-        <Typography style={{ color:'black',fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400',display:(method === 'usdt') ? 'visible' : (method === 'gpay') ? 'visible' : 'hidden' }}>Send {(method === 'usdt') ? 'USDT' : 'Gpay' } to this Address</Typography>
+        <Typography style={{ color:'black',fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400',display:(method === 'usdt') ? 'visible' : (method === 'gpay') ? 'visible' : 'hidden' }}>Send {(method === 'usdt') ? 'USDT' : (method === 'gpay') ? 'Rupees' : 'Zambian Kwacha' } to this Address</Typography>
         <Image src={(method === 'usdt') ? ubarcode : (method === 'gpay') ? gbarcode : '' } width={184} height={156} alt='barcode' sx={{display:(method === 'usdt') ? 'visible' : (method === 'gpay') ? 'visible' : 'hidden'}}/>
         </Stack>
         <Stack className='address' spacing={1} sx={{minWidth:'344px'}}>
-           <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'black' }}>Address link</Typography>
+           <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'black' }}>{(method === 'usdt') ? 'Address Link' : (method === 'gpay') ? 'UPI ID' : 'Account Number'}Address link</Typography>
            <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{height:'58px',background:'#EFEFEF',borderRadius:'5px',padding:'16px'}} spacing={2}>
       <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'black' }}>{(method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : (method === 'gpay') ? 'Ashhar Jamal Jafri' : '260773179326 Yotamu Banda'}</Typography>
       <Image src={iCopy} width={20} height={20} alt='icopy' onClick={()=>{
