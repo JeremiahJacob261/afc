@@ -82,9 +82,7 @@ export default function Transaction() {
             localStorage.setItem('dm', 'gpay');
             router.push('/user/inputvalue')
           }} />
-          <Image src={AiZm} width={255} height={145} alt='su' onClick={() => {
-            alert('Zambian Deposit is currently unavailable ");
-          }} />
+          
         </Stack>
         <Stack direction='row' justifyContent='space-between'>
           <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '500' }}>Recent Transactions</Typography>
