@@ -179,7 +179,7 @@ const { data, error } = await supabase
                   </Stack>
                   <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
                   <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                    <Image src={pro.loaded ? ihome : Ims} width={50} height={50}/>
+                    <Image src={Ims} width={50} height={50}/>
                     <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
                   </Stack>
                   <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
@@ -188,7 +188,7 @@ const { data, error } = await supabase
                     <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
                   </Stack>
                   <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                    <Image src={pro.loaded ? iaway : Ims} width={50} height={50}/>
+                    <Image src={Ims} width={50} height={50}/>
                     <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{pro.away}</Typography>
                   </Stack>
                   </Stack>
