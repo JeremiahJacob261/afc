@@ -83,8 +83,7 @@ export default function Transaction() {
             router.push('/user/inputvalue')
           }} />
           <Image src={AiZm} width={255} height={145} alt='su' onClick={() => {
-            localStorage.setItem('dm', 'airtel');
-            router.push('/user/inputvalue')
+            alert('Zambian Deposit is currently unavailable ");
           }} />
         </Stack>
         <Stack direction='row' justifyContent='space-between'>
