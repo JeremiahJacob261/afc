@@ -189,7 +189,7 @@ const { data, error } = await supabase
                 </Stack>
                 <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
                     <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                        <Image src={Ims} width={50} height={50} alt='home' />
+                        <Image src={matches.ihome ? matches.ihome : Ims} width={65} height={50} alt='home' sx={{ borderRadius:'10px'}}/>
                         <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{matches.home}</Typography>
                     </Stack>
                     <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
@@ -198,7 +198,7 @@ const { data, error } = await supabase
                         <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
                     </Stack>
                     <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                        <Image src={Ims} width={50} height={50} alt='away' />
+                        <Image src={matches.iaway ? matches.iaway : Ims} width={65} height={50} alt='away' sx={{ borderRadius:'10px'}}/>
                         <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{matches.away}</Typography>
                     </Stack>
                 </Stack>
@@ -488,7 +488,9 @@ const { data, error } = await supabase
                                                 "away": matches.away,
                                                 "time": matches.time,
                                                 "date": matches.date,
-                                                "odd": matches[picked]
+                                                "odd": matches[picked],
+                                                "ihome":matches.ihome,
+                                                "iaway":matches.iaway
                                             })
                                         console.log(error)
                                     }

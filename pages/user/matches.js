@@ -54,8 +54,6 @@ border: "1px solid rgba(255, 255, 255, 0.3)"
               let stams = Date.parse(pro.date + " " + pro.time) / 1000;
               let curren = new Date().getTime() / 1000;
               const league = (pro.league === 'others') ? pro.otherl : pro.league;
-              console.log(new Date(pro.date))
-              console.log(new Date(pro.time))
               let date = parseInt(new Date(pro.date).getMonth() + 1);
               let day = new Date(pro.date).getDate();
               let time = pro.time.substring(0, pro.time.length - 3)
@@ -81,7 +79,7 @@ border: "1px solid rgba(255, 255, 255, 0.3)"
                   </Stack>
                   <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
                   <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                    <Image src={Ims} width={50} height={50} alt='home'/>
+                    <Image src={pro.ihome ? pro.ihome : Ims} width={65} height={50} alt='home'/>
                     <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
                   </Stack>
                   <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
@@ -90,7 +88,7 @@ border: "1px solid rgba(255, 255, 255, 0.3)"
                     <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
                   </Stack>
                   <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                    <Image src={Ims} width={50} height={50} alt='away'/>
+                    <Image src={pro.iaway ? pro.iaway : Ims} width={65} height={50} alt='away'/>
                     <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{pro.away}</Typography>
                   </Stack>
                   </Stack>
@@ -124,6 +122,7 @@ export async function getServerSideProps(context) {
     .select()
     .eq('verified',false)
   let footDat = data;
+  console.log(data)
   return {
     props: { footDat }, // will be passed to the page component as props
   }
