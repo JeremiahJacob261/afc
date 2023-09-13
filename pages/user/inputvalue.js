@@ -37,8 +37,8 @@ export default function InputValue() {
                 router.push('/user/deposit')
             }
              }else{
-              if( amount.length < 1 || amount < 208 ){
-                Alerts((method === 'usdt') ? 'Please Input any Amount above 9 USDT' : (method === 'gpay') ? 'Please Input any Amount above 829 Indian Rupees' : 'Please Input any Amount above 207 Zambian Kwacha',false)
+              if( amount.length < 1 || amount < 210 ){
+                Alerts((method === 'usdt') ? 'Please Input any Amount above 9 USDT' : (method === 'gpay') ? 'Please Input any Amount above 829 Indian Rupees' : 'Please Input any Amount above 209 Zambian Kwacha',false)
               }else{
               localStorage.setItem('amo',amount)
                 router.push('/user/deposit')

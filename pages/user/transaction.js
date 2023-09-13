@@ -12,6 +12,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import Rd from '../../public/icon/rounds.png'
 import { getAuth, signOut } from "firebase/auth";
 import Sg from '../../public/icon/sgpay.png'
+import MtZm from '../../public/icon/mtn.png'
 import AiZm from '../../public/icon/airtel.png'
 import Su from '../../public/icon/susdt.png'
 export default function Transaction() {
@@ -82,7 +83,10 @@ export default function Transaction() {
             localStorage.setItem('dm', 'gpay');
             router.push('/user/inputvalue')
           }} />
-          
+          <Image src={MtZm} width={255} height={145} alt='su' onClick={() => {
+            localStorage.setItem('dm', 'mtn');
+            router.push('/user/inputvalue')
+          }} />
         </Stack>
         <Stack direction='row' justifyContent='space-between'>
           <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '500' }}>Recent Transactions</Typography>
@@ -98,12 +102,12 @@ export default function Transaction() {
               <Stack direction="row" spacing={2} justifyContent="space-between" alignItems='center' sx={{ padding: '8px' }} key={t.id}>
                 <Image src={Rd} width={40} height={40} alt='rounds' />
                 <Stack direction='column' alignItems='start' sx={{ width: '196px' }}>
-                  <Typography style={{ color: 'black', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>{(t.method === 'usdt') ? 'USDT' : 'Gpay'}
+                  <Typography style={{ color: 'black', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>{(t.method === 'usdt') ? 'USDT' : (t.method === 'gpay') ? 'Gpay' : 'Mobile Money'}
                   </Typography>
                   <Typography style={{ color: 'black', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{month} {date.getDate()}</Typography>
 
                 </Stack>
-                <Typography style={{ color: 'black', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{t.amount} {(t.method === 'usdt') ? 'USDT' : '₹'}</Typography>
+                <Typography style={{ color: 'black', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{t.amount} {(t.method === 'usdt') ? 'USDT' : (t.method === 'gpay') ? '₹' : 'Kwacha'}</Typography>
               </Stack>
             )
           })
