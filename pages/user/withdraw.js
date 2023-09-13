@@ -224,6 +224,7 @@ const { data, error } = await supabase
               <MenuItem value='usdt'> USDT (TRC20)</MenuItem>
               <MenuItem value='gpay'>GPAY</MenuItem>
               <MenuItem value='airtel'>Airtel Money Zambia</MenuItem>
+              <MenuItem value='mtn'>MTN Money Zambia</MenuItem>
             </Select>
           </FormControl>
             </Stack>
