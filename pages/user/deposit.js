@@ -134,7 +134,7 @@ checkDepo(url);
       </Stack>
       <Stack direction='row' className='warning' justifyContent='center' alignItems='center' sx={{height:'58px',background:'#FBEFEF',borderRadius:'5px',padding:'16px'}} spacing={2}>
       <PriorityHighRoundedIcon sx={{color:'#E5E7EB',background:'#E94E55',width:'20px',height:'20px',borderRadius:'10px'}}/>
-      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#E94E55' }}>Please note that the minimum deposit is {(method === 'usdt') ? '10 USDT' : (method === 'gpay') ? '830 Indian Rupees' : '208 Zambian Kwacha'}</Typography>
+      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#E94E55' }}>Please note that the minimum deposit is {(method === 'usdt') ? '10 USDT' : (method === 'gpay') ? '830 Indian Rupees' : '210 Zambian Kwacha'}</Typography>
      </Stack>
         <Stack direction='column' spacing={1} sx={{minWidth:'344px'}}>
           <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'black'}}>Wallet Network Address</Typography>
@@ -154,9 +154,10 @@ checkDepo(url);
         <Stack className='address' spacing={1} sx={{minWidth:'344px'}}>
            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'black' }}>{(method === 'usdt') ? 'Address Link' : (method === 'gpay') ? 'UPI ID' : 'Account Number'}</Typography>
            <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{height:'58px',background:'#EFEFEF',borderRadius:'5px',padding:'16px'}} spacing={2}>
-      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'black' }}>{(method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : (method === 'gpay') ? 'Ashhar Jamal Jafri' : '260964681705 Kennedy Suzyo Banda'}</Typography>
+            {/* 260964681705 */}
+      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'black' }}>{(method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : (method === 'gpay') ? 'Ashhar Jamal Jafri' : 'Suzyo Banda 260768246252'}</Typography>
       <Image src={iCopy} width={20} height={20} alt='icopy' onClick={()=>{
-        navigator.clipboard.writeText((method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : (method === 'gpay') ? 'Ashhar Jamal Jafri' : '260964681705' )
+        navigator.clipboard.writeText((method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : (method === 'gpay') ? 'Ashhar Jamal Jafri' : '260768246252' )
       }}/>
       </Stack>
         </Stack>
