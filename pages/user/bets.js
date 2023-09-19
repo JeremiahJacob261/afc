@@ -150,7 +150,7 @@ export default function Bets() {
                       </Stack>
                       <Stack direction='row' justifyContent='space-between' alignItems='center'>
                         <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: 'black' }}>Odds</Typography>
-                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'black' }}>{s.odd} USDT</Typography>
+                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'black' }}>{s.odd} %</Typography>
                       </Stack>
                       <Stack direction='row' justifyContent='space-between' alignItems='center'>
                         <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: 'black' }}>Stake</Typography>
