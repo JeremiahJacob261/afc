@@ -97,10 +97,10 @@ const { data, error } = await supabase
     //santana1 is maximum while santana 2 is minimum
     let santana1 = (method === 'usdt') ? 100 : (method === 'gpay') ? 8300 : 2100;
     let santana2 = (method === 'usdt') ? 19 : (method === 'gpay') ? 1659 : 419;
-    if (amount < santana1) {
-      if (amount > santana2) {
+    if (amount < 100) {
+      if (amount > 19) {
         setWarnab('')
-        if (address.length < 10) {
+        if (address.length < 9) {
           Alerts('Ensure the address is correct',false)
         } else {
           setWarnad('')
