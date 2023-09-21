@@ -150,6 +150,7 @@ const { data, error } = await supabase
     setOpen(true)
   }
   //end of snackbar2
+  let charge = (amount * 5) / 100;
   return (
     <Cover>
       <Alertz/>
@@ -168,7 +169,7 @@ const { data, error } = await supabase
         </Stack>
         <Stack direction='row' alignItems='center' justifyContent='space-between'>
         <Typography sx={{fontSize:'12px',fontWeight:'300',fontFamily:'Poppins,sans-serif'}}>Charge Amount</Typography>
-        <Typography sx={{fontSize:'14px',fontWeight:'500',fontFamily:'Poppins,sans-serif'}}>{((amount * 5) / 100).toFixed(3)} USDT</Typography>
+        <Typography sx={{fontSize:'14px',fontWeight:'500',fontFamily:'Poppins,sans-serif'}}>{charge.toFixed(3)} USDT</Typography>
         </Stack>
         <Stack direction='row' alignItems='center' justifyContent='space-between'>
         <Typography sx={{fontSize:'12px',fontWeight:'300',fontFamily:'Poppins,sans-serif'}}>Total Amount</Typography>
