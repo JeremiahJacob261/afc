@@ -136,14 +136,14 @@ const Alert = React.forwardRef(function Alert(props, ref) {
             <Typography sx={{ color: "black",fontSize:'14px',fontWeight:'300', fontFamily: 'Poppins, sans-serif' }}>Level 1</Typography>
             </Stack>
            </Stack>
-           <Stack direction='row' justifyContent='space-between' alignItems='center'>
+           <Stack direction='row' justifyContent='space-between' alignItems='center'sx={{background:'#F5E663',padding:'8px',borderRadius:'10px'}}>
             <Stack>
               <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'black' }}>Current Balance </Typography>
               <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'black' }}>{info ? ` ${info.balance.toFixed(3)}` : '0' } USDT</Typography>
             </Stack>
-            <Link href='/user/fund' style={{ textDecoration: "none",color:'black' }}>
-            <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#DFE1E7', borderRadius: '20px', padding: '8px', width: '95px',height:'32px' }}>
-              <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: 'black', fontSize: '12px' }}>
+            <Link href='/user/fund' style={{ textDecoration: "none",color:'white' }}>
+            <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background:'#0A369D', borderRadius: '20px', padding: '8px', width: '95px',height:'32px' }}>
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: 'white', fontSize: '12px' }}>
                 Deposit
               </Typography>
               <KeyboardArrowRightIcon sx={{width:'16px',height:'16px'}}/>
@@ -161,7 +161,9 @@ const Alert = React.forwardRef(function Alert(props, ref) {
             <Image src={iLink} width={24} height={24} alt='ilink'/>
             <Typography sx={{ color:'black',fontSize:'14px',fontWeight:300,fontFamily:'Inter,sans-serif'}}>https://afcfifa/register/{info ? info.newrefer : userR }</Typography>
           </Stack>
-          <Image src={iCopy} width={20} height={20} alt='icopy' onClick={() => {
+          <Image src={iCopy} width={20} height={20} alt='icopy' 
+          sx={{background:'#47A8BD',padding:'5px',borderRadius:'5px'}}
+          onClick={() => {
                 navigator.clipboard.writeText("https://afcfifa.com/register/" + info.newrefer)
                 setMessages("Invite Link Copied")
                 setOpened(true);

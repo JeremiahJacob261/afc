@@ -67,6 +67,7 @@ export default function Bets() {
           .from('placed')
           .select()
           .match({ username: name });
+          
         setFina(data)
         console.log(data)
       }
@@ -116,7 +117,7 @@ export default function Bets() {
           </TabList>
         </Stack>
         <TabPanel value="1">
-          <Stack spacing={2}>
+          <Stack spacing={2} direction='column-reverse'>
             
           {
 
@@ -124,50 +125,50 @@ export default function Bets() {
               console.log(s)
               let stams = Date.parse(s.date + " " + s.time) / 1000;
     let curren = new Date().getTime() / 1000;
-              return (
-                <div key={s.betid} onClick={() => {
-                  router.push('/user/viewbet/' + s.betid);
-                }}>
-                  <Box sx={{ background: "#EFEFEF", padding: "8px", height: "max-content", width: '341px', height: '313px', borderRadius: '10px' }} >
-            
-                  <Stack direction="row" spacing={2} alignItems="center" justifyContent="center" marginBottom='20px' marginTop='20px'>
-          <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
-            <Image src={s.ihome ? s.ihome : Ims} width={20} height={20} alt='home' />
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '300',maxWidth:'91px',color:'black' }}>{s.home}</Typography>
-
+    return (
+      <div key={s.betid} onClick={() => {
+        router.push('/user/viewbet/' + s.betid);
+      }}>
+        <Box sx={{ background: "#36558F", padding: "8px", height: "max-content", width: '341px', height: '313px', borderRadius: '10px' }} >
+  
+          <Stack direction="row" spacing={2} alignItems="center" justifyContent="center" marginBottom='20px' marginTop='20px'>
+            <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
+              <Image src={Ims} width={20} height={20} alt='home' />
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '300',maxWidth:'91px',color:'#FED766' }}>{s.home}</Typography>
+  
+            </Stack>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '500' }}>VS</Typography>
+            <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-around">
+              <Image src={Ims} width={20} height={20} alt='away' />
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '300',maxWidth:'91px',color:'#FED766' }}>{s.away}</Typography>
+  
+            </Stack>
           </Stack>
-          <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '500' }}>VS</Typography>
-          <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-around">
-            <Image src={s.iaway ? s.iaway : Ims} width={20} height={20} alt='away' />
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '300',maxWidth:'91px',color:'black' }}>{s.away}</Typography>
-
+          <Stack direction='column' spacing={2}>
+            <Stack direction='row' justifyContent='space-between' alignItems='center'>
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#D4E4BC' }}>Market</Typography>
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FE4A49' }}>{s.market}</Typography>
+            </Stack>
+            <Stack direction='row' justifyContent='space-between' alignItems='center'>
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#D4E4BC' }}>Odds</Typography>
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FE4A49' }}>{s.odd} %</Typography>
+            </Stack>
+            <Stack direction='row' justifyContent='space-between' alignItems='center'>
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#D4E4BC' }}>Stake</Typography>
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FE4A49' }}>{s.stake} USDT</Typography>
+            </Stack>
+            <Stack direction='row' justifyContent='space-between' alignItems='center'>
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#D4E4BC' }}>Profit</Typography>
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FE4A49' }}>{s.stake + s.profit} USDT</Typography>
+            </Stack>
+            <Stack direction='row' justifyContent='space-between' alignItems='center'>
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#D4E4BC' }}> Status</Typography>
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FE4A49' }}> {(stams > curren) ? 'Not Started' : (s.won === 'null') ? 'Ongoing' : (s.won === 'true') ? 'Won' : 'Lost'}</Typography>
+            </Stack>
           </Stack>
-        </Stack>
-                    <Stack direction='column' spacing={2}>
-                      <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: 'black' }}>Market</Typography>
-                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'black' }}>{s.market}</Typography>
-                      </Stack>
-                      <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: 'black' }}>Odds</Typography>
-                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'black' }}>{s.odd} %</Typography>
-                      </Stack>
-                      <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: 'black' }}>Stake</Typography>
-                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'black' }}>{s.stake} USDT</Typography>
-                      </Stack>
-                      <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: 'black' }}>Profit</Typography>
-                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'black' }}>{s.stake + s.profit} USDT</Typography>
-                      </Stack>
-                      <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: 'black' }}> Status</Typography>
-                        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'black' }}> {(stams > curren) ? 'Not Started' : (s.won === 'null') ? 'Ongoing' : (s.won === 'true') ? 'Won' : 'Lost'}</Typography>
-                      </Stack>
-                    </Stack>
-                  </Box>
-                </div>
-              )
+        </Box>
+      </div>
+    )
             })
 
 
@@ -178,7 +179,7 @@ export default function Bets() {
           //tab 2
         }
         <TabPanel value="2">
-          <Stack spacing={3}>
+          <Stack spacing={3} direction='column-reverse'>
 
         
         {
@@ -191,41 +192,41 @@ let curren = new Date().getTime() / 1000;
     <div key={s.betid} onClick={() => {
       router.push('/user/viewbet/' + s.betid);
     }}>
-      <Box sx={{ background: "#EFEFEF", padding: "8px", height: "max-content", width: '341px', height: '313px', borderRadius: '10px' }} >
+      <Box sx={{ background: "#36558F", padding: "8px", height: "max-content", width: '341px', height: '313px', borderRadius: '10px' }} >
 
         <Stack direction="row" spacing={2} alignItems="center" justifyContent="center" marginBottom='20px' marginTop='20px'>
           <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
             <Image src={Ims} width={20} height={20} alt='home' />
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '300',maxWidth:'91px',color:'black' }}>{s.home}</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '300',maxWidth:'91px',color:'#FED766' }}>{s.home}</Typography>
 
           </Stack>
           <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '500' }}>VS</Typography>
           <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-around">
             <Image src={Ims} width={20} height={20} alt='away' />
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '300',maxWidth:'91px',color:'black' }}>{s.away}</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '300',maxWidth:'91px',color:'#FED766' }}>{s.away}</Typography>
 
           </Stack>
         </Stack>
         <Stack direction='column' spacing={2}>
           <Stack direction='row' justifyContent='space-between' alignItems='center'>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: 'black' }}>Market</Typography>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'black' }}>{s.market}</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#D4E4BC' }}>Market</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FE4A49' }}>{s.market}</Typography>
           </Stack>
           <Stack direction='row' justifyContent='space-between' alignItems='center'>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: 'black' }}>Odds</Typography>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'black' }}>{s.odd} %</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#D4E4BC' }}>Odds</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FE4A49' }}>{s.odd} %</Typography>
           </Stack>
           <Stack direction='row' justifyContent='space-between' alignItems='center'>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: 'black' }}>Stake</Typography>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'black' }}>{s.stake} USDT</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#D4E4BC' }}>Stake</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FE4A49' }}>{s.stake} USDT</Typography>
           </Stack>
           <Stack direction='row' justifyContent='space-between' alignItems='center'>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: 'black' }}>Profit</Typography>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'black' }}>{s.stake + s.profit} USDT</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#D4E4BC' }}>Profit</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FE4A49' }}>{s.stake + s.profit} USDT</Typography>
           </Stack>
           <Stack direction='row' justifyContent='space-between' alignItems='center'>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: 'black' }}> Status</Typography>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'black' }}> {(stams > curren) ? 'Not Started' : (s.won === 'null') ? 'Ongoing' : (s.won === 'true') ? 'Won' : 'Lost'}</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#D4E4BC' }}> Status</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FE4A49' }}> {(stams > curren) ? 'Not Started' : (s.won === 'null') ? 'Ongoing' : (s.won === 'true') ? 'Won' : 'Lost'}</Typography>
           </Stack>
         </Stack>
       </Box>

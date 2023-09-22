@@ -74,7 +74,7 @@ border: "1px solid rgba(255, 255, 255, 0.3)"
                     router.push("/user/match/" + pro.match_id)
                   }}>
                   <Stack direction='column'>
-                    <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{league} </Typography>
+                    <Typography style={{ color: '#02182B', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{league} </Typography>
                     <Divider sx={{ background: 'black' }} />
                   </Stack>
                   <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
