@@ -165,15 +165,15 @@ const { data, error } = await supabase
         <Stack sx={{width:'344px',height:'110px',background:'#EFEFEF',padding:'8px',borderRadius:'5px'}} direction='column' spacing={2} justifyContent='center'>
         <Stack direction='row' alignItems='center' justifyContent='space-between'>
         <Typography sx={{fontSize:'12px',fontWeight:'300',fontFamily:'Poppins,sans-serif'}}>Current Balance</Typography>
-        <Typography sx={{fontSize:'14px',fontWeight:'500',fontFamily:'Poppins,sans-serif'}}>{info.balance.toFixed(3)} USDT</Typography>
+        <Typography sx={{fontSize:'14px',fontWeight:'500',fontFamily:'Poppins,sans-serif'}}>{(info.balance) ? info.balance.toFixed(3) : info.balance} USDT</Typography>
         </Stack>
         <Stack direction='row' alignItems='center' justifyContent='space-between'>
         <Typography sx={{fontSize:'12px',fontWeight:'300',fontFamily:'Poppins,sans-serif'}}>Charge Amount</Typography>
-        <Typography sx={{fontSize:'14px',fontWeight:'500',fontFamily:'Poppins,sans-serif'}}>{charge.toFixed(3)} USDT</Typography>
+        <Typography sx={{fontSize:'14px',fontWeight:'500',fontFamily:'Poppins,sans-serif'}}>{(charge) ? charge.toFixed(3) : charge} USDT</Typography>
         </Stack>
         <Stack direction='row' alignItems='center' justifyContent='space-between'>
         <Typography sx={{fontSize:'12px',fontWeight:'300',fontFamily:'Poppins,sans-serif'}}>Total Amount</Typography>
-        <Typography sx={{fontSize:'14px',fontWeight:'500',fontFamily:'Poppins,sans-serif'}}>{total.toFixed(3)} USDT</Typography>
+        <Typography sx={{fontSize:'14px',fontWeight:'500',fontFamily:'Poppins,sans-serif'}}>{total} USDT</Typography>
         </Stack>
         </Stack>
 
