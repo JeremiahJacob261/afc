@@ -79,10 +79,7 @@ export default function Transaction() {
             localStorage.setItem('dm', 'usdt');
             router.push('/user/inputvalue')
           }} />
-          <Image src={Sg} width={255} height={145} alt='su' onClick={() => {
-            localStorage.setItem('dm', 'gpay');
-            router.push('/user/inputvalue')
-          }} />
+          
           <Image src={MtZm} width={255} height={145} alt='su' onClick={() => {
             localStorage.setItem('dm', 'mtn');
             router.push('/user/inputvalue')
