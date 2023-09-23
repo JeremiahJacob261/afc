@@ -372,8 +372,10 @@ export default function Register({ refer }) {
                   codes.countries.map((c) => {
                     return (
                       <MenuItem value={c.code} key={c.name} sx={{ color: '#E5E7EB', background: '#172242' }}>
-                        <Image src={c.flag_image_link} alt={c.name} width={25} height={25}/>
-                        <Typography> {c.code} {c.name}</Typography>
+                        <Stack direction='row' spacing={1}>
+                          <Image src={c.flag_image_link} alt={c.name} width={25} height={22}/>
+                        <Typography sx={{fontFamily: 'Poppins, sans-serif'}}> {c.code} {c.name}</Typography>
+                        </Stack>
                        </MenuItem>
                     )
                   })
