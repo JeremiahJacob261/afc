@@ -67,7 +67,7 @@ const { data, error } = await supabase
           localStorage.setItem('signRef', data[0].newrefer);
           }catch(e){
             console.log(e)
-            alert('Please Check your Internet Connection and Refresh the Website')
+            
           }
           
         }
