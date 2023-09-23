@@ -26,6 +26,7 @@ export default function Deposit() {
   const [info, setInfo] = useState({});
   const [address, setAddress] = useState("")
   const [amount, setAmount] = useState("")
+  const [balance,setBalance] = useState(0);
   const [pin, setPin] = useState("");
   const [warnad, setWarnad] = useState("");
   const [warnab, setWarnab] = useState("");
@@ -42,6 +43,24 @@ export default function Deposit() {
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
+  const GET = async () => {
+    
+    const names = localStorage.getItem('signName');
+    try{
+const { data, error } = await supabase
+      .from('users')
+      .select()
+      .eq('username', names)
+    setInfo(data[0]);
+    setBalance(data[0].balance);
+    localStorage.setItem('signRef', data[0].newrefer);
+    }catch(e){
+      console.log(e)
+      alert('Please Check your Internet Connection and Refresh the Website')
+    }
+    
+  }
+  GET();
   useEffect(() => {
 const useri = localStorage.getItem('signedIn');
     if (useri) {
@@ -52,22 +71,7 @@ const useri = localStorage.getItem('signedIn');
       const name = localStorage.getItem('signName');
       // ...
       
-        const GET = async () => {
-          try{
-const { data, error } = await supabase
-            .from('users')
-            .select()
-            .eq('username', name)
-          setInfo(data[0]);
-          setBalance(data[0].balance);
-          localStorage.setItem('signRef', data[0].newrefer);
-          }catch(e){
-            console.log(e)
-            alert('Please Check your Internet Connection and Refresh the Website')
-          }
-          
-        }
-        GET();
+        
       
     } else {
       // User is signed out
