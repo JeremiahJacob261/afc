@@ -1,0 +1,249 @@
+{
+    "countries": [
+      {
+        "name": "Australia",
+        "code": "+61",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/8/88/Flag_of_Australia_%28converted%29.svg"
+      },
+      {
+        "name": "Austria",
+        "code": "+43",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_Austria.svg"
+      },
+      {
+        "name": "Belgium",
+        "code": "+32",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/9/92/Flag_of_Belgium_%28civil%29.svg"
+      },
+      {
+        "name": "Belize",
+        "code": "+501",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/e/e7/Flag_of_Belize.svg"
+      },
+      {
+        "name": "Bulgaria",
+        "code": "+359",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Bulgaria.svg"
+      },
+      {
+        "name": "Canada",
+        "code": "+1",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Canada.svg"
+      },
+      {
+        "name": "Cameroon",
+        "code": "+237",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/4/4f/Flag_of_Cameroon.svg"
+      },
+      {
+        "name": "Croatia",
+        "code": "+385",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/1/1b/Flag_of_Croatia.svg"
+      },
+      {
+        "name": "Denmark",
+        "code": "+45",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/9/9c/Flag_of_Denmark.svg"
+      },
+      {
+        "name": "Estonia",
+        "code": "+372",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/8/8f/Flag_of_Estonia.svg"
+      },
+      {
+        "name": "Fiji",
+        "code": "+679",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Fiji.svg"
+      },
+      {
+        "name": "France",
+        "code": "+33",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg"
+      },
+      {
+        "name": "Germany",
+        "code": "+49",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg"
+      },
+      {
+        "name": "Gambia",
+        "code": "+220",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/7/77/Flag_of_The_Gambia.svg"
+      },
+      {
+        "name": "Ghana",
+        "code": "+233",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/1/19/Flag_of_Ghana.svg"
+      },
+      {
+        "name": "Greece",
+        "code": "+30",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_Greece.svg"
+      },
+      {
+        "name": "Guyana",
+        "code": "+592",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/9/99/Flag_of_Guyana.svg"
+      },
+      {
+        "name": "Iran",
+        "code": "+98",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/c/ca/Flag_of_Iran.svg"
+      },
+      {
+        "name": "Ireland",
+        "code": "+353",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/4/45/Flag_of_Ireland.svg"
+      },
+      {
+        "name": "India",
+        "code": "+91",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_India.svg"
+      },
+      {
+        "name":"Indonesia",
+        "code":"+62",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_Indonesia.svg"
+      },
+      {
+        "name": "Italy",
+        "code": "+39",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/0/03/Flag_of_Italy.svg"
+      },
+      {
+        "name": "Kenya",
+        "code": "+254",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/4/49/Flag_of_Kenya.svg"
+      },
+      {
+        "name": "Liberia",
+        "code": "+231",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Flag_of_Liberia.svg"
+      },
+      {
+        "name": "Malaysia",
+        "code": "+60",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/6/66/Flag_of_Malaysia.svg"
+      },
+      {
+        "name": "Malta",
+        "code": "+356",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/7/73/Flag_of_Malta.svg"
+      },
+      {
+        "name": "Nepal",
+        "code": "+977",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/9/9b/Flag_of_Nepal.svg"
+      },
+      {
+        "name": "Netherlands",
+        "code": "+31",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/2/20/Flag_of_the_Netherlands.svg"
+      },
+      {
+        "name": "New Zealand",
+        "code": "+64",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Flag_of_New_Zealand.svg"
+      },
+      {
+        "name": "Nigeria",
+        "code": "+234",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/7/79/Flag_of_Nigeria.svg"
+      },
+      {
+        "name": "Norway",
+        "code": "+47",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/d/d9/Flag_of_Norway.svg"
+      },
+      {
+        "name": "Pakistan",
+        "code": "+92",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/3/32/Flag_of_Pakistan.svg"
+      },
+      {
+        "name": "Philippines",
+        "code": "+63",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/9/99/Flag_of_the_Philippines.svg"
+      },
+      {
+        "name": "Russia",
+        "code": "+7",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Flag_of_Russia.svg"
+      },
+      {
+        "name": "Serbia",
+        "code": "+381",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/f/ff/Flag_of_Serbia.svg"
+      },
+      {
+        "name": "Singapore",
+        "code": "+65",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/4/48/Flag_of_Singapore.svg"
+      },
+      {
+        "name": "Slovakia",
+        "code": "+421",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Flag_of_Slovakia.svg"
+      },
+      {
+        "name": "Slovenia",
+        "code": "+386",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/f/f0/Flag_of_Slovenia.svg"
+      },
+      {
+        "name": "South Africa",
+        "code": "+27",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/a/af/Flag_of_South_Africa.svg"
+      },
+      {
+        "name": "Sweden",
+        "code": "+46",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Flag_of_Sweden.svg"
+      },
+      {
+        "name": "Switzerland",
+        "code": "+41",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Flag_of_Switzerland.svg"
+      },
+      {
+        "name": "Tanzania",
+        "code": "+255",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/3/38/Flag_of_Tanzania.svg"
+      },
+      {
+        "name": "Turkey",
+        "code": "+90",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Flag_of_Turkey.svg"
+      },
+      {
+        "name": "Uganda",
+        "code": "+256",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Flag_of_Uganda.svg"
+      },
+      {
+        "name": "Ukraine",
+        "code": "+380",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/4/49/Flag_of_Ukraine.svg"
+      },
+      {
+        "name": "United Kingdom",
+        "code": "+44",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/a/ae/Flag_of_the_United_Kingdom.svg"
+      },
+      {
+        "name": "Vietnam",
+        "code": "+84",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg"
+      },
+      {
+        "name": "Zimbabwe",
+        "code": "+263",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Flag_of_Zimbabwe.svg"
+      },
+      {
+        "name": "Zambia",
+        "code": "+260",
+        "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/0/06/Flag_of_Zambia.svg"
+      }
+    ]
+  }

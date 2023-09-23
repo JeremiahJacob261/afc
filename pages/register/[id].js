@@ -25,7 +25,7 @@ import Wig from '../../public/icon/wig.png'
 import Big from '../../public/icon/badge.png'
 import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, updateProfile } from "firebase/auth";
 import { async } from "@firebase/util";
-import codes from '../api/codes.json'
+import codes from '../api/codeswithflag.json'
 export default function Register({ refer }) {
   const [password, setPassword] = useState("")
   const [cpassword, setcPassword] = useState("")
@@ -371,7 +371,10 @@ export default function Register({ refer }) {
                 {
                   codes.countries.map((c) => {
                     return (
-                      <MenuItem value={c.code} key={c.name} sx={{ color: '#E5E7EB', background: '#172242' }}>{c.code} {c.name}</MenuItem>
+                      <MenuItem value={c.code} key={c.name} sx={{ color: '#E5E7EB', background: '#172242' }}>
+                        <Image src={c.flag_image_link} alt={c.name} width={25} height={25}/>
+                        <Typography> {c.code} {c.name}</Typography>
+                       </MenuItem>
                     )
                   })
                 }
