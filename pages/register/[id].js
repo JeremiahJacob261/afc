@@ -351,7 +351,7 @@ export default function Register({ refer }) {
             <TextField id="outlined-basic" label="Invite Code" variant="outlined"
               value={idR}
               disabled
-              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #E5E7EB', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#E5E7EB' } }}
+              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #E5E7EB', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%",color: '#E5E7EB', background: '#172242', input: { color: '#E5E7EB' } }}
               onChange={(e) => {
                 setidR(e.target.value)
               }} />

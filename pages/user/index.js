@@ -8,7 +8,12 @@ import Image from "next/image";
 import Link from 'next/link'
 import { Button, Typography, Paper, Divider } from "@mui/material";
 import { supabase } from '../api/supabase'
-import Agent from '../../public/posters6.jpg'
+import Carousel from 'react-bootstrap/Carousel';
+import Agent from '../../public/afc1.jpg'
+import Agent1 from '../../public/afc2.jpg'
+import Agent2 from '../../public/afc2.jpg'
+import Agent3 from '../../public/afc3.jpg'
+import Agent4 from '../../public/afc4.jpg'
 import front from '../../public/front.png'
 import fire from '../../public/Group 2.png'
 import WhatshotIcon from '@mui/icons-material/Whatshot';
@@ -21,6 +26,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
 import Backdrop from '@mui/material/Backdrop';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
+
 export default function Home() {
   const [anchorEl, setAnchorEl] = useState(null);
   const openr = Boolean(anchorEl);
@@ -57,6 +63,7 @@ const { data, error } = await supabase
           setInfo(data[0]);
           setBalance(data[0].balance);
           
+          console.log(error)
           localStorage.setItem('signRef', data[0].newrefer);
           }catch(e){
             console.log(e)
@@ -90,6 +97,7 @@ const { data, error } = await supabase
         .limit(5)
         .order('id', { ascending: false });
       setFootDat(data);
+    
     };
     getUsers()
   }, [balance]);
@@ -112,16 +120,16 @@ const { data, error } = await supabase
           <title>Welcome - {info ? `${info.username}` : 'Loading...'}</title>
           <link rel="icon" href="/logo_afc.ico" />
         </Head>
-        <Stack sx={{ background: "#E5E7EB", marginTop: '10px' }} spacing={4} justifyContent='center' >
+        <Stack sx={{ background: "#E5E7EB", marginTop: '10px',maxWidth:'350px' }} spacing={4} justifyContent='center' >
           <Typography style={{ fontSize: '16px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '5px', width: '100%', textAlign: 'left', color: 'black' }}>Hello {info.username}</Typography>
-          <Stack direction='row' justifyContent='space-between' alignItems='center'>
+          <Stack direction='row' justifyContent='space-between' alignItems='center'sx={{background:'#F5E663',padding:'8px',borderRadius:'10px'}}>
             <Stack>
               <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'black' }}>Current Balance </Typography>
-              <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'black' }}>{info ? `${Number(info.balance).toFixed(2)}` : '0'} USDT</Typography>
+              <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'black' }}>{info ? ` ${balance.toFixed(3)}` : '0' } USDT</Typography>
             </Stack>
-            <Link href='/user/fund' sx={{textDecoration:'none',color:'black'}}>
-            <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#DDDDDD', borderRadius: '20px', padding: '8px', width: '95px',height:'32px' }}>
-              <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: 'black', fontSize: '12px' }}>
+            <Link href='/user/fund' style={{ textDecoration: "none",color:'white' }}>
+            <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background:'#0A369D', borderRadius: '20px', padding: '8px', width: '95px',height:'32px' }}>
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: 'white', fontSize: '12px' }}>
                 Deposit
               </Typography>
               <KeyboardArrowRightIcon sx={{width:'16px',height:'16px'}}/>
@@ -129,10 +137,30 @@ const { data, error } = await supabase
             </Link>
           </Stack>
           <Divider sx={{ background: 'black' }} />
-          <Stack justifyContent='center' alignItems='center'>
-            <Image src={front} width={344} height={137} alt='invitation bonus' />
-          </Stack>
-          
+          {/* Carousel */}
+          <Carousel>
+      <Carousel.Item>
+       <Image src={Agent} width={344} height={137} alt='invitation bonus' sx={{borderRadius:'15px'}}/>
+       
+      </Carousel.Item>
+      <Carousel.Item>
+       <Image src={Agent1} width={344} height={137} alt='invitation bonus' sx={{borderRadius:'15px'}}/>
+        
+      </Carousel.Item>
+      <Carousel.Item>
+       <Image src={Agent2} width={344} height={137} alt='invitation bonus' sx={{borderRadius:'15px'}}/>
+        
+      </Carousel.Item>
+      <Carousel.Item>
+       <Image src={Agent3} width={344} height={137} alt='invitation bonus' sx={{borderRadius:'15px'}}/>
+        
+      </Carousel.Item>
+      <Carousel.Item>
+       <Image src={Agent4} width={344} height={137} alt='invitation bonus' sx={{borderRadius:'15px'}}/>
+        
+      </Carousel.Item>
+    </Carousel>
+    {/* end Carousel */}
           <Stack direction='row' justifyContent='space-between' alignItems='center'>
             <Stack direction='row' spacing={1}>
               <Image src={fire} width={24} height={24} />
