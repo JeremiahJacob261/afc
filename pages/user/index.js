@@ -121,7 +121,7 @@ const { data, error } = await supabase
           <link rel="icon" href="/logo_afc.ico" />
         </Head>
         <Stack sx={{ background: "#E5E7EB", marginTop: '10px',maxWidth:'350px' }} spacing={4} justifyContent='center' >
-          <Typography style={{ fontSize: '16px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '5px', width: '100%', textAlign: 'left', color: 'black' }}>Hello {info.username}</Typography>
+          <Typography style={{ fontSize: '16px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '5px', width: '100%', textAlign: 'left', color: 'black' }}>Hello {info ? `${info.username}` : 'Loading...'}</Typography>
           <Stack direction='row' justifyContent='space-between' alignItems='center'sx={{background:'#F5E663',padding:'8px',borderRadius:'10px'}}>
             <Stack>
               <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'black' }}>Current Balance </Typography>
