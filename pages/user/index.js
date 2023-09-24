@@ -43,7 +43,6 @@ export default function Home() {
   const auth = getAuth(app);
   const [draw,setDraw] = useState(false);
     let loads = 0;
-    console.log(Number('45')+Number('45'))
   useEffect(() => {
     const useri = localStorage.getItem('signedIn');
     if (useri) {
@@ -53,16 +52,16 @@ export default function Home() {
       const uid = localStorage.getItem('signUid');
       const name = localStorage.getItem('signName');
       // ...
-      
+      console.log(name)
         const GET = async () => {
           try{
 const { data, error } = await supabase
             .from('users')
             .select()
-            .eq('username', localStorage.getItem('signName'))
+            .eq('username', name)
           setInfo(data[0]);
           setBalance(data[0].balance);
-          
+          console.log(data)
           console.log(error)
           localStorage.setItem('signRef', data[0].newrefer);
           }catch(e){
@@ -174,14 +173,13 @@ const { data, error } = await supabase
             <Stack sx={{ background: '#E6E8F3', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>Next 3 hrs</Typography></Stack>
             <Stack sx={{ background: '#E6E8F3', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>Next 30 mins</Typography></Stack>
           </Stack>
+         
           <Stack alignItems='center'>
             {
             footDat.map((pro) => {
               let stams = Date.parse(pro.date + " " + pro.time) / 1000;
               let curren = new Date().getTime() / 1000;
               const league = (pro.league === 'others') ? pro.otherl : pro.league;
-              console.log(new Date(pro.date))
-              console.log(new Date(pro.time))
               let date = parseInt(new Date(pro.date).getMonth() + 1);
               let day = new Date(pro.date).getDate();
               let time = pro.time.substring(0, pro.time.length - 3)

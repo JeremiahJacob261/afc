@@ -169,6 +169,7 @@ const fire = async (emailer) => {
   
             supabaseMigrate(user.displayName, user.uid);
             alert('you are Logged in');
+            console.log(user.displayName)
             localStorage.setItem('signedIn', true);
             localStorage.setItem('signUid', user.uid);
             localStorage.setItem('signName', user.displayName);
@@ -216,10 +217,12 @@ const fire = async (emailer) => {
             // User successfully signed in
             let user = data.user;
             alert('You are logged in');
+            console.log(user)
             // localStorage.setItem('signRef', data[0].newrefer);
             localStorage.setItem('signedIn', true);
             localStorage.setItem('signUid', user.id);
             localStorage.setItem('signName', user.user_metadata.displayName);
+            console.log(user.user_metadata.displayName)
             setDrop(false)
             router.push('/user')
           }
@@ -288,6 +291,7 @@ const fire = async (emailer) => {
           // User successfully signed in
           let user = data.user;
           alert('you are logged in');
+          console.log(user)
           // localStorage.setItem('signRef', data[0].newrefer);
           localStorage.setItem('signedIn', true);
           localStorage.setItem('signUid', user.id);
