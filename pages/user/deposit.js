@@ -63,6 +63,7 @@ export default function Deposit(){
   async function Upload(){
     if (file == null) return;
     try{
+      //uploaded images and got back image link
  const imageRef = ref(storage, `deposit/${v4() + file.name}`);
     uploadBytes(imageRef, file).then(async () => {
         alert("image uploaded");
@@ -149,7 +150,7 @@ checkDepo(url);
         </Stack>
         <Stack direction='column' spacing={2} className='barcode' sx={{display:(method === 'usdt') ? 'visible' : (method === 'gpay') ? 'visible' : 'hidden'}}>
         <Typography style={{ color:'black',fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400',display:(method === 'usdt') ? 'visible' : (method === 'gpay') ? 'visible' : 'hidden' }}>Send {(method === 'usdt') ? 'USDT' : (method === 'gpay') ? 'Rupees' : 'Zambian Kwacha' } to this Address</Typography>
-        <Image src={(method === 'usdt') ? ubarcode : (method === 'gpay') ? gbarcode : '' } width={184} height={156} alt='barcode' sx={{display:(method === 'usdt') ? 'visible' : (method === 'gpay') ? 'visible' : 'hidden'}}/>
+        <Image src={(method === 'usdt') ? ubarcode : (method === 'gpay') ? gbarcode : '' } width={184} height={186} alt='barcode' sx={{display:(method === 'usdt') ? 'visible' : (method === 'gpay') ? 'visible' : 'hidden'}}/>
         </Stack>
         <Stack className='address' spacing={1} sx={{minWidth:'344px'}}>
            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'black' }}>{(method === 'usdt') ? 'Address Link' : (method === 'gpay') ? 'UPI ID' : 'Account Number'}</Typography>
