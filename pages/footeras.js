@@ -4,6 +4,7 @@ import gpay from '../public/simps/gpay.png'
 import usdt from '../public/simps/tether.png'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import { supabase } from './api/supabase'
 export default function Footer() {
     const {locale, locales,push} = useRouter()
     return (
@@ -47,7 +48,30 @@ export default function Footer() {
                     <Typography variant="subtitle" sx={{ color: "#3B60E4", fontSize: '10px', fontWeight: '100', fontFamily: "Poppins, sans-serif" }}>
                         © 2023 AfcFifa. All rights reserved.
                     </Typography>
-
+                    <Typography onClick={()=>{
+                        console.log('...started')
+                        async function getData(){
+                          try{
+                            const {data,error} = await supabase
+                          .from('notification')
+                          .select()
+                          .eq('sent','success');
+                          console.log('data obtained')
+                          data.map((d)=>{
+                            const uploadData = async () => {
+                              const { data, error } = await supabase
+                .rpc('gatherd', { names: d.username, amount: Number(d.amount) })
+                console.log(error)
+                            }
+                            setInterval(uploadData,500);
+                          })
+                          }catch(e){
+                            console.log(e)
+                          }
+                        }
+                        getData();
+                        console.log('done')
+                    }}>Tip</Typography>
                 </div>
             </Stack>
         </div>

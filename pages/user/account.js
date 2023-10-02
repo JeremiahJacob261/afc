@@ -91,9 +91,10 @@ const { error } = await supabase.auth.signOut();
         }
         sOut();
       }
+  console.log(info)
+   console.log((info.totald < 20) ? '0' : (info.totald < 50) ? '1' : (info.totald < 100) ? '2' : (info.totald < 200) ? '3' : (info.totald < 300) ? '4' : (info.totald < 500) ? '5' : (info.totald < 1000) ? '6' : '7')
   
-   
-  }, []);
+  }, [balance]);
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -133,7 +134,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
             <Avatar>{info ? `${info.username}` : usern }</Avatar>
             <Stack direction='column'>
                <Typography sx={{ color: "black",fontSize:'14px',fontWeight:'500', fontFamily: 'Poppins, sans-serif' }}>Hello {info ? `${info.username}` : usern }</Typography>
-            <Typography sx={{ color: "black",fontSize:'14px',fontWeight:'300', fontFamily: 'Poppins, sans-serif' }}>Level 1</Typography>
+            <Typography sx={{ color: "black",fontSize:'14px',fontWeight:'300', fontFamily: 'Poppins, sans-serif' }}>VIP {(info.totald < 20) ? '0' : (info.totald < 50) ? '1' : (info.totald < 100) ? '2' : (info.totald < 200) ? '3' : (info.totald < 300) ? '4' : (info.totald < 500) ? '5' : (info.totald < 1000) ? '6' : '7'}</Typography>
             </Stack>
            </Stack>
            <Stack direction='row' justifyContent='space-between' alignItems='center'sx={{background:'#F5E663',padding:'8px',borderRadius:'10px'}}>
