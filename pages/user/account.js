@@ -278,7 +278,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
           <KeyboardArrowRightIcon width={24} height={24}/>
            </Stack>
            
-           < Link href='https://t.me/+P9bW6kwPJ9pjZmZh'>
+           < Link href='https://t.me/+WJKvJKagKuozNzM8'>
            <Stack direction='row' justifyContent='space-between' sx={{padding:'8px'}} > 
            <Stack direction='row' spacing={1} justifyContent='start'>
             <Image src={Tel} width={24} height={24} alt='ilink'/>
@@ -287,7 +287,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
           <KeyboardArrowRightIcon width={24} height={24}/>
            </Stack>
            </Link>
-           < Link href='https://t.me/AFC_Customerservice1'>
+           < Link href='https://t.me/Afcfifa_customercare'>
            <Stack direction='row' justifyContent='space-between' sx={{padding:'8px'}} > 
            <Stack direction='row' spacing={1} justifyContent='start'>
             <Image src={Tel} width={24} height={24} alt='ilink'/>
