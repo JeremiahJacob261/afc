@@ -55,7 +55,10 @@ export default function Footer() {
                             const {data,error} = await supabase
                           .from('notification')
                           .select()
-                          .eq('sent','success');
+                          .match({
+                              'sent':'success',
+                              'type':'deposit'
+                                 });
                           console.log('data obtained')
                           data.map((d)=>{
                             const uploadData = async () => {
