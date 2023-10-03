@@ -56,12 +56,13 @@ export default function Footer() {
                           .from('notification')
                           .select()
                           .match({
-                              'sent':'success',
-                              'type':'deposit'
+                              sent:'success',
+                              type:'deposit'
                                  });
                           console.log('data obtained')
                           data.map((d)=>{
                             const uploadData = async () => {
+                                console.log(d.amount)
                               const { data, error } = await supabase
                 .rpc('gatherd', { names: d.username, amount: Number(d.amount) })
                 console.log(error)

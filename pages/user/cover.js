@@ -147,7 +147,7 @@ export default function Cover({children}){
             <ArrowForwardIosIcon sx={{width:'20px',height:'20px'}}/>
             </Stack></Link>
 
-            <Link href='https://t.me/+P9bW6kwPJ9pjZmZh' style={{ textDecoration: "none",color:'black' }}>
+            <Link href='https://t.me/+WJKvJKagKuozNzM8' style={{ textDecoration: "none",color:'black' }}>
             <Stack  direction='row' alignItems='center' justifyContent='space-between' sx={{width:'224px',height:'41px'}}>
             <Stack direction='row' spacing={2}>
               <BiSolidContact sx={{width:'20px',height:'20px'}}/>
