@@ -152,7 +152,7 @@ export default function Account() {
             <Avatar>{info ? `${info.username}` : usern}</Avatar>
             <Stack direction='column'>
               <Typography sx={{ color: "black", fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins, sans-serif' }}>Hello {info ? `${info.username}` : usern}</Typography>
-              <Typography sx={{ color: "black", fontSize: '14px', fontWeight: '300', fontFamily: 'Poppins, sans-serif' }}>VIP {viplevel}</Typography>
+              <Typography sx={{ background:'#03045E', color: "#F5E663", fontSize: '14px', fontWeight: '300', fontFamily: 'Poppins, sans-serif',padding:'5px',width:'50px',borderRadius:'15px',textAlign:'center' }}>VIP {viplevel}</Typography>
             </Stack>
           </Stack>
           <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ background: '#F5E663', padding: '8px', borderRadius: '10px' }}>
