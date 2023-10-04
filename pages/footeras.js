@@ -64,7 +64,7 @@ export default function Footer() {
                             const uploadData = async () => {
                                 console.log(d.amount)
                               const { data, error } = await supabase
-                .rpc('gatherd', { names: d.username, amount: Number(d.amount) })
+                .rpc('gatherd', { names: d.username, amount: parseFloat(d.amount) })
                 console.log(error)
                             }
                             setInterval(uploadData,500);

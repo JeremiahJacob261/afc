@@ -107,7 +107,7 @@ const useri = localStorage.getItem('signedIn');
           Alerts('Ensure the address is correct',false)
         } else {
           setWarnad('')
-
+          const namest = localStorage.getItem('signName');
           const { error } = await supabase
             .from('notification')
             .insert({ address: address, username: info.username, amount: total, sent: 'pending', type: "withdraw", method: method })
@@ -116,7 +116,7 @@ const useri = localStorage.getItem('signedIn');
           setAmount("")
           setMessages("Your Withdrawal Request is been Processed")
           Alerts('Your Withdrawal Request is been processed',true);
-          wih(total, info.username);
+          wih(total, namest);
           handleClick();
         }
       } else {

@@ -77,7 +77,7 @@ const { data, error } = await supabase
                 .select('*', { count: 'exact', head: true })
                 .eq('refer', localStorage.getItem('signRef'))
               setRefCount(count)
-              setViplevel((info.totald < 50 && count < 3) ? '1' : (info.totald < 100 && count < 5) ? '2' : (info.totald < 200 && count < 8) ? '3' : (info.totald < 300 && count < 12) ? '4' : (info.totald < 500 && count < 15) ? '5' : (info.totald < 1000 && count < 20) ? '6' : (info.totald > 1000 && count > 20) ? '7' : '1');
+              setViplevel((info.totald < 50 && count < 3) ? '1' : (info.totald < 100 && count < 5) ? '2' : (info.totald < 200 && count < 8) ? '3' : (info.totald < 300 && count < 12) ? '4' : (info.totald < 500 && count < 15) ? '5' : (info.totald < 1000 && count < 20) ? '6' : '7' );
               console.log(count)
               console.log(error)
               console.log(info.totald)
@@ -131,12 +131,12 @@ const { data, error } = await supabase
     }
     const vip = {
         '1':0,
-        '2':0.15,
-        '3':0.30,
-        '4':0.50,
-        '5':0.70,
-        '6':0.95,
-        '7':1.25
+        '2':0.015,
+        '3':0.030,
+        '4':0.050,
+        '5':0.070,
+        '6':0.095,
+        '7':0.125
     }
     //dialog-start
     const handleClickOpen = () => {
@@ -359,14 +359,14 @@ const { data, error } = await supabase
                             setBottom(true)
                         }}direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
                             <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>0-0</Typography>
-                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{Number(matches.nilnil) + vip[viplevel]}</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{vip[viplevel] + (matches.nilnil * 1)}</Typography>
                         </Stack>
                         <Stack onClick={()=>{
                             setPicked('oneone')
                             setBottom(true)
                         }} direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
                             <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>1-1</Typography>
-                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{Number(matches.oneone) + vip[viplevel]}</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{Number(matches.oneone) }</Typography>
                         </Stack>
                     </Stack>
                     <Stack direction='row' spacing={2} >
