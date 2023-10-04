@@ -280,7 +280,7 @@ const { data, error } = await supabase
                         }}
                         >
                             <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>3-1</Typography>
-                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{Number(matches.threeone) + vip[viplevel]}</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{parseFloat(Number(matches.threeone) + vip[viplevel]).toFixed(2)}</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}
                         onClick={()=>{
@@ -321,7 +321,7 @@ const { data, error } = await supabase
                             setBottom(true)
                         }} justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
                             <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>0-3</Typography>
-                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{Number(matches.nilthree) + vip[viplevel]}</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{parseFloat(Number(matches.nilthree) + vip[viplevel]).toFixed(2)}</Typography>
                         </Stack>
                         <Stack direction='row' onClick={()=>{
                             setPicked('onetwo')
@@ -344,7 +344,7 @@ const { data, error } = await supabase
                             setBottom(true)
                         }} direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
                             <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>2-3</Typography>
-                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{Number(matches.twothree) + vip[viplevel]}</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{parseFloat(Number(matches.twothree) + vip[viplevel]).toFixed(2)}</Typography>
                         </Stack>
                     </Stack>
 
@@ -382,7 +382,7 @@ const { data, error } = await supabase
                             setBottom(true)
                         }} direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
                             <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>3-3</Typography>
-                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{Number(matches.threethree) + vip[viplevel]}</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>{parseFloat(Number(matches.threethree) + vip[viplevel]).toFixed(2)}</Typography>
                         </Stack>
                     </Stack>
                     <Stack direction='row' spacing={2} >
