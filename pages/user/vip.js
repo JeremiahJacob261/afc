@@ -90,7 +90,10 @@ export default function Vip() {
               const { count, error } = await supabase
                 .from('users')
                 .select('*', { count: 'exact', head: true })
-                .eq('refer', localStorage.getItem('signRef'))
+                .match({
+              'refer':localStorage.getItem('signRef'),
+              'firstd':true
+            });
               setRefCount(count)
               setViplevel((info.totald < 50 || count < 3) ? '1' : (info.totald < 100 || count < 5) ? '2' : (info.totald < 200 || count < 8) ? '3' : (info.totald < 300 || count < 12) ? '4' : (info.totald < 500 || count < 15) ? '5' : (info.totald < 1000 || count < 20) ? '6' : '7');
               let vipl = (info.totald < 50 || count < 3) ? '1' : (info.totald < 100 || count < 5) ? '2' : (info.totald < 200 || count < 8) ? '3' : (info.totald < 300 || count < 12) ? '4' : (info.totald < 500 || count < 15) ? '5' : (info.totald < 1000 || count < 20) ? '6' : '7';
@@ -145,24 +148,24 @@ export default function Vip() {
           <Stack>
             <Typography sx={{ fontFamily: 'Poppins,sans-serif' }}>Total Deposit</Typography>
             <Stack direction='row' justifyContent='left' alignItems='center' spacing={2}>
-              <BorderLinearProgress variant="determinate" value={(Number(rprogress.toFixed(2)) > 100 ? 100 : Number(rprogress.toFixed(2)))} sx={{ width: '230px' }} />
-              <Typography sx={{ fontFamily: 'Poppins,sans-serif' }}>{Number(rprogress.toFixed(2))}%</Typography>
+              <BorderLinearProgress variant="determinate" value={(Number(rprogress.toFixed(2)) > 100) ? 100 : Number(rprogress.toFixed(2))} sx={{ width: '230px' }} />
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif' }}>{(Number(rprogress.toFixed(2)) > 100) ? 100 : Number(rprogress.toFixed(2))}%</Typography>
             </Stack>
           </Stack>
 
           <Stack>
             <Typography sx={{ fontFamily: 'Poppins,sans-serif' }}>Referrals</Typography>
             <Stack direction='row' justifyContent='left' alignItems='center' spacing={2}>
-              <BorderLinearProgress variant="determinate" value={(Number(cprogress.toFixed(2)) > 100 ? 100 : Number(cprogress.toFixed(2)))} sx={{ width: '230px' }} />
-              <Typography sx={{ fontFamily: 'Poppins,sans-serif' }}>{Number(cprogress.toFixed(2))}%</Typography>
+              <BorderLinearProgress variant="determinate" value={(Number(cprogress.toFixed(2)) > 100) ? 100 : Number(cprogress.toFixed(2))} sx={{ width: '230px' }} />
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif' }}>{(Number(cprogress.toFixed(2)) > 100) ? 100 : Number(cprogress.toFixed(2))}%</Typography>
             </Stack>
           </Stack>
 
           <Stack>
             <Typography sx={{ fontFamily: 'Poppins,sans-serif' }}>Total</Typography>
             <Stack direction='row' justifyContent='left' alignItems='center' spacing={2}>
-              <BorderLinearProgress variant="determinate" value={ ((Number(cprogress.toFixed(2)) > 100 ? 100 : Number(cprogress.toFixed(2))) + (Number(rprogress.toFixed(2)) > 100 ? 100 : Number(rprogress.toFixed(2))))/2 } sx={{ width: '230px' }} />
-              <Typography sx={{ fontFamily: 'Poppins,sans-serif' }}>{ ((Number(cprogress.toFixed(2)) + Number(rprogress.toFixed(2)))/2).toFixed(2) }%</Typography>
+              <BorderLinearProgress variant="determinate" value={ ((  (Number(cprogress.toFixed(2)) > 100) ? 100 : Number(cprogress.toFixed(2)) + (Number(rprogress.toFixed(2)) > 100) ? 100 : Number(rprogress.toFixed(2))  )/2) } sx={{ width: '230px' }} />
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif' }}>{ ((  (Number(cprogress.toFixed(2)) > 100) ? 100 : Number(cprogress.toFixed(2)) + (Number(rprogress.toFixed(2)) > 100) ? 100 : Number(rprogress.toFixed(2))  )/2).toFixed(2) }%</Typography>
             </Stack>
           </Stack>
         </Stack>
