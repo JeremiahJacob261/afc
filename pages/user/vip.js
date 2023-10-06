@@ -48,7 +48,7 @@ export default function Vip() {
     '4': 12,
     '5': 15,
     '6': 20,
-    '7': 5000
+    '7': 500
   };
   const viproyal = {
     '1': '#CD7F32P',

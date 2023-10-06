@@ -43,7 +43,17 @@ export default function Deposit() {
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
-  const GET = async () => {
+  
+  useEffect(() => {
+const useri = localStorage.getItem('signedIn');
+    if (useri) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+
+      const uid = localStorage.getItem('signUid');
+      const name = localStorage.getItem('signName');
+      // ...
+      const GET = async () => {
     
     const names = localStorage.getItem('signName');
     try{
@@ -61,16 +71,6 @@ const { data, error } = await supabase
     
   }
   GET();
-  useEffect(() => {
-const useri = localStorage.getItem('signedIn');
-    if (useri) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
-
-      const uid = localStorage.getItem('signUid');
-      const name = localStorage.getItem('signName');
-      // ...
-      
         
       
     } else {
@@ -87,7 +87,7 @@ const useri = localStorage.getItem('signedIn');
                 }
                 sOut();
     }
-  }, []);
+  });
   //end of snackbar1
   const wih = async (damount, dusername) => {
      let amo1 = (method === 'usdt') ? damount : (method === 'gpay') ? Number(damount/83) : Number(damount/21);
