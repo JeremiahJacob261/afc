@@ -121,6 +121,7 @@ export async function getServerSideProps(context) {
     .from('bets')
     .select()
     .eq('verified',false)
+    .order('id', { ascending: false });
   let footDat = data;
   console.log(data)
   return {

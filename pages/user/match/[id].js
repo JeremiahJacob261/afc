@@ -40,6 +40,7 @@ export default function Match({ matchDat }) {
     const [odds,setOdds] = useState(0);
     const [bottom, setBottom] = useState(false)
     const [info, setInfo] = useState({});
+    const [balance,setBalance] = useState(0);
     const [refCount, setRefCount] = useState(0);
     const [viplevel, setViplevel] = useState(1);
     const auth = getAuth(app);
@@ -69,6 +70,7 @@ const { data, error } = await supabase
             .select()
             .eq('username', name)
           setInfo(data[0]);
+          setBalance(data[0].balance)
           let infox = data[0];
           localStorage.setItem('signRef', data[0].newrefer);
           async function getReferCount() {
@@ -196,7 +198,7 @@ const { data, error } = await supabase
                 <link rel="icon" href="/logo_afc.ico" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
-            <Stack direction='row' alignItems='center' justifyContent='left' spacing={1} sx={{ padding: '5px', margin: '2px' }} onClick={()=>{ router.push('/user/matches') }}>
+            <Stack direction='row' alignItems='left' justifyContent='left' spacing={1} sx={{ width:'100%',margin:'5px' }} onClick={()=>{ router.push('/user/matches') }}>
                 <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} />
                 <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', width: '90%', textAlign: 'center' }}>Stake your bet</Typography>
             </Stack>
@@ -406,7 +408,7 @@ const { data, error } = await supabase
         let profit = parseFloat((stake * tofal)/100);
         let expext =Number(( parseFloat(stake) + profit).toFixed(3));
         console.log(profit)
-        let ball = parseFloat(info.balance.toFixed(3));
+        let ball = parseFloat(balance.toFixed(3));
         return (
             <Drawer
                 anchor='bottom'
@@ -510,13 +512,13 @@ const { data, error } = await supabase
                                                 'username': info.username,
                                                 'started': false,
                                                 'stake': Number(stake),
-                                                'profit': Number(((matches[picked] * stake) / 100)).toFixed(2),
+                                                'profit': Number(((tofal * stake) / 100)).toFixed(2),
                                                 'aim': profit,
                                                 "home": matches.home,
                                                 "away": matches.away,
                                                 "time": matches.time,
                                                 "date": matches.date,
-                                                "odd": matches[picked],
+                                                "odd": tofal,
                                                 "ihome":matches.ihome,
                                                 "iaway":matches.iaway
                                             })
@@ -527,11 +529,11 @@ const { data, error } = await supabase
                                             .from('useractivity')
                                             .upsert({
                                                 'type': 'bets',
-                                                'amount': stake + (matches[picked] * stake) / 100,
+                                                'amount': stake + (tofal * stake) / 100,
                                                 'user': info.username,
                                                 'match_id': display.matchId,
                                                 'stake': Number(stake),
-                                                'profit': Number(((matches[picked] * stake) / 100)),
+                                                'profit': Number(((tofal * stake) / 100)),
                                                 'market': markets[picked]
                                             })
                                         console.log(error)
