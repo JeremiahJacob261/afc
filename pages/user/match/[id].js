@@ -77,7 +77,7 @@ const { data, error } = await supabase
                 .select('*', { count: 'exact', head: true })
                 .eq('refer', localStorage.getItem('signRef'))
               setRefCount(count)
-              setViplevel((info.totald < 50 && count < 3) ? '1' : (info.totald < 100 && count < 5) ? '2' : (info.totald < 200 && count < 8) ? '3' : (info.totald < 300 && count < 12) ? '4' : (info.totald < 500 && count < 15) ? '5' : (info.totald < 1000 && count < 20) ? '6' : '7' );
+              setViplevel((info.totald < 50 || count < 3) ? '1' : (info.totald < 100 || count < 5) ? '2' : (info.totald < 200 || count < 8) ? '3' : (info.totald < 300 || count < 12) ? '4' : (info.totald < 500 || count < 15) ? '5' : (info.totald < 1000 || count < 20) ? '6' : '7' );
               console.log(count)
               console.log(error)
               console.log(info.totald)

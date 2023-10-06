@@ -92,10 +92,10 @@ export default function Vip() {
                 .select('*', { count: 'exact', head: true })
                 .eq('refer', localStorage.getItem('signRef'))
               setRefCount(count)
-              setViplevel((info.totald < 50 && count < 3) ? '1' : (info.totald < 100 && count < 5) ? '2' : (info.totald < 200 && count < 8) ? '3' : (info.totald < 300 && count < 12) ? '4' : (info.totald < 500 && count < 15) ? '5' : (info.totald < 1000 && count < 20) ? '6' : '7');
-              let vipl = (info.totald < 50 && count < 3) ? '1' : (info.totald < 100 && count < 5) ? '2' : (info.totald < 200 && count < 8) ? '3' : (info.totald < 300 && count < 12) ? '4' : (info.totald < 500 && count < 15) ? '5' : (info.totald < 1000 && count < 20) ? '6' : '7';
-              setRProgress((parseInt(viplimit[vipl]) / parseInt(info.totald)) * 100);
-              setCProgress((parseInt(vipclimit[vipl]) / parseInt(count)) * 100)
+              setViplevel((info.totald < 50 || count < 3) ? '1' : (info.totald < 100 || count < 5) ? '2' : (info.totald < 200 || count < 8) ? '3' : (info.totald < 300 || count < 12) ? '4' : (info.totald < 500 || count < 15) ? '5' : (info.totald < 1000 || count < 20) ? '6' : '7');
+              let vipl = (info.totald < 50 || count < 3) ? '1' : (info.totald < 100 || count < 5) ? '2' : (info.totald < 200 || count < 8) ? '3' : (info.totald < 300 || count < 12) ? '4' : (info.totald < 500 || count < 15) ? '5' : (info.totald < 1000 || count < 20) ? '6' : '7';
+              setRProgress((parseInt(info.totald) / parseInt(viplimit[vipl])) * 100);
+              setCProgress((parseInt(count) / parseInt(vipclimit[vipl])) * 100)
               console.log(data[0])
             } catch (e) {
               console.log(e)
@@ -155,6 +155,14 @@ export default function Vip() {
             <Stack direction='row' justifyContent='left' alignItems='center' spacing={2}>
               <BorderLinearProgress variant="determinate" value={(Number(cprogress.toFixed(2)) > 100 ? 100 : Number(cprogress.toFixed(2)))} sx={{ width: '230px' }} />
               <Typography sx={{ fontFamily: 'Poppins,sans-serif' }}>{Number(cprogress.toFixed(2))}%</Typography>
+            </Stack>
+          </Stack>
+
+          <Stack>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif' }}>Total</Typography>
+            <Stack direction='row' justifyContent='left' alignItems='center' spacing={2}>
+              <BorderLinearProgress variant="determinate" value={ ((Number(cprogress.toFixed(2)) > 100 ? 100 : Number(cprogress.toFixed(2))) + (Number(rprogress.toFixed(2)) > 100 ? 100 : Number(rprogress.toFixed(2))))/2 } sx={{ width: '230px' }} />
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif' }}>{ ((Number(cprogress.toFixed(2)) + Number(rprogress.toFixed(2)))/2).toFixed(2) }%</Typography>
             </Stack>
           </Stack>
         </Stack>
