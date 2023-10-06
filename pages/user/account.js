@@ -17,6 +17,7 @@ import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeft
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import LinkIcon from '@mui/icons-material/Link';
 import iLink from '../../public/icon/ant-design_link-outlined.png'
+import DiamondIcon from '@mui/icons-material/Diamond';
 import iCopy from '../../public/icon/ion_copy.png'
 import iNT from '../../public/icon/inter.png'
 import St from '../../public/icon/steam.png'
@@ -215,6 +216,15 @@ export default function Account() {
               <Stack direction='row' spacing={1} justifyContent='start' >
                 <Image src={St} width={24} height={24} alt='ilink' />
                 <Typography sx={{ color: 'black', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Fund Account</Typography>
+              </Stack>
+              <KeyboardArrowRightIcon width={24} height={24} />
+            </Stack>
+            <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px' }} onClick={() => {
+              router.push('/user/vip');
+            }}>
+              <Stack direction='row' spacing={1} justifyContent='start' >
+                <DiamondIcon sx={{color:'red'}}/>
+                <Typography sx={{ color: 'black', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>VIP Progress</Typography>
               </Stack>
               <KeyboardArrowRightIcon width={24} height={24} />
             </Stack>

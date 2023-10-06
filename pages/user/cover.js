@@ -95,7 +95,7 @@ console.log(error)
             .eq('username', name)
           let info = data[0].dcollect;
           if (!info) {
-            getData();
+            // getData();
           }else{
             console.log('neve go tit')
           }

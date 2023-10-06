@@ -51,24 +51,27 @@ export default function Footer() {
                     <Typography onClick={()=>{
                         console.log('...started')
                         async function getData(){
-                          try{
-                            const {data,error} = await supabase
-                          .from('notification')
-                          .select()
-                          .match({
-                              sent:'success',
-                              type:'deposit'
-                                 });
-                          console.log('data obtained')
-                          data.map((d)=>{
-                            const uploadData = async () => {
-                                console.log(d.amount)
-                              const { data, error } = await supabase
-                .rpc('gatherd', { names: d.username, amount: parseFloat(d.amount) })
-                console.log(error)
-                            }
-                            setInterval(uploadData,500);
-                          })
+                            console.log('get Data got the message')
+                            try{
+                              const {data,error} = await supabase
+                            .from('notification')
+                            .select()
+                            .match({
+                                sent:'success',
+                                type:'deposit'
+                                   });
+                            console.log('data obtained')
+                             for (let i = 0; i < data.length; i++) {
+                                  const element = data[i];
+                              const uploadData = async () => {
+                                
+                               
+                                  const { data, error } = await supabase
+                    .rpc('gatherd', { names: element.username, amount: parseFloat(element.amount) })
+                    console.log(error)
+                          }
+                           uploadData(element)
+                              }
                           }catch(e){
                             console.log(e)
                           }
