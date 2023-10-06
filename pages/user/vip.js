@@ -8,6 +8,7 @@ import { styled } from '@mui/material/styles';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import Logo from '../../public/logoclean.png'
+import Head from 'next/head'
 export default function Vip() {
   const [rprogress, setRProgress] = useState(0);
   const [cprogress, setCProgress] = useState(0);
@@ -18,6 +19,10 @@ export default function Vip() {
   const router = useRouter()
   const [info, setInfo] = useState([]);
   const [balance, setBalance] = useState(0);
+  const [c1,setC1] = useState(0);
+  const [r1,setR1] = useState(0);
+  
+  console.log((c1 + r1)/2)
   //end border
   const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     height: 10,
@@ -98,7 +103,9 @@ export default function Vip() {
               setViplevel((info.totald < 50 || count < 3) ? '1' : (info.totald < 100 || count < 5) ? '2' : (info.totald < 200 || count < 8) ? '3' : (info.totald < 300 || count < 12) ? '4' : (info.totald < 500 || count < 15) ? '5' : (info.totald < 1000 || count < 20) ? '6' : '7');
               let vipl = (info.totald < 50 || count < 3) ? '1' : (info.totald < 100 || count < 5) ? '2' : (info.totald < 200 || count < 8) ? '3' : (info.totald < 300 || count < 12) ? '4' : (info.totald < 500 || count < 15) ? '5' : (info.totald < 1000 || count < 20) ? '6' : '7';
               setRProgress((parseInt(info.totald) / parseInt(viplimit[vipl])) * 100);
-              setCProgress((parseInt(count) / parseInt(vipclimit[vipl])) * 100)
+              setCProgress((parseInt(count) / parseInt(vipclimit[vipl])) * 100);
+              setC1((Number(((parseInt(count) / parseInt(vipclimit[vipl])) * 100).toFixed(2)) > 100) ? 100 : Number(((parseInt(count) / parseInt(vipclimit[vipl])) * 100).toFixed(2)));
+              setR1((Number(((parseInt(info.totald) / parseInt(viplimit[vipl])) * 100).toFixed(2)) > 100) ? 100 : Number(((parseInt(info.totald) / parseInt(viplimit[vipl])) * 100).toFixed(2)));
               console.log(data[0])
             } catch (e) {
               console.log(e)
@@ -129,10 +136,16 @@ export default function Vip() {
     }
     console.log(info)
     //  console.log((info.totald < 20) ? '0' : (info.totald < 50) ? '1' : (info.totald < 100) ? '2' : (info.totald < 200) ? '3' : (info.totald < 300) ? '4' : (info.totald < 500) ? '5' : (info.totald < 1000) ? '6' : '7')
-
+    
   }, [balance]);
+ 
   return (
     <Cover>
+      <Head>
+        <title>VIP Progress</title>
+        <link rel="icon" href="/logo_afc.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
       <Stack direction='row' alignItems='center' justifyContent='left' spacing={1} sx={{ width: '100%' }}>
         <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
           router.push('/user/account')
@@ -164,8 +177,8 @@ export default function Vip() {
           <Stack>
             <Typography sx={{ fontFamily: 'Poppins,sans-serif' }}>Total</Typography>
             <Stack direction='row' justifyContent='left' alignItems='center' spacing={2}>
-              <BorderLinearProgress variant="determinate" value={ ((  (Number(cprogress.toFixed(2)) > 100) ? 100 : Number(cprogress.toFixed(2)) + (Number(rprogress.toFixed(2)) > 100) ? 100 : Number(rprogress.toFixed(2))  )/2) } sx={{ width: '230px' }} />
-              <Typography sx={{ fontFamily: 'Poppins,sans-serif' }}>{ ((  (Number(cprogress.toFixed(2)) > 100) ? 100 : Number(cprogress.toFixed(2)) + (Number(rprogress.toFixed(2)) > 100) ? 100 : Number(rprogress.toFixed(2))  )/2).toFixed(2) }%</Typography>
+              <BorderLinearProgress variant="determinate" value={ (r1+c1)/2 } sx={{ width: '230px' }} />
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif' }}>{ (r1 + c1)/2 }%</Typography>
             </Stack>
           </Stack>
         </Stack>
