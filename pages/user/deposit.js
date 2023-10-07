@@ -1,6 +1,6 @@
 import Cover from "./cover";
 import { Stack,Typography,Button,Modal,Divider } from '@mui/material'
-import Tet from '../../public/icon/tshow.png'
+import Tet from '../../public/simps/ua.jpg'
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import PriorityHighRoundedIcon from '@mui/icons-material/PriorityHighRounded';
 import Image from "next/image";
@@ -156,9 +156,9 @@ checkDepo(url);
            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'black' }}>{(method === 'usdt') ? 'Address Link' : (method === 'gpay') ? 'UPI ID' : 'Account Number'}</Typography>
            <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{height:'58px',background:'#EFEFEF',borderRadius:'5px',padding:'16px'}} spacing={2}>
             {/* 260964681705 */}
-      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'black' }}>{(method === 'usdt') ? 'TVxxZZKmWi547v2yBnhZ6oMXxPkoeuEtjn' : (method === 'gpay') ? 'Ashhar Jamal Jafri' : 'Suzyo Banda 260768246252'}</Typography>
+      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'black' }}>{(method === 'usdt') ? 'TMqYfYgpRgrDtxqJ4kTEh8MgCtvu4W4YPZ' : (method === 'gpay') ? 'Ashhar Jamal Jafri' : 'Suzyo Banda 260768246252'}</Typography>
       <Image src={iCopy} width={20} height={20} alt='icopy' onClick={()=>{
-        navigator.clipboard.writeText((method === 'usdt') ? 'TVxxZZKmWi547v2yBnhZ6oMXxPkoeuEtjn' : (method === 'gpay') ? 'Ashhar Jamal Jafri' : '260768246252' )
+        navigator.clipboard.writeText((method === 'usdt') ? 'TMqYfYgpRgrDtxqJ4kTEh8MgCtvu4W4YPZ' : (method === 'gpay') ? 'Ashhar Jamal Jafri' : '260768246252' )
       }}/>
       </Stack>
         </Stack>
