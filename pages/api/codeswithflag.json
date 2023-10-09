@@ -56,6 +56,11 @@
       "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/8/8f/Flag_of_Estonia.svg"
     },
     {
+      "name": "Egypt",
+      "code": "+20",
+      "flag_image_link": "https://restcountries.eu/data/egy.svg"
+    },    
+    {
       "name": "Fiji",
       "code": "+679",
       "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Fiji.svg"
