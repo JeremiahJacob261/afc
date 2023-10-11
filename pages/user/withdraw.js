@@ -87,7 +87,7 @@ const { data, error } = await supabase
                 }
                 sOut();
     }
-  });
+  },[]);
   //end of snackbar1
   const wih = async (damount, dusername) => {
      let amo1 = (method === 'usdt') ? damount : (method === 'gpay') ? Number(damount/83) : Number(damount/21);
