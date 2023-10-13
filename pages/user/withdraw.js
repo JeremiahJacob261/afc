@@ -39,7 +39,6 @@ export default function Deposit() {
   //snackbar1
   const [messages, setMessages] = useState("")
   const [opened, setOpened] = useState(false);
-  const [total, setTotal] = useState(0);
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
@@ -101,7 +100,7 @@ const { data, error } = await supabase
     let santana1 = (method === 'usdt') ? 100 : (method === 'gpay') ? 8300 : 2100;
     let santana2 = (method === 'usdt') ? 19 : (method === 'gpay') ? 1659 : 419;
     if (amount < 100) {
-      if (amount > 19) {
+      if (amount > 9) {
         setWarnab('')
         if (address.length < 9) {
           Alerts('Ensure the address is correct',false)
@@ -155,6 +154,7 @@ const { data, error } = await supabase
   }
   //end of snackbar2
   let charge = (amount * 5) / 100;
+  let total = Number(amount) + ((amount * 5) / 100);
   return (
     <Cover>
       <Alertz/>
@@ -197,7 +197,7 @@ const { data, error } = await supabase
             value={amount}
             onChange={(a) => {
               setAmount(a.target.value)
-              setTotal(Number(a.target.value) + ((a.target.value * 5) / 100));
+              
             }}/>
             </Stack>
             <Stack spacing={1}> 
