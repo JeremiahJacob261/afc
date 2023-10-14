@@ -188,7 +188,6 @@ const { data, error } = await supabase
               setAddress(a.target.value)
             }}/>
             </Stack>
-        
             <Stack spacing={1}> 
             <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'black'}}>Enter Amount You Wish to Withdraw</Typography>
             <TextField 
