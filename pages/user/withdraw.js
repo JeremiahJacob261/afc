@@ -44,17 +44,17 @@ export default function Deposit() {
   });
   
   useEffect(() => {
-const useri = localStorage.getItem('signedIn');
+const useri = localStorage.getItem('signedIns');
     if (useri) {
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/auth.user
 
-      const uid = localStorage.getItem('signUid');
-      const name = localStorage.getItem('signName');
+      const uid = localStorage.getItem('signUids');
+      const name = localStorage.getItem('signNames');
       // ...
       const GET = async () => {
     
-    const names = localStorage.getItem('signName');
+    const names = localStorage.getItem('signNames');
     try{
 const { data, error } = await supabase
       .from('users')
@@ -79,8 +79,8 @@ const { data, error } = await supabase
                 console.log('sign out');
                 console.log(error);
                 localStorage.removeItem('signedIn');
-                localStorage.removeItem('signUid');
-                localStorage.removeItem('signName');
+                localStorage.removeItem('signUids');
+                localStorage.removeItem('signNames');
                 localStorage.removeItem('signRef');
                 router.push('/login');
                 }
@@ -106,7 +106,7 @@ const { data, error } = await supabase
           Alerts('Ensure the address is correct',false)
         } else {
           setWarnad('')
-          const namest = localStorage.getItem('signName');
+          const namest = localStorage.getItem('signNames');
           const { error } = await supabase
             .from('notification')
             .insert({ address: address, username: info.username, amount: total, sent: 'pending', type: "withdraw", method: method })

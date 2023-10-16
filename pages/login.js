@@ -85,20 +85,22 @@ export default function Login() {
         }
         GET();
         localStorage.setItem('signedIn', true);
-        localStorage.setItem('signUid', user.id);
-        localStorage.setItem('signName', user.user_metadata.displayName);
+        localStorage.setItem('signUids', user.id);
+        localStorage.setItem('signNames', user.user_metadata.displayName);
         router.push('/user');
       } else {
 
         console.log('sign out');
         localStorage.removeItem('signedIn');
-        localStorage.removeItem('signUid');
-        localStorage.removeItem('signName');
+        localStorage.removeItem('signUids');
+        localStorage.removeItem('signNames');
         localStorage.removeItem('signRef');
         router.push('/login');
       }
     }
-    getSe();
+    // getSe();
+
+
     //       if (user) {
     //         // User is signed in, see docs for a list of available properties
     //         // https://firebase.google.com/docs/reference/js/auth.user
@@ -121,16 +123,16 @@ export default function Login() {
 
     //         console.log(localStorage.getItem('signInfo'))
     //         localStorage.setItem('signedIn', true);
-    //         localStorage.setItem('signUid', uid);
-    //         localStorage.setItem('signName', user.displayName);
+    //         localStorage.setItem('signUids', uid);
+    //         localStorage.setItem('signNames', user.displayName);
     //         router.push('/user');
     //       } else {
     //         // User is signed out
     //         // ...
     //         console.log('sign out');b 
     //         localStorage.removeItem('signedIn');
-    //         localStorage.removeItem('signUid');
-    //         localStorage.removeItem('signName');
+    //         localStorage.removeItem('signUids');
+    //         localStorage.removeItem('signNames');
     //         localStorage.removeItem('signRef');
     //       }
 
@@ -171,8 +173,8 @@ const fire = async (emailer) => {
             alert('you are Logged in');
             console.log(user.displayName)
             localStorage.setItem('signedIn', true);
-            localStorage.setItem('signUid', user.uid);
-            localStorage.setItem('signName', user.displayName);
+            localStorage.setItem('signUids', user.uid);
+            localStorage.setItem('signNames', user.displayName);
             setDrop(false)
             router.push('/user');
           })
@@ -220,8 +222,8 @@ const fire = async (emailer) => {
             console.log(user)
             // localStorage.setItem('signRef', data[0].newrefer);
             localStorage.setItem('signedIn', true);
-            localStorage.setItem('signUid', user.id);
-            localStorage.setItem('signName', user.user_metadata.displayName);
+            localStorage.setItem('signUids', user.id);
+            localStorage.setItem('signNames', user.user_metadata.displayName);
             console.log(user.user_metadata.displayName)
             setDrop(false)
             router.push('/user')
@@ -239,8 +241,8 @@ const fire = async (emailer) => {
       //     alert('you are logged in');
       //     localStorage.setItem('signRef', data[0].newrefer);
       //     localStorage.setItem('signedIn', true);
-      //     localStorage.setItem('signUid', user.uid);
-      //     localStorage.setItem('signName', user.displayName);
+      //     localStorage.setItem('signUids', user.uid);
+      //     localStorage.setItem('signNames', user.displayName);
       //     setDrop(false)
       //     router.push('/user');
       //   })
@@ -294,8 +296,8 @@ const fire = async (emailer) => {
           console.log(user)
           // localStorage.setItem('signRef', data[0].newrefer);
           localStorage.setItem('signedIn', true);
-          localStorage.setItem('signUid', user.id);
-          localStorage.setItem('signName', user.user_metadata.displayName);
+          localStorage.setItem('signUids', user.id);
+          localStorage.setItem('signNames', user.user_metadata.displayName);
           setDrop(false)
           router.push('/user')
         }

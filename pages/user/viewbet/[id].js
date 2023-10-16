@@ -21,13 +21,13 @@ export default function Viewbets({ bets }) {
         bets.map((m) => {
             setBet(m);
         })
-        const useri =  localStorage.getItem('signedIn');
+        const useri =  localStorage.getItem('signedIns');
         if (useri) {
           // User is signed in, see docs for a list of available properties
           // https://firebase.google.com/docs/reference/js/auth.user
     
-          const uid =  localStorage.getItem('signUid');
-          const name =  localStorage.getItem('signName');
+          const uid =  localStorage.getItem('signUids');
+          const name =  localStorage.getItem('signNames');
             // User is signed in, see docs for a list of available properties
             // https://firebase.google.com/docs/reference/js/auth.user
            console.log('...')
@@ -50,8 +50,8 @@ export default function Viewbets({ bets }) {
             signOut(auth);
             console.log('sign out');
             localStorage.removeItem('signedIn');
-            localStorage.removeItem('signUid');
-            localStorage.removeItem('signName');
+            localStorage.removeItem('signUids');
+            localStorage.removeItem('signNames');
             router.push('/login');
           }
       

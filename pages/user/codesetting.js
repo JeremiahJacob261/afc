@@ -24,7 +24,7 @@ export default function Code(){
         setOpen(true)
       }
     useEffect(()=>{
-        setName(localStorage.getItem('signName'));
+        setName(localStorage.getItem('signNames'));
     },[])
     const nextPage = () => {
         if(pin === cpin){

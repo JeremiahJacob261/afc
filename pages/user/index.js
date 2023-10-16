@@ -44,13 +44,13 @@ export default function Home() {
   const [draw,setDraw] = useState(false);
     let loads = 0;
   useEffect(() => {
-    const useri = localStorage.getItem('signedIn');
+    const useri = localStorage.getItem('signedIns');
     if (useri) {
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/auth.user
 
-      const uid = localStorage.getItem('signUid');
-      const name = localStorage.getItem('signName');
+      const uid = localStorage.getItem('signUids');
+      const name = localStorage.getItem('signNames');
       // ...
       console.log(name)
         const GET = async () => {
@@ -79,8 +79,8 @@ const { data, error } = await supabase
                 console.log('sign out');
                 console.log(error);
                 localStorage.removeItem('signedIn');
-                localStorage.removeItem('signUid');
-                localStorage.removeItem('signName');
+                localStorage.removeItem('signUids');
+                localStorage.removeItem('signNames');
                 localStorage.removeItem('signRef');
                 router.push('/login');
                 }

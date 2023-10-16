@@ -13,13 +13,13 @@ export default function Notification() {
   const [info, setInfo] = useState({});
   const isMounted = useRef(true);
   useEffect(() => {
-    const useri = localStorage.getItem('signedIn');
+    const useri = localStorage.getItem('signedIns');
     if (useri) {
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/auth.user
 
-      const uid = localStorage.getItem('signUid');
-      const name = localStorage.getItem('signName');
+      const uid = localStorage.getItem('signUids');
+      const name = localStorage.getItem('signNames');
       const ref = localStorage.removeItem('signRef');
       // ...
       if (isMounted.current) {

@@ -118,19 +118,19 @@ export default function Register({ refer }) {
         }
         GET();
         localStorage.setItem('signedIn', true);
-        localStorage.setItem('signUid', user.id);
-        localStorage.setItem('signName', user.user_metadata.displayName);
+        localStorage.setItem('signUids', user.id);
+        localStorage.setItem('signNames', user.user_metadata.displayName);
         route.push('/user');
       } else {
 
         console.log('sign out');
         localStorage.removeItem('signedIn');
-        localStorage.removeItem('signUid');
-        localStorage.removeItem('signName');
+        localStorage.removeItem('signUids');
+        localStorage.removeItem('signNames');
         localStorage.removeItem('signRef');
       }
     }
-    getSe();
+    // getSe();
     async function lvls() {
       try {
         const { data, error } = await supabase
@@ -181,8 +181,8 @@ export default function Register({ refer }) {
     //       console.log(error);
     //       console.log(data);
     //       localStorage.setItem('signedIn', true);
-    //       localStorage.setItem('signUid', user.uid);
-    //       localStorage.setItem('signName', user.displayName);
+    //       localStorage.setItem('signUids', user.uid);
+    //       localStorage.setItem('signNames', user.displayName);
     //       localStorage.setItem('signRef', nRef);
     //     }
     //     //getlvl2
@@ -233,8 +233,8 @@ export default function Register({ refer }) {
         console.log(error);
         console.log(data);
         localStorage.setItem('signedIn', true);
-        localStorage.setItem('signUid', user.id);
-        localStorage.setItem('signName', username);
+        localStorage.setItem('signUids', user.id);
+        localStorage.setItem('signNames', username);
         localStorage.setItem('signRef', nRef);
       } catch (e) {
         console.log(e)

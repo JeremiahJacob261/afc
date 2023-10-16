@@ -66,15 +66,15 @@ export default function Vip() {
   };
   // end vip object
   useEffect(() => {
-    const useri = localStorage.getItem('signedIn');
-    setUsern(localStorage.getItem('signName'));
+    const useri = localStorage.getItem('signedIns');
+    setUsern(localStorage.getItem('signNames'));
     setUserR(localStorage.getItem('signRef'));
     if (useri) {
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/auth.user
 
-      const uid = localStorage.getItem('signUid');
-      const name = localStorage.getItem('signName');
+      const uid = localStorage.getItem('signUids');
+      const name = localStorage.getItem('signNames');
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/auth.user
       console.log('...')
@@ -85,7 +85,7 @@ export default function Vip() {
           const { data, error } = await supabase
             .from('users')
             .select()
-            .eq('username', localStorage.getItem('signName'))
+            .eq('username', localStorage.getItem('signNames'))
           setInfo(data[0])
           setBalance(data[0].balance);
           console.log(refCount)
@@ -127,8 +127,8 @@ export default function Vip() {
         console.log('sign out');
         console.log(error);
         localStorage.removeItem('signedIn');
-        localStorage.removeItem('signUid');
-        localStorage.removeItem('signName');
+        localStorage.removeItem('signUids');
+        localStorage.removeItem('signNames');
         localStorage.removeItem('signRef');
         router.push('/login');
       }
