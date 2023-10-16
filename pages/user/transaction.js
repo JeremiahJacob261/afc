@@ -53,7 +53,7 @@ export default function Transaction() {
         const { error } = await supabase.auth.signOut();
                 console.log('sign out');
                 console.log(error);
-                localStorage.removeItem('signedIn');
+                localStorage.removeItem('signedIns');
                 localStorage.removeItem('signUids');
                 localStorage.removeItem('signNames');
                 localStorage.removeItem('signRef');

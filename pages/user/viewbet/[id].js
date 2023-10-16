@@ -49,7 +49,7 @@ export default function Viewbets({ bets }) {
             // ...
             signOut(auth);
             console.log('sign out');
-            localStorage.removeItem('signedIn');
+            localStorage.removeItem('signedIns');
             localStorage.removeItem('signUids');
             localStorage.removeItem('signNames');
             router.push('/login');

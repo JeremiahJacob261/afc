@@ -84,14 +84,14 @@ export default function Login() {
 
         }
         GET();
-        localStorage.setItem('signedIn', true);
+        localStorage.setItem('signedIns', true);
         localStorage.setItem('signUids', user.id);
         localStorage.setItem('signNames', user.user_metadata.displayName);
         router.push('/user');
       } else {
 
         console.log('sign out');
-        localStorage.removeItem('signedIn');
+        localStorage.removeItem('signedIns');
         localStorage.removeItem('signUids');
         localStorage.removeItem('signNames');
         localStorage.removeItem('signRef');
@@ -122,7 +122,7 @@ export default function Login() {
     //         // GET();
 
     //         console.log(localStorage.getItem('signInfo'))
-    //         localStorage.setItem('signedIn', true);
+    //         localStorage.setItem('signedIns', true);
     //         localStorage.setItem('signUids', uid);
     //         localStorage.setItem('signNames', user.displayName);
     //         router.push('/user');
@@ -130,7 +130,7 @@ export default function Login() {
     //         // User is signed out
     //         // ...
     //         console.log('sign out');b 
-    //         localStorage.removeItem('signedIn');
+    //         localStorage.removeItem('signedIns');
     //         localStorage.removeItem('signUids');
     //         localStorage.removeItem('signNames');
     //         localStorage.removeItem('signRef');
@@ -172,7 +172,7 @@ const fire = async (emailer) => {
             supabaseMigrate(user.displayName, user.uid);
             alert('you are Logged in');
             console.log(user.displayName)
-            localStorage.setItem('signedIn', true);
+            localStorage.setItem('signedIns', true);
             localStorage.setItem('signUids', user.uid);
             localStorage.setItem('signNames', user.displayName);
             setDrop(false)
@@ -221,7 +221,7 @@ const fire = async (emailer) => {
             alert('You are logged in');
             console.log(user)
             // localStorage.setItem('signRef', data[0].newrefer);
-            localStorage.setItem('signedIn', true);
+            localStorage.setItem('signedIns', true);
             localStorage.setItem('signUids', user.id);
             localStorage.setItem('signNames', user.user_metadata.displayName);
             console.log(user.user_metadata.displayName)
@@ -240,7 +240,7 @@ const fire = async (emailer) => {
 
       //     alert('you are logged in');
       //     localStorage.setItem('signRef', data[0].newrefer);
-      //     localStorage.setItem('signedIn', true);
+      //     localStorage.setItem('signedIns', true);
       //     localStorage.setItem('signUids', user.uid);
       //     localStorage.setItem('signNames', user.displayName);
       //     setDrop(false)
@@ -295,7 +295,7 @@ const fire = async (emailer) => {
           alert('you are logged in');
           console.log(user)
           // localStorage.setItem('signRef', data[0].newrefer);
-          localStorage.setItem('signedIn', true);
+          localStorage.setItem('signedIns', true);
           localStorage.setItem('signUids', user.id);
           localStorage.setItem('signNames', user.user_metadata.displayName);
           setDrop(false)

@@ -117,14 +117,14 @@ export default function Register({ refer }) {
 
         }
         GET();
-        localStorage.setItem('signedIn', true);
+        localStorage.setItem('signedIns', true);
         localStorage.setItem('signUids', user.id);
         localStorage.setItem('signNames', user.user_metadata.displayName);
         route.push('/user');
       } else {
 
         console.log('sign out');
-        localStorage.removeItem('signedIn');
+        localStorage.removeItem('signedIns');
         localStorage.removeItem('signUids');
         localStorage.removeItem('signNames');
         localStorage.removeItem('signRef');
@@ -180,7 +180,7 @@ export default function Register({ refer }) {
     //         })
     //       console.log(error);
     //       console.log(data);
-    //       localStorage.setItem('signedIn', true);
+    //       localStorage.setItem('signedIns', true);
     //       localStorage.setItem('signUids', user.uid);
     //       localStorage.setItem('signNames', user.displayName);
     //       localStorage.setItem('signRef', nRef);
@@ -232,7 +232,7 @@ export default function Register({ refer }) {
           })
         console.log(error);
         console.log(data);
-        localStorage.setItem('signedIn', true);
+        localStorage.setItem('signedIns', true);
         localStorage.setItem('signUids', user.id);
         localStorage.setItem('signNames', username);
         localStorage.setItem('signRef', nRef);
