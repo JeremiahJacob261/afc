@@ -100,7 +100,7 @@ const { data, error } = await supabase
     let santana1 = (method === 'usdt') ? 100 : (method === 'gpay') ? 8300 : 2100;
     let santana2 = (method === 'usdt') ? 19 : (method === 'gpay') ? 1659 : 419;
     if (amount < 100) {
-      if (amount > 9) {
+      if (amount > 19) {
         setWarnab('')
         if (address.length < 9) {
           Alerts('Ensure the address is correct',false)
