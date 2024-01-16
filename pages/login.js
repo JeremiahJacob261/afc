@@ -25,7 +25,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useEffect } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
-import Loadingsc from "./overlays/loadingsc";
 export default function Login() {
   const dbs = getDatabase(app);
   const [username, setUsername] = useState("")
