@@ -89,13 +89,13 @@ const { data, error } = await supabase
 
 
     const getUsers = async () => {
-      const { data, error } = await supabase
-        .from('bets')
-        .select()
-        .eq('verified', false)
-        .limit(5)
-        .order('id', { ascending: false });
-      setFootDat(data);
+      // const { data, error } = await supabase
+      //   .from('bets')
+      //   .select()
+      //   .eq('verified', false)
+      //   .limit(5)
+      //   .order('id', { ascending: false });
+      setFootDat([]);
     
     };
     getUsers()

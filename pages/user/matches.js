@@ -117,12 +117,12 @@ border: "1px solid rgba(255, 255, 255, 0.3)"
   )
 }
 export async function getServerSideProps(context) {
-  const { data, error } = await supabase
-    .from('bets')
-    .select()
-    .eq('verified',false)
-    .order('id', { ascending: false });
-  let footDat = data;
+  // const { data, error } = await supabase
+  //   .from('bets')
+  //   .select()
+  //   .eq('verified',false)
+  //   .order('id', { ascending: false });
+  let footDat = [];
   console.log(data)
   return {
     props: { footDat }, // will be passed to the page component as props

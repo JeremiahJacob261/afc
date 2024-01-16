@@ -48,11 +48,11 @@ export default function Deposit(){
    const checkDepo = async (url) => {
     try{
     let uer= localStorage.getItem('signNames');
-    const { error } = await supabase
-      .from('notification')
-      .insert({ address: url, username: uer , amount: amount, sent: 'pending', type: "deposit", method: method } )
-    console.log(error)
-    setfile([]);
+    // const { error } = await supabase
+    //   .from('notification')
+    //   .insert({ address: url, username: uer , amount: amount, sent: 'pending', type: "deposit", method: method } )
+    // console.log(error)
+    // setfile([]);
     Alerts('Your Deposit was Successful',true);
     }catch(e){
       setDrop(false)
@@ -83,7 +83,7 @@ checkDepo(url);
     }else{
       console.log(file)
       console.log(file.length);
-    Upload();
+    // Upload();
     }
   }
   useEffect(() => {
@@ -104,9 +104,9 @@ checkDepo(url);
       // ...
       signOut(auth);
       console.log('sign out');
-      localStorage.removeItem('signedIns');
-      localStorage.removeItem('signUids');
-      localStorage.removeItem('signNames');
+      // localStorage.removeItem('signedIns');
+      // localStorage.removeItem('signUids');
+      // localStorage.removeItem('signNames');
       router.push('/login');
     }
 
