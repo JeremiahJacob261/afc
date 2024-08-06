@@ -2,6 +2,7 @@ import React,{useContext} from "react"
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import { Icon }from '@iconify/react'
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import EuroIcon from '@mui/icons-material/Euro';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
@@ -35,7 +36,7 @@ function BottomNavi() {
         sx={{background:'#E5E7EB',position:'fixed',bottom:0,left:0,width:'100%'}}
       >
         <BottomNavigationAction label="Top" onClick={home} icon={<HomeOutlinedIcon style={{width:"20px"}}/>} sx={{width:"40px",color:"black"}}/>
-        <BottomNavigationAction label="Matches" onClick={matches} icon={<SportsSoccerIcon />} sx={{width:"40px",color:"black"}}/>
+        <BottomNavigationAction label="Matches" onClick={matches} icon={<Icon icon="ion:football-outline" width="24" height="24"  style={{color: "rgba(0, 0, 0, 0.7)"}} />} sx={{width:"40px",color:"black"}}/>
         <BottomNavigationAction label="My Bets" onClick={bets} icon={
           <ManageAccountsIcon />
         } sx={{width:"40px",color:"black"}}/>
