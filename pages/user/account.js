@@ -182,12 +182,12 @@ export default function Account() {
             <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }}>
               <Stack direction='row' spacing={1} justifyContent='start'>
                 <Image src={iLink} width={24} height={24} alt='ilink' />
-                <Typography sx={{ color: 'black', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>https://afcfifa.netlify.app/register/{info ? info.newrefer : userR}</Typography>
+                <Typography sx={{ color: 'black', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>https://afc .netlify.app/register/{info ? info.newrefer : userR}</Typography>
               </Stack>
               <Image src={iCopy} width={20} height={20} alt='icopy'
                 sx={{ background: '#47A8BD', padding: '5px', borderRadius: '5px' }}
                 onClick={() => {
-                  navigator.clipboard.writeText("https://afcfifa.netlify.app/register/" + info.newrefer)
+                  navigator.clipboard.writeText("https://afc .netlify.app/register/" + info.newrefer)
                   setMessages("Invite Link Copied")
                   setOpened(true);
                 }} />
@@ -319,7 +319,7 @@ export default function Account() {
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
             </Link>
-            < Link href='https://t.me/Afcfifa_customercare'>
+            < Link href='https://t.me/Afc _customercare'>
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                 <Stack direction='row' spacing={1} justifyContent='start'>
                   <Image src={Tel} width={24} height={24} alt='ilink' />

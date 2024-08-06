@@ -13,6 +13,6 @@ const options = {
     },
   }
 const supabaseUrl = 'https://aidkzrgsgrfotjiouxto.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFpZGt6cmdzZ3Jmb3RqaW91eHRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTg4NjY1MjgsImV4cCI6MjAxNDQ0MjUyOH0.rFOiNQGULsQMU77DlwFDZSFnH5g3yOYz7N9ANnIz4sc'
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFpZGt6cmdzZ3Jmb3RqaW91eHRvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY5ODg2NjUyOCwiZXhwIjoyMDE0NDQyNTI4fQ.h09NvD6I8MMj5kqOvjyGB0PlZWz9wwk_FqdqCNboRkU'
 
 export const supabase = createClient(supabaseUrl, supabaseKey)

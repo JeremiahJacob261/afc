@@ -197,7 +197,7 @@ const { data, error } = await supabase
             <Sncks message={messages} />
             <Head>
                 <title>{matches.home} VS {matches.away}</title>
-                <meta name="description" content="A Premium AFCFIFA match" />
+                <meta name="description" content="A Premium BFC  match" />
                 <link rel="icon" href="/logo_afc.ico" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>

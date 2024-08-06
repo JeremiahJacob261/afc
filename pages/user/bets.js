@@ -94,7 +94,7 @@ export default function Bets() {
         <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Bet History</Typography>
       </Stack>
       <Head>
-        <title>AFC - My Bets </title>
+        <title>BFC - My Bets </title>
         <meta name="description" content="View Your Recents Betslips" />
         <link rel="icon" href="/logo_afc.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

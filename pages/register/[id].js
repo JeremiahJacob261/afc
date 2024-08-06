@@ -265,7 +265,7 @@ export default function Register({ refer }) {
           updateRef();
           updateRefb();
           setDrop(false);
-          Alerts(`Welcome To AFCFIFA`, true);
+          Alerts(`Welcome To BFC `, true);
         }
       } catch (error) {
         console.error('Error signing up:', error);
@@ -323,7 +323,7 @@ export default function Register({ refer }) {
             sx={{ height: "100%", marginTop: "15px", padding: "10px", backgound: "#495265" }}>
             <Stack direction="column" spacing={4} justifyContent="center" alignItems="center">
               <Link href="/" style={{ textDecoration: "none" }}>
-                <Typography style={{ fontFamily: 'Noto Serif, serif', color: "#E5E7EB", fontWeight: '400', fontSize: '20px' }}>AFCFIFA </Typography>
+                <Typography style={{ fontFamily: 'Noto Serif, serif', color: "#E5E7EB", fontWeight: '400', fontSize: '20px' }}>BFC  </Typography>
               </Link>
               <Typography style={{ fontFamily: 'Poppins,sans-serif', color: '#E5E7EB', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
                 Sign up now and get a welcome bonus!

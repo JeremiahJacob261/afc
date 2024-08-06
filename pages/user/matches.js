@@ -1,7 +1,7 @@
 import Cover from './cover'
 import { supabase } from '../api/supabase'
 import { useContext, useEffect, useState } from "react";
-import { Paper, Stack, Typography, Button ,Divider} from '@mui/material'
+import { Paper, Stack, Typography, Button, Divider } from '@mui/material'
 import Image from "next/image";
 import Head from 'next/head'
 import Ims from '../../public/simps/ball.png'
@@ -10,46 +10,38 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 export default function Matches({ footDat }) {
-  const [drop,setDrop] = useState(false)
+  const [drop, setDrop] = useState(false)
   const [info, setInfo] = useState({})
-  
+
   const router = useRouter()
-  
-  /*
-   background: "rgba(255, 255, 255, 0.56)",
-borderRadius: "16px",
-boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-backdropFilter: "blur(9.2px)",
-WebkitBackdropFilter: "blur(9.2px)",
-border: "1px solid rgba(255, 255, 255, 0.3)"
-  */
- 
- 
+
+
   return (
     <Cover>
-        <Backdrop
+      <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={drop}
       >
         <CircularProgress color="inherit" />
       </Backdrop>
       <Head>
-        <title>AFC - Matches</title>
-        <meta name="description" content="See the Best Matches Provided By AFC-FiFa" />
+        <title>BFC - Matches</title>
+        <meta name="description" content="See the Best Matches Provided By BFC- " />
         <link rel="icon" href="/logo_afc.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div style={{
-        maxWidth: "350px", background: "#E5E7EB",minHeight:'100vh'
+        minWidth: '370px', maxWidth: "450px", background: "#E5E7EB", minHeight: '90vh'
       }}>
-        <Stack direction='row' alignItems='center' spacing={1} sx={{padding:'5px',margin:'2px'}}>
-        <KeyboardArrowLeftOutlinedIcon sx={{width:'24px',height:'24px'}} onClick={()=>{
-          router.push('/user')
-        }}/>
-        <Typography sx={{fontSize:'16px',fontFamily:'Poppins,sans-serif',fontWeight:'300'}}>Matches</Typography>
+        <Stack >
+        <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
+            router.push('/user')
+          }} />
+          <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Matches</Typography>
+     
         </Stack>
         <Stack alignItems='center'>
-            {
+          {
             footDat.map((pro) => {
               let stams = Date.parse(pro.date + " " + pro.time) / 1000;
               let curren = new Date().getTime() / 1000;
@@ -78,50 +70,50 @@ border: "1px solid rgba(255, 255, 255, 0.3)"
                     <Divider sx={{ background: 'black' }} />
                   </Stack>
                   <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
-                  <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                    <Image src={pro.ihome ? pro.ihome : Ims} width={65} height={50} alt='home'/>
-                    <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
-                  </Stack>
-                  <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                    <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
-                   <p>|</p>
-                    <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
-                  </Stack>
-                  <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                    <Image src={pro.iaway ? pro.iaway : Ims} width={65} height={50} alt='away'/>
-                    <Typography sx={{ textAlign:'center',fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{pro.away}</Typography>
-                  </Stack>
+                    <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
+                      <Image src={pro.ihome ? pro.ihome : Ims} width={65} height={50} alt='home' />
+                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
+                    </Stack>
+                    <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
+                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
+                      <p>|</p>
+                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
+                    </Stack>
+                    <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
+                      <Image src={pro.iaway ? pro.iaway : Ims} width={65} height={50} alt='away' />
+                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{pro.away}</Typography>
+                    </Stack>
                   </Stack>
                   <Stack direction='row' spacing={2} >
-                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{borderRadius:'5px',width:'96px',height:'40px',background:'#03045E'}}>
-                      <Typography sx={{fontSize:'12px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'#F5E663'}}>1-0</Typography>
-                      <Typography sx={{fontSize:'16px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'#F5E663'}}>{pro.onenil}</Typography>
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#03045E' }}>
+                      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>1-0</Typography>
+                      <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>{pro.onenil}</Typography>
                     </Stack>
-                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{borderRadius:'5px',width:'96px',height:'40px',background:'#03045E'}}>
-                      <Typography sx={{fontSize:'12px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'#F5E663'}}>1-1</Typography>
-                      <Typography sx={{fontSize:'16px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'#F5E663'}}>{pro.oneone}</Typography>
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#03045E' }}>
+                      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>1-1</Typography>
+                      <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>{pro.oneone}</Typography>
                     </Stack>
-                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{borderRadius:'5px',width:'96px',height:'40px',background:'#03045E'}}>
-                      <Typography sx={{fontSize:'12px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'#F5E663'}}>1-2</Typography>
-                      <Typography sx={{fontSize:'16px',fontFamily:'Poppins,sans-serif',fontWeight:'400',color:'#F5E663'}}>{pro.onetwo}</Typography>
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#03045E' }}>
+                      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>1-2</Typography>
+                      <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>{pro.onetwo}</Typography>
                     </Stack>
                   </Stack>
                 </Stack>
               )
             })
           }
-          </Stack>
-          </div>
+        </Stack>
+      </div>
     </Cover>
 
   )
 }
 export async function getServerSideProps(context) {
-  // const { data, error } = await supabase
-  //   .from('bets')
-  //   .select()
-  //   .eq('verified',false)
-  //   .order('id', { ascending: false });
+  const { data, error } = await supabase
+    .from('bets')
+    .select()
+    .eq('verified', false)
+    .order('id', { ascending: false });
   let footDat = [];
   console.log(data)
   return {

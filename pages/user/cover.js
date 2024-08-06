@@ -138,7 +138,7 @@ console.log(error)
           <Stack direction='column' sx={{ padding: '12px' }}>
             <Stack direction='row' alignItems='center' justifyContent='space-between'>
               <Link href="/" style={{ textDecoration: "none" }}>
-                <Typography style={{ fontFamily: 'Noto Serif, serif', color: "black", fontWeight: '400', fontSize: '20px' }}>AFCFIFA </Typography>
+                <Typography style={{ fontFamily: 'Noto Serif, serif', color: "black", fontWeight: '400', fontSize: '20px' }}>BFC  </Typography>
               </Link>
 
             </Stack>
@@ -220,7 +220,7 @@ console.log(error)
             setDraw(true)
           }} />
         </div>
-        <Typography style={{ fontSize: '24px', fontWeight: '800', color: 'black', margin: '4px', fontFamily: 'Noto, serif' }}>AFCFIFA</Typography>
+        <Typography style={{ fontSize: '24px', fontWeight: '800', color: 'black', margin: '4px', fontFamily: 'Noto, serif' }}>BFC </Typography>
         <div style={{ display: 'inline-flex', alignItems: 'center' }}>
 
           <NotificationsIcon sx={{ color: 'black' }}

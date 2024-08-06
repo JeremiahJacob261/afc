@@ -340,7 +340,7 @@ const fire = async (emailer) => {
       <Stack direction='column' spacing={3}>
         <Stack direction="column" spacing={2} justifyContent="center" alignItems="center">
           <Link href="/" style={{ textDecoration: "none" }}>
-            <Typography style={{ fontFamily: 'Noto Serif, serif', color: "#E5E7EB", fontWeight: '400', fontSize: '20px' }}>AFCFIFA </Typography>
+            <Typography style={{ fontFamily: 'Noto Serif, serif', color: "#E5E7EB", fontWeight: '400', fontSize: '20px' }}>BFC  </Typography>
           </Link>
           <Typography style={{ fontFamily: 'Poppins,sans-serif', color: '#E5E7EB', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
             Dont miss a minute of the action! Sign in
