@@ -3,9 +3,9 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Logos from '../public/logoclean.png'
-import afc1 from '../public/simps/BFC.jpg'
-import afc2 from '../public/simps/BFC2.jpg'
-import afc3 from '../public/simps/BFC3.jpg'
+import afc1 from '../public/simps/AFC.jpg'
+import afc2 from '../public/simps/AFC2.jpg'
+import afc3 from '../public/simps/AFC3.jpg'
 import iv from '../public/simps/Invitation Bonus.jpg'
 import kik from '../public/simps/kick.png'
 import sal from '../public/simps/Monthly salary.png'
@@ -36,7 +36,7 @@ export default function Home() {
              onClick={()=>{
               push('/',undefined,{locale:'es'})
             }}>
-              BFC </Typography></div>
+              BFCFIFA</Typography></div>
           <div style={{ display: 'inline-flex', alignItems: 'center' }}>
             <Link href='/login' style={{ textDecoration: 'none' }}>
               <Typography style={{ fontSize: '13px', fontWeight: '600', color: '#03045E', margin: '4px', fontFamily: 'Poppins, sans-serif' }}>{t('login')}</Typography></Link>
@@ -49,7 +49,7 @@ export default function Home() {
         <div>
           <Typography style={{ color: '#FFFFFF', fontSize: '24px', margin: '4px', fontWeight: 'bolder', fontFamily: 'Poppins, sans-serif' }}>
           {t('welcome_to')}<br />
-            BFC 
+            BFCFIFA
           </Typography>
           <Typography style={{ width: '308px', height: '111px', fontFamily: 'Poppins, sans-serif', fontWeight: '500' }}>
           {t('site_description')}
