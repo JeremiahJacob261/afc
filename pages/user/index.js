@@ -10,7 +10,8 @@ import { Button, Typography, Paper, Divider } from "@mui/material";
 import { supabase } from '../api/supabase'
 import Agent from '../../public/afc1.jpg'
 import Agent1 from '../../public/afc2.jpg'
-import Agent2 from '../../public/afc2.jpg'
+import Agent2 from '../../public/afc3.jpg'
+import { motion } from 'framer-motion'
 import Agent3 from '../../public/afc3.jpg'
 import Agent4 from '../../public/afc4.jpg'
 import front from '../../public/front.png'
@@ -21,13 +22,8 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { getAuth, signOut } from "firebase/auth";
 import Backdrop from '@mui/material/Backdrop';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel"
+import { ImageAspectRatioTwoTone } from "@mui/icons-material";
+
 
 
 export default function Home() {
@@ -104,10 +100,41 @@ export default function Home() {
     getUsers()
   }, [balance]);
 
-  const router = useRouter()
+  const router = useRouter();
+
+  function Carousel() {
+    const images = {
+      0: Agent,
+      1: Agent1,
+      2:Agent2
+    };
+    const [current, setCurrent] = useState(0);
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setCurrent((prevCurrent) => (prevCurrent === 0 ? 1 : prevCurrent === 1 ? 2 : 0));
+      }, 8000);
+
+      return () => clearInterval(interval);
+    }, []);
+
+    return (
+      <Stack>
+         <motion.div
+        key={current}
+        initial={{ opacity: 0, transition: { duration: 1, ease: 'easeIn' } }}
+        animate={{ opacity: 1, }}
+        exit={{ opacity: 0, transition: { duration: 2, ease: 'easeOut' } }}
+        transition={{ duration: 2, ease: 'easeOut' }}
+      >
+          <Image src={images[current]} width={354} height={140} alt="bonus" style={{ width: 'auto', height: 'auto', borderRadius: '5px' }} />
+      </motion.div>
+       </Stack>
+    );
+  }
+
   return (
     <Stack justifyContent="start" alignItems="center"
-      style={{ background: "#242627", marginBottom: "50px",minHeight:'95vh', }}
+      style={{ background: "#242627", marginBottom: "50px", minHeight: '95vh', }}
     >
 
 
@@ -122,7 +149,7 @@ export default function Home() {
           <title>Welcome - {info ? `${info.username}` : 'Loading...'}</title>
           <link rel="icon" href="/brentford.ico" />
         </Head>
-        <Stack sx={{ background: "#242627", marginTop: '10px', minWidth: '350px',maxWidth:'450px' }} spacing={2} justifyContent='center' >
+        <Stack sx={{ background: "#242627", marginTop: '10px', minWidth: '350px', maxWidth: '450px' }} spacing={2} justifyContent='center' >
 
           <Stack direction="column" spacing={1} sx={{ background: '#373636', padding: '12px', borderRadius: '10px' }}>
             <Typography style={{ fontSize: '16px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', textAlign: 'left', color: '#E9E5DA' }}>Hello {info ? `${info.username}` : 'Loading...'},</Typography>
@@ -143,17 +170,7 @@ export default function Home() {
           </Stack>
           <Divider sx={{ background: '#E9E5DA' }} />
 
-          <Stack sx={{ width: '300px' }} justifyContent='center' alignItems='center'>
-            <Carousel>
-              <CarouselContent>
-                <CarouselItem><Image src={Agent} width={354} height={140} alt="bonus" /></CarouselItem>
-                <CarouselItem><Image src={Agent} width={354} height={140} alt="bonus" /></CarouselItem>
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
-          </Stack>
-
+          <Carousel />
 
           <Stack direction='row' justifyContent='space-between' alignItems='center'>
             <Stack direction='row' spacing={1}>
@@ -200,7 +217,7 @@ export default function Home() {
                     </Stack>
                     <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
                       <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                        <Image src={pro.ihome ? pro.ihome : Ims} width={65} height={50} />
+                        <Image src={pro.ihome ? pro.ihome : Ims} width={50} height={50} />
                         <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
                       </Stack>
                       <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
@@ -209,7 +226,7 @@ export default function Home() {
                         <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
                       </Stack>
                       <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                        <Image src={pro.iaway ? pro.iaway : Ims} width={65} height={50} />
+                        <Image src={pro.iaway ? pro.iaway : Ims} width={50} height={50} />
                         <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '12px', fontWeight: '100' }}>{pro.away}</Typography>
                       </Stack>
                     </Stack>
@@ -233,7 +250,7 @@ export default function Home() {
             }
           </Stack>
 
-          
+
           <Stack>
 
           </Stack>

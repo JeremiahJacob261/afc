@@ -220,7 +220,7 @@ export default function Cover({ children }) {
             setDraw(true)
           }} />
         </div>
-        <p className="text-white font-bold">BFC </p>
+        <p className="text-white font-roboto">BFC </p>
         <div style={{ display: 'inline-flex', alignItems: 'center' }}>
           <Icon icon="solar:bell-bold" width="24" height="24" style={{ color: "#FFB400" }}
             onClick={() => {

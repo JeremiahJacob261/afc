@@ -221,7 +221,7 @@ const { data, error } = await supabase
                 </Stack>
                 <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
                     <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                        <Image src={matches.ihome ? matches.ihome : Ims} width={65} height={50} alt='home' sx={{ borderRadius:'10px'}}/>
+                        <Image src={matches.ihome ? matches.ihome : Ims} width={50} height={50} alt='home' sx={{ borderRadius:'10px'}}/>
                         <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '12px', fontWeight: '100' }}>{matches.home}</Typography>
                     </Stack>
                     <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
@@ -230,7 +230,7 @@ const { data, error } = await supabase
                         <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
                     </Stack>
                     <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                        <Image src={matches.iaway ? matches.iaway : Ims} width={65} height={50} alt='away' sx={{ borderRadius:'10px'}}/>
+                        <Image src={matches.iaway ? matches.iaway : Ims} width={50} height={50} alt='away' sx={{ borderRadius:'10px'}}/>
                         <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '12px', fontWeight: '100' }}>{matches.away}</Typography>
                     </Stack>
                 </Stack>

@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -62,6 +65,13 @@
 @layer base {
   * {
     @apply border-border;
+    @font-face {
+      font-family: 'Poppins';
+      src: url('popreg.ttf') format('truetype');
+      font-weight: 300;
+      font-style: normal;
+    }
+    
   }
   body {
     @apply bg-background text-foreground;

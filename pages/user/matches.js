@@ -12,7 +12,7 @@ import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeft
 export default function Matches({ footDat }) {
   const [drop, setDrop] = useState(false)
   const [info, setInfo] = useState({})
-
+  console.log(footDat)
   const router = useRouter()
 
 
@@ -34,14 +34,14 @@ export default function Matches({ footDat }) {
         minWidth: '370px', maxWidth: "450px", background: "#242627", minHeight: '90vh'
       }}>
         <Stack >
-        <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
+          <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
             router.push('/user')
           }} />
-          <Typography sx={{ fontSize: '16px',color:'white', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Matches</Typography>
-     
+          <Typography sx={{ fontSize: '16px', color: 'white', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Matches</Typography>
+
         </Stack>
         <Stack alignItems='center'>
-          {/* {
+          {
             footDat.map((pro) => {
               let stams = Date.parse(pro.date + " " + pro.time) / 1000;
               let curren = new Date().getTime() / 1000;
@@ -56,7 +56,7 @@ export default function Matches({ footDat }) {
                   style={{
                     marginBottom: "8px", padding: "18.5px",
                     display: (stams < curren) ? 'none' : 'visible',
-                    background: '#EFEFEF',
+                    background: '#373636',
                     width: '343px',
                     borderRadius: '5px',
                     height: '210px'
@@ -66,50 +66,44 @@ export default function Matches({ footDat }) {
                     router.push("/user/match/" + pro.match_id)
                   }}>
                   <Stack direction='column'>
-                    <Typography style={{ color: '#02182B', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{league} </Typography>
-                    <Divider sx={{ background: 'E9E5DA' }} />
+                    <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{league} </Typography>
+                    <Divider sx={{ background: '#FFB400' }} />
                   </Stack>
                   <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
                     <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                      <Image src={pro.ihome ? pro.ihome : Ims} width={65} height={50} alt='home' />
-                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
+                      <Image src={pro.ihome ? pro.ihome : Ims} width={50} height={50} alt='home' />
+                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
                     </Stack>
                     <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
+                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
                       <p>|</p>
-                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
+                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
                     </Stack>
                     <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                      <Image src={pro.iaway ? pro.iaway : Ims} width={65} height={50} alt='away' />
-                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '12px', fontWeight: '100' }}>{pro.away}</Typography>
+                      <Image src={pro.iaway ? pro.iaway : Ims} width={50} height={50} alt='away' />
+                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>{pro.away}</Typography>
                     </Stack>
                   </Stack>
                   <Stack direction='row' spacing={2} >
-                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#03045E' }}>
-                      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>1-0</Typography>
-                      <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>{pro.onenil}</Typography>
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>1-0</Typography>
+                      <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>{pro.onenil}</Typography>
                     </Stack>
-                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#03045E' }}>
-                      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>1-1</Typography>
-                      <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>{pro.oneone}</Typography>
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>1-1</Typography>
+                      <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>{pro.oneone}</Typography>
                     </Stack>
-                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#03045E' }}>
-                      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>1-2</Typography>
-                      <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>{pro.onetwo}</Typography>
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>1-2</Typography>
+                      <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>{pro.onetwo}</Typography>
                     </Stack>
                   </Stack>
                 </Stack>
               )
             })
-          } */}
-
-          {
-            footDat.map(()=>{
-              return(
-                <div className='text-white'>h...l</div>
-              )
-            })
           }
+
+      
         </Stack>
       </div>
     </Cover>
@@ -122,8 +116,9 @@ export async function getServerSideProps(context) {
     .from('bets')
     .select()
     .eq('verified', false)
+    .limit(50)
     .order('id', { ascending: false });
-  let footDat = [];
+  let footDat = data;
   console.log(data)
   return {
     props: { footDat }, // will be passed to the page component as props
