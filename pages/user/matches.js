@@ -37,11 +37,11 @@ export default function Matches({ footDat }) {
         <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
             router.push('/user')
           }} />
-          <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Matches</Typography>
+          <Typography sx={{ fontSize: '16px',color:'white', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Matches</Typography>
      
         </Stack>
         <Stack alignItems='center'>
-          {
+          {/* {
             footDat.map((pro) => {
               let stams = Date.parse(pro.date + " " + pro.time) / 1000;
               let curren = new Date().getTime() / 1000;
@@ -101,6 +101,14 @@ export default function Matches({ footDat }) {
                 </Stack>
               )
             })
+          } */}
+
+          {
+            footDat.map(()=>{
+              return(
+                <div className='text-white'>h...l</div>
+              )
+            })
           }
         </Stack>
       </div>
@@ -109,6 +117,7 @@ export default function Matches({ footDat }) {
   )
 }
 export async function getServerSideProps(context) {
+  console.log('hello')
   const { data, error } = await supabase
     .from('bets')
     .select()
