@@ -15,7 +15,7 @@ import { getDatabase } from 'firebase/database'
 import SimpleDialog from './modal'
 import { useRouter } from 'next/router'
 import { getCookie, setCookie, removeCookies } from 'cookies-next';
-import LOGO from '../public/logo_afc.ico'
+import LOGO from '../public/brentford.ico'
 import Image from 'next/image'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -330,7 +330,7 @@ const fire = async (emailer) => {
       <Head>
         <title>Login</title>
         <meta name="description" content="Login to your Account to see whats up with your bets" />
-        <link rel="icon" href="/logo_afc.ico" />
+        <link rel="icon" href="/brentford.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <SimpleDialog
@@ -340,25 +340,25 @@ const fire = async (emailer) => {
       <Stack direction='column' spacing={3}>
         <Stack direction="column" spacing={2} justifyContent="center" alignItems="center">
           <Link href="/" style={{ textDecoration: "none" }}>
-            <Typography style={{ fontFamily: 'Noto Serif, serif', color: "#E5E7EB", fontWeight: '400', fontSize: '20px' }}>BFC  </Typography>
+            <Typography style={{ fontFamily: 'Noto Serif, serif', color: "#242627", fontWeight: '400', fontSize: '20px' }}>BFC  </Typography>
           </Link>
-          <Typography style={{ fontFamily: 'Poppins,sans-serif', color: '#E5E7EB', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
+          <Typography style={{ fontFamily: 'Poppins,sans-serif', color: '#242627', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
             Dont miss a minute of the action! Sign in
           </Typography>
-          <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: '#E5E7EB', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
+          <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: '#242627', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
             Enter the correct information provided to Login to your  account
           </Typography>
         </Stack>
         <Stack direction="column" spacing={4} sx={{ width: '343px' }}>
           <TextField id="outlined-basic" label="Email Or Username" variant="filled"
-            sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #E5E7EB', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#E5E7EB', } }}
+            sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #242627', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#242627', } }}
             value={email}
             onChange={(e) => {
               setEmail(e.target.value)
             }}
           />
           <FormControl
-            sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #E5E7EB', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#E5E7EB', } }}
+            sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #242627', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#242627', } }}
             variant="filled">
             <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
             <OutlinedInput
@@ -374,7 +374,7 @@ const fire = async (emailer) => {
                     onMouseDown={handleMouseDownPassword}
                     edge="end"
                   >
-                    {values.showPassword ? <VisibilityOff sx={{ color: '#E5E7EBsmoke' }} /> : <Visibility sx={{ color: '#E5E7EB' }} />}
+                    {values.showPassword ? <VisibilityOff sx={{ color: '#242627smoke' }} /> : <Visibility sx={{ color: '#242627' }} />}
                   </IconButton>
                 </InputAdornment>
               }
@@ -395,13 +395,13 @@ const fire = async (emailer) => {
         }}
         sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', fontWeight: '400', background: '#FE9D16' }}
           onClick={login}>
-          <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "#E5E7EBsmoke" }}>Login</Typography>
+          <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "#242627smoke" }}>Login</Typography>
         </Button>
-        <Link href="/passwordreset" style={{ textDecoration: '#E5E7EB' }}>
-          <Typography style={{ color: "#E5E7EB", fontSize: '14px', fontWeight: '200', opacity: '0.7', fontFamily: 'Poppins,sans-serif' }}>Forgotten Password ?</Typography>
-          <Divider sx={{ background: '#E5E7EB' }} />
+        <Link href="/passwordreset" style={{ textDecoration: '#242627' }}>
+          <Typography style={{ color: "#242627", fontSize: '14px', fontWeight: '200', opacity: '0.7', fontFamily: 'Poppins,sans-serif' }}>Forgotten Password ?</Typography>
+          <Divider sx={{ background: '#242627' }} />
         </Link>
-        <Link href="/register/000208" style={{ width: '100%', textAlign: 'center', textDecoration: "none", color: "#E5E7EB", fontSize: '15px', fontWeight: '400', fontFamily: 'Poppins,sans-serif' }}>Dont have an Account ?
+        <Link href="/register/000208" style={{ width: '100%', textAlign: 'center', textDecoration: "none", color: "#242627", fontSize: '15px', fontWeight: '400', fontFamily: 'Poppins,sans-serif' }}>Dont have an Account ?
           Create Account
 
         </Link>

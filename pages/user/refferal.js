@@ -116,7 +116,7 @@ export default function Refferal() {
       <Stack alignItems="center" style={{ minHeight: '85vh', width: '100%' }} spacing={1}>
         <Head>
           <title>Referral Details</title>
-          <link rel="icon" href="/logo_afc.ico" />
+          <link rel="icon" href="/brentford.ico" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
         <Stack direction='row' alignItems='center' justifyContent='start' spacing={1} sx={{ width:'100%',padding: '8px', margin: '2px',minWidth:'344px'}}>
@@ -125,10 +125,10 @@ export default function Refferal() {
         }} />
         <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Referral</Typography>
       </Stack>
-      <Accordion style={{background:'#E5E7EB',width:'341px'}}>
+      <Accordion style={{background:'#242627',width:'341px'}}>
         <AccordionSummary
           expandIcon={
-             <KeyboardArrowDownIcon sx={{color:'black',fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300'}}/>
+             <KeyboardArrowDownIcon sx={{color:'E9E5DA',fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300'}}/>
           }
           aria-controls="panel1a-content"
           id="panel1a-header"
@@ -152,7 +152,7 @@ export default function Refferal() {
       
       
      </Stack>
-     <Divider sx={{color:'black'}}/>
+     <Divider sx={{color:'E9E5DA'}}/>
      <Stack direction='column'>
       {
         lvl.map((t)=>{
@@ -166,17 +166,17 @@ export default function Refferal() {
                   <Image src={Rd} width={40} height={40} alt='rounds'/>
                   <Stack direction='column' alignItems='start' sx={{width:'196px'}}>
                     <Stack direction='row' alignItems='center' spacing={1} justifyContent='stretch'>
- <Typography style={{ color:'black',fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '500' }}>{t.username}
+ <Typography style={{ color:'E9E5DA',fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '500' }}>{t.username}
                    </Typography> 
                    <Typography sx={{color:'#808080'}}>•</Typography>
                    <Typography style={{ color:(refers === t.refer) ? '#793D20' : (refers === t.lvla) ? '#5E6172' : '#BE6D07',fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '300' }}>
                     {(refers === t.refer) ? 'Level 1' : (refers === t.lvla) ? 'Level 2' : 'Level 3'}
                    </Typography>
                     </Stack>
-                   <Typography style={{ color:'black',fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{dates} • {time}</Typography>
+                   <Typography style={{ color:'E9E5DA',fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{dates} • {time}</Typography>
                  
                   </Stack>
-                  <Typography style={{ color:'black',fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>$ {balance}</Typography>
+                  <Typography style={{ color:'E9E5DA',fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>$ {balance}</Typography>
                  </Stack>
           )
         })

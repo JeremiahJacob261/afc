@@ -15,7 +15,7 @@ import { getDatabase } from 'firebase/database'
 import SimpleDialog from './modal'
 import { useRouter } from 'next/router'
 import { getCookie, setCookie, removeCookies } from 'cookies-next';
-import LOGO from '../public/logo_afc.ico'
+import LOGO from '../public/brentford.ico'
 import Image from 'next/image'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -71,22 +71,22 @@ export default function PasswordReset() {
       <Head>
         <title>Password Reset</title>
         <meta name="description" content="afc  security settings" />
-        <link rel="icon" href="/logo_afc.ico" />
+        <link rel="icon" href="/brentford.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Stack direction="column" spacing={4} justifyContent="center" alignItems="center">
             <Link href="/" style={{ textDecoration: "none" }}>
-              <Typography style={{ fontFamily: 'Noto Serif, serif', color: "#E5E7EB", fontWeight: '400', fontSize: '20px' }}>BFC  </Typography>
+              <Typography style={{ fontFamily: 'Noto Serif, serif', color: "#242627", fontWeight: '400', fontSize: '20px' }}>BFC  </Typography>
             </Link>
-            <Typography style={{ fontFamily: 'Poppins,sans-serif', color: '#E5E7EB', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
+            <Typography style={{ fontFamily: 'Poppins,sans-serif', color: '#242627', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
             Forgot Password? Dont worry
             </Typography>
-            <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: '#E5E7EB', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
+            <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: '#242627', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
             We would send you a link to your email so you can reset your password
             </Typography>
           </Stack>
       <TextField id="outlined-basic" label="Email" variant="filled"
-        sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #E5E7EB', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#E5E7EB', } }}
+        sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #242627', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#242627', } }}
 
         value={email}
         onChange={(e) => {
@@ -95,11 +95,11 @@ export default function PasswordReset() {
       />
       <Stack direction="column" spacing={2} justifyContent='center' alignItems='center' sx={{width:'343px',position:'absolute',bottom:55}}>
         <Button variant="contained"  sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', background: '#FE9D16' }} onClick={reset}>
-        <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "#E5E7EBsmoke" }}>Send Email</Typography>
+        <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "#242627smoke" }}>Send Email</Typography>
       </Button>
       <Typography>
-              <Link href="/login" style={{ textDecoration: "none", fontSize: '14px', fontWeight: '100', color: "#E5E7EB", opacity: '1.0', fontFamily: 'Poppins,sans-serif' }}>Return To Login</Link>
-              <Divider sx={{background:'#E5E7EB'}}/>
+              <Link href="/login" style={{ textDecoration: "none", fontSize: '14px', fontWeight: '100', color: "#242627", opacity: '1.0', fontFamily: 'Poppins,sans-serif' }}>Return To Login</Link>
+              <Divider sx={{background:'#242627'}}/>
               </Typography>
       
       </Stack>

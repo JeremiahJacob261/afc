@@ -16,11 +16,11 @@ export default function SimpleDialog(props) {
   return (
       <Modal show={open} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>ATALANTA Football Club</Modal.Title>
+          <Modal.Title>Brentford Football Club</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Paper elevation={3} style={{padding:"10px",backgroundColor:"#F4F3EE"}} >
-            <Typography align="center" style={{padding:"4px"}} >Welcome to ATALANTA Football Club,where you can get 
+            <Typography align="center" style={{padding:"4px"}} >Welcome to Brentford Football Club,where you can get 
             the best Odds in the European Betting Market
             </Typography>
           </Paper>

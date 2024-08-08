@@ -89,7 +89,7 @@ export default function Transaction() {
           <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '500' }}>Recent Transactions</Typography>
           <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>See All</Typography>
         </Stack>
-        <Divider sx={{ background: 'black', borderBottomWidth: '2px' }} />
+        <Divider sx={{ background: 'E9E5DA', borderBottomWidth: '2px' }} />
         {
           trans.map((t) => {
             let date = new Date(t.time);
@@ -99,12 +99,12 @@ export default function Transaction() {
               <Stack direction="row" spacing={2} justifyContent="space-between" alignItems='center' sx={{ padding: '8px' }} key={t.id}>
                 <Image src={Rd} width={40} height={40} alt='rounds' />
                 <Stack direction='column' alignItems='start' sx={{ width: '196px' }}>
-                  <Typography style={{ color: 'black', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>{(t.method === 'usdt') ? 'USDT' : (t.method === 'gpay') ? 'Gpay' : 'Mobile Money'}
+                  <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>{(t.method === 'usdt') ? 'USDT' : (t.method === 'gpay') ? 'Gpay' : 'Mobile Money'}
                   </Typography>
-                  <Typography style={{ color: 'black', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{month} {date.getDate()}</Typography>
+                  <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{month} {date.getDate()}</Typography>
 
                 </Stack>
-                <Typography style={{ color: 'black', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{t.amount} {(t.method === 'usdt') ? 'USDT' : (t.method === 'gpay') ? '₹' : 'Kwacha'}</Typography>
+                <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{t.amount} {(t.method === 'usdt') ? 'USDT' : (t.method === 'gpay') ? '₹' : 'Kwacha'}</Typography>
               </Stack>
             )
           })

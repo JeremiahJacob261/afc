@@ -14,7 +14,7 @@ import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import { Form as Farm } from 'react-bootstrap'
 import { getCookies, getCookie, setCookie, setCookies, removeCookies } from 'cookies-next';
-import LOGO from '../../public/logo_afc.ico'
+import LOGO from '../../public/brentford.ico'
 import Image from 'next/image'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -309,7 +309,7 @@ export default function Register({ refer }) {
       <Head>
         <title>Register</title>
         <meta name="description" content="Register With us to get the latest betting market and fantantic Bonus" />
-        <link rel="icon" href="/logo_afc.ico" />
+        <link rel="icon" href="/brentford.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Box >
@@ -323,25 +323,25 @@ export default function Register({ refer }) {
             sx={{ height: "100%", marginTop: "15px", padding: "10px", backgound: "#495265" }}>
             <Stack direction="column" spacing={4} justifyContent="center" alignItems="center">
               <Link href="/" style={{ textDecoration: "none" }}>
-                <Typography style={{ fontFamily: 'Noto Serif, serif', color: "#E5E7EB", fontWeight: '400', fontSize: '20px' }}>BFC  </Typography>
+                <Typography style={{ fontFamily: 'Noto Serif, serif', color: "#242627", fontWeight: '400', fontSize: '20px' }}>BFC  </Typography>
               </Link>
-              <Typography style={{ fontFamily: 'Poppins,sans-serif', color: '#E5E7EB', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
+              <Typography style={{ fontFamily: 'Poppins,sans-serif', color: '#242627', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
                 Sign up now and get a welcome bonus!
               </Typography>
-              <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: '#E5E7EB', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
+              <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: '#242627', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
                 Enter the correct information provided to create an account
               </Typography>
             </Stack>
 
             <TextField id="outlined-basic" label="Username" variant="outlined"
-              sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #E5E7EB', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#E5E7EB', } }}
+              sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #242627', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#242627', } }}
               value={username}
               onChange={(e) => {
                 setUsername(e.target.value)
               }}
             />
             <TextField id="outlined-basic" label="Email" variant="outlined"
-              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #E5E7EB', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#E5E7EB' } }}
+              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #242627', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#242627' } }}
               value={email}
               type='email'
               onChange={(e) => {
@@ -351,7 +351,7 @@ export default function Register({ refer }) {
             <TextField id="outlined-basic" label="Invite Code" variant="outlined"
               value={idR}
               disabled
-              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #E5E7EB', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%",color: '#E5E7EB', background: '#172242', input: { color: '#E5E7EB' } }}
+              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #242627', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%",color: '#242627', background: '#172242', input: { color: '#242627' } }}
               onChange={(e) => {
                 setidR(e.target.value)
               }} />
@@ -362,7 +362,7 @@ export default function Register({ refer }) {
                 id="demo-simple-select"
                 value={age}
                 label="+91"
-                sx={{ fontSize: '14', color: '#E5E7EB', fontWeight: '300', border: '1px solid #E5E7EB', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#E5E7EB' } }}
+                sx={{ fontSize: '14', color: '#242627', fontWeight: '300', border: '1px solid #242627', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#242627' } }}
                 onChange={(e) => {
                   setAge(e.target.value);
                 }}
@@ -371,7 +371,7 @@ export default function Register({ refer }) {
                 {
                   codes.countries.map((c) => {
                     return (
-                      <MenuItem value={c.code} key={c.name} sx={{ color: '#E5E7EB', background: '#172242' }}>
+                      <MenuItem value={c.code} key={c.name} sx={{ color: '#242627', background: '#172242' }}>
                         <Stack direction='row' spacing={1}>
                           <Image src={c.flag_image_link} alt={c.name} width={25} height={22}/>
                         <Typography sx={{fontFamily: 'Poppins, sans-serif'}}> {c.code} {c.name}</Typography>
@@ -394,7 +394,7 @@ export default function Register({ refer }) {
             <TextField id="outlined-basic" label="Phone"
               type="number"
               variant="outlined"
-              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #E5E7EB', color: '#E5E7EB', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#E5E7EB' } }}
+              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #242627', color: '#242627', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#242627' } }}
               value={phone}
               onChange={(e) => {
                 setPhone(e.target.value);
@@ -407,7 +407,7 @@ export default function Register({ refer }) {
                 type={values.showPassword ? 'text' : 'password'}
                 value={values.password}
                 onChange={handleChange('password')}
-                sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #E5E7EB', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#E5E7EB' } }}
+                sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #242627', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#242627' } }}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -416,7 +416,7 @@ export default function Register({ refer }) {
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
                     >
-                      {values.showPassword ? <VisibilityOff sx={{ color: '#E5E7EBsmoke' }} /> : <Visibility sx={{ color: '#E5E7EB' }} />}
+                      {values.showPassword ? <VisibilityOff sx={{ color: '#242627smoke' }} /> : <Visibility sx={{ color: '#242627' }} />}
                     </IconButton>
                   </InputAdornment>
                 }
@@ -428,7 +428,7 @@ export default function Register({ refer }) {
               id="outlined-required"
               label="Confirm Password"
               type="password"
-              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #E5E7EB', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#E5E7EB' } }}
+              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #242627', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#242627' } }}
               value={cpassword}
               onChange={(e) => {
                 setcPassword(e.target.value);
@@ -440,12 +440,12 @@ export default function Register({ refer }) {
               type="checkbox"
               label="Do you accept our Terms and Conditions ?"
               id="age"
-              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #E5E7EB', borderRadius: '4px', fontFamily: 'Poppins, sans-serif' }}
+              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #242627', borderRadius: '4px', fontFamily: 'Poppins, sans-serif' }}
               value={agecheck}
               onChange={(a) => {
                 setAgecheck(a.target.value)
               }}
-              style={{ color: "#E5E7EB" }}
+              style={{ color: "#242627" }}
             />
             <Button variant="contained" sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', background: '#FE9D16' }}
               onClick={() => {
@@ -480,12 +480,12 @@ export default function Register({ refer }) {
                   Alerts('Please Input a Complete Phone Number! at least 9 digits', false)
                 }
               }}>
-              <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: '#03045E', fontSize: '14px', color: '#E5E7EB' }}>Register</Typography>
+              <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: '#03045E', fontSize: '14px', color: '#242627' }}>Register</Typography>
             </Button>
             <Stack direction="row" alignItems="center" justifyContent="center" sx={{ height: '22px' }} spacing={1}>
-              <Typography sx={{ color: "#E5E7EB", fontSize: '14px', fontWeight: '100', opacity: '0.7', fontFamily: 'Poppins,sans-serif' }}>Already have an Account ? </Typography>
+              <Typography sx={{ color: "#242627", fontSize: '14px', fontWeight: '100', opacity: '0.7', fontFamily: 'Poppins,sans-serif' }}>Already have an Account ? </Typography>
               <Typography>
-                <Link href="/login" style={{ textDecoration: "none", fontSize: '14px', fontWeight: '100', color: "#E5E7EB", opacity: '1.0', fontFamily: 'Poppins,sans-serif' }}>Login</Link></Typography>
+                <Link href="/login" style={{ textDecoration: "none", fontSize: '14px', fontWeight: '100', color: "#242627", opacity: '1.0', fontFamily: 'Poppins,sans-serif' }}>Login</Link></Typography>
 
             </Stack>
           </Stack>
@@ -511,7 +511,7 @@ export default function Register({ refer }) {
         aria-describedby="modal-modal-description"
       >
         <Stack alignItems='center' justifyContent='space-evenly' sx={{
-          background: '#E5E7EB', width: '290px', height: '330px', borderRadius: '20px',
+          background: '#242627', width: '290px', height: '330px', borderRadius: '20px',
           position: 'absolute',
           top: '50%',
           left: '50%',
@@ -526,8 +526,8 @@ export default function Register({ refer }) {
           <Typography id="modal-modal-description" sx={{ fontFamily: 'Poppins,sans-serif', mt: 2, fontSize: '14px', fontWeight: '300' }}>
             {ale}
           </Typography>
-          <Divider sx={{ background: 'black' }} />
-          <Button variant='contained' sx={{ fontFamily: 'Poppins,sans-serif', color: '#E5E7EB', background: '#03045E', padding: '8px', width: '100%' }} onClick={() => {
+          <Divider sx={{ background: 'E9E5DA' }} />
+          <Button variant='contained' sx={{ fontFamily: 'Poppins,sans-serif', color: '#242627', background: '#03045E', padding: '8px', width: '100%' }} onClick={() => {
             if (aleT) {
               setOpen(false)
               route.push('/user')

@@ -114,17 +114,17 @@ export default function Deposit() {
   //end of snackbar2
   return (
     <Stack spacing={3} sx={{ padding: '8px' }}>
-      <CloseIcon style={{ color: '#E5E7EB', margin: '12px', width: '50px', height: '50px' }}
+      <CloseIcon style={{ color: '#242627', margin: '12px', width: '50px', height: '50px' }}
         onClick={() => {
           router.push('/user/account')
         }}
       />
       <div style={{ display: 'flex', justifyContent: "center" }}>
 
-        <Typography variant="h4" align='center' style={{ color: '#E5E7EB', fontFamily: 'Poppins, sans-serif' }}>
+        <Typography variant="h4" align='center' style={{ color: '#242627', fontFamily: 'Poppins, sans-serif' }}>
           Withdrawal
         </Typography></div>
-      <Typography style={{ color: '#E5E7EB', fontFamily: 'Poppins, sans-serif' }}>
+      <Typography style={{ color: '#242627', fontFamily: 'Poppins, sans-serif' }}>
         Please note that the minimum withdraw is 20 USDT,
         there is a 5% fee charge on every Withdrawal.
       </Typography>
@@ -135,7 +135,7 @@ export default function Deposit() {
       <Typography style={{ color: '#DBE9EE', fontFamily: 'Poppins, sans-serif' }}>Available Account Balance : {Number(info.balance).toFixed(2)} USDT</Typography>
       <div style={{ display: 'grid', justifyContent: 'center', minWidth: '300px' }}>
         <TextField variant="standard" label='Enter Your USDT Address or Gpay account number'
-          style={{ color: "#E5E7EB", background: "#DADDD8", minWidth: '300px', margin: '8px', padding: '5px', fontFamily: 'Poppins,sans-serif', fontSize: '14px' }}
+          style={{ color: "#242627", background: "#DADDD8", minWidth: '300px', margin: '8px', padding: '5px', fontFamily: 'Poppins,sans-serif', fontSize: '14px' }}
           value={address}
           helperText={warnad}
           onChange={(a) => {
@@ -149,7 +149,7 @@ export default function Deposit() {
         />
         <TextField variant="standard" label='Enter the Amount you wish to Withdraw'
           helperText={warnab}
-          style={{ color: "#E5E7EB", background: "#DADDD8", minWidth: '300px', margin: '8px', padding: '5px', fontFamily: 'Poppins,sans-serif', fontSize: '14px' }}
+          style={{ color: "#242627", background: "#DADDD8", minWidth: '300px', margin: '8px', padding: '5px', fontFamily: 'Poppins,sans-serif', fontSize: '14px' }}
           type="number"
           value={amount}
           onChange={(a) => {
@@ -174,7 +174,7 @@ export default function Deposit() {
           </FormControl>
       </div>
 
-      <Button variant="contained" style={{ color: "#E5E7EB" }} onClick={() => {
+      <Button variant="contained" style={{ color: "#242627" }} onClick={() => {
         if (info.balance < total) {
           alert('Insufficient Balance')
         } else {

@@ -96,7 +96,7 @@ export default function Bets() {
       <Head>
         <title>BFC - My Bets </title>
         <meta name="description" content="View Your Recents Betslips" />
-        <link rel="icon" href="/logo_afc.ico" />
+        <link rel="icon" href="/brentford.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div style={{ color: "#03045E", minHeight: '90vh' }}>
@@ -112,8 +112,8 @@ export default function Bets() {
       <TabContext value={value}>
         <Stack sx={{ borderBottom: 1, borderColor: 'divider' }} justifyContent='center'>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="Active Bets" value="1" sx={{ color: 'black', width: '50%' }} />
-            <Tab label="Finished Bets" value="2" sx={{ color: 'black', width: '50%' }} />
+            <Tab label="Active Bets" value="1" sx={{ color: 'E9E5DA', width: '50%' }} />
+            <Tab label="Finished Bets" value="2" sx={{ color: 'E9E5DA', width: '50%' }} />
           </TabList>
         </Stack>
         <TabPanel value="1">

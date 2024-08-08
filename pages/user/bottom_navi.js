@@ -1,15 +1,13 @@
 import React,{useContext} from "react"
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import { Icon }from '@iconify/react'
-import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
-import EuroIcon from '@mui/icons-material/Euro';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import { Paper, Box, Badge } from '@mui/material'
-import LoginIcon from '@mui/icons-material/Login';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
+import Profile from '../../public/profile.png';
+import Image from 'next/image'
+ 
 function BottomNavi() {
   const [value, setValue] = React.useState(0);
   const router = useRouter()
@@ -33,14 +31,14 @@ function BottomNavi() {
         onChange={(event, newValue) => {
           setValue(newValue);
         }}
-        sx={{background:'#E5E7EB',position:'fixed',bottom:0,left:0,width:'100%'}}
+        sx={{background:'#242627',position:'fixed',height:'72px',bottom:0,left:0,width:'100%'}}
       >
-        <BottomNavigationAction label="Top" onClick={home} icon={<HomeOutlinedIcon style={{width:"20px"}}/>} sx={{width:"40px",color:"black"}}/>
-        <BottomNavigationAction label="Matches" onClick={matches} icon={<Icon icon="ion:football-outline" width="24" height="24"  style={{color: "rgba(0, 0, 0, 0.7)"}} />} sx={{width:"40px",color:"black"}}/>
-        <BottomNavigationAction label="My Bets" onClick={bets} icon={
-          <ManageAccountsIcon />
-        } sx={{width:"40px",color:"black"}}/>
-        <BottomNavigationAction label="Profile" onClick={me} icon={<AccountBoxIcon />} sx={{width:"40px",color:"black"}}/>
+        <BottomNavigationAction label={<p style={{ padding:0,margin:0,fontFamily:'Poppins,san-serif',color:'#D9D9D9' }}>Top</p>} onClick={home} icon={<Icon icon="ri:home-line" width="24" height="24"  style={{color: "#D9D9D9"}} />} sx={{width:"40px",color:"E9E5DA"}}/>
+        <BottomNavigationAction label={<p style={{ padding:0,margin:0,fontFamily:'Poppins,san-serif',color:'#D9D9D9' }}>Matches</p>} onClick={matches} icon={<Icon icon="ion:football-outline" width="24" height="24"  style={{color: "#D9D9D9"}} />} sx={{width:"40px",color:"E9E5DA"}}/>
+        <BottomNavigationAction label={<p style={{ padding:0,margin:0,fontFamily:'Poppins,san-serif',color:'#D9D9D9' }}>My Bets</p>} onClick={bets} icon={
+          <Icon icon="mdi:clipboard-text-history-outline" width="24" height="24"  style={{color: "#D9D9D9"}} />
+        } sx={{width:"40px",color:"E9E5DA"}}/>
+        <BottomNavigationAction label={<p style={{ padding:0,margin:2,fontFamily:'Poppins,san-serif',color:'#D9D9D9' }}>Profile</p>} onClick={me} icon={<Image src={Profile} style={{ width:'26px',height:'26px',padding:0,margin:0}} width="24px" height="24px" alt="profile" />} sx={{width:"40px",color:"E9E5DA"}}/>
       </BottomNavigation>
 
     </Box>

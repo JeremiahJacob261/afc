@@ -38,7 +38,7 @@ const tronWeb = new TronWeb(
                                 Players must be 18 or older to register or play at BFC . Plase ensure that users follow the company daily release game plan to ensure return of investment fund when the game is lost.
 
                             </Typography>
-                            <Typography style={{ width: '193px', color: '#E5E7EB', fontWeight: '400', fontFamily: "Poppins, sans-serif", fontSize: '14px' }}>
+                            <Typography style={{ width: '193px', color: '#242627', fontWeight: '400', fontFamily: "Poppins, sans-serif", fontSize: '14px' }}>
                                 Payment Methods
                             </Typography>
                             <Stack direction="row" spacing={3}>

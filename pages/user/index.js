@@ -8,7 +8,6 @@ import Image from "next/image";
 import Link from 'next/link'
 import { Button, Typography, Paper, Divider } from "@mui/material";
 import { supabase } from '../api/supabase'
-import Carousel from 'react-bootstrap/Carousel';
 import Agent from '../../public/afc1.jpg'
 import Agent1 from '../../public/afc2.jpg'
 import Agent2 from '../../public/afc2.jpg'
@@ -16,16 +15,20 @@ import Agent3 from '../../public/afc3.jpg'
 import Agent4 from '../../public/afc4.jpg'
 import front from '../../public/front.png'
 import fire from '../../public/Group 2.png'
-import WhatshotIcon from '@mui/icons-material/Whatshot';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import Ims from '../../public/simps/ball.png'
 import { app } from '../api/firebase';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
 import Backdrop from '@mui/material/Backdrop';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+
 
 export default function Home() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -103,12 +106,12 @@ export default function Home() {
 
   const router = useRouter()
   return (
-    <Stack justifyContent="center" alignItems="center"
-      style={{ background: "#E5E7EB", marginBottom: "50px" }}
+    <Stack justifyContent="start" alignItems="center"
+      style={{ background: "#242627", marginBottom: "50px",minHeight:'95vh', }}
     >
 
 
-      <Cover sx={{ background: '#E5E7EB', width: '100vh', height: '100vh' }}>
+      <Cover sx={{ background: '#242627', minWidth: '100%', height: '100vh' }}>
         <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={drop}
@@ -117,61 +120,53 @@ export default function Home() {
         </Backdrop>
         <Head>
           <title>Welcome - {info ? `${info.username}` : 'Loading...'}</title>
-          <link rel="icon" href="/logo_afc.ico" />
+          <link rel="icon" href="/brentford.ico" />
         </Head>
-        <Stack sx={{ background: "#E5E7EB", marginTop: '10px', maxWidth: '350px' }} spacing={4} justifyContent='center' >
-          <Typography style={{ fontSize: '16px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '5px', width: '100%', textAlign: 'left', color: 'black' }}>Hello {info ? `${info.username}` : 'Loading...'}</Typography>
-          <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ background: '#F5E663', padding: '8px', borderRadius: '10px' }}>
-            <Stack>
-              <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'black' }}>Current Balance </Typography>
-              <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'black' }}>{info ? ` ${balance.toFixed(3)}` : '0'} USDT</Typography>
-            </Stack>
-            <Link href='/user/fund' style={{ textDecoration: "none", color: 'white' }}>
-              <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#0A369D', borderRadius: '20px', padding: '8px', width: '95px', height: '32px' }}>
-                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: 'white', fontSize: '12px' }}>
-                  Deposit
-                </Typography>
-                <KeyboardArrowRightIcon sx={{ width: '16px', height: '16px' }} />
+        <Stack sx={{ background: "#242627", marginTop: '10px', minWidth: '350px',maxWidth:'450px' }} spacing={2} justifyContent='center' >
+
+          <Stack direction="column" spacing={1} sx={{ background: '#373636', padding: '12px', borderRadius: '10px' }}>
+            <Typography style={{ fontSize: '16px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', textAlign: 'left', color: '#E9E5DA' }}>Hello {info ? `${info.username}` : 'Loading...'},</Typography>
+            <Stack direction='row' justifyContent='space-between' alignItems='center' >
+              <Stack>
+                <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>Current Balance </Typography>
+                <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>{info ? ` ${balance.toFixed(3)}` : '0'} USDT</Typography>
               </Stack>
-            </Link>
+              <Link href='/user/fund' style={{ textDecoration: "none", color: 'white' }}>
+                <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#E94E55', borderRadius: '20px', padding: '8px', width: '95px', height: '32px' }}>
+                  <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: 'white', fontSize: '12px' }}>
+                    Deposit
+                  </Typography>
+                  <KeyboardArrowRightIcon sx={{ width: '16px', height: '16px' }} />
+                </Stack>
+              </Link>
+            </Stack>
           </Stack>
-          <Divider sx={{ background: 'black' }} />
-          {/* Carousel */}
-          <Carousel>
-            <Carousel.Item>
-              <Image src={Agent} width={344} height={137} alt='invitation bonus' sx={{ borderRadius: '15px' }} />
+          <Divider sx={{ background: '#E9E5DA' }} />
 
-            </Carousel.Item>
-            <Carousel.Item>
-              <Image src={Agent1} width={344} height={137} alt='invitation bonus' sx={{ borderRadius: '15px' }} />
+          <Stack sx={{ width: '300px' }} justifyContent='center' alignItems='center'>
+            <Carousel>
+              <CarouselContent>
+                <CarouselItem><Image src={Agent} width={354} height={140} alt="bonus" /></CarouselItem>
+                <CarouselItem><Image src={Agent} width={354} height={140} alt="bonus" /></CarouselItem>
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </Stack>
 
-            </Carousel.Item>
-            <Carousel.Item>
-              <Image src={Agent2} width={344} height={137} alt='invitation bonus' sx={{ borderRadius: '15px' }} />
 
-            </Carousel.Item>
-            <Carousel.Item>
-              <Image src={Agent3} width={344} height={137} alt='invitation bonus' sx={{ borderRadius: '15px' }} />
-
-            </Carousel.Item>
-            <Carousel.Item>
-              <Image src={Agent4} width={344} height={137} alt='invitation bonus' sx={{ borderRadius: '15px' }} />
-
-            </Carousel.Item>
-          </Carousel>
-          {/* end Carousel */}
           <Stack direction='row' justifyContent='space-between' alignItems='center'>
             <Stack direction='row' spacing={1}>
               <Image src={fire} width={24} height={24} />
-              <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '16px', fontWeight: '600' }}>Top Football Matches</Typography>
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '16px', fontWeight: '600' }}>Top Football Matches</Typography>
             </Stack>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>see all</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>see all</Typography>
           </Stack>
           <Stack direction='row' spacing={1}>
-            <Stack sx={{ background: '#F5E663', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>This Week</Typography></Stack>
-            <Stack sx={{ background: '#03045E', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E5E7EB', fontSize: '12px', fontWeight: '100' }}>Today</Typography></Stack>
-            <Stack sx={{ background: '#F5E663', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>Next 3 hrs</Typography></Stack>
-            <Stack sx={{ background: '#F5E663', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>Next 30 mins</Typography></Stack>
+            <Stack sx={{ background: '#CACACA', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#000000', fontSize: '12px', fontWeight: '100' }}>This Week</Typography></Stack>
+            <Stack sx={{ background: '#E94E55', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>Today</Typography></Stack>
+            <Stack sx={{ background: '#CACACA', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#000000', fontSize: '12px', fontWeight: '100' }}>Next 3 hrs</Typography></Stack>
+            <Stack sx={{ background: '#CACACA', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#000000', fontSize: '12px', fontWeight: '100' }}>Next 30 mins</Typography></Stack>
           </Stack>
 
           <Stack alignItems='center'>
@@ -200,22 +195,22 @@ export default function Home() {
                       router.push("/user/match/" + pro.match_id)
                     }}>
                     <Stack direction='column'>
-                      <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{league} </Typography>
-                      <Divider sx={{ background: 'black' }} />
+                      <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{league} </Typography>
+                      <Divider sx={{ background: 'E9E5DA' }} />
                     </Stack>
                     <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
                       <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                         <Image src={pro.ihome ? pro.ihome : Ims} width={65} height={50} />
-                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
+                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
                       </Stack>
                       <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
+                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
                         <p>|</p>
-                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
+                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
                       </Stack>
                       <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                         <Image src={pro.iaway ? pro.iaway : Ims} width={65} height={50} />
-                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{pro.away}</Typography>
+                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '12px', fontWeight: '100' }}>{pro.away}</Typography>
                       </Stack>
                     </Stack>
                     <Stack direction='row' spacing={2} >
@@ -238,13 +233,7 @@ export default function Home() {
             }
           </Stack>
 
-          <Button style={{ background: '#181AA9', color: '#E5E7EB', borderRadius: '5px', width: '100%', height: '57px' }}
-            onClick={() => {
-              router.push('/user/matches')
-            }}
-          >
-            See More Matches
-          </Button>
+          
           <Stack>
 
           </Stack>

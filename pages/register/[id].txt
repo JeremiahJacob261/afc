@@ -19,7 +19,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import {Form as Farm} from 'react-bootstrap'
 import SimpleDialog from '../modal'
 import { getCookies, getCookie, setCookie,setCookies, removeCookies } from 'cookies-next';
-import LOGO from '../../public/logo_afc.ico'
+import LOGO from '../../public/brentford.ico'
 import Image from 'next/image'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -107,7 +107,7 @@ batch.set(updateRef, {"count": data.count+1});
        <Head>
         <title>Register</title>
         <meta name="description" content="Register With us to get the latest betting market and fantantic Bonus" />
-        <link rel="icon" href="/logo_afc.ico" />
+        <link rel="icon" href="/brentford.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
        </Head>
        <Box >

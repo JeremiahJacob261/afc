@@ -27,11 +27,11 @@ export default function Matches({ footDat }) {
       <Head>
         <title>BFC - Matches</title>
         <meta name="description" content="See the Best Matches Provided By BFC- " />
-        <link rel="icon" href="/logo_afc.ico" />
+        <link rel="icon" href="/brentford.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div style={{
-        minWidth: '370px', maxWidth: "450px", background: "#E5E7EB", minHeight: '90vh'
+        minWidth: '370px', maxWidth: "450px", background: "#242627", minHeight: '90vh'
       }}>
         <Stack >
         <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
@@ -67,21 +67,21 @@ export default function Matches({ footDat }) {
                   }}>
                   <Stack direction='column'>
                     <Typography style={{ color: '#02182B', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{league} </Typography>
-                    <Divider sx={{ background: 'black' }} />
+                    <Divider sx={{ background: 'E9E5DA' }} />
                   </Stack>
                   <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
                     <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                       <Image src={pro.ihome ? pro.ihome : Ims} width={65} height={50} alt='home' />
-                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
+                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
                     </Stack>
                     <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
+                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
                       <p>|</p>
-                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
+                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
                     </Stack>
                     <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                       <Image src={pro.iaway ? pro.iaway : Ims} width={65} height={50} alt='away' />
-                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }}>{pro.away}</Typography>
+                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '12px', fontWeight: '100' }}>{pro.away}</Typography>
                     </Stack>
                   </Stack>
                   <Stack direction='row' spacing={2} >

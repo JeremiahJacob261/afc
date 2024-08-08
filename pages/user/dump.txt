@@ -39,7 +39,7 @@ export default function Deposit() {
   const [dea, setDea] = useState("visible")
   const [deb, setDeb] = useState("hidden")
   const auth = getAuth(app);
-  const storage =  getStorage(app,"gs://atalanta-77824.appspot.com");
+  const storage =  getStorage(app,"gs://Brentford-77824.appspot.com");
   const [drop, setDrop] = useState(false)
   const router = useRouter()
   const [dean, setDean] = useState(200)
@@ -166,10 +166,10 @@ checkDepo(url);
           />
           <div style={{ display: 'flex', justifyContent: "center", padding: '5px', background: '#1A1B72' }}>
 
-            <Typography align='center' style={{ color: '#E5E7EB', fontFamily: 'Poppins, sans-serif', fontSize: '30px' }}>
+            <Typography align='center' style={{ color: '#242627', fontFamily: 'Poppins, sans-serif', fontSize: '30px' }}>
               Deposit
             </Typography></div>
-          <Typography style={{ color: '#E5E7EB' }}>
+          <Typography style={{ color: '#242627' }}>
             {(method === 'usdt') ? 'Please note that the minimum deposit is 10 USDT' : 'Please note that the minimum deposit is 830 ₹'}
            
           </Typography>
@@ -189,7 +189,7 @@ checkDepo(url);
               }}
               helperText={amthelp}
               sx={{
-                background: "#E5E7EBsmoke"
+                background: "#242627smoke"
               }}
             />
             <Button
@@ -223,18 +223,18 @@ checkDepo(url);
           <Stack direction="column" spacing={3} sx={{
             visibility: deb,
           }}>
-            <Typography style={{color: "#E5E7EBsmoke",display:(method === 'usdt') ? 'visible' : 'none'}}>ADDRESS NETWORK: TRC20</Typography>
-            <Typography style={{ color: "#E5E7EBsmoke" }}> {(method === 'usdt') ? 'Send Your USDT to this Address : ' : 'Scan this Barcode to deposit your Indian Rupees :'} </Typography>
+            <Typography style={{color: "#242627smoke",display:(method === 'usdt') ? 'visible' : 'none'}}>ADDRESS NETWORK: TRC20</Typography>
+            <Typography style={{ color: "#242627smoke" }}> {(method === 'usdt') ? 'Send Your USDT to this Address : ' : 'Scan this Barcode to deposit your Indian Rupees :'} </Typography>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <Image src={(method === 'usdt') ? barcode : gpaypay } width={200} height={200} alt='TRC20 Address' style={{ padding: '12px', background: '#E5E7EBsmoke', borderRadius: '5px' }}
+              <Image src={(method === 'usdt') ? barcode : gpaypay } width={200} height={200} alt='TRC20 Address' style={{ padding: '12px', background: '#242627smoke', borderRadius: '5px' }}
               /></div>
-            <Typography style={{ color: "black", background: "#E5E7EBsmoke", padding: "4px", cursor: "pointer" }} onClick={() => {
+            <Typography style={{ color: "E9E5DA", background: "#242627smoke", padding: "4px", cursor: "pointer" }} onClick={() => {
               navigator.clipboard.writeText((method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : 'Scan Barcode')
               setMessages("Address Copied")
               handleClick();
             }}>{(method === 'usdt') ? 'TRGvFAEiuwW7cuYJA3dsqRQwazCRwgnA8o' : 'Scan Barcode to pay' }</Typography>
 
-            <Typography variant="caption" sx={{ color: "#E5E7EBsmoke" }}>Click the Address to Copy</Typography>
+            <Typography variant="caption" sx={{ color: "#242627smoke" }}>Click the Address to Copy</Typography>
             <Typography variant="caption" sx={{ color: "#FFE74C" }}>
               
               {(method === 'usdt') ? 'The Minimum Deposit is 10 USDT ,Deposits less than 10 USDT will be ignored.' : 'The Minimum Deposit is 830 ₹, Deposits less than 830 ₹ will be ignored.'}
@@ -244,7 +244,7 @@ checkDepo(url);
                 setfile(e.target.files[0]);
                 console.log(e.target.files[0].name);
               }} />
-              <Button variant='contained'  style={{ color: "#E5E7EB" }} onClick={() => {
+              <Button variant='contained'  style={{ color: "#242627" }} onClick={() => {
                 if(file.length === 0){
                   alert('Please Upload an Image')
                 }else{
@@ -255,7 +255,7 @@ checkDepo(url);
                 }
               }}>Verify Transaction</Button>
 
-            <Typography variant="caption" style={{ color: "#E5E7EB" }} >Click this Button within 20Mins after depositing to Verify.
+            <Typography variant="caption" style={{ color: "#242627" }} >Click this Button within 20Mins after depositing to Verify.
               Failure To Verify the Transaction will result in Lost Funds</Typography>
           </Stack>
         </Stack>
@@ -274,12 +274,12 @@ checkDepo(url);
       <Head>
         <title>Deposit</title>
         <meta name="description" content="Get a percentage bonus on your first deposit" />
-        <link rel="icon" href="/logo_afc.ico" />
+        <link rel="icon" href="/brentford.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Sncks message={messages} />
       <Stack direction="column" spacing={3} alignItems="center">
-        <CloseIcon style={{ color: 'black', margin: '12px', width: '50px', height: '50px' }}
+        <CloseIcon style={{ color: 'E9E5DA', margin: '12px', width: '50px', height: '50px' }}
           onClick={() => {
             router.push('/user/inputvalue')
           }}
@@ -287,10 +287,10 @@ checkDepo(url);
         <Stack>
           <div style={{ display: 'flex', justifyContent: "center", padding: '5px' }}>
 
-            <Typography align='center' style={{ color: 'black', fontFamily: 'Poppins, sans-serif', fontSize: '36px', fontWeight: 'bold' }}>
+            <Typography align='center' style={{ color: 'E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '36px', fontWeight: 'bold' }}>
               DEPOSIT
             </Typography></div>
-          <Typography align='center' style={{ color: 'black', fontFamily: 'Poppins, sans-serif', fontSize: '16px' }}>
+          <Typography align='center' style={{ color: 'E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '16px' }}>
             Choose Preferred Payment Method
           </Typography>
         </Stack>
@@ -304,7 +304,7 @@ checkDepo(url);
             <Stack direction="column" spacing={2} justifyContent="center" alignItems='center'>
 
               <Image src={usdt} alt='usdt' width={90} height={70} />
-              <Typography sx={{ color: 'black' }}>
+              <Typography sx={{ color: 'E9E5DA' }}>
                 USDT
               </Typography>
             </Stack>
@@ -320,7 +320,7 @@ checkDepo(url);
             <Stack direction="column" spacing={2} justifyContent="center" alignItems='center'>
 
               <Image src={gpay} alt='gpay' width={60} height={60} />
-              <Typography sx={{ color: '#E5E7EB' }}>
+              <Typography sx={{ color: '#242627' }}>
                 Gpay
               </Typography>
             </Stack>

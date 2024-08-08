@@ -14,9 +14,9 @@ function MyApp({ Component, pageProps }) {
   const [bets, setBets] = useState([])
   const [slip, setSlip] = useState(0)
   return (
-    <div style={{background: "#E5E7EB",height:'100%'}}>
-      <Component {...pageProps} style={{ background: "#E5E7EB" ,width:"100%",display:'flex'}} />
-      <Footer/>
+    <div style={{background: "#242627",height:'100%'}}>
+      <Component {...pageProps} style={{ background: "#242627" ,width:"100%",display:'flex'}} />
+      
 </div>
   )
 }

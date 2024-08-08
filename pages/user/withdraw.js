@@ -183,13 +183,13 @@ const { data, error } = await supabase
 
         <Stack direction="column" spacing={3}>
           <Stack spacing={1}> 
-            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'black'}}>Enter Gpay or USDT Wallet Address or Airtel Money Account Number</Typography>
+            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'E9E5DA'}}>Enter Gpay or USDT Wallet Address or Airtel Money Account Number</Typography>
             <TextField  sx={{color:'#03045E'}} value={address} onChange={(a) => {
               setAddress(a.target.value)
             }}/>
             </Stack>
             <Stack spacing={1}> 
-            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'black'}}>Enter Amount You Wish to Withdraw</Typography>
+            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'E9E5DA'}}>Enter Amount You Wish to Withdraw</Typography>
             <TextField 
             sx={{color:'#03045E'}}
             type="number"
@@ -200,7 +200,7 @@ const { data, error } = await supabase
             }}/>
             </Stack>
             <Stack spacing={1}> 
-            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'black'}}>Transaction Pin</Typography>
+            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'E9E5DA'}}>Transaction Pin</Typography>
             <TextField 
             sx={{color:'#03045E'}}
             type="password"
@@ -211,14 +211,14 @@ const { data, error } = await supabase
             </Stack>
 
             <Stack spacing={1}> 
-            <Typography sx={{fontSize:'12px',color:'#03045E',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'black'}}>Choose Prefered Payment Method</Typography>
+            <Typography sx={{fontSize:'12px',color:'#03045E',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'E9E5DA'}}>Choose Prefered Payment Method</Typography>
             <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Select your Withdrawal Method</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={method}
-              style={{  background: "#E5E7EB"}}
+              style={{  background: "#242627"}}
               onChange={(e) => {
                 console.log(e.target.value)
                 setMethod(e.target.value);
@@ -231,7 +231,7 @@ const { data, error } = await supabase
             </Select>
           </FormControl>
             </Stack>
-        <Button variant="contained" style={{ color: "#E5E7EB",height:'50px',background:'#03045E' }} onClick={() => {
+        <Button variant="contained" style={{ color: "#242627",height:'50px',background:'#03045E' }} onClick={() => {
           if (info.balance < total) {
             Alerts('Insufficient Balance',false);
           } else {
@@ -273,7 +273,7 @@ const { data, error } = await supabase
   aria-labelledby="modal-modal-title"
   aria-describedby="modal-modal-description"
 >
-  <Stack alignItems='center' justifyContent='space-evenly' sx={{background:'#E5E7EB',width:'290px',height:'330px',borderRadius:'20px',
+  <Stack alignItems='center' justifyContent='space-evenly' sx={{background:'#242627',width:'290px',height:'330px',borderRadius:'20px',
 position: 'absolute',
 top: '50%',
 left: '50%',
@@ -288,8 +288,8 @@ padding:'12px'
     <Typography id="modal-modal-description" sx={{mt: 2,fontSize:'14px',fontWeight:'300'}}>
      {ale}
     </Typography>
-    <Divider sx={{background:'black'}}/>
-    <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'#E5E7EB',background:'#03045E',padding:'8px',width:'100%'}} onClick={()=>{
+    <Divider sx={{background:'E9E5DA'}}/>
+    <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'#242627',background:'#03045E',padding:'8px',width:'100%'}} onClick={()=>{
       if(aleT){
         setOpen(false)
         router.push('/user/withdrawsuccess')
