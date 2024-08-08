@@ -19,7 +19,7 @@ import { Drawer } from '@mui/material'
 import { app } from '../../api/firebase';
 import Image from 'next/image'
 import Ims from '../../../public/simps/ball.png'
-import Depx from '../../../public/depx.png'
+// import Depx from '../../../public/depx.png'
 import Bal from '../../../public/bball.png'
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
@@ -467,9 +467,9 @@ const { data, error } = await supabase
                 <Divider sx={{ background: 'E9E5DA' }}/>
                 <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: 'E9E5DA',width:'210px' }}>Enter the amount you wish to stake</Typography>
-                            <Image src={Depx} alt="deposit" width={87} height={32} onClick={()=>{
+                            {/* <Image src={Depx} alt="deposit" width={87} height={32} onClick={()=>{
                                 router.push('/user/deposit')
-                            }}/>
+                            }}/> */}
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: 'E9E5DA' }}>Account Balance</Typography>
