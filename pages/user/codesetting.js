@@ -59,7 +59,7 @@ export default function Code(){
       <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#E94E55' }}>Please note that whatever pin you set is what you will always use to make withdrawals</Typography>
       </Stack>
       <Stack spacing={1} sx={{minWidth:'344px'}}> 
-            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'E9E5DA'}}>Enter Pin </Typography>
+            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'#CACACA'}}>Enter Pin </Typography>
             <TextField 
             sx={{color:'#03045E'}}
             value={pin}
@@ -71,7 +71,7 @@ export default function Code(){
             />
             </Stack>
             <Stack spacing={1} sx={{minWidth:'344px'}}> 
-            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'E9E5DA'}}>Confirm Pin </Typography>
+            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'#CACACA'}}>Confirm Pin </Typography>
             <TextField 
             sx={{color:'#03045E'}}
             label='Enter Pin'
@@ -115,7 +115,7 @@ export default function Code(){
         <Typography id="modal-modal-description" sx={{fontFamily:'Poppins,sans-serif',mt: 2,fontSize:'14px',fontWeight:'300'}}>
          {ale}
         </Typography>
-        <Divider sx={{background:'E9E5DA'}}/>
+        <Divider sx={{background:'#CACACA'}}/>
         <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'#242627',background:'#03045E',padding:'8px',width:'100%'}} onClick={()=>{
           if(aleT){
             setOpen(false)

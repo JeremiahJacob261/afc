@@ -112,8 +112,8 @@ export default function Bets() {
       <TabContext value={value}>
         <Stack sx={{ borderBottom: 1, borderColor: 'divider' }} justifyContent='center'>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="Active Bets" value="1" sx={{ color: 'E9E5DA', width: '50%' }} />
-            <Tab label="Finished Bets" value="2" sx={{ color: 'E9E5DA', width: '50%' }} />
+            <Tab label="Active Bets" value="1" sx={{ color: '#CACACA', width: '50%' }} />
+            <Tab label="Finished Bets" value="2" sx={{ color: '#CACACA', width: '50%' }} />
           </TabList>
         </Stack>
         <TabPanel value="1">

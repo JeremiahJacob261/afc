@@ -34,7 +34,7 @@ export default function Home() {
           alignItems='center' justifyContent="space-between">
           <div style={{ display: 'inline-flex', alignItems: 'center' }}>
             <Image src={Logos} width={30} height={46} alt='logo' />
-            <Typography style={{ fontSize: '13px', fontWeight: '600', color: 'E9E5DA', margin: '4px', fontFamily: 'Poppins, sans-serif' }}
+            <Typography style={{ fontSize: '13px', fontWeight: '600', color: '#CACACA', margin: '4px', fontFamily: 'Poppins, sans-serif' }}
              onClick={()=>{
               push('/',undefined,{locale:'es'})
             }}>

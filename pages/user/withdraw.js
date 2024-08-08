@@ -183,13 +183,13 @@ const { data, error } = await supabase
 
         <Stack direction="column" spacing={3}>
           <Stack spacing={1}> 
-            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'E9E5DA'}}>Enter Gpay or USDT Wallet Address or Airtel Money Account Number</Typography>
+            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'#CACACA'}}>Enter Gpay or USDT Wallet Address or Airtel Money Account Number</Typography>
             <TextField  sx={{color:'#03045E'}} value={address} onChange={(a) => {
               setAddress(a.target.value)
             }}/>
             </Stack>
             <Stack spacing={1}> 
-            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'E9E5DA'}}>Enter Amount You Wish to Withdraw</Typography>
+            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'#CACACA'}}>Enter Amount You Wish to Withdraw</Typography>
             <TextField 
             sx={{color:'#03045E'}}
             type="number"
@@ -200,7 +200,7 @@ const { data, error } = await supabase
             }}/>
             </Stack>
             <Stack spacing={1}> 
-            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'E9E5DA'}}>Transaction Pin</Typography>
+            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'#CACACA'}}>Transaction Pin</Typography>
             <TextField 
             sx={{color:'#03045E'}}
             type="password"
@@ -211,7 +211,7 @@ const { data, error } = await supabase
             </Stack>
 
             <Stack spacing={1}> 
-            <Typography sx={{fontSize:'12px',color:'#03045E',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'E9E5DA'}}>Choose Prefered Payment Method</Typography>
+            <Typography sx={{fontSize:'12px',color:'#03045E',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'#CACACA'}}>Choose Prefered Payment Method</Typography>
             <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Select your Withdrawal Method</InputLabel>
             <Select
@@ -288,7 +288,7 @@ padding:'12px'
     <Typography id="modal-modal-description" sx={{mt: 2,fontSize:'14px',fontWeight:'300'}}>
      {ale}
     </Typography>
-    <Divider sx={{background:'E9E5DA'}}/>
+    <Divider sx={{background:'#CACACA'}}/>
     <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'#242627',background:'#03045E',padding:'8px',width:'100%'}} onClick={()=>{
       if(aleT){
         setOpen(false)

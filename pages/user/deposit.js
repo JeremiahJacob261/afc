@@ -138,37 +138,37 @@ checkDepo(url);
       <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#E94E55' }}>Please note that the minimum deposit is {(method === 'usdt') ? '10 USDT' : (method === 'gpay') ? '830 Indian Rupees' : '210 Zambian Kwacha'}</Typography>
      </Stack>
         <Stack direction='column' spacing={1} sx={{minWidth:'344px'}}>
-          <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'E9E5DA'}}>Wallet Network Address</Typography>
+          <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'#CACACA'}}>Wallet Network Address</Typography>
           <Stack direction="row" spacing={2}  alignItems='center' sx={{ padding: '8px',background:'#EFEFEF',borderRadius:'10px' }}>
                   <Image src={Tet} width={40} height={40} alt='rounds'/>
                   <Stack direction='column' justifyContent='start' sx={{width:'196px'}}>
- <Typography style={{ color:'E9E5DA',fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>{(method === 'usdt') ? 'USDT' : (method === 'gpay') ? 'Gpay' : (method === 'airtel') ? 'Airtel Money Zambia' : 'MTN Money Zambia'}
+ <Typography style={{ color:'#CACACA',fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>{(method === 'usdt') ? 'USDT' : (method === 'gpay') ? 'Gpay' : (method === 'airtel') ? 'Airtel Money Zambia' : 'MTN Money Zambia'}
                    </Typography>
-                   <Typography style={{ color:'E9E5DA',fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{(method === 'usdt') ? 'TRC 20 Network' : (method === 'gpay') ? 'UPI ID' : 'Account Number'}</Typography>
+                   <Typography style={{ color:'#CACACA',fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{(method === 'usdt') ? 'TRC 20 Network' : (method === 'gpay') ? 'UPI ID' : 'Account Number'}</Typography>
                  </Stack>
                  </Stack>
         </Stack>
         <Stack direction='column' spacing={2} className='barcode' sx={{display:(method === 'usdt') ? 'visible' : (method === 'gpay') ? 'visible' : 'hidden'}}>
-        <Typography style={{ color:'E9E5DA',fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400',display:(method === 'usdt') ? 'visible' : (method === 'gpay') ? 'visible' : 'hidden' }}>Send {(method === 'usdt') ? 'USDT' : (method === 'gpay') ? 'Rupees' : 'Zambian Kwacha' } to this Address</Typography>
+        <Typography style={{ color:'#CACACA',fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400',display:(method === 'usdt') ? 'visible' : (method === 'gpay') ? 'visible' : 'hidden' }}>Send {(method === 'usdt') ? 'USDT' : (method === 'gpay') ? 'Rupees' : 'Zambian Kwacha' } to this Address</Typography>
         <Image src={(method === 'usdt') ? ubarcode : (method === 'gpay') ? gbarcode : '' } width={184} height={186} alt='barcode' sx={{display:(method === 'usdt') ? 'visible' : (method === 'gpay') ? 'visible' : 'hidden'}}/>
         </Stack>
         <Stack className='address' spacing={1} sx={{minWidth:'344px'}}>
-           <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'E9E5DA' }}>{(method === 'usdt') ? 'Address Link' : (method === 'gpay') ? 'UPI ID' : 'Account Number'}</Typography>
+           <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#CACACA' }}>{(method === 'usdt') ? 'Address Link' : (method === 'gpay') ? 'UPI ID' : 'Account Number'}</Typography>
            <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{height:'58px',background:'#EFEFEF',borderRadius:'5px',padding:'16px'}} spacing={2}>
             {/* 260964681705 */}
-      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'E9E5DA' }}>{(method === 'usdt') ? 'TMqYfYgpRgrDtxqJ4kTEh8MgCtvu4W4YPZ' : (method === 'gpay') ? 'Ashhar Jamal Jafri' : 'Suzyo Banda 260768246252'}</Typography>
+      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#CACACA' }}>{(method === 'usdt') ? 'TMqYfYgpRgrDtxqJ4kTEh8MgCtvu4W4YPZ' : (method === 'gpay') ? 'Ashhar Jamal Jafri' : 'Suzyo Banda 260768246252'}</Typography>
       <Image src={iCopy} width={20} height={20} alt='icopy' onClick={()=>{
         navigator.clipboard.writeText((method === 'usdt') ? 'TMqYfYgpRgrDtxqJ4kTEh8MgCtvu4W4YPZ' : (method === 'gpay') ? 'Ashhar Jamal Jafri' : '260768246252' )
       }}/>
       </Stack>
         </Stack>
         <Stack className='upload' spacing={1} sx={{minWidth:'344px'}}>
-           <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'E9E5DA' }}>Upload Transaction Details</Typography>
+           <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#CACACA' }}>Upload Transaction Details</Typography>
           <Stack justifyContent='center' alignItems='center' sx={{ width:'343px',height:'87px',background:'#242627',borderStyle:'dashed',borderRadius:'10px',border:'2px dashed #EFEFEF'}} 
           onClick={()=>{
              inputFile.current.click();
           }}> 
-          <InsertDriveFileIcon sx={{color:'E9E5DA', fontFamily: 'Poppins,sans-serif'}}/>
+          <InsertDriveFileIcon sx={{color:'#CACACA', fontFamily: 'Poppins,sans-serif'}}/>
           <input type='file' id='file' ref={inputFile} style={{display: 'none'}} 
           accept="image/*" onChange={(e) => {
                 setfile(e.target.files[0]);
@@ -181,11 +181,11 @@ checkDepo(url);
            <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{height:'58px',background:'#EFEFEF',borderRadius:'5px',padding:'16px'}} spacing={2}>
            <InsertDriveFileIcon sx={{color:'#03045E', fontFamily: 'Poppins,sans-serif'}}/>
            <Stack alignItems='start' justifyContent='start'>
-           <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'E9E5DA' }}>{file.name}</Typography>
-           <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'E9E5DA' }}>{file.size}</Typography>
+           <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#CACACA' }}>{file.name}</Typography>
+           <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#CACACA' }}>{file.size}</Typography>
       
            </Stack>
-      <ClearIcon sx={{width:'24px',height:'24px',color:'E9E5DA'}} onClick={()=>{
+      <ClearIcon sx={{width:'24px',height:'24px',color:'#CACACA'}} onClick={()=>{
         setfile([])
       }}/>
       </Stack>
@@ -229,7 +229,7 @@ padding:'12px'
     <Typography id="modal-modal-description" sx={{fontFamily:'Poppins,sans-serif',mt: 2,fontSize:'14px',fontWeight:'300'}}>
      {ale}
     </Typography>
-    <Divider sx={{background:'E9E5DA'}}/>
+    <Divider sx={{background:'#CACACA'}}/>
     <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'#242627',background:'#03045E',padding:'8px',width:'100%'}} onClick={()=>{
       if(aleT){
         setOpen(false)

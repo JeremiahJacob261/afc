@@ -94,7 +94,6 @@ const { data, error } = await supabase
           getReferCount();
           }catch(e){
             console.log(e)
-            alert('Please Check your Internet Connection and Refresh the Website')
           }
           
         }
@@ -202,8 +201,8 @@ const { data, error } = await supabase
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
             <Stack direction='row' alignItems='left' justifyContent='left' spacing={1} sx={{ width:'100%',margin:'5px' }} onClick={()=>{ router.push('/user/matches') }}>
-                <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} />
-                <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', width: '90%', textAlign: 'center' }}>Stake your bet</Typography>
+                <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px',color:'#CACACA' }} />
+                <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif',color:'#CACACA', fontWeight: '300', width: '90%', textAlign: 'center' }}>Stake your bet</Typography>
             </Stack>
 
 
@@ -211,62 +210,62 @@ const { data, error } = await supabase
 
                 style={{
                     marginBottom: "8px", padding: "18.5px",
-                    background: '#F5F5F5',
+                    background: '#373636',
                     width: '343px',
                     borderRadius: '5px',
                 }} >
                 <Stack direction='column'>
-                    <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{(matches.league === 'others') ? matches.otherl : matches.league} </Typography>
-                    <Divider sx={{ background: 'E9E5DA' }} />
+                    <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{(matches.league === 'others') ? matches.otherl : matches.league} </Typography>
+                    <Divider sx={{ background: '#CACACA' }} />
                 </Stack>
                 <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
                     <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                         <Image src={matches.ihome ? matches.ihome : Ims} width={50} height={50} alt='home' sx={{ borderRadius:'10px'}}/>
-                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '12px', fontWeight: '100' }}>{matches.home}</Typography>
+                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>{matches.home}</Typography>
                     </Stack>
                     <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
+                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
                         <p>|</p>
-                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
+                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
                     </Stack>
                     <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                         <Image src={matches.iaway ? matches.iaway : Ims} width={50} height={50} alt='away' sx={{ borderRadius:'10px'}}/>
-                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '12px', fontWeight: '100' }}>{matches.away}</Typography>
+                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>{matches.away}</Typography>
                     </Stack>
                 </Stack>
-                <Divider sx={{ background: 'E9E5DA' }} />
-                <Stack direction='column' spacing={3}>
+                <Divider sx={{ background: '#CACACA' }} />
+                <Stack direction='column' spacing={3} style={{ minWidth:'320px'}}>
                     <Stack direction='row' alignItems='center' spacing={2}>
                         <Image src={Bal} width={24} height={24} alt='balls' />
-                        <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Home Picks</Typography>
+                        <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Home Picks</Typography>
                     </Stack>
                     <Divider />
-                    <Stack direction='row' spacing={2} justifyContent='space-around'>
+                    <Stack direction='row' spacing={2} justifyContent='space-around' alignItems='center'>
                         <Stack direction='row' justifyContent='space-around' alignItems='center'
                          sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }} 
                         onClick={()=>{
                             setPicked('onenil')
                             setBottom(true)
                         }}>
-                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>1-0</Typography>
-                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>{(parseFloat(matches.onenil) + vip[viplevel]).toFixed(3)}</Typography>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>1-0</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>{(parseFloat(matches.onenil) + vip[viplevel]).toFixed(3)}</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }} onClick={()=>{
                             setPicked('twonil')
                             setBottom(true)
                         }}>
-                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>2-0</Typography>
-                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>{(parseFloat(matches.twoone)+ vip[viplevel]).toFixed(3)}</Typography>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>2-0</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>{(parseFloat(matches.twoone)+ vip[viplevel]).toFixed(3)}</Typography>
                         </Stack>
                     </Stack>
-                    <Stack direction='row' spacing={2} >
+                    <Stack direction='row' spacing={2} justifyContent='space-around' alignItems='center'>
                         <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}
                         onClick={()=>{
                             setPicked('threenil')
                             setBottom(true)
                         }}>
-                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>3-0</Typography>
-                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>{(parseFloat(matches.threenil) + vip[viplevel]).toFixed(3)}</Typography>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>3-0</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>{(parseFloat(matches.threenil) + vip[viplevel]).toFixed(3)}</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}
                         onClick={()=>{
@@ -274,19 +273,19 @@ const { data, error } = await supabase
                             setBottom(true)
                         }}
                         >
-                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>2-1</Typography>
-                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>{(parseFloat(matches.twoone) + vip[viplevel]).toFixed(3)}</Typography>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>2-1</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>{(parseFloat(matches.twoone) + vip[viplevel]).toFixed(3)}</Typography>
                         </Stack>
                     </Stack>
-                    <Stack direction='row' spacing={2} >
+                    <Stack direction='row' spacing={2} justifyContent='space-around' alignItems='center'>
                         <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}
                         onClick={()=>{
                             setPicked('threeone')
                             setBottom(true)
                         }}
                         >
-                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>3-1</Typography>
-                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>{(parseFloat(matches.threeone) + vip[viplevel]).toFixed(3)}</Typography>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>3-1</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>{(parseFloat(matches.threeone) + vip[viplevel]).toFixed(3)}</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}
                         onClick={()=>{
@@ -294,110 +293,110 @@ const { data, error } = await supabase
                             setBottom(true)
                         }}
                         >
-                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>3-2</Typography>
-                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>{(parseFloat(matches.threetwo) + vip[viplevel]).toFixed(3)}</Typography>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>3-2</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>{(parseFloat(matches.threetwo) + vip[viplevel]).toFixed(3)}</Typography>
                         </Stack>
                     </Stack>
 
                     <Stack direction='row' alignItems='center' spacing={2}>
                         <Image src={Bal} width={24} height={24} alt='balls' />
-                        <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Away Picks</Typography>
+                        <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Away Picks</Typography>
                     </Stack>
                     <Divider />
-                    <Stack direction='row' spacing={2} justifyContent='space-around'>
+                    <Stack direction='row' spacing={2} justifyContent='space-around' alignItems='center'>
                         <Stack onClick={()=>{
                             setPicked('nilone')
                             setBottom(true)
                         }}
                         direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
-                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>0-1</Typography>
-                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>{(parseFloat(matches.nilone) + vip[viplevel]).toFixed(3)}</Typography>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>0-1</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>{(parseFloat(matches.nilone) + vip[viplevel]).toFixed(3)}</Typography>
                         </Stack>
                         <Stack direction='row' onClick={()=>{
                             setPicked('niltwo')
                             setBottom(true)
                         }} justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
-                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>0-2</Typography>
-                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>{(parseFloat(matches.niltwo) + vip[viplevel]).toFixed(3)}</Typography>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>0-2</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>{(parseFloat(matches.niltwo) + vip[viplevel]).toFixed(3)}</Typography>
                         </Stack>
                     </Stack>
-                    <Stack direction='row' spacing={2} >
+                    <Stack direction='row' spacing={2} justifyContent='space-around' alignItems='center'>
                         <Stack direction='row' onClick={()=>{
                             setPicked('nilthree')
                             setBottom(true)
                         }} justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
-                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>0-3</Typography>
-                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>{(parseFloat(matches.nilthree) + vip[viplevel]).toFixed(3)}</Typography>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>0-3</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>{(parseFloat(matches.nilthree) + vip[viplevel]).toFixed(3)}</Typography>
                         </Stack>
                         <Stack direction='row' onClick={()=>{
                             setPicked('onetwo')
                             setBottom(true)
                         }} justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
-                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>1-2</Typography>
-                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>{(parseFloat(matches.onetwo) + vip[viplevel]).toFixed(3)}</Typography>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>1-2</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>{(parseFloat(matches.onetwo) + vip[viplevel]).toFixed(3)}</Typography>
                         </Stack>
                     </Stack>
-                    <Stack direction='row' spacing={2} >
+                    <Stack direction='row' spacing={2} justifyContent='space-around' alignItems='center'>
                         <Stack onClick={()=>{
                             setPicked('onethree')
                             setBottom(true)
                         }} direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
-                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>1-3</Typography>
-                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>{(parseFloat(matches.onethree) + vip[viplevel]).toFixed(3)}</Typography>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>1-3</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>{(parseFloat(matches.onethree) + vip[viplevel]).toFixed(3)}</Typography>
                         </Stack>
                         <Stack onClick={()=>{
                             setPicked('twothree')
                             setBottom(true)
                         }} direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
-                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>2-3</Typography>
-                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>{(parseFloat(matches.twothree) + vip[viplevel]).toFixed(3)}</Typography>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>2-3</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>{(parseFloat(matches.twothree) + vip[viplevel]).toFixed(3)}</Typography>
                         </Stack>
                     </Stack>
 
                     <Stack direction='row' alignItems='center' spacing={2}>
                         <Image src={Bal} width={24} height={24} alt='balls' />
-                        <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Draw Picks</Typography>
+                        <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Draw Picks</Typography>
                     </Stack>
                     <Divider />
-                    <Stack direction='row' spacing={2} justifyContent='space-around'>
+                    <Stack direction='row' spacing={2} justifyContent='space-around' alignItems='center'>
                         <Stack onClick={()=>{
                             setPicked('nilnil')
                             setBottom(true)
                         }}direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
-                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>0-0</Typography>
-                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>{(vip[viplevel] + parseFloat(matches.nilnil)).toFixed(3)}</Typography>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>0-0</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>{(vip[viplevel] + parseFloat(matches.nilnil)).toFixed(3)}</Typography>
                         </Stack>
                         <Stack onClick={()=>{
                             setPicked('oneone')
                             setBottom(true)
                         }} direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
-                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>1-1</Typography>
-                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>{(parseFloat(matches.oneone) + vip[viplevel]).toFixed(3)}</Typography>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>1-1</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>{(parseFloat(matches.oneone) + vip[viplevel]).toFixed(3)}</Typography>
                         </Stack>
                     </Stack>
-                    <Stack direction='row' spacing={2} >
+                    <Stack direction='row' spacing={2} justifyContent='space-around' alignItems='center'>
                         <Stack onClick={()=>{
                             setPicked('twotwo')
                             setBottom(true)
                         }} direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
-                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>2-2</Typography>
-                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>{(parseFloat(matches.twotwo) + vip[viplevel]).toFixed(3)}</Typography>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>2-2</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>{(parseFloat(matches.twotwo) + vip[viplevel]).toFixed(3)}</Typography>
                         </Stack>
                         <Stack  onClick={()=>{
                             setPicked('threethree')
                             setBottom(true)
                         }} direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
-                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>3-3</Typography>
-                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>{(parseFloat(matches.threethree) + vip[viplevel]).toFixed(3)}</Typography>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>3-3</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>{(parseFloat(matches.threethree) + vip[viplevel]).toFixed(3)}</Typography>
                         </Stack>
                     </Stack>
-                    <Stack direction='row' spacing={2} >
+                    <Stack direction='row' spacing={2} justifyContent='space-around' alignItems='center'>
                         <Stack onClick={()=>{
                             setPicked('otherscores')
                             setBottom(true)
                         }} direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
-                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>Others</Typography>
-                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'E9E5DA' }}>{(parseFloat(matches.otherscores) + vip[viplevel]).toFixed(3)}</Typography>
+                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>Others</Typography>
+                            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#000000',cursor:'pointer' }}>{(parseFloat(matches.otherscores) + vip[viplevel]).toFixed(3)}</Typography>
                         </Stack>
                     </Stack>
                 </Stack>
@@ -406,7 +405,7 @@ const { data, error } = await supabase
       </Cover>
     );
     function Draws() {
-        const [stake,setStake] = useState(0);
+        const [stake,setStake] = useState('');
         let tofal = Number((parseFloat(matches[picked]) + vip[viplevel]).toFixed(3));
         let profit = parseFloat((stake * tofal)/100);
         let expext =Number(( parseFloat(stake) + profit).toFixed(3));
@@ -422,74 +421,77 @@ const { data, error } = await supabase
             >
                 
                 <Cover>
-                <Stack direction='column' spacing={2} style={{ background: '#242627', padding: '8px', minHeight: '100vh',paddingBottom:'12px' }}>
+                <Stack direction='column' spacing={2} style={{ background: '#242627', padding: '8px', minHeight: '90vh',paddingBottom:'70px' }}>
                     <Stack direction='row' sx={{ padding: '5px' }}>
-                        <KeyboardArrowLeftOutlinedIcon onClick={()=>{
+                        <KeyboardArrowLeftOutlinedIcon style={{ color:'#CACACA'}} onClick={()=>{
                             setBottom(false)
                         }}/>
-                        <Typography sx={{ width: '100%', fontFamily: 'Poppins,sans-serif', textAlign: 'center' }}>Stake your bet</Typography>
+                        <Typography sx={{ width: '100%', fontFamily: 'Poppins,sans-serif', textAlign: 'center',color:'#CACACA' }}>Stake your bet</Typography>
                     </Stack>
                     <Stack direction='column' alignItems='center' justifyContent='center'>
-                    <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{ (matches.league === 'others') ? matches.otherl : matches.league} </Typography>
-                    <Divider sx={{ background: 'E9E5DA' }} />
+                    <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{ (matches.league === 'others') ? matches.otherl : matches.league} </Typography>
+                    <Divider sx={{ background: '#CACACA' }} />
                   </Stack>
                     <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
                         <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                             <Image src={matches.ihome ? matches.ihome : Ims} width={50} height={50} alt='home' />
-                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '12px', fontWeight: '100' }}>{matches.home}</Typography>
+                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>{matches.home}</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
+                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
                             <p>|</p>
-                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
+                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
                         </Stack>
                         <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                             <Image src={matches.iaway ? matches.iaway : Ims} width={50} height={50} alt='away' />
-                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'E9E5DA', fontSize: '12px', fontWeight: '100' }}>{matches.away}</Typography>
+                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>{matches.away}</Typography>
                         </Stack>
 
                     </Stack>
-                    <Divider sx={{ background: 'E9E5DA' }} />
+                    <Divider sx={{ background: '#CACACA' }} />
                     <Stack direction='column' spacing={3}>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: 'E9E5DA' }}>Match ID</Typography>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'E9E5DA' }}>{matches.match_id}</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#CACACA' }}>Match ID</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#CACACA' }}>{matches.match_id}</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: 'E9E5DA' }}>Market</Typography>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'E9E5DA' }}>{markets[picked]}</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#CACACA' }}>Market</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#CACACA' }}>{markets[picked]}</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: 'E9E5DA' }}>Odds</Typography>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'E9E5DA' }}>{tofal}</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#CACACA' }}>Odds</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#CACACA' }}>{tofal}</Typography>
                         </Stack>
                     </Stack>
-                <Divider sx={{ background: 'E9E5DA' }}/>
+                <Divider sx={{ background: '#CACACA' }}/>
                 <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: 'E9E5DA',width:'210px' }}>Enter the amount you wish to stake</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#CACACA',width:'210px' }}>Enter the amount you wish to stake</Typography>
                             {/* <Image src={Depx} alt="deposit" width={87} height={32} onClick={()=>{
                                 router.push('/user/deposit')
                             }}/> */}
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: 'E9E5DA' }}>Account Balance</Typography>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'E9E5DA' }}>{ball} USDT</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#CACACA' }}>Account Balance</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#CACACA' }}>{ball} USDT</Typography>
                         </Stack>
-                        <TextField variant="outlined" label='stake' type='number' sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', background: '#242627',color:'#03045E' }}
+                        <input placeholder='stake' type='text' 
+                         style={{ fontFamily: 'Poppins, sans-serif', padding: "10px",borderRadius:'12px', width: '100%', background: '#242627',color:'#FFFFFF',border:'3px solid #CACACA' }}
                         value={stake}
                         onChange={(e)=>{
-                            setStake(e.target.value)
-                        }}
-                        />
+                            if(!isNaN(e.target.value)){
+                                 setStake(e.target.value)
+                            }
+                           
+                        }}/>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: 'E9E5DA' }}>Profit</Typography>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: 'E9E5DA' }}>{profit} USDT</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#CACACA' }}>Profit</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#CACACA' }}>{profit} USDT</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: 'E9E5DA' }}>Expected Profit</Typography>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: 'E9E5DA' }}>{expext} USDT</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#CACACA' }}>Expected Profit</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#CACACA' }}>{expext} USDT</Typography>
                         </Stack>
-                        <Button sx={{fontFamily: 'Poppins,sans-serif',margin:'8px', fontSize: '16', fontWeight: '300', color: '#242627',background:"#03045E",padding:'10px'}} 
+                        <Button sx={{fontFamily: 'Poppins,sans-serif',margin:'8px', fontSize: '16', fontWeight: '300', color: '#FFFFFF',background:"#E94E55",padding:'10px'}} 
                         onClick={()=>{
                             if (stake - 1 < info.balance) {
                                 if (stake < 1) {

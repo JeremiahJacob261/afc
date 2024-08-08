@@ -16,7 +16,7 @@ export default function Funds() {
         <Stack direction='column' justifyContent='center' alignItems='center' sx={{minHeight:'90vh',padding:'12px',position:'relative'}} spacing={3}>
             <Stack sx={{width:'240px',height:'305px',padding:'8px'}} alignItems='center' justifyContent='center' spacing={2}>
                  <Image src={WS} width={250} height={115} alt='ws'/>
-         <Typography sx={{fontSize:'18px',fontWeight:'600',color:'E9E5DA'}}>Make a Deposit</Typography>
+         <Typography sx={{fontSize:'18px',fontWeight:'600',color:'#CACACA'}}>Make a Deposit</Typography>
          <Typography id="modal-modal-description" sx={{textAlign:'center',fontFamily:'Poppins,sans-serif',fontSize:'18px',fontWeight:'300'}}>
          Deposit money into your account in 3 easy steps
     </Typography>

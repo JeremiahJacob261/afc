@@ -526,7 +526,7 @@ export default function Register({ refer }) {
           <Typography id="modal-modal-description" sx={{ fontFamily: 'Poppins,sans-serif', mt: 2, fontSize: '14px', fontWeight: '300' }}>
             {ale}
           </Typography>
-          <Divider sx={{ background: 'E9E5DA' }} />
+          <Divider sx={{ background: '#CACACA' }} />
           <Button variant='contained' sx={{ fontFamily: 'Poppins,sans-serif', color: '#242627', background: '#03045E', padding: '8px', width: '100%' }} onClick={() => {
             if (aleT) {
               setOpen(false)

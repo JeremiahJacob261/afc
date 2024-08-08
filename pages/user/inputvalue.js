@@ -65,7 +65,7 @@ export default function InputValue() {
       <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#E94E55' }}>Please note that the minimum deposit is {(method === 'usdt') ? '10 USDT' : (method === 'gpay') ? '830 Indian Rupees' : '210 Zambian Kwacha'}</Typography>
       </Stack>
       <Stack spacing={1} sx={{minWidth:'344px'}}> 
-            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'E9E5DA'}}>Enter Amount </Typography>
+            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'#CACACA'}}>Enter Amount </Typography>
             <TextField 
             sx={{color:'#03045E'}}
             type="number"
@@ -108,7 +108,7 @@ export default function InputValue() {
         <Typography id="modal-modal-description" sx={{fontFamily:'Poppins,sans-serif',mt: 2,fontSize:'14px',fontWeight:'300'}}>
          {ale}
         </Typography>
-        <Divider sx={{background:'E9E5DA'}}/>
+        <Divider sx={{background:'#CACACA'}}/>
         <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'#242627',background:'#03045E',padding:'8px',width:'100%'}} onClick={()=>{
           
             setOpen(false)

@@ -144,57 +144,57 @@ export default function Cover({ children }) {
             </Stack>
 
             <Stack direction='column'>
-              <Link href='/user/matches' style={{ textDecoration: "none", color: 'E9E5DA' }}>
+              <Link href='/user/matches' style={{ textDecoration: "none", color: '#CACACA' }}>
                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                   <Stack direction='row' spacing={2}>
                     <SportsSoccerIcon sx={{ width: '20px', height: '20px' }} />
-                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: 'E9E5DA' }}>Matches</Typography>
+                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#CACACA' }}>Matches</Typography>
                   </Stack>
                   <ArrowForwardIosIcon sx={{ width: '20px', height: '20px' }} />
                 </Stack></Link>
 
-              <Link href='/user/bets' style={{ textDecoration: "none", color: 'E9E5DA' }}>
+              <Link href='/user/bets' style={{ textDecoration: "none", color: '#CACACA' }}>
                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                   <Stack direction='row' spacing={2}>
                     <BiTimer sx={{ width: '20px', height: '20px' }} />
-                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: 'E9E5DA' }}>Bets</Typography>
+                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#CACACA' }}>Bets</Typography>
                   </Stack>
                   <ArrowForwardIosIcon sx={{ width: '20px', height: '20px' }} />
                 </Stack>
               </Link>
 
-              <Link href='/user/fund' style={{ textDecoration: "none", color: 'E9E5DA' }}>
+              <Link href='/user/fund' style={{ textDecoration: "none", color: '#CACACA' }}>
                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                   <Stack direction='row' spacing={2}>
                     <GiPayMoney sx={{ width: '20px', height: '20px' }} />
-                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: 'E9E5DA' }}>Deposit</Typography>
+                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#CACACA' }}>Deposit</Typography>
                   </Stack>
                   <ArrowForwardIosIcon sx={{ width: '20px', height: '20px' }} />
                 </Stack></Link>
 
-              <Link href='/user/withdraw' style={{ textDecoration: "none", color: 'E9E5DA' }}>
+              <Link href='/user/withdraw' style={{ textDecoration: "none", color: '#CACACA' }}>
                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                   <Stack direction='row' spacing={2}>
                     <GiReceiveMoney sx={{ width: '20px', height: '20px' }} />
-                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: 'E9E5DA' }}>Withdraw</Typography>
+                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#CACACA' }}>Withdraw</Typography>
                   </Stack>
                   <ArrowForwardIosIcon sx={{ width: '20px', height: '20px' }} />
                 </Stack></Link>
 
-              <Link href='/user/account' style={{ textDecoration: "none", color: 'E9E5DA' }}>
+              <Link href='/user/account' style={{ textDecoration: "none", color: '#CACACA' }}>
                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                   <Stack direction='row' spacing={2}>
                     <BsFillPersonFill sx={{ width: '20px', height: '20px' }} />
-                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: 'E9E5DA' }}>Profile</Typography>
+                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#CACACA' }}>Profile</Typography>
                   </Stack>
                   <ArrowForwardIosIcon sx={{ width: '20px', height: '20px' }} />
                 </Stack></Link>
 
-              <Link href='https://t.me/+WJKvJKagKuozNzM8' style={{ textDecoration: "none", color: 'E9E5DA' }}>
+              <Link href='https://t.me/+WJKvJKagKuozNzM8' style={{ textDecoration: "none", color: '#CACACA' }}>
                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                   <Stack direction='row' spacing={2}>
                     <BiSolidContact sx={{ width: '20px', height: '20px' }} />
-                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: 'E9E5DA' }}>Contact</Typography>
+                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#CACACA' }}>Contact</Typography>
                   </Stack>
                   <ArrowForwardIosIcon sx={{ width: '20px', height: '20px' }} />
                 </Stack></Link>
@@ -202,7 +202,7 @@ export default function Cover({ children }) {
               <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                 <Stack direction='row' spacing={2}>
                   <TranslateIcon sx={{ width: '20px', height: '20px' }} />
-                  <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: 'E9E5DA' }}>Language</Typography>
+                  <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#CACACA' }}>Language</Typography>
                 </Stack>
                 <ArrowForwardIosIcon sx={{ width: '20px', height: '20px' }} />
               </Stack>

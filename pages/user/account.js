@@ -161,8 +161,8 @@ export default function Account() {
           </Stack>
           <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ background: '#F5E663', padding: '8px', borderRadius: '10px' }}>
             <Stack>
-              <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'E9E5DA' }}>Current Balance </Typography>
-              <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: 'E9E5DA' }}>{balance.toFixed(3)} USDT</Typography>
+              <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#CACACA' }}>Current Balance </Typography>
+              <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#CACACA' }}>{balance.toFixed(3)} USDT</Typography>
             </Stack>
             <Link href='/user/fund' style={{ textDecoration: "none", color: 'white' }}>
               <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#0A369D', borderRadius: '20px', padding: '8px', width: '95px', height: '32px' }}>
@@ -182,7 +182,7 @@ export default function Account() {
             <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }}>
               <Stack direction='row' spacing={1} justifyContent='start'>
                 <Image src={iLink} width={24} height={24} alt='ilink' />
-                <Typography sx={{ color: 'E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>https://afc .netlify.app/register/{info ? info.newrefer : userR}</Typography>
+                <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>https://afc .netlify.app/register/{info ? info.newrefer : userR}</Typography>
               </Stack>
               <Image src={iCopy} width={20} height={20} alt='icopy'
                 sx={{ background: '#47A8BD', padding: '5px', borderRadius: '5px' }}
@@ -199,7 +199,7 @@ export default function Account() {
               }}>
               <Stack direction='row' spacing={1} justifyContent='start'>
                 <Image src={iNT} width={24} height={24} alt='int' />
-                <Typography sx={{ color: 'E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>All Referral</Typography>
+                <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>All Referral</Typography>
               </Stack>
               <KeyboardArrowRightIcon width={24} height={24} />
             </Stack>
@@ -218,7 +218,7 @@ export default function Account() {
             }}>
               <Stack direction='row' spacing={1} justifyContent='start' >
                 <Image src={St} width={24} height={24} alt='ilink' />
-                <Typography sx={{ color: 'E9E5DA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Fund Account</Typography>
+                <Typography sx={{ color: '#CACACA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Fund Account</Typography>
               </Stack>
               <KeyboardArrowRightIcon width={24} height={24} />
             </Stack>
@@ -227,7 +227,7 @@ export default function Account() {
             }}>
               <Stack direction='row' spacing={1} justifyContent='start' >
                 <DiamondIcon sx={{color:'red'}}/>
-                <Typography sx={{ color: 'E9E5DA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>VIP Progress</Typography>
+                <Typography sx={{ color: '#CACACA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>VIP Progress</Typography>
               </Stack>
               <KeyboardArrowRightIcon width={24} height={24} />
             </Stack>
@@ -246,7 +246,7 @@ export default function Account() {
             }}>
               <Stack direction='row' spacing={1} justifyContent='start'>
                 <Image src={Sw} width={24} height={24} alt='ilink' />
-                <Typography sx={{ color: 'E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Withdraw</Typography>
+                <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Withdraw</Typography>
               </Stack>
               <KeyboardArrowRightIcon width={24} height={24} />
             </Stack>
@@ -256,7 +256,7 @@ export default function Account() {
             }}>
               <Stack direction='row' spacing={1} justifyContent='start'>
                 <Image src={Vec} width={24} height={24} alt='ilink' />
-                <Typography sx={{ color: 'E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>History</Typography>
+                <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>History</Typography>
               </Stack>
               <KeyboardArrowRightIcon width={24} height={24} />
             </Stack>
@@ -266,7 +266,7 @@ export default function Account() {
             }}>
               <Stack direction='row' spacing={1} justifyContent='start'>
                 <Image src={Lk} width={24} height={24} alt='ilink' />
-                <Typography sx={{ color: 'E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Code Setting</Typography>
+                <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Code Setting</Typography>
               </Stack>
               <KeyboardArrowRightIcon width={24} height={24} />
             </Stack>
@@ -285,7 +285,7 @@ export default function Account() {
             }}>
               <Stack direction='row' spacing={1} justifyContent='start' >
                 <Image src={Bt} width={24} height={24} alt='ilink' />
-                <Typography sx={{ color: 'E9E5DA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>My Bets</Typography>
+                <Typography sx={{ color: '#CACACA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>My Bets</Typography>
               </Stack>
               <KeyboardArrowRightIcon width={24} height={24} />
             </Stack>
@@ -305,7 +305,7 @@ export default function Account() {
             }>
               <Stack direction='row' spacing={1} justifyContent='start'>
                 <Image src={Fq} width={24} height={24} alt='ilink' />
-                <Typography sx={{ color: 'E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>FAQ</Typography>
+                <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>FAQ</Typography>
               </Stack>
               <KeyboardArrowRightIcon width={24} height={24} />
             </Stack>
@@ -314,7 +314,7 @@ export default function Account() {
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                 <Stack direction='row' spacing={1} justifyContent='start'>
                   <Image src={Tel} width={24} height={24} alt='ilink' />
-                  <Typography sx={{ color: 'E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Telegram</Typography>
+                  <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Telegram</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
@@ -323,7 +323,7 @@ export default function Account() {
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                 <Stack direction='row' spacing={1} justifyContent='start'>
                   <Image src={Tel} width={24} height={24} alt='ilink' />
-                  <Typography sx={{ color: 'E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Contact</Typography>
+                  <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Contact</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
@@ -355,7 +355,7 @@ export default function Account() {
               }>
               <Stack direction='row' spacing={1} justifyContent='start' >
                 <Image src={Ot} width={24} height={24} alt='ilink' />
-                <Typography sx={{ color: 'E9E5DA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Sign out</Typography>
+                <Typography sx={{ color: '#CACACA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Sign out</Typography>
               </Stack>
               <KeyboardArrowRightIcon width={24} height={24} />
             </Stack>

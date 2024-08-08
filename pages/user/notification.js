@@ -80,11 +80,11 @@ export default function Notification() {
                 <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '8px' }} key={r.id}>
                   <Image src={Rd} width={40} height={40} alt='rounds' />
                   <Stack direction='column' sx={{ width: '196px' }}>
-                    <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>You Recieved Referral Bonus from {r.username} .
+                    <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>You Recieved Referral Bonus from {r.username} .
                     </Typography>
-                    <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{parseFloat(r.amount).toFixed(3)} USDT</Typography>
+                    <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{parseFloat(r.amount).toFixed(3)} USDT</Typography>
                   </Stack>
-                  <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
+                  <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
                 </Stack>
               );
             } else {
@@ -96,10 +96,10 @@ export default function Notification() {
                     <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '8px' }} key={r.id}>
                       <Image src={Rd} width={40} height={40} alt='rounds' />
                       <Stack direction='column' sx={{ width: '196px' }}>
-                        <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>Your Bet of {parseFloat(r.amount).toFixed(3)} USDT was successfully cancelled
+                        <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>Your Bet of {parseFloat(r.amount).toFixed(3)} USDT was successfully cancelled
                         </Typography>
                       </Stack>
-                      <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
+                      <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
                     </Stack>
                   )
 
@@ -109,11 +109,11 @@ export default function Notification() {
                       <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '8px' }} key={r.id}>
                         <Image src={Rd} width={40} height={40} alt='rounds' />
                         <Stack direction='column' sx={{ width: '196px' }}>
-                          <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>You Won a bet
+                          <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>You Won a bet
                           </Typography>
-                          <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{parseFloat(r.amount).toFixed(3)} USDT</Typography>
+                          <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{parseFloat(r.amount).toFixed(3)} USDT</Typography>
                         </Stack>
-                        <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
+                        <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
                       </Stack>
                     )
                   } else {
@@ -122,11 +122,11 @@ export default function Notification() {
                         <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '8px' }} key={r.id}>
                           <Image src={Rd} width={40} height={40} alt='rounds' />
                           <Stack direction='column' sx={{ width: '196px' }}>
-                            <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>Your USDT Withdrawal Request was Approved.
+                            <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>Your USDT Withdrawal Request was Approved.
                             </Typography>
-                            <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{parseFloat(r.amount).toFixed(3)} USDT</Typography>
+                            <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{parseFloat(r.amount).toFixed(3)} USDT</Typography>
                           </Stack>
-                          <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
+                          <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
                         </Stack>
                       )
                     } else {
@@ -135,11 +135,11 @@ export default function Notification() {
                           <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '8px' }} key={r.id}>
                             <Image src={Rd} width={40} height={40} alt='rounds' />
                             <Stack direction='column' sx={{ width: '196px' }}>
-                              <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>Your GPAY Withdrawal Request Failed.
+                              <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>Your GPAY Withdrawal Request Failed.
                               </Typography>
-                              <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{parseFloat(r.amount).toFixed(3)} USDT</Typography>
+                              <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{parseFloat(r.amount).toFixed(3)} USDT</Typography>
                             </Stack>
-                            <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
+                            <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
                           </Stack>
                         )
                       } else {
@@ -148,11 +148,11 @@ export default function Notification() {
                             <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '8px' }} key={r.id}>
                               <Image src={Rd} width={40} height={40} alt='rounds' />
                               <Stack direction='column' sx={{ width: '196px' }}>
-                                <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>Your USDT Withdrawal Request Failed.
+                                <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>Your USDT Withdrawal Request Failed.
                                 </Typography>
-                                <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{parseFloat(r.amount).toFixed(3)} USDT</Typography>
+                                <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{parseFloat(r.amount).toFixed(3)} USDT</Typography>
                               </Stack>
-                              <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
+                              <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
                             </Stack>
                           )
                         } else {
@@ -161,11 +161,11 @@ export default function Notification() {
                               <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '8px' }} key={r.id}>
                                 <Image src={Rd} width={40} height={40} alt='rounds' />
                                 <Stack direction='column' sx={{ width: '196px' }}>
-                                  <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>Your USDT Deposit Claim is not Approved.
+                                  <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>Your USDT Deposit Claim is not Approved.
                                   </Typography>
-                                  <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{parseFloat(r.amount).toFixed(3)} USDT</Typography>
+                                  <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{parseFloat(r.amount).toFixed(3)} USDT</Typography>
                                 </Stack>
-                                <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
+                                <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
                               </Stack>
                             )
                           } else {
@@ -173,11 +173,11 @@ export default function Notification() {
                               <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '8px' }} key={r.id}>
                                 <Image src={Rd} width={40} height={40} alt='rounds' />
                                 <Stack direction='column' sx={{ width: '196px' }}>
-                                  <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>You Recieved {r.code} from admin
+                                  <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>You Recieved {r.code} from admin
                                   </Typography>
-                                  <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{parseFloat(r.amount).toFixed(3)} USDT</Typography>
+                                  <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{parseFloat(r.amount).toFixed(3)} USDT</Typography>
                                 </Stack>
-                                <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
+                                <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
                               </Stack>
                             )
                           }
@@ -200,10 +200,10 @@ export default function Notification() {
                       <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '8px' }} key={r.id}>
                         <Image src={Rd} width={40} height={40} alt='rounds' />
                         <Stack direction='column' sx={{ width: '196px' }}>
-                          <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>You have Recieved {parseFloat(parseFloat(r.amount).toFixed(3)).toFixed(3)} USDT from {r.username} as REBATE Commision
+                          <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>You have Recieved {parseFloat(parseFloat(r.amount).toFixed(3)).toFixed(3)} USDT from {r.username} as REBATE Commision
                           </Typography>
                         </Stack>
-                        <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
+                        <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
                       </Stack>
                     );
                   }else{
@@ -214,10 +214,10 @@ export default function Notification() {
                   <Stack direction="row" spacing={2} justifyContent="center" alignItems='center' sx={{ padding: '8px' }} key={r.id}>
                     <Image src={Rd} width={40} height={40} alt='rounds' />
                     <Stack direction='column' sx={{ width: '196px' }}>
-                      <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>{r.username}
+                      <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>{r.username}
                       </Typography>
                     </Stack>
-                    <Typography style={{ color: 'E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
+                    <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{dates}</Typography>
                   </Stack>
                 );
                   }

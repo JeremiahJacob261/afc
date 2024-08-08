@@ -15,7 +15,7 @@ export default function Dsuccess() {
         <Stack direction='column' alignItems='center' justifyContent='center' sx={{minHeight:'90vh',padding:'12px',position:'relative'}}>
             <Stack sx={{width:'240px',height:'305px',padding:'8px'}} alignItems='center' justifyContent='center'>
                  <Image src={WS} width={150} height={156} alt='ws'/>
-         <Typography sx={{fontSize:'18px',fontWeight:'600',color:'E9E5DA'}}>Deposit Successful</Typography>
+         <Typography sx={{fontSize:'18px',fontWeight:'600',color:'#CACACA'}}>Deposit Successful</Typography>
          <Typography id="modal-modal-description" sx={{textAlign:'center',fontFamily:'Poppins,sans-serif',mt: 2,fontSize:'14px',fontWeight:'300'}}>
          You have successfully deposited {amo} USDT to your account
     </Typography>
