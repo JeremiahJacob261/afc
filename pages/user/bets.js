@@ -11,6 +11,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { app } from '../api/firebase';
+import Loading from "@/pages/components/loading";
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
 import Tab from '@mui/material/Tab';
@@ -32,6 +33,13 @@ export default function Bets() {
   const handleClickOpen = () => {
     setOpen(true);
   };
+
+     //the below controls the loading modal
+     const [openx, setOpenx] = useState(false);
+     const handleOpenx = () => setOpenx(true);
+     const handleClosex = () => setOpenx(false);
+ 
+     //the end of thellaoding modal control
 
   const handleClose = () => {
     setOpen(false);
@@ -66,6 +74,7 @@ export default function Bets() {
         const { data, error } = await supabase
           .from('placed')
           .select()
+          .neq('won','null')
           .match({ username: name });
           
         setFina(data)
@@ -87,6 +96,8 @@ export default function Bets() {
   }, []);
   return (
     <Cover>
+      
+      <Loading open={openx} handleClose={handleClosex} />
       <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '8px', margin: '2px' }}>
         <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
           router.push('/user')
@@ -111,7 +122,15 @@ export default function Bets() {
     return (
       <TabContext value={value}>
         <Stack sx={{ borderBottom: 1, borderColor: 'divider' }} justifyContent='center'>
-          <TabList onChange={handleChange} aria-label="lab API tabs example">
+          <TabList onChange={handleChange} aria-label="lab API tabs example" 
+  textColor="white"
+  indicatorColor="secondary"
+  sx={{
+    '.Mui-selected': {
+      color: 'orange', // Customize the color here
+    },
+  }}
+  >
             <Tab label="Active Bets" value="1" sx={{ color: '#CACACA', width: '50%' }} />
             <Tab label="Finished Bets" value="2" sx={{ color: '#CACACA', width: '50%' }} />
           </TabList>
@@ -127,6 +146,7 @@ export default function Bets() {
     let curren = new Date().getTime() / 1000;
     return (
       <div key={s.betid} onClick={() => {
+        handleOpenx();
         router.push('/user/viewbet/' + s.betid);
       }}>
         <Box sx={{ background: "#373636", padding: "12px", height: "max-content", width: '341px', height: 'auto', borderRadius: '10px' }} >
@@ -190,43 +210,44 @@ fina.map((s) => {
 let curren = new Date().getTime() / 1000;
   return (
     <div key={s.betid} onClick={() => {
+      handleOpenx();
       router.push('/user/viewbet/' + s.betid);
     }}>
-      <Box sx={{ background: "#36558F", padding: "8px", height: "max-content", width: '341px', height: '313px', borderRadius: '10px' }} >
+      <Box sx={{ background: "#373636", padding: "12px", height: "max-content", width: '341px', height: 'auto', borderRadius: '10px' }} >
 
-        <Stack direction="row" spacing={2} alignItems="center" justifyContent="center" marginBottom='20px' marginTop='20px'>
+        <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between" marginBottom='20px' marginTop='20px'>
           <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
             <Image src={Ims} width={20} height={20} alt='home' />
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '300',maxWidth:'91px',color:'#FED766' }}>{s.home}</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '300',maxWidth:'91px',color:'#E6E8F3' }}>{s.home}</Typography>
 
           </Stack>
-          <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '500' }}>VS</Typography>
+          <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '500',color:'#FFB400' }}>VS</Typography>
           <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-around">
             <Image src={Ims} width={20} height={20} alt='away' />
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '300',maxWidth:'91px',color:'#FED766' }}>{s.away}</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '300',maxWidth:'91px',color:'#E6E8F3' }}>{s.away}</Typography>
 
           </Stack>
         </Stack>
         <Stack direction='column' spacing={2}>
           <Stack direction='row' justifyContent='space-between' alignItems='center'>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#D4E4BC' }}>Market</Typography>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FE4A49' }}>{s.market}</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#E6E8F3' }}>Market</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FFFFFF' }}>{s.market}</Typography>
           </Stack>
           <Stack direction='row' justifyContent='space-between' alignItems='center'>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#D4E4BC' }}>Odds</Typography>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FE4A49' }}>{s.odd} %</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#E6E8F3' }}>Odds</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FFFFFF' }}>{s.odd} %</Typography>
           </Stack>
           <Stack direction='row' justifyContent='space-between' alignItems='center'>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#D4E4BC' }}>Stake</Typography>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FE4A49' }}>{s.stake} USDT</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#E6E8F3' }}>Stake</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FFFFFF' }}>{s.stake} USDT</Typography>
           </Stack>
           <Stack direction='row' justifyContent='space-between' alignItems='center'>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#D4E4BC' }}>Profit</Typography>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FE4A49' }}>{s.stake + s.profit} USDT</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#E6E8F3' }}>Profit</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FFFFFF' }}>{s.stake + s.profit} USDT</Typography>
           </Stack>
           <Stack direction='row' justifyContent='space-between' alignItems='center'>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#D4E4BC' }}> Status</Typography>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FE4A49' }}> {(stams > curren) ? 'Not Started' : (s.won === 'null') ? 'Ongoing' : (s.won === 'true') ? 'Won' : 'Lost'}</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#E6E8F3' }}> Status</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FFFFFF' }}> {(stams > curren) ? 'Not Started' : (s.won === 'null') ? 'Ongoing' : (s.won === 'true') ? 'Won' : 'Lost'}</Typography>
           </Stack>
         </Stack>
       </Box>
