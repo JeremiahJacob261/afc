@@ -7,6 +7,7 @@ import Head from 'next/head'
 import Ims from '../../public/simps/ball.png'
 import { useRouter } from "next/router";
 import Backdrop from '@mui/material/Backdrop';
+import Loading from "../components/loading";
 import CircularProgress from '@mui/material/CircularProgress';
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 export default function Matches({ footDat }) {
@@ -14,6 +15,12 @@ export default function Matches({ footDat }) {
   const [info, setInfo] = useState({})
   console.log(footDat)
   const router = useRouter()
+     //the below controls the loading modal
+     const [open, setOpen] = useState(false);
+     const handleOpen = () => setOpen(true);
+     const handleClose = () => setOpen(false);
+ 
+     //the end of thellaoding modal control
 
 
   return (
@@ -24,6 +31,7 @@ export default function Matches({ footDat }) {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
+      <Loading open={open} handleClose={handleClose} />
       <Head>
         <title>BFC - Matches</title>
         <meta name="description" content="See the Best Matches Provided By BFC- " />
@@ -61,7 +69,7 @@ export default function Matches({ footDat }) {
                     borderRadius: '5px',
                     height: '210px'
                   }} onClick={() => {
-                    setDrop(true)
+                  handleOpen()
                     //register/000208
                     router.push("/user/match/" + pro.match_id)
                   }}>
