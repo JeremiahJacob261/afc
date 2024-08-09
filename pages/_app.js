@@ -1,4 +1,5 @@
 import '../styles/globals.css'
+import '@/styles/bind.css';
 import { AppContext, SlipContext } from './api/Context'
 import { useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';

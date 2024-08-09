@@ -15,6 +15,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import { Icon } from '@iconify/react'
 import LinkIcon from '@mui/icons-material/Link';
 import iLink from '../../public/icon/ant-design_link-outlined.png'
 import DiamondIcon from '@mui/icons-material/Diamond';
@@ -73,25 +74,25 @@ export default function Account() {
           setBalance(data[0].balance);
           console.log(refCount)
           localStorage.setItem('signRef', data[0].newrefer);
-      async function getReferCount() {
-        try {
-          const { count, error } = await supabase
-            .from('users')
-            .select('*', { count: 'exact', head: true })
-            .match({
-              'refer':localStorage.getItem('signRef'),
-              'firstd':true
-            });
-          setRefCount(count)
-          console.log(info.totald)
-          setViplevel((info.totald < 50 || count < 3) ? '1' : (info.totald < 100 || count < 5) ? '2' : (info.totald < 200 || count < 8) ? '3' : (info.totald < 300 || count < 12) ? '4' : (info.totald < 500 || count < 15) ? '5' : (info.totald < 1000 || count < 20) ? '6' : '7');
-          console.log(count)
+          async function getReferCount() {
+            try {
+              const { count, error } = await supabase
+                .from('users')
+                .select('*', { count: 'exact', head: true })
+                .match({
+                  'refer': localStorage.getItem('signRef'),
+                  'firstd': true
+                });
+              setRefCount(count)
+              console.log(info.totald)
+              setViplevel((info.totald < 50 || count < 3) ? '1' : (info.totald < 100 || count < 5) ? '2' : (info.totald < 200 || count < 8) ? '3' : (info.totald < 300 || count < 12) ? '4' : (info.totald < 500 || count < 15) ? '5' : (info.totald < 1000 || count < 20) ? '6' : '7');
+              console.log(count)
+            } catch (e) {
+              console.log(e)
+            }
+          }
+          getReferCount();
         } catch (e) {
-          console.log(e)
-        }
-      }
-      getReferCount();
-     } catch (e) {
           console.log(e)
         }
 
@@ -155,8 +156,8 @@ export default function Account() {
           <Stack direction='row' spacing={2}>
             <Avatar>{info ? `${info.username}` : usern}</Avatar>
             <Stack direction='column'>
-              <Typography sx={{ color: "E9E5DA", fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins, sans-serif' }}>Hello {info ? `${info.username}` : usern}</Typography>
-              <Typography sx={{ background:'#03045E', color: "#F5E663", fontSize: '14px', fontWeight: '300', fontFamily: 'Poppins, sans-serif',padding:'5px',width:'50px',borderRadius:'15px',textAlign:'center' }}>VIP {viplevel}</Typography>
+              <Typography sx={{ color: "#FFFFFF", fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins, sans-serif' }}>Hello {info ? `${info.username}` : usern}</Typography>
+              <Typography sx={{ background: '#03045E', color: "#F5E663", fontSize: '14px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', padding: '5px', width: '50px', borderRadius: '15px', textAlign: 'center' }}>VIP {viplevel}</Typography>
             </Stack>
           </Stack>
           <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ background: '#F5E663', padding: '8px', borderRadius: '10px' }}>
@@ -176,32 +177,33 @@ export default function Account() {
           {
             //deposit
           }
-          <Stack direction='column'>
-            <Typography sx={{ color: "E9E5DA", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Referral</Typography>
+          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px" }}>
+            <Typography sx={{ color: "#E94E55", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>MY TEAM</Typography>
             <Divider />
-            <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }}>
-              <Stack direction='row' spacing={1} justifyContent='start'>
-                <Image src={iLink} width={24} height={24} alt='ilink' />
-                <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>https://afc .netlify.app/register/{info ? info.newrefer : userR}</Typography>
-              </Stack>
-              <Image src={iCopy} width={20} height={20} alt='icopy'
-                sx={{ background: '#47A8BD', padding: '5px', borderRadius: '5px' }}
-                onClick={() => {
+
+            <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', height: '110px', padding: '8px', background: '#242627', borderRadius: '8px' }}>
+              <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} alignItems="center">
+                <Stack direction='row' spacing={1} justifyContent='center' alignItems="center">
+                  <Icon icon="ant-design:link-outlined" width="24" height="24" style={{ color: "#a3a3a3" }} />
+                  <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>https://afc .netlify.app/register/{info ? info.newrefer : userR}</Typography>
+                </Stack>
+                <Icon icon="solar:copy-bold-duotone" width="24" height="24" style={{ color: '#a3a3a3' }} onClick={() => {
                   navigator.clipboard.writeText("https://afc .netlify.app/register/" + info.newrefer)
                   setMessages("Invite Link Copied")
                   setOpened(true);
                 }} />
-            </Stack>
-
-            <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }}
-              onClick={() => {
-                router.push('/user/refferal');
-              }}>
-              <Stack direction='row' spacing={1} justifyContent='start'>
-                <Image src={iNT} width={24} height={24} alt='int' />
-                <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>All Referral</Typography>
               </Stack>
-              <KeyboardArrowRightIcon width={24} height={24} />
+
+              <Stack direction='row' justifyContent='space-between' alignItems={"center"} sx={{ padding: '8px' }}
+                onClick={() => {
+                  router.push('/user/refferal');
+                }}>
+                <Stack direction='row' spacing={1} justifyContent='start'>
+                  <Icon icon="carbon:diagram-reference" width="24" height="24" style={{ color: '#a3a3a3' }} />
+                  <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>All Referral</Typography>
+                </Stack>
+                <KeyboardArrowRightIcon width={24} height={24} />
+              </Stack>
             </Stack>
           </Stack>
           {
@@ -210,26 +212,29 @@ export default function Account() {
           {
             //fun
           }
-          <Stack direction='column'>
-            <Typography sx={{ color: "E9E5DA", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Deposit</Typography>
+          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px" }}>
+            <Typography sx={{ color: "#E94E55", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Deposit</Typography>
             <Divider />
-            <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px' }} onClick={() => {
-              router.push('/user/fund');
-            }}>
-              <Stack direction='row' spacing={1} justifyContent='start' >
-                <Image src={St} width={24} height={24} alt='ilink' />
-                <Typography sx={{ color: '#CACACA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Fund Account</Typography>
+            <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', height: '110px', padding: '8px', background: '#242627', borderRadius: '8px' }}>
+
+              <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px' }} onClick={() => {
+                router.push('/user/fund');
+              }}>
+                <Stack direction='row' spacing={1} justifyContent='start' alignItems={"center"}>
+                  <Icon icon="streamline:money-atm-card-3-deposit-money-payment-finance-atm-withdraw" width="24" height="24" style={{ color: "#a3a3a3" }} />
+                  <Typography sx={{ color: '#CACACA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Fund Account</Typography>
+                </Stack>
+                <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
-              <KeyboardArrowRightIcon width={24} height={24} />
-            </Stack>
-            <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px' }} onClick={() => {
-              router.push('/user/vip');
-            }}>
-              <Stack direction='row' spacing={1} justifyContent='start' >
-                <DiamondIcon sx={{color:'red'}}/>
-                <Typography sx={{ color: '#CACACA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>VIP Progress</Typography>
+              <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px' }} onClick={() => {
+                router.push('/user/vip');
+              }}>
+                <Stack direction='row' spacing={1} justifyContent='start' alignItems={"center"}>
+                  <Icon icon="icon-park-twotone:diamond-one" width="24" height="24" style={{ color: "#FFB400" }} />
+                  <Typography sx={{ color: '#CACACA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>VIP Progress</Typography>
+                </Stack>
+                <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
-              <KeyboardArrowRightIcon width={24} height={24} />
             </Stack>
           </Stack>
           {
@@ -238,37 +243,50 @@ export default function Account() {
           {
             //withdraw
           }
-          <Stack direction='column'>
-            <Typography sx={{ color: "E9E5DA", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Withdrawal</Typography>
+          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px" }}>
+            <Typography sx={{ color: "#FFFFFF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Withdrawal</Typography>
             <Divider />
-            <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} onClick={() => {
-              router.push('/user/withdraw');
-            }}>
-              <Stack direction='row' spacing={1} justifyContent='start'>
-                <Image src={Sw} width={24} height={24} alt='ilink' />
-                <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Withdraw</Typography>
-              </Stack>
-              <KeyboardArrowRightIcon width={24} height={24} />
-            </Stack>
+            <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '150px', padding: '8px', background: '#242627', borderRadius: '8px' }}>
 
-            <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} onClick={() => {
-              router.push('/user/transaction');
-            }}>
-              <Stack direction='row' spacing={1} justifyContent='start'>
-                <Image src={Vec} width={24} height={24} alt='ilink' />
-                <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>History</Typography>
+              <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} onClick={() => {
+                router.push('/user/withdraw');
+              }}>
+                <Stack direction='row' spacing={1} justifyContent='start' alignItems="center">
+                  <Icon icon="uil:money-withdraw" width="24" height="24" style={{ color: '#a3a3a3' }} />
+                  <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Withdraw</Typography>
+                </Stack>
+                <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
-              <KeyboardArrowRightIcon width={24} height={24} />
-            </Stack>
 
-            <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} onClick={() => {
-              router.push('/user/codesetting');
-            }}>
-              <Stack direction='row' spacing={1} justifyContent='start'>
-                <Image src={Lk} width={24} height={24} alt='ilink' />
-                <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Code Setting</Typography>
+              <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} onClick={() => {
+                router.push('/user/transaction');
+              }}>
+                <Stack direction='row' spacing={1} justifyContent='start' alignItems="center">
+                  <Icon icon="ri:history-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
+                  <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>History</Typography>
+                </Stack>
+                <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
-              <KeyboardArrowRightIcon width={24} height={24} />
+
+              <Stack direction='row' justifyContent='space-between' alignItems="center" sx={{ padding: '8px' }} onClick={() => {
+                router.push('/user/codesetting');
+              }}>
+                <Stack direction='row' spacing={1} justifyContent='start' alignItems="center">
+                  <Icon icon="iconamoon:lock-light" width="24" height="24" style={{ color: '#a3a3a3' }} />
+                  <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Code Setting</Typography>
+                </Stack>
+                <KeyboardArrowRightIcon width={24} height={24} />
+              </Stack>
+
+              <Stack direction='row' justifyContent='space-between' alignItems="center" sx={{ padding: '8px' }} onClick={() => {
+                router.push('/user/bindwallet?token=' + info.uuid);
+              }}>
+                <Stack direction='row' spacing={1} justifyContent='start'>
+                  <Icon icon="icon-park-twotone:connect" width="24" height="24" style={{ color: '#a3a3a3' }} />
+                  <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Link Wallets</Typography>
+                </Stack>
+                <KeyboardArrowRightIcon width={24} height={24} />
+              </Stack>
             </Stack>
           </Stack>
           {
@@ -277,8 +295,8 @@ export default function Account() {
           {
             //fun
           }
-          <Stack direction='column'>
-            <Typography sx={{ color: "E9E5DA", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Bets</Typography>
+          <Stack direction='column' style={{ background: '#373636', padding: '12px', borderRadius: "5px" }}>
+            <Typography sx={{ color: "#FFFFFF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Bets</Typography>
             <Divider />
             <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px' }} onClick={() => {
               router.push('/user/bets');
@@ -296,8 +314,8 @@ export default function Account() {
           {
             //About
           }
-          <Stack direction='column'>
-            <Typography sx={{ color: "E9E5DA", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>About</Typography>
+          <Stack direction='column' style={{ background: '#373636', padding: '12px', borderRadius: "5px" }}>
+            <Typography sx={{ color: "#FFFFFF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>About</Typography>
             <Divider />
             <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} onClick={() => {
               router.push("/user/faq")
@@ -335,8 +353,8 @@ export default function Account() {
           {
             //close
           }
-          <Stack direction='column'>
-            <Typography sx={{ color: "E9E5DA", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Closure</Typography>
+          <Stack direction='column' style={{ background: '#373636', padding: '12px', borderRadius: "5px" }}>
+            <Typography sx={{ color: "#FFFFFF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Closure</Typography>
             <Divider />
             <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px' }}
               onClick={() => {
