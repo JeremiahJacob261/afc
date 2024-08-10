@@ -273,7 +273,7 @@ export default function Account() {
               </Stack>
 
               <Stack direction='row' justifyContent='space-between' alignItems="center" sx={{ padding: '8px' }} onClick={() => {
-                router.push('/user/bindwallet?token=' + info.uuid);
+                router.push('/user/bindwallet');
               }}>
                 <Stack direction='row' spacing={1} justifyContent='start'>
                   <Icon icon="icon-park-twotone:connect" width="24" height="24" style={{ color: '#a3a3a3' }} />

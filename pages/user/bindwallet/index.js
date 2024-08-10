@@ -5,18 +5,23 @@ import { styled } from '@mui/material/styles';
 import Logo from '@/public/favicon.ico';
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import Cover from '../cover'
 import FormControl from '@mui/material/FormControl';
 import Loading from "@/pages/components/loading";
 import toast, { Toaster } from "react-hot-toast";
+import IDRBANK from '@/pages/api/idrbanks.json';
 import { motion } from "framer-motion";
 import NativeSelect from '@mui/material/NativeSelect';
 import InputBase from '@mui/material/InputBase';
 import { supabase } from "@/pages/api/supabase";
-export default function Home({ data, wallets }) {
+import { CookiesProvider, useCookies } from 'react-cookie';
+export default function Home({ wallets }) {
     const router = useRouter();
+    const [cookies, setCookie] = useCookies(['authdata']);
     const [amount, setAmount] = useState('');
     const [wallet, setWallet] = useState([]);
     const [address, setAddress] = useState('')
+    const data = cookies.authdata;
     const [bank, setBank] = useState('')
     const [accountnumber, setAccountNumber] = useState('')
     const [accountname, setAccountName] = useState('')
@@ -25,6 +30,10 @@ export default function Home({ data, wallets }) {
         const [v, t] = event.target.value.split('-')
         setWallet(event.target.value);
         setType(t)
+    };
+
+    const handleBhange = (event) => {
+        setBank(event.target.value);
     };
     //the below controls the loading modal
     const [open, setOpen] = useState(false);
@@ -88,7 +97,7 @@ export default function Home({ data, wallets }) {
                                 headers: {
                                     'Content-Type': 'application/json'
                                 },
-                                body: JSON.stringify({  type: type, wallet: accountnumber,name:accountname,bank:wallet, uid: localStorage.getItem('token') })
+                                body: JSON.stringify({ type: type, wallet: accountnumber, name: accountname, bank: wallet, uid: data.id })
                             });
                             const data = await response.json();
                             if (data.status == 'success') {
@@ -117,56 +126,56 @@ export default function Home({ data, wallets }) {
                     make();
                 }
             } else {
-                    // this is for crypto methods
-                    if( address < 3 || wallet < 3) {
-                        toast('Please fill all details correctly',
-                            {
-                                icon: '🤦‍♀️',
-                                style: {
-                                    borderRadius: '10px',
-                                    background: '#DE1A1A',
-                                    color: '#fff',
+                // this is for crypto methods
+                if (address < 3 || wallet < 3) {
+                    toast('Please fill all details correctly',
+                        {
+                            icon: '🤦‍♀️',
+                            style: {
+                                borderRadius: '10px',
+                                background: '#DE1A1A',
+                                color: '#fff',
+                            },
+                        }
+                    );
+                } else {
+                    //send the data
+                    const make = async () => {
+                        try {
+                            handleOpen();
+                            const response = await fetch('/api/bindwallet', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
                                 },
-                            }
-                        );
-                    }else{
-                        //send the data
-                        const make = async () => {
-                            try {
-                                handleOpen();
-                                const response = await fetch('/api/bindwallet', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: JSON.stringify({ wallet: address, type: type, name:"",bank:wallet, uid: localStorage.getItem('token') })
-                                });
-                                const data = await response.json();
-                                if (data.status == 'success') {
-                                    toast('Binding Wallet successful',
-                                        {
-                                            icon: '🥳',
-                                            style: {
-                                                borderRadius: '10px',
-                                                background: '#26A69A',
-                                                color: '#fff',
-                                            },
-                                        }
-                                    );
-                                    handleClose();
-                                    router.back();
+                                body: JSON.stringify({ wallet: address, type: type, name: "", bank: wallet, uid: localStorage.getItem('token') })
+                            });
+                            const data = await response.json();
+                            if (data.status == 'success') {
+                                toast('Binding Wallet successful',
+                                    {
+                                        icon: '🥳',
+                                        style: {
+                                            borderRadius: '10px',
+                                            background: '#26A69A',
+                                            color: '#fff',
+                                        },
+                                    }
+                                );
+                                handleClose();
+                                router.back();
 
-                                } else {
-                                    toast.error(data.message)
-                                    handleClose();
-                                }
-                            } catch (e) {
-                                console.log(e)
+                            } else {
+                                toast.error(data.message)
                                 handleClose();
                             }
+                        } catch (e) {
+                            console.log(e)
+                            handleClose();
                         }
-                        make();
                     }
+                    make();
+                }
             }
         } catch (e) {
             console.log(e);
@@ -212,32 +221,23 @@ export default function Home({ data, wallets }) {
 
 
     return (
-        <div className="dashboard-background">
+        <Cover>
             <Toaster position="bottom-center"
                 reverseOrder={false} />
             <Head>
                 <title>BIND WALLET</title>
             </Head>
             <Loading open={open} handleClose={handleClose} />
-            <Stack direction="column" spacing={3} justifyContent="center" alignItems="center" sx={{ width: '100%', height: '100%' }} >
+            <Stack direction="column" spacing={3} justifyContent="center" alignItems="center" sx={{ minWidth: '350px', width: '100%', height: '100%' }} >
 
-                <Stack direction={"column"} alignItems="center" justifyContent={"center"} spacing={3} className='t-con'>
-                    <Image src={Logo} alt="logo" width={67} height={58} style={{ borderRadius: '6px' }} onClick={() => { router.push('/dashboard') }} />
-
-                    <p className="k-title">BIND WALLET</p>
-
-                    <p className="i-title">CoinMassFX allows users to bind or connect their favourite wallet, offering easy and reliable withdrawal method.</p>
-                </Stack>
-
-                <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ marginTop: '20px', marginBottom: "20px", background: 'none', paddingBottom: '30px', width: '100%', maxWidth: '450px' }}>
-                    <Stack direction="column" alignItems="center" justifyContent={"center"} spacing={3} sx={{ background: '#1A1A1A', padding: '16px', borderRadius: '8px', minWidth: "100%", maxWidth: '400px' }}>
+                <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ marginTop: '20px', marginBottom: "20px", background: 'none', minWidth: "350px",paddingBottom: '30px', width: '100%', maxWidth: '450px' }}>
+                    <Stack direction="column" alignItems="center" justifyContent={"center"} spacing={3} sx={{ background: '#373636', padding: '16px', borderRadius: '8px', minWidth: "350px", maxWidth: '450px' }}>
                         <Stack direction="row" alignItems="center" justifyContent={"space-between"} sx={{ width: '100%' }}>
                             <p style={{ color: '#D9D8D4', fontWeight: '700', fontSize: '14px' }}>BIND WALLET</p>
-
-
                         </Stack>
-                        <Stack direction="row" alignItems="center" justifyContent={"center"} spacing={3} sx={{ background: '#1A1A1A', padding: '12px', width: '100%' }}>
-                            <FormControl sx={{ m: 1, width: '100%' }} variant="standard">
+                        <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#242627', padding: '8px', width: '100%',borderRadius:'8px' }}>
+                            <p className='normal-bold' style={{ textAlign:'start' }}>Select Payment Method</p>
+                            <FormControl sx={{ m: 1, width: '100%',maxWidth:'301px' }} variant="standard">
                                 <NativeSelect
                                     id="demo-customized-select-native"
                                     value={wallet}
@@ -259,7 +259,8 @@ export default function Home({ data, wallets }) {
                         {
                             (type === 'local') ?
                                 <>
-                                    <Stack direction="row" alignItems="center" justifyContent={"center"} spacing={3} sx={{ background: '#1A1A1A', padding: '12px', width: '100%' }}>
+                                    <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#242627', padding: '8px', width: '100%',borderRadius:'8px' }}>
+                                    <p className='normal-bold' style={{ textAlign:'start' }}>Account Number</p>
                                         <input type="text" className="amountinput" placeholder="account number" value={accountnumber} onChange={(e) => {
                                             if (!isNaN(e.target.value)) {
                                                 setAccountNumber(e.target.value)
@@ -267,24 +268,40 @@ export default function Home({ data, wallets }) {
                                         }} />
                                     </Stack>
 
-                                    <Stack direction="row" alignItems="center" justifyContent={"center"} spacing={3} sx={{ background: '#1A1A1A', padding: '12px', width: '100%' }}>
+                                    <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#242627', padding: '8px', width: '100%',borderRadius:'8px' }}>
+                                    <p className='normal-bold' style={{ textAlign:'start' }}>Account Name</p>
                                         <input type="text" className="amountinput" placeholder="account name" value={accountname} onChange={(e) => {
 
                                             setAccountName(e.target.value)
                                         }} />
                                     </Stack>
 
-                                    <Stack direction="row" alignItems="center" justifyContent={"center"} spacing={3} sx={{ background: '#1A1A1A', padding: '12px', width: '100%' }}>
-                                        <input type="text" className="amountinput" placeholder="bank name" value={bank} onChange={(e) => {
-
-                                            setBank(e.target.value)
-                                        }} />
-                                    </Stack>
+                                    <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#242627', padding: '8px', width: '100%',borderRadius:'8px' }}>
+                            <p className='normal-bold' style={{ textAlign:'start' }}>Select Payment Method</p>
+                            <FormControl sx={{ m: 1, width: '100%',maxWidth:'301px' }} variant="standard">
+                                <NativeSelect
+                                    id="demo-customized-select-native"
+                                    value={bank}
+                                    onChange={handleBhange}
+                                    input={<BootstrapInput />}
+                                >
+                                    <option aria-label="None" value="" style={{ color: '#D9D8D4', background: '#212121' }} />
+                                    {
+                                        IDRBANK.map((w) => {
+                                            return (
+                                                <option key={w.name} value={w.name} style={{ color: '#D9D8D4', background: '#212121' }}>{w.name.toUpperCase()}</option>
+                                            )
+                                        })
+                                    }
+                                </NativeSelect>
+                            </FormControl>
+                        </Stack>
                                 </>
 
                                 :
                                 <>
-                                    <Stack direction="row" alignItems="center" justifyContent={"center"} spacing={3} sx={{ background: '#1A1A1A', padding: '12px', width: '100%' }}>
+                                    <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#242627', padding: '12px', width: '100%',borderRadius:'8px' }}>
+                                    <p className='normal-bold' style={{ textAlign:'start' }}>Input your address</p>
                                         <input type="text" className="amountinput" placeholder="wallet address" value={address} onChange={(e) => {
 
                                             setAddress(e.target.value)
@@ -297,7 +314,7 @@ export default function Home({ data, wallets }) {
                         }
 
                         <motion.div whileTap={{ scale: 0.9 }} whileHover={{ scale: 1.02 }} onClick={nextfund} style={{ width: '100%', height: '45px' }}>
-                            <Stack className="powerbtn" direction="column" alignItems="center" justifyContent={"center"}>
+                            <Stack className="powerbtn" direction="column" alignItems="center" justifyContent={"center"} sx={{ }}>
                                 <p className="normal-bold" style={{ fontWeight: 'bold' }}>BIND WALLET</p>
                             </Stack>
                         </motion.div>
@@ -308,48 +325,23 @@ export default function Home({ data, wallets }) {
 
 
             </Stack>
-        </div>
+        </Cover>
     )
 }
 
 export const getServerSideProps = async (context) => {
-    const tokener = context.query.token;
-    console.log(tokener.length);
+   
     try {
         const { data: wallets, error: walleterror } = await supabase
             .from('walle')
             .select('*')
             .eq('available', true);
-        if (tokener.length < 10) {
             return {
-                props: { data: { 'username': "Error Occured" }, wallets: wallets }
+                props: {  wallets: wallets }
             }
-        } else {
-            const { data, error } = await supabase
-                .from('users')
-                .select("*")
-                .eq('uuid', tokener)
-            if (error) {
-                return {
-                    props: { data: { 'username': "Error Occured" }, wallets: wallets }
-                }
-            } else {
-                if (data && data.length > 0) {
-
-                    return {
-                        props: { data: data[0], wallets: wallets }
-                    }
-                } else {
-                    return {
-                        props: { data: { 'username': "Error Occured" }, wallets: wallets }
-                    }
-                }
-
-            }
-        }
     } catch (e) {
         return {
-            props: { data: { 'username': "Error Occured" }, wallets: [] }
+            props: {  wallets: [] }
         }
     }
 
