@@ -218,24 +218,22 @@ export default function Login() {
           }
           setDrop(false)
         } else {
-             // Set a cookie
+          // Set a cookie
           let user = data.user;
-             let thecoook = JSON.stringify({ "username": user.user_metadata.displayName, "email": emailer, "id": user.id })
-             setCookie('authdata', thecoook);
-   
-             setCookie('authed', true);
+          let thecoook = JSON.stringify({ "username": user.user_metadata.displayName, "email": emailer, "id": user.id })
+          setCookie('authdata', thecoook);
+
+          setCookie('authed', true);
           // User successfully signed in
           alert('You are logged in');
           console.log(user)
           // localStorage.setItem('signRef', data[0].newrefer);
-       
+
           localStorage.setItem('signedIns', true);
           localStorage.setItem('signUids', user.id);
           localStorage.setItem('signNames', user.user_metadata.displayName);
           console.log(user.user_metadata.displayName)
-          setInterval(() => {
-            router.push('/user')
-}, 1500);
+          router.push('/user')
         }
       }
       sign(data[0].email);
@@ -298,22 +296,20 @@ export default function Login() {
             console.log(error.message)
           }
           setDrop(false)
-        } else {     
+        } else {
           let user = data.user;
-           let thecoook = JSON.stringify({ "username": user.user_metadata.displayName, "email": emailer, "id": user.id })
+          let thecoook = JSON.stringify({ "username": user.user_metadata.displayName, "email": emailer, "id": user.id })
           setCookie('authdata', thecoook);
           setCookie('authed', true);
           // User successfully signed in
           alert('you are logged in');
           console.log(user)
           // localStorage.setItem('signRef', data[0].newrefer);
-    
+
           localStorage.setItem('signedIns', true);
           localStorage.setItem('signUids', user.id);
           localStorage.setItem('signNames', user.user_metadata.displayName);
-          setInterval(() => {
-                      router.push('/user')
-          }, 1500);
+          router.push('/user')
 
         }
       }
@@ -380,7 +376,7 @@ export default function Login() {
           <FormControl
             sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#CACACA', } }}
             variant="filled">
-            <InputLabel htmlFor="outlined-adornment-password" sx={{color:'white'}}>Password</InputLabel>
+            <InputLabel htmlFor="outlined-adornment-password" sx={{ color: 'white' }}>Password</InputLabel>
             <OutlinedInput
               id="outlined-adornment-password"
               type={values.showPassword ? 'text' : 'password'}
