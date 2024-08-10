@@ -13,7 +13,6 @@ import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import { Form as Farm } from 'react-bootstrap'
-import { getCookies, getCookie, setCookie, setCookies, removeCookies } from 'cookies-next';
 import LOGO from '../../public/brentford.ico'
 import Image from 'next/image'
 import Visibility from '@mui/icons-material/Visibility';
@@ -25,6 +24,7 @@ import Wig from '../../public/icon/wig.png'
 import Big from '../../public/icon/badge.png'
 import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, updateProfile } from "firebase/auth";
 import { async } from "@firebase/util";
+import { useCookies } from 'react-cookie';
 import codes from '../api/codeswithflag.json'
 export default function Register({ refer }) {
   const [password, setPassword] = useState("")
@@ -33,6 +33,8 @@ export default function Register({ refer }) {
   const [phone, setPhone] = useState("")
   const [username, setUsername] = useState("")
   const [age, setAge] = useState("+91");
+  
+  const [cookies, setCookie] = useCookies(['authdata']);
   const [drop, setDrop] = useState(false);
   const [idR, setidR] = useState(refer);
   const [agecheck, setAgecheck] = useState(false);
@@ -97,40 +99,7 @@ export default function Register({ refer }) {
       .rpc('increment', { x: 1, row_id: idR })
   }
   useEffect(() => {
-    async function getSe() {
-
-      const { data, error } = await supabase.auth.getSession();
-      if (data.session != null) {
-        console.log(data.session)
-        let user = data.session.user;
-        async function GET() {
-          try {
-            const { data, error } = await supabase
-              .from('users')
-              .select()
-              .eq('username', user.user_metadata.displayName);
-            localStorage.setItem('signRef', data[0].newrefer);
-            console.log(data);
-          } catch (e) {
-
-          }
-
-        }
-        GET();
-        localStorage.setItem('signedIns', true);
-        localStorage.setItem('signUids', user.id);
-        localStorage.setItem('signNames', user.user_metadata.displayName);
-        route.push('/user');
-      } else {
-
-        console.log('sign out');
-        localStorage.removeItem('signedIns');
-        localStorage.removeItem('signUids');
-        localStorage.removeItem('signNames');
-        localStorage.removeItem('signRef');
-      }
-    }
-    // getSe();
+    
     async function lvls() {
       try {
         const { data, error } = await supabase
@@ -232,6 +201,10 @@ export default function Register({ refer }) {
           })
         console.log(error);
         console.log(data);
+        let thecoook = JSON.stringify({ "username": username, "email": email, "id": user.id })
+          setCookie('authdata', thecoook);
+
+          setCookie('authed', true);
         localStorage.setItem('signedIns', true);
         localStorage.setItem('signUids', user.id);
         localStorage.setItem('signNames', username);
@@ -320,49 +293,63 @@ export default function Register({ refer }) {
             alignItems="center"
             spacing={2}
             className="glass"
-            sx={{ height: "100%", marginTop: "15px", padding: "10px", backgound: "#495265" }}>
+            sx={{ height: "100%", marginTop: "15px",minWidth:'345px',maxWidth:'450px', padding: "10px", backgound: "#495265" }}>
             <Stack direction="column" spacing={4} justifyContent="center" alignItems="center">
               <Link href="/" style={{ textDecoration: "none" }}>
-                <Typography style={{ fontFamily: 'Noto Serif, serif', color: "#242627", fontWeight: '400', fontSize: '20px' }}>BFC  </Typography>
+                <Typography style={{ fontFamily: 'Noto Serif, serif', color: "#CACACA", fontWeight: '400', fontSize: '20px' }}>BFC  </Typography>
               </Link>
-              <Typography style={{ fontFamily: 'Poppins,sans-serif', color: '#242627', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
-                Sign up now and get a welcome bonus!
+              <Typography style={{ fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
+                Sign up now and get a free USDT to invest!
               </Typography>
-              <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: '#242627', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
+              <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
                 Enter the correct information provided to create an account
               </Typography>
             </Stack>
 
-            <TextField id="outlined-basic" label="Username" variant="outlined"
-              sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #242627', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#242627', } }}
+            <TextField placeholder="Username" variant="outlined"
+
+              sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#FFFFFF' } }}
+
               value={username}
               onChange={(e) => {
                 setUsername(e.target.value)
               }}
             />
-            <TextField id="outlined-basic" label="Email" variant="outlined"
-              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #242627', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#242627' } }}
+            <TextField id="outlined-basic" placeholder="Email" variant="outlined"
+              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#FFFFFF' } }} InputLabelProps={{
+                style: {
+                  color: '#CACACA', // Change the color to red
+                },
+              }}
               value={email}
               type='email'
               onChange={(e) => {
                 setEmail(e.target.value)
               }}
             />
-            <TextField id="outlined-basic" label="Invite Code" variant="outlined"
+            <TextField id="outlined-basic" placeholder="Invite Code" variant="outlined"
               value={idR}
               disabled
-              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #242627', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%",color: '#242627', background: '#172242', input: { color: '#242627' } }}
+              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", color: '#CACACA', background: '#172242', input: { color: '#FFFFFF' } }} InputLabelProps={{
+                style: {
+                  color: '#CACACA', // Change the color to red
+                },
+              }}
               onChange={(e) => {
                 setidR(e.target.value)
               }} />
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Code</InputLabel>
+              <InputLabel id="demo-simple-select-placeholder">Code</InputLabel>
               <Select
-                labelId="demo-simple-select-label"
+                placeholderId="demo-simple-select-placeholder"
                 id="demo-simple-select"
                 value={age}
-                label="+91"
-                sx={{ fontSize: '14', color: '#242627', fontWeight: '300', border: '1px solid #242627', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#242627' } }}
+                placeholder="+91"
+                sx={{ fontSize: '14', color: '#CACACA', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#FFFFFF' } }} InputLabelProps={{
+                  style: {
+                    color: '#CACACA', // Change the color to red
+                  },
+                }}
                 onChange={(e) => {
                   setAge(e.target.value);
                 }}
@@ -371,12 +358,12 @@ export default function Register({ refer }) {
                 {
                   codes.countries.map((c) => {
                     return (
-                      <MenuItem value={c.code} key={c.name} sx={{ color: '#242627', background: '#172242' }}>
+                      <MenuItem value={c.code} key={c.name} sx={{ color: '#CACACA', background: '#172242' }}>
                         <Stack direction='row' spacing={1}>
-                          <Image src={c.flag_image_link} alt={c.name} width={25} height={22}/>
-                        <Typography sx={{fontFamily: 'Poppins, sans-serif'}}> {c.code} {c.name}</Typography>
+                          <Image src={c.flag_image_link} alt={c.name} width={25} height={22} />
+                          <Typography sx={{ fontFamily: 'Poppins, sans-serif' }}> {c.code} {c.name}</Typography>
                         </Stack>
-                       </MenuItem>
+                      </MenuItem>
                     )
                   })
                 }
@@ -391,10 +378,14 @@ export default function Register({ refer }) {
 
               </Select>
             </FormControl>
-            <TextField id="outlined-basic" label="Phone"
+            <TextField id="outlined-basic" placeholder="Phone"
               type="number"
               variant="outlined"
-              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #242627', color: '#242627', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#242627' } }}
+              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', color: '#CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#FFFFFF' } }} InputLabelProps={{
+                style: {
+                  color: '#CACACA', // Change the color to red
+                },
+              }}
               value={phone}
               onChange={(e) => {
                 setPhone(e.target.value);
@@ -407,28 +398,36 @@ export default function Register({ refer }) {
                 type={values.showPassword ? 'text' : 'password'}
                 value={values.password}
                 onChange={handleChange('password')}
-                sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #242627', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#242627' } }}
+                sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#FFFFFF' } }} InputLabelProps={{
+                  style: {
+                    color: '#CACACA', // Change the color to red
+                  },
+                }}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
-                      aria-label="toggle password visibility"
+                      aria-placeholder="toggle password visibility"
                       onClick={handleClickShowPassword}
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
                     >
-                      {values.showPassword ? <VisibilityOff sx={{ color: '#242627smoke' }} /> : <Visibility sx={{ color: '#242627' }} />}
+                      {values.showPassword ? <VisibilityOff sx={{ color: '#CACACAsmoke' }} /> : <Visibility sx={{ color: '#CACACA' }} />}
                     </IconButton>
                   </InputAdornment>
                 }
-                label="Enter Password"
+                placeholder="Enter Password"
               />
             </FormControl>
             <TextField
               required
               id="outlined-required"
-              label="Confirm Password"
+              placeholder="Confirm Password"
               type="password"
-              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #242627', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#242627' } }}
+              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#FFFFFF' } }} InputLabelProps={{
+                style: {
+                  color: '#CACACA', // Change the color to red
+                },
+              }}
               value={cpassword}
               onChange={(e) => {
                 setcPassword(e.target.value);
@@ -440,12 +439,12 @@ export default function Register({ refer }) {
               type="checkbox"
               label="Do you accept our Terms and Conditions ?"
               id="age"
-              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #242627', borderRadius: '4px', fontFamily: 'Poppins, sans-serif' }}
+              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif' }}
               value={agecheck}
               onChange={(a) => {
                 setAgecheck(a.target.value)
               }}
-              style={{ color: "#242627" }}
+              style={{ color: "#CACACA" }}
             />
             <Button variant="contained" sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', background: '#FE9D16' }}
               onClick={() => {
@@ -480,12 +479,12 @@ export default function Register({ refer }) {
                   Alerts('Please Input a Complete Phone Number! at least 9 digits', false)
                 }
               }}>
-              <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: '#03045E', fontSize: '14px', color: '#242627' }}>Register</Typography>
+              <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: '#03045E', fontSize: '14px', color: '#CACACA' }}>Register</Typography>
             </Button>
             <Stack direction="row" alignItems="center" justifyContent="center" sx={{ height: '22px' }} spacing={1}>
-              <Typography sx={{ color: "#242627", fontSize: '14px', fontWeight: '100', opacity: '0.7', fontFamily: 'Poppins,sans-serif' }}>Already have an Account ? </Typography>
+              <Typography sx={{ color: "#CACACA", fontSize: '14px', fontWeight: '100', opacity: '0.7', fontFamily: 'Poppins,sans-serif' }}>Already have an Account ? </Typography>
               <Typography>
-                <Link href="/login" style={{ textDecoration: "none", fontSize: '14px', fontWeight: '100', color: "#242627", opacity: '1.0', fontFamily: 'Poppins,sans-serif' }}>Login</Link></Typography>
+                <Link href="/login" style={{ textDecoration: "none", fontSize: '14px', fontWeight: '100', color: "#CACACA", opacity: '1.0', fontFamily: 'Poppins,sans-serif' }}>Login</Link></Typography>
 
             </Stack>
           </Stack>
@@ -507,11 +506,11 @@ export default function Register({ refer }) {
             setOpen(false)
           }
         }}
-        aria-labelledby="modal-modal-title"
+        aria-placeholderledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Stack alignItems='center' justifyContent='space-evenly' sx={{
-          background: '#242627', width: '290px', height: '330px', borderRadius: '20px',
+          background: '#CACACA', width: '290px', height: '330px', borderRadius: '20px',
           position: 'absolute',
           top: '50%',
           left: '50%',
@@ -527,7 +526,7 @@ export default function Register({ refer }) {
             {ale}
           </Typography>
           <Divider sx={{ background: '#CACACA' }} />
-          <Button variant='contained' sx={{ fontFamily: 'Poppins,sans-serif', color: '#242627', background: '#03045E', padding: '8px', width: '100%' }} onClick={() => {
+          <Button variant='contained' sx={{ fontFamily: 'Poppins,sans-serif', color: '#CACACA', background: '#03045E', padding: '8px', width: '100%' }} onClick={() => {
             if (aleT) {
               setOpen(false)
               route.push('/user')

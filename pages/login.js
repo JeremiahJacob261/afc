@@ -150,95 +150,95 @@ export default function Login() {
       }
     })
     //update email after migration
-    const uidch = async () =>{
+    const uidch = async () => {
 
-const { error } = await supabase
-.from('users')
-.update({ userId: data.user.id })
-.eq('email', email);
+      const { error } = await supabase
+        .from('users')
+        .update({ userId: data.user.id })
+        .eq('email', email);
     }
     uidch();
     router.push('/user')
 
   }
- 
+
   const login = async () => {
-//firebase
-const fire = async (emailer) => {
-  signInWithEmailAndPassword(auth, emailer, values.password)
-          .then((userCredential) => {
-            // Signed in 
-            const user = userCredential.user;
-            // ...
-  
-            supabaseMigrate(user.displayName, user.uid);
-            alert('you are Logged in');
-            console.log(user.displayName)
-            localStorage.setItem('signedIns', true);
-            localStorage.setItem('signUids', user.uid);
-            localStorage.setItem('signNames', user.displayName);
-            setDrop(false)
-            router.push('/user');
-          })
-          .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log(error.message)
-            setDrop(false)
-              alert(error.code);
-              if(error.code === 'network-request-failed'){
-                alert('Please Check Your internet connection or Check your password')
-              }
-          });
-        }
-        
-          //end of firebase
+    //firebase
+    const fire = async (emailer) => {
+      signInWithEmailAndPassword(auth, emailer, values.password)
+        .then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+          // ...
+
+          supabaseMigrate(user.displayName, user.uid);
+          alert('you are Logged in');
+          console.log(user.displayName)
+          localStorage.setItem('signedIns', true);
+          localStorage.setItem('signUids', user.uid);
+          localStorage.setItem('signNames', user.displayName);
+          setDrop(false)
+          router.push('/user');
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(error.message)
+          setDrop(false)
+          alert(error.code);
+          if (error.code === 'network-request-failed') {
+            alert('Please Check Your internet connection or Check your password')
+          }
+        });
+    }
+
+    //end of firebase
     async function findemail() {
       const { data, error } = await supabase
         .from('users')
         .select('email')
         .eq('username', email)
 
-        async function sign(emailer) {
+      async function sign(emailer) {
 
-          const { data, error } = await supabase.auth.signInWithPassword({
-            email: emailer,
-            password: values.password,
-          })
-          if (error) {
-            // Handle authentication error
-            console.error(error);
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log(error.message)
-            if(error.message === 'Invalid login credentials'){
-             fire(emailer);
-            }else{
-              console.log(error.message)
-            }
-            setDrop(false)
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: emailer,
+          password: values.password,
+        })
+        if (error) {
+          // Handle authentication error
+          console.error(error);
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(error.message)
+          if (error.message === 'Invalid login credentials') {
+            fire(emailer);
           } else {
-            // User successfully signed in
-            let user = data.user;
-            alert('You are logged in');
-            console.log(user)
-            // localStorage.setItem('signRef', data[0].newrefer);
-              // Set a cookie
-             let thecoook =  JSON.stringify({ "username":user.user_metadata.displayName,"email": emailer, "id":user.id })
-            setCookie('authdata', thecoook);
-            
-          setCookie('authed', true);
-            localStorage.setItem('signedIns', true);
-            localStorage.setItem('signUids', user.id);
-            localStorage.setItem('signNames', user.user_metadata.displayName);
-            console.log(user.user_metadata.displayName)
-            setDrop(false)
-            router.push('/user')
+            console.log(error.message)
           }
+          setDrop(false)
+        } else {
+          // User successfully signed in
+          let user = data.user;
+          alert('You are logged in');
+          console.log(user)
+          // localStorage.setItem('signRef', data[0].newrefer);
+          // Set a cookie
+          let thecoook = JSON.stringify({ "username": user.user_metadata.displayName, "email": emailer, "id": user.id })
+          setCookie('authdata', thecoook);
+
+          setCookie('authed', true);
+          localStorage.setItem('signedIns', true);
+          localStorage.setItem('signUids', user.id);
+          localStorage.setItem('signNames', user.user_metadata.displayName);
+          console.log(user.user_metadata.displayName)
+          setDrop(false)
+          router.push('/user')
         }
-       sign(data[0].email);
+      }
+      sign(data[0].email);
       //end of supabase sgn in
-  
+
       // signInWithEmailAndPassword(auth, data[0].email, values.password)
       //   .then((userCredential) => {
       //     // Signed in 
@@ -290,9 +290,9 @@ const fire = async (emailer) => {
           const errorCode = error.code;
           const errorMessage = error.message;
           console.log(error.message)
-          if(error.message === 'Invalid login credentials'){
-           fire(emailer);
-          }else{
+          if (error.message === 'Invalid login credentials') {
+            fire(emailer);
+          } else {
             console.log(error.message)
           }
           setDrop(false)
@@ -302,17 +302,17 @@ const fire = async (emailer) => {
           alert('you are logged in');
           console.log(user)
           // localStorage.setItem('signRef', data[0].newrefer);
-          let thecoook =  JSON.stringify({ "username":user.user_metadata.displayName,"email": emailer, "id":user.id })
+          let thecoook = JSON.stringify({ "username": user.user_metadata.displayName, "email": emailer, "id": user.id })
           setCookie('authdata', thecoook);
           setCookie('authed', true);
-           localStorage.setItem('signedIns', true);
+          localStorage.setItem('signedIns', true);
           localStorage.setItem('signUids', user.id);
           localStorage.setItem('signNames', user.user_metadata.displayName);
           setDrop(false)
           router.push('/user')
         }
       }
-     sign(email);
+      sign(email);
     }
 
 
@@ -354,10 +354,10 @@ const fire = async (emailer) => {
             <Typography style={{ fontFamily: 'Noto Serif, serif', color: "#CACACA", fontWeight: '400', fontSize: '20px' }}>BFC  </Typography>
           </Link>
           <Typography
-          onClick={()=>{
+            onClick={() => {
 
-          }}
-          style={{ fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
+            }}
+            style={{ fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
             Dont miss a minute of the action! Sign in
           </Typography>
           <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
@@ -365,7 +365,7 @@ const fire = async (emailer) => {
           </Typography>
         </Stack>
         <Stack direction="column" spacing={4} sx={{ width: '343px' }}>
-          <TextField id="outlined-basic" label="Email Or Username" variant="filled"
+          <TextField id="outlined-basic" placeholder="Email Or Username" variant="filled"
             sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#CACACA', } }}
             value={email}
             onChange={(e) => {
@@ -375,7 +375,7 @@ const fire = async (emailer) => {
           <FormControl
             sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#CACACA', } }}
             variant="filled">
-            <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+            <InputLabel htmlFor="outlined-adornment-password" sx={{color:'white'}}>Password</InputLabel>
             <OutlinedInput
               id="outlined-adornment-password"
               type={values.showPassword ? 'text' : 'password'}
@@ -384,7 +384,7 @@ const fire = async (emailer) => {
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
-                    aria-label="toggle password visibility"
+                    aria-placeholder="toggle password visibility"
                     onClick={handleClickShowPassword}
                     onMouseDown={handleMouseDownPassword}
                     edge="end"
@@ -399,16 +399,16 @@ const fire = async (emailer) => {
         </Stack>
       </Stack>
       <Stack direction="column" spacing={2} justifyContent='center' alignItems='center' sx={{ width: '343px', marginTop: '200px' }}>
-        <Button variant="contained" 
-        onKeyDown={(event)=>{
-          if(
-            event.key === "Enter" ||
-            event.key === "Space"
-            ){
+        <Button variant="contained"
+          onKeyDown={(event) => {
+            if (
+              event.key === "Enter" ||
+              event.key === "Space"
+            ) {
               login()
             }
-        }}
-        sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', fontWeight: '400', background: '#FE9D16' }}
+          }}
+          sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', fontWeight: '400', background: '#FE9D16' }}
           onClick={login}>
           <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "#CACACAsmoke" }}>Login</Typography>
         </Button>
