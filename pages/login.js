@@ -218,22 +218,24 @@ export default function Login() {
           }
           setDrop(false)
         } else {
-          // User successfully signed in
+             // Set a cookie
           let user = data.user;
+             let thecoook = JSON.stringify({ "username": user.user_metadata.displayName, "email": emailer, "id": user.id })
+             setCookie('authdata', thecoook);
+   
+             setCookie('authed', true);
+          // User successfully signed in
           alert('You are logged in');
           console.log(user)
           // localStorage.setItem('signRef', data[0].newrefer);
-          // Set a cookie
-          let thecoook = JSON.stringify({ "username": user.user_metadata.displayName, "email": emailer, "id": user.id })
-          setCookie('authdata', thecoook);
-
-          setCookie('authed', true);
+       
           localStorage.setItem('signedIns', true);
           localStorage.setItem('signUids', user.id);
           localStorage.setItem('signNames', user.user_metadata.displayName);
           console.log(user.user_metadata.displayName)
-          setDrop(false)
-          router.push('/user')
+          setInterval(() => {
+            router.push('/user')
+}, 1500);
         }
       }
       sign(data[0].email);
@@ -296,20 +298,23 @@ export default function Login() {
             console.log(error.message)
           }
           setDrop(false)
-        } else {
-          // User successfully signed in
+        } else {     
           let user = data.user;
+           let thecoook = JSON.stringify({ "username": user.user_metadata.displayName, "email": emailer, "id": user.id })
+          setCookie('authdata', thecoook);
+          setCookie('authed', true);
+          // User successfully signed in
           alert('you are logged in');
           console.log(user)
           // localStorage.setItem('signRef', data[0].newrefer);
-          let thecoook = JSON.stringify({ "username": user.user_metadata.displayName, "email": emailer, "id": user.id })
-          setCookie('authdata', thecoook);
-          setCookie('authed', true);
+    
           localStorage.setItem('signedIns', true);
           localStorage.setItem('signUids', user.id);
           localStorage.setItem('signNames', user.user_metadata.displayName);
-          setDrop(false)
-          router.push('/user')
+          setInterval(() => {
+                      router.push('/user')
+          }, 1500);
+
         }
       }
       sign(email);

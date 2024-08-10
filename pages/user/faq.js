@@ -35,7 +35,7 @@ const router = useRouter();
          
           return(
             <Accordion expanded={expanded === `panel${f.id}`} onChange={handleChange(`panel${f.id}`)}
-            sx={{background:'#1A1B72'}}
+            sx={{background:'#373636'}}
             key={f.id}
             >
         <AccordionSummary

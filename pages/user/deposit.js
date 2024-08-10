@@ -174,12 +174,12 @@ checkDepo(url);
                 setfile(e.target.files[0]);
                 console.log(e.target.files[0]);
               }}/>
-          <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '500',color:'#03045E' }} onClick={()=>{
+          <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '500',color:'#242627' }} onClick={()=>{
              inputFile.current.click();
           }}>Browse</Typography>
           </Stack>
            <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{height:'58px',background:'#EFEFEF',borderRadius:'5px',padding:'16px'}} spacing={2}>
-           <InsertDriveFileIcon sx={{color:'#03045E', fontFamily: 'Poppins,sans-serif'}}/>
+           <InsertDriveFileIcon sx={{color:'#242627', fontFamily: 'Poppins,sans-serif'}}/>
            <Stack alignItems='start' justifyContent='start'>
            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#CACACA' }}>{file.name}</Typography>
            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#CACACA' }}>{file.size}</Typography>
@@ -194,7 +194,7 @@ checkDepo(url);
       <PriorityHighRoundedIcon sx={{color:'#242627',background:'#E94E55',width:'20px',height:'20px',borderRadius:'10px'}}/>
       <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#E94E55' }}>Verify in 20 minutes as faiure to do so may lead to decine in transaction</Typography>
       </Stack>
-      <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'#242627',background:'#03045E',padding:'8px',width:'343px',height:'50px'}} onClick={checkFile}>Verify</Button>
+      <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'#242627',background:'#242627',padding:'8px',width:'343px',height:'50px'}} onClick={checkFile}>Verify</Button>
            
       </Stack>
     </Cover>
@@ -230,7 +230,7 @@ padding:'12px'
      {ale}
     </Typography>
     <Divider sx={{background:'#CACACA'}}/>
-    <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'#242627',background:'#03045E',padding:'8px',width:'100%'}} onClick={()=>{
+    <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'#242627',background:'#242627',padding:'8px',width:'100%'}} onClick={()=>{
       if(aleT){
         setOpen(false)
         router.push('/user/depositsuccess')

@@ -55,24 +55,24 @@ export default function Home({user}) {
       2: Agent2
     };
     const [current, setCurrent] = useState(0);
-    useEffect(() => {
-      const interval = setInterval(() => {
-        setCurrent((prevCurrent) => (prevCurrent === 0 ? 1 : prevCurrent === 1 ? 2 : 0));
-      }, 8000);
+    // useEffect(() => {
+    //   const interval = setInterval(() => {
+    //     setCurrent((prevCurrent) => (prevCurrent === 0 ? 1 : prevCurrent === 1 ? 2 : 0));
+    //   }, 8000);
 
-      return () => clearInterval(interval);
-    }, []);
+    //   return () => clearInterval(interval);
+    // }, []);
 
     return (
       <Stack>
         <motion.div
-          key={current}
-          initial={{ opacity: 0, transition: { duration: 1, ease: 'easeIn' } }}
-          animate={{ opacity: 1, }}
-          exit={{ opacity: 0, transition: { duration: 2, ease: 'easeOut' } }}
-          transition={{ duration: 2, ease: 'easeOut' }}
+          // key={current}
+          // initial={{ opacity: 0, transition: { duration: 1, ease: 'easeIn' } }}
+          // animate={{ opacity: 1, }}
+          // exit={{ opacity: 0, transition: { duration: 2, ease: 'easeOut' } }}
+          // transition={{ duration: 2, ease: 'easeOut' }}
         >
-          <Image src={images[current]} width={354} height={140} alt="bonus" style={{ width: 'auto', height: 'auto', borderRadius: '5px' }} />
+          <Image src={images[1]} width={354} height={140} alt="bonus" style={{ width: 'auto', height: 'auto', borderRadius: '5px' }} />
         </motion.div>
       </Stack>
     );
@@ -177,15 +177,15 @@ export default function Home({user}) {
                       </Stack>
                     </Stack>
                     <Stack direction='row' spacing={2} >
-                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#03045E' }}>
+                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#242627' }}>
                         <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>1-0</Typography>
                         <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>{pro.onenil}</Typography>
                       </Stack>
-                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#03045E' }}>
+                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#242627' }}>
                         <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>1-1</Typography>
                         <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>{pro.oneone}</Typography>
                       </Stack>
-                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#03045E' }}>
+                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#242627' }}>
                         <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>1-2</Typography>
                         <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>{pro.onetwo}</Typography>
                       </Stack>

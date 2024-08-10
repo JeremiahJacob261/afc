@@ -8,7 +8,8 @@ export function middleware(request) {
                 //  let authres = NextResponse.redirect(new URL('/login', req.url))    
                 //     authres.cookies.set("supabase-auth-id", "havana");
                 //     return authres
-                if (!request.cookies.has('authed')) {
+                let auths = request.cookies.has('authed') || request.cookies.has('authdata');
+                if (!auths) {
                         console.log('redirect')
                         return NextResponse.redirect(new URL('/login', request.url));
                 } else {

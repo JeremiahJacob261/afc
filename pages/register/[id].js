@@ -479,7 +479,7 @@ export default function Register({ refer }) {
                   Alerts('Please Input a Complete Phone Number! at least 9 digits', false)
                 }
               }}>
-              <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: '#03045E', fontSize: '14px', color: '#CACACA' }}>Register</Typography>
+              <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: '#242627', fontSize: '14px', color: '#CACACA' }}>Register</Typography>
             </Button>
             <Stack direction="row" alignItems="center" justifyContent="center" sx={{ height: '22px' }} spacing={1}>
               <Typography sx={{ color: "#CACACA", fontSize: '14px', fontWeight: '100', opacity: '0.7', fontFamily: 'Poppins,sans-serif' }}>Already have an Account ? </Typography>
@@ -526,7 +526,7 @@ export default function Register({ refer }) {
             {ale}
           </Typography>
           <Divider sx={{ background: '#CACACA' }} />
-          <Button variant='contained' sx={{ fontFamily: 'Poppins,sans-serif', color: '#CACACA', background: '#03045E', padding: '8px', width: '100%' }} onClick={() => {
+          <Button variant='contained' sx={{ fontFamily: 'Poppins,sans-serif', color: '#CACACA', background: '#242627', padding: '8px', width: '100%' }} onClick={() => {
             if (aleT) {
               setOpen(false)
               route.push('/user')

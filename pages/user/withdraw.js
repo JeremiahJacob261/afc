@@ -184,14 +184,14 @@ const { data, error } = await supabase
         <Stack direction="column" spacing={3}>
           <Stack spacing={1}> 
             <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'#CACACA'}}>Enter Gpay or USDT Wallet Address or Airtel Money Account Number</Typography>
-            <TextField  sx={{color:'#03045E'}} value={address} onChange={(a) => {
+            <TextField  sx={{color:'#242627'}} value={address} onChange={(a) => {
               setAddress(a.target.value)
             }}/>
             </Stack>
             <Stack spacing={1}> 
             <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'#CACACA'}}>Enter Amount You Wish to Withdraw</Typography>
             <TextField 
-            sx={{color:'#03045E'}}
+            sx={{color:'#242627'}}
             type="number"
             value={amount}
             onChange={(a) => {
@@ -202,7 +202,7 @@ const { data, error } = await supabase
             <Stack spacing={1}> 
             <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'#CACACA'}}>Transaction Pin</Typography>
             <TextField 
-            sx={{color:'#03045E'}}
+            sx={{color:'#242627'}}
             type="password"
             value={pin}
             onChange={(a) => {
@@ -211,7 +211,7 @@ const { data, error } = await supabase
             </Stack>
 
             <Stack spacing={1}> 
-            <Typography sx={{fontSize:'12px',color:'#03045E',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'#CACACA'}}>Choose Prefered Payment Method</Typography>
+            <Typography sx={{fontSize:'12px',color:'#242627',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'#CACACA'}}>Choose Prefered Payment Method</Typography>
             <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Select your Withdrawal Method</InputLabel>
             <Select
@@ -231,7 +231,7 @@ const { data, error } = await supabase
             </Select>
           </FormControl>
             </Stack>
-        <Button variant="contained" style={{ color: "#242627",height:'50px',background:'#03045E' }} onClick={() => {
+        <Button variant="contained" style={{ color: "#242627",height:'50px',background:'#242627' }} onClick={() => {
           if (info.balance < total) {
             Alerts('Insufficient Balance',false);
           } else {
@@ -289,7 +289,7 @@ padding:'12px'
      {ale}
     </Typography>
     <Divider sx={{background:'#CACACA'}}/>
-    <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'#242627',background:'#03045E',padding:'8px',width:'100%'}} onClick={()=>{
+    <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'#242627',background:'#242627',padding:'8px',width:'100%'}} onClick={()=>{
       if(aleT){
         setOpen(false)
         router.push('/user/withdrawsuccess')

@@ -61,7 +61,7 @@ export default function Code(){
       <Stack spacing={1} sx={{minWidth:'344px'}}> 
             <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'#CACACA'}}>Enter Pin </Typography>
             <TextField 
-            sx={{color:'#03045E'}}
+            sx={{color:'#242627'}}
             value={pin}
             label='Enter Pin'
             type='password'
@@ -73,7 +73,7 @@ export default function Code(){
             <Stack spacing={1} sx={{minWidth:'344px'}}> 
             <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'#CACACA'}}>Confirm Pin </Typography>
             <TextField 
-            sx={{color:'#03045E'}}
+            sx={{color:'#242627'}}
             label='Enter Pin'
             type='password'
             value={cpin}
@@ -82,7 +82,7 @@ export default function Code(){
             }}
             />
             </Stack>
-            <Button variant='contained' sx={{position:'absolute',bottom:100,fontFamily:'Poppins,sans-serif',color:'#242627',background:'#03045E',padding:'8px',minWidth:'343px',height:'50px'}} onClick={nextPage}>Continue</Button>
+            <Button variant='contained' sx={{position:'absolute',bottom:100,fontFamily:'Poppins,sans-serif',color:'#242627',background:'#242627',padding:'8px',minWidth:'343px',height:'50px'}} onClick={nextPage}>Continue</Button>
             </Stack>
         </Cover>
     )
@@ -116,7 +116,7 @@ export default function Code(){
          {ale}
         </Typography>
         <Divider sx={{background:'#CACACA'}}/>
-        <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'#242627',background:'#03045E',padding:'8px',width:'100%'}} onClick={()=>{
+        <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'#242627',background:'#242627',padding:'8px',width:'100%'}} onClick={()=>{
           if(aleT){
             setOpen(false)
             router.push('/user/account')

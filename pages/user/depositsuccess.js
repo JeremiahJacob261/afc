@@ -20,7 +20,7 @@ export default function Dsuccess() {
          You have successfully deposited {amo} USDT to your account
     </Typography>
             </Stack>
-        <Button variant='contained' sx={{position:'absolute',bottom:100,fontFamily:'Poppins,sans-serif',color:'#242627',background:'#03045E',padding:'8px',width:'343px',height:'50px'}} onClick={()=>{
+        <Button variant='contained' sx={{position:'absolute',bottom:100,fontFamily:'Poppins,sans-serif',color:'#242627',background:'#242627',padding:'8px',width:'343px',height:'50px'}} onClick={()=>{
      
         router.push('/user/account')
       

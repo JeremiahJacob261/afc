@@ -135,16 +135,16 @@ export default function Refferal() {
         >
           <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{width:'100%'}}>
             <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '500' }}>Referrals({lvl ? lvl.length : '0'})</Typography>
-            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#03045E',padding:'8px' }}>{fshow}</Typography>
+            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#242627',padding:'8px' }}>{fshow}</Typography>
         
             </Stack>
            
           </AccordionSummary>
         <AccordionDetails>
-        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:(fshow === 'Level 1') ? '#808080' : (fshow === 'Level 2') ? '#808080' : (fshow === 'Level 3') ? '#808080' : '#03045E',padding:'8px' }} onClick={()=>{ reMain}}>All</Typography>
-        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:(fshow === 'Level 1') ? '#03045E' : (fshow === 'Level 2') ? '#808080' : '#808080',padding:'8px' }} onClick={()=>{ filterData('refer')}}>Level 1</Typography>
-        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:(fshow === 'Level 1') ? '#808080' : (fshow === 'Level 2') ? '#03045E' : '#808080',padding:'8px' }} onClick={()=>{ filterData('lvla')}}>Level 2</Typography>
-        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:(fshow === 'Level 1') ? '#808080' : (fshow === 'Level 2') ? '#808080' : '#03045E',padding:'8px' }} onClick={()=>{ filterData('lvlb')}}>Level 3</Typography>
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:(fshow === 'Level 1') ? '#808080' : (fshow === 'Level 2') ? '#808080' : (fshow === 'Level 3') ? '#808080' : '#242627',padding:'8px' }} onClick={()=>{ reMain}}>All</Typography>
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:(fshow === 'Level 1') ? '#242627' : (fshow === 'Level 2') ? '#808080' : '#808080',padding:'8px' }} onClick={()=>{ filterData('refer')}}>Level 1</Typography>
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:(fshow === 'Level 1') ? '#808080' : (fshow === 'Level 2') ? '#242627' : '#808080',padding:'8px' }} onClick={()=>{ filterData('lvla')}}>Level 2</Typography>
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:(fshow === 'Level 1') ? '#808080' : (fshow === 'Level 2') ? '#808080' : '#242627',padding:'8px' }} onClick={()=>{ filterData('lvlb')}}>Level 3</Typography>
           
         </AccordionDetails>
       </Accordion>
