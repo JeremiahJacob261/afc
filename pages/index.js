@@ -53,7 +53,7 @@ export default function Home() {
           {t('welcome_to')}<br />
             BFC
           </Typography>
-          <Typography style={{ width: '308px', height: '111px', fontFamily: 'Poppins, sans-serif', fontWeight: '500' }}>
+          <Typography style={{ width: '308px', height: '171px', fontFamily: 'Poppins, sans-serif', fontWeight: '500' }}>
           {t('site_description')}
           </Typography></div>
         {
