@@ -10,25 +10,15 @@ import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import { supabase } from '../api/supabase'
 import Head from 'next/head';
 import Image from 'next/image';
+import profile from '@/public/prof.png'
 import { app } from '../api/firebase';
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { Icon } from '@iconify/react'
-import LinkIcon from '@mui/icons-material/Link';
-import iLink from '../../public/icon/ant-design_link-outlined.png'
-import DiamondIcon from '@mui/icons-material/Diamond';
-import iCopy from '../../public/icon/ion_copy.png'
-import iNT from '../../public/icon/inter.png'
-import St from '../../public/icon/steam.png'
-import Lk from '../../public/icon/lock.png'
-import Sw from '../../public/icon/steamw.png'
-import Vec from '../../public/icon/Vector.png'
-import Bt from '../../public/icon/bet.png'
-import Ot from '../../public/icon/out.png'
-import Tel from '../../public/icon/tel.png'
-import Fq from '../../public/icon/faq.png'
+
+import toast,{ Toaster } from 'react-hot-toast';
 export default function Account() {
   const auth = getAuth(app);
   const router = useRouter()
@@ -135,14 +125,16 @@ export default function Account() {
   }
   //end of snackbar2
   return (
-    <Cover style={{ width: "100%" }}>
+    <Cover style={{ width: "100%",paddingBottom:'100px' }}>
+        <Toaster position="bottom-center"
+                reverseOrder={false} />
       <Sncks />
       <Head>
         <title>{info ? `${info.username}` : 'Loading...'}&lsquo; Account</title>
         <link rel="icon" href="/brentford.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Box sx={{ padding: "8px", background: "#242627", width: '100%', minHeight: '80vh' }}>
+      <Box sx={{ padding: "8px", background: "#242627", width: '100%', minHeight: '90vh',paddingBottom:'5vh' }}>
         <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '5px', margin: '2px' }}>
           <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
             router.push('/user')
@@ -153,26 +145,28 @@ export default function Account() {
           //start of profile
         }
         <Stack spacing={4} sx={{ minWidth: '344px' }}>
-          <Stack direction='row' spacing={2}>
-            <Avatar>{info ? `${info.username}` : usern}</Avatar>
+          <Stack spacing={1} sx={{ background:'#2D2F2F',padding:'8px',borderRadius:'5px'}}>
+          <Stack direction='row' spacing={2} sx={{ padding:'8px'}} alignItems='center' justifyContent={"start"}>
+            <Image src={profile} width={50} height={50}alt="profile"/>
             <Stack direction='column'>
               <Typography sx={{ color: "#FFFFFF", fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins, sans-serif' }}>Hello {info ? `${info.username}` : usern}</Typography>
-              <Typography sx={{ background: '#03045E', color: "#F5E663", fontSize: '14px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', padding: '5px', width: '50px', borderRadius: '15px', textAlign: 'center' }}>VIP {viplevel}</Typography>
+              <Typography sx={{ color: "#CACACA", fontSize: '14px', fontWeight: '300', fontFamily: 'Poppins, sans-serif',  width: '50px', textAlign: 'start' }}>VIP {viplevel}</Typography>
             </Stack>
           </Stack>
-          <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ background: '#F5E663', padding: '8px', borderRadius: '10px' }}>
+          <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{  padding: '8px', borderRadius: '10px' }}>
             <Stack>
-              <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#CACACA' }}>Current Balance </Typography>
+              <Typography style={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#CACACA' }}>Current Balance </Typography>
               <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#CACACA' }}>{balance.toFixed(3)} USDT</Typography>
             </Stack>
             <Link href='/user/fund' style={{ textDecoration: "none", color: 'white' }}>
-              <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#0A369D', borderRadius: '20px', padding: '8px', width: '95px', height: '32px' }}>
+              <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#E94E55', borderRadius: '20px', padding: '8px', width: '95px', height: '32px' }}>
                 <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: 'white', fontSize: '12px' }}>
                   Deposit
                 </Typography>
                 <KeyboardArrowRightIcon sx={{ width: '16px', height: '16px' }} />
               </Stack>
             </Link>
+          </Stack>
           </Stack>
           {
             //deposit
@@ -185,12 +179,12 @@ export default function Account() {
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} alignItems="center">
                 <Stack direction='row' spacing={1} justifyContent='center' alignItems="center">
                   <Icon icon="ant-design:link-outlined" width="24" height="24" style={{ color: "#a3a3a3" }} />
-                  <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>https://afc .netlify.app/register/{info ? info.newrefer : userR}</Typography>
+                  <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>https://www.bfc.com/register/{info ? info.newrefer : userR}</Typography>
                 </Stack>
                 <Icon icon="solar:copy-bold-duotone" width="24" height="24" style={{ color: '#a3a3a3' }} onClick={() => {
-                  navigator.clipboard.writeText("https://afc .netlify.app/register/" + info.newrefer)
+                  navigator.clipboard.writeText("https://www.bfc.com/register/" + info.newrefer)
                   setMessages("Invite Link Copied")
-                  setOpened(true);
+                  toast.success("Invite link copied")
                 }} />
               </Stack>
 
@@ -295,17 +289,20 @@ export default function Account() {
           {
             //fun
           }
-          <Stack direction='column' style={{ background: '#373636', padding: '12px', borderRadius: "5px" }}>
+          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px" }}>
             <Typography sx={{ color: "#FFFFFF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Bets</Typography>
             <Divider />
-            <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px' }} onClick={() => {
-              router.push('/user/bets');
-            }}>
-              <Stack direction='row' spacing={1} justifyContent='start' >
-                <Image src={Bt} width={24} height={24} alt='ilink' />
-                <Typography sx={{ color: '#CACACA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>My Bets</Typography>
+            <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '50px', padding: '8px', background: '#242627', borderRadius: '8px' }}>
+
+              <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px' }} onClick={() => {
+                router.push('/user/bets');
+              }}>
+                <Stack direction='row' spacing={1} justifyContent='start' alignItems="center">
+                  <Icon icon="mdi:clipboard-text-history-outline" width="24" height="24" style={{ color: '#a3a3a3' }} />
+                  <Typography sx={{ color: '#CACACA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>My Bets</Typography>
+                </Stack>
+                <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
-              <KeyboardArrowRightIcon width={24} height={24} />
             </Stack>
           </Stack>
           {
@@ -314,15 +311,17 @@ export default function Account() {
           {
             //About
           }
-          <Stack direction='column' style={{ background: '#373636', padding: '12px', borderRadius: "5px" }}>
+          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px" }}>
             <Typography sx={{ color: "#FFFFFF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>About</Typography>
             <Divider />
+            <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '50px', padding: '8px', background: '#242627', borderRadius: '8px' }}>
+
             <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} onClick={() => {
               router.push("/user/faq")
             }
             }>
               <Stack direction='row' spacing={1} justifyContent='start'>
-                <Image src={Fq} width={24} height={24} alt='ilink' />
+              <Icon icon="streamline:interface-help-question-circle-circle-faq-frame-help-info-mark-more-query-question" width="24" height="24" style={{ color: '#a3a3a3' }} />
                 <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>FAQ</Typography>
               </Stack>
               <KeyboardArrowRightIcon width={24} height={24} />
@@ -331,7 +330,8 @@ export default function Account() {
             < Link href='https://t.me/+WJKvJKagKuozNzM8'>
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                 <Stack direction='row' spacing={1} justifyContent='start'>
-                  <Image src={Tel} width={24} height={24} alt='ilink' />
+                <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
+             
                   <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Telegram</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
@@ -340,12 +340,13 @@ export default function Account() {
             < Link href='https://t.me/Afc _customercare'>
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                 <Stack direction='row' spacing={1} justifyContent='start'>
-                  <Image src={Tel} width={24} height={24} alt='ilink' />
+                <Icon icon="mdi:support" width="24" height="24" style={{ color: '#a3a3a3' }} />
                   <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Contact</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
             </Link>
+          </Stack>
           </Stack>
           {
             //end of About
@@ -353,9 +354,11 @@ export default function Account() {
           {
             //close
           }
-          <Stack direction='column' style={{ background: '#373636', padding: '12px', borderRadius: "5px" }}>
+          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px" }}>
             <Typography sx={{ color: "#FFFFFF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Closure</Typography>
             <Divider />
+            <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '50px', padding: '8px', background: '#242627', borderRadius: '8px' }}>
+
             <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px' }}
               onClick={() => {
                 const sOut = async () => {
@@ -372,10 +375,11 @@ export default function Account() {
               }
               }>
               <Stack direction='row' spacing={1} justifyContent='start' >
-                <Image src={Ot} width={24} height={24} alt='ilink' />
+              <Icon icon="hugeicons:logout-05" width="24" height="24" style={{ color: '#a3a3a3' }} />
                 <Typography sx={{ color: '#CACACA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Sign out</Typography>
               </Stack>
               <KeyboardArrowRightIcon width={24} height={24} />
+            </Stack>
             </Stack>
           </Stack>
           {
