@@ -21,11 +21,13 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Backdrop from '@mui/material/Backdrop';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
-import CircularProgress from '@mui/material/CircularProgress';
+import { useCookies } from 'react-cookie';
 import { useEffect } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
 export default function Login() {
+  const [cookies, setCookie] = useCookies(['authdata']);
+
   const dbs = getDatabase(app);
   const [username, setUsername] = useState("")
   const [open, setOpen] = React.useState(false);
@@ -63,6 +65,7 @@ export default function Login() {
     event.preventDefault();
   };
   useEffect(() => {
+
     async function getSe() {
 
       const { data, error } = await supabase.auth.getSession();
@@ -220,6 +223,11 @@ const fire = async (emailer) => {
             alert('You are logged in');
             console.log(user)
             // localStorage.setItem('signRef', data[0].newrefer);
+              // Set a cookie
+             let thecoook =  JSON.stringify({ "username":user.user_metadata.displayName,"email": emailer, "id":user.id })
+            setCookie('authdata', thecoook);
+            
+          setCookie('authed', true);
             localStorage.setItem('signedIns', true);
             localStorage.setItem('signUids', user.id);
             localStorage.setItem('signNames', user.user_metadata.displayName);
@@ -294,7 +302,10 @@ const fire = async (emailer) => {
           alert('you are logged in');
           console.log(user)
           // localStorage.setItem('signRef', data[0].newrefer);
-          localStorage.setItem('signedIns', true);
+          let thecoook =  JSON.stringify({ "username":user.user_metadata.displayName,"email": emailer, "id":user.id })
+          setCookie('authdata', thecoook);
+          setCookie('authed', true);
+           localStorage.setItem('signedIns', true);
           localStorage.setItem('signUids', user.id);
           localStorage.setItem('signNames', user.user_metadata.displayName);
           setDrop(false)
@@ -340,29 +351,29 @@ const fire = async (emailer) => {
       <Stack direction='column' spacing={3}>
         <Stack direction="column" spacing={2} justifyContent="center" alignItems="center">
           <Link href="/" style={{ textDecoration: "none" }}>
-            <Typography style={{ fontFamily: 'Noto Serif, serif', color: "#242627", fontWeight: '400', fontSize: '20px' }}>BFC  </Typography>
+            <Typography style={{ fontFamily: 'Noto Serif, serif', color: "#CACACA", fontWeight: '400', fontSize: '20px' }}>BFC  </Typography>
           </Link>
           <Typography
           onClick={()=>{
-            
+
           }}
-          style={{ fontFamily: 'Poppins,sans-serif', color: '#242627', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
+          style={{ fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
             Dont miss a minute of the action! Sign in
           </Typography>
-          <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: '#242627', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
+          <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
             Enter the correct information provided to Login to your  account
           </Typography>
         </Stack>
         <Stack direction="column" spacing={4} sx={{ width: '343px' }}>
           <TextField id="outlined-basic" label="Email Or Username" variant="filled"
-            sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #242627', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#242627', } }}
+            sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#CACACA', } }}
             value={email}
             onChange={(e) => {
               setEmail(e.target.value)
             }}
           />
           <FormControl
-            sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #242627', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#242627', } }}
+            sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#CACACA', } }}
             variant="filled">
             <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
             <OutlinedInput
@@ -378,7 +389,7 @@ const fire = async (emailer) => {
                     onMouseDown={handleMouseDownPassword}
                     edge="end"
                   >
-                    {values.showPassword ? <VisibilityOff sx={{ color: '#242627smoke' }} /> : <Visibility sx={{ color: '#242627' }} />}
+                    {values.showPassword ? <VisibilityOff sx={{ color: '#CACACAsmoke' }} /> : <Visibility sx={{ color: '#CACACA' }} />}
                   </IconButton>
                 </InputAdornment>
               }
@@ -399,13 +410,13 @@ const fire = async (emailer) => {
         }}
         sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', fontWeight: '400', background: '#FE9D16' }}
           onClick={login}>
-          <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "#242627smoke" }}>Login</Typography>
+          <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "#CACACAsmoke" }}>Login</Typography>
         </Button>
-        <Link href="/passwordreset" style={{ textDecoration: '#242627' }}>
-          <Typography style={{ color: "#242627", fontSize: '14px', fontWeight: '200', opacity: '0.7', fontFamily: 'Poppins,sans-serif' }}>Forgotten Password ?</Typography>
-          <Divider sx={{ background: '#242627' }} />
+        <Link href="/passwordreset" style={{ textDecoration: '#CACACA' }}>
+          <Typography style={{ color: "#CACACA", fontSize: '14px', fontWeight: '200', opacity: '0.7', fontFamily: 'Poppins,sans-serif' }}>Forgotten Password ?</Typography>
+          <Divider sx={{ background: '#CACACA' }} />
         </Link>
-        <Link href="/register/000208" style={{ width: '100%', textAlign: 'center', textDecoration: "none", color: "#242627", fontSize: '15px', fontWeight: '400', fontFamily: 'Poppins,sans-serif' }}>Dont have an Account ?
+        <Link href="/register/000208" style={{ width: '100%', textAlign: 'center', textDecoration: "none", color: "#CACACA", fontSize: '15px', fontWeight: '400', fontFamily: 'Poppins,sans-serif' }}>Dont have an Account ?
           Create Account
 
         </Link>
@@ -413,3 +424,6 @@ const fire = async (emailer) => {
     </Stack>
   )
 }
+
+
+

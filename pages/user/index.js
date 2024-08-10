@@ -26,7 +26,7 @@ import { ImageAspectRatioTwoTone } from "@mui/icons-material";
 
 
 
-export default function Home() {
+export default function Home({user}) {
   const [anchorEl, setAnchorEl] = useState(null);
   const openr = Boolean(anchorEl);
   const [drop, setDrop] = useState(false);
@@ -37,68 +37,14 @@ export default function Home() {
     setAnchorEl(null);
   };
   const [footDat, setFootDat] = useState([])
-  const [balance, setBalance] = useState(0)
-  const [info, setInfo] = useState({})
+  const balance = parseFloat(user.balance);
+  const [info, setInfo] = useState(user)
   const auth = getAuth(app);
   const [draw, setDraw] = useState(false);
   let loads = 0;
   useEffect(() => {
-    const useri = localStorage.getItem('signedIns');
-    if (useri) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
 
-      const uid = localStorage.getItem('signUids');
-      const name = localStorage.getItem('signNames');
-      // ...
-      console.log(name)
-      const GET = async () => {
-        try {
-          const { data, error } = await supabase
-            .from('users')
-            .select()
-            .eq('username', name)
-          setInfo(data[0]);
-          setBalance(data[0].balance);
-          console.log(data)
-          console.log(error)
-          localStorage.setItem('signRef', data[0].newrefer);
-        } catch (e) {
-          console.log(e)
-
-        }
-
-      }
-      GET();
-
-    } else {
-      // User is signed out
-      const sOut = async () => {
-        const { error } = await supabase.auth.signOut();
-        console.log('sign out');
-        console.log(error);
-        localStorage.removeItem('signedIns');
-        localStorage.removeItem('signUids');
-        localStorage.removeItem('signNames');
-        localStorage.removeItem('signRef');
-        router.push('/login');
-      }
-      sOut();
-    }
-
-
-    const getUsers = async () => {
-      // const { data, error } = await supabase
-      //   .from('bets')
-      //   .select()
-      //   .eq('verified', false)
-      //   .limit(5)
-      //   .order('id', { ascending: false });
-      setFootDat([]);
-
-    };
-    getUsers()
-  }, [balance]);
+  }, []);
 
   const router = useRouter();
 
@@ -106,7 +52,7 @@ export default function Home() {
     const images = {
       0: Agent,
       1: Agent1,
-      2:Agent2
+      2: Agent2
     };
     const [current, setCurrent] = useState(0);
     useEffect(() => {
@@ -119,16 +65,16 @@ export default function Home() {
 
     return (
       <Stack>
-         <motion.div
-        key={current}
-        initial={{ opacity: 0, transition: { duration: 1, ease: 'easeIn' } }}
-        animate={{ opacity: 1, }}
-        exit={{ opacity: 0, transition: { duration: 2, ease: 'easeOut' } }}
-        transition={{ duration: 2, ease: 'easeOut' }}
-      >
+        <motion.div
+          key={current}
+          initial={{ opacity: 0, transition: { duration: 1, ease: 'easeIn' } }}
+          animate={{ opacity: 1, }}
+          exit={{ opacity: 0, transition: { duration: 2, ease: 'easeOut' } }}
+          transition={{ duration: 2, ease: 'easeOut' }}
+        >
           <Image src={images[current]} width={354} height={140} alt="bonus" style={{ width: 'auto', height: 'auto', borderRadius: '5px' }} />
-      </motion.div>
-       </Stack>
+        </motion.div>
+      </Stack>
     );
   }
 
@@ -258,4 +204,23 @@ export default function Home() {
       </Cover>
     </Stack>
   )
+}
+export async function getServerSideProps(context) {
+  const { req } = context;
+  const cooks = req.cookies.authdata;
+  console.log(cooks)
+  const decodedString = decodeURIComponent(cooks);
+
+  // Parsing the JSON string to obtain the object
+  const jsonObject = JSON.parse(decodedString);
+
+  const { data, error } = await supabase
+    .from('users')
+    .select('*')
+    .eq('email', jsonObject.email)
+  let user = data[0];
+  console.log(data)
+  return {
+    props: { user }, // will be passed to the page component as props
+  }
 }
