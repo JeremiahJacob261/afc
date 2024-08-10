@@ -3,10 +3,14 @@ import { NextResponse } from 'next/server';
 import cookie from "cookie";
 export default function handler(req, res) {
 
-    res.setHeader("Set-Cookie", cookie.serialize("viewedWelcomeMessage", "true"));
-
-    const theme = req.cookies;
+    // res.setHeader("Set-Cookie", cookie.serialize("viewedWelcomeMessage", "true"));
+   
+  // Parsing the JSON string to obtain the object
+  
+    const theme = req.cookies.authdata;
+    // const decodedString = decodeURIComponent(theme);
+    // const jsonObject = JSON.parse(decodedString);
     console.log(theme)
-    res.status(200).json({ name: 'John Doe' })
+    res.status(200).json(theme)
   }
   

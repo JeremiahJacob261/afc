@@ -23,13 +23,14 @@ import { getAuth, signOut } from "firebase/auth";
 import Backdrop from '@mui/material/Backdrop';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import { ImageAspectRatioTwoTone } from "@mui/icons-material";
-
+import { CookiesProvider, useCookies } from 'react-cookie';
 
 
 export default function Home({ user }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const openr = Boolean(anchorEl);
   const [drop, setDrop] = useState(false);
+  const [cookies, setCookie] = useCookies(['authdata']);
   const handleClickr = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -39,7 +40,7 @@ export default function Home({ user }) {
   const [footDat, setFootDat] = useState([])
 
   const [balance, setBalance] = useState(0)
-  const [info, setInfo] = useState(user)
+  const [info, setInfo] = useState(cookies.authdata)
   const auth = getAuth(app);
   const [draw, setDraw] = useState(false);
   let loads = 0;
@@ -49,7 +50,7 @@ export default function Home({ user }) {
       const { data, error } = await supabase
         .from('users')
         .select('balance')
-        .eq('email', user.email)
+        .eq('email', cookies.authdata.email)
       setBalance(parseFloat(data[0].balance))
     } catch (e) {
       console.log(e)
@@ -216,17 +217,4 @@ export default function Home({ user }) {
       </Cover>
     </Stack>
   )
-}
-export async function getServerSideProps(context) {
-  const { req } = context;
-  const cooks = req.cookies.authdata;
-  console.log(cooks)
-  const decodedString = decodeURIComponent(cooks);
-  // Parsing the JSON string to obtain the object
-  const jsonObject = JSON.parse(decodedString);
-
-
-  return {
-    props: { user: jsonObject }, // will be passed to the page component as props
-  }
 }
