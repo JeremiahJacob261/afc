@@ -233,6 +233,7 @@ export default function Login() {
           localStorage.setItem('signUids', user.id);
           localStorage.setItem('signNames', user.user_metadata.displayName);
           console.log(user.user_metadata.displayName)
+          setDrop(false)
           router.push('/user')
         }
       }
@@ -309,6 +310,7 @@ export default function Login() {
           localStorage.setItem('signedIns', true);
           localStorage.setItem('signUids', user.id);
           localStorage.setItem('signNames', user.user_metadata.displayName);
+          setDrop(false)
           router.push('/user')
 
         }

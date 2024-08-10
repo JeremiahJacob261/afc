@@ -26,7 +26,7 @@ import { ImageAspectRatioTwoTone } from "@mui/icons-material";
 
 
 
-export default function Home({user}) {
+export default function Home({ user }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const openr = Boolean(anchorEl);
   const [drop, setDrop] = useState(false);
@@ -37,14 +37,26 @@ export default function Home({user}) {
     setAnchorEl(null);
   };
   const [footDat, setFootDat] = useState([])
-  const balance = parseFloat(user.balance);
+
+  const [balance, setBalance] = useState(0)
   const [info, setInfo] = useState(user)
   const auth = getAuth(app);
   const [draw, setDraw] = useState(false);
   let loads = 0;
   useEffect(() => {
-
-  }, []);
+   const runer = async () =>{
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('balance')
+        .eq('email', user.email)
+      setBalance(parseFloat(data[0].balance))
+    } catch (e) {
+      console.log(e)
+    }
+   }
+   runer();
+  }, [balance]);
 
   const router = useRouter();
 
@@ -66,11 +78,11 @@ export default function Home({user}) {
     return (
       <Stack>
         <motion.div
-          // key={current}
-          // initial={{ opacity: 0, transition: { duration: 1, ease: 'easeIn' } }}
-          // animate={{ opacity: 1, }}
-          // exit={{ opacity: 0, transition: { duration: 2, ease: 'easeOut' } }}
-          // transition={{ duration: 2, ease: 'easeOut' }}
+        // key={current}
+        // initial={{ opacity: 0, transition: { duration: 1, ease: 'easeIn' } }}
+        // animate={{ opacity: 1, }}
+        // exit={{ opacity: 0, transition: { duration: 2, ease: 'easeOut' } }}
+        // transition={{ duration: 2, ease: 'easeOut' }}
         >
           <Image src={images[1]} width={354} height={140} alt="bonus" style={{ width: 'auto', height: 'auto', borderRadius: '5px' }} />
         </motion.div>
@@ -210,17 +222,11 @@ export async function getServerSideProps(context) {
   const cooks = req.cookies.authdata;
   console.log(cooks)
   const decodedString = decodeURIComponent(cooks);
-
   // Parsing the JSON string to obtain the object
   const jsonObject = JSON.parse(decodedString);
 
-  const { data, error } = await supabase
-    .from('users')
-    .select('*')
-    .eq('email', jsonObject.email)
-  let user = data[0];
-  console.log(data)
+
   return {
-    props: { user }, // will be passed to the page component as props
+    props: { user: jsonObject }, // will be passed to the page component as props
   }
 }
