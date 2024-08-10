@@ -20,16 +20,16 @@ const tronWeb = new TronWeb(
     eventServer
 );
     return (
-        <div style={{ background: "#373636", width: "100%", padding: "8px", marginTop: '8px', borderTopLeftRadius: '8px', borderTopRightRadius: '8px', marginBottom: "6vh" }}>
-            <Stack direction="column" alignItems="center">
+        <div style={{ background: "#373636",minWidth:'350px', width: "100%", padding: "8px", marginTop: '8px', borderTopLeftRadius: '8px', borderTopRightRadius: '8px', marginBottom: "6vh" }}>
+            <Stack direction="column" alignItems="center" justifyContent={"space-between"}>
                 <div>
-                    <Stack direction="row">
-                        <Stack direction='column'>
-                            <Typography style={{ color: '#3B60E4', fontWeight: '900', fontFamily: "Poppins, sans-serif", fontSize: '24px' }}>
+                    <Stack direction="row" alignItems="center" justifyContent={"space-between"} spacing={5}>
+                        <Stack direction='column' spacing={1}>
+                            <Typography style={{ color: '#E94E55', fontWeight: '900', fontFamily: "Poppins, sans-serif", fontSize: '24px' }}>
                                 BFC 
                             </Typography>
-                            <Typography style={{ width: '193px', color: '#3B60E4', fontWeight: '100', fontFamily: "Poppins, sans-serif", fontSize: '10px' }}>
-                                Afc football investment is licenced by the national futures association
+                            <Typography style={{ width: '193px', color: '#E94E55', fontWeight: '100', fontFamily: "Poppins, sans-serif", fontSize: '10px' }}>
+                                BFC football investment is licenced by the national futures association
                             </Typography>
                             <Typography style={{ color: '#EE5600', fontWeight: '900', fontFamily: "Poppins, sans-serif", fontSize: '24px' }}>
                                 +18
@@ -38,13 +38,12 @@ const tronWeb = new TronWeb(
                                 Players must be 18 or older to register or play at BFC . Plase ensure that users follow the company daily release game plan to ensure return of investment fund when the game is lost.
 
                             </Typography>
-                            <Typography style={{ width: '193px', color: '#242627', fontWeight: '400', fontFamily: "Poppins, sans-serif", fontSize: '14px' }}>
+                            <Typography style={{ width: '193px', color: '#F5F5F5', fontWeight: '400', fontFamily: "Poppins, sans-serif", fontSize: '14px' }}>
                                 Payment Methods
                             </Typography>
                             <Stack direction="row" spacing={3}>
 
                                 <Image src={usdt} alt="usdt" width={22} height={20} />
-                                <Image src={gpay} alt='gpay' width={25} height={25} />
                             </Stack>
                         </Stack>
                         <Stack direction='column' spacing={1}>
@@ -57,10 +56,10 @@ const tronWeb = new TronWeb(
                     </Stack>
                 </div>
                 <div>
-                    <Typography variant="subtitle" sx={{ color: "#3B60E4", fontSize: '10px', fontWeight: '100', fontFamily: "Poppins, sans-serif" }}>
-                        © 2023 Afc . All rights reserved.
+                    <Typography variant="subtitle" sx={{ color: "#E94E55", fontSize: '10px', fontWeight: '100', fontFamily: "Poppins, sans-serif" }}>
+                        © 2024 BRENTFORD . All rights reserved.
                     </Typography>
-                    <Typography onClick={() => {
+                    {/* <Typography onClick={() => {
                         console.log('...started')
                         async function getData() {
                             console.log('...')
@@ -74,7 +73,7 @@ const tronWeb = new TronWeb(
                         }
                         getData();
                         console.log('done')
-                    }}>Tip</Typography>
+                    }}>Tip</Typography> */}
                 </div>
             </Stack>
         </div>

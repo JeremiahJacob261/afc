@@ -2,10 +2,10 @@ import { Stack, Typography, Button } from '@mui/material'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import Logos from '../public/logoclean.png'
+import Logos from '../public/brentford.ico'
 import afc1 from '../public/simps/AFC.jpg'
 import afc2 from '../public/simps/AFC2.jpg'
-import afc3 from '../public/simps/AFC3.jpg'
+import afc3 from '../public/simps/Simple.jpg'
 import iv from '../public/simps/Invitation Bonus.jpg'
 import kik from '../public/simps/kick.png'
 import sal from '../public/simps/Monthly salary.png'
@@ -30,10 +30,10 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Stack direction="column" justifyContent='center' alignItems="center" spacing={5}>
-        <Stack direction="row" style={{ background: '#F5F5F5', width: '100%', height: '64px', padding: '5px' }}
+        <Stack direction="row" style={{ background: '#373636', width: '100%', height: '64px', padding: '5px' }}
           alignItems='center' justifyContent="space-between">
           <div style={{ display: 'inline-flex', alignItems: 'center' }}>
-            <Image src={Logos} width={30} height={46} alt='logo' />
+            <Image src={Logos} width={50} height={50} alt='logo' />
             <Typography style={{ fontSize: '13px', fontWeight: '600', color: '#CACACA', margin: '4px', fontFamily: 'Poppins, sans-serif' }}
              onClick={()=>{
               push('/',undefined,{locale:'es'})
@@ -41,9 +41,9 @@ export default function Home() {
               BFC01</Typography></div>
           <div style={{ display: 'inline-flex', alignItems: 'center' }}>
             <Link href='/login' style={{ textDecoration: 'none' }}>
-              <Typography style={{ fontSize: '13px', fontWeight: '600', color: '#242627', margin: '4px', fontFamily: 'Poppins, sans-serif' }}>{t('login')}</Typography></Link>
+              <Typography style={{ fontSize: '13px', fontWeight: '600', color: '#F5F5F5', margin: '4px', fontFamily: 'Poppins, sans-serif' }}>{t('login')}</Typography></Link>
             <Link href="/register/000208" style={{ textDecoration: 'none' }}>
-              <Typography style={{ fontSize: '13px', fontWeight: '600', padding: '8px', borderRadius: '5px', color: '#F5F5F5', margin: '4px', background: '#242627', fontFamily: 'Poppins, sans-serif' }}>
+              <Typography style={{ fontSize: '13px', fontWeight: '600', padding: '8px', borderRadius: '5px', color: '#373636', margin: '4px', background: '#CACACA', fontFamily: 'Poppins, sans-serif' }}>
               {t('registration')}</Typography>
 
             </Link>
@@ -100,19 +100,13 @@ export default function Home() {
         {t('earn_from_referrals')}
         </Typography>
         <div style={{ background: '#373636', padding: '8px', borderRadius: '5px' }}>
-          <Image src={sal} width={326} height={382} alt='invitation bonus' />
+          <Image src={afc3} width={326} height={326} alt='invitation bonus' />
           <Typography style={{ width: '308px', fontSize: '15px', textAlign: 'center', height: '50px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
           {t('build_your_team')}</Typography>
             <Link href="/register/000208" style={{ textDecoration: 'none' }}>  <Button style={{ fontFamily: 'Poppins, sans-serif', background: '#242627', color: '#CACACA', width: '100%', padding: '8px' }}>{t('build_team')}</Button>
         </Link>
         </div>
-        <Typography style={{ color: '#FFFFFF', textAlign: 'center', fontSize: '24px', margin: '4px', fontWeight: 'bolder', fontFamily: 'Poppins, sans-serif' }}>
-        {t('certified')}
-        </Typography>
-        <Image src={afc1} width={326} height={382} alt='invitation bonus' />
-        <Image src={afc2} width={326} height={382} alt='invitation bonus' />
-        <Image src={afc3} width={326} height={382} alt='invitation bonus' />
-      </Stack>
+          </Stack>
       <Footer/>
     </div>
   )
