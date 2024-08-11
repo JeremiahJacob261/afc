@@ -300,7 +300,7 @@ export default function Login() {
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={drop}
       >
-        <Image src={LOGO} width={100} height={100} id='balls' sx={{ marginLeft: '8px' }} />
+        <Image src={LOGO} width={100} height={100} id='balls' alt="logo" sx={{ marginLeft: '8px' }} />
       </Backdrop>
       <Head>
         <title>Login</title>
