@@ -1,4 +1,4 @@
-import { Button, Stack, TextField, Typography, MenuItem,Divider } from "@mui/material";
+import { Button, Stack, TextField, Typography, MenuItem, Divider } from "@mui/material";
 import React, { useState, useContext, useEffect } from "react";
 import { supabase } from '../api/supabase'
 import { AppContext } from '../api/Context'
@@ -15,36 +15,37 @@ import FormHelperText from '@mui/material/FormHelperText';
 import Modal from '@mui/material/Modal';
 import Cover from './cover'
 import FormControl from '@mui/material/FormControl';
+import { motion } from 'framer-motion'
 import { getAuth, signOut } from "firebase/auth";
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import Wig from '../../public/icon/wig.png'
 import Image from 'next/image'
 import Big from '../../public/icon/badge.png'
 import { DriveFileRenameOutlineRounded } from "@mui/icons-material";
-export default function Deposit() {
+export default function Deposit({ wallets }) {
   //86f36a9d-c8e8-41cb-a8aa-3bbe7b66d0a5
   const [info, setInfo] = useState({});
   const [address, setAddress] = useState("")
   const [amount, setAmount] = useState("")
-  const [balance,setBalance] = useState(0);
+  const [balance, setBalance] = useState(0);
   const [pin, setPin] = useState("");
   const [warnad, setWarnad] = useState("");
   const [warnab, setWarnab] = useState("");
-  const [method, setMethod] = useState('usdt');
-  const [open,setOpen] = useState(false)
+  const [method, setMethod] = useState('');
+  const [open, setOpen] = useState(false)
   const auth = getAuth(app);
   const router = useRouter();
-  const [ale,setAle] = useState('')
-  const [aleT,setAleT] = useState(false)
+  const [ale, setAle] = useState('')
+  const [aleT, setAleT] = useState(false)
   //snackbar1
   const [messages, setMessages] = useState("")
   const [opened, setOpened] = useState(false);
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
-  
+
   useEffect(() => {
-const useri = localStorage.getItem('signedIns');
+    const useri = localStorage.getItem('signedIns');
     if (useri) {
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/auth.user
@@ -53,47 +54,47 @@ const useri = localStorage.getItem('signedIns');
       const name = localStorage.getItem('signNames');
       // ...
       const GET = async () => {
-    
-    const names = localStorage.getItem('signNames');
-    try{
-const { data, error } = await supabase
-      .from('users')
-      .select()
-      .eq('username', names)
-    setInfo(data[0]);
-    setBalance(data[0].balance);
-    localStorage.setItem('signRef', data[0].newrefer);
-    }catch(e){
-      console.log(e)
-      alert('Please Check your Internet Connection and Refresh the Website')
-    }
-    
-  }
-  GET();
-        
-      
+
+        const names = localStorage.getItem('signNames');
+        try {
+          const { data, error } = await supabase
+            .from('users')
+            .select()
+            .eq('username', names)
+          setInfo(data[0]);
+          setBalance(data[0].balance);
+          localStorage.setItem('signRef', data[0].newrefer);
+        } catch (e) {
+          console.log(e)
+          alert('Please Check your Internet Connection and Refresh the Website')
+        }
+
+      }
+      GET();
+
+
     } else {
       // User is signed out
       const sOut = async () => {
         const { error } = await supabase.auth.signOut();
-                console.log('sign out');
-                console.log(error);
-                localStorage.removeItem('signedIns');
-                localStorage.removeItem('signUids');
-                localStorage.removeItem('signNames');
-                localStorage.removeItem('signRef');
-                router.push('/login');
-                }
-                sOut();
+        console.log('sign out');
+        console.log(error);
+        localStorage.removeItem('signedIns');
+        localStorage.removeItem('signUids');
+        localStorage.removeItem('signNames');
+        localStorage.removeItem('signRef');
+        router.push('/login');
+      }
+      sOut();
     }
-  },[]);
+  }, []);
   //end of snackbar1
   const wih = async (damount, dusername) => {
-     let amo1 = (method === 'usdt') ? damount : (method === 'gpay') ? Number(damount/83) : Number(damount/21);
+    let amo1 = (method === 'usdt') ? damount : (method === 'gpay') ? Number(damount / 83) : Number(damount / 21);
     const { data, error } = await supabase
       .rpc('withdrawer', { amount: amo1, names: dusername })
     console.log(error);
-    localStorage.setItem('wm',damount);
+    localStorage.setItem('wm', damount);
   }
   const Withdrawal = async () => {
     //santana1 is maximum while santana 2 is minimum
@@ -103,7 +104,7 @@ const { data, error } = await supabase
       if (amount > 19) {
         setWarnab('')
         if (address.length < 9) {
-          Alerts('Ensure the address is correct',false)
+          Alerts('Ensure the address is correct', false)
         } else {
           setWarnad('')
           const namest = localStorage.getItem('signNames');
@@ -114,16 +115,16 @@ const { data, error } = await supabase
           setAddress("")
           setAmount("")
           setMessages("Your Withdrawal Request is been Processed")
-          Alerts('Your Withdrawal Request is been processed',true);
+          Alerts('Your Withdrawal Request is been processed', true);
           wih(total, namest);
           handleClick();
         }
       } else {
 
-        Alerts('Please Input a value between 20 and 100 USDT',false)
+        Alerts('Please Input a value between 20 and 100 USDT', false)
       }
     } else {
-      Alerts('Please Input a value between 20 and 100 USDT',false)
+      Alerts('Please Input a value between 20 and 100 USDT', false)
     }
   }
   //snackbar2
@@ -147,7 +148,7 @@ const { data, error } = await supabase
       </Snackbar>
     )
   }
-  const Alerts = (m,t) =>{
+  const Alerts = (m, t) => {
     setAle(m)
     setAleT(t)
     setOpen(true)
@@ -156,150 +157,173 @@ const { data, error } = await supabase
   let charge = (amount * 5) / 100;
   let total = Number(amount) + ((amount * 5) / 100);
   return (
-    <Cover>
-      <Alertz/>
+    <Cover style={{ minHeight:'95vh',paddingBottom:'100px' }}>
+      <Alertz />
       <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '8px', margin: '2px' }}>
         <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
           router.push('/user/account')
         }} />
-        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Bet History</Typography>
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'white' }}>WITHDRAW</Typography>
       </Stack>
-      <Stack spacing={3} sx={{ padding: '8px' }}>
+      <Stack spacing={3} sx={{ padding: '8px',marginBottom:'100px' }} >
         <Sncks message={messages} />
-        <Stack sx={{width:'344px',height:'110px',background:'#EFEFEF',padding:'8px',borderRadius:'5px'}} direction='column' spacing={2} justifyContent='center'>
-        <Stack direction='row' alignItems='center' justifyContent='space-between'>
-        <Typography sx={{fontSize:'12px',fontWeight:'300',fontFamily:'Poppins,sans-serif'}}>Current Balance</Typography>
-        <Typography sx={{fontSize:'14px',fontWeight:'500',fontFamily:'Poppins,sans-serif'}}>{(info.balance) ? info.balance.toFixed(3) : info.balance} USDT</Typography>
-        </Stack>
-        <Stack direction='row' alignItems='center' justifyContent='space-between'>
-        <Typography sx={{fontSize:'12px',fontWeight:'300',fontFamily:'Poppins,sans-serif'}}>Charge Amount</Typography>
-        <Typography sx={{fontSize:'14px',fontWeight:'500',fontFamily:'Poppins,sans-serif'}}>{(charge) ? charge.toFixed(3) : charge} USDT</Typography>
-        </Stack>
-        <Stack direction='row' alignItems='center' justifyContent='space-between'>
-        <Typography sx={{fontSize:'12px',fontWeight:'300',fontFamily:'Poppins,sans-serif'}}>Total Amount</Typography>
-        <Typography sx={{fontSize:'14px',fontWeight:'500',fontFamily:'Poppins,sans-serif'}}>{total} USDT</Typography>
-        </Stack>
+        <Stack sx={{ minWidth: '350px', height: '110px', background: '#373636', padding: '8px', borderRadius: '5px' }} direction='column' spacing={2} justifyContent='center'>
+          <Stack direction='row' alignItems='center' justifyContent='space-between'>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif',color:'#CACACA' }}>Current Balance</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif',color:'#CACACA' }}>{(info.balance) ? info.balance.toFixed(3) : info.balance} USDT</Typography>
+          </Stack>
+          <Stack direction='row' alignItems='center' justifyContent='space-between'>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif',color:'#CACACA' }}>Charge Amount</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif',color:'#CACACA' }}>{(charge) ? charge.toFixed(3) : charge} USDT</Typography>
+          </Stack>
+          <Stack direction='row' alignItems='center' justifyContent='space-between'>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif',color:'#CACACA' }}>Total Amount</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif',color:'#CACACA' }}>{total} USDT</Typography>
+          </Stack>
         </Stack>
 
         <Stack direction="column" spacing={3}>
-          <Stack spacing={1}> 
-            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'#CACACA'}}>Enter Gpay or USDT Wallet Address or Airtel Money Account Number</Typography>
-            <TextField  sx={{color:'#242627'}} value={address} onChange={(a) => {
-              setAddress(a.target.value)
-            }}/>
-            </Stack>
-            <Stack spacing={1}> 
-            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'#CACACA'}}>Enter Amount You Wish to Withdraw</Typography>
-            <TextField 
-            sx={{color:'#242627'}}
-            type="number"
-            value={amount}
-            onChange={(a) => {
-              setAmount(a.target.value)
-              
-            }}/>
-            </Stack>
-            <Stack spacing={1}> 
-            <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'#CACACA'}}>Transaction Pin</Typography>
-            <TextField 
-            sx={{color:'#242627'}}
-            type="password"
-            value={pin}
-            onChange={(a) => {
-              setPin(a.target.value)
-            }}/>
-            </Stack>
 
-            <Stack spacing={1}> 
-            <Typography sx={{fontSize:'12px',color:'#242627',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'#CACACA'}}>Choose Prefered Payment Method</Typography>
+        <Stack spacing={1} >
+            <Typography sx={{ fontSize: '12px', color: '#242627', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Choose Prefered Payment Method</Typography>
             <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Select your Withdrawal Method</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={method}
-              style={{  background: "#242627"}}
-              onChange={(e) => {
-                console.log(e.target.value)
-                setMethod(e.target.value);
-              }}
-            >
-              <MenuItem value='usdt'> USDT (TRC20)</MenuItem>
-              <MenuItem value='gpay'>GPAY</MenuItem>
-              <MenuItem value='airtel'>Airtel Money Zambia</MenuItem>
-              <MenuItem value='mtn'>MTN Money Zambia</MenuItem>
-            </Select>
-          </FormControl>
-            </Stack>
-        <Button variant="contained" style={{ color: "#242627",height:'50px',background:'#242627' }} onClick={() => {
-          if (info.balance < total) {
-            Alerts('Insufficient Balance',false);
-          } else {
-            
-            if (address.length < 10) {
-              Alerts('Ensure the address is correct',false);
-            } else {
-              if(!info.codeset){
-                Alerts('Your Need To Set a Transaction Pin',false);
-                router.push('/user/codesetting');
-              }else{
-                if(info.pin == pin){
+              <InputLabel id="demo-simple-select-label">Select your Withdrawal Method</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={method}
+                style={{ background: "#242627",color:'#CACACA',border:'1px solid #CACACA' }}
+                onChange={(e) => {
+                  console.log(e.target.value)
+                  setMethod(e.target.value);
+                }}
+              >
+                <MenuItem value=''>none</MenuItem>
+                {
+                  wallets.map((w)=>{
+                    return <MenuItem value={w.name}>{w.name}</MenuItem>
+                  })
+                }
+                
+              </Select>
+            </FormControl>
+          </Stack>
 
-            Withdrawal();
-                }else{
-                  Alerts('Incorrect Pin',false);
+          <Stack spacing={1}>
+            <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Enter Amount You Wish to Withdraw</Typography>
+            <TextField
+              sx={{ border:'1px solid #CACACA',input: { color: '#CACACA', }  }}
+              type="number"
+              value={amount}
+              onChange={(a) => {
+                setAmount(a.target.value)
+
+              }} />
+          </Stack>
+          <Stack spacing={1}>
+            <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Transaction Pin</Typography>
+            <TextField
+              sx={{ border:'1px solid #CACACA',input: { color: '#CACACA', },textAlign:'center' }}
+              type="pin"
+              value={pin}
+              onChange={(a) => {
+                if(!isNaN(a.target.value)){
+                  setPin(a.target.value)
+                }
+              }} />
+          </Stack>
+
+          
+          <motion.div whileTap={{ scale:1.05 }} style={{ display:'flex',flexDirection:'row', alignItems:'center',borderRadius:'8px', justifyContent:'center',   color: "#CACACA", height: '50px', background: '#373636',minWidth:'310px',padding:'12px' }} onClick={() => {
+            if (info.balance < total) {
+              Alerts('Insufficient Balance', false);
+            } else {
+
+              if (address.length < 10) {
+                Alerts('Ensure the address is correct', false);
+              } else {
+                if (!info.codeset) {
+                  Alerts('Your Need To Set a Transaction Pin', false);
+                  router.push('/user/codesetting');
+                } else {
+                  if (info.pin == pin) {
+
+                    Withdrawal();
+                  } else {
+                    Alerts('Incorrect Pin', false);
+                  }
                 }
               }
             }
-          }
-        }}>Withdraw</Button>
+          }}>Withdraw</motion.div>
 
         </Stack>
       </Stack>
     </Cover>
   )
-  function Alertz(){
-    return(
-    <Modal
-  open={open}
-  onClose={()=>{
-    if(aleT){
-      setOpen(false)
-      router.push('/user/withdrawsuccess')
-    }else{
-      setOpen(false)
-    }
-    }}
-  aria-labelledby="modal-modal-title"
-  aria-describedby="modal-modal-description"
->
-  <Stack alignItems='center' justifyContent='space-evenly' sx={{background:'#242627',width:'290px',height:'330px',borderRadius:'20px',
-position: 'absolute',
-top: '50%',
-left: '50%',
-transform: 'translate(-50%, -50%)',
-padding:'12px'
-}}>
-  <Image src={aleT ? Big : Wig} width={120} height={120} alt='widh'/>
-    <Typography id="modal-modal-title" sx={{fontFamily:'Poppins,sans-serif',fontSize:'20px',fontWeight:'500'}}>
-    
-     {aleT ? 'Success' : 'Eh Sorry!'}
-    </Typography>
-    <Typography id="modal-modal-description" sx={{mt: 2,fontSize:'14px',fontWeight:'300'}}>
-     {ale}
-    </Typography>
-    <Divider sx={{background:'#CACACA'}}/>
-    <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'#242627',background:'#242627',padding:'8px',width:'100%'}} onClick={()=>{
-      if(aleT){
-        setOpen(false)
-        router.push('/user/withdrawsuccess')
-      }else{
-        setOpen(false)
-      }
-    }}>Okay</Button>
-  </Stack>
-    
-</Modal>)
+  function Alertz() {
+    return (
+      <Modal
+        open={open}
+        onClose={() => {
+          if (aleT) {
+            setOpen(false)
+            router.push('/user/withdrawsuccess')
+          } else {
+            setOpen(false)
+          }
+        }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Stack alignItems='center' justifyContent='space-evenly' sx={{
+          background: '#242627', width: '290px', height: '330px', borderRadius: '20px',
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          padding: '12px'
+        }}>
+          <Image src={aleT ? Big : Wig} width={120} height={120} alt='widh' />
+          <Typography id="modal-modal-title" sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '20px', fontWeight: '500' }}>
+
+            {aleT ? 'Success' : 'Eh Sorry!'}
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2, fontSize: '14px', fontWeight: '300' }}>
+            {ale}
+          </Typography>
+          <Divider sx={{ background: '#CACACA' }} />
+          <Button variant='contained' sx={{ fontFamily: 'Poppins,sans-serif', color: '#242627', background: '#242627', padding: '8px', width: '100%' }} onClick={() => {
+            if (aleT) {
+              setOpen(false)
+              router.push('/user/withdrawsuccess')
+            } else {
+              setOpen(false)
+            }
+          }}>Okay</Button>
+        </Stack>
+
+      </Modal>)
   }
+
+}
+
+
+export const getServerSideProps = async (context) => {
+   
+  try {
+      const { data: wallets, error: walleterror } = await supabase
+          .from('walle')
+          .select('*')
+          .eq('available', true);
+          return {
+              props: {  wallets: wallets }
+          }
+  } catch (e) {
+      return {
+          props: {  wallets: [] }
+      }
+  }
+
 
 }

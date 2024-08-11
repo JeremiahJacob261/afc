@@ -19,7 +19,8 @@ try{
  if(data && data.length > 0){
      res.status(200).json({status: 'failed',message:'Wallet already linked'})
  }else{
-    const { data,error} = await supabase
+    console.log('no wallet')
+    const { error} = await supabase
  .from('user_wallets')
  .insert({
         bank:bank,
@@ -30,8 +31,10 @@ try{
  })
  .eq('uuid',uid);
     if(error){
+        console.log('error:',error)
         res.status(400).json({error: error.message})
     }else{
+        console.log('success')
         res.status(200).json({status: 'success',message:'Wallet Binding Success'})
  }
 }

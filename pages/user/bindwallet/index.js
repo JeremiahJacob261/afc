@@ -99,8 +99,8 @@ export default function Home({ wallets }) {
                                 },
                                 body: JSON.stringify({ type: type, wallet: accountnumber, name: accountname, bank: wallet, uid: data.id })
                             });
-                            const data = await response.json();
-                            if (data.status == 'success') {
+                            const datax = await response.json();
+                            if (datax.status == 'success') {
                                 toast('Binding Wallet successful',
                                     {
                                         icon: '🥳',
@@ -111,11 +111,10 @@ export default function Home({ wallets }) {
                                         },
                                     }
                                 );
-                                handleClose();
-                                router.back();
+                                router.push('/user/account');
 
                             } else {
-                                toast.error(data.message)
+                                toast.error(datax.message)
                                 handleClose();
                             }
                         } catch (e) {
