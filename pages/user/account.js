@@ -18,8 +18,10 @@ import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeft
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { Icon } from '@iconify/react'
 
+import { CookiesProvider, useCookies } from 'react-cookie';
 import toast,{ Toaster } from 'react-hot-toast';
 export default function Account() {
+  const [, setCookie] = useCookies([]);
   const auth = getAuth(app);
   const router = useRouter()
   const [info, setInfo] = useState([]);
@@ -369,6 +371,8 @@ export default function Account() {
                   localStorage.removeItem('signUids');
                   localStorage.removeItem('signNames');
                   localStorage.removeItem('signRef');
+                  setCookie('authdata', '', { path: '/', expires: new Date(0) });
+                  setCookie('authed', '', { path: '/', expires: new Date(0) });
                   router.push('/login');
                 }
                 sOut();

@@ -51,7 +51,7 @@ export default function Login() {
   });
 
   const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
+    setValues({ ...values, [prop]: event.target.value.replace(/\s/g, '') });
   };
 
   const handleClickShowPassword = () => {
@@ -102,42 +102,6 @@ export default function Login() {
     }
     // getSe();
 
-
-    //       if (user) {
-    //         // User is signed in, see docs for a list of available properties
-    //         // https://firebase.google.com/docs/reference/js/auth.user
-    //         const uid = user.uid;
-    //         // ...
-    //         async function GET() {
-    //           try{
-    //  const { data, error } = await supabase
-    //             .from('users')
-    //             .select()
-    //             .eq('username', user.displayName);
-    //           localStorage.setItem('signRef', data[0].newrefer);
-    //           console.log(data);
-    //           }catch(e){
-
-    //           }
-
-    //         }
-    //         // GET();
-
-    //         console.log(localStorage.getItem('signInfo'))
-    //         localStorage.setItem('signedIns', true);
-    //         localStorage.setItem('signUids', uid);
-    //         localStorage.setItem('signNames', user.displayName);
-    //         router.push('/user');
-    //       } else {
-    //         // User is signed out
-    //         // ...
-    //         console.log('sign out');b 
-    //         localStorage.removeItem('signedIns');
-    //         localStorage.removeItem('signUids');
-    //         localStorage.removeItem('signNames');
-    //         localStorage.removeItem('signRef');
-    //       }
-
   }, [])
   const supabaseMigrate = async (username, uid) => {
     const { data, error } = await supabase.auth.signUp({
@@ -177,7 +141,6 @@ export default function Login() {
           localStorage.setItem('signedIns', true);
           localStorage.setItem('signUids', user.uid);
           localStorage.setItem('signNames', user.displayName);
-          setDrop(false)
           router.push('/user');
         })
         .catch((error) => {
@@ -233,7 +196,6 @@ export default function Login() {
           localStorage.setItem('signUids', user.id);
           localStorage.setItem('signNames', user.user_metadata.displayName);
           console.log(user.user_metadata.displayName)
-          setDrop(false)
           router.push('/user')
         }
       }
@@ -310,7 +272,6 @@ export default function Login() {
           localStorage.setItem('signedIns', true);
           localStorage.setItem('signUids', user.id);
           localStorage.setItem('signNames', user.user_metadata.displayName);
-          setDrop(false)
           router.push('/user')
 
         }
@@ -339,7 +300,7 @@ export default function Login() {
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={drop}
       >
-        <SportsSoccerIcon id='balls' sx={{ marginLeft: '8px' }} />
+        <Image src={LOGO} width={100} height={100} id='balls' sx={{ marginLeft: '8px' }} />
       </Backdrop>
       <Head>
         <title>Login</title>
@@ -372,7 +333,7 @@ export default function Login() {
             sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#CACACA', } }}
             value={email}
             onChange={(e) => {
-              setEmail(e.target.value)
+              setEmail(e.target.value.replace(/\s/g, ''))
             }}
           />
           <FormControl
@@ -405,8 +366,7 @@ export default function Login() {
         <Button variant="contained"
           onKeyDown={(event) => {
             if (
-              event.key === "Enter" ||
-              event.key === "Space"
+              event.key === "Enter"
             ) {
               login()
             }
