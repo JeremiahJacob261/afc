@@ -175,7 +175,7 @@ export default function Account() {
           }
           <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px" }}>
             <Typography sx={{ color: "#E94E55", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>MY TEAM</Typography>
-            <Divider />
+            <Divider sx={{ color:'#cacaca'}}/>
 
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', height: '110px', padding: '8px', background: '#242627', borderRadius: '8px' }}>
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} alignItems="center">
