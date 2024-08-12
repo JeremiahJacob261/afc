@@ -12,6 +12,7 @@ import Agent from '../../public/afc1.jpg'
 import Agent1 from '../../public/afc2.jpg'
 import Agent2 from '../../public/afc3.jpg'
 import { motion } from 'framer-motion'
+import {Icon } from '@iconify/react'
 import Agent3 from '../../public/afc3.jpg'
 import Agent4 from '../../public/afc4.jpg'
 import front from '../../public/front.png'
@@ -126,6 +127,19 @@ export default function Home({ user }) {
                 </Stack>
               </Link>
             </Stack>
+            <Divider sx={{ bgcolor: "secondary.light" }} />
+            < Link href='https://t.me/+WJKvJKagKuozNzM8' style={{ textDecoration:'none' }}>
+                <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
+                  <Stack direction='row' spacing={1} justifyContent='start'>
+                    <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
+
+                    <Stack direction='column' spacing={0} justifyContent='start'>
+   <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Telegram Channel</Typography>
+   <Typography sx={{ color: '#CACACA', fontSize: '12px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Join our telegram group to earn more</Typography>  
+                    </Stack>
+                  </Stack>
+                </Stack>
+              </Link>
           </Stack>
           <Divider sx={{ background: '#E9E5DA' }} />
 

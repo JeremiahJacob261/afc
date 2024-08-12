@@ -22,15 +22,15 @@ export default function Cover({ children }) {
 
   const languages = [
     {
-      "name": "United Kingdom",
+      "name": "English",
       "flag": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Flag_of_the_United_Kingdom_%281-2%29.svg/125px-Flag_of_the_United_Kingdom_%281-2%29.svg.png"
     },
     {
-      "name": "Spain",
+      "name": "español",
       "flag": "https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/Flag_of_Spain.svg/750px-Flag_of_Spain.svg.png?20160610210450"
     },
     {
-      "name": "Italy",
+      "name": "Lingua italiana",
       "flag": "https://upload.wikimedia.org/wikipedia/en/thumb/0/03/Flag_of_Italy.svg/125px-Flag_of_Italy.svg.png"
     },
     {
@@ -38,8 +38,12 @@ export default function Cover({ children }) {
       "flag": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Flag_of_Indonesia.svg/125px-Flag_of_Indonesia.svg.png"
     },
     {
-      "name": "Spain",
-      "flag": "https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/Flag_of_Spain.svg/750px-Flag_of_Spain.svg.png?20160610210450"
+      "name": "فارسی",
+      "flag": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Flag_of_Iran_%28official%29.svg/125px-Flag_of_Iran_%28official%29.svg.png"
+    },
+    {
+      "name": "langue française",
+      "flag": "https://upload.wikimedia.org/wikipedia/en/thumb/c/c3/Flag_of_France.svg/125px-Flag_of_France.svg.png"
     }
   ];
   const [draw, setDraw] = useState(false);

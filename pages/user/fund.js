@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Cover from './cover'
 import React from 'react'
 import { useRouter } from 'next/router'
+import { motion } from 'framer-motion'
 import WS from '../../public/icon/vault.png'
 import Head from 'next/head'
 export default function Funds() {
@@ -17,15 +18,15 @@ export default function Funds() {
             <Stack sx={{width:'240px',height:'305px',padding:'8px'}} alignItems='center' justifyContent='center' spacing={2}>
                  <Image src={WS} width={250} height={115} alt='ws'/>
          <Typography sx={{fontSize:'18px',fontWeight:'600',color:'#CACACA'}}>Make a Deposit</Typography>
-         <Typography id="modal-modal-description" sx={{textAlign:'center',fontFamily:'Poppins,sans-serif',fontSize:'18px',fontWeight:'300'}}>
-         Deposit money into your account in 3 easy steps
+         <Typography id="modal-modal-description" sx={{color:'#cacaca',textAlign:'center',fontFamily:'Poppins,sans-serif',fontSize:'18px',fontWeight:'300'}}>
+         Deposit money into your account in 3 easy steps with any payment method of your choice
     </Typography>
             </Stack>
-        <Button variant='contained' sx={{position:'absolute',bottom:90,fontFamily:'Poppins,sans-serif',color:'#242627',background:'#242627',padding:'8px',width:'343px',height:'50px'}} onClick={()=>{
+        <motion.div whileTap={{ scale:1.05 }} style={{ display:'flex',flexDirection:'row',cursor:'pointer', alignItems:'center',borderRadius:'8px', justifyContent:'center',   color: "#CACACA", height: '50px', background: '#373636',minWidth:'310px',padding:'12px' }} onClick={()=>{
      
         router.push('/user/transaction')
       
-    }}>Get Started</Button>
+    }}>Get Started</motion.div>
         </Stack>
         
         </Cover>
