@@ -19,7 +19,7 @@ const router = useRouter();
   return (
     <div stylle={{minHeight:'80vh'}}>
       <Stack direction="row" justifyContent="left">
-        <CloseIcon style={{ color: '#242627', width: '30px', height: '30px', margin: '8px' }}
+        <CloseIcon style={{ color: '#CACACA', width: '30px', height: '30px', margin: '8px' }}
         onClick={()=>{
           router.push('/user/account')
         }}
@@ -43,13 +43,13 @@ const router = useRouter();
           aria-controls="panel1bh-content"
           id="panel1bh-header"
         >
-          <Typography sx={{ width: '33%', flexShrink: 0,color:'#242627',fontFamily:'Poppins,sans-serif' }}>
+          <Typography sx={{ width: '33%', flexShrink: 0,color:'#CACACA',fontFamily:'Poppins,sans-serif' }}>
             {f.Question}
           </Typography>
-          <Typography sx={{ color: '#242627' }}></Typography>
+          <Typography sx={{ color: '#CACACA' }}></Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography sx={{ color: '#242627',fontWeight:'100',fontSize:'15px',fontFamily:'Poppins,sans-serif' }}>
+          <Typography sx={{ color: '#CACACA',fontWeight:'100',fontSize:'15px',fontFamily:'Poppins,sans-serif' }}>
            {f.Answer}
           </Typography>
         </AccordionDetails>
