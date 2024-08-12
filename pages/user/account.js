@@ -169,6 +169,16 @@ export default function Account() {
                 </Stack>
               </Link>
             </Stack>
+            <Divider sx={{ bgcolor: "secondary.light" }} />
+            < Link href='https://t.me/+WJKvJKagKuozNzM8' style={{ textDecoration:'none' }}>
+                <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
+                  <Stack direction='row' spacing={1} justifyContent='start'>
+                    <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
+
+                    <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Telegram Channel</Typography>
+                  </Stack>
+                </Stack>
+              </Link>
           </Stack>
           {
             //deposit

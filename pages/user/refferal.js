@@ -123,7 +123,7 @@ export default function Refferal() {
         <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
           router.push('/user/account')
         }} />
-        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Referral</Typography>
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#cacaca' }}>Referral</Typography>
       </Stack>
       <Accordion style={{background:'#242627',width:'341px'}}>
         <AccordionSummary
@@ -134,8 +134,8 @@ export default function Refferal() {
           id="panel1a-header"
         >
           <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{width:'100%'}}>
-            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '500' }}>Referrals({lvl ? lvl.length : '0'})</Typography>
-            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#242627',padding:'8px' }}>{fshow}</Typography>
+            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '500',color:'#cacaca' }}>Referrals({lvl ? lvl.length : '0'})</Typography>
+            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#cacaca',padding:'8px' }}>{fshow}</Typography>
         
             </Stack>
            
