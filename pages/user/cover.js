@@ -17,35 +17,12 @@ import { app } from '../api/firebase';
 import { supabase } from '../api/supabase'
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { getAuth, signOut } from "firebase/auth";
+import Translate from '@/pages/translator';
 import { useRouter } from "next/router";
 export default function Cover({ children }) {
 
-  const languages = [
-    {
-      "name": "English",
-      "flag": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Flag_of_the_United_Kingdom_%281-2%29.svg/125px-Flag_of_the_United_Kingdom_%281-2%29.svg.png"
-    },
-    {
-      "name": "español",
-      "flag": "https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/Flag_of_Spain.svg/750px-Flag_of_Spain.svg.png?20160610210450"
-    },
-    {
-      "name": "Lingua italiana",
-      "flag": "https://upload.wikimedia.org/wikipedia/en/thumb/0/03/Flag_of_Italy.svg/125px-Flag_of_Italy.svg.png"
-    },
-    {
-      "name": "Indonesia",
-      "flag": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Flag_of_Indonesia.svg/125px-Flag_of_Indonesia.svg.png"
-    },
-    {
-      "name": "فارسی",
-      "flag": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Flag_of_Iran_%28official%29.svg/125px-Flag_of_Iran_%28official%29.svg.png"
-    },
-    {
-      "name": "langue française",
-      "flag": "https://upload.wikimedia.org/wikipedia/en/thumb/c/c3/Flag_of_France.svg/125px-Flag_of_France.svg.png"
-    }
-  ];
+
+
   const [draw, setDraw] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const openr = Boolean(anchorEl);
@@ -147,7 +124,8 @@ export default function Cover({ children }) {
   return (
     <Stack direction="column"
       justifyContent="center"
-      alignItems="center" style={{ width: '100%', background: "#242627" }}>
+      alignItems="center" 
+      style={{ width: '100%', background: "#242627",paddingTop:'#50px',marginTop:'-40px' }}>
       {
         //drawer layout
       }
@@ -226,27 +204,13 @@ export default function Cover({ children }) {
               <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                 <Stack direction='row' spacing={2}>
                   <TranslateIcon sx={{ width: '20px', height: '20px', color: '#D20000' }} />
-                  <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#CACACA' }}>Language</Typography>
+                  <Typography className='notranslate' sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#CACACA' }}>Language</Typography>
                 </Stack>
                 <ArrowForwardIosIcon sx={{ width: '20px', height: '20px', color: '#D20000' }} />
               </Stack>
             </Stack>
             {/* the start of supported Languages */}
-            <Stack direction="column" spacing={1} sx={{ width: '100%', height: 'auto', padding: '12px', background: '#2D2F2F', borderRadius: '8px', border: '0.6px solid #373636' }}>
-              {
-                languages.map((l) => {
-                  return (
-                    <Stack direction="column" spacing={1} key={l.name}>
-                      <Stack sx={{ width: '100%' }} direction={"row"} spacing={1} alignItems="center" justifyContent={"start"}>
-                        <Image src={l.flag} alt={l.name} width={24} height={18} />
-                        <p style={{ color: '#cacaca', fontFamily: 'Poppins,sans-serif', fontSize: '13px', fontWeight: "300" }}>{l.name}</p>
-                      </Stack>
-                      <div style={{ border: '0.05px solid #4A4A4A', width: '100%' }}></div>
-                    </Stack>
-                  );
-                })
-              }
-            </Stack>
+            <Translate />
           </Stack>
         </Drawer>
       </React.Fragment>
@@ -269,7 +233,9 @@ export default function Cover({ children }) {
         </div> </Stack>
       <div style={{ paddingBottom: "50px" }}>  {children}</div>
 
-      <BottomNavi /></Stack>
+      <BottomNavi />
+
+    </Stack>
 
   )
 }
