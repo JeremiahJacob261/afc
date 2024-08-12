@@ -75,3 +75,28 @@ html{
 }
 
 /* styles.css */
+
+.betTab{
+  padding: 8px;
+  border-radius: 3px 10px 10px 10px;
+  background-color: #242627;
+  cursor:pointer;
+  border: 1px solid #373636;
+  width: auto;
+  height: 60px;
+  text-align: center;
+  font-size: 13px;
+  color: #cacaca;
+}
+.betTabSelected{
+  padding: 8px;
+  border-radius: 3px 10px 10px 10px;
+  background-color: #373636;
+  cursor:pointer;
+  border:1px solid #242627;
+  width: auto;
+  font-size: 13px;
+  height: 60px;
+  text-align: center;
+  color:#cacaca;
+}

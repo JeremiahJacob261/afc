@@ -58,3 +58,29 @@
   .amountinput::placeholder {
     color: #4c4a44;
   }
+
+  .transactionrow{
+    padding: 12px;
+    margin: 8px;
+    max-width: 323px;
+    height: auto;
+    color:whitesmoke;
+    border-radius: 5px;
+    background-color: #242627;
+  }
+
+  .betspent  {
+    width: 310px;
+    border: 0.6px solid #242627;
+    height: auto;
+    background-color: #373636;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    text-align: center;
+    margin: 10px;
+    border-radius: 10px;
+   }
