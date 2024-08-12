@@ -232,7 +232,7 @@ export default function Cover({ children }) {
               {
                 languages.map((l) => {
                   return (
-                    <Stack direction="column" spacing={1}>
+                    <Stack direction="column" spacing={1} key={l.name}>
                       <Stack sx={{ width: '100%' }} direction={"row"} spacing={1} alignItems="center" justifyContent={"start"}>
                         <Image src={l.flag} alt={l.name} width={24} height={18} />
                         <p style={{ color: '#cacaca', fontFamily: 'Poppins,sans-serif', fontSize: '13px', fontWeight: "300" }}>{l.name}</p>

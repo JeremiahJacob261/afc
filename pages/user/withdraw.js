@@ -201,7 +201,7 @@ export default function Deposit({ wallets }) {
                 <MenuItem value=''>none</MenuItem>
                 {
                   wallets.map((w)=>{
-                    return <MenuItem value={w.name}>{w.name}</MenuItem>
+                    return <MenuItem value={w.name} key={w.name}>{w.name}</MenuItem>
                   })
                 }
                 
