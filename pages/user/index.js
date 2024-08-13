@@ -128,7 +128,7 @@ export default function Home({ user }) {
               </Link>
             </Stack>
             <Divider sx={{ bgcolor: "secondary.light" }} />
-            < Link href='https://t.me/+WJKvJKagKuozNzM8' style={{ textDecoration:'none' }}>
+            < Link href='https://t.me/+z9zAqssyXg45MTQ0' style={{ textDecoration:'none' }}>
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                   <Stack direction='row' spacing={1} justifyContent='start'>
                     <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
