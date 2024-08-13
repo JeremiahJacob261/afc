@@ -10,10 +10,11 @@ import { useRouter } from 'next/router'
 import CloseIcon from '@mui/icons-material/Close';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
-import InputAdornment from '@mui/material/InputAdornment';
-import FormHelperText from '@mui/material/FormHelperText';
+import { Icon } from '@iconify/react'
+import Head from "next/head";
 import Modal from '@mui/material/Modal';
 import Cover from './cover'
+import Loading from "@/pages/components/loading";
 import FormControl from '@mui/material/FormControl';
 import { motion } from 'framer-motion'
 import { getAuth, signOut } from "firebase/auth";
@@ -22,9 +23,22 @@ import Wig from '../../public/icon/wig.png'
 import Image from 'next/image'
 import Big from '../../public/icon/badge.png'
 import { DriveFileRenameOutlineRounded } from "@mui/icons-material";
-export default function Deposit({ wallets }) {
+export default function Deposit({ wallx }) {
   //86f36a9d-c8e8-41cb-a8aa-3bbe7b66d0a5
+  function findObjectById(id) {
+    return wallx.find(obj => obj.name === id);
+  }
+  const [wallets, setWallet] = useState([]);
   const [info, setInfo] = useState({});
+  const [rate,setRate] = useState(1);
+  const [currency,setCurrency] = useState({});
+
+  //the below controls the loading modal
+  const [openx, setOpenx] = useState(false);
+  const handleOpenx = () => setOpenx(true);
+  const handleClosex = () => setOpenx(false);
+
+  //the end of thellaoding modal control
   const [address, setAddress] = useState("")
   const [amount, setAmount] = useState("")
   const [balance, setBalance] = useState(0);
@@ -44,7 +58,91 @@ export default function Deposit({ wallets }) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
 
+  const getVip = async () => {
+    let test = await fetch('/api/vipcalculate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ 'username': localStorage.getItem('signNames') })
+    }).then(data => {
+      return data.json();
+    })
+    return test;
+  }
+
+  const testRoute = () => {
+    const aayncer = async () => {
+      try {
+        getVip().then(async (data) => {
+          let viplevel = data.viplevel;
+          console.log(amountlimit[viplevel]);
+          //this sends data to the withdraw in backend
+
+
+          let test = await fetch('/api/withdraw', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              name: users[0].username, pass: password, wallet: wallet, amount: parseFloat(amount).toFixed(3), method: (method === 'USDT (TRC20)') ? 'usdt' : (method === 'PKR') ? 'pkr' : 'idr',
+              "bank": walletinfo.bank, "accountname": walletinfo.accountname, vipamount: (method === 'USDT (TRC20)') ? amountlimit[viplevel] : (method === 'PKR') ? amountlimity[viplevel] : amountlimitx[viplevel]
+            })
+          }).then(data => {
+
+            return data.json();
+          })
+          console.log(test);
+          if (test[0].status === 'Failed') {
+            alert(test[0].message);
+            if (test[0].message === 'No transaction pin has been set') {
+              toast.error(test[0].message)
+              router.push('/user/codesetting')
+              handleToggleClose();
+            }
+            handleToggleClose();
+          } else {
+
+            router.push('/user/withdrawsuccess')
+            handleToggleClose();
+          }
+        })
+      } catch (e) {
+        console.log(e);
+        handleToggleClose();
+      }
+
+
+    }
+    aayncer();
+
+  }
+  const transaction = () => {
+
+    if (password === '') {
+      alert('Please enter your password')
+    } else if (cpassword === '') {
+      alert('Please confirm your password')
+    } else if (password !== cpassword) {
+      alert('Password does not match')
+    } else if (amount === '') {
+      alert('Please enter amount')
+    } else if (amount < methodmin[method]) {
+      alert(`Minimum amount to withdraw is ${methodmin[method]} ${method}`)
+
+    } else if (amount > methodmax[method]) {
+      alert(`Maximum amount to withdraw including charges is ${methodmax[method]} ${method}`)
+
+    } else {
+
+      setDrop(true);
+      testRoute();
+    }
+  }
+
   useEffect(() => {
+    
     const useri = localStorage.getItem('signedIns');
     if (useri) {
       // User is signed in, see docs for a list of available properties
@@ -61,6 +159,14 @@ export default function Deposit({ wallets }) {
             .from('users')
             .select()
             .eq('username', names)
+
+          //get the wallets
+          const { data: wall, error: wrr } = await supabase
+            .from('user_wallets')
+            .select()
+            .eq('uid', data[0].userId)
+          setWallet(wall ?? []);
+
           setInfo(data[0]);
           setBalance(data[0].balance);
           localStorage.setItem('signRef', data[0].newrefer);
@@ -73,59 +179,12 @@ export default function Deposit({ wallets }) {
       GET();
 
 
-    } else {
-      // User is signed out
-      const sOut = async () => {
-        const { error } = await supabase.auth.signOut();
-        console.log('sign out');
-        console.log(error);
-        localStorage.removeItem('signedIns');
-        localStorage.removeItem('signUids');
-        localStorage.removeItem('signNames');
-        localStorage.removeItem('signRef');
-        router.push('/login');
-      }
-      sOut();
     }
   }, []);
   //end of snackbar1
-  const wih = async (damount, dusername) => {
-    let amo1 = (method === 'usdt') ? damount : (method === 'gpay') ? Number(damount / 83) : Number(damount / 21);
-    const { data, error } = await supabase
-      .rpc('withdrawer', { amount: amo1, names: dusername })
-    console.log(error);
-    localStorage.setItem('wm', damount);
-  }
-  const Withdrawal = async () => {
-    //santana1 is maximum while santana 2 is minimum
-    let santana1 = (method === 'usdt') ? 100 : (method === 'gpay') ? 8300 : 2100;
-    let santana2 = (method === 'usdt') ? 19 : (method === 'gpay') ? 1659 : 419;
-    if (amount < 100) {
-      if (amount > 19) {
-        setWarnab('')
-        if (address.length < 9) {
-          Alerts('Ensure the address is correct', false)
-        } else {
-          setWarnad('')
-          const namest = localStorage.getItem('signNames');
-          const { error } = await supabase
-            .from('notification')
-            .insert({ address: address, username: info.username, amount: total, sent: 'pending', type: "withdraw", method: method })
-          console.log(error)
-          setAddress("")
-          setAmount("")
-          setMessages("Your Withdrawal Request is been Processed")
-          Alerts('Your Withdrawal Request is been processed', true);
-          wih(total, namest);
-          handleClick();
-        }
-      } else {
 
-        Alerts('Please Input a value between 20 and 100 USDT', false)
-      }
-    } else {
-      Alerts('Please Input a value between 20 and 100 USDT', false)
-    }
+  const Withdrawal = async () => {
+
   }
   //snackbar2
   const handleClick = () => {
@@ -157,54 +216,85 @@ export default function Deposit({ wallets }) {
   let charge = (amount * 5) / 100;
   let total = Number(amount) + ((amount * 5) / 100);
   return (
-    <Cover style={{ minHeight:'95vh',paddingBottom:'100px' }}>
+    <Cover style={{ minHeight: '95vh', paddingBottom: '100px' }}>
+      <Head>
+        <title>Withdraw</title>
+      </Head>
       <Alertz />
       <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '8px', margin: '2px' }}>
         <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
           router.push('/user/account')
         }} />
-        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'white' }}>WITHDRAW</Typography>
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: 'white' }}>WITHDRAW</Typography>
       </Stack>
-      <Stack spacing={3} sx={{ padding: '8px',marginBottom:'100px' }} >
+      <Stack spacing={3} sx={{ padding: '8px', marginBottom: '100px' }} >
         <Sncks message={messages} />
-        <Stack sx={{ minWidth: '350px', height: '110px', background: '#373636', padding: '8px', borderRadius: '5px' }} direction='column' spacing={2} justifyContent='center'>
+        <Stack sx={{ minWidth: '350px', minHeight: '110px', background: '#373636', padding: '8px', borderRadius: '5px' }} direction='column' spacing={2} justifyContent='center'>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif',color:'#CACACA' }}>Current Balance</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif',color:'#CACACA' }}>{(info.balance) ? info.balance.toFixed(3) : info.balance} USDT</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Current Balance</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>{(info.balance) ? info.balance.toFixed(3) : info.balance} USDT</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif',color:'#CACACA' }}>Charge Amount</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif',color:'#CACACA' }}>{(charge) ? charge.toFixed(3) : charge} USDT</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Charge Amount</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>{(charge) ? charge.toFixed(3) : charge} USDT</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif',color:'#CACACA' }}>Total Amount</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif',color:'#CACACA' }}>{total} USDT</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Total Amount</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>{total} USDT</Typography>
           </Stack>
+          <Stack direction='row' alignItems='center' justifyContent='space-between'>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Total Amount in {currency.currency_code.toUpperCase()}</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>{parseFloat(total * rate).toFixed(2)} {currency.currency_code.toUpperCase()}</Typography>
+          </Stack>
+          <Divider sx={{ color: 'white' }} />
+          <motion.div
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.9 }}
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              handleOpenx()
+              router.push('/user/bindwallet')
+            }}
+          >
+            <Stack direction='row' spacing={1} justifyContent='center' alignItems={"center"} sx={{ background: '#242627', padding: '8px', borderRadius: '8px' }}
+
+            >
+              <Icon icon="icon-park-twotone:add" width="24" height="24" style={{ color: '#a3a3a3' }} />
+
+              <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Bind Wallet</Typography>
+            </Stack>
+          </motion.div>
+
         </Stack>
 
         <Stack direction="column" spacing={3}>
 
-        <Stack spacing={1} >
-            <Typography sx={{ fontSize: '12px', color: '#242627', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Choose Prefered Payment Method</Typography>
+          <Stack spacing={1} >
+            <Typography sx={{ fontSize: '12px', color: '#242627', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Choose Prefered Payment Wallet</Typography>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Select your Withdrawal Method</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={method}
-                style={{ background: "#242627",color:'#CACACA',border:'1px solid #CACACA' }}
+                style={{ background: "#242627", color: '#CACACA', border: '1px solid #CACACA' }}
                 onChange={(e) => {
-                  console.log(e.target.value)
+                  console.log(e.target.value);
+                  const [w, b, t] = e.target.value.split('-');
+                  setAddress(w);
+                  let current = findObjectById(b);
+                  setRate(current.rates);
                   setMethod(e.target.value);
+                  setCurrency(current);
                 }}
               >
                 <MenuItem value=''>none</MenuItem>
                 {
-                  wallets.map((w)=>{
-                    return <MenuItem value={w.name} key={w.name}>{w.name}</MenuItem>
+                  wallets.map((w) => {
+                    return <MenuItem value={w.wallet + '-' + w.bank} key={w.id}>{w.wallet} {w.bank}</MenuItem>
                   })
                 }
-                
+
               </Select>
             </FormControl>
           </Stack>
@@ -212,7 +302,7 @@ export default function Deposit({ wallets }) {
           <Stack spacing={1}>
             <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Enter Amount You Wish to Withdraw</Typography>
             <TextField
-              sx={{ border:'1px solid #CACACA',input: { color: '#CACACA', }  }}
+              sx={{ border: '1px solid #CACACA', input: { color: '#CACACA', } }}
               type="number"
               value={amount}
               onChange={(a) => {
@@ -223,42 +313,45 @@ export default function Deposit({ wallets }) {
           <Stack spacing={1}>
             <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Transaction Pin</Typography>
             <TextField
-              sx={{ border:'1px solid #CACACA',input: { color: '#CACACA', },textAlign:'center' }}
+              sx={{ border: '1px solid #CACACA', input: { color: '#CACACA', }, textAlign: 'center' }}
               type="pin"
               value={pin}
               onChange={(a) => {
-                if(!isNaN(a.target.value)){
+                if (!isNaN(a.target.value)) {
                   setPin(a.target.value)
                 }
               }} />
           </Stack>
 
-          
-          <motion.div whileTap={{ scale:1.05 }} style={{ display:'flex',flexDirection:'row', alignItems:'center',borderRadius:'8px', justifyContent:'center',   color: "#CACACA", height: '50px', background: '#373636',minWidth:'310px',padding:'12px' }} onClick={() => {
-            if (info.balance < total) {
-              Alerts('Insufficient Balance', false);
-            } else {
 
-              if (address.length < 10) {
-                Alerts('Ensure the address is correct', false);
+          <motion.div whileTap={{ scale: 0.98 }}
+            style={{ cursor: 'pointer', display: 'flex', flexDirection: 'row', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: "#CACACA", height: '50px', background: '#E94E55', minWidth: '310px', padding: '12px' }}
+            onClick={() => {
+              if (info.balance < total) {
+                Alerts('Insufficient Balance', false);
               } else {
-                if (!info.codeset) {
-                  Alerts('Your Need To Set a Transaction Pin', false);
-                  router.push('/user/codesetting');
-                } else {
-                  if (info.pin == pin) {
 
-                    Withdrawal();
+                if (address.length < 10) {
+                  Alerts('Ensure the address is correct', false);
+                } else {
+                  if (!info.codeset) {
+                    Alerts('Your Need To Set a Transaction Pin', false);
+                    router.push('/user/codesetting');
                   } else {
-                    Alerts('Incorrect Pin', false);
+                    if (info.pin == pin) {
+
+                      transaction();
+                    } else {
+                      Alerts('Incorrect Pin', false);
+                    }
                   }
                 }
               }
-            }
-          }}>Withdraw</motion.div>
+            }}>Withdraw</motion.div>
 
         </Stack>
       </Stack>
+      <Loading open={openx} handleClose={handleClosex} />
     </Cover>
   )
   function Alertz() {
@@ -285,15 +378,15 @@ export default function Deposit({ wallets }) {
           padding: '12px'
         }}>
           <Image src={aleT ? Big : Wig} width={120} height={120} alt='widh' />
-          <Typography id="modal-modal-title" sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '20px', fontWeight: '500' }}>
+          <Typography id="modal-modal-title" sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '20px', fontWeight: '500', color: '#cacaca' }}>
 
             {aleT ? 'Success' : 'Eh Sorry!'}
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2, fontSize: '14px', fontWeight: '300' }}>
+          <Typography id="modal-modal-description" sx={{ mt: 2, fontSize: '14px', fontWeight: '300', color: '#cacaca' }}>
             {ale}
           </Typography>
           <Divider sx={{ background: '#CACACA' }} />
-          <Button variant='contained' sx={{ fontFamily: 'Poppins,sans-serif', color: '#242627', background: '#242627', padding: '8px', width: '100%' }} onClick={() => {
+          <Button variant='contained' sx={{ fontFamily: 'Poppins,sans-serif', color: '#cacaca', background: '#E94E55', padding: '8px', width: '100%' }} onClick={() => {
             if (aleT) {
               setOpen(false)
               router.push('/user/withdrawsuccess')
@@ -310,19 +403,19 @@ export default function Deposit({ wallets }) {
 
 
 export const getServerSideProps = async (context) => {
-   
+
   try {
-      const { data: wallets, error: walleterror } = await supabase
-          .from('walle')
-          .select('*')
-          .eq('available', true);
-          return {
-              props: {  wallets: wallets }
-          }
+    const { data: wallets, error: walleterror } = await supabase
+      .from('walle')
+      .select('*')
+      .eq('available', true);
+    return {
+      props: { wallx: wallets }
+    }
   } catch (e) {
-      return {
-          props: {  wallets: [] }
-      }
+    return {
+      props: { wallx: [] }
+    }
   }
 
 

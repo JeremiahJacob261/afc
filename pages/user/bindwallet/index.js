@@ -25,11 +25,14 @@ export default function Home({ wallets }) {
     const [bank, setBank] = useState('')
     const [accountnumber, setAccountNumber] = useState('')
     const [accountname, setAccountName] = useState('')
+    const [curcode,setCurcode] = useState('usdt');
     const [type, setType] = useState('');
     const handleChange = (event) => {
-        const [v, t] = event.target.value.split('-')
+        const [v, t,cc] = event.target.value.split('-')
         setWallet(event.target.value);
         setType(t)
+        setCurcode(cc);
+        console.log(event.target.value)
     };
 
     const handleBhange = (event) => {
@@ -229,14 +232,14 @@ export default function Home({ wallets }) {
             <Loading open={open} handleClose={handleClose} />
             <Stack direction="column" spacing={3} justifyContent="center" alignItems="center" sx={{ minWidth: '350px', width: '100%', height: '100%' }} >
 
-                <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ marginTop: '20px', marginBottom: "20px", background: 'none', minWidth: "350px",paddingBottom: '30px', width: '100%', maxWidth: '450px' }}>
+                <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ marginTop: '20px', marginBottom: "20px", background: 'none', minWidth: "350px", paddingBottom: '30px', width: '100%', maxWidth: '450px' }}>
                     <Stack direction="column" alignItems="center" justifyContent={"center"} spacing={3} sx={{ background: '#373636', padding: '16px', borderRadius: '8px', minWidth: "350px", maxWidth: '450px' }}>
                         <Stack direction="row" alignItems="center" justifyContent={"space-between"} sx={{ width: '100%' }}>
                             <p style={{ color: '#D9D8D4', fontWeight: '700', fontSize: '14px' }}>BIND WALLET</p>
                         </Stack>
-                        <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#242627', padding: '8px', width: '100%',borderRadius:'8px' }}>
-                            <p className='normal-bold' style={{ textAlign:'start' }}>Select Payment Method</p>
-                            <FormControl sx={{ m: 1, width: '100%',maxWidth:'301px' }} variant="standard">
+                        <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#242627', padding: '8px', width: '100%', borderRadius: '8px' }}>
+                            <p className='normal-bold' style={{ textAlign: 'start' }}>Select Payment Method</p>
+                            <FormControl sx={{ m: 1, width: '100%', maxWidth: '301px' }} variant="standard">
                                 <NativeSelect
                                     id="demo-customized-select-native"
                                     value={wallet}
@@ -247,7 +250,7 @@ export default function Home({ wallets }) {
                                     {
                                         wallets.map((w) => {
                                             return (
-                                                <option key={w.name} value={w.name + '-' + w.type} style={{ color: '#D9D8D4', background: '#212121' }}>{w.name.toUpperCase()}</option>
+                                                <option key={w.name} value={w.name + '-' + w.type + '-' + w.currency_code} style={{ color: '#D9D8D4', background: '#212121' }}>{w.name.toUpperCase()}</option>
                                             )
                                         })
                                     }
@@ -258,8 +261,8 @@ export default function Home({ wallets }) {
                         {
                             (type === 'local') ?
                                 <>
-                                    <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#242627', padding: '8px', width: '100%',borderRadius:'8px' }}>
-                                    <p className='normal-bold' style={{ textAlign:'start' }}>Account Number</p>
+                                    <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#242627', padding: '8px', width: '100%', borderRadius: '8px' }}>
+                                        <p className='normal-bold' style={{ textAlign: 'start' }}>Account Number</p>
                                         <input type="text" className="amountinput" placeholder="account number" value={accountnumber} onChange={(e) => {
                                             if (!isNaN(e.target.value)) {
                                                 setAccountNumber(e.target.value)
@@ -267,40 +270,53 @@ export default function Home({ wallets }) {
                                         }} />
                                     </Stack>
 
-                                    <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#242627', padding: '8px', width: '100%',borderRadius:'8px' }}>
-                                    <p className='normal-bold' style={{ textAlign:'start' }}>Account Name</p>
+                                    <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#242627', padding: '8px', width: '100%', borderRadius: '8px' }}>
+                                        <p className='normal-bold' style={{ textAlign: 'start' }}>Account Name</p>
                                         <input type="text" className="amountinput" placeholder="account name" value={accountname} onChange={(e) => {
 
                                             setAccountName(e.target.value)
                                         }} />
                                     </Stack>
 
-                                    <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#242627', padding: '8px', width: '100%',borderRadius:'8px' }}>
-                            <p className='normal-bold' style={{ textAlign:'start' }}>Select Payment Method</p>
-                            <FormControl sx={{ m: 1, width: '100%',maxWidth:'301px' }} variant="standard">
-                                <NativeSelect
-                                    id="demo-customized-select-native"
-                                    value={bank}
-                                    onChange={handleBhange}
-                                    input={<BootstrapInput />}
-                                >
-                                    <option aria-label="None" value="" style={{ color: '#D9D8D4', background: '#212121' }} />
-                                    {
-                                        IDRBANK.map((w) => {
-                                            return (
-                                                <option key={w.name} value={w.name} style={{ color: '#D9D8D4', background: '#212121' }}>{w.name.toUpperCase()}</option>
-                                            )
-                                        })
-                                    }
-                                </NativeSelect>
-                            </FormControl>
-                        </Stack>
+
+                                            {
+                                                (curcode === 'idr') ? 
+                                                <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#242627', padding: '8px', width: '100%', borderRadius: '8px' }}>
+                                                <p className='normal-bold' style={{ textAlign: 'start' }}>Select Bank</p>
+                                                <FormControl sx={{ m: 1, width: '100%', maxWidth: '301px' }} variant="standard">
+                                                    <NativeSelect
+                                                        id="demo-customized-select-native"
+                                                        value={bank}
+                                                        onChange={handleBhange}
+                                                        input={<BootstrapInput />}
+                                                    >
+                                                        <option aria-label="None" value="" style={{ color: '#D9D8D4', background: '#212121' }} />
+                                                        {
+                                                            IDRBANK.map((w) => {
+                                                                return (
+                                                                    <option key={w.name} value={w.name} style={{ color: '#D9D8D4', background: '#212121' }}>{w.name.toUpperCase()}</option>
+                                                                )
+                                                            })
+                                                        }
+                                                    </NativeSelect>
+                                                </FormControl>
+                                            </Stack>
+                                                :
+                                                <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#242627', padding: '12px', width: '100%', borderRadius: '8px' }}>
+                                                <p className='normal-bold' style={{ textAlign: 'start' }}>Input your bank name</p>
+                                                <input type="text" className="amountinput" placeholder="bank name" value={bank} onChange={(e) => {
+        
+                                                    setBank(e.target.value)
+                                                }} />
+                                            </Stack>
+                                            }
+                                   
                                 </>
 
                                 :
                                 <>
-                                    <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#242627', padding: '12px', width: '100%',borderRadius:'8px' }}>
-                                    <p className='normal-bold' style={{ textAlign:'start' }}>Input your address</p>
+                                    <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#242627', padding: '12px', width: '100%', borderRadius: '8px' }}>
+                                        <p className='normal-bold' style={{ textAlign: 'start' }}>Input your address</p>
                                         <input type="text" className="amountinput" placeholder="wallet address" value={address} onChange={(e) => {
 
                                             setAddress(e.target.value)
@@ -313,7 +329,7 @@ export default function Home({ wallets }) {
                         }
 
                         <motion.div whileTap={{ scale: 0.9 }} whileHover={{ scale: 1.02 }} onClick={nextfund} style={{ width: '100%', height: '45px' }}>
-                            <Stack className="powerbtn" direction="column" alignItems="center" justifyContent={"center"} sx={{ }}>
+                            <Stack className="powerbtn" direction="column" alignItems="center" justifyContent={"center"} sx={{}}>
                                 <p className="normal-bold" style={{ fontWeight: 'bold' }}>BIND WALLET</p>
                             </Stack>
                         </motion.div>
@@ -329,18 +345,18 @@ export default function Home({ wallets }) {
 }
 
 export const getServerSideProps = async (context) => {
-   
+
     try {
         const { data: wallets, error: walleterror } = await supabase
             .from('walle')
             .select('*')
             .eq('available', true);
-            return {
-                props: {  wallets: wallets }
-            }
+        return {
+            props: { wallets: wallets }
+        }
     } catch (e) {
         return {
-            props: {  wallets: [] }
+            props: { wallets: [] }
         }
     }
 
