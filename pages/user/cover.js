@@ -125,7 +125,7 @@ export default function Cover({ children }) {
     <Stack direction="column"
       justifyContent="center"
       alignItems="center" 
-      style={{ width: '100%', background: "#242627",paddingTop:'#50px',marginTop:'-40px' }}>
+      style={{ width: '100%', background: "#242627",paddingTop:'#50px',marginTop:'-10px' }}>
       {
         //drawer layout
       }

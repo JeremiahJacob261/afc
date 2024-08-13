@@ -6,15 +6,23 @@ import { useRouter } from 'next/router'
 import { motion } from 'framer-motion'
 import WS from '../../public/icon/vault.png'
 import Head from 'next/head'
+import Loading from "@/pages/components/loading";
 export default function Funds() {
   const router = useRouter();
+      //the below controls the loading modal
+      const [openx, setOpenx] = useState(false);
+      const handleOpenx = () => setOpenx(true);
+      const handleClosex = () => setOpenx(false);
+  
+      //the end of thellaoding modal control
     return(
         <Cover>
             <Head>
           <title>Deposit - Enter Amount</title>
           <link rel="icon" href="/brentford.ico" />
         </Head>
-        <Stack direction='column' justifyContent='center' alignItems='center' sx={{minHeight:'90vh',padding:'12px',position:'relative'}} spacing={3}>
+        <Loading open={openx} handleClose={handleClosex} />
+        <Stack direction='column' justifyContent='center' alignItems='center' sx={{minHeight:'95vh',padding:'12px',position:'relative'}} spacing={3}>
             <Stack sx={{width:'240px',height:'305px',padding:'8px'}} alignItems='center' justifyContent='center' spacing={2}>
                  <Image src={WS} width={250} height={115} alt='ws'/>
          <Typography sx={{fontSize:'18px',fontWeight:'600',color:'#CACACA'}}>Make a Deposit</Typography>
@@ -23,7 +31,7 @@ export default function Funds() {
     </Typography>
             </Stack>
         <motion.div whileTap={{ scale:1.05 }} style={{ display:'flex',flexDirection:'row',cursor:'pointer', alignItems:'center',borderRadius:'8px', justifyContent:'center',   color: "#CACACA", height: '50px', background: '#373636',minWidth:'310px',padding:'12px' }} onClick={()=>{
-     
+          handleOpenx()
         router.push('/user/transaction')
       
     }}>Get Started</motion.div>

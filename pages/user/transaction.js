@@ -7,17 +7,19 @@ import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeft
 import { useRouter } from 'next/router'
 import CloseIcon from '@mui/icons-material/Close';
 import { app } from '../api/firebase';
-import Image from 'next/image'
-import { onAuthStateChanged } from "firebase/auth";
-import Rd from '../../public/icon/rounds.png'
 import { getAuth, signOut } from "firebase/auth";
-import Sg from '../../public/icon/sgpay.png'
-import MtZm from '../../public/icon/mtn.png'
-import AiZm from '../../public/icon/airtel.png'
-import Su from '../../public/icon/susdt.png'
+import { motion } from 'framer-motion';
+import Loading from "@/pages/components/loading";
+
 export default function Transaction() {
   const [trans, setTrans] = useState([])
   const router = useRouter()
+  //the below controls the loading modal
+  const [openx, setOpenx] = useState(false);
+  const handleOpenx = () => setOpenx(true);
+  const handleClosex = () => setOpenx(false);
+
+  //the end of thellaoding modal control
   const auth = getAuth(app)
   const months = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"];
@@ -30,13 +32,13 @@ export default function Transaction() {
       const uid = localStorage.getItem('signUids');
       const name = localStorage.getItem('signNames');
       // ...
-      
+
       const GET = async () => {
         try {
           const { data, error } = await supabase
             .from('notification')
             .select()
-            .eq('username',name)
+            .eq('username', name)
             .order('id', { ascending: false });
           setTrans(data)
           console.log(data.length)
@@ -46,69 +48,58 @@ export default function Transaction() {
 
       }
       GET();
-      
+
     } else {
       // User is signed out
       const sOut = async () => {
         const { error } = await supabase.auth.signOut();
-                console.log('sign out');
-                console.log(error);
-                localStorage.removeItem('signedIns');
-                localStorage.removeItem('signUids');
-                localStorage.removeItem('signNames');
-                localStorage.removeItem('signRef');
-                router.push('/login');
-                }
-                sOut();
+        console.log('sign out');
+        console.log(error);
+        localStorage.removeItem('signedIns');
+        localStorage.removeItem('signUids');
+        localStorage.removeItem('signNames');
+        localStorage.removeItem('signRef');
+        router.push('/login');
+      }
+      sOut();
     }
 
   }, [])
   var sn = 0;
   return (
     <Cover>
+      <Loading open={openx} handleClose={handleClosex} />
       <Stack style={{ minHeight: '85vh', width: '100%' }} spacing={2}>
-        <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '8px', margin: '2px' }}>
+        <Stack direction='column' alignItems='center' spacing={1} sx={{ padding: '8px', margin: '2px' }}>
           <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
             router.push('/user/fund')
           }} />
           <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Choose Payment Method</Typography>
         </Stack>
 
-        <Stack direction="row" sx={{ overflowX: 'auto', maxWidth: '360px' }} spacing={2}>
-          <Image src={Su} width={255} height={145} alt='su' onClick={() => {
-            localStorage.setItem('dm', 'usdt');
-            router.push('/user/inputvalue')
-          }} />
-          
-          <Image src={MtZm} width={255} height={145} alt='su' onClick={() => {
-            localStorage.setItem('dm', 'mtn');
-            router.push('/user/inputvalue')
-          }} />
-        </Stack>
-        <Stack direction='row' justifyContent='space-between'>
-          <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '500' }}>Recent Transactions</Typography>
-          <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>See All</Typography>
-        </Stack>
-        <Divider sx={{ background: '#CACACA', borderBottomWidth: '2px' }} />
-        {
-          trans.map((t) => {
-            let date = new Date(t.time);
-            let dates = date.getDate() + '-' + parseInt(date.getMonth() + 1) + '-' + date.getFullYear()
-            let month = months[date.getMonth()];
-            return (
-              <Stack direction="row" spacing={2} justifyContent="space-between" alignItems='center' sx={{ padding: '8px' }} key={t.id}>
-                <Image src={Rd} width={40} height={40} alt='rounds' />
-                <Stack direction='column' alignItems='start' sx={{ width: '196px' }}>
-                  <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '400' }}>{(t.method === 'usdt') ? 'USDT' : (t.method === 'gpay') ? 'Gpay' : 'Mobile Money'}
-                  </Typography>
-                  <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{month} {date.getDate()}</Typography>
+        <Stack direction="column" sx={{ overflowX: 'auto', maxWidth: '360px' }} spacing={2}
+       >
+          <Stack direction="column" alignItems='center' justifyContent="center" sx={{ minWidth: '255px', height: '145px', background: '#373636', borderRadius: '5px', padding: '8px' }}
+            onClick={()=> { 
+              localStorage.setItem('dm','usdt')
+              handleOpenx()
+              router.push('/user/inputvalue')
+            }}
+          >
+            <p style={{ color: '#cacaca', fontFamily: 'Poppins, san-serif', fontWeight: '300' }}>USDT (TRC20)</p>
+          </Stack>
 
-                </Stack>
-                <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '12px', fontWeight: '300' }}>{t.amount} {(t.method === 'usdt') ? 'USDT' : (t.method === 'gpay') ? '₹' : 'Kwacha'}</Typography>
-              </Stack>
-            )
-          })
-        }
+          <Stack direction="column" alignItems='center' justifyContent="center" sx={{ minWidth: '255px', height: '145px', background: '#373636', borderRadius: '5px', padding: '8px' }}
+            onClick={()=> { 
+              localStorage.setItem('dm','idr')
+              handleOpenx()
+              router.push('/user/inputvalue')
+            }}
+          >
+            <p style={{ color: '#cacaca', fontFamily: 'Poppins, san-serif', fontWeight: '300' }}>Indonesian Ruppes</p>
+          </Stack>
+        </Stack>
+
       </Stack>
     </Cover>
   )

@@ -4,9 +4,11 @@ import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeft
 import PriorityHighRoundedIcon from '@mui/icons-material/PriorityHighRounded';
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { motion } from 'framer-motion'
 import Modal from '@mui/material/Modal';
 import Wig from '../../public/icon/wig.png'
 import Image from 'next/image'
+import Loading from "@/pages/components/loading";
 export default function InputValue() {
     const router = useRouter();
     const [ale,setAle] = useState('')
@@ -50,9 +52,16 @@ export default function InputValue() {
     useEffect(()=>{
       setMethod(localStorage.getItem('dm'));
     },[])
+        //the below controls the loading modal
+        const [openx, setOpenx] = useState(false);
+        const handleOpenx = () => setOpenx(true);
+        const handleClosex = () => setOpenx(false);
+    
+        //the end of thellaoding modal control
     return(
         <Cover>
             <Alertz/>
+            <Loading open={openx} handleClose={handleClosex} />
             <Stack direction='column' alignItems='center' sx={{minHeight:'90vh'}} spacing={2}>
             <Stack direction='row' alignItems='start' spacing={1} sx={{ padding: '8px', margin: '2px',minWidth:'343px' }}>
         <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
@@ -67,15 +76,18 @@ export default function InputValue() {
       <Stack spacing={1} sx={{minWidth:'344px'}}> 
             <Typography sx={{fontSize:'12px',fontWeight:'500',fontFamily:'Poppins,sans-serif',color:'#CACACA'}}>Enter Amount </Typography>
             <TextField 
-            sx={{color:'#242627'}}
+            sx={{color:'#242627',input:{ color:'#f5f5f5'}}}
             type="number"
             value={amount}
             onChange={(a) => {
               setAmount(a.target.value);
             }}/>
             </Stack>
-            <Button variant='contained' sx={{position:'absolute',bottom:100,fontFamily:'Poppins,sans-serif',color:'#242627',background:'#242627',padding:'8px',minWidth:'343px',height:'50px'}} onClick={nextPage}>Continue</Button>
-            </Stack>
+            <motion.div whileTap={{ scale:1.05 }} style={{ display:'flex',flexDirection:'row',cursor:'pointer', alignItems:'center',borderRadius:'8px', justifyContent:'center',   color: "#CACACA", height: '50px', background: '#373636',minWidth:'310px',padding:'12px' }} onClick={()=>{
+          handleOpenx()
+      nextPage()
+      
+    }}>Continue</motion.div> </Stack>
         </Cover>
     )
     function Alertz(){
@@ -108,11 +120,11 @@ export default function InputValue() {
         <Typography id="modal-modal-description" sx={{fontFamily:'Poppins,sans-serif',mt: 2,fontSize:'14px',fontWeight:'300'}}>
          {ale}
         </Typography>
-        <Divider sx={{background:'#CACACA'}}/>
-        <Button variant='contained' sx={{fontFamily:'Poppins,sans-serif',color:'#242627',background:'#242627',padding:'8px',width:'100%'}} onClick={()=>{
-          
-            setOpen(false)
-        }}>Okay</Button>
+        <Divider sx={{color:'#CACACA'}}/>
+        <motion.div whileTap={{ scale:1.05 }} style={{ display:'flex',flexDirection:'row',cursor:'pointer', alignItems:'center',borderRadius:'8px', justifyContent:'center',   color: "#CACACA", height: '50px', background: '#373636',minWidth:'310px',padding:'12px' }} onClick={()=>{
+                  setOpen(false)
+    }}>Okay</motion.div>
+      
       </Stack>
         
     </Modal>)
