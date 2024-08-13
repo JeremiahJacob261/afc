@@ -4,6 +4,7 @@ import Cover from './cover'
 import React from 'react'
 import { useRouter } from 'next/router'
 import { motion } from 'framer-motion'
+import { useState } from 'react'
 import WS from '../../public/icon/vault.png'
 import Head from 'next/head'
 import Loading from "@/pages/components/loading";
@@ -30,7 +31,7 @@ export default function Funds() {
          Deposit money into your account in 3 easy steps with any payment method of your choice
     </Typography>
             </Stack>
-        <motion.div whileTap={{ scale:1.05 }} style={{ display:'flex',flexDirection:'row',cursor:'pointer', alignItems:'center',borderRadius:'8px', justifyContent:'center',   color: "#CACACA", height: '50px', background: '#373636',minWidth:'310px',padding:'12px' }} onClick={()=>{
+        <motion.div whileTap={{ scale:1.05 }} style={{ cursor:'pointer',border:'0.6px solid #373636',display:'flex',flexDirection:'row',cursor:'pointer', alignItems:'center',borderRadius:'8px', justifyContent:'center',   color: "#CACACA", height: '50px', background: '#E94E55',minWidth:'310px',padding:'12px' }} onClick={()=>{
           handleOpenx()
         router.push('/user/transaction')
       

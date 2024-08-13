@@ -27,6 +27,7 @@ export default function InputValue() {
               if( amount.length < 1 || amount < 10 ){
                 Alerts((method === 'usdt') ? 'Please Input any Amount above 9 USDT' : (method === 'gpay') ? 'Please Input any Amount above 829 Indian Rupees' : 'Please Input any Amount above 208 Zambian Kwacha',false)
             }else{
+              handleOpenx()
               localStorage.setItem('amo',amount)
                 router.push('/user/deposit')
             }
@@ -84,7 +85,7 @@ export default function InputValue() {
             }}/>
             </Stack>
             <motion.div whileTap={{ scale:1.05 }} style={{ display:'flex',flexDirection:'row',cursor:'pointer', alignItems:'center',borderRadius:'8px', justifyContent:'center',   color: "#CACACA", height: '50px', background: '#373636',minWidth:'310px',padding:'12px' }} onClick={()=>{
-          handleOpenx()
+        
       nextPage()
       
     }}>Continue</motion.div> </Stack>
@@ -113,11 +114,11 @@ export default function InputValue() {
     padding:'12px'
     }}>
       <Image src={aleT ? Big : Wig} width={120} height={120} alt='widh'/>
-        <Typography id="modal-modal-title" sx={{fontFamily:'Poppins,sans-serif',fontSize:'20px',fontWeight:'500'}}>
+        <Typography id="modal-modal-title" sx={{fontFamily:'Poppins,sans-serif',fontSize:'20px',fontWeight:'500',color:'#cacaca'}}>
         
          {aleT ? 'Success' : 'Eh Sorry!'}
         </Typography>
-        <Typography id="modal-modal-description" sx={{fontFamily:'Poppins,sans-serif',mt: 2,fontSize:'14px',fontWeight:'300'}}>
+        <Typography id="modal-modal-description" sx={{fontFamily:'Poppins,sans-serif',mt: 2,fontSize:'14px',fontWeight:'300',color:'#cacaca'}}>
          {ale}
         </Typography>
         <Divider sx={{color:'#CACACA'}}/>
