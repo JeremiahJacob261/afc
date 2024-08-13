@@ -16,9 +16,11 @@ import CircularProgress from '@mui/material/CircularProgress';
 import toast ,{ Toaster } from 'react-hot-toast';
 
 export default function Upload() {
-  const amount = localStorage.getItem('amo');
-  const name = localStorage.getItem('signNames');
-  const method = localStorage.getItem('dm');
+
+  const [amount,setAmount] =useState('')
+  const [name,setName] =useState('')
+  const [method,setMethod] =useState('')
+
   const router = useRouter();
   const [file, setfile] = useState([]);
       //the below controls the loading modal
@@ -119,6 +121,9 @@ export default function Upload() {
   // }
   useEffect(() => {
     console.log(localStorage.getItem('amo'))
+    setAmount(localStorage.getItem('amo'));
+    setName(localStorage.getItem('signNames'));
+    setMethod(localStorage.getItem('dm'));
     if (localStorage.getItem('amo') === null) {
       router.push('/user/fund')
     }
