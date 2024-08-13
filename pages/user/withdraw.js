@@ -14,6 +14,7 @@ import { Icon } from '@iconify/react'
 import Head from "next/head";
 import Modal from '@mui/material/Modal';
 import Cover from './cover'
+import toast, { Toaster} from 'react-hot-toast'
 import Loading from "@/pages/components/loading";
 import FormControl from '@mui/material/FormControl';
 import { motion } from 'framer-motion'
@@ -28,10 +29,23 @@ export default function Deposit({ wallx }) {
   function findObjectById(id) {
     return wallx.find(obj => obj.name === id);
   }
+
+  
+  let amountlimit = {
+    '1': 20,
+    '2': 50,
+    '3': 100,
+    '4': 200,
+    '5': 300,
+    '6': 500,
+    '7': 1000
+}
+
   const [wallets, setWallet] = useState([]);
   const [info, setInfo] = useState({});
   const [rate,setRate] = useState(1);
   const [currency,setCurrency] = useState({});
+  const [swallet,setSWallet] = useState({});
 
   //the below controls the loading modal
   const [openx, setOpenx] = useState(false);
@@ -58,6 +72,11 @@ export default function Deposit({ wallx }) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
 
+  //serach
+  function findObjectByWallet(id) {
+    return wallets.find(obj => obj.wallet === id);
+  }
+
   const getVip = async () => {
     let test = await fetch('/api/vipcalculate', {
       method: 'POST',
@@ -76,7 +95,6 @@ export default function Deposit({ wallx }) {
       try {
         getVip().then(async (data) => {
           let viplevel = data.viplevel;
-          console.log(amountlimit[viplevel]);
           //this sends data to the withdraw in backend
 
 
@@ -85,9 +103,10 @@ export default function Deposit({ wallx }) {
             headers: {
               'Content-Type': 'application/json'
             },
+            //space here: crypto address for crypto , account number fro local banks
             body: JSON.stringify({
-              name: users[0].username, pass: password, wallet: wallet, amount: parseFloat(amount).toFixed(3), method: (method === 'USDT (TRC20)') ? 'usdt' : (method === 'PKR') ? 'pkr' : 'idr',
-              "bank": walletinfo.bank, "accountname": walletinfo.accountname, vipamount: (method === 'USDT (TRC20)') ? amountlimit[viplevel] : (method === 'PKR') ? amountlimity[viplevel] : amountlimitx[viplevel]
+              name: info.username, pass: pin, wallet: address, amount: parseFloat(amount).toFixed(3), method: currency.currency_code,
+              "bank": currency.bank, "accountname": swallet['names'], vipamount: amountlimit[viplevel]
             })
           }).then(data => {
 
@@ -95,22 +114,21 @@ export default function Deposit({ wallx }) {
           })
           console.log(test);
           if (test[0].status === 'Failed') {
-            alert(test[0].message);
+            toast.error(test[0].message);
             if (test[0].message === 'No transaction pin has been set') {
               toast.error(test[0].message)
               router.push('/user/codesetting')
-              handleToggleClose();
+             
             }
-            handleToggleClose();
           } else {
 
             router.push('/user/withdrawsuccess')
-            handleToggleClose();
+            
           }
         })
       } catch (e) {
         console.log(e);
-        handleToggleClose();
+        handleClosex();
       }
 
 
@@ -120,23 +138,23 @@ export default function Deposit({ wallx }) {
   }
   const transaction = () => {
 
-    if (password === '') {
-      alert('Please enter your password')
-    } else if (cpassword === '') {
-      alert('Please confirm your password')
-    } else if (password !== cpassword) {
-      alert('Password does not match')
+    if (pin === '') {
+      toast.error('Please enter your password')
+    } else if (pin === '') {
+      toast.error('Please confirm your password')
+    } else if (pin !== pin) {
+      toast.error('Password does not match')
     } else if (amount === '') {
-      alert('Please enter amount')
-    } else if (amount < methodmin[method]) {
-      alert(`Minimum amount to withdraw is ${methodmin[method]} ${method}`)
+      toast.error('Please enter amount')
+    } else if (amount < 10) {
+      toast.error(`Minimum amount to withdraw is 10 USDT`)
 
-    } else if (amount > methodmax[method]) {
-      alert(`Maximum amount to withdraw including charges is ${methodmax[method]} ${method}`)
+    } else if (amount > 100) {
+      toast.error(`Maximum amount to withdraw including charges is 100 USDT`)
 
     } else {
 
-      setDrop(true);
+      handleOpenx()
       testRoute();
     }
   }
@@ -172,7 +190,7 @@ export default function Deposit({ wallx }) {
           localStorage.setItem('signRef', data[0].newrefer);
         } catch (e) {
           console.log(e)
-          alert('Please Check your Internet Connection and Refresh the Website')
+          toast.error('Please Check your Internet Connection and Refresh the Website')
         }
 
       }
@@ -243,8 +261,8 @@ export default function Deposit({ wallx }) {
             <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>{total} USDT</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Total Amount in {currency.currency_code.toUpperCase()}</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>{parseFloat(total * rate).toFixed(2)} {currency.currency_code.toUpperCase()}</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Total Amount in {(currency.currency_code  ?? "USDT").toUpperCase()}</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>{parseFloat(total * rate).toFixed(2)} {(currency.currency_code ?? "USDT").toUpperCase()}</Typography>
           </Stack>
           <Divider sx={{ color: 'white' }} />
           <motion.div
@@ -279,13 +297,23 @@ export default function Deposit({ wallx }) {
                 value={method}
                 style={{ background: "#242627", color: '#CACACA', border: '1px solid #CACACA' }}
                 onChange={(e) => {
+                try{
                   console.log(e.target.value);
                   const [w, b, t] = e.target.value.split('-');
                   setAddress(w);
+                  let selectx = findObjectByWallet(w);
+                  setSWallet(selectx)
+                  console.log(selectx)
                   let current = findObjectById(b);
                   setRate(current.rates);
-                  setMethod(e.target.value);
+                  setMethod(b);
                   setCurrency(current);
+                }catch(e){
+                  console.log(e)
+                  
+                }finally{
+                  setMethod(e.target.value);
+                }
                 }}
               >
                 <MenuItem value=''>none</MenuItem>
@@ -300,7 +328,7 @@ export default function Deposit({ wallx }) {
           </Stack>
 
           <Stack spacing={1}>
-            <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Enter Amount You Wish to Withdraw</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Enter Amount You Wish to Withdraw in USD</Typography>
             <TextField
               sx={{ border: '1px solid #CACACA', input: { color: '#CACACA', } }}
               type="number"
@@ -326,32 +354,13 @@ export default function Deposit({ wallx }) {
 
           <motion.div whileTap={{ scale: 0.98 }}
             style={{ cursor: 'pointer', display: 'flex', flexDirection: 'row', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: "#CACACA", height: '50px', background: '#E94E55', minWidth: '310px', padding: '12px' }}
-            onClick={() => {
-              if (info.balance < total) {
-                Alerts('Insufficient Balance', false);
-              } else {
-
-                if (address.length < 10) {
-                  Alerts('Ensure the address is correct', false);
-                } else {
-                  if (!info.codeset) {
-                    Alerts('Your Need To Set a Transaction Pin', false);
-                    router.push('/user/codesetting');
-                  } else {
-                    if (info.pin == pin) {
-
-                      transaction();
-                    } else {
-                      Alerts('Incorrect Pin', false);
-                    }
-                  }
-                }
-              }
-            }}>Withdraw</motion.div>
+            onClick={transaction}>Withdraw</motion.div>
 
         </Stack>
       </Stack>
       <Loading open={openx} handleClose={handleClosex} />
+      <Toaster position="bottom-center"
+        reverseOrder={false} />
     </Cover>
   )
   function Alertz() {

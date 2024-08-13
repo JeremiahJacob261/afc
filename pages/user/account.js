@@ -169,7 +169,7 @@ export default function Account() {
                 </Stack>
               </Link>
             </Stack>
-            <Divider sx={{ bgcolor: "secondary.light" }} />
+            <Divider sx={{ bgcolor: "#E94E55" }} />
             < Link href='https://t.me/+WJKvJKagKuozNzM8' style={{ textDecoration:'none' }}>
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                   <Stack direction='row' spacing={1} justifyContent='start'>
@@ -183,9 +183,8 @@ export default function Account() {
           {
             //deposit
           }
-          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px" }}>
+          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px",border:'1px solid #E94E55' }}>
             <Typography sx={{ color: "#E94E55", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>MY TEAM</Typography>
-
 
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', height: '110px', padding: '8px', background: '#242627', borderRadius: '8px' }}>
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} alignItems="center">
@@ -199,7 +198,7 @@ export default function Account() {
                   toast.success("Invite link copied")
                 }} />
               </Stack>
-              <Divider sx={{ bgcolor: "secondary.light" }} />
+              <Divider sx={{ bgcolor: "#E94E55" }} />
               <Stack direction='row' justifyContent='space-between' alignItems={"center"} sx={{ padding: '8px' }}
                 onClick={() => {
                   router.push('/user/refferal');
@@ -218,7 +217,7 @@ export default function Account() {
           {
             //fun
           }
-          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px" }}>
+          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px",border:'1px solid #E94E55' }}>
             <Typography sx={{ color: "#E94E55", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Deposit</Typography>
             <Divider />
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', height: '110px', padding: '8px', background: '#242627', borderRadius: '8px' }}>
@@ -233,7 +232,7 @@ export default function Account() {
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
 
-              <Divider sx={{ bgcolor: "secondary.light" }} />
+              <Divider sx={{ bgcolor: "#E94E55" }} />
 
               <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px' }} onClick={() => {
                 router.push('/user/vip');
@@ -252,8 +251,8 @@ export default function Account() {
           {
             //withdraw
           }
-          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px" }}>
-            <Typography sx={{ color: "#FFFFFF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Withdrawal</Typography>
+          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px",border:'1px solid #E94E55' }}>
+            <Typography sx={{ color: "#E94E55", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Withdrawal</Typography>
             <Divider />
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '150px', padding: '8px', background: '#242627', borderRadius: '8px' }}>
 
@@ -267,7 +266,7 @@ export default function Account() {
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
 
-              <Divider sx={{ bgcolor: "secondary.light" }} />
+              <Divider sx={{ bgcolor: "#E94E55" }} />
 
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} onClick={() => {
                 router.push('/user/history');
@@ -279,7 +278,7 @@ export default function Account() {
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
 
-              <Divider sx={{ bgcolor: "secondary.light" }} />
+              <Divider sx={{ bgcolor: "#E94E55" }} />
 
               <Stack direction='row' justifyContent='space-between' alignItems="center" sx={{ padding: '8px' }} onClick={() => {
                 router.push('/user/codesetting');
@@ -291,7 +290,7 @@ export default function Account() {
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
 
-              <Divider sx={{ bgcolor: "secondary.light" }} />
+              <Divider sx={{ bgcolor: "#E94E55" }} />
 
               <Stack direction='row' justifyContent='space-between' alignItems="center" sx={{ padding: '8px' }} onClick={() => {
                 router.push('/user/bindwallet');
@@ -310,8 +309,8 @@ export default function Account() {
           {
             //fun
           }
-          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px" }}>
-            <Typography sx={{ color: "#FFFFFF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Bets</Typography>
+          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px",border:'1px solid #E94E55' }}>
+            <Typography sx={{ color: "#E94E55", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Bets</Typography>
             <Divider />
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '50px', padding: '8px', background: '#242627', borderRadius: '8px' }}>
 
@@ -332,8 +331,8 @@ export default function Account() {
           {
             //About
           }
-          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px" }}>
-            <Typography sx={{ color: "#FFFFFF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>About</Typography>
+          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px",border:'1px solid #E94E55' }}>
+            <Typography sx={{ color: "#E94E55", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>About</Typography>
             <Divider />
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '50px', padding: '8px', background: '#242627', borderRadius: '8px' }}>
 
@@ -348,7 +347,7 @@ export default function Account() {
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
 
-              <Divider sx={{ bgcolor: "secondary.light" }} />
+              <Divider sx={{ bgcolor: "#E94E55" }} />
 
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} onClick={() => {
                 router.push("/user/faq")
@@ -361,7 +360,7 @@ export default function Account() {
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
 
-              <Divider sx={{ bgcolor: "secondary.light" }} />
+              <Divider sx={{ bgcolor: "#E94E55" }} />
 
               < Link href='https://t.me/+WJKvJKagKuozNzM8' style={{ textDecoration:'none' }}>
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
@@ -374,7 +373,7 @@ export default function Account() {
                 </Stack>
               </Link>
 
-              <Divider sx={{ bgcolor: "secondary.light" }} />
+              <Divider sx={{ bgcolor: "#E94E55" }} />
 
               < Link href='https://t.me/Afc _customercare' style={{ textDecoration:'none' }}>
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
@@ -393,8 +392,8 @@ export default function Account() {
           {
             //close
           }
-          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px" }}>
-            <Typography sx={{ color: "#FFFFFF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Closure</Typography>
+          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px",border:'1px solid #E94E55' }}>
+            <Typography sx={{ color: "#E94E55", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Closure</Typography>
             <Divider />
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '50px', padding: '8px', background: '#242627', borderRadius: '8px' }}>
 

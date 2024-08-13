@@ -1,5 +1,5 @@
 import BottomNavi from "./bottom_navi"
-import { Stack, Typography, Button } from "@mui/material"
+import { Stack, Typography, Divider } from "@mui/material"
 import Drawer from '@mui/material/Drawer';
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
@@ -142,10 +142,12 @@ export default function Cover({ children }) {
               <Link href="/" style={{ textDecoration: "none" }}>
                 <p style={{ fontFamily: 'Noto Serif, serif', color: "#E9E5DA", fontWeight: '400', fontSize: '20px' }}>BFC  </p>
               </Link>
-
+              <Icon icon="ri:close-fill" width="32" height="32"  style={{color: "#E94E55"}} onClick={()=>{
+                setDraw(false)
+              }}/>
             </Stack>
 
-            <Stack direction='column'>
+            <Stack direction='column' >
               <Link href='/user/matches' style={{ textDecoration: "none", color: '#CACACA', cursor: 'pointer' }}>
                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                   <Stack direction='row' spacing={2}>
@@ -217,8 +219,8 @@ export default function Cover({ children }) {
       {
         //drawer layout end
       }
-      <Stack direction="row" style={{ background: '#242627', width: '100%', height: '64px', padding: '5px' }}
-        alignItems='center' justifyContent="space-between">
+      <Stack direction="row" style={{ background: '#242627', width: '100%', height: '64px', padding: '12px' }}
+        alignItems='center' justifyContent="space-around">
         <div style={{ display: 'inline-flex', alignItems: 'center' }}>
           <Icon icon="tabler:grid-dots" width="24" height="24" style={{ color: '#FFB400' }} onClick={() => {
             setDraw(true)
@@ -232,7 +234,7 @@ export default function Cover({ children }) {
             }} />
         </div> </Stack>
       <div style={{ paddingBottom: "50px" }}>  {children}</div>
-
+      <Divider sx={{ bgcolor: "#E94E55" }} />
       <BottomNavi />
 
     </Stack>

@@ -21,7 +21,7 @@ export default async function handler(req, res) {
         res.status(200).json([{ 'status': 'Failed', 'message': 'Wrong password' }]);
     } else {
 
-        if (bets.length > 5) {
+        if (bets.length > 4) {
             if (!data[0].codeset) {
 
                 console.log('no transaction pin has been set')
