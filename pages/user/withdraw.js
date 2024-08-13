@@ -24,7 +24,16 @@ import Wig from '../../public/icon/wig.png'
 import Image from 'next/image'
 import Big from '../../public/icon/badge.png'
 import { DriveFileRenameOutlineRounded } from "@mui/icons-material";
-export default function Deposit({ wallx }) {
+export default function Deposit() {
+  const [wallx,setWallx] = useState([]);
+  const getwallx = async () => {
+    const { data: wallets, error: walleterror } = await supabase
+      .from('walle')
+      .select('*')
+      .eq('available', true);
+      setWallx(wallets)
+  }
+  getwallx()
   //86f36a9d-c8e8-41cb-a8aa-3bbe7b66d0a5
   function findObjectById(id) {
     return wallx.find(obj => obj.name === id);
@@ -411,21 +420,18 @@ export default function Deposit({ wallx }) {
 }
 
 
-export const getServerSideProps = async (context) => {
+// export const getServerSideProps = async (context) => {
 
-  try {
-    const { data: wallets, error: walleterror } = await supabase
-      .from('walle')
-      .select('*')
-      .eq('available', true);
-    return {
-      props: { wallx: wallets }
-    }
-  } catch (e) {
-    return {
-      props: { wallx: [] }
-    }
-  }
+//   try {
+    
+//     return {
+//       props: { wallx: wallets }
+//     }
+//   } catch (e) {
+//     return {
+//       props: { wallx: [] }
+//     }
+//   }
 
 
-}
+// }

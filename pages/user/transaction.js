@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import { supabase } from '../api/supabase'
 import Cover from './cover'
+import Image from 'next/image'
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import { useRouter } from 'next/router'
 import CloseIcon from '@mui/icons-material/Close';
@@ -11,7 +12,7 @@ import { getAuth, signOut } from "firebase/auth";
 import { motion } from 'framer-motion';
 import Loading from "@/pages/components/loading";
 
-export default function Transaction() {
+export default function Transaction({ wallx }) {
   const [trans, setTrans] = useState([])
   const router = useRouter()
   //the below controls the loading modal
@@ -79,28 +80,45 @@ export default function Transaction() {
 
         <Stack direction="column" sx={{ overflowX: 'auto', maxWidth: '360px' }} spacing={2}
        >
-          <Stack direction="column" alignItems='center' justifyContent="center" sx={{ minWidth: '255px', height: '145px', background: '#373636', borderRadius: '5px', padding: '8px' }}
-            onClick={()=> { 
-              localStorage.setItem('dm','usdt')
-              handleOpenx()
-              router.push('/user/inputvalue')
-            }}
-          >
-            <p style={{ color: '#cacaca', fontFamily: 'Poppins, san-serif', fontWeight: '300' }}>USDT (TRC20)</p>
-          </Stack>
-
-          <Stack direction="column" alignItems='center' justifyContent="center" sx={{ minWidth: '255px', height: '145px', background: '#373636', borderRadius: '5px', padding: '8px' }}
-            onClick={()=> { 
-              localStorage.setItem('dm','idr')
-              handleOpenx()
-              router.push('/user/inputvalue')
-            }}
-          >
-            <p style={{ color: '#cacaca', fontFamily: 'Poppins, san-serif', fontWeight: '300' }}>Indonesian Ruppes</p>
-          </Stack>
+         {
+          wallx.map((m)=>{
+            return(
+              <Stack direction="column" alignItems='center' justifyContent="space-around" sx={{ minWidth: '255px', height: '145px', background: '#373636', borderRadius: '5px', padding: '8px' }}
+             key={m.name}
+              onClick={()=> { 
+                localStorage.setItem('dm',m.currencycode)
+                handleOpenx()
+                router.push('/user/inputvalue')
+              }}
+            >
+              <Image src={m.image} width={75} height={75} alt={m.name} style={{ borderRadius:'9px'}}/>
+              <p style={{ color: '#cacaca', fontFamily: 'Poppins, san-serif', fontWeight: '300' }}>{m.name}</p>
+            </Stack>
+            )
+          })
+         }
         </Stack>
 
       </Stack>
     </Cover>
   )
+}
+
+export const getServerSideProps = async (context) => {
+
+  try {
+    const { data: wallets, error: walleterror } = await supabase
+      .from('walle')
+      .select('*')
+      .eq('available', true);
+    return {
+      props: { wallx: wallets }
+    }
+  } catch (e) {
+    return {
+      props: { wallx: [] }
+    }
+  }
+
+
 }
