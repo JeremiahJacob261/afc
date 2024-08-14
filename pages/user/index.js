@@ -28,7 +28,7 @@ import { ImageAspectRatioTwoTone } from "@mui/icons-material";
 import { CookiesProvider, useCookies } from 'react-cookie';
 
 
-export default function Home({ footDat }) {
+export default function Home() {
   const [anchorEl, setAnchorEl] = useState(null);
   const openr = Boolean(anchorEl);
   const [drop, setDrop] = useState(false);
@@ -39,7 +39,7 @@ export default function Home({ footDat }) {
   const handleCloser = () => {
     setAnchorEl(null);
   };
-  // const [footDat, setFootDat] = useState([])
+  const [footDat, setFootDat] = useState([]);
 
    //the below controls the loading modal
    const [open, setOpen] = useState(false);
@@ -66,6 +66,17 @@ export default function Home({ footDat }) {
     }
    }
    runer();
+
+   const getMatch = async ()=>{
+    const { data, error } = await supabase
+    .from('bets')
+    .select('*')
+    .eq('verified', false)
+    .limit(50)
+    .order('id', { ascending: false });
+    setFootDat([]);
+   }
+   getMatch();
   }, [balance]);
 
   const router = useRouter();
@@ -243,17 +254,17 @@ export default function Home({ footDat }) {
   )
 }
 
-export async function getServerSideProps(context) {
-  console.log('hello')
-  const { data, error } = await supabase
-    .from('bets')
-    .select('*')
-    .eq('verified', false)
-    .limit(50)
-    .order('id', { ascending: false });
-  let footDat = data;
-  console.log(data)
-  return {
-    props: { footDat }, // will be passed to the page component as props
-  }
-}
+// export async function getServerSideProps(context) {
+//   console.log('hello')
+//   const { data, error } = await supabase
+//     .from('bets')
+//     .select('*')
+//     .eq('verified', false)
+//     .limit(50)
+//     .order('id', { ascending: false });
+//   let footDat = data;
+//   console.log(data)
+//   return {
+//     props: { footDat }, // will be passed to the page component as props
+//   }
+// }
