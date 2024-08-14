@@ -5,6 +5,7 @@ import { useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useCookies } from "react-cookie"
 import { Stack } from '@mui/material';
+import Head from 'next/head'
 import Footer from './footeras';
 import { BetContext } from './api/Context'
 import { appWithTranslation } from 'next-i18next'
@@ -16,6 +17,13 @@ function MyApp({ Component, pageProps }) {
   const [slip, setSlip] = useState(0)
   return (
     <div style={{background: "#242627",height:'100%'}}>
+      <Head>
+        <title>BFC</title>
+        <meta name="description" content="Login to your Account to see whats up with your investments
+        " />
+        <link rel="icon" href="/brentford.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
       <Component {...pageProps} style={{ background: "#242627" ,width:"100%",display:'flex'}} />
       
 </div>

@@ -240,12 +240,14 @@ export default function Deposit() {
     setOpen(true)
   }
   //end of snackbar2
-  let charge = (amount * 5) / 100;
-  let total = Number(amount) + ((amount * 5) / 100);
+  let charge = (amount * 7) / 100;
+  let total = Number(amount) + ((amount * 7) / 100);
   return (
     <Cover style={{ minHeight: '95vh', paddingBottom: '100px' }}>
       <Head>
         <title>Withdraw</title>
+        <link rel="icon" href="/brentford.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Alertz />
       <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '8px', margin: '2px' }}>
