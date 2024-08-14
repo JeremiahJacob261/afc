@@ -69,22 +69,22 @@ export default function Home({ user }) {
       2: Agent2
     };
     const [current, setCurrent] = useState(0);
-    // useEffect(() => {
-    //   const interval = setInterval(() => {
-    //     setCurrent((prevCurrent) => (prevCurrent === 0 ? 1 : prevCurrent === 1 ? 2 : 0));
-    //   }, 8000);
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setCurrent((prevCurrent) => (prevCurrent === 0 ? 1 : prevCurrent === 1 ? 2 : 0));
+      }, 8000);
 
-    //   return () => clearInterval(interval);
-    // }, []);
+      return () => clearInterval(interval);
+    }, []);
 
     return (
       <Stack>
         <motion.div
-        // key={current}
-        // initial={{ opacity: 0, transition: { duration: 1, ease: 'easeIn' } }}
-        // animate={{ opacity: 1, }}
-        // exit={{ opacity: 0, transition: { duration: 2, ease: 'easeOut' } }}
-        // transition={{ duration: 2, ease: 'easeOut' }}
+        key={current}
+        initial={{ opacity: 0, transition: { duration: 1, ease: 'easeIn' } }}
+        animate={{ opacity: 1, }}
+        exit={{ opacity: 0, transition: { duration: 2, ease: 'easeOut' } }}
+        transition={{ duration: 2, ease: 'easeOut' }}
         >
           <Image src={images[1]} width={354} height={140} alt="bonus" style={{ width: 'auto', height: 'auto', borderRadius: '5px' }} />
         </motion.div>

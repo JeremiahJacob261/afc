@@ -125,7 +125,7 @@ export async function getServerSideProps(context) {
     .select()
     .eq('verified', false)
     .limit(50)
-    .order('id', { ascending: false });
+    .order('created_at', { ascending: true });
   let footDat = data;
   console.log(data)
   return {

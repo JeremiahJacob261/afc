@@ -150,7 +150,7 @@ export default function Upload() {
         <CircularProgress color="inherit" />
       </Backdrop>
       <Stack direction='column' justifyContent='center' alignItems="center" sx={{ height: '90vh' }} spacing={2}>
-      <Stack direction='row' className='warning' justifyContent='center' alignItems='center' sx={{ height: '58px', background: '#FBEFEF', borderRadius: '5px', padding: '16px' }} spacing={2}>
+      <Stack direction='row' className='warning' justifyContent='center' alignItems='center' sx={{ height: '58px', background: '#FBEFEF', borderRadius: '5px', padding: '16px',maxWidth:'340px' }} spacing={2}>
           <PriorityHighRoundedIcon sx={{ color: '#242627', background: '#E94E55', width: '20px', height: '20px', borderRadius: '10px' }} />
           <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#E94E55' }}>Please deposit only {amount} {method} to the address below, depositing any amount other than this may result in lost funds.</Typography>
         </Stack>
@@ -192,9 +192,9 @@ export default function Upload() {
           </Stack>
         </motion.div>
         <motion.p onClick={checkParams}
-          whileTap={{ background: '#E94E55', color: '#373636', scale: 0.9 }}
-          whileHover={{ background: '#E94E55', color: '#373636', scale: 1.1 }}
-          style={{ fontWeight: '500', fontSize: '12px', color: 'white', padding: '10px', background: '#373636', border: '0.6px solid #373636', width: '30vh', textAlign: 'center', cursor: 'pointer', borderRadius: '5px' }}>
+          whileTap={{ background: '#373636', color: '#E94E55', scale: 0.9 }}
+          whileHover={{ background: '#373636', color: '#E94E55', scale: 1.1 }}
+          style={{ fontWeight: '500',minWidth:'340px', fontSize: '12px', color: 'white', padding: '16px', background: '#E94E55', border: '0.6px solid #373636', width: '30vh', textAlign: 'center', cursor: 'pointer', borderRadius: '5px' }}>
           COMPLETE !</motion.p>
 
       </Stack>

@@ -156,7 +156,7 @@ export default function Deposit() {
     } else if (amount === '') {
       toast.error('Please enter amount')
     } else if (amount < 10) {
-      toast.error(`Minimum amount to withdraw is 10 USDT`)
+      toast.error(`Minimum amount to withdraw is 5 USDT`)
 
     } else if (amount > 100) {
       toast.error(`Maximum amount to withdraw including charges is 100 USDT`)

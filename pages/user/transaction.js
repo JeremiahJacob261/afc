@@ -70,12 +70,12 @@ export default function Transaction({ wallx }) {
   return (
     <Cover>
       <Loading open={openx} handleClose={handleClosex} />
-      <Stack style={{ minHeight: '85vh', width: '100%' }} spacing={2}>
+      <Stack style={{ minHeight: '90vh', width: '100%' }} spacing={2}>
         <Stack direction='column' alignItems='center' spacing={1} sx={{ padding: '8px', margin: '2px' }}>
-          <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
+          <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px',color:'#cacaca' }} onClick={() => {
             router.push('/user/fund')
           }} />
-          <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Choose Payment Method</Typography>
+          <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#cacaca' }}>Choose Payment Method</Typography>
         </Stack>
 
         <Stack direction="column" sx={{ overflowX: 'auto', maxWidth: '360px' }} spacing={2}
@@ -86,9 +86,9 @@ export default function Transaction({ wallx }) {
               <Stack direction="column" alignItems='center' justifyContent="space-around" sx={{ minWidth: '255px', height: '145px', background: '#373636', borderRadius: '5px', padding: '8px' }}
              key={m.name}
               onClick={()=> { 
-                localStorage.setItem('dm',m.currencycode)
+                localStorage.setItem('dm',m.currency_code)
                 handleOpenx()
-                router.push('/user/inputvalue')
+                router.push('/user/inputvalue?dm=' + m.currency_code);
               }}
             >
               <Image src={m.image} width={75} height={75} alt={m.name} style={{ borderRadius:'9px'}}/>

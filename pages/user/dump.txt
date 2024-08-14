@@ -170,7 +170,7 @@ checkDepo(url);
               Deposit
             </Typography></div>
           <Typography style={{ color: '#242627' }}>
-            {(method === 'usdt') ? 'Please note that the minimum deposit is 10 USDT' : 'Please note that the minimum deposit is 830 ₹'}
+            {(method === 'usdt') ? 'Please note that the minimum deposit is 5 USDT' : 'Please note that the minimum deposit is 830 ₹'}
            
           </Typography>
           <Stack
@@ -197,7 +197,7 @@ checkDepo(url);
               onClick={() => {
                 if(method === 'usdt'){
                   if (amount < 10 ) {
-                  setAmthelp('The Minimum Deposit is 10 USDT');
+                  setAmthelp('The Minimum Deposit is 5 USDT');
                      console.log(amount)
                 } else {
                     console.log(amount)
@@ -237,7 +237,7 @@ checkDepo(url);
             <Typography variant="caption" sx={{ color: "#242627smoke" }}>Click the Address to Copy</Typography>
             <Typography variant="caption" sx={{ color: "#FFE74C" }}>
               
-              {(method === 'usdt') ? 'The Minimum Deposit is 10 USDT ,Deposits less than 10 USDT will be ignored.' : 'The Minimum Deposit is 830 ₹, Deposits less than 830 ₹ will be ignored.'}
+              {(method === 'usdt') ? 'The Minimum Deposit is 5 USDT ,Deposits less than 5 USDT will be ignored.' : 'The Minimum Deposit is 830 ₹, Deposits less than 830 ₹ will be ignored.'}
               After making the Transaction, Please upload a screenshot of the successful Transaction.
             </Typography>
               <input type="file" name="image" accept="image/*" onChange={(e) => {

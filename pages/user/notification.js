@@ -59,13 +59,13 @@ export default function Notification() {
         <link rel="icon" href="/brentford.ico" />
       </Head>
       <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '8px', margin: '2px' }}>
-        <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
+        <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px',color:'#cacaca' }} onClick={() => {
           router.push('/user')
         }} />
-        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Notifications</Typography>
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#cacaca' }}>Notifications</Typography>
       </Stack>
       <Stack direction="row">
-        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '500', padding: '8px' }}>Notification ({not.length})</Typography>
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '500', padding: '8px',color:'#cacaca' }}>Notification ({not.length})</Typography>
 
       </Stack>
       <Stack direction='column'>
