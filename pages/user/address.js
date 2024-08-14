@@ -108,7 +108,6 @@ export default function Address({pay}) {
                     {
                         (pay.type === 'local') ?
                         <>
-                        <p style={{ color:'#cacaca', fontFamily:'Poppins,sans-serif', fontSize:'16px',padding:'4px',margin:2 }}>{pay.address}</p>
                         <p style={{ color:'#cacaca', fontFamily:'Poppins,sans-serif', fontSize:'16px',padding:'4px',margin:2 }}>{pay.accountname}</p>
                         <p style={{ color:'#cacaca', fontFamily:'Poppins,sans-serif', fontSize:'16px',padding:'4px',margin:2 }}>{pay.bank}</p>
                         </>

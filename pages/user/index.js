@@ -17,6 +17,7 @@ import Agent3 from '../../public/afc3.jpg'
 import Agent4 from '../../public/afc4.jpg'
 import front from '../../public/front.png'
 import fire from '../../public/Group 2.png'
+import Loading from "../components/loading";
 import Ims from '../../public/simps/ball.png'
 import { app } from '../api/firebase';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -27,7 +28,7 @@ import { ImageAspectRatioTwoTone } from "@mui/icons-material";
 import { CookiesProvider, useCookies } from 'react-cookie';
 
 
-export default function Home({ user }) {
+export default function Home({ footDat }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const openr = Boolean(anchorEl);
   const [drop, setDrop] = useState(false);
@@ -38,7 +39,14 @@ export default function Home({ user }) {
   const handleCloser = () => {
     setAnchorEl(null);
   };
-  const [footDat, setFootDat] = useState([])
+  // const [footDat, setFootDat] = useState([])
+
+   //the below controls the loading modal
+   const [open, setOpen] = useState(false);
+   const handleOpen = () => setOpen(true);
+   const handleClose = () => setOpen(false);
+
+   //the end of thellaoding modal control
 
   const [balance, setBalance] = useState(0)
   const [info, setInfo] = useState(cookies.authdata)
@@ -97,6 +105,7 @@ export default function Home({ user }) {
       style={{ background: "#242627", marginBottom: "50px", minHeight: '95vh', }}
     >
 
+<Loading open={open} handleClose={handleClose} />
 
       <Cover sx={{ background: '#242627', minWidth: '100%', height: '100vh' }}>
         <Backdrop
@@ -159,70 +168,71 @@ export default function Home({ user }) {
             <Stack sx={{ background: '#CACACA', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#000000', fontSize: '12px', fontWeight: '100' }}>Next 30 mins</Typography></Stack>
           </Stack>
 
-          <Stack alignItems='center'>
-            {
-              footDat.map((pro) => {
-                let stams = Date.parse(pro.date + " " + pro.time) / 1000;
-                let curren = new Date().getTime() / 1000;
-                const league = (pro.league === 'others') ? pro.otherl : pro.league;
-                let date = parseInt(new Date(pro.date).getMonth() + 1);
-                let day = new Date(pro.date).getDate();
-                let time = pro.time.substring(0, pro.time.length - 3)
-                return (
+          <Stack alignItems='center' direction={"column-reverse"}>
+          {
+            footDat.map((pro) => {
+              let stams = Date.parse(pro.date + " " + pro.time) / 1000;
+              let curren = new Date().getTime() / 1000;
+              const league = (pro.league === 'others') ? pro.otherl : pro.league;
+              let date = parseInt(new Date(pro.date).getMonth() + 1);
+              let day = new Date(pro.date).getDate();
+              let time = pro.time.substring(0, pro.time.length - 3)
+              return (
 
-                  <Stack direction="column" spacing={2} justifyContent='center' alignItems='center'
-                    key={"match" + pro.home + pro.away}
-                    style={{
-                      marginBottom: "8px", padding: "18.5px",
-                      display: (stams < curren) ? 'none' : 'visible',
-                      background: '#EFEFEF',
-                      width: '343px',
-                      borderRadius: '5px',
-                      height: '210px'
-                    }} onClick={() => {
-                      setDrop(true)
-                      //register/000208
-                      router.push("/user/match/" + pro.match_id)
-                    }}>
-                    <Stack direction='column'>
-                      <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{league} </Typography>
-                      <Divider sx={{ background: '#CACACA' }} />
+                <Stack direction="column" spacing={2} justifyContent='center' alignItems='center'
+                  key={pro.match_id}
+                  style={{
+                    marginBottom: "8px", padding: "18.5px",
+                    display: (stams < curren) ? 'none' : 'visible',
+                    background: '#373636',
+                    width: '343px',
+                    borderRadius: '5px',
+                    height: '210px'
+                  }} onClick={() => {
+                  handleOpen()
+                    //register/000208
+                    router.push("/user/match/" + pro.match_id)
+                  }}>
+                  <Stack direction='column'>
+                    <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{league} </Typography>
+                    <Divider sx={{ background: '#FFB400' }} />
+                  </Stack>
+                  <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
+                    <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
+                      <Image src={pro.ihome ? pro.ihome : Ims} width={50} height={50} alt='home' />
+                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
                     </Stack>
-                    <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
-                      <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                        <Image src={pro.ihome ? pro.ihome : Ims} width={50} height={50} />
-                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
-                      </Stack>
-                      <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
-                        <p>|</p>
-                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
-                      </Stack>
-                      <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                        <Image src={pro.iaway ? pro.iaway : Ims} width={50} height={50} />
-                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>{pro.away}</Typography>
-                      </Stack>
+                    <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
+                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
+                      <p>|</p>
+                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
                     </Stack>
-                    <Stack direction='row' spacing={2} >
-                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#242627' }}>
-                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>1-0</Typography>
-                        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>{pro.onenil}</Typography>
-                      </Stack>
-                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#242627' }}>
-                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>1-1</Typography>
-                        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>{pro.oneone}</Typography>
-                      </Stack>
-                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#242627' }}>
-                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>1-2</Typography>
-                        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#F5E663' }}>{pro.onetwo}</Typography>
-                      </Stack>
+                    <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
+                      <Image src={pro.iaway ? pro.iaway : Ims} width={50} height={50} alt='away' />
+                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>{pro.away}</Typography>
                     </Stack>
                   </Stack>
-                )
-              })
-            }
-          </Stack>
+                  <Stack direction='row' spacing={2} >
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3',border:'3px solid #E94E55' }}>
+                      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>1-0</Typography>
+                      <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>{pro.onenil}</Typography>
+                    </Stack>
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3',border:'3px solid #E94E55' }}>
+                      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>1-1</Typography>
+                      <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>{pro.oneone}</Typography>
+                    </Stack>
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3',border:'3px solid #E94E55' }}>
+                      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>1-2</Typography>
+                      <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>{pro.onetwo}</Typography>
+                    </Stack>
+                  </Stack>
+                </Stack>
+              )
+            })
+          }
 
+      
+        </Stack>
 
           <Stack>
 
@@ -231,4 +241,19 @@ export default function Home({ user }) {
       </Cover>
     </Stack>
   )
+}
+
+export async function getServerSideProps(context) {
+  console.log('hello')
+  const { data, error } = await supabase
+    .from('bets')
+    .select('*')
+    .eq('verified', false)
+    .limit(50)
+    .order('id', { ascending: false });
+  let footDat = data;
+  console.log(data)
+  return {
+    props: { footDat }, // will be passed to the page component as props
+  }
 }

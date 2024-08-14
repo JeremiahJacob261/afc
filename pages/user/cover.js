@@ -199,7 +199,7 @@ export default function Cover({ children }) {
                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                   <Stack direction='row' spacing={2}>
                     <BiSolidContact sx={{ width: '20px', height: '20px' }} />
-                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#CACACA' }}>Contact</Typography>
+                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#CACACA' }}>Customer Care</Typography>
                   </Stack>
                   <ArrowForwardIosIcon sx={{ width: '20px', height: '20px' }} />
                 </Stack></Link>

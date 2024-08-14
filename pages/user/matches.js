@@ -48,7 +48,7 @@ export default function Matches({ footDat }) {
           <Typography sx={{ fontSize: '16px', color: 'white', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Matches</Typography>
 
         </Stack>
-        <Stack alignItems='center'>
+        <Stack alignItems='center' direction={"column-reverse"}>
           {
             footDat.map((pro) => {
               let stams = Date.parse(pro.date + " " + pro.time) / 1000;
@@ -122,10 +122,10 @@ export async function getServerSideProps(context) {
   console.log('hello')
   const { data, error } = await supabase
     .from('bets')
-    .select()
+    .select('*')
     .eq('verified', false)
     .limit(50)
-    .order('created_at', { ascending: true });
+    .order('id', { ascending: false });
   let footDat = data;
   console.log(data)
   return {
