@@ -14,6 +14,7 @@ import Image from 'next/image'
 import Loading from "@/pages/components/loading";
 import toast,{Toaster} from 'react-hot-toast';
 
+export const runtime = 'edge';
 //let imagesx be the list of images
 //let address be the list of address
 export async function getServerSideProps(context) {

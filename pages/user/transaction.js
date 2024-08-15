@@ -12,6 +12,8 @@ import { getAuth, signOut } from "firebase/auth";
 import { motion } from 'framer-motion';
 import Loading from "@/pages/components/loading";
 
+export const runtime = 'edge';
+
 export default function Transaction({ wallx }) {
   const [trans, setTrans] = useState([])
   const router = useRouter()

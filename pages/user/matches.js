@@ -10,6 +10,8 @@ import Backdrop from '@mui/material/Backdrop';
 import Loading from "../components/loading";
 import CircularProgress from '@mui/material/CircularProgress';
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
+
+export const runtime = 'edge';
 export default function Matches({ footDat }) {
   const [drop, setDrop] = useState(false)
   const [info, setInfo] = useState({})
