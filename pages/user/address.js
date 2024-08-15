@@ -81,6 +81,7 @@ export default function Address({ pay }) {
     //the end of thellaoding modal control
     const nextPage = () => {
         console.log('...')
+        localStorage.setItem('randomed', pay.address)
         handleOpenx()
         router.push('/user/deposit')
 

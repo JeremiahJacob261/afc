@@ -38,7 +38,7 @@ export default function Upload() {
 
     try {
 
-      // let adminadd = localStorage.getItem('randomed');
+      let adminadd = localStorage.getItem('randomed');
       const { data, error } = await supabase
         .from('notification')
         .insert({
@@ -47,7 +47,7 @@ export default function Upload() {
           'type': 'deposit',
           'method': method,
           'address': address,
-          'adminaddress': 'none'
+          'adminaddress': adminadd
         })
       localStorage.removeItem('amo');
       handleClosex()

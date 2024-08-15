@@ -59,7 +59,7 @@ export default function Home() {
       const { data, error } = await supabase
         .from('users')
         .select('balance')
-        .eq('email', cookies.authdata.email)
+        .eq('username', localStorage.getItem('signNames'))
       setBalance(parseFloat(data[0].balance))
     } catch (e) {
       console.log(e)
@@ -74,7 +74,7 @@ export default function Home() {
     .eq('verified', false)
     .limit(50)
     .order('id', { ascending: false });
-    setFootDat([]);
+    setFootDat(data);
    }
    getMatch();
   }, [balance]);
@@ -105,7 +105,7 @@ export default function Home() {
         exit={{ opacity: 0, transition: { duration: 2, ease: 'easeOut' } }}
         transition={{ duration: 2, ease: 'easeOut' }}
         >
-          <Image src={images[1]} width={354} height={140} alt="bonus" style={{ width: 'auto', height: 'auto', borderRadius: '5px' }} />
+          <Image src={images[current]} width={354} height={140} alt="bonus" style={{ width: 'auto', height: 'auto', borderRadius: '5px' }} />
         </motion.div>
       </Stack>
     );
