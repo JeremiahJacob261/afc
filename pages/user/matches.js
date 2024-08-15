@@ -123,7 +123,7 @@ export default function Matches({ footDat }) {
 export async function getServerSideProps(context) {
   console.log('hello')
   const { data, error } = await supabase
-    .from('bets')
+    .from('betz')
     .select('*')
     .eq('verified', false)
     .limit(50)

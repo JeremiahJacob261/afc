@@ -453,7 +453,7 @@ export default function Match({ matchDat }) {
 
 export async function getStaticPaths() {
     const { data, error } = await supabase
-        .from('bets')
+        .from('betz')
         .select()
     const paths = data.map((ref) => ({
         params: { id: ref.match_id },
@@ -469,7 +469,7 @@ export async function getStaticProps({ params }) {
     // params contains the post `id`.
     // If the route is like /posts/1, then params.id is 1
     const { data, error } = await supabase
-        .from('bets')
+        .from('betz')
         .select()
         .eq('match_id', params.id)
     let matchDat = data;
