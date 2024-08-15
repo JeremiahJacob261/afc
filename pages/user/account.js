@@ -23,6 +23,7 @@ import toast, { Toaster } from 'react-hot-toast';
 export default function Account() {
   const [, setCookie] = useCookies([]);
   const auth = getAuth(app);
+  const [username,setUsername] = useState('')
   const router = useRouter()
   const [info, setInfo] = useState([]);
   const [balance, setBalance] = useState(0);
@@ -42,6 +43,7 @@ export default function Account() {
   const [userR, setUserR] = useState('')
   //end of snackbar1
   useEffect(() => {
+    setUsername(localStorage.getItem('signNames'))
     const useri = localStorage.getItem('signedIns');
     setUsern(localStorage.getItem('signNames'));
     setUserR(localStorage.getItem('signRef'));
@@ -132,7 +134,7 @@ export default function Account() {
         reverseOrder={false} />
       <Sncks />
       <Head>
-        <title>{info ? `${info.username}` : 'Loading...'}&lsquo; Account</title>
+        <title>{username ? `${username}` : 'Loading...'}&lsquo; Account</title>
         <link rel="icon" href="/brentford.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
@@ -151,7 +153,7 @@ export default function Account() {
             <Stack direction='row' spacing={2} sx={{ padding: '8px' }} alignItems='center' justifyContent={"start"}>
               <Image src={profile} width={50} height={50} alt="profile" />
               <Stack direction='column'>
-                <Typography sx={{ color: "#FFFFFF", fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins, sans-serif' }}>Hello {info ? `${info.username}` : usern}</Typography>
+                <Typography sx={{ color: "#FFFFFF", fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins, sans-serif' }}>Hello {username ? `${username}` : usern}</Typography>
                 <Typography sx={{ color: "#CACACA", fontSize: '14px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', width: '50px', textAlign: 'start' }}>VIP {viplevel}</Typography>
               </Stack>
             </Stack>

@@ -16,7 +16,7 @@ import InputBase from '@mui/material/InputBase';
 import { supabase } from "@/pages/api/supabase";
 import { CookiesProvider, useCookies } from 'react-cookie';
 
-export const runtime = 'edge';
+ 
 
 export default function Home({ wallets }) {
     const router = useRouter();

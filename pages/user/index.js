@@ -30,6 +30,7 @@ import { CookiesProvider, useCookies } from 'react-cookie';
 
 export default function Home() {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [username,setUsername] = useState('');
   const openr = Boolean(anchorEl);
   const [drop, setDrop] = useState(false);
   const [cookies, setCookie] = useCookies(['authdata']);
@@ -54,6 +55,7 @@ export default function Home() {
   const [draw, setDraw] = useState(false);
   let loads = 0;
   useEffect(() => {
+    setUsername(localStorage.getItem('signNames'))
    const runer = async () =>{
     try {
       const { data, error } = await supabase
@@ -132,7 +134,7 @@ export default function Home() {
         <Stack sx={{ background: "#242627", marginTop: '10px', minWidth: '350px', maxWidth: '450px' }} spacing={2} justifyContent='center' >
 
           <Stack direction="column" spacing={1} sx={{ background: '#373636', padding: '12px', borderRadius: '10px' }}>
-            <Typography style={{ fontSize: '16px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', textAlign: 'left', color: '#E9E5DA' }}>Hello {info ? `${info.username}` : 'Loading...'},</Typography>
+            <Typography style={{ fontSize: '16px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', textAlign: 'left', color: '#E9E5DA' }}>Hello {username ? `${username}` : 'Loading...'},</Typography>
             <Stack direction='row' justifyContent='space-between' alignItems='center' >
               <Stack>
                 <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>Current Balance </Typography>
