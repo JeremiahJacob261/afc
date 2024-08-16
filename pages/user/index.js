@@ -62,7 +62,7 @@ export default function Home() {
         .from('users')
         .select('balance')
         .eq('username', localStorage.getItem('signNames'))
-      setBalance(parseFloat(data[0].balance))
+      setBalance(data[0].balance)
     } catch (e) {
       console.log(e)
     }

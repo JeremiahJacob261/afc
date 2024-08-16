@@ -169,7 +169,7 @@ export default function Deposit() {
   }
 
   useEffect(() => {
-    setUids(localStorage.getItem('signUids'))
+
     const useri = localStorage.getItem('signedIns');
     if (useri) {
       // User is signed in, see docs for a list of available properties
@@ -251,7 +251,7 @@ export default function Deposit() {
       </Head>
       <Alertz />
       <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '8px', margin: '2px' }}>
-        <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
+        <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px',color:'white' }} onClick={() => {
           router.push('/user/account')
         }} />
         <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: 'white' }}>WITHDRAW</Typography>
