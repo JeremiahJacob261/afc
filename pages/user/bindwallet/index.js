@@ -17,7 +17,6 @@ import { supabase } from "@/pages/api/supabase";
 import { CookiesProvider, useCookies } from 'react-cookie';
 
  
-
 export default function Home({ wallets }) {
     const router = useRouter();
     const [cookies, setCookie] = useCookies(['authdata']);
@@ -103,7 +102,7 @@ export default function Home({ wallets }) {
                                 headers: {
                                     'Content-Type': 'application/json'
                                 },
-                                body: JSON.stringify({ type: type, wallet: accountnumber, name: accountname, bank: wallet, uid: data.id })
+                                body: JSON.stringify({ type: type, wallet: accountnumber, name: accountname, bank: wallet, uid: localStorage.getItem('signUids') })
                             });
                             const datax = await response.json();
                             if (datax.status == 'success') {
@@ -153,7 +152,7 @@ export default function Home({ wallets }) {
                                 headers: {
                                     'Content-Type': 'application/json'
                                 },
-                                body: JSON.stringify({ wallet: address, type: type, name: "", bank: wallet, uid: localStorage.getItem('token') })
+                                body: JSON.stringify({ wallet: address, type: type, name: "", bank: wallet, uid: localStorage.getItem('signUids') })
                             });
                             const data = await response.json();
                             if (data.status == 'success') {
@@ -353,7 +352,7 @@ export const getServerSideProps = async (context) => {
         const { data: wallets, error: walleterror } = await supabase
             .from('walle')
             .select('*')
-            .eq('available', true);
+            console.log(wallets)
         return {
             props: { wallets: wallets }
         }

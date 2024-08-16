@@ -130,6 +130,7 @@ export async function getServerSideProps(context) {
     .order('id', { ascending: false });
   let footDat = data;
   console.log(data)
+  console.log(error)
   return {
     props: { footDat }, // will be passed to the page component as props
   }

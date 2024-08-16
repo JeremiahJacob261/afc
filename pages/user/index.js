@@ -128,7 +128,7 @@ export default function Home() {
           <SportsSoccerIcon id='balls' sx={{ marginLeft: '8px' }} />
         </Backdrop>
         <Head>
-          <title>Welcome - {info ? `${info.username}` : 'Loading...'}</title>
+          <title>Welcome - {username ? `${username}` : 'Loading...'}</title>
           <link rel="icon" href="/brentford.ico" />
         </Head>
         <Stack sx={{ background: "#242627", marginTop: '10px', minWidth: '350px', maxWidth: '450px' }} spacing={2} justifyContent='center' >
