@@ -49,7 +49,8 @@ export default function Home({ wallets }) {
     //the end of thellaoding modal control
     const updata = data;
     useEffect(() => {
-        setUids(localStorage.getItem('signNames'));
+        setUids(localStorage.getItem('signUids'));
+        console.log(localStorage.getItem('signNames'))
         // if (!localStorage.getItem('token')) {
         //     router.push('/login')
         // }
