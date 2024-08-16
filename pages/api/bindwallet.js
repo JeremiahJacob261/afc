@@ -28,8 +28,7 @@ try{
         wallet:wallet,
         method:type,
         uid:uid
- })
- .eq('uuid',uid);
+ });
     if(error){
         console.log('error:',error)
         res.status(400).json({error: error.message})
