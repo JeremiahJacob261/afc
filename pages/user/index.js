@@ -50,7 +50,7 @@ export default function Home() {
    //the end of thellaoding modal control
 
   const [balance, setBalance] = useState(0)
-  const [info, setInfo] = useState(cookies.authdata)
+  const [info, setInfo] = useState([cookies.authdata])
   const auth = getAuth(app);
   const [draw, setDraw] = useState(false);
   let loads = 0;
@@ -138,7 +138,7 @@ export default function Home() {
             <Stack direction='row' justifyContent='space-between' alignItems='center' >
               <Stack>
                 <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>Current Balance </Typography>
-                <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>{info ? ` ${balance.toFixed(3)}` : '0'} USDT</Typography>
+                <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>{balance ? ` ${balance.toFixed(3)}` : '0'} USDT</Typography>
               </Stack>
               <Link href='/user/fund' style={{ textDecoration: "none", color: 'white' }}>
                 <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#E94E55', borderRadius: '20px', padding: '8px', width: '95px', height: '32px' }}>
