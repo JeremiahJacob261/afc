@@ -49,11 +49,11 @@ export default function Home({ wallets }) {
     //the end of thellaoding modal control
     const updata = data;
     useEffect(() => {
-        setUids(localStorage.getItem('signUids'))
+        setUids(localStorage.getItem('signNames'));
         // if (!localStorage.getItem('token')) {
         //     router.push('/login')
         // }
-    }, []);
+    }, [uids]);
 
 
 

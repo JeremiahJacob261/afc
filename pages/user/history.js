@@ -75,7 +75,7 @@ export default function Transaction({ transaction }) {
                             let amountc = m.amount ?? 0;
                             let amountx = parseFloat(amountc).toFixed(2);
                             return (
-                                <Stack sx={{ width:'100%',padding:'8px' }} direction='row' justifyContent='center' alignItems="center" spacing={3} key={m.uid}
+                                <Stack sx={{ width:'100%',padding:'8px',background:'#373636',borderRadius:'12px' }} direction='row' justifyContent='center' alignItems="center" spacing={3} key={m.uid}
                                  className='transactionrow'
                                  onClick={()=>{ console.log(m)}}
                                  >

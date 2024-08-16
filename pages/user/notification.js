@@ -53,7 +53,7 @@ export default function Notification() {
   }, []);
 
   return (
-    <Stack direction="column" sx={{ minHeight: '80vh' }}>
+    <Stack direction="column" sx={{ minHeight: '100vh' }}>
       <Head>
         <title>Notifications</title>
         <link rel="icon" href="/brentford.ico" />
