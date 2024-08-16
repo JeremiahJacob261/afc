@@ -23,6 +23,7 @@ export default function Home({ wallets }) {
     const [amount, setAmount] = useState('');
     const [wallet, setWallet] = useState([]);
     const [address, setAddress] = useState('')
+    const [ uids,setUids] = useState('');
     const data = cookies.authdata;
     const [bank, setBank] = useState('')
     const [accountnumber, setAccountNumber] = useState('')
@@ -48,6 +49,7 @@ export default function Home({ wallets }) {
     //the end of thellaoding modal control
     const updata = data;
     useEffect(() => {
+        setUids(localStorage.getItem('signUids'))
         // if (!localStorage.getItem('token')) {
         //     router.push('/login')
         // }
@@ -102,7 +104,7 @@ export default function Home({ wallets }) {
                                 headers: {
                                     'Content-Type': 'application/json'
                                 },
-                                body: JSON.stringify({ type: type, wallet: accountnumber, name: accountname, bank: wallet, uid: localStorage.getItem('signUids') })
+                                body: JSON.stringify({ type: type, wallet: accountnumber, name: accountname, bank: wallet, uid: uids })
                             });
                             const datax = await response.json();
                             if (datax.status == 'success') {
@@ -152,7 +154,7 @@ export default function Home({ wallets }) {
                                 headers: {
                                     'Content-Type': 'application/json'
                                 },
-                                body: JSON.stringify({ wallet: address, type: type, name: "", bank: wallet, uid: localStorage.getItem('signUids') })
+                                body: JSON.stringify({ wallet: address, type: type, name: "", bank: wallet, uid: uids })
                             });
                             const data = await response.json();
                             if (data.status == 'success') {

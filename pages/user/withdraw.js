@@ -169,7 +169,7 @@ export default function Deposit() {
   }
 
   useEffect(() => {
-    
+    setUids(localStorage.getItem('signUids'))
     const useri = localStorage.getItem('signedIns');
     if (useri) {
       // User is signed in, see docs for a list of available properties
