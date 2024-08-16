@@ -71,7 +71,7 @@ export default function Home() {
 
    const getMatch = async ()=>{
     const { data, error } = await supabase
-    .from('betz')
+    .from('bets')
     .select('*')
     .eq('verified', false)
     .limit(50)
@@ -259,7 +259,7 @@ export default function Home() {
 // export async function getServerSideProps(context) {
 //   console.log('hello')
 //   const { data, error } = await supabase
-//     .from('betz')
+//     .from('bets')
 //     .select('*')
 //     .eq('verified', false)
 //     .limit(50)

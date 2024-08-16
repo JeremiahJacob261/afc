@@ -61,7 +61,7 @@ export default function Viewbets({ bets }) {
             try {
 
                 const { data, error } = await supabase
-                    .from('betz')
+                    .from('bets')
                     .select()
                     .eq('match_id', bet.match_id);
                 data.map((m) => {
