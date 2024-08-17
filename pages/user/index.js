@@ -198,7 +198,12 @@ export default function Home() {
             {
               footDat.map((pro) => {
                 let stams = Date.parse(pro.date + " " + pro.time) / 1000;
-                let curren = new Date().getTime() / 1000;
+                let d1 = new Date();
+                d1.toUTCString();
+                // two hours less than my local time
+                let d1utc = Math.floor(d1.getTime() / 1000);
+                // let curren = new Date().getTime() / 1000;
+                let curren = d1utc + 3600;
                 const league = (pro.league === 'others') ? pro.otherl : pro.league;
                 let date = parseInt(new Date(pro.date).getMonth() + 1);
                 let day = new Date(pro.date).getDate();

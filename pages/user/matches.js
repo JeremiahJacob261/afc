@@ -11,18 +11,18 @@ import Loading from "../components/loading";
 import CircularProgress from '@mui/material/CircularProgress';
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 
- 
+
 export default function Matches({ footDat }) {
   const [drop, setDrop] = useState(false)
   const [info, setInfo] = useState({})
   console.log(footDat)
   const router = useRouter()
-     //the below controls the loading modal
-     const [open, setOpen] = useState(false);
-     const handleOpen = () => setOpen(true);
-     const handleClose = () => setOpen(false);
- 
-     //the end of thellaoding modal control
+  //the below controls the loading modal
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  //the end of thellaoding modal control
 
 
   return (
@@ -54,7 +54,12 @@ export default function Matches({ footDat }) {
           {
             footDat.map((pro) => {
               let stams = Date.parse(pro.date + " " + pro.time) / 1000;
-              let curren = new Date().getTime() / 1000;
+              let d1 = new Date();
+              d1.toUTCString();
+              // two hours less than my local time
+              let d1utc = Math.floor(d1.getTime() / 1000);
+              // let curren = new Date().getTime() / 1000;
+              let curren = d1utc + 3600;
               const league = (pro.league === 'others') ? pro.otherl : pro.league;
               let date = parseInt(new Date(pro.date).getMonth() + 1);
               let day = new Date(pro.date).getDate();
@@ -71,7 +76,7 @@ export default function Matches({ footDat }) {
                     borderRadius: '5px',
                     height: '210px'
                   }} onClick={() => {
-                  handleOpen()
+                    handleOpen()
                     //register/000208
                     router.push("/user/match/" + pro.match_id)
                   }}>
@@ -95,15 +100,15 @@ export default function Matches({ footDat }) {
                     </Stack>
                   </Stack>
                   <Stack direction='row' spacing={2} >
-                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3',border:'3px solid #E94E55' }}>
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3', border: '3px solid #E94E55' }}>
                       <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>1-0</Typography>
                       <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>{pro.onenil}</Typography>
                     </Stack>
-                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3',border:'3px solid #E94E55' }}>
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3', border: '3px solid #E94E55' }}>
                       <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>1-1</Typography>
                       <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>{pro.oneone}</Typography>
                     </Stack>
-                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3',border:'3px solid #E94E55' }}>
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3', border: '3px solid #E94E55' }}>
                       <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>1-2</Typography>
                       <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>{pro.onetwo}</Typography>
                     </Stack>
@@ -113,7 +118,7 @@ export default function Matches({ footDat }) {
             })
           }
 
-      
+
         </Stack>
       </div>
     </Cover>
