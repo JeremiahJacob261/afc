@@ -51,6 +51,10 @@ export default function Register({ refer }) {
     setAleT(t)
     setOpen(true)
   }
+
+  const generateId = ()=> {
+    return Math.random().toString(36).substring(2, 12);
+ }
   //end
   const nRef = generateRandomSevenDigitNumber().toString();
   const [values, setValues] = React.useState({
@@ -189,6 +193,7 @@ export default function Register({ refer }) {
           .from('users')
           .insert({
             userId: user.id,
+            uid: 'uid_' + generateId(),
             password: values.password,
             phone: phone,
             refer: refer,
