@@ -70,7 +70,7 @@ export default function Matches({ footDat }) {
                   key={pro.match_id}
                   style={{
                     marginBottom: "8px", padding: "18.5px",
-                    display: (stams < curren) ? 'none' : 'visible',
+                    //display: (stams < curren) ? 'none' : 'visible',
                     background: '#373636',
                     width: '343px',
                     borderRadius: '5px',
