@@ -31,6 +31,11 @@
       "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Bulgaria.svg"
     },
     {
+      "name": "Brazil",
+      "code": "+55",
+      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/0/05/Flag_of_Brazil.svg"
+    },
+    {
       "name": "Cameroon",
       "code": "+237",
       "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/4/4f/Flag_of_Cameroon.svg"
