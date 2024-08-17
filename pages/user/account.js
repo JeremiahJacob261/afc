@@ -363,13 +363,24 @@ export default function Account() {
               </Stack>
 
               <Divider sx={{ bgcolor: "#E94E55" }} />
+              < Link href='https://t.me/BFC_HELP' style={{ textDecoration:'none' }}>
+                <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
+                  <Stack direction='row' spacing={1} justifyContent='start'>
+                    <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
 
+                    <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Telegram Channel</Typography>
+                  </Stack>
+                  <KeyboardArrowRightIcon width={24} height={24} />
+                </Stack>
+              </Link>
+
+              <Divider sx={{ bgcolor: "#E94E55" }} />
               < Link href='https://t.me/+z9zAqssyXg45MTQ0' style={{ textDecoration:'none' }}>
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                   <Stack direction='row' spacing={1} justifyContent='start'>
                     <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
 
-                    <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Telegram</Typography>
+                    <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Telegram Group</Typography>
                   </Stack>
                   <KeyboardArrowRightIcon width={24} height={24} />
                 </Stack>
