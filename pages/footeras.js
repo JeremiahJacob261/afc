@@ -3,22 +3,21 @@ import TelegramIcon from '@mui/icons-material/Telegram';
 import gpay from '../public/simps/gpay.png'
 import axios from 'axios';
 import usdt from '../public/simps/tether.png'
-import TronWeb from 'tronweb';
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { supabase } from './api/supabase'
 export default function Footer() {
     const { locale, locales, push } = useRouter();
-    const HttpProvider = TronWeb.providers.HttpProvider;
-const fullNode = new HttpProvider('https://api.trongrid.io'); 
-const solidityNode = new HttpProvider('https://api.trongrid.io');
-const eventServer = 'https://api.trongrid.io';
+//     const HttpProvider = TronWeb.providers.HttpProvider;
+// const fullNode = new HttpProvider('https://api.trongrid.io'); 
+// const solidityNode = new HttpProvider('https://api.trongrid.io');
+// const eventServer = 'https://api.trongrid.io';
 
-const tronWeb = new TronWeb(
-    fullNode,
-    solidityNode,
-    eventServer
-);
+// const tronWeb = new TronWeb(
+//     fullNode,
+//     solidityNode,
+//     eventServer
+// );
     return (
         <div style={{ background: "#373636",minWidth:'350px', width: "100%", padding: "8px", marginTop: '8px', borderTopLeftRadius: '8px', borderTopRightRadius: '8px', marginBottom: "6vh" }}>
             <Stack direction="column" alignItems="center" justifyContent={"space-between"}>

@@ -55,7 +55,6 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "^1.13.2",
     "@iconify/react": "^5.0.2"
   }
 }
