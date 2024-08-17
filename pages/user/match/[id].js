@@ -23,6 +23,14 @@ import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
 export default function Match({ matchDat }) {
     //backdrop
+
+    let d1 = new Date();
+    d1.toUTCString();
+    // two hours less than my local time
+    let d1utc = Math.floor(d1.getTime() / 1000);
+    // let curren = new Date().getTime() / 1000;
+    let currenv = d1utc;
+    console.log(currenv)
     const [drop, setDrop] = useState(false)
     //snackbar1
     const [messages, setMessages] = useState("")
@@ -267,18 +275,18 @@ export default function Match({ matchDat }) {
                         marketsArray.map((m) => {
                             return (
                                 <Stack direction="column" spacing={1} key={m.num}>
-                                        <Stack direction="row" alignItems="center" justifyContent={"space-around"} sx={{ minWidth: '300px', height: '40px' }}>
-                                    <p style={{ color:'#cacaca',padding:'8px' }}>{m.num}</p>
-                                    <p style={{ color:'#FFB400',padding:'8px' }}>{matches[m.word]}%</p>
-                                    <motion.div 
-                                    onClick={()=>{ 
-                                        setPicked(m.word)
-                                        setBottom(true)
-                                    }}
-                                    whileHover={{ scale:1.1 }} whileTap={{ scale :0.95}}
-                                    style={{ color:'#cacaca',background:'#E94E55',padding:'4px',borderRadius:'5px'}}>choose</motion.div>
-                                </Stack>
-                                <Divider sx={{ bgcolor: "secondary.light" }} />
+                                    <Stack direction="row" alignItems="center" justifyContent={"space-around"} sx={{ minWidth: '300px', height: '40px' }}>
+                                        <p style={{ color: '#cacaca', padding: '8px' }}>{m.num}</p>
+                                        <p style={{ color: '#FFB400', padding: '8px' }}>{matches[m.word]}%</p>
+                                        <motion.div
+                                            onClick={() => {
+                                                setPicked(m.word)
+                                                setBottom(true)
+                                            }}
+                                            whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}
+                                            style={{ color: '#cacaca', background: '#E94E55', padding: '4px', borderRadius: '5px' }}>choose</motion.div>
+                                    </Stack>
+                                    <Divider sx={{ bgcolor: "secondary.light" }} />
                                 </Stack>
                             )
                         })
@@ -381,6 +389,9 @@ export default function Match({ matchDat }) {
                                 if (stake - 1 < info.balance) {
                                     if (stake < 1) {
                                         toast.error('You do not have sufficient balance for this transaction')
+                                    } else if (stake < 1) {
+                                        toast.error('Minimum bet is 1 USDT')
+
                                     } else {
                                         handleClose();
                                         handleOpenx()
