@@ -24,13 +24,13 @@ import { getAuth, signOut } from "firebase/auth";
 export default function Match({ matchDat }) {
     //backdrop
 
+    let stamx = matchDat[0].tsgmt/1000;
     let d1 = new Date();
     d1.toUTCString();
     // two hours less than my local time
     let d1utc = Math.floor(d1.getTime() / 1000);
     // let curren = new Date().getTime() / 1000;
     let currenv = d1utc;
-    console.log(currenv)
     const [drop, setDrop] = useState(false)
     //snackbar1
     const [messages, setMessages] = useState("")
@@ -207,8 +207,6 @@ export default function Match({ matchDat }) {
             </Snackbar>
         )
     }
-    let stams = Date.parse(matches.date + " " + matches.time) / 1000;
-    let curren = new Date().getTime() / 1000;
     console.log(new Date(matches.date))
     console.log(matches)
     let date = parseInt(new Date(matches.date).getMonth() + 1);
@@ -389,8 +387,8 @@ export default function Match({ matchDat }) {
                                 if (stake - 1 < info.balance) {
                                     if (stake < 1) {
                                         toast.error('You do not have sufficient balance for this transaction')
-                                    } else if (stake < 1) {
-                                        toast.error('Minimum bet is 1 USDT')
+                                    } else if  (stamx < currenv) {
+                                        toast.error('This Match has expired')
 
                                     } else {
                                         handleClose();

@@ -11,6 +11,7 @@ import { app } from '../api/firebase';
 import { getAuth, signOut } from "firebase/auth";
 import { motion } from 'framer-motion';
 import Loading from "@/pages/components/loading";
+import Loadingx from "@/pages/components/loadx";
 
  
 
@@ -23,6 +24,14 @@ export default function Transaction({ wallx }) {
   const handleClosex = () => setOpenx(false);
 
   //the end of thellaoding modal control
+
+
+    //the below controls the selection modal
+    const [openy, setOpeny] = useState(false);
+    const handleOpeny = () => setOpeny(true);
+    const handleClosey = () => setOpeny(false);
+  
+    //the end of thellaoding selection control
   const auth = getAuth(app)
   const months = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"];
@@ -70,9 +79,10 @@ export default function Transaction({ wallx }) {
   }, [])
   var sn = 0;
   return (
-    <Cover>
+    <Cover >
       <Loading open={openx} handleClose={handleClosex} />
-      <Stack style={{ minHeight: '90vh', width: '100%' }} spacing={2}>
+      <Loadingx open={openy} handleClose={handleClosey} />
+      <Stack style={{ minHeight: '95vh', width: '100%',paddingBottom:'120px' }} spacing={2}>
         <Stack direction='column' alignItems='center' spacing={1} sx={{ padding: '8px', margin: '2px' }}>
           <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px',color:'#cacaca' }} onClick={() => {
             router.push('/user/fund')
@@ -88,9 +98,16 @@ export default function Transaction({ wallx }) {
               <Stack direction="column" alignItems='center' justifyContent="space-around" sx={{ minWidth: '255px', height: '145px', background: '#373636', borderRadius: '5px', padding: '8px' }}
              key={m.name}
               onClick={()=> { 
-                localStorage.setItem('dm',m.currency_code)
+
+                if(m.currency_code === 'fcfa'){
+
+                    handleOpeny()
+                }else{
+                       localStorage.setItem('dm',m.currency_code)
                 handleOpenx()
                 router.push('/user/inputvalue?dm=' + m.currency_code);
+                }
+           
               }}
             >
               <Image src={m.image} width={75} height={75} alt={m.name} style={{ borderRadius:'9px'}}/>

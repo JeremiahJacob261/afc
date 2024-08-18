@@ -51,7 +51,13 @@ export default function InputValue({ method }) {
     }else{
       localStorage.setItem('amo',amount);
       handleOpenx()
+      if(method.currency_code === 'fcfa'){
+      let trf = localStorage.getItem('dmmv')
+      router.push('/user/address?dm=' + method.currency_code + '&trf=' + trf)
+      }else{
+        
       router.push('/user/address?dm=' + method.currency_code)
+      }
     }
 
   }

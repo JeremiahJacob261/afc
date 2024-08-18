@@ -12,53 +12,56 @@ import { supabase } from "../api/supabase";
 import Link from 'next/link'
 import Image from 'next/image'
 import Loading from "@/pages/components/loading";
-import toast,{Toaster} from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 
- 
+const trfx = {
+    'wave':'Wave',
+    'mtn':'MTN Money'
+};
 //let imagesx be the list of images
 //let address be the list of address
 export async function getServerSideProps(context) {
 
     const met = context.query.dm;
-    const { data, error } = await supabase
+    if (met === 'fcfa') {
+        const trf = context.query.trf;
+        const { data, error } = await supabase
         .from('depositwallet')
         .select('*')
-        .eq('currency_code', met)
-        console.log(data)
-    if (data.length < 1) {
-
+        .match({'currency_code': met, 'bank':trfx[trf]})
         return {
             props: {
                 pay: data[0],
                 // Will be passed to the page component as props
             },
         }
-
     } else {
-        let constx = Math.floor(Math.random() * data.length);
-        console.log(constx)
-        return {
-            props: {
-                pay: data[constx],
-                // Will be passed to the page component as props
-            },
+        const { data, error } = await supabase
+            .from('depositwallet')
+            .select('*')
+            .eq('currency_code', met)
+        console.log(data)
+        if (data.length < 1) {
+
+            return {
+                props: {
+                    pay: data[0],
+                    // Will be passed to the page component as props
+                },
+            }
+
+        } else {
+            let constx = Math.floor(Math.random() * data.length);
+            console.log(constx)
+            return {
+                props: {
+                    pay: data[constx],
+                    // Will be passed to the page component as props
+                },
+            }
         }
     }
 
-
-    // let constx = Math.floor(Math.random() * imagesx.length);
-    // let imax = imagesx[constx]
-    // let addressx = address[constx]
-    // console.log(imax)
-    // return {
-    //     props: {
-    //         method: met,
-    //         images: imax,
-    //         address: addressx,
-    //         randomed: constx
-    //         // Will be passed to the page component as props
-    //     },
-    // }
 }
 
 
@@ -148,7 +151,7 @@ export default function Address({ pay }) {
                     nextPage()
 
                 }}>Verify Deposit</motion.div> </Stack>
-                <Toaster/>
+            <Toaster />
         </Cover>
     )
     function Alertz() {
