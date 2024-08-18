@@ -8,8 +8,8 @@ import { useRouter } from 'next/router';
 import Refresh from '@/public/refresh.png';
 
 export default function Loadingx({ open, handleClose }) {
-    if (!open) return null;
     const router = useRouter();
+    if (!open) return null;
     return (
         <Modal
             open={open}
