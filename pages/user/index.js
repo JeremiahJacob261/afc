@@ -208,7 +208,9 @@ export default function Home() {
                 const league = (pro.league === 'others') ? pro.otherl : pro.league;
                 let date = parseInt(new Date(pro.date).getMonth() + 1);
                 let day = new Date(pro.date).getDate();
-                let time = pro.time.substring(0, pro.time.length - 3)
+                let time = pro.time.substring(0, pro.time.length - 3);
+                const [h,m] = time.split(':');
+                let timex = parseFloat(h)-1 + ':' + m;
                 return (
 
                   <Stack direction="column" spacing={2} justifyContent='center' alignItems='center'
@@ -235,7 +237,7 @@ export default function Home() {
                         <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
                       </Stack>
                       <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
+                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{timex}</Typography>
                         <p>|</p>
                         <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
                       </Stack>
