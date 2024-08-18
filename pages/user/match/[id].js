@@ -24,13 +24,7 @@ import { getAuth, signOut } from "firebase/auth";
 export default function Match({ matchDat }) {
     //backdrop
 
-    let stamx = matchDat[0].tsgmt/1000;
-    let d1 = new Date();
-    d1.toUTCString();
-    // two hours less than my local time
-    let d1utc = Math.floor(d1.getTime() / 1000);
-    // let curren = new Date().getTime() / 1000;
-    let currenv = d1utc;
+  
     const [drop, setDrop] = useState(false)
     //snackbar1
     const [messages, setMessages] = useState("")
@@ -302,6 +296,14 @@ export default function Match({ matchDat }) {
         let expext = Number((parseFloat(stake) + profit).toFixed(3));
         console.log(profit)
         let ball = parseFloat(balance.toFixed(3));
+
+        let stamx = matches.tsgmt/1000;
+        let d1 = new Date();
+        d1.toUTCString();
+        // two hours less than my local time
+        let d1utc = Math.floor(d1.getTime() / 1000);
+        // let curren = new Date().getTime() / 1000;
+        let currenv = d1utc;
         return (
             <Drawer
                 anchor='bottom'
