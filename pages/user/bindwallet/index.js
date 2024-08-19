@@ -105,7 +105,7 @@ export default function Home({ wallets }) {
                                 headers: {
                                     'Content-Type': 'application/json'
                                 },
-                                body: JSON.stringify({ type: type, wallet: accountnumber, name: accountname, bank: wallet, uid: uids })
+                                body: JSON.stringify({ type: type, wallet: accountnumber, name: accountname,walletname:wallet, bank: bank, uid: uids })
                             });
                             const datax = await response.json();
                             if (datax.status == 'success') {
@@ -155,7 +155,7 @@ export default function Home({ wallets }) {
                                 headers: {
                                     'Content-Type': 'application/json'
                                 },
-                                body: JSON.stringify({ wallet: address, type: type, name: "", bank: wallet, uid: uids })
+                                body: JSON.stringify({ wallet: address, type: type, name: "",walletname:"", bank: wallet, uid: uids })
                             });
                             const data = await response.json();
                             if (data.status == 'success') {

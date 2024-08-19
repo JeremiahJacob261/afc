@@ -8,13 +8,14 @@ export default async  function handler(req, res) {
    const type = body.type; //crypto or local
    const wallet = body.wallet; //address and account number
    const name = body.name; //for locals - account name
+   const walletname = body.walletname; //for locals - account name
    const bank = body.bank; // for both - locals -> bank name, crypto -> bitcoin,eth etc
    console.log(body)
 try{
  const { data,error:urror} = await supabase
  .from('user_wallets')
  .select('*')
- .match({'uid':uid, "bank":bank});
+ .match({'uid':uid, "walletnames":walletname});
  console.log(data)
  if(data && data.length > 0){
      res.status(200).json({status: 'failed',message:'Wallet already linked'})
@@ -27,7 +28,8 @@ try{
         names:name,
         wallet:wallet,
         method:type,
-        uid:uid
+        uid:uid,
+        walletnames:walletname
  });
     if(error){
         console.log('error:',error)
