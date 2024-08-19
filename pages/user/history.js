@@ -11,9 +11,9 @@ export default function Transaction({ transaction }) {
     const [user, setUser] = useState({});
     const rate = {
         'usdt': 1,
-        'idr': 16250,
-        'bca':16250,
-        'pkr': 279
+        'idr': 16255,
+        'fcfa':633,
+        'ngn': 1500
     }
     const betSelectLogic = (index) => {
         setSelected(index);
@@ -89,11 +89,12 @@ export default function Transaction({ transaction }) {
                                             <p>Transaction Type: </p><p>{m.type ?? 'unknown type'}</p></Stack>
                                         <Divider sx={{ background: 'grey' }} />
                                         <Stack direction="row" justifyContent="space-between" alignItems="center">
-                                            <p>Amount: </p><p>{amountx} {(m.method === 'idr' || m.method === 'bca' || m.method === 'pkr') ? `${(m.method === 'idr' || m.method === 'bca') ? 'IDR' : 'PKR'} (${(parseFloat(amountx)/rate[m.method]).toFixed(2)}USDT)` : "USDT"}</p>
-                                        </Stack>
+                                            <p>Amount: </p><p> {(m.type === 'withdraw') ? amountx + "USDT:" + (parseFloat(amountx) * rate[m.method]) + (m.method ?? '').toUpperCase() : amountx + "USDT:" + parseFloat(amountx) + (m.method ?? '').toUpperCase()}  </p>
+                                       
+                                       </Stack>
                                         <Divider sx={{ background: 'grey' }} />
                                         <Stack direction="row" justifyContent="space-between" alignItems="center">
-                                            <p>Transaction Currency: </p><p> {(m.method === 'idr' || m.method === 'bca') ? "IDR" : (m.method === 'pkr') ? "PKR" : "USDT"}</p>
+                                            <p>Transaction Currency: </p><p> {(m.method ?? '').toUpperCase()}</p>
                                         </Stack>
                                         <Divider sx={{ background: 'grey' }} />
                                         <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -130,8 +131,8 @@ export default function Transaction({ transaction }) {
                 <p style={{ fontSize: '16px', fontWeight: '600',color:'#cacaca' }}>Transactions</p>
             </Stack>
             <Stack className='betspent' direction="row" justifyContent="space-between">
-          <p    style={{ color:'#cacaca',fontWeight:'500' }}>Total Deposits<br/>$ {parseFloat(user.totald).toFixed(2)}</p>
-          <p    style={{ color:'#cacaca',fontWeight:'500' }}>Total Withdraw<br/>$ {parseFloat(user.totalw).toFixed(2)}</p>
+          <p    style={{ color:'#cacaca',fontWeight:'500' }}>Total Deposits<br/>$ {parseFloat(user.totald).toFixed(2) ?? 0}</p>
+          <p    style={{ color:'#cacaca',fontWeight:'500' }}>Total Withdraw<br/>$ {parseFloat(user.totalw).toFixed(2) ?? 0}</p>
       </Stack>
             <Stack direction="row" sx={{ width: '100%', marginTop: '5px', padding: '6px' }} spacing={2} justifyContent='center' alignItems="center">
                 <p className={(selected != 0) ? 'betTab' : 'betTabSelected'} onClick={() => { betSelectLogic(0) }}>All</p>
