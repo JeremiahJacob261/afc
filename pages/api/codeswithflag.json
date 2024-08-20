@@ -186,6 +186,11 @@
       "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/7/73/Flag_of_Malta.svg"
     },
     {
+      "name": "Myanmar",
+      "code": "+95",
+      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Flag_of_Myanmar.svg"
+    },
+    {
       "name": "Nepal",
       "code": "+977",
       "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/9/9b/Flag_of_Nepal.svg"
