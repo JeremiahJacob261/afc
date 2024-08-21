@@ -36,6 +36,11 @@ export default function Translate() {
             "flag": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Flag_of_Indonesia.svg/125px-Flag_of_Indonesia.svg.png"
         },
         {
+            "name": "မြန်မာဘာသာ",
+            "code": "my",
+            "flag": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Flag_of_Myanmar.svg"
+        },
+        {
             "name": "فارسی",
             "code": "fa",
             "flag": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Flag_of_Iran_%28official%29.svg/125px-Flag_of_Iran_%28official%29.svg.png"
@@ -153,7 +158,7 @@ export default function Translate() {
                     languages.map((l) => {
                         return (
                             <Stack direction="column" spacing={1} key={l.name} onClick={() => { changeLanguageHandler(l.code) }}>
-                                <Stack sx={{ width: '100%' }} direction={"row"} spacing={1} alignItems="center" justifyContent={"start"}>
+                                <Stack sx={{ width: '100%',cursor:'pointer' }} direction={"row"} spacing={1} alignItems="center" justifyContent={"start"}>
                                     <Image src={l.flag} alt={l.name} width={24} height={18} />
                                     <p style={{ color: '#cacaca', fontFamily: 'Poppins,sans-serif', fontSize: '13px', fontWeight: "300" }}>{l.name}</p>
                                 </Stack>
