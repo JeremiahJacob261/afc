@@ -172,7 +172,7 @@ export default function Account() {
               </Link>
             </Stack>
             <Divider sx={{ bgcolor: "#E94E55" }} />
-            < Link href='https://t.me/+z9zAqssyXg45MTQ0' style={{ textDecoration:'none' }}>
+            < Link href='https://t.me/+eeFd7JdRZ-QxOTA0' style={{ textDecoration:'none' }}>
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                   <Stack direction='row' spacing={1} justifyContent='start'>
                     <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
@@ -375,7 +375,7 @@ export default function Account() {
               </Link>
 
               <Divider sx={{ bgcolor: "#E94E55" }} />
-              < Link href='https://t.me/+z9zAqssyXg45MTQ0' style={{ textDecoration:'none' }}>
+              < Link href='https://t.me/+eeFd7JdRZ-QxOTA0' style={{ textDecoration:'none' }}>
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                   <Stack direction='row' spacing={1} justifyContent='start'>
                     <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />

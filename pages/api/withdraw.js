@@ -5,7 +5,8 @@ export default async function handler(req, res) {
     const rate = {
         'usdt': 1,
         'idr': 16255,
-        'pkr': 279
+        'pkr': 279,
+        'mmk':5811
     }
     const amountx = body.amount;
     const { data, error } = await supabase

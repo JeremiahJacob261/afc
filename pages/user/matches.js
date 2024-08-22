@@ -5,6 +5,7 @@ import { Paper, Stack, Typography, Button, Divider } from '@mui/material'
 import Image from "next/image";
 import Head from 'next/head'
 import Ims from '../../public/simps/ball.png'
+import { Icon } from '@iconify/react';
 import { useRouter } from "next/router";
 import Backdrop from '@mui/material/Backdrop';
 import Loading from "../components/loading";
@@ -54,7 +55,7 @@ export default function Matches({ footDat }) {
           {
             footDat.map((pro) => {
               // let stams = Date.parse(pro.date + " " + pro.time) / 1000;
-              let stams = pro.tsgmt/1000;
+              let stams = pro.tsgmt / 1000;
               let d1 = new Date();
               d1.toUTCString();
               // two hours less than my local time
@@ -76,13 +77,23 @@ export default function Matches({ footDat }) {
                     background: '#373636',
                     width: '343px',
                     borderRadius: '5px',
-                    height: '210px'
+                    minHeight: '210px'
                   }} onClick={() => {
                     handleOpen()
                     //register/000208
                     router.push("/user/match/" + pro.match_id)
                   }}>
                   <Stack direction='column'>
+                    <Stack direction="rows" alignItems="center" justifyContent="center">
+                      {
+                        (pro.company) ?
+                          <>
+                            <Icon icon="solar:star-bold-duotone" width="24" height="24" style={{ color: '#FFB400' }} />
+                            <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Verified Company Game</Typography>
+                          </>
+                          : <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}></Typography>
+                      }
+                    </Stack>
                     <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{league} </Typography>
                     <Divider sx={{ background: '#FFB400' }} />
                   </Stack>
@@ -102,15 +113,15 @@ export default function Matches({ footDat }) {
                     </Stack>
                   </Stack>
                   <Stack direction='row' spacing={2} >
-                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3', border: '3px solid #E94E55' }}>
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3', border: pro.company ? '3px solid #FFB400' : '3px solid #E94E55' }}>
                       <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>1-0</Typography>
                       <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>{pro.onenil}</Typography>
                     </Stack>
-                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3', border: '3px solid #E94E55' }}>
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3', border: pro.company ? '3px solid #FFB400' : '3px solid #E94E55' }}>
                       <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>1-1</Typography>
                       <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>{pro.oneone}</Typography>
                     </Stack>
-                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3', border: '3px solid #E94E55' }}>
+                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3', border: pro.company ? '3px solid #FFB400' : '3px solid #E94E55' }}>
                       <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>1-2</Typography>
                       <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>{pro.onetwo}</Typography>
                     </Stack>

@@ -24,7 +24,7 @@ import { getAuth, signOut } from "firebase/auth";
 export default function Match({ matchDat }) {
     //backdrop
 
-  
+
     const [drop, setDrop] = useState(false)
     //snackbar1
     const [messages, setMessages] = useState("")
@@ -276,7 +276,7 @@ export default function Match({ matchDat }) {
                                                 setBottom(true)
                                             }}
                                             whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}
-                                            style={{ color: '#cacaca', background: '#E94E55', padding: '4px', borderRadius: '5px' }}>choose</motion.div>
+                                            style={{ cursor:'pointer',color: '#cacaca', background: (matches.comarket != m.word) ?  '#E94E55' : '#FFB400', padding: '4px', borderRadius: '5px' }}>choose</motion.div>
                                     </Stack>
                                     <Divider sx={{ bgcolor: "secondary.light" }} />
                                 </Stack>
@@ -295,9 +295,10 @@ export default function Match({ matchDat }) {
         let profit = parseFloat((stake * tofal) / 100);
         let expext = Number((parseFloat(stake) + profit).toFixed(3));
         console.log(profit)
+        let gcount = info.gcount ?? 0;
         let ball = parseFloat(balance.toFixed(3));
 
-        let stamx = matches.tsgmt/1000;
+        let stamx = matches.tsgmt / 1000;
         let d1 = new Date();
         d1.toUTCString();
         // two hours less than my local time
@@ -389,10 +390,13 @@ export default function Match({ matchDat }) {
                                 if (stake - 1 < info.balance) {
                                     if (stake < 1) {
                                         toast.error('You do not have sufficient balance for this transaction')
-                                    } else if  (stamx < currenv) {
+                                    } else if (stamx < currenv) {
                                         toast.error('This Match has expired')
 
-                                    } else {
+                                    }else if ( gcount > 2) {
+                                        toast.error('You have reached the maximum number of bets for today');
+
+                                    }else {
                                         handleClose();
                                         handleOpenx()
                                         let balls = ball - stake;
@@ -441,6 +445,16 @@ export default function Match({ matchDat }) {
                                                 })
                                             console.log(error)
                                         }
+                                        const updategcount = async () => {
+
+                                            const { error: err } = await supabase
+                                                .from('users')
+                                                .update({
+                                                    'gcount': gcount + 1,
+                                                })
+                                                .eq('username', info.username);
+                                        }
+                                        updategcount();
                                         saveToUser();
                                         deductBet();
                                         saveToDB();
