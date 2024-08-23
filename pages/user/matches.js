@@ -77,13 +77,14 @@ export default function Matches({ footDat }) {
                     background: '#373636',
                     width: '343px',
                     borderRadius: '5px',
-                    minHeight: '210px'
+                    minHeight: '210px',
+                    border:pro.company ? '1px solid #FFB400' : ''
                   }} onClick={() => {
                     handleOpen()
                     //register/000208
                     router.push("/user/match/" + pro.match_id)
                   }}>
-                  <Stack direction='column'>
+                  <Stack direction='column' >
                     <Stack direction="rows" alignItems="center" justifyContent="center">
                       {
                         (pro.company) ?
