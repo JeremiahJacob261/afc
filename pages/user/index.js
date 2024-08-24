@@ -182,7 +182,7 @@ export default function Home() {
 
           <Stack direction='row' justifyContent='space-between' alignItems='center'>
             <Stack direction='row' spacing={1}>
-              <Image src={fire} width={24} height={24} />
+              <Image src={fire} width={24} height={24} alt="fire"/>
               <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '16px', fontWeight: '600' }}>Top Football Matches</Typography>
             </Stack>
             <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>see all</Typography>
