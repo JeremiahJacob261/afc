@@ -16,14 +16,16 @@ import toast, { Toaster } from 'react-hot-toast';
 
 const trfx = {
     'wave':'Wave',
-    'mtn':'MTN Money'
+    'mtn':'MTN Money',
+    'kpay':'kpay',
+    'kbz':'KBZ Bank',
 };
 //let imagesx be the list of images
 //let address be the list of address
 export async function getServerSideProps(context) {
 
     const met = context.query.dm;
-    if (met === 'fcfa') {
+    if (met === 'fcfa' || met === 'mmk') {
         const trf = context.query.trf;
         const { data, error } = await supabase
         .from('depositwallet')
