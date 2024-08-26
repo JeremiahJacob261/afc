@@ -269,7 +269,7 @@ export default function Match({ matchDat }) {
                                 <Stack direction="column" spacing={1} key={m.num}>
                                     <Stack direction="row" alignItems="center" justifyContent={"space-around"} sx={{ minWidth: '300px', height: '40px' }}>
                                         <p style={{ color: '#cacaca', padding: '8px' }}>{m.num}</p>
-                                        <p style={{ color: '#FFB400', padding: '8px' }}>{matches[m.word]}%</p>
+                                        <p style={{ color: '#FFB400', padding: '8px' }}>{parseFloat(matches[m.word] + vip[viplevel]).toFixed(3)}%</p>
                                         <motion.div
                                             onClick={() => {
                                                 setPicked(m.word)

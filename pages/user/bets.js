@@ -179,7 +179,7 @@ export default function Bets() {
             </Stack>
             <Stack direction='row' justifyContent='space-between' alignItems='center'>
               <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#E6E8F3' }}>Profit</Typography>
-              <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FFFFFF' }}>{s.stake + s.profit} USDT</Typography>
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FFFFFF' }}>{parseFloat(s.stake + s.profit).toFixed(3)} USDT</Typography>
             </Stack>
             <Stack direction='row' justifyContent='space-between' alignItems='center'>
               <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#E6E8F3' }}> Status</Typography>
@@ -243,7 +243,7 @@ let curren = new Date().getTime() / 1000;
           </Stack>
           <Stack direction='row' justifyContent='space-between' alignItems='center'>
             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#E6E8F3' }}>Profit</Typography>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FFFFFF' }}>{s.stake + s.profit} USDT</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FFFFFF' }}>{parseFloat(s.stake + s.profit).toFixed(3)} USDT</Typography>
           </Stack>
           <Stack direction='row' justifyContent='space-between' alignItems='center'>
             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#E6E8F3' }}> Status</Typography>
