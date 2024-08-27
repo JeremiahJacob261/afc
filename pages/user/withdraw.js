@@ -317,6 +317,7 @@ export default function Deposit() {
                   console.log(selectx)
                   let current = findObjectById(b);
                   setRate(current.rates);
+                  console.log(rates)
                   setMethod(b);
                   setCurrency(current);
                 }catch(e){
@@ -330,7 +331,7 @@ export default function Deposit() {
                 <MenuItem value=''>none</MenuItem>
                 {
                   wallets.map((w) => {
-                    return <MenuItem value={w.wallet + '-' + w.bank} key={w.id}>{w.wallet} {w.bank}</MenuItem>
+                    return <MenuItem value={w.wallet + '-' + (w.walletnames ?? w.bank)} key={w.id}>{w.wallet} {w.walletnames ?? w.bank}</MenuItem>
                   })
                 }
 

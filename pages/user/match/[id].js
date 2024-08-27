@@ -205,7 +205,8 @@ export default function Match({ matchDat }) {
     console.log(matches)
     let date = parseInt(new Date(matches.date).getMonth() + 1);
     let day = new Date(matches.date).getDate();
-    let time = matches.time;
+    let [th,tm,ts] = matches.time.split(':');
+    let time = parseFloat(th-1) + ":" + tm;
 
     //main ui
     return (

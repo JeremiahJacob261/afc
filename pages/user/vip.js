@@ -22,7 +22,6 @@ export default function Vip() {
   const [c1,setC1] = useState(0);
   const [r1,setR1] = useState(0);
   
-  console.log((c1 + r1)/2)
   //end border
   const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     height: 10,
@@ -107,6 +106,7 @@ export default function Vip() {
               setC1((Number(((parseInt(count) / parseInt(vipclimit[vipl])) * 100).toFixed(2)) > 100) ? 100 : Number(((parseInt(count) / parseInt(vipclimit[vipl])) * 100).toFixed(2)));
               setR1((Number(((parseInt(info.totald) / parseInt(viplimit[vipl])) * 100).toFixed(2)) > 100) ? 100 : Number(((parseInt(info.totald) / parseInt(viplimit[vipl])) * 100).toFixed(2)));
               console.log(data[0])
+              console.log((c1 + r1)/2)
             } catch (e) {
               console.log(e)
             }
