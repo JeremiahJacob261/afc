@@ -33,6 +33,7 @@ export default function Match({ matchDat }) {
         return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
     });
     //end of snackbar1
+    
     const [matches, setMatches] = useState({})
     const [display, setDisplay] = useState({})
     const [open, setOpen] = useState(false)
