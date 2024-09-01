@@ -22,7 +22,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import TabPanel from '@mui/lab/TabPanel';
 export default function Refferal() {
   const [value, setValue] = useState('1');
-
+  const [xxx, setXxx] = useState(0);
   const months= ["January","February","March","April","May","June","July",
             "August","September","October","November","December"];
   const handleChange = (event, newValue) => {
@@ -68,6 +68,14 @@ export default function Refferal() {
         
       }
       getRef();
+
+
+        const calculateTotal = () => {
+          const sum = lvl.reduce((acc, item) => acc + item.totald, 0);
+          setXxx(sum.toFixed(2));
+        };
+    
+        calculateTotal();
       } else {
         // User is signed out
         // ...
@@ -79,7 +87,9 @@ export default function Refferal() {
         router.push('/login');
       }
  
-  }, []);
+
+
+  }, [xxx]);
   async function filterData(tofill){
     setFshow((tofill === 'refer') ? 'Level 1' : (tofill === 'lvla') ? 'Level 2' : 'Level 3');
     const fill = lvlst.filter(i => i[tofill] === refers);
@@ -110,6 +120,7 @@ export default function Refferal() {
   ];
   
   var sn = 0;
+
   return (
     <Cover>
     <div style={{ minHeight: '85vh', width: '100%', overflowX: 'hidden' }}>
@@ -134,7 +145,7 @@ export default function Refferal() {
           id="panel1a-header"
         >
           <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{width:'100%'}}>
-            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '500',color:'#cacaca' }}>Referrals({lvl ? lvl.length : '0'})</Typography>
+            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '500',color:'#cacaca' }}>Referrals({lvl ? lvl.length : '0'})- {xxx} USDT</Typography>
             <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300',color:'#cacaca',padding:'8px' }}>{fshow}</Typography>
         
             </Stack>
