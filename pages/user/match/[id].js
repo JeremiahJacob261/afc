@@ -24,7 +24,7 @@ import { getAuth, signOut } from "firebase/auth";
 export default function Match({ matchDat }) {
     //backdrop
 
-
+    //end of backdrop
     const [drop, setDrop] = useState(false)
     //snackbar1
     const [messages, setMessages] = useState("")
@@ -33,7 +33,7 @@ export default function Match({ matchDat }) {
         return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
     });
     //end of snackbar1
-    
+
     const [matches, setMatches] = useState({})
     const [display, setDisplay] = useState({})
     const [open, setOpen] = useState(false)
@@ -207,8 +207,8 @@ export default function Match({ matchDat }) {
     let date = parseInt(new Date(matches.date).getMonth() + 1);
     let day = new Date(matches.date).getDate();
     let tix = matches.time ?? '00:00:00';
-    let [th,tm,ts] = tix.split(':');
-    let time = parseFloat(th-1) + ":" + tm;
+    let [th, tm, ts] = tix.split(':');
+    let time = parseFloat(th - 1) + ":" + tm;
 
     //main ui
     return (
@@ -279,7 +279,7 @@ export default function Match({ matchDat }) {
                                                 setBottom(true)
                                             }}
                                             whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}
-                                            style={{ cursor:'pointer',color: '#cacaca', background: (matches.comarket != m.word) ?  '#E94E55' : '#FFB400', padding: '4px', borderRadius: '5px' }}>choose</motion.div>
+                                            style={{ cursor: 'pointer', color: '#cacaca', background: (matches.comarket != m.word) ? '#E94E55' : '#FFB400', padding: '4px', borderRadius: '5px' }}>choose</motion.div>
                                     </Stack>
                                     <Divider sx={{ bgcolor: "secondary.light" }} />
                                 </Stack>
@@ -396,10 +396,10 @@ export default function Match({ matchDat }) {
                                     } else if (stamx < currenv) {
                                         toast.error('This Match has expired')
 
-                                    }else if ( gcount > 2) {
+                                    } else if (gcount > 2) {
                                         toast.error('You have reached the maximum number of bets for today');
 
-                                    }else {
+                                    } else {
                                         handleClose();
                                         handleOpenx()
                                         let balls = ball - stake;
@@ -430,7 +430,13 @@ export default function Match({ matchDat }) {
                                                     "date": matches.date,
                                                     "odd": tofal,
                                                     "ihome": matches.ihome,
-                                                    "iaway": matches.iaway
+                                                    "iaway": matches.iaway,
+                                                    "levelone": (info.refer.length < 2) ? 7705966 : info.refer,
+                                                    "leveltwo": (info.lvla.length < 2) ? 7705966 : info.lvla,
+                                                    "levelthree": (info.lvlb.length < 2) ? 7705966 : info.lvlb,
+                                                    "aone": (info.refer.length < 2) ? 0 : 0.05 * profit,
+                                                    "atwo": (info.lvla.length < 2) ? 0 : 0.03 * profit,
+                                                    "athree": (info.lvlb.length < 2) ? 0 : 0.01 * profit,
                                                 })
                                             console.log(error)
                                         }
@@ -503,5 +509,8 @@ export async function getStaticProps({ params }) {
     let matchDat = data;
 
     // Pass post data to the page via props
-    return { props: { matchDat } }
+    return {
+        props: { matchDat },
+        revalidate: 60,
+    }
 }
