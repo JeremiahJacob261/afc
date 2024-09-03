@@ -550,5 +550,5 @@ export default function Register( {refer} ) {
 export async function getServerSideProps(context) {
   const { params } = context;
   const id = params.id;
-  return { props: { id } }
+  return { props: { refer: id } }
 }
