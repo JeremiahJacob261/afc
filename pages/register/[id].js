@@ -26,7 +26,8 @@ import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, updateProf
 import { async } from "@firebase/util";
 import { useCookies } from 'react-cookie';
 import codes from '../api/codeswithflag.json'
-export default function Register({ refer }) {
+export default function Register( {refer} ) {
+  
   const [password, setPassword] = useState("")
   const [cpassword, setcPassword] = useState("")
   const route = useRouter();
@@ -545,22 +546,9 @@ export default function Register({ refer }) {
       </Modal>)
   }
 }
-export async function getStaticPaths() {
-  const { data, error } = await supabase
-    .from('users')
-    .select()
-  const paths = data.map((ref) => ({
-    params: { id: ref.newrefer },
-  }))
-  return { paths, fallback: true }
-}
 
-// This also gets called at build time
-export async function getStaticProps({ params }) {
-  // params contains the post `id`.
-  // If the route is like /posts/1, then params.id is 1
-  let refer = params.id;
-
-  // Pass post data to the page via props
-  return { props: { refer } }
+export async function getServerSideProps(context) {
+  const { params } = context;
+  const id = params.id;
+  return { props: { id } }
 }

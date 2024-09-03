@@ -485,32 +485,13 @@ export default function Match({ matchDat }) {
     }
 }
 
-export async function getStaticPaths() {
+export async function getServerSideProps(context) {
+    const { params } = context;
+    const id = params.id;
     const { data, error } = await supabase
         .from('bets')
         .select()
-    const paths = data.map((ref) => ({
-        params: { id: ref.match_id },
-    }))
-
-
-
-    return { paths, fallback: true }
-}
-
-// This also gets called at build time
-export async function getStaticProps({ params }) {
-    // params contains the post `id`.
-    // If the route is like /posts/1, then params.id is 1
-    const { data, error } = await supabase
-        .from('bets')
-        .select()
-        .eq('match_id', params.id)
-    let matchDat = data;
-
-    // Pass post data to the page via props
-    return {
-        props: { matchDat },
-        revalidate: 60,
-    }
+        .eq('match_id', id);
+        let matchDat = data;
+    return { props: { matchDat } }
 }

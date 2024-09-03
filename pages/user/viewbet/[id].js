@@ -104,9 +104,9 @@ export default function Viewbets({ bets }) {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
             <Stack direction='row' sx={{ padding: '12px' }} onClick={() => {
-                    router.back();
-                }}>
-                <KeyboardArrowLeftOutlinedIcon style={{ color: '#CACACA' }}  />
+                router.back();
+            }}>
+                <KeyboardArrowLeftOutlinedIcon style={{ color: '#CACACA' }} />
                 <p style={{ width: '100%', fontFamily: 'Poppins,sans-serif', textAlign: 'center', color: '#CACACA' }}>go back to bets</p>
             </Stack>
             <Stack direction="column" sx={{ padding: '10px', minHeight: '100vh' }} spacing={2}>
@@ -173,28 +173,16 @@ export default function Viewbets({ bets }) {
 
     }
 }
-export async function getStaticPaths() {
+
+
+
+export async function getServerSideProps(context) {
+    const { params } = context;
+    const id = params.id;
     const { data, error } = await supabase
         .from('placed')
         .select()
-    const paths = data.map((p) => ({
-        params: { id: p.betid },
-    }))
-
-
-
-    return { paths, fallback: true }
-}
-
-// This also gets called at build time
-export async function getStaticProps({ params }) {
-    // params contains the post `id`.
-    // If the route is like /posts/1, then params.id is 1
-    const { data, error } = await supabase
-        .from('placed')
-        .select()
-        .eq('betid', params.id)
-    let bets = data;
-    // Pass post data to the page via props
+        .eq('betid', id);
+        let bets = data;
     return { props: { bets } }
 }
