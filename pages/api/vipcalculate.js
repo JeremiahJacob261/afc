@@ -18,7 +18,7 @@ export default async function handler(req, res) {
                 'firstd': true
             });
         console.log(count);
-        let vipl = (users.totald < 50 || count < 3) ? '1' : (users.totald < 100 || count < 5) ? '2' : (users.totald < 200 || count < 8) ? '3' : (users.totald < 300 || count < 12) ? '4' : (users.totald < 500 || count < 15) ? '5' : (users.totald < 1000 || count < 20) ? '6' : '7';
+        let vipl = (users.totald < 50 || count < 5) ? '1' : (users.totald < 100 || count < 10) ? '2' : (users.totald < 200 || count < 15) ? '3' : (users.totald < 300 || count < 20) ? '4' : (users.totald < 500 || count < 30) ? '5' : (users.totald < 1000 || count < 40) ? '6' : '7';
         res.status(200).json({ status: "success", viplevel: vipl })
 
     } catch (e) {

@@ -84,7 +84,7 @@ export default function Match({ matchDat }) {
                                     'firstd': true
                                 });
                             setRefCount(count)
-                            setViplevel((infox.totald < 50 || count < 3) ? '1' : (infox.totald < 100 || count < 5) ? '2' : (infox.totald < 200 || count < 8) ? '3' : (infox.totald < 300 || count < 12) ? '4' : (infox.totald < 500 || count < 15) ? '5' : (infox.totald < 1000 || count < 20) ? '6' : '7');
+                            setViplevel((infox.totald < 50 || count < 5) ? '1' : (infox.totald < 100 || count < 10) ? '2' : (infox.totald < 200 || count < 15) ? '3' : (infox.totald < 300 || count < 20) ? '4' : (infox.totald < 500 || count < 30) ? '5' : (infox.totald < 1000 || count < 40) ? '6' : '7');
                             console.log(count)
                             console.log(error)
                             console.log(infox.totald)
