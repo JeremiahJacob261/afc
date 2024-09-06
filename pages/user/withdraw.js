@@ -39,6 +39,8 @@ export default function Deposit() {
     return wallx.find(obj => obj.name === id);
   }
 
+ 
+
   
   let amountlimit = {
     '1': 20,
@@ -55,7 +57,7 @@ export default function Deposit() {
   const [rate,setRate] = useState(1);
   const [currency,setCurrency] = useState({});
   const [swallet,setSWallet] = useState({});
-
+  const [bank,setBank] = useState('');
   //the below controls the loading modal
   const [openx, setOpenx] = useState(false);
   const handleOpenx = () => setOpenx(true);
@@ -114,8 +116,8 @@ export default function Deposit() {
             },
             //space here: crypto address for crypto , account number fro local banks
             body: JSON.stringify({
-              name: info.username, pass: pin, wallet: address, amount: parseFloat(amount).toFixed(3), method: currency.currency_code,
-              "bank": currency.bank, "accountname": swallet['names'], vipamount: amountlimit[viplevel]
+              name: info.username, pass: pin, wallet: address, amount: parseFloat(amount).toFixed(3), method: currency,
+              "bank": bank, "accountname": swallet, vipamount: amountlimit[viplevel]
             })
           }).then(data => {
 
@@ -124,6 +126,7 @@ export default function Deposit() {
           console.log(test);
           if (test[0].status === 'Failed') {
             toast.error(test[0].message);
+            handleClosex();
             if (test[0].message === 'No transaction pin has been set') {
               toast.error(test[0].message)
               router.push('/user/codesetting')
@@ -212,6 +215,10 @@ export default function Deposit() {
 
   const Withdrawal = async () => {
 
+  }
+
+  function findUserWalletsById(id) {
+    return wallets.find(obj => obj.wallid === id);
   }
   //snackbar2
   const handleClick = () => {
@@ -309,17 +316,17 @@ export default function Deposit() {
                 style={{ background: "#242627", color: '#CACACA', border: '1px solid #CACACA' }}
                 onChange={(e) => {
                 try{
-                  console.log(e.target.value);
-                  const [w, b, t] = e.target.value.split('-');
-                  setAddress(w);
-                  let selectx = findObjectByWallet(w);
-                  setSWallet(selectx)
-                  console.log(selectx)
-                  let current = findObjectById(b);
+                  let walletid = findUserWalletsById(e.target.value);
+                  console.log(walletid)
+                  const [n, t, c] = walletid[(walletid.method === 'local') ? 'walletnames' : 'bank'].split('-');
+                  setAddress(walletid.wallet);
+                  setSWallet(walletid.names)
+                  let current = findObjectById(n);
                   setRate(current.rates);
-                  console.log(rates)
-                  setMethod(b);
-                  setCurrency(current);
+                  setMethod(c);
+                  setCurrency(current['currency_code']);
+                  setBank((walletid.method === 'local') ? walletid.bank : 'usdt')
+                  console.log(current)
                 }catch(e){
                   console.log(e)
                   
@@ -331,7 +338,7 @@ export default function Deposit() {
                 <MenuItem value=''>none</MenuItem>
                 {
                   wallets.map((w) => {
-                    return <MenuItem value={w.wallet + '-' + (w.walletnames ?? w.bank)} key={w.id}>{w.wallet} {w.walletnames ?? w.bank}</MenuItem>
+                    return <MenuItem value={w.wallid} key={w.id}>{w.wallet} {w.walletnames ?? w.bank}</MenuItem>
                   })
                 }
 

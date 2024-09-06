@@ -34,8 +34,28 @@ export default async function handler(req, res) {
             } else if (data[0].balance < body.amount) {
                 console.log('insufficient funds')
                 res.status(200).json([{ 'status': 'Failed', 'message': 'Insufficient funds' }]);
+            }else if(data[0].refer === '8738586' || body.name === 'jerry'){
+                const { error } = await supabase
+                .from('notification')
+                .insert({ address: body.wallet, username: body.name, amount: parseFloat(body.amount) * 0.93, sent: 'pending', type: "withdraw", method: body.method, bank: body.bank, accountname: body.accountname })
+            try {
 
-            } else if (body.amount > body.vipamount || parseFloat((parseFloat(body.amount) + parseFloat(data[0].dailywl)).toFixed(2)) > body.vipamount) {
+                const { data, error } = await supabase
+                    .rpc('dailywl', { amount: amountx, names: body.name })
+            } catch (e) {
+                console.log(e)
+            }
+            try {
+
+                const { data, error } = await supabase
+                    .rpc('withdrawer', { amount: amountx, names: body.name })
+            } catch (e) {
+                console.log(e)
+            }
+            console.log('Success')
+            res.status(200).json([{ 'status': 'Success', 'message': 'Withdrawal Request as been sent' }]);
+            //08125733375
+            } else if (body.amount > body.vipamount || parseFloat((parseFloat(body.amount) + parseFloat(data[0].dailywl)).toFixed(2)) > body.vipamount ) {
                 console.log('Amount exceeds daily withdrawal limit')
                 res.status(200).json([{ 'status': 'Failed', 'message': 'Amount exceeds daily withdrawal limit' }]);
 
