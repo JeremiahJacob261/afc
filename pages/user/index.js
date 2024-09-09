@@ -68,7 +68,81 @@ export default function Home() {
   }
   runerx();
   useEffect(() => {
-    setUsername(localStorage.getItem('signNames'))
+
+    //guild functions
+    const Depositing = async (damount, dusername) => {
+      const { data, error } = await supabase
+        .rpc('depositor', { amount: damount, names: dusername })
+      console.log(error);
+    }
+
+    const Chan = async (bets, type) => {
+      const { data, error } = await supabase
+        .rpc('chan', { bet: bets, des: type })
+      console.log(error);
+    }
+
+    const AffBonus = async (damount, dusername, refer, lvla, lvlb) => {
+      try {
+          const { data, error } = await supabase
+              .rpc('affbonus', { name: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
+          console.log(error);
+      } catch (e) {
+          console.log(e)
+      }
+
+  }
+
+  const NUser = async (reason, username, amount) => {
+    const { error } = await supabase
+        .from('activa')
+        .insert({
+            'code': reason,
+            'username': username,
+            'amount': amount
+        });
+}
+  //end of functions
+    const name = localStorage.getItem('signNames');
+
+    const GET = async () => {
+      const { data, error } = await supabase
+        .from('placed')
+        .select('match_id,stake,aim,username,profit,market,betid')
+        .match({ username: name, won: 'null' });
+      
+
+      //a for loop to get the match results
+      data.map(async (d) => {
+
+        const { data: btx, error: bte } = await supabase
+          .from('bets')
+          .select('verified,results')
+          .eq('match_id', d.match_id);
+        if (btx[0]) {
+          try {
+            if (d.market != btx[0].results) {
+              const { data: user, error: uerror } = await supabase
+                .from('users')
+                .select('refer,lvla,lvlb')
+                .eq('username', name);
+              Depositing(d.stake + d.aim, name);
+              Chan(d.betid, 'true');
+              AffBonus(parseFloat(d.profit), d.username, user.refer, user.lvla, user.lvlb);
+              NUser('bet', d.username, Number(d.aim) + Number(d.stake))
+            } else {
+              Chan(d.betid, 'false');
+            }
+            console.log('did')
+          } catch (e) {
+            console.log(e)
+          } finally {
+            window.location.reload();
+          }
+        }
+      });
+    }
+    GET();
     const runer = async () => {
       try {
         const { data, error } = await supabase
@@ -182,7 +256,7 @@ export default function Home() {
 
           <Stack direction='row' justifyContent='space-between' alignItems='center'>
             <Stack direction='row' spacing={1}>
-              <Image src={fire} width={24} height={24} alt="fire"/>
+              <Image src={fire} width={24} height={24} alt="fire" />
               <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '16px', fontWeight: '600' }}>Top Football Matches</Typography>
             </Stack>
             <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>see all</Typography>
@@ -198,19 +272,19 @@ export default function Home() {
             {
               footDat.map((pro) => {
                 // let stams = Date.parse(pro.date + " " + pro.time) / 1000;
-                let stams = pro.tsgmt/1000;
-              let d1 = new Date();
-              d1.toUTCString();
-              // two hours less than my local time
-              let d1utc = Math.floor(d1.getTime() / 1000);
-              // let curren = new Date().getTime() / 1000;
-              let curren = d1utc;
+                let stams = pro.tsgmt / 1000;
+                let d1 = new Date();
+                d1.toUTCString();
+                // two hours less than my local time
+                let d1utc = Math.floor(d1.getTime() / 1000);
+                // let curren = new Date().getTime() / 1000;
+                let curren = d1utc;
                 const league = (pro.league === 'others') ? pro.otherl : pro.league;
                 let date = parseInt(new Date(pro.date).getMonth() + 1);
                 let day = new Date(pro.date).getDate();
                 let time = pro.time.substring(0, pro.time.length - 3);
-                const [h,m] = time.split(':');
-                let timex = parseFloat(h)-1 + ':' + m;
+                const [h, m] = time.split(':');
+                let timex = parseFloat(h) - 1 + ':' + m;
                 return (
 
                   <Stack direction="column" spacing={2} justifyContent='center' alignItems='center'
@@ -222,23 +296,23 @@ export default function Home() {
                       width: '343px',
                       borderRadius: '5px',
                       height: '210px',
-                    border:pro.company ? '1px solid #FFB400' : ''
+                      border: pro.company ? '1px solid #FFB400' : ''
                     }} onClick={() => {
                       handleOpen()
                       //register/000208
                       router.push("/user/match/" + pro.match_id)
                     }}>
                     <Stack direction='column'>
-                    <Stack direction="rows" alignItems="center" justifyContent="center">
-                      {
-                        (pro.company) ?
-                          <>
-                            <Icon icon="solar:star-bold-duotone" width="24" height="24" style={{ color: '#FFB400' }} />
-                            <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Verified Company Game</Typography>
-                          </>
-                          : <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}></Typography>
-                      }
-                    </Stack>
+                      <Stack direction="rows" alignItems="center" justifyContent="center">
+                        {
+                          (pro.company) ?
+                            <>
+                              <Icon icon="solar:star-bold-duotone" width="24" height="24" style={{ color: '#FFB400' }} />
+                              <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Verified Company Game</Typography>
+                            </>
+                            : <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}></Typography>
+                        }
+                      </Stack>
                       <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{league} </Typography>
                       <Divider sx={{ background: '#FFB400' }} />
                     </Stack>
@@ -262,7 +336,7 @@ export default function Home() {
                         <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>1-0</Typography>
                         <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>{pro.onenil}</Typography>
                       </Stack>
-                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3', border: pro.company ? '3px solid #FFB400' : '3px solid #E94E55'  }}>
+                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3', border: pro.company ? '3px solid #FFB400' : '3px solid #E94E55' }}>
                         <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>1-1</Typography>
                         <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>{pro.oneone}</Typography>
                       </Stack>
