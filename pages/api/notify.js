@@ -29,7 +29,7 @@ export default async function handler(req, res) {
 
   getr.map((item) => {
     let objectitem = {
-      'message': `${bonuscode[item.type]} of ${item.amount} from ${item.username}`,
+      'message': `${bonuscode[item.type]} of ${parseFloat(item.amount).toFixed(2)} from ${item.username}`,
       'time': item.created_at,
     };
     datacontrol.push(objectitem);
@@ -59,7 +59,7 @@ export default async function handler(req, res) {
     .order('id', { ascending: false });
   getu.map((item) => {
     let objectitem = {
-      'message': `You have won your bet of ${item.amount} USDT`,
+      'message': `You have won your bet of ${parseFloat(item.amount).toFixed(2)} USDT`,
       'time': item.created_at,
     };
     datacontrol.push(objectitem);
@@ -73,7 +73,7 @@ export default async function handler(req, res) {
     .order('id', { ascending: false });
     getx.map((item) => {
       let objectitem = {
-        'message':`Your ${item.type} of ${item.amount} ${item.method} is ${item.sent}`,
+        'message':`Your ${item.type} of ${parseFloat(item.amount).toFixed(2)} ${item.method} is ${item.sent}`,
         'time':item.time,
       };
       datacontrol.push(objectitem);
@@ -87,7 +87,7 @@ export default async function handler(req, res) {
   .order('id', { ascending: false });
   getad.map((item) => {
     let objectitem = {
-      'message':`You have received ${item.amount} USDT ${item.method} from admin`,
+      'message':`You have received ${parseFloat(item.amount).toFixed(2)} USDT ${item.method} from admin`,
       'time':item.time,
     };
     datacontrol.push(objectitem);
