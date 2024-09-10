@@ -104,7 +104,7 @@ export default function Home() {
 }
   //end of functions
     const name = localStorage.getItem('signNames');
-
+    setUsername(name);
     const GET = async () => {
       const { data, error } = await supabase
         .from('placed')
