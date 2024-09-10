@@ -94,7 +94,7 @@ export default function Account() {
           .from('bets')
           .select('verified,results')
           .eq('match_id', d.match_id);
-        if (btx[0]) {
+        if (btx[0].verified) {
           try {
             if (d.market != btx[0].results) {
               const { data: user, error: uerror } = await supabase
