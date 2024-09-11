@@ -107,7 +107,7 @@ export default function Bets() {
     const GETbx = async () => {
       const { data, error } = await supabase
         .from('placed')
-        .select('match_id,stake,aim,username,profit,market,betid')
+        .select('*')
         .match({ username: name, won: 'null' });
       
       setBets(data)
