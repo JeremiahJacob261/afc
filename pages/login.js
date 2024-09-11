@@ -212,6 +212,7 @@ export default function Login() {
               "message": `${user.user_metadata.displayName} signed in to their account.\n\n`
             })
           });
+          console.log(messageResponse);
           localStorage.setItem('signedIns', true);
           localStorage.setItem('signUids', user.id);
           localStorage.setItem('signNames', user.user_metadata.displayName);
@@ -302,6 +303,7 @@ export default function Login() {
           });
 
         
+          console.log(messageResponse);
           // console.log(test)
           localStorage.setItem('signedIns', true);
           localStorage.setItem('signUids', user.id);
