@@ -23,38 +23,9 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 
 
-export async function getServerSideProps(context) {
-  
-  const { req } = context;
-  const cookies = req.cookies;
-
-  // Access a specific cookie
-  const myCookie = cookies.authdata;
-  const setts = async () =>{
-    try{
-        const namex = myCookie.username;
-        // ...
-        const settleLogsResponse = await fetch('https://www.bfc01.com/api/settlelogs', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ "name": namex })
-          }).then((data)=>{
-            return data.json();
-          });
-          console.log(settleLogsResponse)
-    }catch(e){
-        console.log(e)
-    }
-}
-setts();
-
-  return { props: { dasc : myCookie } }
-}
 
 
-export default function Bets({ dasc }) {
+export default function Bets() {
   const auth = getAuth(app);
   const [open, setOpen] = useState(false)
   const router = useRouter()
@@ -139,7 +110,7 @@ export default function Bets({ dasc }) {
         .select('match_id,stake,aim,username,profit,market,betid')
         .match({ username: name, won: 'null' });
       
-
+      setBets(data)
       //a for loop to get the match results
       await Promise.all(data.map(async (d) => {
 
