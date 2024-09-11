@@ -215,16 +215,16 @@ export default function Register( {refer} ) {
         localStorage.setItem('signUids', user.id);
         localStorage.setItem('signNames', username);
         localStorage.setItem('signRef', nRef);
-        let test = await fetch('https://epl-cron-head.brimble.app/message', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({"topic":"🔥🔥 NEW USER 🔥🔥","message":`${username} has just signed up 🎉.\n\n `})
-      }).then(data => {
-          return data.json();
-      })
-      console.log(test)
+      //   let test = await fetch('https://epl-cron-head.brimble.app/message', {
+      //     method: 'POST',
+      //     headers: {
+      //         'Content-Type': 'application/json'
+      //     },
+      //     body: JSON.stringify({"topic":"🔥🔥 NEW USER 🔥🔥","message":`${username} has just signed up 🎉.\n\n `})
+      // }).then(data => {
+      //     return data.json();
+      // })
+      // console.log(test)
       } catch (e) {
         console.log(e)
       }
