@@ -21,7 +21,40 @@ import Ims from '../../public/simps/ball.png'
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-export default function Bets() {
+
+
+export async function getServerSideProps(context) {
+  
+  const { req } = context;
+  const cookies = req.cookies;
+
+  // Access a specific cookie
+  const myCookie = cookies.authdata;
+  const setts = async () =>{
+    try{
+        const namex = myCookie.username;
+        // ...
+        const settleLogsResponse = await fetch('https://www.bfc01.com/api/settlelogs', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ "name": namex })
+          }).then((data)=>{
+            return data.json();
+          });
+          console.log(settleLogsResponse)
+    }catch(e){
+        console.log(e)
+    }
+}
+setts();
+
+  return { props: { dasc : myCookie } }
+}
+
+
+export default function Bets({ dasc }) {
   const auth = getAuth(app);
   const [open, setOpen] = useState(false)
   const router = useRouter()
@@ -137,7 +170,7 @@ export default function Bets() {
         }
         });
       }
-      GET();
+      // GET();
       const GETn = async () => {
         const { data, error } = await supabase
           .from('placed')
@@ -329,3 +362,5 @@ export default function Bets() {
       </TabContext>);
   }
 }
+
+

@@ -20,7 +20,39 @@ import { Icon } from '@iconify/react'
 
 import { CookiesProvider, useCookies } from 'react-cookie';
 import toast, { Toaster } from 'react-hot-toast';
-export default function Account() {
+
+export async function getServerSideProps(context) {
+  
+  const { req } = context;
+  const cookies = req.cookies;
+
+  // Access a specific cookie
+  const myCookie = cookies.authdata;
+  const setts = async () =>{
+    try{
+        const namex = myCookie.username;
+        // ...
+        const settleLogsResponse = await fetch('https://www.bfc01.com/api/settlelogs', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ "name": namex })
+          }).then((data)=>{
+            return data.json();
+          });
+          console.log(settleLogsResponse)
+    }catch(e){
+        console.log(e)
+    }
+}
+setts();
+
+  return { props: { settc : myCookie } }
+}
+
+
+export default function Account({settc}) {
   const [, setCookie] = useCookies([]);
   const auth = getAuth(app);
   const [username,setUsername] = useState('')
@@ -117,7 +149,7 @@ export default function Account() {
         }
       });
     }
-    GETbx();
+    // GETbx();
 
     setUsername(localStorage.getItem('signNames'))
     const useri = localStorage.getItem('signedIns');

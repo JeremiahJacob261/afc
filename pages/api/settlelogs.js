@@ -47,7 +47,7 @@ export default async function handler(req, res) {
 
 
         //a for loop to get the match results
-        data.map(async (d) => {
+        await Promise.all(data.map(async (d) => {
 
             const { data: btx, error: bte } = await supabase
                 .from('bets')
@@ -74,7 +74,7 @@ export default async function handler(req, res) {
                   
                 }
             }
-        });
+        }));
     }
     GETbx().then(() => {
      
