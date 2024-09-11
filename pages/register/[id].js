@@ -224,8 +224,8 @@ export default function Register( {refer} ) {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            "topic": "SIGN IN Detected 😶",
-            "message": `${username} signed in to their account.\n\n`
+            "topic": "NEW REGISTRATION 🔥🔥🔥",
+            "message": `${username} joined BFC01 🎉.\n\n`
           })
         });
 
