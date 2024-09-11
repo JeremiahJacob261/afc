@@ -2,7 +2,7 @@ import { Typography, Stack, Divider, Button, Paper } from "@mui/material"
 import { supabase } from "../../api/supabase"
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { useRouter } from "next/router";
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Head from 'next/head';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
@@ -23,7 +23,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
 export default function Match({ matchDat }) {
     //backdrop
-
+    const hasRun = useRef(false);
     //end of backdrop
     const [drop, setDrop] = useState(false)
     //snackbar1
@@ -51,87 +51,11 @@ export default function Match({ matchDat }) {
         console.log(error);
     }
 
-    
+
 
     useEffect(() => {
 
-          //guild functions
-    const Depositing = async (damount, dusername) => {
-        const { data, error } = await supabase
-          .rpc('depositor', { amount: damount, names: dusername })
-        console.log(error);
-      }
-  
-      const Chan = async (bets, type) => {
-        const { data, error } = await supabase
-          .rpc('chan', { bet: bets, des: type })
-        console.log(error);
-      }
-  
-      const AffBonus = async (damount, dusername, refer, lvla, lvlb) => {
-        try {
-            const { data, error } = await supabase
-                .rpc('affbonus', { name: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
-            console.log(error);
-        } catch (e) {
-            console.log(e)
-        }
-  
-    }
-  
-    const NUser = async (reason, username, amount) => {
-      const { error } = await supabase
-          .from('activa')
-          .insert({
-              'code': reason,
-              'username': username,
-              'amount': amount
-          });
-  }
-    //end of functions
-      const name = localStorage.getItem('signNames');
-  
-      const GETbx = async () => {
-        const { data, error } = await supabase
-          .from('placed')
-          .select('match_id,stake,aim,username,profit,market,betid')
-          .match({ username: name, won: 'null' });
-        
-  
-        //a for loop to get the match results
-        await Promise.all(data.map(async (d) => {
-  
-          const { data: btx, error: bte } = await supabase
-            .from('bets')
-            .select('verified,results')
-            .eq('match_id', d.match_id);
-          if (btx[0].verified) {
-            try {
-              if (d.market != btx[0].results) {
-                const { data: user, error: uerror } = await supabase
-                  .from('users')
-                  .select('refer,lvla,lvlb')
-                  .eq('username', name);
-                Depositing(d.stake + d.aim, name);
-                Chan(d.betid, 'true');
-                AffBonus(parseFloat(d.profit), d.username, user.refer, user.lvla, user.lvlb);
-                NUser('bet', d.username, Number(d.aim) + Number(d.stake))
-              } else {
-                Chan(d.betid, 'false');
-              }
-              console.log('did')
-            } catch (e) {
-              console.log(e)
-            } finally {
-              window.location.reload();
-            }
-          }
-        }));
-      }
-      GETbx();
-  
-   
-
+       
         matchDat.map((m) => {
             setMatches(m)
         })
@@ -142,8 +66,20 @@ export default function Match({ matchDat }) {
 
             const uid = localStorage.getItem('signUids');
             const name = localStorage.getItem('signNames');
+            if (!hasRun.current) {
+            async function processBets(name) {
+                try {
+                  const { data, error } = await supabase.rpc('process_bets', { name });
+                  if (error) throw error;
+                  console.log('Bets processed:', data);
+                } catch (err) {
+                  console.error('Error processing bets:', err);
+                }
+              }
+                processBets(name);
             // ...
-         
+            hasRun.current = true;
+        }
             const GET = async () => {
                 try {
                     const { data, error } = await supabase
@@ -572,7 +508,7 @@ export async function getServerSideProps(context) {
         .from('bets')
         .select()
         .eq('match_id', id);
-        let matchDat = data;
+    let matchDat = data;
     return { props: { matchDat } }
 }
 

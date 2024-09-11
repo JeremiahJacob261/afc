@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { useRouter } from 'next/router'
 import Head from "next/head";
 import Cover from './cover'
@@ -31,6 +31,7 @@ import { CookiesProvider, useCookies } from 'react-cookie';
 export default function Home() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [username, setUsername] = useState('');
+  const hasRun = useRef(false);
   const openr = Boolean(anchorEl);
   const [drop, setDrop] = useState(false);
   const [cookies, setCookie] = useCookies(['authdata']);
@@ -105,44 +106,21 @@ export default function Home() {
   //end of functions
     const name = localStorage.getItem('signNames');
     setUsername(name);
-    const GET = async () => {
-      const { data, error } = await supabase
-        .from('placed')
-        .select('match_id,stake,aim,username,profit,market,betid')
-        .match({ username: name, won: 'null' });
-      
-
-      //a for loop to get the match results
-      await Promise.all(data.map(async (d) => {
-
-        const { data: btx, error: bte } = await supabase
-          .from('bets')
-          .select('verified,results')
-          .eq('match_id', d.match_id);
-        if (btx[0].verified) {
-          try {
-            if (d.market != btx[0].results) {
-              const { data: user, error: uerror } = await supabase
-                .from('users')
-                .select('refer,lvla,lvlb')
-                .eq('username', name);
-              Depositing(d.stake + d.aim, name);
-              Chan(d.betid, 'true');
-              AffBonus(parseFloat(d.profit), d.username, user.refer, user.lvla, user.lvlb);
-              NUser('bet', d.username, Number(d.aim) + Number(d.stake))
-            } else {
-              Chan(d.betid, 'false');
-            }
-            console.log('did')
-          } catch (e) {
-            console.log(e)
-          } finally {
-            window.location.reload();
-          }
+    if (!hasRun.current) {
+      async function processBets(name) {
+        try {
+          const { data, error } = await supabase.rpc('process_bets', { name });
+          if (error) throw error;
+          console.log('Bets processed:', data);
+        } catch (err) {
+          console.error('Error processing bets:', err);
         }
-      }));
+      }
+      processBets(name);
+      console.log('hi')
+      // ...
+      hasRun.current = true;
     }
-    GET();
     const runer = async () => {
       try {
         const { data, error } = await supabase

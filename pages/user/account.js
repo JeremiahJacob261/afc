@@ -1,7 +1,6 @@
 import { Avatar, Paper, Typography, Box, Stack, Button, Divider } from '@mui/material'
 import Cover from './cover'
-import React, { useContext, useEffect, useState } from "react";
-import { getCookies, getCookie, setCookies, deleteCookie } from 'cookies-next';
+import React, { useRef, useEffect, useState } from "react";
 import { useRouter } from 'next/router'
 import Link from 'next/link';
 import Snackbar from '@mui/material/Snackbar';
@@ -21,41 +20,13 @@ import { Icon } from '@iconify/react'
 import { CookiesProvider, useCookies } from 'react-cookie';
 import toast, { Toaster } from 'react-hot-toast';
 
-export async function getServerSideProps(context) {
-  
-  const { req } = context;
-  const cookies = req.cookies;
-
-  // Access a specific cookie
-  const myCookie = cookies.authdata;
-  const setts = async () =>{
-    try{
-        const namex = myCookie.username;
-        // ...
-        const settleLogsResponse = await fetch('https://www.bfc01.com/api/settlelogs', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ "name": namex })
-          }).then((data)=>{
-            return data.json();
-          });
-          console.log(settleLogsResponse)
-    }catch(e){
-        console.log(e)
-    }
-}
-setts();
-
-  return { props: { settc : myCookie } }
-}
 
 
-export default function Account({settc}) {
+export default function Account() {
   const [, setCookie] = useCookies([]);
+  const hasRun = useRef(false);
   const auth = getAuth(app);
-  const [username,setUsername] = useState('')
+  const [username, setUsername] = useState('')
   const router = useRouter()
   const [info, setInfo] = useState([]);
   const [balance, setBalance] = useState(0);
@@ -75,82 +46,20 @@ export default function Account({settc}) {
   const [userR, setUserR] = useState('')
   //end of snackbar1
   useEffect(() => {
-
-    //guild functions
-    const Depositing = async (damount, dusername) => {
-      const { data, error } = await supabase
-        .rpc('depositor', { amount: damount, names: dusername })
-      console.log(error);
-    }
-
-    const Chan = async (bets, type) => {
-      const { data, error } = await supabase
-        .rpc('chan', { bet: bets, des: type })
-      console.log(error);
-    }
-
-    const AffBonus = async (damount, dusername, refer, lvla, lvlb) => {
-      try {
-          const { data, error } = await supabase
-              .rpc('affbonus', { name: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
-          console.log(error);
-      } catch (e) {
-          console.log(e)
-      }
-
-  }
-
-  const NUser = async (reason, username, amount) => {
-    const { error } = await supabase
-        .from('activa')
-        .insert({
-            'code': reason,
-            'username': username,
-            'amount': amount
-        });
-}
-  //end of functions
-    const name = localStorage.getItem('signNames');
-
-    const GETbx = async () => {
-      const { data, error } = await supabase
-        .from('placed')
-        .select('match_id,stake,aim,username,profit,market,betid')
-        .match({ username: name, won: 'null' });
-      
-
-      //a for loop to get the match results
-      await Promise.all(data.map(async (d) => {
-
-        const { data: btx, error: bte } = await supabase
-          .from('bets')
-          .select('verified,results')
-          .eq('match_id', d.match_id);
-        if (btx[0].verified) {
-          try {
-            if (d.market != btx[0].results) {
-              const { data: user, error: uerror } = await supabase
-                .from('users')
-                .select('refer,lvla,lvlb')
-                .eq('username', name);
-              Depositing(d.stake + d.aim, name);
-              Chan(d.betid, 'true');
-              AffBonus(parseFloat(d.profit), d.username, user.refer, user.lvla, user.lvlb);
-              NUser('bet', d.username, Number(d.aim) + Number(d.stake))
-            } else {
-              Chan(d.betid, 'false');
-            }
-            console.log('did')
-          } catch (e) {
-            console.log(e)
-          } finally {
-            window.location.reload();
-          }
+    if (!hasRun.current) {
+      async function processBets(name) {
+        try {
+          const { data, error } = await supabase.rpc('process_bets', { name });
+          if (error) throw error;
+          console.log('Bets processed:', data);
+        } catch (err) {
+          console.error('Error processing bets:', err);
         }
-      }));
+      }
+      processBets(localStorage.getItem('signNames'));
+      // ...
+      hasRun.current = true;
     }
-    GETbx();
-
     setUsername(localStorage.getItem('signNames'))
     const useri = localStorage.getItem('signedIns');
     setUsern(localStorage.getItem('signNames'));
@@ -280,20 +189,20 @@ export default function Account({settc}) {
               </Link>
             </Stack>
             <Divider sx={{ bgcolor: "#E94E55" }} />
-            < Link href='https://t.me/+eeFd7JdRZ-QxOTA0' style={{ textDecoration:'none' }}>
-                <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
-                  <Stack direction='row' spacing={1} justifyContent='start'>
-                    <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
+            < Link href='https://t.me/+eeFd7JdRZ-QxOTA0' style={{ textDecoration: 'none' }}>
+              <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
+                <Stack direction='row' spacing={1} justifyContent='start'>
+                  <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
 
-                    <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Telegram Channel</Typography>
-                  </Stack>
+                  <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Telegram Channel</Typography>
                 </Stack>
-              </Link>
+              </Stack>
+            </Link>
           </Stack>
           {
             //deposit
           }
-          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px",border:'1px solid #E94E55' }}>
+          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px", border: '1px solid #E94E55' }}>
             <Typography sx={{ color: "#E94E55", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>MY TEAM</Typography>
 
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', height: '110px', padding: '8px', background: '#242627', borderRadius: '8px' }}>
@@ -327,7 +236,7 @@ export default function Account({settc}) {
           {
             //fun
           }
-          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px",border:'1px solid #E94E55' }}>
+          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px", border: '1px solid #E94E55' }}>
             <Typography sx={{ color: "#E94E55", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Deposit</Typography>
             <Divider />
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', height: '110px', padding: '8px', background: '#242627', borderRadius: '8px' }}>
@@ -361,7 +270,7 @@ export default function Account({settc}) {
           {
             //withdraw
           }
-          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px",border:'1px solid #E94E55' }}>
+          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px", border: '1px solid #E94E55' }}>
             <Typography sx={{ color: "#E94E55", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Withdrawal</Typography>
             <Divider />
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '150px', padding: '8px', background: '#242627', borderRadius: '8px' }}>
@@ -419,7 +328,7 @@ export default function Account({settc}) {
           {
             //fun
           }
-          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px",border:'1px solid #E94E55' }}>
+          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px", border: '1px solid #E94E55' }}>
             <Typography sx={{ color: "#E94E55", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Bets</Typography>
             <Divider />
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '50px', padding: '8px', background: '#242627', borderRadius: '8px' }}>
@@ -441,7 +350,7 @@ export default function Account({settc}) {
           {
             //About
           }
-          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px",border:'1px solid #E94E55' }}>
+          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px", border: '1px solid #E94E55' }}>
             <Typography sx={{ color: "#E94E55", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>About</Typography>
             <Divider />
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '50px', padding: '8px', background: '#242627', borderRadius: '8px' }}>
@@ -471,7 +380,7 @@ export default function Account({settc}) {
               </Stack>
 
               <Divider sx={{ bgcolor: "#E94E55" }} />
-              < Link href='https://t.me/BFC_HELP' style={{ textDecoration:'none' }}>
+              < Link href='https://t.me/BFC_HELP' style={{ textDecoration: 'none' }}>
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                   <Stack direction='row' spacing={1} justifyContent='start'>
                     <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
@@ -483,7 +392,7 @@ export default function Account({settc}) {
               </Link>
 
               <Divider sx={{ bgcolor: "#E94E55" }} />
-              < Link href='https://t.me/+eeFd7JdRZ-QxOTA0' style={{ textDecoration:'none' }}>
+              < Link href='https://t.me/+eeFd7JdRZ-QxOTA0' style={{ textDecoration: 'none' }}>
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                   <Stack direction='row' spacing={1} justifyContent='start'>
                     <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
@@ -496,7 +405,7 @@ export default function Account({settc}) {
 
               <Divider sx={{ bgcolor: "#E94E55" }} />
 
-              < Link href='https://t.me/BFC_HELP' style={{ textDecoration:'none' }}>
+              < Link href='https://t.me/BFC_HELP' style={{ textDecoration: 'none' }}>
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                   <Stack direction='row' spacing={1} justifyContent='start'>
                     <Icon icon="mdi:support" width="24" height="24" style={{ color: '#a3a3a3' }} />
@@ -513,7 +422,7 @@ export default function Account({settc}) {
           {
             //close
           }
-          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px",border:'1px solid #E94E55' }}>
+          <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px", border: '1px solid #E94E55' }}>
             <Typography sx={{ color: "#E94E55", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Closure</Typography>
             <Divider />
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '50px', padding: '8px', background: '#242627', borderRadius: '8px' }}>
