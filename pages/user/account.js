@@ -120,7 +120,7 @@ export default function Account({settc}) {
       
 
       //a for loop to get the match results
-      data.map(async (d) => {
+      await Promise.all(data.map(async (d) => {
 
         const { data: btx, error: bte } = await supabase
           .from('bets')
@@ -147,9 +147,9 @@ export default function Account({settc}) {
             window.location.reload();
           }
         }
-      });
+      }));
     }
-    // GETbx();
+    GETbx();
 
     setUsername(localStorage.getItem('signNames'))
     const useri = localStorage.getItem('signedIns');

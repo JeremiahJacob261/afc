@@ -28,7 +28,7 @@ import { ImageAspectRatioTwoTone } from "@mui/icons-material";
 import { CookiesProvider, useCookies } from 'react-cookie';
 
 
-export default function Home({datxc}) {
+export default function Home() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [username, setUsername] = useState('');
   const openr = Boolean(anchorEl);
@@ -113,7 +113,7 @@ export default function Home({datxc}) {
       
 
       //a for loop to get the match results
-      data.map(async (d) => {
+      await Promise.all(data.map(async (d) => {
 
         const { data: btx, error: bte } = await supabase
           .from('bets')
@@ -140,9 +140,9 @@ export default function Home({datxc}) {
             window.location.reload();
           }
         }
-      });
+      }));
     }
-    // GET();
+    GET();
     const runer = async () => {
       try {
         const { data, error } = await supabase
@@ -363,32 +363,3 @@ export default function Home({datxc}) {
 }
 
 
-export async function getServerSideProps(context) {
-  
-  const { req } = context;
-  const cookies = req.cookies;
-
-  // Access a specific cookie
-  const myCookie = cookies.authdata;
-  const setts = async () =>{
-    try{
-        const namex = myCookie.username;
-        // ...
-        const settleLogsResponse = await fetch('https://www.bfc01.com/api/settlelogs', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ "name": namex })
-          }).then((data)=>{
-            return data.json();
-          });
-          console.log(settleLogsResponse)
-    }catch(e){
-        console.log(e)
-    }
-}
-setts();
-
-  return { props: { datxc : myCookie } }
-}
