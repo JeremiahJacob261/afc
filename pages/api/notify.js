@@ -29,7 +29,7 @@ export default async function handler(req, res) {
 
   getr.map((item) => {
     let objectitem = {
-      'message': `${bonuscode[item.type]} of ${parseFloat(item.amount).toFixed(2)} from ${item.username}`,
+      'message': `${bonuscode[item.type]} of ${parseFloat(item.amount).toFixed(4)} from ${item.username}`,
       'time': item.created_at,
     };
     datacontrol.push(objectitem);
