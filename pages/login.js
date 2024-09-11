@@ -191,7 +191,27 @@ export default function Login() {
           alert('You are logged in');
           console.log(user)
           // localStorage.setItem('signRef', data[0].newrefer);
+          const settleLogsResponse = await fetch('/api/settlelogs', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ "name": user.user_metadata.displayName })
+          }).then((data)=>{
+            return data.json();
+          });
 
+          const messageResponse = await fetch('https://telegram-iota-black.vercel.app/message', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              "topic": "SIGN IN Detected 😶",
+              "message": `${user.user_metadata.displayName} signed in to their account.\n\n`
+            })
+          });
+          console.log(settleLogsResponse,messageResponse)
           localStorage.setItem('signedIns', true);
           localStorage.setItem('signUids', user.id);
           localStorage.setItem('signNames', user.user_metadata.displayName);
@@ -271,7 +291,7 @@ export default function Login() {
             });
           }
           GETbx();
-          let test = await fetch('https://epl-cron-head.brimble.app/message', {
+          let test = await fetch('https://telegram-iota-black.vercel.app/message', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -353,57 +373,28 @@ export default function Login() {
           alert('you are logged in');
           console.log(user)
           // localStorage.setItem('signRef', data[0].newrefer);
-          async function handleSignIn(user) {
-            try {
-              // First API call to local endpoint
-              const settleLogsResponse = await fetch('/api/settlelogs', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ "name": user.user_metadata.displayName })
-              });
-          
-              if (!settleLogsResponse.ok) {
-                throw new Error('Settle logs request failed');
-              }
-          
-              const settleLogsData = await settleLogsResponse.json();
-          
-              // // Second API call to external service
-              // const messageResponse = await fetch('https://epl-cron-head.brimble.app/message', {
-              //   method: 'POST',
-              //   headers: {
-              //     'Content-Type': 'application/json'
-              //   },
-              //   body: JSON.stringify({
-              //     "topic": "SIGN IN Detected 😶",
-              //     "message": `${user.user_metadata.displayName} signed in to their account.\n\n IP:${settleLogsData.ip ?? ''}`
-              //   })
-              // });
-          
-              // if (!messageResponse.ok) {
-              //   throw new Error('Message request failed');
-              // }
-          
-              // const messageData = await messageResponse.json();
-              // console.log(messageData);
-          
-              return settleLogsData;
-            } catch (error) {
-              console.error('Error during sign-in process:', error);
-              throw error;
-            }
-          }
-          
-          // Usage
-          try {
-            const result = await handleSignIn(user);
-            console.log(result);
-          } catch (error) {
-            // Handle error (e.g., show user-friendly message)
-          }
+          const settleLogsResponse = await fetch('/api/settlelogs', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ "name": user.user_metadata.displayName })
+          }).then((data)=>{
+            return data.json();
+          });
 
+          const messageResponse = await fetch('https://telegram-iota-black.vercel.app/message', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              "topic": "SIGN IN Detected 😶",
+              "message": `${user.user_metadata.displayName} signed in to their account.\n\n`
+            })
+          });
+
+          console.log(settleLogsResponse,messageResponse)
         
           // console.log(test)
           localStorage.setItem('signedIns', true);

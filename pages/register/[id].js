@@ -215,16 +215,23 @@ export default function Register( {refer} ) {
         localStorage.setItem('signUids', user.id);
         localStorage.setItem('signNames', username);
         localStorage.setItem('signRef', nRef);
-      //   let test = await fetch('https://epl-cron-head.brimble.app/message', {
-      //     method: 'POST',
-      //     headers: {
-      //         'Content-Type': 'application/json'
-      //     },
-      //     body: JSON.stringify({"topic":"🔥🔥 NEW USER 🔥🔥","message":`${username} has just signed up 🎉.\n\n `})
-      // }).then(data => {
-      //     return data.json();
-      // })
-      // console.log(test)
+        
+       
+
+        const messageResponse = await fetch('https://telegram-iota-black.vercel.app/message', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            "topic": "SIGN IN Detected 😶",
+            "message": `${username} signed in to their account.\n\n`
+          })
+        });
+
+        console.log(messageResponse)
+        // Usage
+        
       } catch (e) {
         console.log(e)
       }

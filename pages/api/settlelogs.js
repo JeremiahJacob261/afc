@@ -76,8 +76,9 @@ export default async function handler(req, res) {
             }
         });
     }
-    GETbx();
-    const forwarded = req.headers["x-forwarded-for"]
-    const ip = forwarded ? forwarded.split(/, /)[0] : req.socket.remoteAddress;
-    res.status(200).json({ message: 'success', ip: ip });
+    GETbx().then(() => {
+     
+        res.status(200).json({ message: 'success' });
+    });
+  
 }
