@@ -212,7 +212,6 @@ export default function Login() {
               "message": `${user.user_metadata.displayName} signed in to their account.\n\n`
             })
           });
-          console.log(settleLogsResponse,messageResponse)
           localStorage.setItem('signedIns', true);
           localStorage.setItem('signUids', user.id);
           localStorage.setItem('signNames', user.user_metadata.displayName);
@@ -289,15 +288,7 @@ export default function Login() {
           alert('you are logged in');
           console.log(user)
           // localStorage.setItem('signRef', data[0].newrefer);
-          const settleLogsResponse = await fetch('/api/settlelogs', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ "name": user.user_metadata.displayName })
-          }).then((data)=>{
-            return data.json();
-          });
+         
 
           const messageResponse = await fetch('https://telegram-iota-black.vercel.app/message', {
             method: 'POST',
@@ -310,7 +301,6 @@ export default function Login() {
             })
           });
 
-          console.log(settleLogsResponse,messageResponse)
         
           // console.log(test)
           localStorage.setItem('signedIns', true);
