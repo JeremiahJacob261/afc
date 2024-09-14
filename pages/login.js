@@ -202,17 +202,6 @@ export default function Login() {
           }
           processBets(user.user_metadata.displayName);
 
-          const messageResponse = await fetch('https://telegram-iota-black.vercel.app/message', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              "topic": "SIGN IN Detected 😶",
-              "message": `${user.user_metadata.displayName} signed in to their account.\n\n`
-            })
-          });
-          console.log(messageResponse);
           localStorage.setItem('signedIns', true);
           localStorage.setItem('signUids', user.id);
           localStorage.setItem('signNames', user.user_metadata.displayName);
@@ -291,19 +280,6 @@ export default function Login() {
           // localStorage.setItem('signRef', data[0].newrefer);
          
 
-          const messageResponse = await fetch('https://telegram-iota-black.vercel.app/message', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              "topic": "SIGN IN Detected 😶",
-              "message": `${user.user_metadata.displayName} signed in to their account.\n\n`
-            })
-          });
-
-        
-          console.log(messageResponse);
           // console.log(test)
           localStorage.setItem('signedIns', true);
           localStorage.setItem('signUids', user.id);
