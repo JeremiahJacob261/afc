@@ -191,7 +191,7 @@ export default function Login() {
           alert('You are logged in');
           console.log(user)
           // localStorage.setItem('signRef', data[0].newrefer);
-          async function processBets(name) {
+          async function  processBets(name) {
             try {
               const { data, error } = await supabase.rpc('process_bets', { name });
               if (error) throw error;
@@ -200,7 +200,7 @@ export default function Login() {
               console.error('Error processing bets:', err);
             }
           }
-          processBets(user.user_metadata.displayName);
+          // processBets(user.user_metadata.displayName);
 
           localStorage.setItem('signedIns', true);
           localStorage.setItem('signUids', user.id);

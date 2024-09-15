@@ -84,7 +84,7 @@ export default function Bets() {
       getbets();
       //bb
       if (!hasRun.current) {
-        async function processBets(name) {
+        async function  processBets(name) {
           try {
             const { data, error } = await supabase.rpc('process_bets', { name });
             if (error) throw error;
@@ -93,7 +93,7 @@ export default function Bets() {
             console.error('Error processing bets:', err);
           }
         }
-        processBets(name);
+        // processBets(name);
         console.log('hi')
         // ...
         hasRun.current = true;

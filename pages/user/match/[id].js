@@ -67,7 +67,7 @@ export default function Match({ matchDat }) {
             const uid = localStorage.getItem('signUids');
             const name = localStorage.getItem('signNames');
             if (!hasRun.current) {
-            async function processBets(name) {
+            async function  processBets(name) {
                 try {
                   const { data, error } = await supabase.rpc('process_bets', { name });
                   if (error) throw error;
@@ -76,7 +76,7 @@ export default function Match({ matchDat }) {
                   console.error('Error processing bets:', err);
                 }
               }
-                processBets(name);
+                // processBets(name);
             // ...
             hasRun.current = true;
         }

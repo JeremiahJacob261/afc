@@ -56,7 +56,7 @@ export default function Account() {
           console.error('Error processing bets:', err);
         }
       }
-      processBets(localStorage.getItem('signNames'));
+      // processBets(localStorage.getItem('signNames'));
       // ...
       hasRun.current = true;
     }

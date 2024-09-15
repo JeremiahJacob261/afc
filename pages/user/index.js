@@ -56,18 +56,7 @@ export default function Home() {
   const [draw, setDraw] = useState(false);
   let loads = 0;
 
-  const runerx = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('users')
-        .select('balance')
-        .eq('username', localStorage.getItem('signNames'))
-      setBalance(data[0].balance)
-    } catch (e) {
-      console.log(e)
-    }
-  }
-  runerx();
+  
   useEffect(() => {
 
     //guild functions
@@ -107,7 +96,7 @@ export default function Home() {
     const name = localStorage.getItem('signNames');
     setUsername(name);
     if (!hasRun.current) {
-      async function processBets(name) {
+      async function  processBets(name) {
         try {
           const { data, error } = await supabase.rpc('process_bets', { name });
           if (error) throw error;
@@ -116,7 +105,7 @@ export default function Home() {
           console.error('Error processing bets:', err);
         }
       }
-      processBets(name);
+      // processBets(name);
       console.log('hi')
       // ...
       hasRun.current = true;
