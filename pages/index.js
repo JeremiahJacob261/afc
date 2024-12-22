@@ -3,9 +3,9 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Logos from '../public/bradford.ico'
-import afc1 from '../public/simps/AFC.jpg'
-import afc2 from '../public/simps/AFC2.jpg'
-import afc3 from '../public/simps/Simple.jpg'
+import bfc1 from '../public/bfc1.jpg'
+import bfc2 from '../public/bfc2.jpg'
+import bfc3 from '../public/bfc3.jpg'
 import iv from '../public/simps/Invitation Bonus.jpg'
 import kik from '../public/simps/kick.png'
 import sal from '../public/simps/Monthly salary.png'
@@ -60,7 +60,7 @@ export default function Home() {
           //page
         }
         <div style={{ background: '#373636', padding: '8px', borderRadius: '5px' }}>
-          <Image src={iv} width={331} height={157} alt='invitation bonus' />
+          <Image src={bfc1} width={331} height={157} alt='invitation bonus' />
           <Typography style={{ width: '308px', fontFamily: 'Poppins, sans-serif', fontWeight: 'bold', padding: '8px' }}>{t('invitation_bonus')}</Typography>
           <Typography style={{ width: '308px', height: '185px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
           {t('invitation_bonus_description')}</Typography>
@@ -71,7 +71,7 @@ export default function Home() {
           //end
         }
         <div style={{ background: '#373636', padding: '8px', borderRadius: '5px' }}>
-          <Image src={kik} width={331} height={157} alt='invitation bonus' />
+          <Image src={bfc2} width={331} height={157} alt='invitation bonus' />
           <Typography style={{ width: '308px', height: '245px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
           {t('betting_markets')}
             </Typography>
@@ -83,7 +83,7 @@ export default function Home() {
         {t('earn_on_referrals')}
         </Typography>
         <div style={{ background: '#373636', padding: '8px', borderRadius: '5px' }}>
-          <Image src={ref} width={331} height={175} alt='invitation bonus' />
+          <Image src={bfc3} width={331} height={175} alt='invitation bonus' />
           <div>
 
             <Typography style={{ fontSize: '15px', width: '308px', height: '55px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
@@ -100,7 +100,7 @@ export default function Home() {
         {t('earn_from_referrals')}
         </Typography>
         <div style={{ background: '#373636', padding: '8px', borderRadius: '5px' }}>
-          <Image src={afc3} width={326} height={326} alt='invitation bonus' />
+          <Image src={bfc3} width={326} height={326} alt='invitation bonus' />
           <Typography style={{ width: '308px', fontSize: '15px', textAlign: 'center', height: '50px', fontFamily: 'Poppins, sans-serif', fontWeight: '300', padding: '2px', margin: '4px' }}>
           {t('build_your_team')}</Typography>
             <Link href="/register/000208" style={{ textDecoration: 'none' }}>  <Button style={{ fontFamily: 'Poppins, sans-serif', background: '#242627', color: '#CACACA', width: '100%', padding: '8px' }}>{t('build_team')}</Button>
