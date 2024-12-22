@@ -135,7 +135,7 @@ export default function Bets() {
       <Head>
         <title>BFC - My Bets </title>
         <meta name="description" content="View Your Recents Betslips" />
-        <link rel="icon" href="/brentford.ico" />
+        <link rel="icon" href="/bradford.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div style={{ color: "#03045E", minHeight: '90vh' }}>

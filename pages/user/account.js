@@ -152,7 +152,7 @@ export default function Account() {
       <Sncks />
       <Head>
         <title>{username ? `${username}` : 'Loading...'}&lsquo; Account</title>
-        <link rel="icon" href="/brentford.ico" />
+        <link rel="icon" href="/bradford.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Box sx={{ padding: "8px", background: "#242627", width: '100%', minHeight: '90vh', paddingBottom: '5vh' }}>

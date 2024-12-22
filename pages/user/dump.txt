@@ -39,7 +39,7 @@ export default function Deposit() {
   const [dea, setDea] = useState("visible")
   const [deb, setDeb] = useState("hidden")
   const auth = getAuth(app);
-  const storage =  getStorage(app,"gs://Brentford-77824.appspot.com");
+  const storage =  getStorage(app,"gs://BRADFORD-77824.appspot.com");
   const [drop, setDrop] = useState(false)
   const router = useRouter()
   const [dean, setDean] = useState(200)
@@ -274,7 +274,7 @@ checkDepo(url);
       <Head>
         <title>Deposit</title>
         <meta name="description" content="Get a percentage bonus on your first deposit" />
-        <link rel="icon" href="/brentford.ico" />
+        <link rel="icon" href="/bradford.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Sncks message={messages} />

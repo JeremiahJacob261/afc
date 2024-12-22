@@ -244,7 +244,7 @@ export default function Match({ matchDat }) {
                 <Head>
                     <title>{matches.home} VS {matches.away}</title>
                     <meta name="description" content="A Premium BFC  match" />
-                    <link rel="icon" href="/brentford.ico" />
+                    <link rel="icon" href="/bradford.ico" />
                     <meta name="viewport" content="width=device-width, initial-scale=1" />
                 </Head>
                 <Stack direction='row' alignItems='left' justifyContent='left' spacing={1} sx={{ width: '100%', margin: '5px' }} onClick={() => { router.push('/user/matches') }}>

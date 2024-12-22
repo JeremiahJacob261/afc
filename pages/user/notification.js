@@ -50,7 +50,7 @@ export default function Notification() {
     <Stack direction="column" sx={{ minHeight: '100vh' }}>
       <Head>
         <title>Notifications</title>
-        <link rel="icon" href="/brentford.ico" />
+        <link rel="icon" href="/bradford.ico" />
       </Head>
       <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '8px', margin: '2px' }}>
         <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px', color: '#cacaca' }} onClick={() => {

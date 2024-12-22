@@ -129,7 +129,7 @@ export default function Refferal() {
         <Stack alignItems="center" style={{ minHeight: '85vh', width: '100%' }} spacing={1}>
           <Head>
             <title>Referral Details</title>
-            <link rel="icon" href="/brentford.ico" />
+            <link rel="icon" href="/bradford.ico" />
             <meta name="viewport" content="width=device-width, initial-scale=1" />
           </Head>
           <Stack direction='row' alignItems='center' justifyContent='start' spacing={1} sx={{ width: '100%', padding: '8px', margin: '2px', minWidth: '344px' }}>

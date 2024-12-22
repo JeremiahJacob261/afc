@@ -100,7 +100,7 @@ export default function Viewbets({ bets }) {
             <Head>
                 <title>Bet Details</title>
                 <meta name="description" content="Login to your Account to see more info about your bets" />
-                <link rel="icon" href="/brentford.ico" />
+                <link rel="icon" href="/bradford.ico" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
             <Stack direction='row' sx={{ padding: '12px' }} onClick={() => {

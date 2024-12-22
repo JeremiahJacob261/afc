@@ -253,7 +253,7 @@ export default function Deposit() {
     <Cover style={{ minHeight: '95vh', paddingBottom: '100px' }}>
       <Head>
         <title>Withdraw</title>
-        <link rel="icon" href="/brentford.ico" />
+        <link rel="icon" href="/bradford.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Alertz />

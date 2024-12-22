@@ -20,7 +20,7 @@ export default function Funds() {
         <Cover>
             <Head>
           <title>Deposit - Enter Amount</title>
-          <link rel="icon" href="/brentford.ico" />
+          <link rel="icon" href="/bradford.ico" />
         </Head>
         <Loading open={openx} handleClose={handleClosex} />
         <Stack direction='column' justifyContent='center' alignItems='center' sx={{minHeight:'95vh',padding:'12px',position:'relative'}} spacing={3}>

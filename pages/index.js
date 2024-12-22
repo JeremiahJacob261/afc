@@ -2,7 +2,7 @@ import { Stack, Typography, Button } from '@mui/material'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import Logos from '../public/brentford.ico'
+import Logos from '../public/bradford.ico'
 import afc1 from '../public/simps/AFC.jpg'
 import afc2 from '../public/simps/AFC2.jpg'
 import afc3 from '../public/simps/Simple.jpg'
@@ -24,9 +24,9 @@ export default function Home() {
   return (
     <div className={styles.container} style={{ background: "#242627", width: "100%", minHeight: "750px", color: "#CACACA", opacity: "0.9", padding: "1px", backdropFilter: "blur(8px)" }}>
       <Head>
-        <title>Brentford FOOTBALL CLUB (BFC)</title>
-        <meta name="description" content="Brentford football club" />
-        <link rel="icon" href="/brentford.ico" />
+        <title>Bradford FOOTBALL CLUB (BFC)</title>
+        <meta name="description" content="Bradford football club" />
+        <link rel="icon" href="/bradford.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Stack direction="column" justifyContent='center' alignItems="center" spacing={5}>

@@ -183,7 +183,7 @@ export default function Home() {
         </Backdrop>
         <Head>
           <title>Welcome - {username ? `${username}` : 'Loading...'}</title>
-          <link rel="icon" href="/brentford.ico" />
+          <link rel="icon" href="/bradford.ico" />
         </Head>
         <Stack sx={{ background: "#242627", marginTop: '10px', minWidth: '350px', maxWidth: '450px' }} spacing={2} justifyContent='center' >
 

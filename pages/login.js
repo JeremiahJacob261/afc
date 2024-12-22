@@ -15,7 +15,7 @@ import { getDatabase } from 'firebase/database'
 import SimpleDialog from './modal'
 import { useRouter } from 'next/router'
 import { getCookie, setCookie, removeCookies } from 'cookies-next';
-import LOGO from '../public/brentford.ico'
+import LOGO from '../public/bradford.ico'
 import Image from 'next/image'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -317,7 +317,7 @@ export default function Login() {
       <Head>
         <title>Login</title>
         <meta name="description" content="Login to your Account to see whats up with your bets" />
-        <link rel="icon" href="/brentford.ico" />
+        <link rel="icon" href="/bradford.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <SimpleDialog

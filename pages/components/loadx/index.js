@@ -2,7 +2,7 @@ import { Stack } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import { useState } from 'react';
 import Image from 'next/image';
-import Logo from '@/public/brentford.ico'
+import Logo from '@/public/bradford.ico'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/router';
 import Refresh from '@/public/refresh.png';
@@ -25,7 +25,7 @@ export default function Loadingx({ open, handleClose,currency }) {
                 
                     <Stack direction='column' alignItems="center" justifyContent={"center"}>
                         
-                        <Image src={Logo} alt="brentford fc" width={70} height={70} />
+                        <Image src={Logo} alt="bradford fc" width={70} height={70} />
                         <p style={{ color: '#CACACA', width: '100%', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>Choose any Transaction method</p>
                         <p style={{ color: '#CACACA', width: '100%', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '300', fontSize: '13px' }}>you can Choose any transaction type that is available in your location</p>
                     </Stack>
@@ -62,7 +62,7 @@ export default function Loadingx({ open, handleClose,currency }) {
                 
                     <Stack direction='column' alignItems="center" justifyContent={"center"}>
                         
-                        <Image src={Logo} alt="brentford fc" width={70} height={70} />
+                        <Image src={Logo} alt="bradford fc" width={70} height={70} />
                         <p style={{ color: '#CACACA', width: '100%', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>Choose any Transaction method</p>
                         <p style={{ color: '#CACACA', width: '100%', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '300', fontSize: '13px' }}>you can Choose any transaction type that is available in your location</p>
                     </Stack>

@@ -15,7 +15,7 @@ import { getDatabase } from 'firebase/database'
 import SimpleDialog from './modal'
 import { useRouter } from 'next/router'
 import { getCookie, setCookie, removeCookies } from 'cookies-next';
-import LOGO from '../public/brentford.ico'
+import LOGO from '../public/bradford.ico'
 import Image from 'next/image'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -71,7 +71,7 @@ export default function PasswordReset() {
       <Head>
         <title>Password Reset</title>
         <meta name="description" content="afc  security settings" />
-        <link rel="icon" href="/brentford.ico" />
+        <link rel="icon" href="/bradford.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Stack direction="column" spacing={4} justifyContent="center" alignItems="center">
