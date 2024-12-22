@@ -341,6 +341,8 @@ export default function Login() {
           </Typography>
         </Stack>
         <Stack direction="column" spacing={4} sx={{ width: '343px' }}>
+          <div>
+          <p style={{ fontFamily: 'Poppins,sans-serif', color:'#CACACA', fontSize:'12px',marginBottom:'5px'  }}>email or username</p>
           <TextField id="outlined-basic" placeholder="Email Or Username" variant="filled"
             sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#CACACA', } }}
             value={email}
@@ -348,15 +350,19 @@ export default function Login() {
               setEmail(e.target.value.replace(/\s/g, ''))
             }}
           />
+          </div>
+          <div>
+          <p style={{ fontFamily: 'Poppins,sans-serif', color:'#CACACA', fontSize:'12px',marginBottom:'5px' }}>password</p>
           <FormControl
             sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#CACACA', } }}
             variant="filled">
-            <InputLabel htmlFor="outlined-adornment-password" sx={{ color: 'white' }}>Password</InputLabel>
+            <InputLabel htmlFor="outlined-adornment-password" sx={{ color: 'white',input: { color: '#CACACA', } }}>Password</InputLabel>
             <OutlinedInput
               id="outlined-adornment-password"
               type={values.showPassword ? 'text' : 'password'}
               value={values.password}
               onChange={handleChange('password')}
+              sx={{ input: { color: '#CACACA', } }}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -372,6 +378,7 @@ export default function Login() {
               label="Password"
             />
           </FormControl>
+          </div>
         </Stack>
       </Stack>
       <Stack direction="column" spacing={2} justifyContent='center' alignItems='center' sx={{ width: '343px', marginTop: '200px' }}>
