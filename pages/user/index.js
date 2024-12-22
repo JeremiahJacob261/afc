@@ -8,13 +8,13 @@ import Image from "next/image";
 import Link from 'next/link'
 import { Button, Typography, Paper, Divider } from "@mui/material";
 import { supabase } from '../api/supabase'
-import Agent from '../../public/afc1.jpg'
-import Agent1 from '../../public/afc2.jpg'
-import Agent2 from '../../public/afc3.jpg'
+import Agent from '../../public/bfc1.jpg'
+import Agent1 from '../../public/bfc2.jpg'
+import Agent2 from '../../public/bfc3.jpg'
 import { motion } from 'framer-motion'
 import { Icon } from '@iconify/react'
-import Agent3 from '../../public/afc3.jpg'
-import Agent4 from '../../public/afc4.jpg'
+import Agent3 from '../../public/afc4.jpg'
+import Agent4 from '../../public/afc5.jpg'
 import front from '../../public/front.png'
 import fire from '../../public/Group 2.png'
 import Loading from "../components/loading";
@@ -141,7 +141,9 @@ export default function Home() {
     const images = {
       0: Agent,
       1: Agent1,
-      2: Agent2
+      2: Agent2,
+      3: Agent3,
+      4: Agent4
     };
     const [current, setCurrent] = useState(0);
     useEffect(() => {
@@ -223,7 +225,7 @@ export default function Home() {
 
           <Stack direction='row' justifyContent='space-between' alignItems='center'>
             <Stack direction='row' spacing={1}>
-              <Image src={fire} width={24} height={24} alt="fire" />
+              <Icon icon="carbon:football-american" width="24" height="24" style={{ color: '#CACACA' }} />
               <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '16px', fontWeight: '600' }}>Top Football Matches</Typography>
             </Stack>
             <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>see all</Typography>
