@@ -11,10 +11,9 @@ export default function Transaction({ transaction }) {
     const [user, setUser] = useState({});
     const rate = {
         'usdt': 1,
-        'idr': 16255,
-        'fcfa':633,
-        'ngn': 1500,
-        'mmk':5811
+        'idr': 16000,
+        'fcfa':600,
+        'mmk':5000
     }
     const betSelectLogic = (index) => {
         setSelected(index);
