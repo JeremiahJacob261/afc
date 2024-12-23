@@ -181,13 +181,13 @@ export default function Bets() {
 
                       <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between" marginBottom='20px' marginTop='20px'>
                         <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
-                          <Image src={Ims} width={20} height={20} alt='home' />
+                          <Image src={s.ihome ?? Ims} width={25} height={25} alt='home' />
                           <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '300', maxWidth: '91px', color: '#E6E8F3' }}>{s.home}</Typography>
 
                         </Stack>
                         <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '500', color: '#FFB400' }}>VS</Typography>
                         <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-around">
-                          <Image src={Ims} width={20} height={20} alt='away' />
+                          <Image src={s.iaway ?? Ims} width={25} height={25} alt='away' />
                           <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '300', maxWidth: '91px', color: '#E6E8F3' }}>{s.away}</Typography>
 
                         </Stack>
@@ -244,13 +244,13 @@ export default function Bets() {
 
                       <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between" marginBottom='20px' marginTop='20px'>
                         <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
-                          <Image src={Ims} width={20} height={20} alt='home' />
+                          <Image src={s.ihome  ?? Ims} width={20} height={20} alt='home' />
                           <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '300', maxWidth: '91px', color: '#E6E8F3' }}>{s.home}</Typography>
 
                         </Stack>
                         <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '500', color: '#FFB400' }}>VS</Typography>
                         <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-around">
-                          <Image src={Ims} width={20} height={20} alt='away' />
+                          <Image src={s.iaway ?? Ims} width={20} height={20} alt='away' />
                           <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '300', maxWidth: '91px', color: '#E6E8F3' }}>{s.away}</Typography>
 
                         </Stack>

@@ -412,7 +412,7 @@ export default function Match({ matchDat }) {
                             }} />
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#CACACA' }}>Profit</Typography>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#CACACA' }}>{profit} USDT</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#CACACA' }}>{parseFloat(profit).toFixed(3)} USDT</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#CACACA' }}>Expected Profit</Typography>
@@ -441,7 +441,6 @@ export default function Match({ matchDat }) {
                                             console.log(error)
                                             setMessages("Bet Successful")
                                             handleClick();
-                                            handleClosex()
                                         }
                                         const saveToDB = async () => {
                                             const { error } = await supabase
@@ -499,7 +498,7 @@ export default function Match({ matchDat }) {
                                         saveToDB();
                                         Reads('readbet', stake);
 
-                                        router.push('/user/matches');
+                                        router.push('/user/bets');
                                     }
                                 } else {
                                     toast.error("You do not have Enough USDT to Complete this BET");
