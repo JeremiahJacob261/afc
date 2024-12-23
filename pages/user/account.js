@@ -21,6 +21,15 @@ import { CookiesProvider, useCookies } from 'react-cookie';
 import toast, { Toaster } from 'react-hot-toast';
 
 
+async function processBets(name) {
+  try {
+    const { data, error } = await supabase.rpc('process_bets', { name });
+    if (error) throw error;
+    console.log('Bets processed:', data);
+  } catch (err) {
+    console.error('Error processing bets:', err);
+  }
+}
 
 export default function Account() {
   const [, setCookie] = useCookies([]);
@@ -47,15 +56,6 @@ export default function Account() {
   //end of snackbar1
   useEffect(() => {
     if (!hasRun.current) {
-      async function processBets(name) {
-        try {
-          const { data, error } = await supabase.rpc('process_bets', { name });
-          if (error) throw error;
-          console.log('Bets processed:', data);
-        } catch (err) {
-          console.error('Error processing bets:', err);
-        }
-      }
       // processBets(localStorage.getItem('signNames'));
       // ...
       hasRun.current = true;
@@ -462,4 +462,18 @@ export default function Account() {
       </Box>
     </Cover>
   )
+}
+
+
+export async function getServerSideProps(context) {  
+  const { req } = context;
+  const { cookies } = req;
+  const myCookie = cookies.authdata;
+  let data = JSON.parse(myCookie);
+  let name = data['username'] ?? "";
+  console.log(myCookie)
+  processBets(name);
+  return {
+    props: {}, // will be passed to the page component as props
+  }
 }

@@ -28,7 +28,7 @@ export function middleware(request) {
                         let name = cookdata['username'];
                         console.log(name);
                         console.log(cookdata);
-                        processBets(name);
+                        // processBets(name);
                 }
         }
 

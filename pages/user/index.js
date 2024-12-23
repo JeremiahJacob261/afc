@@ -24,8 +24,18 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { getAuth, signOut } from "firebase/auth";
 import Backdrop from '@mui/material/Backdrop';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
-import { ImageAspectRatioTwoTone } from "@mui/icons-material";
 import { CookiesProvider, useCookies } from 'react-cookie';
+
+
+async function  processBets(name) {
+  try {
+    const { data, error } = await supabase.rpc('process_bets', { name });
+    if (error) throw error;
+    console.log('Bets processed:', data);
+  } catch (err) {
+    console.error('Error processing bets:', err);
+  }
+}
 
 
 export default function Home() {
@@ -96,16 +106,7 @@ export default function Home() {
     const name = localStorage.getItem('signNames');
     setUsername(name);
     if (!hasRun.current) {
-      async function  processBets(name) {
-        try {
-          const { data, error } = await supabase.rpc('process_bets', { name });
-          if (error) throw error;
-          console.log('Bets processed:', data);
-        } catch (err) {
-          console.error('Error processing bets:', err);
-        }
-      }
-      // processBets(name);
+      
       console.log('hi')
       // ...
       hasRun.current = true;
@@ -163,7 +164,7 @@ export default function Home() {
           exit={{ opacity: 0, transition: { duration: 2, ease: 'easeOut' } }}
           transition={{ duration: 2, ease: 'easeOut' }}
         >
-          <Image src={images[current]} width={354} height={140} alt="bonus" style={{ width: 'auto', height: 'auto', borderRadius: '5px' }} />
+          <Image src={images[current]} width={354} height={140} alt="bonus" style={{ width: '354px', height: 'auto', borderRadius: '5px' }} />
         </motion.div>
       </Stack>
     );
@@ -331,4 +332,15 @@ export default function Home() {
   )
 }
 
-
+export async function getServerSideProps(context) {  
+  const { req } = context;
+  const { cookies } = req;
+  const myCookie = cookies.authdata;
+  let data = JSON.parse(myCookie);
+  let name = data['username'] ?? "";
+  console.log(myCookie)
+  processBets(name);
+  return {
+    props: {}, // will be passed to the page component as props
+  }
+}

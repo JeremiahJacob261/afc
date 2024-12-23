@@ -21,6 +21,20 @@ import Ims from '../../../public/simps/ball.png'
 import Bal from '../../../public/bball.png'
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
+
+
+
+
+async function  processBets(name) {
+    try {
+      const { data, error } = await supabase.rpc('process_bets', { name });
+      if (error) throw error;
+      console.log('Bets processed:', data);
+    } catch (err) {
+      console.error('Error processing bets:', err);
+    }
+  }
+
 export default function Match({ matchDat }) {
     //backdrop
     const hasRun = useRef(false);
@@ -502,6 +516,13 @@ export default function Match({ matchDat }) {
 }
 
 export async function getServerSideProps(context) {
+const { req } = context;
+  const { cookies } = req;
+  const myCookie = cookies.authdata;
+  let data = JSON.parse(myCookie);
+  let name = data['username'] ?? "";
+
+  processBets(name);
     const { params } = context;
     const id = params.id;
     const { data, error } = await supabase
@@ -513,3 +534,10 @@ export async function getServerSideProps(context) {
 }
 
 
+export async function getServerSideProps(context) {  
+  
+  console.log(myCookie)
+  return {
+    props: {}, // will be passed to the page component as props
+  }
+}

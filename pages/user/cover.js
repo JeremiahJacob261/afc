@@ -137,7 +137,7 @@ export default function Cover({ children }) {
             setDraw(false)
           }}
         >
-          <Stack direction='column' sx={{ padding: '12px', background: '#242627', height: '100%' }}>
+          <Stack direction='column' sx={{ padding: '12px', background: '#242627', height: '100%',position:'fixed' }}>
             <Stack direction='row' alignItems='center' justifyContent='space-between'>
               <Link href="/" style={{ textDecoration: "none" }}>
                 <p style={{ fontFamily: 'Noto Serif, serif', color: "#E9E5DA", fontWeight: '400', fontSize: '20px' }}>BFC  </p>
@@ -220,7 +220,7 @@ export default function Cover({ children }) {
       {
         //drawer layout end
       }
-      <Stack direction="row" style={{ background: '#242627', width: '100%', height: '64px', padding: '12px' }}
+      <Stack direction="row" style={{ background: '#242627', width: '100%', height: '64px', padding: '12px',position:'fixed',top:'0px'}}
         alignItems='center' justifyContent="space-around">
         <div style={{ display: 'inline-flex', alignItems: 'center' }}>
           <Icon icon="tabler:grid-dots" width="24" height="24" style={{ color: '#FFB400' }} onClick={() => {
@@ -234,7 +234,7 @@ export default function Cover({ children }) {
               router.push('/user/notification');
             }} />
         </div> </Stack>
-      <div style={{ paddingBottom: "50px" }}>  {children}</div>
+      <div style={{ paddingBottom: "50px",paddingTop:'70px' }}>  {children}</div>
       <Divider sx={{ bgcolor: "#E94E55" }} />
       <BottomNavi />
 

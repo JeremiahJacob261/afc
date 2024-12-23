@@ -7,24 +7,62 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { useRouter } from 'next/router';
 import Profile from '../../public/profile.png';
 import Image from 'next/image'
+import {Backdrop} from '@mui/material'
+import LOGO from '../../public/bradford.ico';
+
  
 function BottomNavi() {
   const [value, setValue] = React.useState(0);
+  //the below controls the loading modal
+  const [open, setOpen] =  React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  
   const router = useRouter()
   const home = () => {
+   if(router.pathname == '/user'){
+    window.location.reload()
+   }else{
+    handleOpen()
     router.push("/user")
+
+   }
+    
   }
   const matches = () => {
+  if(router.pathname == '/user/matches'){
+    window.location.reload()
+  }else{
+    handleOpen()
     router.push("/user/matches")
   }
+  }
   const me = () => {
-    router.push("/user/account")
+    if(router.pathname == '/user/account'){
+      window.location.reload()
+    }else{
+      handleOpen()
+      router.push("/user/account")
+    }
   }
   const bets = () => {
-    router.push("/user/bets")
+    if(router.pathname == '/user/bets'){
+      window.location.reload()
+    }else{
+      handleOpen()
+      router.push("/user/bets")
+    }
   }
+
+  
   return (
     <Box xc='true'>
+       <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={open}
+      >
+        <Image src={LOGO} width={100} height={100} id='balls' alt="logo" sx={{ marginLeft: '8px' }} />
+      </Backdrop>
         <BottomNavigation
         showLabels
         value={value}

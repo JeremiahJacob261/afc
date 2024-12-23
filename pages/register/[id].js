@@ -127,65 +127,6 @@ export default function Register( {refer} ) {
 
   const signup = async () => {
     setDrop(true);
-    // let usern = username.replace(/^\s+|\s+$/gm, '')
-    // createUserWithEmailAndPassword(auth, email, values.password)
-    //   .then((userCredential) => {
-    //     // Signed in 
-    //     const user = userCredential.user;
-    //     // ...
-    //     console.log(user.uid);
-
-    //     const upload = async () => {
-
-    //       console.log(nRef)
-    //       const { data, error } = await supabase
-    //         .from('users')
-    //         .insert({
-    //           userId: user.uid,
-    //           password: values.password,
-    //           phone: phone,
-    //           refer: refer,
-    //           username: username,
-    //           countrycode: age,
-    //           newrefer: nRef,
-    //           lvla: lvla,
-    //           lvlb: lvlb,
-    //           email: email,
-    //         })
-    //       console.log(error);
-    //       console.log(data);
-    //       localStorage.setItem('signedIns', true);
-    //       localStorage.setItem('signUids', user.uid);
-    //       localStorage.setItem('signNames', user.displayName);
-    //       localStorage.setItem('signRef', nRef);
-    //     }
-    //     //getlvl2
-    //     upload();
-    //     updateRef();
-    //     updateRefb();
-    //     setDrop(false);
-    //     updateProfile(auth.currentUser, {
-    //       displayName: username,
-    //       phoneNumber: phone
-    //     }).then(async () => {
-
-    //     })
-
-    //     setOpen(true);
-    //   })
-    //   .catch((error) => {
-    //     const errorCode = error.code;
-    //     const errorMessage = error.message;
-    //     // ..
-    //     console.log(error.code);
-    //     setDrop(false);
-    //     if (errorCode === 'auth/email-already-in-use') {
-
-    //       alert('this email is already registered')
-    //     } else if (errorCode === 'auth/weak-password') {
-    //       alert('Your password is weak, please use atleast 6 characters')
-    //     }
-    //   });
     const upload = async (user) => {
 
       try {
@@ -218,18 +159,18 @@ export default function Register( {refer} ) {
         
        
 
-        const messageResponse = await fetch('https://telegram-iota-black.vercel.app/message', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            "topic": "NEW REGISTRATION 🔥🔥🔥",
-            "message": `${username} joined BFC01 🎉.\n\n`
-          })
-        });
+        // const messageResponse = await fetch('https://telegram-iota-black.vercel.app/message', {
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/json'
+        //   },
+        //   body: JSON.stringify({
+        //     "topic": "NEW REGISTRATION 🔥🔥🔥",
+        //     "message": `${username} joined BFC01 🎉.\n\n`
+        //   })
+        // });
 
-        console.log(messageResponse)
+        // console.log(messageResponse)
         // Usage
         
       } catch (e) {
@@ -260,7 +201,6 @@ export default function Register( {refer} ) {
           upload(data.user);
           updateRef();
           updateRefb();
-          setDrop(false);
           Alerts(`Welcome To BFC `, true);
         }
       } catch (error) {

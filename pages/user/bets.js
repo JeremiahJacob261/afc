@@ -24,6 +24,15 @@ import TabPanel from '@mui/lab/TabPanel';
 
 
 
+async function  processBets(name) {
+  try {
+    const { data, error } = await supabase.rpc('process_bets', { name });
+    if (error) throw error;
+    console.log('Bets processed:', data);
+  } catch (err) {
+    console.error('Error processing bets:', err);
+  }
+}
 
 export default function Bets() {
   const auth = getAuth(app);
@@ -84,15 +93,6 @@ export default function Bets() {
       getbets();
       //bb
       if (!hasRun.current) {
-        async function  processBets(name) {
-          try {
-            const { data, error } = await supabase.rpc('process_bets', { name });
-            if (error) throw error;
-            console.log('Bets processed:', data);
-          } catch (err) {
-            console.error('Error processing bets:', err);
-          }
-        }
         // processBets(name);
         console.log('hi')
         // ...
@@ -291,3 +291,15 @@ export default function Bets() {
 }
 
 
+export async function getServerSideProps(context) {  
+  const { req } = context;
+  const { cookies } = req;
+  const myCookie = cookies.authdata;
+  let data = JSON.parse(myCookie);
+  let name = data['username'] ?? "";
+  console.log(myCookie)
+  processBets(name);
+  return {
+    props: {}, // will be passed to the page component as props
+  }
+}
