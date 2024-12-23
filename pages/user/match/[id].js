@@ -101,7 +101,7 @@ export default function Match({ matchDat }) {
                         .select()
                         .eq('username', name)
                     setInfo(data[0]);
-                    setBalance(data[0].balance)
+                    setBalance(parseFloat(data[0].balance))
                     let infox = data[0];
                     localStorage.setItem('signRef', data[0].newrefer);
                     async function getReferCount() {
