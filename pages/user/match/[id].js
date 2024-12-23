@@ -519,8 +519,8 @@ export async function getServerSideProps(context) {
 const { req } = context;
   const { cookies } = req;
   const myCookie = cookies.authdata;
-  let data = JSON.parse(myCookie);
-  let name = data['username'] ?? "";
+  let datax = JSON.parse(myCookie);
+  let name = datax['username'] ?? "";
 
   processBets(name);
     const { params } = context;
@@ -533,11 +533,3 @@ const { req } = context;
     return { props: { matchDat } }
 }
 
-
-export async function getServerSideProps(context) {  
-  
-  console.log(myCookie)
-  return {
-    props: {}, // will be passed to the page component as props
-  }
-}
