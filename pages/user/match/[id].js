@@ -432,11 +432,11 @@ export default function Match({ matchDat }) {
                                     } else {
                                         handleClose();
                                         handleOpenx()
-                                        let balls = ball - stake;
+                                        let balls = parseFloat(ball) - parseFloat(stake ?? 0);
                                         const deductBet = async () => {
                                             const { error } = await supabase
                                                 .from('users')
-                                                .update({ balance: balls })
+                                                .update({ balance: parseFloat(balls) })
                                                 .eq('username', info.username)
                                             console.log(error)
                                             setMessages("Bet Successful")
