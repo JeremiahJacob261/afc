@@ -142,7 +142,7 @@ export default function Cover({ children }) {
               <Link href="/" style={{ textDecoration: "none" }}>
                 <p style={{ fontFamily: 'Noto Serif, serif', color: "#E9E5DA", fontWeight: '400', fontSize: '20px' }}>BFC  </p>
               </Link>
-              <Icon icon="ri:close-fill" width="32" height="32"  style={{color: "#E94E55"}} onClick={()=>{
+              <Icon icon="ri:close-fill" width="32" height="32"  style={{color: "#D4AF37"}} onClick={()=>{
                 setDraw(false)
               }}/>
             </Stack>
@@ -235,7 +235,7 @@ export default function Cover({ children }) {
             }} />
         </div> </Stack>
       <div style={{ paddingBottom: "50px",paddingTop:'70px' }}>  {children}</div>
-      <Divider sx={{ bgcolor: "#E94E55" }} />
+      <Divider sx={{ bgcolor: "#D4AF37" }} />
       <BottomNavi />
 
     </Stack>

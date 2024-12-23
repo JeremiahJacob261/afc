@@ -372,7 +372,7 @@ export default function Deposit() {
 
 
           <motion.div whileTap={{ scale: 0.98 }}
-            style={{ cursor: 'pointer', display: 'flex', flexDirection: 'row', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: "#CACACA", height: '50px', background: '#E94E55', minWidth: '310px', padding: '12px' }}
+            style={{ cursor: 'pointer', display: 'flex', flexDirection: 'row', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: "#CACACA", height: '50px', background: '#D4AF37', minWidth: '310px', padding: '12px' }}
             onClick={transaction}>Withdraw</motion.div>
 
         </Stack>
@@ -414,7 +414,7 @@ export default function Deposit() {
             {ale}
           </Typography>
           <Divider sx={{ background: '#CACACA' }} />
-          <Button variant='contained' sx={{ fontFamily: 'Poppins,sans-serif', color: '#cacaca', background: '#E94E55', padding: '8px', width: '100%' }} onClick={() => {
+          <Button variant='contained' sx={{ fontFamily: 'Poppins,sans-serif', color: '#cacaca', background: '#D4AF37', padding: '8px', width: '100%' }} onClick={() => {
             if (aleT) {
               setOpen(false)
               router.push('/user/withdrawsuccess')

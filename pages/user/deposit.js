@@ -151,8 +151,8 @@ export default function Upload() {
       </Backdrop>
       <Stack direction='column' justifyContent='center' alignItems="center" sx={{ height: '90vh' }} spacing={2}>
       <Stack direction='row' className='warning' justifyContent='center' alignItems='center' sx={{ height: '58px', background: '#FBEFEF', borderRadius: '5px', padding: '16px',maxWidth:'340px' }} spacing={2}>
-          <PriorityHighRoundedIcon sx={{ color: '#242627', background: '#E94E55', width: '20px', height: '20px', borderRadius: '10px' }} />
-          <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#E94E55' }}>Please deposit only {amount} {method} to the address below, depositing any amount other than this may result in lost funds.</Typography>
+          <PriorityHighRoundedIcon sx={{ color: '#242627', background: '#D4AF37', width: '20px', height: '20px', borderRadius: '10px' }} />
+          <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#D4AF37' }}>Please deposit only {amount} {method} to the address below, depositing any amount other than this may result in lost funds.</Typography>
         </Stack>
         <motion.div
           whileTap={{ scale: 1.09 }}
@@ -162,7 +162,7 @@ export default function Upload() {
             onClick={() => {
               inputFile.current.click();
             }}>
-            <InsertDriveFileIcon sx={{ color: '#E94E55', fontFamily: 'Poppins,sans-serif' }} />
+            <InsertDriveFileIcon sx={{ color: '#D4AF37', fontFamily: 'Poppins,sans-serif' }} />
             <input type='file' id='file'
               ref={inputFile} style={{ display: 'none' }}
               accept="image/*" onChange={(e) => {
@@ -179,7 +179,7 @@ export default function Upload() {
           whileTap={{ scale: 0.9 }}
           whileHover={{ scale: 1.04 }}
         >
-          <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ height: '58px', background: '#E94E55', borderRadius: '5px', border: '0.5px solid #373636', padding: '16px' }} spacing={2}>
+          <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ height: '58px', background: '#D4AF37', borderRadius: '5px', border: '0.5px solid #373636', padding: '16px' }} spacing={2}>
             <InsertDriveFileIcon sx={{ color: 'white', fontFamily: 'Poppins,sans-serif' }} />
             <Stack alignItems='center' justifyContent='start' spacing={1}>
               <p style={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: 'white' }}>{file.name ? file.name : 'No File Selected'}</p>
@@ -192,9 +192,9 @@ export default function Upload() {
           </Stack>
         </motion.div>
         <motion.p onClick={checkParams}
-          whileTap={{ background: '#373636', color: '#E94E55', scale: 0.9 }}
-          whileHover={{ background: '#373636', color: '#E94E55', scale: 1.1 }}
-          style={{ fontWeight: '500',minWidth:'340px', fontSize: '12px', color: 'white', padding: '16px', background: '#E94E55', border: '0.6px solid #373636', width: '30vh', textAlign: 'center', cursor: 'pointer', borderRadius: '5px' }}>
+          whileTap={{ background: '#373636', color: '#D4AF37', scale: 0.9 }}
+          whileHover={{ background: '#373636', color: '#D4AF37', scale: 1.1 }}
+          style={{ fontWeight: '500',minWidth:'340px', fontSize: '12px', color: 'white', padding: '16px', background: '#D4AF37', border: '0.6px solid #373636', width: '30vh', textAlign: 'center', cursor: 'pointer', borderRadius: '5px' }}>
           COMPLETE !</motion.p>
 
       </Stack>

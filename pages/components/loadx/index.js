@@ -37,7 +37,7 @@ export default function Loadingx({ open, handleClose,currency }) {
                          router.push('/user/inputvalue?dm=fcfa');
                     }}>
                         <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#242627', borderRadius: '8px' }}>
-                            <p style={{ color: '#E94E55', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 1: WAVE</p>
+                            <p style={{ color: '#D4AF37', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 1: WAVE</p>
                         </Stack>
                     </motion.div>
 
@@ -49,7 +49,7 @@ export default function Loadingx({ open, handleClose,currency }) {
                          router.push('/user/inputvalue?dm=fcfa');
                     }}>
                         <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#242627', borderRadius: '8px' }}>
-                            <p style={{ color: '#E94E55', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 2: MTN MONEY</p>
+                            <p style={{ color: '#D4AF37', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 2: MTN MONEY</p>
                         </Stack>
                     </motion.div>
 
@@ -74,7 +74,7 @@ export default function Loadingx({ open, handleClose,currency }) {
                          router.push('/user/inputvalue?dm=mmk');
                     }}>
                         <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#242627', borderRadius: '8px' }}>
-                            <p style={{ color: '#E94E55', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 1: WAVE</p>
+                            <p style={{ color: '#D4AF37', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 1: WAVE</p>
                         </Stack>
                     </motion.div>
 
@@ -86,7 +86,7 @@ export default function Loadingx({ open, handleClose,currency }) {
                          router.push('/user/inputvalue?dm=mmk');
                     }}>
                         <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#242627', borderRadius: '8px' }}>
-                            <p style={{ color: '#E94E55', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 2: KPAY</p>
+                            <p style={{ color: '#D4AF37', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 2: KPAY</p>
                         </Stack>
                     </motion.div>
 
@@ -97,7 +97,7 @@ export default function Loadingx({ open, handleClose,currency }) {
                          router.push('/user/inputvalue?dm=mmk');
                     }}>
                         <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#242627', borderRadius: '8px' }}>
-                            <p style={{ color: '#E94E55', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 3: KBZ Bank</p>
+                            <p style={{ color: '#D4AF37', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 3: KBZ Bank</p>
                         </Stack>
                     </motion.div>
 

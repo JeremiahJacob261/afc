@@ -24,10 +24,10 @@ export default function Footer() {
                 <div>
                     <Stack direction="row" alignItems="center" justifyContent={"space-between"} spacing={5}>
                         <Stack direction='column' spacing={1}>
-                            <Typography style={{ color: '#E94E55', fontWeight: '900', fontFamily: "Poppins, sans-serif", fontSize: '24px' }}>
+                            <Typography style={{ color: '#D4AF37', fontWeight: '900', fontFamily: "Poppins, sans-serif", fontSize: '24px' }}>
                                 BFC 
                             </Typography>
-                            <Typography style={{ width: '193px', color: '#E94E55', fontWeight: '100', fontFamily: "Poppins, sans-serif", fontSize: '10px' }}>
+                            <Typography style={{ width: '193px', color: '#D4AF37', fontWeight: '100', fontFamily: "Poppins, sans-serif", fontSize: '10px' }}>
                                 BFC football investment is licenced by the national futures association
                             </Typography>
                             <Typography style={{ color: '#EE5600', fontWeight: '900', fontFamily: "Poppins, sans-serif", fontSize: '24px' }}>
@@ -55,7 +55,7 @@ export default function Footer() {
                     </Stack>
                 </div>
                 <div>
-                    <Typography variant="subtitle" sx={{ color: "#E94E55", fontSize: '10px', fontWeight: '100', fontFamily: "Poppins, sans-serif" }}>
+                    <Typography variant="subtitle" sx={{ color: "#D4AF37", fontSize: '10px', fontWeight: '100', fontFamily: "Poppins, sans-serif" }}>
                         © 2024 BRADFORD . All rights reserved.
                     </Typography>
                     {/* <Typography onClick={() => {

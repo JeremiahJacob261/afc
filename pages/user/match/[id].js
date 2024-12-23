@@ -309,7 +309,7 @@ export default function Match({ matchDat }) {
                                                 setBottom(true)
                                             }}
                                             whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}
-                                            style={{ cursor: 'pointer', color: '#cacaca', background: (matches.comarket != m.word) ? '#E94E55' : '#FFB400', padding: '4px', borderRadius: '5px' }}>choose</motion.div>
+                                            style={{ cursor: 'pointer', color: '#cacaca', background: (matches.comarket != m.word) ? '#D4AF37' : '#FFB400', padding: '4px', borderRadius: '5px' }}>choose</motion.div>
                                     </Stack>
                                     <Divider sx={{ bgcolor: "secondary.light" }} />
                                 </Stack>
@@ -418,7 +418,7 @@ export default function Match({ matchDat }) {
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#CACACA' }}>Expected Profit</Typography>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#CACACA' }}>{expext} USDT</Typography>
                         </Stack>
-                        <Button sx={{ fontFamily: 'Poppins,sans-serif', margin: '8px', fontSize: '16', fontWeight: '300', color: '#FFFFFF', background: "#E94E55", padding: '10px' }}
+                        <Button sx={{ fontFamily: 'Poppins,sans-serif', margin: '8px', fontSize: '16', fontWeight: '300', color: '#FFFFFF', background: "#D4AF37", padding: '10px' }}
                             onClick={() => {
                                 if (stake - 1 < info.balance) {
                                     if (stake < 1) {

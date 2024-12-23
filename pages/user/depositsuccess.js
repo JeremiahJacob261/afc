@@ -31,9 +31,9 @@ export default function Dsuccess() {
           </Typography>
         </Stack>
         <motion.p onClick={() => { router.push('/user/') }}
-          whileTap={{ background: '#E94E55', color: '#373636', scale: 0.9 }}
-          whileHover={{ background: '#E94E55', color: '#373636', scale: 1.1 }}
-          style={{ fontWeight: '500', fontSize: '12px', color: 'white', padding: '10px', background: '#373636', border: '0.6px solid #E94E55', width: '50vw', textAlign: 'center', cursor: 'pointer', borderRadius: '5px' }}>
+          whileTap={{ background: '#D4AF37', color: '#373636', scale: 0.9 }}
+          whileHover={{ background: '#D4AF37', color: '#373636', scale: 1.1 }}
+          style={{ fontWeight: '500', fontSize: '12px', color: 'white', padding: '10px', background: '#373636', border: '0.6px solid #D4AF37', width: '50vw', textAlign: 'center', cursor: 'pointer', borderRadius: '5px' }}>
           Continue </motion.p>
       </Stack>
 

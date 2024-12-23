@@ -97,8 +97,8 @@ export default function InputValue({ method }) {
         <></>
         }
         <Stack direction='row' justifyContent='center' alignItems='center' sx={{width:'350px', height: '58px', background: '#FBEFEF', borderRadius: '5px', padding: '16px' }} spacing={2}>
-          <PriorityHighRoundedIcon sx={{ color: '#242627', background: '#E94E55', width: '20px', height: '20px', borderRadius: '10px' }} />
-          <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#E94E55' }}>Please note that the minimum deposit is {5 * method.rates ?? 1} {(method.name ?? 'usdt').toUpperCase()}</Typography>
+          <PriorityHighRoundedIcon sx={{ color: '#242627', background: '#D4AF37', width: '20px', height: '20px', borderRadius: '10px' }} />
+          <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#D4AF37' }}>Please note that the minimum deposit is {5 * method.rates ?? 1} {(method.name ?? 'usdt').toUpperCase()}</Typography>
         </Stack>
         <Stack spacing={1} sx={{ minWidth: '344px' }}>
           <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Enter Amount </Typography>
@@ -110,7 +110,7 @@ export default function InputValue({ method }) {
               setAmount(a.target.value);
             }} />
         </Stack>
-        <motion.div whileTap={{ scale: 1.05 }} style={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: "#CACACA", height: '50px', background: '#E94E55', minWidth: '360px', padding: '12px' }} onClick={() => {
+        <motion.div whileTap={{ scale: 1.05 }} style={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: "#CACACA", height: '50px', background: '#D4AF37', minWidth: '360px', padding: '12px' }} onClick={() => {
 
           nextPage()
 

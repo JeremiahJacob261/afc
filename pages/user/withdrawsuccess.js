@@ -25,7 +25,7 @@ router.push('/user/account')
 }}
           whileTap={{ background: '#cacaca', color: '#373636', scale: 0.9 }}
           whileHover={{ background: '#cacaca', color: '#373636', scale: 1.1 }}
-          style={{ fontWeight: '500', fontSize: '12px', color: 'white', padding: '10px', background: '#E94E55', border: '0.6px solid #373636', width: '30vh', textAlign: 'center', cursor: 'pointer', borderRadius: '5px' }}>
+          style={{ fontWeight: '500', fontSize: '12px', color: 'white', padding: '10px', background: '#D4AF37', border: '0.6px solid #373636', width: '30vh', textAlign: 'center', cursor: 'pointer', borderRadius: '5px' }}>
           COMPLETE !</motion.p>
 
         </Stack>

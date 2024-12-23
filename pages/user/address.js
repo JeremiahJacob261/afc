@@ -109,8 +109,8 @@ export default function Address({ pay }) {
                     <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Payment Address</Typography>
                 </Stack>
                 <Stack direction='row' justifyContent='center' alignItems='center' sx={{ height: 'auto', maxWidth: '360px', background: '#FBEFEF', borderRadius: '5px', padding: '16px' }} spacing={2}>
-                    <PriorityHighRoundedIcon sx={{ color: '#242627', background: '#E94E55', width: '20px', height: '20px', borderRadius: '10px' }} />
-                    <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#E94E55' }}>Please note that you are to deposit only {amount} {(pay.currency_code === 'usdt') ? pay.currency_code.toUpperCase() + '(TRC20)' : pay.currency_code.toUpperCase()} to the payment method below.</Typography>
+                    <PriorityHighRoundedIcon sx={{ color: '#242627', background: '#D4AF37', width: '20px', height: '20px', borderRadius: '10px' }} />
+                    <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#D4AF37' }}>Please note that you are to deposit only {amount} {(pay.currency_code === 'usdt') ? pay.currency_code.toUpperCase() + '(TRC20)' : pay.currency_code.toUpperCase()} to the payment method below.</Typography>
                 </Stack>
                 <Stack spacing={1} sx={{ minWidth: '344px' }} alignItems={"center"} justifyContent={"center"}>
                     <Image src={pay.image} width={300} height={350} alt="pay with love" style={{ borderRadius: '8px' }} />
@@ -146,9 +146,9 @@ export default function Address({ pay }) {
                 <Stack direction='column' justifyContent='space-between' spacing={1} alignItems='center' sx={{ height: 'auto', maxWidth: '360px', background: '#373636', borderRadius: '5px', padding: '12px', margin: '4px' }} >
                     <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#cacaca' }}>You are expected to upload an image of the receipt in the next page within 30 minutes of making the transaction else transferred funds might be lost!.
                     </Typography>
-                    <Link href="https://t.me/BFC_HELP" style={{ textDecoration: 'none' }}> <p style={{ fontFamily: 'Poppins,sans-serif', fontSize: '13px', color: '#E94E55' }}>Click to Contact Support for more information</p></Link>
+                    <Link href="https://t.me/BFC_HELP" style={{ textDecoration: 'none' }}> <p style={{ fontFamily: 'Poppins,sans-serif', fontSize: '13px', color: '#D4AF37' }}>Click to Contact Support for more information</p></Link>
                 </Stack>
-                <motion.div whileTap={{ scale: 1.05 }} style={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: "#CACACA", height: '50px', background: '#E94E55', minWidth: '360px', padding: '12px' }} onClick={() => {
+                <motion.div whileTap={{ scale: 1.05 }} style={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: "#CACACA", height: '50px', background: '#D4AF37', minWidth: '360px', padding: '12px' }} onClick={() => {
 
                     nextPage()
 
