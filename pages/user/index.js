@@ -13,8 +13,8 @@ import Agent1 from '../../public/bfc2.jpg'
 import Agent2 from '../../public/bfc3.jpg'
 import {AnimatePresence, motion } from 'framer-motion'
 import { Icon } from '@iconify/react'
-import Agent3 from '../../public/afc4.jpg'
-import Agent4 from '../../public/afc5.jpg'
+import Agent3 from '../../public/bfc4.jpg'
+import Agent4 from '../../public/bfc5.jpg'
 import Loading from "../components/loading";
 import Ims from '../../public/simps/ball.png'
 import { app } from '../api/firebase';
@@ -215,11 +215,11 @@ export default function Home() {
             < Link href='https://t.me/+bfJIWHK3fKNkNjY1' target="_blank" style={{ textDecoration: 'none' }}>
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                 <Stack direction='row' spacing={1} justifyContent='start'>
-                  <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
+                  <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: 'orange' }} />
 
                   <Stack direction='column' spacing={0} justifyContent='start'>
-                    <Typography sx={{ color: '#BD001B', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif',textDecoration:'underline' }}>Telegram Channel</Typography>
-                    <Typography sx={{ color: '#B22222', fontSize: '12px', fontWeight: 300, fontFamily: 'Inter,sans-serif',textDecoration:'underline' }}>Join our telegram group to earn more</Typography>
+                    <Typography sx={{ color: 'orange', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif',textDecoration:'underline' }}>Telegram Channel</Typography>
+                    <Typography sx={{ color: 'orange', fontSize: '12px', fontWeight: 300, fontFamily: 'Inter,sans-serif',textDecoration:'underline' }}>Join our telegram group to earn more</Typography>
                   </Stack>
                 </Stack>
               </Stack>

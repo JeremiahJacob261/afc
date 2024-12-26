@@ -38,9 +38,6 @@ export default function Deposit() {
   function findObjectById(id) {
     return wallx.find(obj => obj.name === id);
   }
-
- 
-
   
   let amountlimit = {
     '1': 20,
@@ -158,8 +155,8 @@ export default function Deposit() {
       toast.error('Password does not match')
     } else if (amount === '') {
       toast.error('Please enter amount')
-    } else if (amount < 15) {
-      toast.error(`Minimum amount to withdraw is 15 USDT`)
+    } else if (amount < 10) {
+      toast.error(`Minimum amount to withdraw is 10 USDT`)
 
     } else if (amount > 100) {
       toast.error(`Maximum amount to withdraw including charges is 100 USDT`)
@@ -247,8 +244,8 @@ export default function Deposit() {
     setOpen(true)
   }
   //end of snackbar2
-  let charge = (amount * 7) / 100;
-  let total = Number(amount) + ((amount * 7) / 100);
+  let charge = (amount * 5) / 100;
+  let total = Number(amount) + ((amount * 5) / 100);
   return (
     <Cover style={{ minHeight: '95vh', paddingBottom: '100px' }}>
       <Head>

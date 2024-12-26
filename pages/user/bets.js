@@ -211,7 +211,7 @@ export default function Bets() {
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                           <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#E6E8F3' }}> Status</Typography>
-                          <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FFFFFF' }}> {(stams > curren) ? 'Not Started' : (s.won === 'null') ? 'Ongoing' : (s.won === 'true') ? 'Won' : 'Lost'}</Typography>
+                          <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: (stams > curren) ? '#CACACA' : (s.won === 'null') ? 'orange' : (s.won === 'true') ? 'green' : 'red' }}> {(stams > curren) ? 'Not Started' : (s.won === 'null') ? 'Ongoing' : (s.won === 'true') ? 'Won' : 'Lost'}</Typography>
                         </Stack>
                       </Stack>
                     </Box>
@@ -274,7 +274,7 @@ export default function Bets() {
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                           <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '400', color: '#E6E8F3' }}> Status</Typography>
-                          <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#FFFFFF' }}> {(stams > curren) ? 'Not Started' : (s.won === 'null') ? 'Ongoing' : (s.won === 'true') ? 'Won' : 'Lost'}</Typography>
+                          <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: (stams > curren) ? '#CACACA' : (s.won === 'null') ? 'orange' : (s.won === 'true') ? 'green' : 'red' }}> {(stams > curren) ? 'Not Started' : (s.won === 'null') ? 'Ongoing' : (s.won === 'true') ? 'Won' : 'Lost'}</Typography>
                         </Stack>
                       </Stack>
                     </Box>

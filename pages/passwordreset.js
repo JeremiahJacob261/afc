@@ -70,7 +70,7 @@ export default function PasswordReset() {
       </Backdrop>
       <Head>
         <title>Password Reset</title>
-        <meta name="description" content="afc  security settings" />
+        <meta name="description" content="Bradford security settings" />
         <link rel="icon" href="/bradford.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
