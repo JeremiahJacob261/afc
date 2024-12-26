@@ -5,18 +5,16 @@ import Cover from './cover'
 import { Box, Stack } from "@mui/system";
 import { useState } from "react";
 import Image from "next/image";
-import Link from 'next/link'
-import { Button, Typography, Paper, Divider } from "@mui/material";
+import Link from 'next/link';
+import { Typography, Divider } from "@mui/material";
 import { supabase } from '../api/supabase'
 import Agent from '../../public/bfc1.jpg'
 import Agent1 from '../../public/bfc2.jpg'
 import Agent2 from '../../public/bfc3.jpg'
-import { motion } from 'framer-motion'
+import {AnimatePresence, motion } from 'framer-motion'
 import { Icon } from '@iconify/react'
 import Agent3 from '../../public/afc4.jpg'
 import Agent4 from '../../public/afc5.jpg'
-import front from '../../public/front.png'
-import fire from '../../public/Group 2.png'
 import Loading from "../components/loading";
 import Ims from '../../public/simps/ball.png'
 import { app } from '../api/firebase';
@@ -130,7 +128,7 @@ export default function Home() {
         .select('*')
         .eq('verified', false)
         .limit(50)
-        .order('id', { ascending: false });
+        .order('tsgmt', { ascending: false });
       setFootDat(data);
     }
     getMatch();
@@ -149,24 +147,31 @@ export default function Home() {
     const [current, setCurrent] = useState(0);
     useEffect(() => {
       const interval = setInterval(() => {
-        setCurrent((prevCurrent) => (prevCurrent === 0 ? 1 : prevCurrent === 1 ? 2 : 0));
+        setCurrent((prevCurrent) => (prevCurrent === 1 ? 2 : prevCurrent === 2 ? 3 : 1));
       }, 8000);
 
       return () => clearInterval(interval);
     }, []);
 
     return (
-      <Stack>
-        <motion.div
-          key={current}
-          initial={{ opacity: 0, transition: { duration: 1, ease: 'easeIn' } }}
-          animate={{ opacity: 1, }}
-          exit={{ opacity: 0, transition: { duration: 2, ease: 'easeOut' } }}
-          transition={{ duration: 2, ease: 'easeOut' }}
-        >
-          <Image src={images[current]} width={354} height={140} alt="bonus" style={{ width: '354px', height: 'auto', borderRadius: '5px' }} />
-        </motion.div>
-      </Stack>
+      <AnimatePresence>
+      <motion.div
+        key={current}
+        initial={{ opacity: 0, x: 100 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -100 }}
+        transition={{ duration: 0.5 }}
+        className="image-wrapper"
+      >
+        <Image
+          src={images[current]}
+          alt={`Slide ${current}`}
+          layout="responsive"
+          width={350} // Adjust based on your design
+          height={159} // Adjust based on your design
+        />
+      </motion.div>
+    </AnimatePresence>
     );
   }
 
@@ -207,14 +212,14 @@ export default function Home() {
               </Link>
             </Stack>
             <Divider sx={{ bgcolor: "secondary.light" }} />
-            < Link href='https://t.me/+eeFd7JdRZ-QxOTA0' style={{ textDecoration: 'none' }}>
+            < Link href='https://t.me/+bfJIWHK3fKNkNjY1' target="_blank" style={{ textDecoration: 'none' }}>
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                 <Stack direction='row' spacing={1} justifyContent='start'>
                   <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
 
                   <Stack direction='column' spacing={0} justifyContent='start'>
-                    <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Telegram Channel</Typography>
-                    <Typography sx={{ color: '#CACACA', fontSize: '12px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Join our telegram group to earn more</Typography>
+                    <Typography sx={{ color: '#BD001B', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif',textDecoration:'underline' }}>Telegram Channel</Typography>
+                    <Typography sx={{ color: '#B22222', fontSize: '12px', fontWeight: 300, fontFamily: 'Inter,sans-serif',textDecoration:'underline' }}>Join our telegram group to earn more</Typography>
                   </Stack>
                 </Stack>
               </Stack>

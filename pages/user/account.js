@@ -189,7 +189,7 @@ export default function Account() {
               </Link>
             </Stack>
             <Divider sx={{ bgcolor: "#D4AF37" }} />
-            < Link href='https://t.me/+eeFd7JdRZ-QxOTA0' style={{ textDecoration: 'none' }}>
+            < Link href='https://t.me/+bfJIWHK3fKNkNjY1' style={{ textDecoration: 'none' }}>
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                 <Stack direction='row' spacing={1} justifyContent='start'>
                   <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
@@ -380,7 +380,7 @@ export default function Account() {
               </Stack>
 
               <Divider sx={{ bgcolor: "#D4AF37" }} />
-              < Link href='https://t.me/BFC_HELP' style={{ textDecoration: 'none' }}>
+              < Link href='https://t.me/bradfordfootball_Help' style={{ textDecoration: 'none' }}>
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                   <Stack direction='row' spacing={1} justifyContent='start'>
                     <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
@@ -392,7 +392,7 @@ export default function Account() {
               </Link>
 
               <Divider sx={{ bgcolor: "#D4AF37" }} />
-              < Link href='https://t.me/+eeFd7JdRZ-QxOTA0' style={{ textDecoration: 'none' }}>
+              < Link href='https://t.me/+bfJIWHK3fKNkNjY1' style={{ textDecoration: 'none' }}>
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                   <Stack direction='row' spacing={1} justifyContent='start'>
                     <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
@@ -405,7 +405,7 @@ export default function Account() {
 
               <Divider sx={{ bgcolor: "#D4AF37" }} />
 
-              < Link href='https://t.me/BFC_HELP' style={{ textDecoration: 'none' }}>
+              < Link href='https://t.me/bradfordfootball_Help' style={{ textDecoration: 'none' }}>
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                   <Stack direction='row' spacing={1} justifyContent='start'>
                     <Icon icon="mdi:support" width="24" height="24" style={{ color: '#a3a3a3' }} />

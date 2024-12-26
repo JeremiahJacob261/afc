@@ -147,7 +147,7 @@ export async function getServerSideProps(context) {
     .select('*')
     .eq('verified', false)
     .limit(50)
-    .order('id', { ascending: false });
+    .order('tsgmt', { ascending: false });
   let footDat = data;
   console.log(data)
   console.log(error)

@@ -27,6 +27,7 @@
     "clsx": "^2.1.1",
     "cookie": "^0.5.0",
     "cookies-next": "^2.1.1",
+    "cryptia": "^1.0.1",
     "embla-carousel-react": "^8.1.8",
     "eslint": "8.26.0",
     "eslint-config-next": "13.0.1",
