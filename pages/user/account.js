@@ -203,13 +203,13 @@ export default function Account() {
             //deposit
           }
           <Stack direction='column' spacing={1} style={{ background: '#373636', padding: '12px', borderRadius: "5px", border: '1px solid #D4AF37' }}>
-            <Typography sx={{ color: "#D4AF37", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>MY TEAM</Typography>
+            <Typography sx={{ color: "#D4AF37", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>REFERRALS</Typography>
 
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', height: '110px', padding: '8px', background: '#242627', borderRadius: '8px' }}>
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} alignItems="center">
                 <Stack direction='row' spacing={1} justifyContent='center' alignItems="center">
                   <Icon icon="ant-design:link-outlined" width="24" height="24" style={{ color: "#a3a3a3" }} />
-                  <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>https://www.bfc01.com/register/{info ? info.newrefer : userR}</Typography>
+                  <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>https://www.bfc01.com/register/{info ? info?.newrefer : userR}</Typography>
                 </Stack>
                 <Icon icon="solar:copy-bold-duotone" width="24" height="24" style={{ color: '#a3a3a3' }} onClick={() => {
                   navigator.clipboard.writeText("https://www.bfc01.com/register/" + info.newrefer)
@@ -223,8 +223,8 @@ export default function Account() {
                   router.push('/user/refferal');
                 }}>
                 <Stack direction='row' spacing={1} justifyContent='start'>
-                  <Icon icon="carbon:diagram-reference" width="24" height="24" style={{ color: '#a3a3a3' }} />
-                  <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>All Referral</Typography>
+                  <Icon icon="carbon:diagram-reference" width="24" height="24" style={{ color: !info?.firstd ? '#a3a3a3' : 'lightgreen' }} />
+                  <Typography sx={{ color: !info?.firstd ? '#a3a3a3' : 'lightgreen', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>All Referral</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
@@ -385,7 +385,7 @@ export default function Account() {
                   <Stack direction='row' spacing={1} justifyContent='start'>
                     <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
 
-                    <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Telegram Channel</Typography>
+                    <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Customer Service</Typography>
                   </Stack>
                   <KeyboardArrowRightIcon width={24} height={24} />
                 </Stack>
