@@ -209,10 +209,10 @@ export default function Account() {
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} alignItems="center">
                 <Stack direction='row' spacing={1} justifyContent='center' alignItems="center">
                   <Icon icon="ant-design:link-outlined" width="24" height="24" style={{ color: "#a3a3a3" }} />
-                  <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>https://www.bfc01.com/register/{info ? info?.newrefer : userR}</Typography>
+                  <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>https://app.bfc01.com/register/{info ? info?.newrefer : userR}</Typography>
                 </Stack>
                 <Icon icon="solar:copy-bold-duotone" width="24" height="24" style={{ color: '#a3a3a3' }} onClick={() => {
-                  navigator.clipboard.writeText("https://www.bfc01.com/register/" + info.newrefer)
+                  navigator.clipboard.writeText("https://app.bfc01.com/register/" + info.newrefer)
                   setMessages("Invite Link Copied")
                   toast.success("Invite link copied")
                 }} />
