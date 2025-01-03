@@ -159,8 +159,8 @@ export default function Bets() {
               },
             }}
           >
-            <Tab label="Settled Bets" value="1" sx={{ color: '#CACACA', width: '50%' }} />
-            <Tab label="Unsettled Bets" value="2" sx={{ color: '#CACACA', width: '50%' }} />
+            <Tab label="UnSettled Bets" value="1" sx={{ color: '#CACACA', width: '50%' }} />
+            <Tab label="Settled Bets" value="2" sx={{ color: '#CACACA', width: '50%' }} />
           </TabList>
         </Stack>
         <TabPanel value="1">

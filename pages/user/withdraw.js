@@ -155,8 +155,8 @@ export default function Deposit() {
       toast.error('Password does not match')
     } else if (amount === '') {
       toast.error('Please enter amount')
-    } else if (amount < 10) {
-      toast.error(`Minimum amount to withdraw is 10 USDT`)
+    } else if (amount < 11) {
+      toast.error(`Minimum amount to withdraw is 11 USDT`)
 
     } else if (amount > 100) {
       toast.error(`Maximum amount to withdraw including charges is 100 USDT`)
