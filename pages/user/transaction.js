@@ -100,7 +100,7 @@ export default function Transaction({ wallx }) {
                   key={m.name}
                   onClick={() => {
 
-                    if (m.currency_code === 'fcfa' || m.currency_code === 'mmk') {
+                    if (m.currency_code === 'fcfa' || m.currency_code === 'mmk'|| m.currency_code === 'idr') {
                       localStorage.setItem('dm', m.currency_code)
                       setCurcode(m.currency_code);
                       handleOpeny()

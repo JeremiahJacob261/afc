@@ -56,7 +56,44 @@ export default function Loadingx({ open, handleClose,currency }) {
 
                 </Stack>
                 
-                    :
+               : (currency === 'idr') ? 
+                
+               <Stack direction="column" spacing={2} alignItems="center" justifyContent={"center"} sx={{ padding: '12px', width: '300px', height: 'auto', background: '#353431', borderRadius: '16px' }}>
+                
+               <Stack direction='column' alignItems="center" justifyContent={"center"}>
+                   
+                   <Image src={Logo} alt="bradford fc" width={70} height={70} />
+                   <p style={{ color: '#CACACA', width: '100%', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>Choose any Transaction method</p>
+                   <p style={{ color: '#CACACA', width: '100%', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '300', fontSize: '13px' }}>you can Choose any transaction type that is available in your location</p>
+               </Stack>
+
+               <motion.div whileTap={{ scale: 0.8 }} style={{ width: '100%',cursor:'pointer' }} 
+               onClick={()=>{
+                    localStorage.setItem('dm','idr');
+                    localStorage.setItem('dmmv','DANA');
+                    router.push('/user/inputvalue?dm=idr');
+               }}>
+                   <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#242627', borderRadius: '8px' }}>
+                       <p style={{ color: '#D4AF37', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 1: DANA</p>
+                   </Stack>
+               </motion.div>
+
+
+               <motion.div whileTap={{ scale: 0.8 }} style={{ width: '100%',cursor:'pointer' }}
+                onClick={()=>{
+                    localStorage.setItem('dm','idr');
+                    localStorage.setItem('dmmv','bca');
+                    router.push('/user/inputvalue?dm=idr');
+               }}>
+                   <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#242627', borderRadius: '8px' }}>
+                       <p style={{ color: '#D4AF37', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 2: BANK CENTRAL ASIA</p>
+                   </Stack>
+               </motion.div>
+
+
+           </Stack>
+                
+                :
 
                     <Stack direction="column" spacing={2} alignItems="center" justifyContent={"center"} sx={{ padding: '12px', width: '300px', height: 'auto', background: '#353431', borderRadius: '16px' }}>
                 

@@ -51,7 +51,7 @@ export default function InputValue({ method }) {
     }else{
       localStorage.setItem('amo',amount);
       handleOpenx()
-      if(method.currency_code === 'fcfa' || method.currency_code === 'mmk'){
+      if(method.currency_code === 'fcfa' || method.currency_code === 'mmk' || method.currency_code === 'idr'){
       let trf = localStorage.getItem('dmmv')
       router.push('/user/address?dm=' + method.currency_code + '&trf=' + trf)
       }else{

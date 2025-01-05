@@ -19,13 +19,15 @@ const trfx = {
     'mtn':'MTN Money',
     'kpay':'kpay',
     'kbz':'KBZ Bank',
+    'bca':"BANK CENTRAL ASIA",
+    'DANA':'DANA'
 };
 //let imagesx be the list of images
 //let address be the list of address
 export async function getServerSideProps(context) {
 
     const met = context.query.dm;
-    if (met === 'fcfa' || met === 'mmk') {
+    if (met === 'fcfa' || met === 'mmk' || met === 'idr') {
         const trf = context.query.trf;
         const { data, error } = await supabase
         .from('depositwallet')
