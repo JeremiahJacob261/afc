@@ -170,7 +170,7 @@ export default function Account() {
             <Stack direction='row' spacing={2} sx={{ padding: '8px' }} alignItems='center' justifyContent={"start"}>
               <Image src={profile} width={50} height={50} alt="profile" />
               <Stack direction='column'>
-                <Typography sx={{ color: "#FFFFFF", fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins, sans-serif' }}>Hello {username ? `${username}` : usern}</Typography>
+                <Typography sx={{ color: "#FFFFFF", fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins, sans-serif' }}>Hello <p className="notranslate">{username ? `${username}` : usern}</p></Typography>
                 <Typography sx={{ color: "#CACACA", fontSize: '14px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', width: '50px', textAlign: 'start' }}>VIP {viplevel}</Typography>
               </Stack>
             </Stack>
