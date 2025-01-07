@@ -79,7 +79,7 @@ export default function Loadingx({ open, handleClose,currency }) {
                </motion.div>
 
 
-               <motion.div whileTap={{ scale: 0.8 }} style={{ width: '100%',cursor:'pointer' }}
+               {/* <motion.div whileTap={{ scale: 0.8 }} style={{ width: '100%',cursor:'pointer' }}
                 onClick={()=>{
                     localStorage.setItem('dm','idr');
                     localStorage.setItem('dmmv','bca');
@@ -89,7 +89,7 @@ export default function Loadingx({ open, handleClose,currency }) {
                        <p style={{ color: '#D4AF37', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 2: BANK CENTRAL ASIA</p>
                    </Stack>
                </motion.div>
-
+ */}
 
            </Stack>
                 
