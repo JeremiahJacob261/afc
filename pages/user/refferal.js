@@ -181,7 +181,7 @@ export default function Refferal() {
                       <Stack direction='row' alignItems='center' spacing={1} justifyContent='stretch'>
                         <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '500' }}>{t.username}
                         </Typography>
-                        <Typography sx={{ color: '#808080' }}>•</Typography>
+                        <Typography sx={{ fontSize:'9px', color: 'yellowgreen' }}>•active</Typography>
                         <Typography style={{ color: (refers === t.refer) ? '#793D20' : (refers === t.lvla) ? '#5E6172' : '#BE6D07', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '300' }}>
                           {(refers === t.refer) ? 'Level 1' : (refers === t.lvla) ? 'Level 2' : 'Level 3'}
                         </Typography>
