@@ -11,7 +11,7 @@ import { supabase } from '../api/supabase'
 import Agent from '../../public/bfc1.jpg'
 import Agent1 from '../../public/bfc2.jpg'
 import Agent2 from '../../public/bfc3.jpg'
-import {AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { Icon } from '@iconify/react'
 import Agent3 from '../../public/bfc4.jpg'
 import Agent4 from '../../public/bfc5.jpg'
@@ -25,7 +25,7 @@ import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import { CookiesProvider, useCookies } from 'react-cookie';
 
 
-async function  processBets(name) {
+async function processBets(name) {
   try {
     const { data, error } = await supabase.rpc('process_bets', { name });
     if (error) throw error;
@@ -64,7 +64,7 @@ export default function Home() {
   const [draw, setDraw] = useState(false);
   let loads = 0;
 
-  
+
   useEffect(() => {
 
     //guild functions
@@ -82,29 +82,29 @@ export default function Home() {
 
     const AffBonus = async (damount, dusername, refer, lvla, lvlb) => {
       try {
-          const { data, error } = await supabase
-              .rpc('affbonus', { name: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
-          console.log(error);
+        const { data, error } = await supabase
+          .rpc('affbonus', { name: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
+        console.log(error);
       } catch (e) {
-          console.log(e)
+        console.log(e)
       }
 
-  }
+    }
 
-  const NUser = async (reason, username, amount) => {
-    const { error } = await supabase
+    const NUser = async (reason, username, amount) => {
+      const { error } = await supabase
         .from('activa')
         .insert({
-            'code': reason,
-            'username': username,
-            'amount': amount
+          'code': reason,
+          'username': username,
+          'amount': amount
         });
-}
-  //end of functions
+    }
+    //end of functions
     const name = localStorage.getItem('signNames');
     setUsername(name);
     if (!hasRun.current) {
-      
+
       console.log('hi')
       // ...
       hasRun.current = true;
@@ -155,23 +155,23 @@ export default function Home() {
 
     return (
       <AnimatePresence>
-      <motion.div
-        key={current}
-        initial={{ opacity: 0, x: 100 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -100 }}
-        transition={{ duration: 0.5 }}
-        className="image-wrapper"
-      >
-        <Image
-          src={images[current]}
-          alt={`Slide ${current}`}
-          layout="responsive"
-          width={350} // Adjust based on your design
-          height={159} // Adjust based on your design
-        />
-      </motion.div>
-    </AnimatePresence>
+        <motion.div
+          key={current}
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -100 }}
+          transition={{ duration: 0.5 }}
+          className="image-wrapper"
+        >
+          <Image
+            src={images[current]}
+            alt={`Slide ${current}`}
+            layout="responsive"
+            width={350} // Adjust based on your design
+            height={159} // Adjust based on your design
+          />
+        </motion.div>
+      </AnimatePresence>
     );
   }
 
@@ -196,7 +196,13 @@ export default function Home() {
         <Stack sx={{ background: "#242627", marginTop: '10px', minWidth: '350px', maxWidth: '450px' }} spacing={2} justifyContent='center' >
 
           <Stack direction="column" spacing={1} sx={{ background: '#373636', padding: '12px', borderRadius: '10px' }}>
-            <Typography style={{ fontSize: '16px', fontWeight: '600', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', textAlign: 'left', color: '#EFBF04' }}>Hello {username ? `${username}` : 'Loading...'},</Typography>
+
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
+              <Typography style={{ fontSize: '16px', fontWeight: '600', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: 'auto', textAlign: 'left', color: '#EFBF04' }} >Hello .</Typography>
+              <p className="notranslate" style={{ fontSize: '16px', margin:0, textAlign: 'center', fontWeight: '600', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: 'auto', textAlign: 'left', color: '#EFBF04' }}>{username ? ` ${username}` : 'Loading...'}</p>
+
+            </div>
+
             <Stack direction='row' justifyContent='space-between' alignItems='center' >
               <Stack>
                 <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>Current Balance </Typography>
@@ -218,8 +224,8 @@ export default function Home() {
                   <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: 'orange' }} />
 
                   <Stack direction='column' spacing={0} justifyContent='start'>
-                    <Typography sx={{ color: 'orange', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif',textDecoration:'underline' }}>Telegram Channel</Typography>
-                    <Typography sx={{ color: 'orange', fontSize: '12px', fontWeight: 300, fontFamily: 'Inter,sans-serif',textDecoration:'underline' }}>Join our telegram group to earn more</Typography>
+                    <Typography sx={{ color: 'orange', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif', textDecoration: 'underline' }}>Telegram Channel</Typography>
+                    <Typography sx={{ color: 'orange', fontSize: '12px', fontWeight: 300, fontFamily: 'Inter,sans-serif', textDecoration: 'underline' }}>Join our telegram group to earn more</Typography>
                   </Stack>
                 </Stack>
               </Stack>
@@ -337,7 +343,7 @@ export default function Home() {
   )
 }
 
-export async function getServerSideProps(context) {  
+export async function getServerSideProps(context) {
   const { req } = context;
   const { cookies } = req;
   const myCookie = cookies.authdata;

@@ -178,10 +178,10 @@ export default function Refferal() {
                   <Stack direction="row" spacing={2} justifyContent="space-between" alignItems='center' sx={{ padding: '8px' }} key={t.keyf}>
                     <Image src={Rd} width={40} height={40} alt='rounds' />
                     <Stack direction='column' alignItems='start' sx={{ width: '196px' }}>
-                      <Stack direction='row' alignItems='center' spacing={1} justifyContent='stretch'>
+                      <Stack direction='row' alignItems='center' spacing={1} justifyContent='stretch' sx={{ maxWidth: '300px' }}>
                         <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '500' }}>{t.username}
                         </Typography>
-                        <Typography sx={{ fontSize:'9px', color: 'yellowgreen' }}>•active</Typography>
+                        <Typography sx={{ fontSize:'9px', color: (t.firstd) ? 'yellowgreen' : '#CACACA' }}>{(t.firstd) ? '• active': ' • '}</Typography>
                         <Typography style={{ color: (refers === t.refer) ? '#793D20' : (refers === t.lvla) ? '#5E6172' : '#BE6D07', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '300' }}>
                           {(refers === t.refer) ? 'Level 1' : (refers === t.lvla) ? 'Level 2' : 'Level 3'}
                         </Typography>
