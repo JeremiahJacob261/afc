@@ -137,11 +137,11 @@ export default function Login() {
 
           supabaseMigrate(user.displayName, user.uid);
           alert('you are Logged in');
+          router.push('/user');
           console.log(user.displayName)
           localStorage.setItem('signedIns', true);
           localStorage.setItem('signUids', user.uid);
           localStorage.setItem('signNames', user.displayName);
-          router.push('/user');
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -190,6 +190,7 @@ export default function Login() {
           // User successfully signed in
           alert('You are logged in');
           console.log(user)
+          router.push('/user')
           // localStorage.setItem('signRef', data[0].newrefer);
           async function  processBets(name) {
             try {
@@ -206,7 +207,6 @@ export default function Login() {
           localStorage.setItem('signUids', user.id);
           localStorage.setItem('signNames', user.user_metadata.displayName);
           console.log(user.user_metadata.displayName);
-          router.push('/user')
         }
       }
       sign(data[0].email);
@@ -276,6 +276,7 @@ export default function Login() {
           setCookie('authed', true);
           // User successfully signed in
           alert('you are logged in');
+          router.push('/user')
           console.log(user)
           // localStorage.setItem('signRef', data[0].newrefer);
          
@@ -284,7 +285,6 @@ export default function Login() {
           localStorage.setItem('signedIns', true);
           localStorage.setItem('signUids', user.id);
           localStorage.setItem('signNames', user.user_metadata.displayName);
-          router.push('/user')
 
         }
       }
