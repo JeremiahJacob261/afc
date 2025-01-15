@@ -127,7 +127,7 @@ export default function Loadingx({ open, handleClose,currency }) {
                         </Stack>
                     </motion.div>
 
-                    <motion.div whileTap={{ scale: 0.8 }} style={{ width: '100%',cursor:'pointer' }}
+                    {/* <motion.div whileTap={{ scale: 0.8 }} style={{ width: '100%',cursor:'pointer' }}
                      onClick={()=>{
                          localStorage.setItem('dm','mmk');
                          localStorage.setItem('dmmv','kbz');
@@ -136,7 +136,7 @@ export default function Loadingx({ open, handleClose,currency }) {
                         <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#242627', borderRadius: '8px' }}>
                             <p style={{ color: '#D4AF37', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 3: KBZ Bank</p>
                         </Stack>
-                    </motion.div>
+                    </motion.div> */}
 
                 </Stack>
                 }
