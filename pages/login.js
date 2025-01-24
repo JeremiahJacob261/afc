@@ -175,7 +175,7 @@ export default function Login() {
           const errorMessage = error.message;
           console.log(error.message)
           if (error.message === 'Invalid login credentials') {
-            fire(emailer);
+           alert("Check your Username and Password");
           } else {
             console.log(error.message)
           }
@@ -192,16 +192,6 @@ export default function Login() {
           console.log(user)
           router.push('/user')
           // localStorage.setItem('signRef', data[0].newrefer);
-          async function  processBets(name) {
-            try {
-              const { data, error } = await supabase.rpc('process_bets', { name });
-              if (error) throw error;
-              console.log('Bets processed:', data);
-            } catch (err) {
-              console.error('Error processing bets:', err);
-            }
-          }
-          // processBets(user.user_metadata.displayName);
 
           localStorage.setItem('signedIns', true);
           localStorage.setItem('signUids', user.id);
@@ -212,27 +202,6 @@ export default function Login() {
       sign(data[0].email);
       //end of supabase sgn in
 
-      // signInWithEmailAndPassword(auth, data[0].email, values.password)
-      //   .then((userCredential) => {
-      //     // Signed in 
-      //     const user = userCredential.user;
-      //     // ...
-
-      //     alert('you are logged in');
-      //     localStorage.setItem('signRef', data[0].newrefer);
-      //     localStorage.setItem('signedIns', true);
-      //     localStorage.setItem('signUids', user.uid);
-      //     localStorage.setItem('signNames', user.displayName);
-      //     setDrop(false)
-      //     router.push('/user');
-      //   })
-      //   .catch((error) => {
-      //     const errorCode = error.code;
-      //     const errorMessage = error.message;
-      //     console.log(error.message)
-      //     alert(errorCode);
-      //     setDrop(false)
-      //   });
     }
     setDrop(true)
     localStorage.clear()
