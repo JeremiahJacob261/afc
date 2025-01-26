@@ -6,10 +6,6 @@ import Logos from '../public/bradford.ico'
 import bfc1 from '../public/bfc1.jpg'
 import bfc2 from '../public/bfc2.jpg'
 import bfc3 from '../public/bfc3.jpg'
-import iv from '../public/simps/Invitation Bonus.jpg'
-import kik from '../public/simps/kick.png'
-import sal from '../public/simps/Monthly salary.png'
-import ref from '../public/simps/Referral Bonus.jpg'
 import Link from 'next/link'
 
 import Footer from './footeras';

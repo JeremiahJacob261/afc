@@ -72,6 +72,7 @@ export default function Login() {
       if (data.session != null) {
         console.log(data.session)
         let user = data.session.user;
+        router.push('/user');
         async function GET() {
           try {
             const { data, error } = await supabase
@@ -89,7 +90,6 @@ export default function Login() {
         localStorage.setItem('signedIns', true);
         localStorage.setItem('signUids', user.id);
         localStorage.setItem('signNames', user.user_metadata.displayName);
-        router.push('/user');
       } else {
 
         console.log('sign out');
