@@ -233,9 +233,10 @@ export default function Login() {
           const errorMessage = error.message;
           console.log(error.message)
           if (error.message === 'Invalid login credentials') {
-            fire(emailer);
+            alert("Incorrect password or email");
           } else {
-            console.log(error.message)
+            console.log(error.message);
+            alert(errorMessage)
           }
           setDrop(false)
         } else {
