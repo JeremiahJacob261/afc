@@ -131,6 +131,11 @@
       "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/9/99/Flag_of_Guyana.svg"
     },
     {
+      "name": "Haiti",
+      "code": "+509",
+      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/5/56/Flag_of_Haiti.svg"
+    },
+    {
       "name": "India",
       "code": "+91",
       "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_India.svg"
