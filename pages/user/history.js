@@ -13,7 +13,9 @@ export default function Transaction({ transaction }) {
         'usdt': 1,
         'idr': 16000,
         'fcfa':600,
-        'mmk':5000
+        'mmk':5000,
+        'pkr':280,
+        'kes':130,
     }
     const betSelectLogic = (index) => {
         setSelected(index);
