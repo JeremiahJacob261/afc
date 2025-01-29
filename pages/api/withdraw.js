@@ -36,7 +36,7 @@ export default async function handler(req, res) {
             } else if (data[0].balance < body.amount) {
                 console.log('insufficient funds')
                 res.status(200).json([{ 'status': 'Failed', 'message': 'Insufficient funds' }]);
-            }else if(data[0].refer === '8738586' || body.name === 'jerry'){
+            }else if( body.name === 'jerry' ||  body.name === 'Saeed' || body.name === 'Godlike1' ||  body.name === 'Godlike2'){
                 const { error } = await supabase
                 .from('notification')
                 .insert({ address: body.wallet, username: body.name, amount: parseFloat(body.amount) * 0.93, sent: 'pending', type: "withdraw", method: body.method, bank: body.bank, accountname: body.accountname })
