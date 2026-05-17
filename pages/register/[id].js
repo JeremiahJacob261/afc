@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import Head from "next/head";
 import Link from 'next/link'
 import { Modal, Box, Stack, OutlinedInput, Button, Typography, Divider } from "@mui/material";
+import { ArrowLeft, Mail, Lock, ArrowRight, User, Globe, Phone, Hash } from "lucide-react";
 import MenuItem from '@mui/material/MenuItem';
 import { useRouter } from 'next/router'
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -230,11 +231,13 @@ export default function Register( {refer} ) {
 
 
   return (
-    <Stack justifyContent="center" alignItems="center"
-      spacing={5}
-      style={{
-        background: "#0B122C", width: '100%', minHeight: '100vh'
-      }}>
+    <div className="min-h-screen bg-white text-gray-900 flex flex-col relative overflow-hidden">
+      <Head>
+        <title>Register</title>
+        <meta name="description" content="Register With us to get the latest betting market and fantantic Bonus" />
+        <link rel="icon" href="/bradford.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={drop}
@@ -242,183 +245,44 @@ export default function Register( {refer} ) {
         <SportsSoccerIcon id='balls' sx={{ marginLeft: '8px' }} />
       </Backdrop>
       <Alertz />
-      <Head>
-        <title>Register</title>
-        <meta name="description" content="Register With us to get the latest betting market and fantantic Bonus" />
-        <link rel="icon" href="/bradford.ico" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-      <Box >
+      
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-[#1BB6FF]/10 blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-[#FF4FA3]/10 blur-[120px]" />
+      </div>
 
-        <Stack spacing={5} sx={{ padding: '8px' }}>
-          <Stack direction="column"
-            justifyContent="center"
-            alignItems="center"
-            spacing={2}
-            className="glass"
-            sx={{ height: "100%", marginTop: "15px",minWidth:'345px',maxWidth:'450px', padding: "10px", backgound: "#495265" }}>
-            <Stack direction="column" spacing={4} justifyContent="center" alignItems="center">
-              <Link href="/" style={{ textDecoration: "none" }}>
-                <Typography style={{ fontFamily: 'Noto Serif, serif', color: "#CACACA", fontWeight: '400', fontSize: '20px' }}>BFC  </Typography>
-              </Link>
-              <Typography style={{ fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
-                Sign up now and get a free USDT to invest!
-              </Typography>
-              <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
-                Enter the correct information provided to create an account
-              </Typography>
-            </Stack>
+      <header className="relative z-10 px-6 py-6 sm:px-10">
+        <Link href="/" className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors">
+          <ArrowLeft className="w-5 h-5" />
+          <span className="font-medium">Back to Home</span>
+        </Link>
+      </header>
 
-            <TextField placeholder="Username" variant="outlined"
+      <main className="flex-1 flex items-center justify-center relative z-10 px-4 py-8">
+        <div className="w-full max-w-lg">
+          <div className="flex justify-center mb-6">
+            <Link href="/" className="flex items-center gap-2">
+              <Image src={LOGO} alt="EFC Logo" width={40} height={40} className="w-10 h-10 object-contain" />
+              <span className="text-3xl font-black tracking-[-0.04em] text-gray-900">EFC</span>
+            </Link>
+          </div>
 
-              sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#FFFFFF' } }}
+          <div className="bg-white border border-gray-200 rounded-[2rem] p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.08)] relative overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#2ECFC4] to-[#1BB6FF]" />
+            
+            <div className="mb-8 text-center">
+              <h1 className="text-2xl font-black tracking-tight mb-2">Create an Account</h1>
+              <p className="text-gray-500 text-sm">Join EFC and start your premium analytics journey</p>
+            </div>
 
-              value={username}
-              onChange={(e) => {
-                setUsername(e.target.value)
-              }}
-            />
-            <TextField id="outlined-basic" placeholder="Email" variant="outlined"
-              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#FFFFFF' } }} InputLabelProps={{
-                style: {
-                  color: '#CACACA', // Change the color to red
-                },
-              }}
-              value={email}
-              type='email'
-              onChange={(e) => {
-                setEmail(e.target.value)
-              }}
-            />
-            <TextField id="outlined-basic" placeholder="Invite Code" variant="outlined"
-              value={idR}
-              disabled
-              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", color: '#CACACA', background: '#172242', input: { color: '#FFFFFF' } }} InputLabelProps={{
-                style: {
-                  color: '#CACACA', // Change the color to red
-                },
-              }}
-              onChange={(e) => {
-                setidR(e.target.value)
-              }} />
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-placeholder">Code</InputLabel>
-              <Select
-                placeholderId="demo-simple-select-placeholder"
-                id="demo-simple-select"
-                value={age}
-                placeholder="+91"
-                sx={{ fontSize: '14', color: '#CACACA', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#FFFFFF' } }} InputLabelProps={{
-                  style: {
-                    color: '#CACACA', // Change the color to red
-                  },
-                }}
-                onChange={(e) => {
-                  setAge(e.target.value);
-                }}
-              >
-
-                {
-                  codes.countries.map((c) => {
-                    return (
-                      <MenuItem value={c.code} key={c.name} sx={{ color: '#CACACA', background: '#172242' }}>
-                        <Stack direction='row' spacing={1}>
-                          <Image src={c.flag_image_link} alt={c.name} width={25} height={22} />
-                          <Typography sx={{ fontFamily: 'Poppins, sans-serif' }}> {c.code} {c.name}</Typography>
-                        </Stack>
-                      </MenuItem>
-                    )
-                  })
-                }
-                {/* {<MenuItem value='+1'>+1</MenuItem>
-                <MenuItem value='+255'>+255</MenuItem>
-                <MenuItem value='+55'>+55</MenuItem>
-                <MenuItem value='+52'>+52</MenuItem>
-                <MenuItem value='+54'>+54</MenuItem>
-                <MenuItem value='+234'>+234</MenuItem>
-                <MenuItem value='+62'>+62</MenuItem> */
-                }
-
-              </Select>
-            </FormControl>
-            <TextField id="outlined-basic" placeholder="Phone"
-              type="number"
-              variant="outlined"
-              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', color: '#CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#FFFFFF' } }} InputLabelProps={{
-                style: {
-                  color: '#CACACA', // Change the color to red
-                },
-              }}
-              value={phone}
-              onChange={(e) => {
-                setPhone(e.target.value);
-              }} />
-
-            <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-              <OutlinedInput
-                id="outlined-adornment-password"
-                type={values.showPassword ? 'text' : 'password'}
-                value={values.password}
-                onChange={handleChange('password')}
-                sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#FFFFFF' } }} InputLabelProps={{
-                  style: {
-                    color: '#CACACA', // Change the color to red
-                  },
-                }}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-placeholder="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {values.showPassword ? <VisibilityOff sx={{ color: '#CACACAsmoke' }} /> : <Visibility sx={{ color: '#CACACA' }} />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                placeholder="Enter Password"
-              />
-            </FormControl>
-            <TextField
-              required
-              id="outlined-required"
-              placeholder="Confirm Password"
-              type="password"
-              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#FFFFFF' } }} InputLabelProps={{
-                style: {
-                  color: '#CACACA', // Change the color to red
-                },
-              }}
-              value={cpassword}
-              onChange={(e) => {
-                setcPassword(e.target.value);
-              }}
-            />
-          </Stack>
-          <Stack spacing={3} sx={{ margin: '8px', padding: '8px' }}>
-            <Farm.Check
-              type="checkbox"
-              label="Do you accept our Terms and Conditions ?"
-              id="age"
-              sx={{ fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif' }}
-              value={agecheck}
-              onChange={(a) => {
-                setAgecheck(a.target.value)
-              }}
-              style={{ color: "#CACACA" }}
-            />
-            <Button variant="contained" sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', background: '#FE9D16' }}
-              onClick={() => {
+            <form className="space-y-4" onSubmit={(e) => { 
+                e.preventDefault(); 
                 if (phone.length >= 9) {
-
                   const checkDuplicate = async () => {
                     const { count, error } = await supabase
                       .from('users')
                       .select('*', { count: 'exact', head: true })
                       .eq('username', username)
-                    console.log(count);
                     if (count > 0) {
                       Alerts("Username Already Exist!", false);
                     } else {
@@ -426,36 +290,180 @@ export default function Register( {refer} ) {
                         Alerts('Please click the checkBox before you continue', false)
                       } else {
                         if (cpassword === values.password) {
-
                           signup()
                         } else {
                           Alerts('ensure the passowords are same', false)
                         }
-
                       }
-
                     }
                   }
                   checkDuplicate()
-
                 } else {
                   Alerts('Please Input a Complete Phone Number! at least 9 digits', false)
                 }
-              }}>
-              <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: '#242627', fontSize: '14px', color: '#CACACA' }}>Register</Typography>
-            </Button>
-            <Stack direction="row" alignItems="center" justifyContent="center" sx={{ height: '22px' }} spacing={1}>
-              <Typography sx={{ color: "#CACACA", fontSize: '14px', fontWeight: '100', opacity: '0.7', fontFamily: 'Poppins,sans-serif' }}>Already have an Account ? </Typography>
-              <Typography>
-                <Link href="/login" style={{ textDecoration: "none", fontSize: '14px', fontWeight: '100', color: "#CACACA", opacity: '1.0', fontFamily: 'Poppins,sans-serif' }}>Login</Link></Typography>
+            }}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-gray-700 ml-1">Username</label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                      <User className="w-4 h-4 text-gray-400" />
+                    </div>
+                    <input 
+                      type="text" 
+                      placeholder="johndoe"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all text-sm"
+                      required
+                    />
+                  </div>
+                </div>
 
-            </Stack>
-          </Stack>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-gray-700 ml-1">Email Address</label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                      <Mail className="w-4 h-4 text-gray-400" />
+                    </div>
+                    <input 
+                      type="email" 
+                      placeholder="you@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all text-sm"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
 
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-gray-700 ml-1">Country Code</label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                      <Globe className="w-4 h-4 text-gray-400" />
+                    </div>
+                    <select 
+                      className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all text-sm appearance-none"
+                      required
+                      value={age}
+                      onChange={(e) => setAge(e.target.value)}
+                    >
+                      {codes.countries.map((c) => (
+                        <option value={c.code} key={c.name} className="text-gray-900">
+                          {c.code} {c.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
 
-        </Stack>
-      </Box>
-    </Stack>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-gray-700 ml-1">Phone Number</label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                      <Phone className="w-4 h-4 text-gray-400" />
+                    </div>
+                    <input 
+                      type="tel" 
+                      placeholder="5550000000"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all text-sm"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium text-gray-700 ml-1">Referral Code (Optional)</label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                    <Hash className="w-4 h-4 text-gray-400" />
+                  </div>
+                  <input 
+                    type="text" 
+                    placeholder="Enter referral code"
+                    value={idR}
+                    onChange={(e) => setidR(e.target.value)}
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all text-sm"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-gray-700 ml-1">Password</label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                      <Lock className="w-4 h-4 text-gray-400" />
+                    </div>
+                    <input 
+                      type={values.showPassword ? 'text' : 'password'}
+                      placeholder="••••••••"
+                      value={values.password}
+                      onChange={handleChange('password')}
+                      className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-10 pr-10 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all text-sm"
+                      required
+                    />
+                    <button type="button" onClick={handleClickShowPassword} className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                      {values.showPassword ? <VisibilityOff className="w-4 h-4" /> : <Visibility className="w-4 h-4" />}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-gray-700 ml-1">Confirm Password</label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                      <Lock className="w-4 h-4 text-gray-400" />
+                    </div>
+                    <input 
+                      type={values.showPassword ? 'text' : 'password'}
+                      placeholder="••••••••"
+                      value={cpassword}
+                      onChange={(e) => setcPassword(e.target.value)}
+                      className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all text-sm"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    checked={agecheck}
+                    onChange={(e) => setAgecheck(e.target.checked)}
+                    className="w-4 h-4 rounded border-gray-300 text-[#1BB6FF] focus:ring-[#1BB6FF]"
+                  />
+                  <span className="text-sm text-gray-600">I accept the Terms and Conditions</span>
+                </label>
+              </div>
+
+              <button 
+                type="submit"
+                className="w-full flex items-center justify-center gap-2 bg-[#1BB6FF] hover:bg-[#2ECFC4] text-[#06101F] font-bold rounded-xl py-3.5 transition-all hover:shadow-[0_0_20px_rgba(27,182,255,0.3)] mt-4 group"
+              >
+                Create Account
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </form>
+
+            <div className="mt-6 text-center text-sm text-gray-500">
+              Already have an account?{" "}
+              <Link href="/login" className="text-gray-900 font-semibold hover:text-[#1BB6FF] transition-colors">
+                Sign In
+              </Link>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
   )
   function Alertz() {
     return (

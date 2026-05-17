@@ -27,11 +27,11 @@
     "clsx": "^2.1.1",
     "cookie": "^0.5.0",
     "cookies-next": "^2.1.1",
-    "cryptia": "^1.0.1",
     "embla-carousel-react": "^8.1.8",
     "eslint": "8.26.0",
     "eslint-config-next": "13.0.1",
     "firebase": "^9.13.0",
+    "framer-motion": "^12.38.0",
     "i18next": "^23.4.4",
     "i18next-http-backend": "^2.2.1",
     "js-cookie": "^3.0.5",
@@ -56,6 +56,9 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@iconify/react": "^5.0.2"
+    "@iconify/react": "^5.0.2",
+    "@types/node": "^25.8.0",
+    "@types/react": "^19.2.14",
+    "typescript": "^6.0.3"
   }
 }

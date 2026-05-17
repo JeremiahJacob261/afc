@@ -1,7 +1,7 @@
 import React, { useState, Suspense } from "react";
 import Head from "next/head";
 import { Avatar, Box, Stack, OutlinedInput, Button, Typography, Divider } from "@mui/material";
-import InputLabel from '@mui/material/InputLabel';
+import { ArrowLeft, Lock, ArrowRight, User } from "lucide-react";
 import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
@@ -266,114 +266,112 @@ export default function Login() {
 
 
   return (
-    <Stack
-      direction="column"
-      alignItems="center"
-      spacing={10}
-      style={{
-        padding: "15px",
-        overflowX: "hidden",
-        maxWidth: "100%",
-        minHeight: "100vh",
-        background: '#0B122C'
-        , position: 'relative'
-      }}>
-      <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={drop}
-      >
-        <Image src={LOGO} width={100} height={100} id='balls' alt="logo" sx={{ marginLeft: '8px' }} />
-      </Backdrop>
+    <div className="min-h-screen bg-white text-gray-900 flex flex-col relative overflow-hidden">
       <Head>
         <title>Login</title>
         <meta name="description" content="Login to your Account to see whats up with your bets" />
         <link rel="icon" href="/bradford.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={drop}
+      >
+        <Image src={LOGO} width={100} height={100} id='balls' alt="logo" />
+      </Backdrop>
       <SimpleDialog
         open={open}
         onClose={handleClose}
       />
-      <Stack direction='column' spacing={3}>
-        <Stack direction="column" spacing={2} justifyContent="center" alignItems="center">
-          <Link href="/" style={{ textDecoration: "none" }}>
-            <Typography style={{ fontFamily: 'Noto Serif, serif', color: "#CACACA", fontWeight: '400', fontSize: '20px' }}>BFC  </Typography>
-          </Link>
-          <Typography
-            onClick={() => {
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-[#1BB6FF]/10 blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-[#FF4FA3]/10 blur-[120px]" />
+      </div>
 
-            }}
-            style={{ fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
-            Dont miss a minute of the action! Sign in
-          </Typography>
-          <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
-            Enter the correct information provided to Login to your  account
-          </Typography>
-        </Stack>
-        <Stack direction="column" spacing={4} sx={{ width: '343px' }}>
-          <div>
-          <p style={{ fontFamily: 'Poppins,sans-serif', color:'#CACACA', fontSize:'12px',marginBottom:'5px'  }}>email or username</p>
-          <TextField id="outlined-basic" placeholder="Email Or Username" variant="filled"
-            sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#CACACA', } }}
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value.replace(/\s/g, ''))
-            }}
-          />
-          </div>
-          <div>
-          <p style={{ fontFamily: 'Poppins,sans-serif', color:'#CACACA', fontSize:'12px',marginBottom:'5px' }}>password</p>
-          <FormControl
-            sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #CACACA', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#CACACA', } }}
-            variant="filled">
-            <InputLabel htmlFor="outlined-adornment-password" sx={{ color: 'white',input: { color: '#CACACA', } }}>Password</InputLabel>
-            <OutlinedInput
-              id="outlined-adornment-password"
-              type={values.showPassword ? 'text' : 'password'}
-              value={values.password}
-              onChange={handleChange('password')}
-              sx={{ input: { color: '#CACACA', } }}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-placeholder="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {values.showPassword ? <VisibilityOff sx={{ color: '#CACACAsmoke' }} /> : <Visibility sx={{ color: '#CACACA' }} />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Password"
-            />
-          </FormControl>
-          </div>
-        </Stack>
-      </Stack>
-      <Stack direction="column" spacing={2} justifyContent='center' alignItems='center' sx={{ width: '343px', marginTop: '200px' }}>
-        <Button variant="contained"
-          onKeyDown={(event) => {
-            if (
-              event.key === "Enter"
-            ) {
-              login()
-            }
-          }}
-          sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', fontWeight: '400', background: '#FE9D16' }}
-          onClick={login}>
-          <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "#CACACAsmoke" }}>Login</Typography>
-        </Button>
-        <Link href="/passwordreset" style={{ textDecoration: '#CACACA' }}>
-          <Typography style={{ color: "#CACACA", fontSize: '14px', fontWeight: '200', opacity: '0.7', fontFamily: 'Poppins,sans-serif' }}>Forgotten Password ?</Typography>
-          <Divider sx={{ background: '#CACACA' }} />
+      <header className="relative z-10 px-6 py-6 sm:px-10">
+        <Link href="/" className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors">
+          <ArrowLeft className="w-5 h-5" />
+          <span className="font-medium">Back to Home</span>
         </Link>
-        <Link href="/register/000208" style={{ width: '100%', textAlign: 'center', textDecoration: "none", color: "#CACACA", fontSize: '15px', fontWeight: '400', fontFamily: 'Poppins,sans-serif' }}>Dont have an Account ?
-          Create Account
+      </header>
 
-        </Link>
-      </Stack>
-    </Stack>
+      <main className="flex-1 flex items-center justify-center relative z-10 px-4 py-12">
+        <div className="w-full max-w-md">
+          <div className="flex justify-center mb-8">
+            <Link href="/" className="flex items-center gap-2">
+              <Image src={LOGO} alt="EFC Logo" width={40} height={40} className="w-10 h-10 object-contain" />
+              <span className="text-3xl font-black tracking-[-0.04em] text-gray-900">EFC</span>
+            </Link>
+          </div>
+
+          <div className="bg-white border border-gray-200 rounded-[2rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.08)] relative overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#2ECFC4] to-[#1BB6FF]" />
+            
+            <div className="mb-8 text-center">
+              <h1 className="text-2xl font-black tracking-tight mb-2">Welcome Back</h1>
+              <p className="text-gray-500 text-sm">Sign in to access your premium analytics</p>
+            </div>
+
+            <form className="space-y-5" onSubmit={(e) => { e.preventDefault(); login(); }}>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 ml-1">Email or Username</label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <User className="w-5 h-5 text-gray-400" />
+                  </div>
+                  <input 
+                    type="text" 
+                    placeholder="Email or Username"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value.replace(/\s/g, ''))}
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-12 pr-4 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between ml-1">
+                  <label className="text-sm font-medium text-gray-700">Password</label>
+                  <Link href="/passwordreset" className="text-xs text-[#1BB6FF] hover:text-[#2ECFC4] transition-colors">Forgot password?</Link>
+                </div>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Lock className="w-5 h-5 text-gray-400" />
+                  </div>
+                  <input 
+                    type={values.showPassword ? 'text' : 'password'}
+                    placeholder="••••••••"
+                    value={values.password}
+                    onChange={handleChange('password')}
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-12 pr-12 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all"
+                    required
+                  />
+                  <button type="button" onClick={handleClickShowPassword} className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600">
+                    {values.showPassword ? <VisibilityOff className="w-5 h-5" /> : <Visibility className="w-5 h-5" />}
+                  </button>
+                </div>
+              </div>
+
+              <button 
+                type="submit"
+                className="w-full flex items-center justify-center gap-2 bg-[#1BB6FF] hover:bg-[#2ECFC4] text-[#06101F] font-bold rounded-xl py-3.5 transition-all hover:shadow-[0_0_20px_rgba(27,182,255,0.3)] mt-2 group"
+              >
+                Sign In
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </form>
+
+            <div className="mt-6 text-center text-sm text-gray-500">
+              Don&apos;t have an account?{" "}
+              <Link href="/register/000208" className="text-gray-900 font-semibold hover:text-[#1BB6FF] transition-colors">
+                Create Account
+              </Link>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
   )
 }
 
