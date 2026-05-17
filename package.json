@@ -53,7 +53,8 @@
     "tailwindcss": "^3.4.8",
     "tailwindcss-animate": "^1.0.7",
     "tronweb": "^5.3.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "ws": "^8.16.0"
   },
   "devDependencies": {
     "@iconify/react": "^5.0.2",
