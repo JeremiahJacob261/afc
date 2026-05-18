@@ -18,9 +18,9 @@ export default function Home() {
   return (
     <main className="bg-slate-50 min-h-screen text-slate-900 font-sans antialiased selection:bg-electric-500/20">
       <Head>
-        <title>Bradford FOOTBALL CLUB (BFC)</title>
+        <title>European Football</title>
         <meta name="description" content="Bradford football club" />
-        <link rel="icon" href="/bradford.ico" />
+        <link rel="icon" href="/logo.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Navbar />
