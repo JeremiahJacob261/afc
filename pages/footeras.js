@@ -19,7 +19,7 @@ export default function Footer() {
 //     eventServer
 // );
     return (
-        <div style={{ background: "#373636",minWidth:'350px', width: "100%", padding: "8px", marginTop: '8px', borderTopLeftRadius: '8px', borderTopRightRadius: '8px', marginBottom: "6vh" }}>
+        <div style={{ background: "#10284D",minWidth:'350px', width: "100%", padding: "8px", marginTop: '8px', borderTopLeftRadius: '8px', borderTopRightRadius: '8px', marginBottom: "6vh" }}>
             <Stack direction="column" alignItems="center" justifyContent={"space-between"}>
                 <div>
                     <Stack direction="row" alignItems="center" justifyContent={"space-between"} spacing={5}>
@@ -55,7 +55,7 @@ export default function Footer() {
                     </Stack>
                 </div>
                 <div>
-                    <Typography variant="subtitle" sx={{ color: "#D4AF37", fontSize: '10px', fontWeight: '100', fontFamily: "Poppins, sans-serif" }}>
+                    <Typography variant="subtitle" sx={{ color: "#1BB6FF", fontSize: '10px', fontWeight: '100', fontFamily: "Poppins, sans-serif" }}>
                         © 2024 BRADFORD . All rights reserved.
                     </Typography>
                     {/* <Typography onClick={() => {

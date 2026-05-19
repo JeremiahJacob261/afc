@@ -147,38 +147,38 @@ export default function Vip() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Stack direction='row' alignItems='center' justifyContent='left' spacing={1} sx={{ width: '100%' }}>
-        <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px',color:'#cacaca' }} onClick={() => {
+        <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px',color:'#E9E5DA' }} onClick={() => {
           router.push('/user/account')
         }} />
-        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' ,color:'#cacaca'}}>VIP</Typography>
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' ,color:'#E9E5DA'}}>VIP</Typography>
       </Stack>
       <Stack justifyContent='center' alignItems='center' direction='column' sx={{ minHeight: '90vh' }}>
 
-        <DiamondIcon sx={{ width: '200px', height: '200px', color:'#cacaca',backdropFilter: 'blur(10px)' }} />
-        <Typography variant='h3' sx={{ fontFamily: 'Poppins,sans-serif',color:'#cacaca', opacity: 0.7 }}>VIP {viplevel}</Typography>
+        <DiamondIcon sx={{ width: '200px', height: '200px', color:'#E9E5DA',backdropFilter: 'blur(10px)' }} />
+        <Typography variant='h3' sx={{ fontFamily: 'Poppins,sans-serif',color:'#E9E5DA', opacity: 0.7 }}>VIP {viplevel}</Typography>
 
         <Stack justifyContent='left' alignItems='left'>
           <Stack>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif',color:'#cacaca' }}>Total Deposit</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif',color:'#E9E5DA' }}>Total Deposit</Typography>
             <Stack direction='row' justifyContent='left' alignItems='center' spacing={2}>
               <BorderLinearProgress variant="determinate" value={(Number(rprogress.toFixed(2)) > 100) ? 100 : Number(rprogress.toFixed(2))} sx={{ width: '230px' }} />
-              <Typography sx={{ fontFamily: 'Poppins,sans-serif',color:'#cacaca' }}>{(Number(rprogress.toFixed(2)) > 100) ? 100 : Number(rprogress.toFixed(2))}%</Typography>
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif',color:'#E9E5DA' }}>{(Number(rprogress.toFixed(2)) > 100) ? 100 : Number(rprogress.toFixed(2))}%</Typography>
             </Stack>
           </Stack>
 
           <Stack>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif',color:'#cacaca' }}>Referrals</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif',color:'#E9E5DA' }}>Referrals</Typography>
             <Stack direction='row' justifyContent='left' alignItems='center' spacing={2}>
               <BorderLinearProgress variant="determinate" value={(Number(cprogress.toFixed(2)) > 100) ? 100 : Number(cprogress.toFixed(2))} sx={{ width: '230px' }} />
-              <Typography sx={{ fontFamily: 'Poppins,sans-serif',color:'#cacaca' }}>{(Number(cprogress.toFixed(2)) > 100) ? 100 : Number(cprogress.toFixed(2))}%</Typography>
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif',color:'#E9E5DA' }}>{(Number(cprogress.toFixed(2)) > 100) ? 100 : Number(cprogress.toFixed(2))}%</Typography>
             </Stack>
           </Stack>
 
           <Stack>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif',color:'#cacaca' }}>Total</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif',color:'#E9E5DA' }}>Total</Typography>
             <Stack direction='row' justifyContent='left' alignItems='center' spacing={2}>
               <BorderLinearProgress variant="determinate" value={ (r1+c1)/2 } sx={{ width: '230px' }} />
-              <Typography sx={{ fontFamily: 'Poppins,sans-serif',color:'#cacaca' }}>{ (r1 + c1)/2 }%</Typography>
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif',color:'#E9E5DA' }}>{ (r1 + c1)/2 }%</Typography>
             </Stack>
           </Stack>
         </Stack>

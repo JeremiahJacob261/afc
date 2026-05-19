@@ -27,11 +27,14 @@ import { CookiesProvider, useCookies } from 'react-cookie';
 
 async function processBets(name) {
   try {
-    const { data, error } = await supabase.rpc('process_bets', { name });
-    if (error) throw error;
-    console.log('Bets processed:', data);
+    await fetch('/api/rpc/process_bets', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name })
+    })
+    console.log('Bets processed for', name)
   } catch (err) {
-    console.error('Error processing bets:', err);
+    console.error('Error processing bets:', err)
   }
 }
 
@@ -67,28 +70,35 @@ export default function Home() {
 
   useEffect(() => {
 
-    //guild functions
+    //guild functions (use backend RPC endpoints)
     const Depositing = async (damount, dusername) => {
-      const { data, error } = await supabase
-        .rpc('depositor', { amount: damount, names: dusername })
-      console.log(error);
+      try {
+        await fetch('/api/rpc/depositor', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ names: dusername, amount: damount })
+        })
+      } catch (e) { console.log(e) }
     }
 
     const Chan = async (bets, type) => {
-      const { data, error } = await supabase
-        .rpc('chan', { bet: bets, des: type })
-      console.log(error);
+      try {
+        await fetch('/api/rpc/chan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ bet: bets, des: type })
+        })
+      } catch (e) { console.log(e) }
     }
 
     const AffBonus = async (damount, dusername, refer, lvla, lvlb) => {
       try {
-        const { data, error } = await supabase
-          .rpc('affbonus', { name: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
-        console.log(error);
-      } catch (e) {
-        console.log(e)
-      }
-
+        await fetch('/api/rpc/affbonus', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
+        })
+      } catch (e) { console.log(e) }
     }
 
     const NUser = async (reason, username, amount) => {
@@ -177,12 +187,12 @@ export default function Home() {
 
   return (
     <Stack justifyContent="start" alignItems="center"
-      style={{ background: "#242627", marginBottom: "50px", minHeight: '95vh', }}
+      style={{ background: "#06101F", marginBottom: "50px", minHeight: '95vh', }}
     >
 
       <Loading open={open} handleClose={handleClose} />
 
-      <Cover sx={{ background: '#242627', minWidth: '100%', height: '100vh' }}>
+      <Cover sx={{ background: '#06101F', minWidth: '100%', height: '100vh' }}>
         <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={drop}
@@ -193,13 +203,13 @@ export default function Home() {
           <title>Welcome - {username ? `${username}` : 'Loading...'}</title>
           <link rel="icon" href="/bradford.ico" />
         </Head>
-        <Stack sx={{ background: "#242627", marginTop: '10px', minWidth: '350px', maxWidth: '450px' }} spacing={2} justifyContent='center' >
+        <Stack sx={{ background: "#06101F", marginTop: '10px', minWidth: '350px', maxWidth: '450px' }} spacing={2} justifyContent='center' >
 
-          <Stack direction="column" spacing={1} sx={{ background: '#373636', padding: '12px', borderRadius: '10px' }}>
+          <Stack direction="column" spacing={1} sx={{ background: '#10284D', padding: '12px', borderRadius: '10px' }}>
 
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
-              <Typography style={{ fontSize: '16px', fontWeight: '600', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: 'auto', textAlign: 'left', color: '#EFBF04' }} >Hello .</Typography>
-              <p className="notranslate" style={{ fontSize: '16px', margin:0, textAlign: 'center', fontWeight: '600', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: 'auto', textAlign: 'left', color: '#EFBF04' }}>{username ? ` ${username}` : 'Loading...'}</p>
+              <Typography style={{ fontSize: '16px', fontWeight: '600', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: 'auto', textAlign: 'left', color: '#1BB6FF' }} >Hello .</Typography>
+              <p className="notranslate" style={{ fontSize: '16px', margin:0, textAlign: 'center', fontWeight: '600', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: 'auto', textAlign: 'left', color: '#1BB6FF' }}>{username ? ` ${username}` : 'Loading...'}</p>
 
             </div>
 
@@ -208,8 +218,8 @@ export default function Home() {
                 <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>Current Balance </Typography>
                 <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>{balance ? ` ${balance.toFixed(3)}` : '0'} USDT</Typography>
               </Stack>
-              <Link href='/user/fund' style={{ textDecoration: "none", color: 'white' }}>
-                <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#D4AF37', borderRadius: '20px', padding: '8px', width: '95px', height: '32px' }}>
+                <Link href='/user/fund' style={{ textDecoration: "none", color: 'white' }}>
+                <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#1BB6FF', borderRadius: '20px', padding: '8px', width: '95px', height: '32px' }}>
                   <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: 'white', fontSize: '12px' }}>
                     Deposit
                   </Typography>
@@ -221,11 +231,11 @@ export default function Home() {
             < Link href='https://t.me/+bfJIWHK3fKNkNjY1' target="_blank" style={{ textDecoration: 'none' }}>
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                 <Stack direction='row' spacing={1} justifyContent='start'>
-                  <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: 'orange' }} />
+                  <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#1BB6FF' }} />
 
                   <Stack direction='column' spacing={0} justifyContent='start'>
-                    <Typography sx={{ color: 'orange', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif', textDecoration: 'underline' }}>Telegram Channel</Typography>
-                    <Typography sx={{ color: 'orange', fontSize: '12px', fontWeight: 300, fontFamily: 'Inter,sans-serif', textDecoration: 'underline' }}>Join our telegram group to earn more</Typography>
+                    <Typography sx={{ color: '#1BB6FF', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif', textDecoration: 'underline' }}>Telegram Channel</Typography>
+                    <Typography sx={{ color: '#1BB6FF', fontSize: '12px', fontWeight: 300, fontFamily: 'Inter,sans-serif', textDecoration: 'underline' }}>Join our telegram group to earn more</Typography>
                   </Stack>
                 </Stack>
               </Stack>
@@ -237,16 +247,16 @@ export default function Home() {
 
           <Stack direction='row' justifyContent='space-between' alignItems='center'>
             <Stack direction='row' spacing={1}>
-              <Icon icon="carbon:football-american" width="24" height="24" style={{ color: '#CACACA' }} />
-              <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '16px', fontWeight: '600' }}>Top Football Matches</Typography>
+              <Icon icon="carbon:football-american" width="24" height="24" style={{ color: '#E9E5DA' }} />
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '16px', fontWeight: '600' }}>Top Football Matches</Typography>
             </Stack>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>see all</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>see all</Typography>
           </Stack>
           <Stack direction='row' spacing={1}>
-            <Stack sx={{ background: '#CACACA', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#000000', fontSize: '12px', fontWeight: '100' }}>This Week</Typography></Stack>
-            <Stack sx={{ background: '#D4AF37', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>Today</Typography></Stack>
-            <Stack sx={{ background: '#CACACA', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#000000', fontSize: '12px', fontWeight: '100' }}>Next 3 hrs</Typography></Stack>
-            <Stack sx={{ background: '#CACACA', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#000000', fontSize: '12px', fontWeight: '100' }}>Next 30 mins</Typography></Stack>
+            <Stack sx={{ background: '#10284D', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>This Week</Typography></Stack>
+            <Stack sx={{ background: '#1BB6FF', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#06101F', fontSize: '12px', fontWeight: '100' }}>Today</Typography></Stack>
+            <Stack sx={{ background: '#10284D', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>Next 3 hrs</Typography></Stack>
+            <Stack sx={{ background: '#10284D', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>Next 30 mins</Typography></Stack>
           </Stack>
 
           <Stack alignItems='center' direction={"column-reverse"}>
@@ -273,11 +283,11 @@ export default function Home() {
                     style={{
                       marginBottom: "8px", padding: "18.5px",
                       display: (stams < curren) ? 'none' : 'visible',
-                      background: '#373636',
+                      background: '#10284D',
                       width: '343px',
                       borderRadius: '5px',
                       height: '210px',
-                      border: pro.company ? '1px solid #FFB400' : ''
+                      border: pro.company ? '1px solid #1BB6FF' : ''
                     }} onClick={() => {
                       handleOpen()
                       //register/000208
@@ -288,42 +298,42 @@ export default function Home() {
                         {
                           (pro.company) ?
                             <>
-                              <Icon icon="solar:star-bold-duotone" width="24" height="24" style={{ color: '#FFB400' }} />
-                              <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Verified Company Game</Typography>
+                              <Icon icon="solar:star-bold-duotone" width="24" height="24" style={{ color: '#1BB6FF' }} />
+                              <Typography style={{ color: '#E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Verified Company Game</Typography>
                             </>
                             : <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}></Typography>
                         }
                       </Stack>
-                      <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{league} </Typography>
-                      <Divider sx={{ background: '#FFB400' }} />
+                      <Typography style={{ color: '#E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{league} </Typography>
+                      <Divider sx={{ background: '#1BB6FF' }} />
                     </Stack>
                     <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
                       <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                         <Image src={pro.ihome ? pro.ihome : Ims} width={50} height={50} alt='home' />
-                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
+                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
                       </Stack>
                       <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{timex}</Typography>
-                        <p>|</p>
-                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
+                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{timex}</Typography>
+                        <p style={{color:'#E9E5DA'}}>|</p>
+                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
                       </Stack>
                       <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                         <Image src={pro.iaway ? pro.iaway : Ims} width={50} height={50} alt='away' />
-                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>{pro.away}</Typography>
+                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{pro.away}</Typography>
                       </Stack>
                     </Stack>
                     <Stack direction='row' spacing={2} >
-                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3', border: pro.company ? '3px solid #FFB400' : '3px solid #D4AF37' }}>
-                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>1-0</Typography>
-                        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>{pro.onenil}</Typography>
+                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3', border: '3px solid #1BB6FF' }}>
+                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#06101F' }}>1-0</Typography>
+                        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#06101F' }}>{pro.onenil}</Typography>
                       </Stack>
-                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3', border: pro.company ? '3px solid #FFB400' : '3px solid #D4AF37' }}>
-                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>1-1</Typography>
-                        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>{pro.oneone}</Typography>
+                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3', border: '3px solid #1BB6FF' }}>
+                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#06101F' }}>1-1</Typography>
+                        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#06101F' }}>{pro.oneone}</Typography>
                       </Stack>
-                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3', border: pro.company ? '3px solid #FFB400' : '3px solid #D4AF37' }}>
-                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>1-2</Typography>
-                        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>{pro.onetwo}</Typography>
+                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3', border: '3px solid #1BB6FF' }}>
+                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#06101F' }}>1-2</Typography>
+                        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#06101F' }}>{pro.onetwo}</Typography>
                       </Stack>
                     </Stack>
                   </Stack>

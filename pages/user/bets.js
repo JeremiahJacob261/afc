@@ -24,13 +24,16 @@ import TabPanel from '@mui/lab/TabPanel';
 
 
 
-async function  processBets(name) {
+async function processBets(name) {
   try {
-    const { data, error } = await supabase.rpc('process_bets', { name });
-    if (error) throw error;
-    console.log('Bets processed:', data);
+    await fetch('/api/rpc/process_bets', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name })
+    })
+    console.log('Bets processed for', name)
   } catch (err) {
-    console.error('Error processing bets:', err);
+    console.error('Error processing bets:', err)
   }
 }
 
@@ -159,8 +162,8 @@ export default function Bets() {
               },
             }}
           >
-            <Tab label="UnSettled Bets" value="1" sx={{ color: '#CACACA', width: '50%' }} />
-            <Tab label="Settled Bets" value="2" sx={{ color: '#CACACA', width: '50%' }} />
+            <Tab label="UnSettled Bets" value="1" sx={{ color: '#E9E5DA', width: '50%' }} />
+            <Tab label="Settled Bets" value="2" sx={{ color: '#E9E5DA', width: '50%' }} />
           </TabList>
         </Stack>
         <TabPanel value="1">

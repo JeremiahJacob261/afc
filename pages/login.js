@@ -24,7 +24,7 @@ import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import { useCookies } from 'react-cookie';
 import { useEffect } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { onAuthStateChanged } from "firebase/auth";
+
 export default function Login() {
   const [cookies, setCookie] = useCookies(['authdata']);
 
@@ -35,9 +35,7 @@ export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState('')
   const auth = getAuth(app);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+
 
   const handleClose = (value) => {
     setOpen(false);
@@ -118,7 +116,7 @@ export default function Login() {
 
       const { error } = await supabase
         .from('users')
-        .update({ userId: data.user.id })
+        .update({ userid: data.user.id })
         .eq('email', email);
     }
     uidch();

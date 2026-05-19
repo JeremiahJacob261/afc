@@ -42,7 +42,7 @@ export default function Matches({ footDat }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div style={{
-        minWidth: '370px', maxWidth: "450px", background: "#242627", minHeight: '90vh'
+        minWidth: '370px', maxWidth: "450px", background: "#06101F", minHeight: '90vh'
       }}>
         <Stack >
           <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
@@ -75,11 +75,11 @@ export default function Matches({ footDat }) {
                   style={{
                     marginBottom: "8px", padding: "18.5px",
                     display: (stams < curren) ? 'none' : 'visible',
-                    background: '#373636',
+                    background: '#10284D',
                     width: '343px',
                     borderRadius: '5px',
                     minHeight: '210px',
-                    border:pro.company ? '1px solid #FFB400' : ''
+                    border:pro.company ? '1px solid #1BB6FF' : ''
                   }} onClick={() => {
                     handleOpen()
                     //register/000208
@@ -90,19 +90,19 @@ export default function Matches({ footDat }) {
                       {
                         (pro.company) ?
                           <>
-                            <Icon icon="solar:star-bold-duotone" width="24" height="24" style={{ color: '#FFB400' }} />
-                            <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Verified Company Game</Typography>
+                            <Icon icon="solar:star-bold-duotone" width="24" height="24" style={{ color: '#1BB6FF' }} />
+                            <Typography style={{ color: '#E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Verified Company Game</Typography>
                           </>
                           : <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}></Typography>
                       }
                     </Stack>
-                    <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{league} </Typography>
-                    <Divider sx={{ background: '#FFB400' }} />
+                    <Typography style={{ color: '#E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{league} </Typography>
+                    <Divider sx={{ background: '#1BB6FF' }} />
                   </Stack>
                   <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
                     <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                       <Image src={pro.ihome ? pro.ihome : Ims} width={50} height={50} alt='home' />
-                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
+                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
                     </Stack>
                     <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
                       <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{timex}</Typography>
@@ -111,7 +111,7 @@ export default function Matches({ footDat }) {
                     </Stack>
                     <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                       <Image src={pro.iaway ? pro.iaway : Ims} width={50} height={50} alt='away' />
-                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>{pro.away}</Typography>
+                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{pro.away}</Typography>
                     </Stack>
                   </Stack>
                   <Stack direction='row' spacing={2} >

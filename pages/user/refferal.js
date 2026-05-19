@@ -136,28 +136,28 @@ export default function Refferal() {
             <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
               router.push('/user/account')
             }} />
-            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#cacaca' }}>Referral</Typography>
+            <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#E9E5DA' }}>Referral</Typography>
           </Stack>
-          <Accordion style={{ background: '#242627', width: '341px' }}>
+          <Accordion style={{ background: '#06101F', width: '341px' }}>
             <AccordionSummary
               expandIcon={
-                <KeyboardArrowDownIcon sx={{ color: '#CACACA', fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }} />
+                <KeyboardArrowDownIcon sx={{ color: '#E9E5DA', fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }} />
               }
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
               <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ width: '100%' }}>
-                <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '500', color: '#cacaca' }}>Referrals({lvl ? lvl.length : '0'})- {xxx} USDT</Typography>
-                <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#cacaca', padding: '8px' }}>{fshow}</Typography>
+                <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '500', color: '#E9E5DA' }}>Referrals({lvl ? lvl.length : '0'})- {xxx} USDT</Typography>
+                <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#E9E5DA', padding: '8px' }}>{fshow}</Typography>
 
               </Stack>
 
             </AccordionSummary>
             <AccordionDetails>
-              <Typography sx={{ fontSize: '16px', cursor: 'pointer', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: (fshow === 'Level 1') ? '#808080' : (fshow === 'Level 2') ? '#808080' : (fshow === 'Level 3') ? '#808080' : '#CACACA', padding: '8px' }} onClick={() => { reMain() }}>All</Typography>
-              <Typography sx={{ fontSize: '16px', cursor: 'pointer', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: (fshow === 'Level 1') ? '#CACACA' : (fshow === 'Level 2') ? '#808080' : '#808080', padding: '8px' }} onClick={() => { filterData('refer') }}>Level 1</Typography>
-              <Typography sx={{ fontSize: '16px', cursor: 'pointer', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: (fshow === 'Level 1') ? '#808080' : (fshow === 'Level 2') ? '#CACACA' : '#808080', padding: '8px' }} onClick={() => { filterData('lvla') }}>Level 2</Typography>
-              <Typography sx={{ fontSize: '16px', cursor: 'pointer', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: (fshow === 'Level 1') ? '#808080' : (fshow === 'Level 2') ? '#808080' : '#CACACA', padding: '8px' }} onClick={() => { filterData('lvlb') }}>Level 3</Typography>
+              <Typography sx={{ fontSize: '16px', cursor: 'pointer', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: (fshow === 'Level 1') ? '#808080' : (fshow === 'Level 2') ? '#808080' : (fshow === 'Level 3') ? '#808080' : '#E9E5DA', padding: '8px' }} onClick={() => { reMain() }}>All</Typography>
+              <Typography sx={{ fontSize: '16px', cursor: 'pointer', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: (fshow === 'Level 1') ? '#E9E5DA' : (fshow === 'Level 2') ? '#808080' : '#808080', padding: '8px' }} onClick={() => { filterData('refer') }}>Level 1</Typography>
+              <Typography sx={{ fontSize: '16px', cursor: 'pointer', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: (fshow === 'Level 1') ? '#808080' : (fshow === 'Level 2') ? '#E9E5DA' : '#808080', padding: '8px' }} onClick={() => { filterData('lvla') }}>Level 2</Typography>
+              <Typography sx={{ fontSize: '16px', cursor: 'pointer', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: (fshow === 'Level 1') ? '#808080' : (fshow === 'Level 2') ? '#808080' : '#E9E5DA', padding: '8px' }} onClick={() => { filterData('lvlb') }}>Level 3</Typography>
 
             </AccordionDetails>
           </Accordion>
@@ -165,7 +165,7 @@ export default function Refferal() {
 
 
           </Stack>
-          <Divider sx={{ color: '#CACACA' }} />
+          <Divider sx={{ color: '#E9E5DA' }} />
           <Stack direction='column' sx={{ paddingBottom: '50px' }}>
             {
               lvl.map((t) => {
@@ -179,17 +179,17 @@ export default function Refferal() {
                     <Image src={Rd} width={40} height={40} alt='rounds' />
                     <Stack direction='column' alignItems='start' sx={{ width: '196px' }}>
                       <Stack direction='row' alignItems='center' spacing={1} justifyContent='stretch' sx={{ maxWidth: '300px' }}>
-                        <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '500' }}>{t.username}
+                        <Typography style={{ color: '#E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '16px', fontWeight: '500' }}>{t.username}
                         </Typography>
-                        <Typography sx={{ fontSize:'9px', color: (t.firstd) ? 'yellowgreen' : '#CACACA' }}>{(t.firstd) ? '• active': ' • '}</Typography>
+                        <Typography sx={{ fontSize:'9px', color: (t.firstd) ? 'yellowgreen' : '#E9E5DA' }}>{(t.firstd) ? '• active': ' • '}</Typography>
                         <Typography style={{ color: (refers === t.refer) ? '#793D20' : (refers === t.lvla) ? '#5E6172' : '#BE6D07', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '300' }}>
                           {(refers === t.refer) ? 'Level 1' : (refers === t.lvla) ? 'Level 2' : 'Level 3'}
                         </Typography>
                       </Stack>
-                      <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{dates} • {time}</Typography>
+                      <Typography style={{ color: '#E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>{dates} • {time}</Typography>
 
                     </Stack>
-                    <Typography style={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>$ {t.totald ?? 0}</Typography>
+                    <Typography style={{ color: '#E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500' }}>$ {t.totald ?? 0}</Typography>
                   </Stack>
                 )
               })

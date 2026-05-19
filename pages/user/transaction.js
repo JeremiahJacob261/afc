@@ -85,10 +85,10 @@ export default function Transaction({ wallx }) {
       <Loadingx open={openy} handleClose={handleClosey} currency={curcode}/>
       <Stack style={{ minHeight: '95vh', width: '100%', paddingBottom: '120px' }} spacing={2}>
         <Stack direction='column' alignItems='center' spacing={1} sx={{ padding: '8px', margin: '2px' }}>
-          <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px', color: '#cacaca' }} onClick={() => {
+          <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px', color: '#E9E5DA' }} onClick={() => {
             router.push('/user/fund')
           }} />
-          <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#cacaca' }}>Choose Payment Method</Typography>
+          <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#E9E5DA' }}>Choose Payment Method</Typography>
         </Stack>
 
         <Stack direction="column" sx={{ overflowX: 'auto', maxWidth: '360px' }} spacing={2}
@@ -96,7 +96,7 @@ export default function Transaction({ wallx }) {
           {
             wallx.map((m) => {
               return (
-                <Stack direction="column" alignItems='center' justifyContent="space-around" sx={{ minWidth: '255px', height: '145px', background: '#373636', borderRadius: '5px', padding: '8px' }}
+                <Stack direction="column" alignItems='center' justifyContent="space-around" sx={{ minWidth: '255px', height: '145px', background: '#10284D', borderRadius: '5px', padding: '8px' }}
                   key={m.name}
                   onClick={() => {
 
@@ -113,7 +113,7 @@ export default function Transaction({ wallx }) {
                   }}
                 >
                   <Image src={m.image} width={75} height={75} alt={m.name} style={{ borderRadius: '9px' }} />
-                  <p style={{ color: '#cacaca', fontFamily: 'Poppins, san-serif', fontWeight: '300' }}>{m.name}</p>
+                  <p style={{ color: '#E9E5DA', fontFamily: 'Poppins, san-serif', fontWeight: '300' }}>{m.name}</p>
                 </Stack>
               )
             })

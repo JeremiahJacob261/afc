@@ -191,7 +191,7 @@ export default function Deposit() {
           const { data: wall, error: wrr } = await supabase
             .from('user_wallets')
             .select()
-            .eq('uid', data[0].userId)
+            .eq('uid', data[0].userid)
           setWallet(wall ?? []);
 
           setInfo(data[0]);
@@ -262,22 +262,22 @@ export default function Deposit() {
       </Stack>
       <Stack spacing={3} sx={{ padding: '8px', marginBottom: '100px' }} >
         <Sncks message={messages} />
-        <Stack sx={{ minWidth: '350px', minHeight: '110px', background: '#373636', padding: '8px', borderRadius: '5px' }} direction='column' spacing={2} justifyContent='center'>
+        <Stack sx={{ minWidth: '350px', minHeight: '110px', background: '#10284D', padding: '8px', borderRadius: '5px' }} direction='column' spacing={2} justifyContent='center'>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Current Balance</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>{(info.balance) ? info.balance.toFixed(3) : info.balance} USDT</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Current Balance</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{(info.balance) ? info.balance.toFixed(3) : info.balance} USDT</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Charge Amount</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>{(charge) ? charge.toFixed(3) : charge} USDT</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Charge Amount</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{(charge) ? charge.toFixed(3) : charge} USDT</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Total Amount</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>{total} USDT</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Total Amount</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{total} USDT</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Total Amount in {(currency.currency_code  ?? "USDT").toUpperCase()}</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>{parseFloat(total * rate).toFixed(2)} {(currency.currency_code ?? "USDT").toUpperCase()}</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Total Amount in {(currency.currency_code  ?? "USDT").toUpperCase()}</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{parseFloat(total * rate).toFixed(2)} {(currency.currency_code ?? "USDT").toUpperCase()}</Typography>
           </Stack>
           <Divider sx={{ color: 'white' }} />
           <motion.div
@@ -289,12 +289,12 @@ export default function Deposit() {
               router.push('/user/bindwallet')
             }}
           >
-            <Stack direction='row' spacing={1} justifyContent='center' alignItems={"center"} sx={{ background: '#242627', padding: '8px', borderRadius: '8px' }}
+              <Stack direction='row' spacing={1} justifyContent='center' alignItems={"center"} sx={{ background: '#06101F', padding: '8px', borderRadius: '8px' }}
 
             >
               <Icon icon="icon-park-twotone:add" width="24" height="24" style={{ color: '#a3a3a3' }} />
 
-              <Typography sx={{ color: '#CACACA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Bind Wallet</Typography>
+              <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Bind Wallet</Typography>
             </Stack>
           </motion.div>
 
@@ -303,14 +303,14 @@ export default function Deposit() {
         <Stack direction="column" spacing={3}>
 
           <Stack spacing={1} >
-            <Typography sx={{ fontSize: '12px', color: '#242627', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Choose Prefered Payment Wallet</Typography>
+            <Typography sx={{ fontSize: '12px', color: '#06101F', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Choose Prefered Payment Wallet</Typography>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Select your Withdrawal Method</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={method}
-                style={{ background: "#242627", color: '#CACACA', border: '1px solid #CACACA' }}
+                style={{ background: "#06101F", color: '#E9E5DA', border: '1px solid #E9E5DA' }}
                 onChange={(e) => {
                 try{
                   let walletid = findUserWalletsById(e.target.value);
@@ -344,9 +344,9 @@ export default function Deposit() {
           </Stack>
 
           <Stack spacing={1}>
-            <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Enter Amount You Wish to Withdraw in USD</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Enter Amount You Wish to Withdraw in USD</Typography>
             <TextField
-              sx={{ border: '1px solid #CACACA', input: { color: '#CACACA', } }}
+              sx={{ border: '1px solid #E9E5DA', input: { color: '#E9E5DA', } }}
               type="number"
               value={amount}
               onChange={(a) => {
@@ -355,9 +355,9 @@ export default function Deposit() {
               }} />
           </Stack>
           <Stack spacing={1}>
-            <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Transaction Pin</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Transaction Pin</Typography>
             <TextField
-              sx={{ border: '1px solid #CACACA', input: { color: '#CACACA', }, textAlign: 'center' }}
+              sx={{ border: '1px solid #E9E5DA', input: { color: '#E9E5DA', }, textAlign: 'center' }}
               type="pin"
               value={pin}
               onChange={(a) => {
@@ -369,7 +369,7 @@ export default function Deposit() {
 
 
           <motion.div whileTap={{ scale: 0.98 }}
-            style={{ cursor: 'pointer', display: 'flex', flexDirection: 'row', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: "#CACACA", height: '50px', background: '#D4AF37', minWidth: '310px', padding: '12px' }}
+            style={{ cursor: 'pointer', display: 'flex', flexDirection: 'row', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: "#06101F", height: '50px', background: '#1BB6FF', minWidth: '310px', padding: '12px' }}
             onClick={transaction}>Withdraw</motion.div>
 
         </Stack>
@@ -395,7 +395,7 @@ export default function Deposit() {
         aria-describedby="modal-modal-description"
       >
         <Stack alignItems='center' justifyContent='space-evenly' sx={{
-          background: '#242627', width: '290px', height: '330px', borderRadius: '20px',
+          background: '#06101F', width: '290px', height: '330px', borderRadius: '20px',
           position: 'absolute',
           top: '50%',
           left: '50%',
@@ -403,15 +403,15 @@ export default function Deposit() {
           padding: '12px'
         }}>
           <Image src={aleT ? Big : Wig} width={120} height={120} alt='widh' />
-          <Typography id="modal-modal-title" sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '20px', fontWeight: '500', color: '#cacaca' }}>
+          <Typography id="modal-modal-title" sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '20px', fontWeight: '500', color: '#E9E5DA' }}>
 
             {aleT ? 'Success' : 'Eh Sorry!'}
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2, fontSize: '14px', fontWeight: '300', color: '#cacaca' }}>
+          <Typography id="modal-modal-description" sx={{ mt: 2, fontSize: '14px', fontWeight: '300', color: '#E9E5DA' }}>
             {ale}
           </Typography>
-          <Divider sx={{ background: '#CACACA' }} />
-          <Button variant='contained' sx={{ fontFamily: 'Poppins,sans-serif', color: '#cacaca', background: '#D4AF37', padding: '8px', width: '100%' }} onClick={() => {
+          <Divider sx={{ background: '#E9E5DA' }} />
+          <Button variant='contained' sx={{ fontFamily: 'Poppins,sans-serif', color: '#06101F', background: '#1BB6FF', padding: '8px', width: '100%' }} onClick={() => {
             if (aleT) {
               setOpen(false)
               router.push('/user/withdrawsuccess')

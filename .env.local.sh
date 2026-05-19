@@ -3,3 +3,4 @@ export SIGNERKEY = 54X+nsxtwryGGHbp1YhVC0DXoRSZQKKllq+iofxWpgBGhntq/05gg0lRMVEYO
 export SALTSEPARATOR = Bw==
 export ROUNDS = 8
 export MEMCOST = 14
+export S

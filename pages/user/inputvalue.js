@@ -75,21 +75,21 @@ export default function InputValue({ method }) {
      
 
         <Stack direction='row' alignItems='start' spacing={1} sx={{ padding: '8px', margin: '2px', minWidth: '343px' }}>
-          <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px', color: '#cacaca' }} onClick={() => {
+          <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px', color: '#E9E5DA' }} onClick={() => {
             router.push('/user/transaction')
           }} />
-          <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#cacaca' }}>Deposit</Typography>
+          <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#E9E5DA' }}>Deposit</Typography>
         </Stack>
         {
           (method.currency_code != 'usdt') ? 
-          <Stack sx={{ minWidth: '350px', minHeight: 'auto', background: '#373636', padding: '8px', borderRadius: '5px' }} direction='column' spacing={2} justifyContent='center'>
+          <Stack sx={{ minWidth: '350px', minHeight: 'auto', background: '#10284D', padding: '8px', borderRadius: '5px' }} direction='column' spacing={2} justifyContent='center'>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Amount in USDT</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>{(amount/method.rates).toFixed(3)} USDT</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Amount in USDT</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{(amount/method.rates).toFixed(3)} USDT</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Amount in {method.currency_code.toUpperCase()}</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>{amount} {method.currency_code.toUpperCase()}</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Amount in {method.currency_code.toUpperCase()}</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{amount} {method.currency_code.toUpperCase()}</Typography>
           </Stack>
         </Stack>
 
@@ -97,20 +97,20 @@ export default function InputValue({ method }) {
         <></>
         }
         <Stack direction='row' justifyContent='center' alignItems='center' sx={{width:'350px', height: '58px', background: '#FBEFEF', borderRadius: '5px', padding: '16px' }} spacing={2}>
-          <PriorityHighRoundedIcon sx={{ color: '#242627', background: '#D4AF37', width: '20px', height: '20px', borderRadius: '10px' }} />
-          <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#D4AF37' }}>Please note that the minimum deposit is {5 * method.rates ?? 1} {(method.name ?? 'usdt').toUpperCase()}</Typography>
+          <PriorityHighRoundedIcon sx={{ color: '#06101F', background: '#1BB6FF', width: '20px', height: '20px', borderRadius: '10px' }} />
+          <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#1BB6FF' }}>Please note that the minimum deposit is {5 * method.rates ?? 1} {(method.name ?? 'usdt').toUpperCase()}</Typography>
         </Stack>
         <Stack spacing={1} sx={{ minWidth: '344px' }}>
-          <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Enter Amount </Typography>
+          <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Enter Amount </Typography>
           <TextField
-            sx={{ color: '#242627', width: '360px', input: { color: '#f5f5f5' }, border: '1px solid #cacaca', borderRadius: '5px' }}
+            sx={{ color: '#06101F', width: '360px', input: { color: '#f5f5f5' }, border: '1px solid #E9E5DA', borderRadius: '5px' }}
             type="number"
             value={amount}
             onChange={(a) => {
               setAmount(a.target.value);
             }} />
         </Stack>
-        <motion.div whileTap={{ scale: 1.05 }} style={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: "#CACACA", height: '50px', background: '#D4AF37', minWidth: '360px', padding: '12px' }} onClick={() => {
+        <motion.div whileTap={{ scale: 1.05 }} style={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: "#06101F", height: '50px', background: '#1BB6FF', minWidth: '360px', padding: '12px' }} onClick={() => {
 
           nextPage()
 
@@ -133,7 +133,7 @@ export default function InputValue({ method }) {
         aria-describedby="modal-modal-description"
       >
         <Stack alignItems='center' justifyContent='space-evenly' sx={{
-          background: '#242627', width: '290px', height: '330px', borderRadius: '20px',
+          background: '#06101F', width: '290px', height: '330px', borderRadius: '20px',
           position: 'absolute',
           top: '50%',
           left: '50%',
@@ -141,15 +141,15 @@ export default function InputValue({ method }) {
           padding: '12px'
         }}>
           <Image src={aleT ? Big : Wig} width={120} height={120} alt='widh' />
-          <Typography id="modal-modal-title" sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '20px', fontWeight: '500', color: '#cacaca' }}>
+          <Typography id="modal-modal-title" sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '20px', fontWeight: '500', color: '#E9E5DA' }}>
 
             {aleT ? 'Success' : 'Eh Sorry!'}
           </Typography>
-          <Typography id="modal-modal-description" sx={{ fontFamily: 'Poppins,sans-serif', mt: 2, fontSize: '14px', fontWeight: '300', color: '#cacaca' }}>
+          <Typography id="modal-modal-description" sx={{ fontFamily: 'Poppins,sans-serif', mt: 2, fontSize: '14px', fontWeight: '300', color: '#E9E5DA' }}>
             {ale}
           </Typography>
-          <Divider sx={{ color: '#CACACA' }} />
-          <motion.div whileTap={{ scale: 1.05 }} style={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: "#CACACA", height: '50px', background: '#373636', minWidth: '310px', padding: '12px' }} onClick={() => {
+          <Divider sx={{ color: '#E9E5DA' }} />
+          <motion.div whileTap={{ scale: 1.05 }} style={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: "#06101F", height: '50px', background: '#1BB6FF', minWidth: '310px', padding: '12px' }} onClick={() => {
             setOpen(false)
           }}>Okay</motion.div>
 

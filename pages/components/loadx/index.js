@@ -48,8 +48,8 @@ export default function Loadingx({ open, handleClose,currency }) {
                          localStorage.setItem('dmmv','mtn');
                          router.push('/user/inputvalue?dm=fcfa');
                     }}>
-                        <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#242627', borderRadius: '8px' }}>
-                            <p style={{ color: '#D4AF37', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 2: MTN MONEY</p>
+                        <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#06101F', borderRadius: '8px' }}>
+                            <p style={{ color: '#1BB6FF', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 2: MTN MONEY</p>
                         </Stack>
                     </motion.div>
 
@@ -63,8 +63,8 @@ export default function Loadingx({ open, handleClose,currency }) {
                <Stack direction='column' alignItems="center" justifyContent={"center"}>
                    
                    <Image src={Logo} alt="bradford fc" width={70} height={70} />
-                   <p style={{ color: '#CACACA', width: '100%', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>Choose any Transaction method</p>
-                   <p style={{ color: '#CACACA', width: '100%', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '300', fontSize: '13px' }}>you can Choose any transaction type that is available in your location</p>
+                   <p style={{ color: '#E9E5DA', width: '100%', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>Choose any Transaction method</p>
+                   <p style={{ color: '#E9E5DA', width: '100%', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '300', fontSize: '13px' }}>you can Choose any transaction type that is available in your location</p>
                </Stack>
 
                <motion.div whileTap={{ scale: 0.8 }} style={{ width: '100%',cursor:'pointer' }} 
@@ -73,8 +73,8 @@ export default function Loadingx({ open, handleClose,currency }) {
                     localStorage.setItem('dmmv','DANA');
                     router.push('/user/inputvalue?dm=idr');
                }}>
-                   <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#242627', borderRadius: '8px' }}>
-                       <p style={{ color: '#D4AF37', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 1: DANA</p>
+                   <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#06101F', borderRadius: '8px' }}>
+                       <p style={{ color: '#1BB6FF', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 1: DANA</p>
                    </Stack>
                </motion.div>
 
@@ -85,8 +85,8 @@ export default function Loadingx({ open, handleClose,currency }) {
                     localStorage.setItem('dmmv','bca');
                     router.push('/user/inputvalue?dm=idr');
                }}>
-                   <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#242627', borderRadius: '8px' }}>
-                       <p style={{ color: '#D4AF37', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 2: BANK CENTRAL ASIA</p>
+                   <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#06101F', borderRadius: '8px' }}>
+                       <p style={{ color: '#1BB6FF', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 2: BANK CENTRAL ASIA</p>
                    </Stack>
                </motion.div>
  */}
@@ -122,8 +122,8 @@ export default function Loadingx({ open, handleClose,currency }) {
                          localStorage.setItem('dmmv','kpay');
                          router.push('/user/inputvalue?dm=mmk');
                     }}>
-                        <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#242627', borderRadius: '8px' }}>
-                            <p style={{ color: '#D4AF37', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 2: KPAY</p>
+                        <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#06101F', borderRadius: '8px' }}>
+                            <p style={{ color: '#1BB6FF', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 2: KPAY</p>
                         </Stack>
                     </motion.div>
 
@@ -133,8 +133,8 @@ export default function Loadingx({ open, handleClose,currency }) {
                          localStorage.setItem('dmmv','kbz');
                          router.push('/user/inputvalue?dm=mmk');
                     }}>
-                        <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#242627', borderRadius: '8px' }}>
-                            <p style={{ color: '#D4AF37', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 3: KBZ Bank</p>
+                        <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#06101F', borderRadius: '8px' }}>
+                            <p style={{ color: '#1BB6FF', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 3: KBZ Bank</p>
                         </Stack>
                     </motion.div> */}
 

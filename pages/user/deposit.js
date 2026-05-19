@@ -151,7 +151,7 @@ export default function Upload() {
       </Backdrop>
       <Stack direction='column' justifyContent='center' alignItems="center" sx={{ height: '90vh' }} spacing={2}>
       <Stack direction='row' className='warning' justifyContent='center' alignItems='center' sx={{ height: '58px', background: '#FBEFEF', borderRadius: '5px', padding: '16px',maxWidth:'340px' }} spacing={2}>
-          <PriorityHighRoundedIcon sx={{ color: '#242627', background: '#D4AF37', width: '20px', height: '20px', borderRadius: '10px' }} />
+          <PriorityHighRoundedIcon sx={{ color: '#06101F', background: '#1BB6FF', width: '20px', height: '20px', borderRadius: '10px' }} />
           <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#D4AF37' }}>Please deposit only {amount} {method} to the address below, depositing any amount other than this may result in lost funds.</Typography>
         </Stack>
         <motion.div

@@ -60,11 +60,13 @@ export default function Cover({ children }) {
           for (let i = 0; i < data.length; i++) {
             const element = data[i];
             const uploadData = async () => {
-
-
-              const { data, error } = await supabase
-                .rpc('gatherd', { names: element.username, amount: parseFloat(element.amount) })
-              console.log(error)
+              try {
+                await fetch('/api/rpc/gatherd', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ names: element.username, amount: parseFloat(element.amount) })
+                })
+              } catch (e) { console.log(e) }
             }
             uploadData(element)
           }
@@ -125,7 +127,7 @@ export default function Cover({ children }) {
     <Stack direction="column"
       justifyContent="center"
       alignItems="center" 
-      style={{ width: '100%', background: "#242627",paddingTop:'#50px',marginTop:'-10px' }}>
+      style={{ width: '100%', background: "#06101F",paddingTop:'#50px',marginTop:'-10px' }}>
       {
         //drawer layout
       }
@@ -137,79 +139,79 @@ export default function Cover({ children }) {
             setDraw(false)
           }}
         >
-          <Stack direction='column' sx={{ padding: '12px', background: '#242627', height: '100%',position:'fixed' }}>
+          <Stack direction='column' sx={{ padding: '12px', background: '#06101F', height: '100%',position:'fixed' }}>
             <Stack direction='row' alignItems='center' justifyContent='space-between'>
               <Link href="/" style={{ textDecoration: "none" }}>
                 <p style={{ fontFamily: 'Noto Serif, serif', color: "#E9E5DA", fontWeight: '400', fontSize: '20px' }}>BFC  </p>
               </Link>
-              <Icon icon="ri:close-fill" width="32" height="32"  style={{color: "#D4AF37"}} onClick={()=>{
+              <Icon icon="ri:close-fill" width="32" height="32"  style={{color: "#1BB6FF"}} onClick={()=>{
                 setDraw(false)
               }}/>
             </Stack>
 
             <Stack direction='column' >
-              <Link href='/user/matches' style={{ textDecoration: "none", color: '#CACACA', cursor: 'pointer' }}>
+              <Link href='/user/matches' style={{ textDecoration: "none", color: '#E9E5DA', cursor: 'pointer' }}>
                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                   <Stack direction='row' spacing={2}>
                     <SportsSoccerIcon sx={{ width: '20px', height: '20px' }} />
-                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#CACACA' }}>Matches</Typography>
+                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#E9E5DA' }}>Matches</Typography>
                   </Stack>
                   <ArrowForwardIosIcon sx={{ width: '20px', height: '20px' }} />
                 </Stack></Link>
 
-              <Link href='/user/bets' style={{ textDecoration: "none", color: '#CACACA', cursor: 'pointer' }}>
+              <Link href='/user/bets' style={{ textDecoration: "none", color: '#E9E5DA', cursor: 'pointer' }}>
                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                   <Stack direction='row' spacing={2}>
                     <BiTimer sx={{ width: '20px', height: '20px' }} />
-                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#CACACA' }}>Bets</Typography>
+                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#E9E5DA' }}>Bets</Typography>
                   </Stack>
                   <ArrowForwardIosIcon sx={{ width: '20px', height: '20px' }} />
                 </Stack>
               </Link>
 
-              <Link href='/user/fund' style={{ textDecoration: "none", color: '#CACACA', cursor: 'pointer' }}>
+              <Link href='/user/fund' style={{ textDecoration: "none", color: '#E9E5DA', cursor: 'pointer' }}>
                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                   <Stack direction='row' spacing={2}>
                     <GiPayMoney sx={{ width: '20px', height: '20px' }} />
-                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#CACACA' }}>Deposit</Typography>
+                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#E9E5DA' }}>Deposit</Typography>
                   </Stack>
                   <ArrowForwardIosIcon sx={{ width: '20px', height: '20px' }} />
                 </Stack></Link>
 
-              <Link href='/user/withdraw' style={{ textDecoration: "none", color: '#CACACA', cursor: 'pointer' }}>
+              <Link href='/user/withdraw' style={{ textDecoration: "none", color: '#E9E5DA', cursor: 'pointer' }}>
                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                   <Stack direction='row' spacing={2}>
                     <GiReceiveMoney sx={{ width: '20px', height: '20px' }} />
-                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#CACACA' }}>Withdraw</Typography>
+                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#E9E5DA' }}>Withdraw</Typography>
                   </Stack>
                   <ArrowForwardIosIcon sx={{ width: '20px', height: '20px' }} />
                 </Stack></Link>
 
-              <Link href='/user/account' style={{ textDecoration: "none", color: '#CACACA', cursor: 'pointer' }}>
+              <Link href='/user/account' style={{ textDecoration: "none", color: '#E9E5DA', cursor: 'pointer' }}>
                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                   <Stack direction='row' spacing={2}>
                     <BsFillPersonFill sx={{ width: '20px', height: '20px' }} />
-                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#CACACA' }}>Profile</Typography>
+                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#E9E5DA' }}>Profile</Typography>
                   </Stack>
                   <ArrowForwardIosIcon sx={{ width: '20px', height: '20px' }} />
                 </Stack>
                 </Link>
 
-              <Link href='https://t.me/bradfordfootball_Help' style={{ textDecoration: "none", color: '#CACACA', cursor: 'pointer' }}>
+              <Link href='https://t.me/bradfordfootball_Help' style={{ textDecoration: "none", color: '#E9E5DA', cursor: 'pointer' }}>
                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                   <Stack direction='row' spacing={2}>
                     <BiSolidContact sx={{ width: '20px', height: '20px' }} />
-                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#CACACA' }}>Customer Care</Typography>
+                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#E9E5DA' }}>Customer Care</Typography>
                   </Stack>
                   <ArrowForwardIosIcon sx={{ width: '20px', height: '20px' }} />
                 </Stack></Link>
 
               <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                 <Stack direction='row' spacing={2}>
-                  <TranslateIcon sx={{ width: '20px', height: '20px', color: '#D20000' }} />
-                  <Typography className='notranslate' sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#CACACA' }}>Language</Typography>
+                  <TranslateIcon sx={{ width: '20px', height: '20px', color: '#D14B45' }} />
+                  <Typography className='notranslate' sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#E9E5DA' }}>Language</Typography>
                 </Stack>
-                <ArrowForwardIosIcon sx={{ width: '20px', height: '20px', color: '#D20000' }} />
+                <ArrowForwardIosIcon sx={{ width: '20px', height: '20px', color: '#D14B45' }} />
               </Stack>
             </Stack>
             {/* the start of supported Languages */}
@@ -220,22 +222,22 @@ export default function Cover({ children }) {
       {
         //drawer layout end
       }
-      <Stack direction="row" style={{ background: '#242627', width: '100%', height: '64px', padding: '12px',position:'fixed',top:'0px'}}
+      <Stack direction="row" style={{ background: '#06101F', width: '100%', height: '64px', padding: '12px',position:'fixed',top:'0px'}}
         alignItems='center' justifyContent="space-around">
         <div style={{ display: 'inline-flex', alignItems: 'center' }}>
-          <Icon icon="tabler:grid-dots" width="24" height="24" style={{ color: '#FFB400' }} onClick={() => {
+          <Icon icon="tabler:grid-dots" width="24" height="24" style={{ color: '#1BB6FF' }} onClick={() => {
             setDraw(true)
           }} />
         </div>
-        <p className="font-roboto" style={{ color: '#EFBF04', fontWeight:'500' }}>BRADFORD FOOTBALL</p>
+        <p className="font-roboto" style={{ color: '#23B5FF', fontWeight:'500' }}>BRADFORD FOOTBALL</p>
         <div style={{ display: 'inline-flex', alignItems: 'center' }}>
-          <Icon icon="solar:bell-bold" width="24" height="24" style={{ color: "#FFB400" }}
+          <Icon icon="solar:bell-bold" width="24" height="24" style={{ color: "#1BB6FF" }}
             onClick={() => {
               router.push('/user/notification');
             }} />
         </div> </Stack>
       <div style={{ paddingBottom: "50px",paddingTop:'70px' }}>  {children}</div>
-      <Divider sx={{ bgcolor: "#D4AF37" }} />
+      <Divider sx={{ bgcolor: "#1BB6FF" }} />
       <BottomNavi />
 
     </Stack>

@@ -7,7 +7,7 @@
     border-radius: 4px;
     border: 1px solid #4c4a44;
     cursor: pointer;
-    background-color: #D4AF37;
+    background-color: #1BB6FF;
   }
   
   .powerbtn p {
@@ -15,7 +15,7 @@
     font-size: 13px;
     font-weight: bold;
     text-align: center;
-    color: #212121;
+    color: #06101F;
     margin: 0px;
     text-align: center;
     cursor: pointer;
@@ -52,7 +52,7 @@
     background-color: #212121;
     color: whitesmoke;
     border-radius: 5px;
-    border: 1px solid #CACACA;
+    border: 1px solid #E9E5DA;
   }
   
   .amountinput::placeholder {
@@ -70,9 +70,9 @@
 
   .betspent  {
     width: 310px;
-    border: 0.6px solid #242627;
+    border: 0.6px solid #06101F;
     height: auto;
-    background-color: #373636;
+    background-color: #10284D;
     padding: 10px;
     display: flex;
     flex-direction: row;

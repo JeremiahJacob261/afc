@@ -41,16 +41,20 @@ export default async function handler(req, res) {
                 .from('notification')
                 .insert({ address: body.wallet, username: body.name, amount: parseFloat(body.amount) * 0.93, sent: 'pending', type: "withdraw", method: body.method, bank: body.bank, accountname: body.accountname })
             try {
-
-                const { data, error } = await supabase
-                    .rpc('dailywl', { amount: amountx, names: body.name })
+                await fetch('/api/rpc/dailywl', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ amount: amountx, names: body.name })
+                })
             } catch (e) {
                 console.log(e)
             }
             try {
-
-                const { data, error } = await supabase
-                    .rpc('withdrawer', { amount: amountx, names: body.name })
+                await fetch('/api/rpc/withdrawer', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ amount: amountx, names: body.name })
+                })
             } catch (e) {
                 console.log(e)
             }
@@ -66,16 +70,20 @@ export default async function handler(req, res) {
                     .from('notification')
                     .insert({ address: body.wallet, username: body.name, amount: parseFloat(body.amount) * 0.93, sent: 'pending', type: "withdraw", method: body.method, bank: body.bank, accountname: body.accountname })
                 try {
-
-                    const { data, error } = await supabase
-                        .rpc('dailywl', { amount: amountx, names: body.name })
+                    await fetch('/api/rpc/dailywl', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ amount: amountx, names: body.name })
+                    })
                 } catch (e) {
                     console.log(e)
                 }
                 try {
-
-                    const { data, error } = await supabase
-                        .rpc('withdrawer', { amount: amountx, names: body.name })
+                    await fetch('/api/rpc/withdrawer', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ amount: amountx, names: body.name })
+                    })
                 } catch (e) {
                     console.log(e)
                 }

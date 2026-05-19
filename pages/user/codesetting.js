@@ -55,13 +55,13 @@ export default function Code() {
           <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Deposit</Typography>
         </Stack>
         <Stack direction='row' justifyContent='center' alignItems='center' sx={{ height: '58px', background: '#FBEFEF', borderRadius: '5px', padding: '16px', maxWidth: '344px' }} spacing={2}>
-          <PriorityHighRoundedIcon sx={{ color: '#242627', background: '#D4AF37', width: '20px', height: '20px', borderRadius: '10px' }} />
-          <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#D4AF37' }}>Please note that whatever pin you set is what you will always use to make withdrawals</Typography>
+          <PriorityHighRoundedIcon sx={{ color: '#06101F', background: '#1BB6FF', width: '20px', height: '20px', borderRadius: '10px' }} />
+          <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#1BB6FF' }}>Please note that whatever pin you set is what you will always use to make withdrawals</Typography>
         </Stack>
         <Stack spacing={1} sx={{ minWidth: '344px' }}>
-          <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Enter Pin </Typography>
+          <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Enter Pin </Typography>
           <TextField
-            sx={{ input: { color: '#CACACA', }, border: "1px solid #F5F5F5" }}
+            sx={{ input: { color: '#E9E5DA', }, border: "1px solid #F5F5F5" }}
             value={pin}
             label='Enter Pin'
             type='pin'
@@ -76,9 +76,9 @@ export default function Code() {
           />
         </Stack>
         <Stack spacing={1} sx={{ minWidth: '344px' }}>
-          <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#CACACA' }}>Confirm Pin </Typography>
+          <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Confirm Pin </Typography>
           <TextField
-            sx={{ input: { color: '#CACACA', }, border: "1px solid #F5F5F5" }}
+            sx={{ input: { color: '#E9E5DA', }, border: "1px solid #F5F5F5" }}
             label='Enter Pin'
             type='password'
             value={cpin}
@@ -91,7 +91,7 @@ export default function Code() {
             }}
           />
         </Stack>
-        <motion.div  whileTap={{ scale:1.05 }} style={{ display:'flex',flexDirection:'row', alignItems:'center',borderRadius:'8px', justifyContent:'center',  bottom: 100, fontFamily: 'Poppins,sans-serif', color: '#CACACA', background: '#373636', padding: '8px', minWidth: '343px', height: '50px' }} onClick={nextPage}>SET PIN</motion.div>
+        <motion.div  whileTap={{ scale:1.05 }} style={{ display:'flex',flexDirection:'row', alignItems:'center',borderRadius:'8px', justifyContent:'center',  bottom: 100, fontFamily: 'Poppins,sans-serif', color: '#06101F', background: '#1BB6FF', padding: '8px', minWidth: '343px', height: '50px' }} onClick={nextPage}>SET PIN</motion.div>
       </Stack>
     </Cover>
   )
@@ -110,7 +110,7 @@ export default function Code() {
         aria-describedby="modal-modal-description"
       >
         <Stack alignItems='center' justifyContent='space-evenly' sx={{
-          background: '#242627', width: '290px', height: '330px', borderRadius: '20px',
+          background: '#06101F', width: '290px', height: '330px', borderRadius: '20px',
           position: 'absolute',
           top: '50%',
           left: '50%',
@@ -118,15 +118,15 @@ export default function Code() {
           padding: '12px'
         }}>
           <Image src={aleT ? Big : Wig} width={120} height={120} alt='widh' />
-          <Typography id="modal-modal-title" sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '20px', fontWeight: '500',color:'#cacaca' }}>
+          <Typography id="modal-modal-title" sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '20px', fontWeight: '500',color:'#E9E5DA' }}>
 
             {aleT ? 'Success' : 'Eh Sorry!'}
           </Typography>
-          <Typography id="modal-modal-description" sx={{ fontFamily: 'Poppins,sans-serif', mt: 2, fontSize: '14px', fontWeight: '300',color:'#cacaca' }}>
+          <Typography id="modal-modal-description" sx={{ fontFamily: 'Poppins,sans-serif', mt: 2, fontSize: '14px', fontWeight: '300',color:'#E9E5DA' }}>
             {ale}
           </Typography>
-          <Divider sx={{ background: '#CACACA' }} />
-          <Button variant='contained' sx={{ fontFamily: 'Poppins,sans-serif', color: '#cacaca', background: '#373636', padding: '8px', width: '100%' }} onClick={() => {
+          <Divider sx={{ background: '#E9E5DA' }} />
+          <Button variant='contained' sx={{ fontFamily: 'Poppins,sans-serif', color: '#06101F', background: '#1BB6FF', padding: '8px', width: '100%' }} onClick={() => {
             if (aleT) {
               setOpen(false)
               router.push('/user/account')

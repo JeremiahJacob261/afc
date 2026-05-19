@@ -111,13 +111,13 @@ export default function Address({ pay }) {
                     <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Payment Address</Typography>
                 </Stack>
                 <Stack direction='row' justifyContent='center' alignItems='center' sx={{ height: 'auto', maxWidth: '360px', background: '#FBEFEF', borderRadius: '5px', padding: '16px' }} spacing={2}>
-                    <PriorityHighRoundedIcon sx={{ color: '#242627', background: '#D4AF37', width: '20px', height: '20px', borderRadius: '10px' }} />
-                    <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#D4AF37' }}>Please note that you are to deposit only {amount} {(pay.currency_code === 'usdt') ? pay.currency_code.toUpperCase() + '(TRC20)' : pay.currency_code.toUpperCase()} to the payment method below.</Typography>
+                    <PriorityHighRoundedIcon sx={{ color: '#06101F', background: '#1BB6FF', width: '20px', height: '20px', borderRadius: '10px' }} />
+                    <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#1BB6FF' }}>Please note that you are to deposit only {amount} {(pay.currency_code === 'usdt') ? pay.currency_code.toUpperCase() + '(TRC20)' : pay.currency_code.toUpperCase()} to the payment method below.</Typography>
                 </Stack>
                 <Stack spacing={1} sx={{ minWidth: '344px' }} alignItems={"center"} justifyContent={"center"}>
                     <Image src={pay.image} width={300} height={350} alt="pay with love" style={{ borderRadius: '8px' }} />
                     <Stack direction="row" spacing={1}>
-                        <p style={{ color: '#cacaca', fontFamily: 'Poppins,sans-serif', fontSize: '16px', padding: '4px', margin: 2 }}>{pay.address}</p>
+                        <p style={{ color: '#E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '16px', padding: '4px', margin: 2 }}>{pay.address}</p>
                         <Icon icon="solar:copy-bold-duotone" width="24" height="24" style={{ color: '#a3a3a3' }} onClick={() => {
                             navigator.clipboard.writeText(pay.address)
                             toast.success("Address or Account copied")
@@ -127,14 +127,14 @@ export default function Address({ pay }) {
                         (pay.type === 'local') ?
                             <>
                                 <Stack direction="row" spacing={1}>
-                                    <p style={{ color: '#cacaca', fontFamily: 'Poppins,sans-serif', fontSize: '16px', padding: '4px', margin: 2 }}>{pay.accountname}</p>
+                                    <p style={{ color: '#E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '16px', padding: '4px', margin: 2 }}>{pay.accountname}</p>
                                     <Icon icon="solar:copy-bold-duotone" width="24" height="24" style={{ color: '#a3a3a3' }} onClick={() => {
                                         navigator.clipboard.writeText(pay.accountname)
                                         toast.success("AccounT Name copied")
                                     }} />
                                 </Stack>
                                 <Stack direction="row" spacing={1}>
-                                    <p style={{ color: '#cacaca', fontFamily: 'Poppins,sans-serif', fontSize: '16px', padding: '4px', margin: 2 }}>{pay.bank}</p>
+                                    <p style={{ color: '#E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '16px', padding: '4px', margin: 2 }}>{pay.bank}</p>
                                     <Icon icon="solar:copy-bold-duotone" width="24" height="24" style={{ color: '#a3a3a3' }} onClick={() => {
                                         navigator.clipboard.writeText(pay.bank)
                                         toast.success("Bank Name copied")
@@ -145,12 +145,12 @@ export default function Address({ pay }) {
                             <></>
                     }
                 </Stack>
-                <Stack direction='column' justifyContent='space-between' spacing={1} alignItems='center' sx={{ height: 'auto', maxWidth: '360px', background: '#373636', borderRadius: '5px', padding: '12px', margin: '4px' }} >
-                    <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#cacaca' }}>You are expected to upload an image of the receipt in the next page within 30 minutes of making the transaction else transferred funds might be lost!.
+                <Stack direction='column' justifyContent='space-between' spacing={1} alignItems='center' sx={{ height: 'auto', maxWidth: '360px', background: '#10284D', borderRadius: '5px', padding: '12px', margin: '4px' }} >
+                    <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#E9E5DA' }}>You are expected to upload an image of the receipt in the next page within 30 minutes of making the transaction else transferred funds might be lost!.
                     </Typography>
                     <Link href="https://t.me/bradfordfootball_Help" style={{ textDecoration: 'none' }}> <p style={{ fontFamily: 'Poppins,sans-serif', fontSize: '13px', color: '#D4AF37' }}>Click to Contact Support for more information</p></Link>
                 </Stack>
-                <motion.div whileTap={{ scale: 1.05 }} style={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: "#CACACA", height: '50px', background: '#D4AF37', minWidth: '360px', padding: '12px' }} onClick={() => {
+                <motion.div whileTap={{ scale: 1.05 }} style={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: "#06101F", height: '50px', background: '#1BB6FF', minWidth: '360px', padding: '12px' }} onClick={() => {
 
                     nextPage()
 
@@ -174,7 +174,7 @@ export default function Address({ pay }) {
                 aria-describedby="modal-modal-description"
             >
                 <Stack alignItems='center' justifyContent='space-evenly' sx={{
-                    background: '#242627', width: '290px', height: '330px', borderRadius: '20px',
+                    background: '#06101F', width: '290px', height: '330px', borderRadius: '20px',
                     position: 'absolute',
                     top: '50%',
                     left: '50%',

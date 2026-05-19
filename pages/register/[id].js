@@ -101,8 +101,13 @@ export default function Register( {refer} ) {
       .insert({ refer: nRef, count: 0 })
   }
   const updateRefb = async () => {
-    const { data, error } = await supabase
-      .rpc('increment', { x: 1, row_id: idR })
+    try {
+      await fetch('/api/rpc/increment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ x: 1, row_id: idR })
+      })
+    } catch (e) { console.log(e) }
   }
   useEffect(() => {
     
@@ -135,7 +140,7 @@ export default function Register( {refer} ) {
         const { data, error } = await supabase
           .from('users')
           .insert({
-            userId: user.id,
+            userid: user.id,
             uid: 'uid_' + generateId(),
             password: values.password,
             phone: phone,

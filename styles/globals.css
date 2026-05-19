@@ -61,7 +61,7 @@ html{
   scroll-behavior: smooth;
 }
 .MuiInputLabel-root {
-  color: #242627 !important;
+  color: #06101F !important;
 }
 #balls {
   position: absolute;
@@ -131,24 +131,24 @@ html{
 .betTab{
   padding: 8px;
   border-radius: 3px 10px 10px 10px;
-  background-color: #242627;
+  background-color: #06101F;
   cursor:pointer;
-  border: 1px solid #373636;
+  border: 1px solid #10284D;
   width: auto;
   height: 60px;
   text-align: center;
   font-size: 13px;
-  color: #cacaca;
+  color: #E9E5DA;
 }
 .betTabSelected{
   padding: 8px;
   border-radius: 3px 10px 10px 10px;
-  background-color: #373636;
+  background-color: #10284D;
   cursor:pointer;
-  border:1px solid #242627;
+  border:1px solid #06101F;
   width: auto;
   font-size: 13px;
   height: 60px;
   text-align: center;
-  color:#cacaca;
+  color:#E9E5DA;
 }

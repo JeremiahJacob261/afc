@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps }) {
   const [bets, setBets] = useState([])
   const [slip, setSlip] = useState(0)
   return (
-    <div style={{background: "#242627",height:'100%'}}>
+    <div style={{background: "#06101F",height:'100%'}}>
       <Head>
         <title>BFC</title>
         <meta name="description" content="Login to your Account to see whats up with your investments
@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps }) {
         <link rel="icon" href="/bradford.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Component {...pageProps} style={{ background: "#242627" ,width:"100%",display:'flex'}} />
+      <Component {...pageProps} style={{ background: "#06101F" ,width:"100%",display:'flex'}} />
       
 </div>
   )

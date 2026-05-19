@@ -238,11 +238,11 @@ export default function Home({ wallets }) {
             <Stack direction="column" spacing={3} justifyContent="center" alignItems="center" sx={{ minWidth: '350px', width: '100%', height: '100%' }} >
 
                 <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ marginTop: '20px', marginBottom: "20px", background: 'none', minWidth: "350px", paddingBottom: '30px', width: '100%', maxWidth: '450px' }}>
-                    <Stack direction="column" alignItems="center" justifyContent={"center"} spacing={3} sx={{ background: '#373636', padding: '16px', borderRadius: '8px', minWidth: "350px", maxWidth: '450px' }}>
+                    <Stack direction="column" alignItems="center" justifyContent={"center"} spacing={3} sx={{ background: '#10284D', padding: '16px', borderRadius: '8px', minWidth: "350px", maxWidth: '450px' }}>
                         <Stack direction="row" alignItems="center" justifyContent={"space-between"} sx={{ width: '100%' }}>
                             <p style={{ color: '#D9D8D4', fontWeight: '700', fontSize: '14px' }}>BIND WALLET</p>
                         </Stack>
-                        <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#242627', padding: '8px', width: '100%', borderRadius: '8px' }}>
+                        <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#06101F', padding: '8px', width: '100%', borderRadius: '8px' }}>
                             <p className='normal-bold' style={{ textAlign: 'start' }}>Select Payment Method</p>
                             <FormControl sx={{ m: 1, width: '100%', maxWidth: '301px' }} variant="standard">
                                 <NativeSelect
@@ -266,7 +266,7 @@ export default function Home({ wallets }) {
                         {
                             (type === 'local') ?
                                 <>
-                                    <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#242627', padding: '8px', width: '100%', borderRadius: '8px' }}>
+                                    <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#06101F', padding: '8px', width: '100%', borderRadius: '8px' }}>
                                         <p className='normal-bold' style={{ textAlign: 'start' }}>Account Number</p>
                                         <input type="text" className="amountinput" placeholder="account number" value={accountnumber} onChange={(e) => {
                                             if (!isNaN(e.target.value)) {
@@ -275,7 +275,7 @@ export default function Home({ wallets }) {
                                         }} />
                                     </Stack>
 
-                                    <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#242627', padding: '8px', width: '100%', borderRadius: '8px' }}>
+                                    <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#06101F', padding: '8px', width: '100%', borderRadius: '8px' }}>
                                         <p className='normal-bold' style={{ textAlign: 'start' }}>Account Name</p>
                                         <input type="text" className="amountinput" placeholder="account name" value={accountname} onChange={(e) => {
 
@@ -286,7 +286,7 @@ export default function Home({ wallets }) {
 
                                             {
                                                 (curcode === 'idr') ? 
-                                                <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#242627', padding: '8px', width: '100%', borderRadius: '8px' }}>
+                                                <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#06101F', padding: '8px', width: '100%', borderRadius: '8px' }}>
                                                 <p className='normal-bold' style={{ textAlign: 'start' }}>Select Bank</p>
                                                 <FormControl sx={{ m: 1, width: '100%', maxWidth: '301px' }} variant="standard">
                                                     <NativeSelect
@@ -307,7 +307,7 @@ export default function Home({ wallets }) {
                                                 </FormControl>
                                             </Stack>
                                                 :
-                                                <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#242627', padding: '12px', width: '100%', borderRadius: '8px' }}>
+                                                <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#06101F', padding: '12px', width: '100%', borderRadius: '8px' }}>
                                                 <p className='normal-bold' style={{ textAlign: 'start' }}>Input your bank name</p>
                                                 <input type="text" className="amountinput" placeholder="bank name" value={bank} onChange={(e) => {
         
@@ -320,7 +320,7 @@ export default function Home({ wallets }) {
 
                                 :
                                 <>
-                                    <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#242627', padding: '12px', width: '100%', borderRadius: '8px' }}>
+                                    <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#06101F', padding: '12px', width: '100%', borderRadius: '8px' }}>
                                         <p className='normal-bold' style={{ textAlign: 'start' }}>Input your address</p>
                                         <input type="text" className="amountinput" placeholder="wallet address" value={address} onChange={(e) => {
 

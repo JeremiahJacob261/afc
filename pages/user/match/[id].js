@@ -25,15 +25,18 @@ import { getAuth, signOut } from "firebase/auth";
 
 
 
-async function  processBets(name) {
+async function processBets(name) {
     try {
-      const { data, error } = await supabase.rpc('process_bets', { name });
-      if (error) throw error;
-      console.log('Bets processed:', data);
+        await fetch('/api/rpc/process_bets', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name })
+        })
+        console.log('Bets processed for', name)
     } catch (err) {
-      console.error('Error processing bets:', err);
+        console.error('Error processing bets:', err)
     }
-  }
+}
 
 export default function Match({ matchDat }) {
     //backdrop
@@ -60,9 +63,15 @@ export default function Match({ matchDat }) {
     const [viplevel, setViplevel] = useState(1);
     const auth = getAuth(app);
     const Reads = async (dtype, damount) => {
-        const { data, error } = await supabase
-            .rpc(dtype, { amount: damount })
-        console.log(error);
+        try {
+            await fetch(`/api/rpc/${dtype}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount: damount })
+            })
+        } catch (e) {
+            console.log(e)
+        }
     }
 
 
@@ -81,13 +90,17 @@ export default function Match({ matchDat }) {
             const uid = localStorage.getItem('signUids');
             const name = localStorage.getItem('signNames');
             if (!hasRun.current) {
-            async function  processBets(name) {
+            async function processBets(name) {
                 try {
-                  const { data, error } = await supabase.rpc('process_bets', { name });
-                  if (error) throw error;
-                  console.log('Bets processed:', data);
+                  await fetch('/api/rpc/process_bets', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name })
+                  })
+                  console.log('Bets processed for', name)
                 } catch (err) {
-                  console.error('Error processing bets:', err);
+                  console.error('Error processing bets:', err)
+                }
                 }
               }
                 // processBets(name);
@@ -246,7 +259,7 @@ export default function Match({ matchDat }) {
             <Toaster position="bottom-center"
                 reverseOrder={false} />
             <Loading open={openx} handleClose={handleClosex} />
-            <Stack style={{ width: "100%", minHeight: '100vh', background: '#242627' }} alignItems="center">
+            <Stack style={{ width: "100%", minHeight: '100vh', background: '#06101F' }} alignItems="center">
                 <Draws />
                 <Backdrop
                     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -262,8 +275,8 @@ export default function Match({ matchDat }) {
                     <meta name="viewport" content="width=device-width, initial-scale=1" />
                 </Head>
                 <Stack direction='row' alignItems='left' justifyContent='left' spacing={1} sx={{ width: '100%', margin: '5px' }} onClick={() => { router.push('/user/matches') }}>
-                    <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px', color: '#CACACA' }} />
-                    <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontWeight: '300', width: '90%', textAlign: 'center' }}>Stake your bet</Typography>
+                    <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px', color: '#E9E5DA' }} />
+                        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontWeight: '300', width: '90%', textAlign: 'center' }}>Stake your bet</Typography>
                 </Stack>
 
 
@@ -271,45 +284,45 @@ export default function Match({ matchDat }) {
 
                     style={{
                         marginBottom: "8px", padding: "18.5px",
-                        background: '#373636',
+                        background: '#10284D',
                         width: '343px',
                         borderRadius: '5px',
                     }} >
                     <Stack direction='column'>
-                        <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{(matches.league === 'others') ? matches.otherl : matches.league} </Typography>
-                        <Divider sx={{ background: '#CACACA' }} />
+                        <Typography style={{ color: '#E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{(matches.league === 'others') ? matches.otherl : matches.league} </Typography>
+                        <Divider sx={{ background: '#E9E5DA' }} />
                     </Stack>
                     <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
                         <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                             <Image src={matches.ihome ? matches.ihome : Ims} width={50} height={50} alt='home' sx={{ borderRadius: '10px' }} />
-                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>{matches.home}</Typography>
+                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{matches.home}</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
-                            <p>|</p>
-                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
+                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
+                            <p style={{color:'#E9E5DA'}}>|</p>
+                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
                         </Stack>
                         <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                             <Image src={matches.iaway ? matches.iaway : Ims} width={50} height={50} alt='away' sx={{ borderRadius: '10px' }} />
-                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>{matches.away}</Typography>
+                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{matches.away}</Typography>
                         </Stack>
                     </Stack>
-                    <Divider sx={{ background: '#CACACA' }} />
+                    <Divider sx={{ background: '#E9E5DA' }} />
 
                     {
                         marketsArray.map((m) => {
                             return (
                                 <Stack direction="column" spacing={1} key={m.num}>
                                     <Stack direction="row" alignItems="center" justifyContent={"space-around"} sx={{ minWidth: '300px', height: '40px' }}>
-                                        <p style={{ color: '#cacaca', padding: '8px' }}>{m.num}</p>
-                                        <p style={{ color: '#FFB400', padding: '8px' }}>{parseFloat(matches[m.word] + vip[viplevel]).toFixed(3)}%</p>
+                                        <p style={{ color: '#E9E5DA', padding: '8px' }}>{m.num}</p>
+                                        <p style={{ color: '#1BB6FF', padding: '8px' }}>{parseFloat(matches[m.word] + vip[viplevel]).toFixed(3)}%</p>
                                         <motion.div
                                             onClick={() => {
                                                 setPicked(m.word)
                                                 setBottom(true)
                                             }}
                                             whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}
-                                            style={{ cursor: 'pointer', color: '#cacaca', background: (matches.comarket != m.word) ? '#D4AF37' : '#FFB400', padding: '4px', borderRadius: '5px' }}>choose</motion.div>
+                                            style={{ cursor: 'pointer', color: '#06101F', background: (matches.comarket != m.word) ? '#1BB6FF' : '#1BB6FF', padding: '4px', borderRadius: '5px' }}>choose</motion.div>
                                     </Stack>
                                     <Divider sx={{ bgcolor: "secondary.light" }} />
                                 </Stack>
@@ -348,61 +361,61 @@ export default function Match({ matchDat }) {
             >
 
                 <Cover>
-                    <Stack direction='column' spacing={2} style={{ background: '#242627', padding: '8px', minHeight: '90vh', paddingBottom: '70px' }}>
+                    <Stack direction='column' spacing={2} style={{ background: '#06101F', padding: '8px', minHeight: '90vh', paddingBottom: '70px' }}>
                         <Stack direction='row' sx={{ padding: '5px' }}>
-                            <KeyboardArrowLeftOutlinedIcon style={{ color: '#CACACA' }} onClick={() => {
+                            <KeyboardArrowLeftOutlinedIcon style={{ color: '#E9E5DA' }} onClick={() => {
                                 setBottom(false)
                             }} />
-                            <Typography sx={{ width: '100%', fontFamily: 'Poppins,sans-serif', textAlign: 'center', color: '#CACACA' }}>Stake your bet</Typography>
+                            <Typography sx={{ width: '100%', fontFamily: 'Poppins,sans-serif', textAlign: 'center', color: '#E9E5DA' }}>Stake your bet</Typography>
                         </Stack>
                         <Stack direction='column' alignItems='center' justifyContent='center'>
-                            <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{(matches.league === 'others') ? matches.otherl : matches.league} </Typography>
-                            <Divider sx={{ background: '#CACACA' }} />
+                            <Typography style={{ color: '#E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{(matches.league === 'others') ? matches.otherl : matches.league} </Typography>
+                            <Divider sx={{ background: '#E9E5DA' }} />
                         </Stack>
                         <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
                             <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                                 <Image src={matches.ihome ? matches.ihome : Ims} width={50} height={50} alt='home' />
-                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>{matches.home}</Typography>
+                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{matches.home}</Typography>
                             </Stack>
                             <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
-                                <p>|</p>
-                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
+                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
+                                <p style={{color:'#E9E5DA'}}>|</p>
+                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
                             </Stack>
                             <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                                 <Image src={matches.iaway ? matches.iaway : Ims} width={50} height={50} alt='away' />
-                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '12px', fontWeight: '100' }}>{matches.away}</Typography>
+                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{matches.away}</Typography>
                             </Stack>
 
                         </Stack>
-                        <Divider sx={{ background: '#CACACA' }} />
+                        <Divider sx={{ background: '#E9E5DA' }} />
                         <Stack direction='column' spacing={3}>
                             <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#CACACA' }}>Match ID</Typography>
-                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#CACACA' }}>{matches.match_id}</Typography>
+                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#E9E5DA' }}>Match ID</Typography>
+                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{matches.match_id}</Typography>
                             </Stack>
                             <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#CACACA' }}>Market</Typography>
-                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#CACACA' }}>{markets[picked]}</Typography>
+                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#E9E5DA' }}>Market</Typography>
+                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{markets[picked]}</Typography>
                             </Stack>
                             <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#CACACA' }}>Odds</Typography>
-                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#CACACA' }}>{tofal}</Typography>
+                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#E9E5DA' }}>Odds</Typography>
+                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{tofal}</Typography>
                             </Stack>
                         </Stack>
-                        <Divider sx={{ background: '#CACACA' }} />
+                        <Divider sx={{ background: '#E9E5DA' }} />
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#CACACA', width: '210px' }}>Enter the amount you wish to stake</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#E9E5DA', width: '210px' }}>Enter the amount you wish to stake</Typography>
                             {/* <Image src={Depx} alt="deposit" width={87} height={32} onClick={()=>{
                                 router.push('/user/deposit')
                             }}/> */}
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#CACACA' }}>Account Balance</Typography>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#CACACA' }}>{ball} USDT</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#E9E5DA' }}>Account Balance</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{ball} USDT</Typography>
                         </Stack>
                         <input placeholder='stake' type='text'
-                            style={{ fontFamily: 'Poppins, sans-serif', padding: "10px", borderRadius: '12px', width: '100%', background: '#242627', color: '#FFFFFF', border: '3px solid #CACACA' }}
+                            style={{ fontFamily: 'Poppins, sans-serif', padding: "10px", borderRadius: '12px', width: '100%', background: '#06101F', color: '#FFFFFF', border: '3px solid #E9E5DA' }}
                             value={stake}
                             onChange={(e) => {
                                 if (!isNaN(e.target.value)) {
@@ -411,14 +424,14 @@ export default function Match({ matchDat }) {
 
                             }} />
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#CACACA' }}>Profit</Typography>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#CACACA' }}>{parseFloat(profit).toFixed(3)} USDT</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#E9E5DA' }}>Profit</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{parseFloat(profit).toFixed(3)} USDT</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#CACACA' }}>Expected Profit</Typography>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#CACACA' }}>{expext} USDT</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#E9E5DA' }}>Expected Profit</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#E9E5DA' }}>{expext} USDT</Typography>
                         </Stack>
-                        <Button sx={{ fontFamily: 'Poppins,sans-serif', margin: '8px', fontSize: '16', fontWeight: '300', color: '#FFFFFF', background: "#D4AF37", padding: '10px' }}
+                        <Button sx={{ fontFamily: 'Poppins,sans-serif', margin: '8px', fontSize: '16', fontWeight: '300', color: '#06101F', background: "#1BB6FF", padding: '10px' }}
                             onClick={() => {
                                 if (stake - 1 < info.balance) {
                                     if (stake < 1) {

@@ -153,14 +153,14 @@ export default function Translate() {
         </Stack>
       </Modal> */}
 
-            <Stack direction="column" spacing={1} sx={{ width: '100%', height: 'auto', padding: '12px', background: '#2D2F2F', borderRadius: '8px', border: '0.6px solid #373636' }}>
+            <Stack direction="column" spacing={1} sx={{ width: '100%', height: 'auto', padding: '12px', background: '#10284D', borderRadius: '8px', border: '0.6px solid #1BB6FF' }}>
                 {
                     languages.map((l) => {
                         return (
                             <Stack direction="column" spacing={1} key={l.name} onClick={() => { changeLanguageHandler(l.code) }}>
                                 <Stack sx={{ width: '100%',cursor:'pointer' }} direction={"row"} spacing={1} alignItems="center" justifyContent={"start"}>
                                     <Image src={l.flag} alt={l.name} width={24} height={18} />
-                                    <p style={{ color: '#cacaca', fontFamily: 'Poppins,sans-serif', fontSize: '13px', fontWeight: "300" }}>{l.name}</p>
+                                    <p style={{ color: '#E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: '13px', fontWeight: "300" }}>{l.name}</p>
                                 </Stack>
                                 <div style={{ border: '0.05px solid #4A4A4A', width: '100%' }}></div>
                             </Stack>

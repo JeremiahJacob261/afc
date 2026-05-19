@@ -4,28 +4,35 @@ export default async function handler(req, res) {
     const body = req.body;
     const name = body.name;
 
-    //guild functions
+    //guild functions (use backend RPC endpoints)
     const Depositing = async (damount, dusername) => {
-        const { data, error } = await supabase
-            .rpc('depositor', { amount: damount, names: dusername })
-        console.log(error);
+        try {
+            await fetch('/api/rpc/depositor', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ names: dusername, amount: damount })
+            })
+        } catch (e) { console.log(e) }
     }
 
     const Chan = async (bets, type) => {
-        const { data, error } = await supabase
-            .rpc('chan', { bet: bets, des: type })
-        console.log(error);
+        try {
+            await fetch('/api/rpc/chan', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ bet: bets, des: type })
+            })
+        } catch (e) { console.log(e) }
     }
 
     const AffBonus = async (damount, dusername, refer, lvla, lvlb) => {
         try {
-            const { data, error } = await supabase
-                .rpc('affbonus', { name: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
-            console.log(error);
-        } catch (e) {
-            console.log(e)
-        }
-
+            await fetch('/api/rpc/affbonus', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
+            })
+        } catch (e) { console.log(e) }
     }
 
     const NUser = async (reason, username, amount) => {

@@ -38,7 +38,7 @@ export default function Viewbets({ bets }) {
                 const { data, error } = await supabase
                     .from('users')
                     .select()
-                    .eq('userId', uid)
+                    .eq('userid', uid)
                 setInfo(data[0]);
                 console.log(data)
             }
@@ -84,9 +84,13 @@ export default function Viewbets({ bets }) {
             });
     }
     const Depositing = async (damount, dusername) => {
-        const { data, error } = await supabase
-            .rpc('depositor', { amount: damount, names: dusername })
-        console.log(error);
+        try {
+            await fetch('/api/rpc/depositor', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ names: dusername, amount: damount })
+            })
+        } catch (e) { console.log(e) }
     }
 
     return (
