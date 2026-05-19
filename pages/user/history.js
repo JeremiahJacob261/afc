@@ -122,8 +122,8 @@ export default function Transaction({ transaction }) {
         <Cover>
             <Head>
                 <title>History</title>
-                <meta name="description" content="Bradford football club" />
-        <link rel="icon" href="/bradford.ico" />
+                <meta name="description" content="european football club" />
+        <link rel="icon" href="/european.ico" />
             </Head>
         <div className="backgrounds" style={{ width:'100%', display:'flex',flexDirection:'column',justifyContent:'start',alignItems:'center'}}>
             <Stack className='headers' direction="row" alignItems='center' sx={{ padding: '8px', width: '100%' }} spacing={1}>

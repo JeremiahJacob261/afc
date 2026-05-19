@@ -2,7 +2,7 @@ import { Stack } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import { useState } from 'react';
 import Backdrop from '@mui/material/Backdrop';
-import LOGO from '../../../public/bradford.ico';
+import LOGO from '../../../public/european.ico';
 import Image from 'next/image';
 import Refresh from '@/public/refresh.png';
 

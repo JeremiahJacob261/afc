@@ -1,4 +1,4 @@
--- Supabase Database Schema for BRADFORD FC Betting Platform
+-- Supabase Database Schema for EUROPEAN FC Betting Platform
 -- Generated: 2026-05-18
 -- This schema matches the application structure used in the Next.js project
 

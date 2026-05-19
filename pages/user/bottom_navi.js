@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import Profile from '../../public/profile.png';
 import Image from 'next/image'
 import {Backdrop} from '@mui/material'
-import LOGO from '../../public/bradford.ico';
+import LOGO from '../../public/european.ico';
 
  
 function BottomNavi() {

@@ -2,7 +2,6 @@ import { Stack } from '@mui/material';
 import Head from 'next/head';
 import Image from "next/image";
 import { styled } from '@mui/material/styles';
-import Logo from '@/public/favicon.ico';
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Cover from '../cover'

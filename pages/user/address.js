@@ -148,7 +148,7 @@ export default function Address({ pay }) {
                 <Stack direction='column' justifyContent='space-between' spacing={1} alignItems='center' sx={{ height: 'auto', maxWidth: '360px', background: '#10284D', borderRadius: '5px', padding: '12px', margin: '4px' }} >
                     <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#E9E5DA' }}>You are expected to upload an image of the receipt in the next page within 30 minutes of making the transaction else transferred funds might be lost!.
                     </Typography>
-                    <Link href="https://t.me/bradfordfootball_Help" style={{ textDecoration: 'none' }}> <p style={{ fontFamily: 'Poppins,sans-serif', fontSize: '13px', color: '#D4AF37' }}>Click to Contact Support for more information</p></Link>
+                    <Link href="https://t.me/europeanfootball_Help" style={{ textDecoration: 'none' }}> <p style={{ fontFamily: 'Poppins,sans-serif', fontSize: '13px', color: '#D4AF37' }}>Click to Contact Support for more information</p></Link>
                 </Stack>
                 <motion.div whileTap={{ scale: 1.05 }} style={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: "#06101F", height: '50px', background: '#1BB6FF', minWidth: '360px', padding: '12px' }} onClick={() => {
 

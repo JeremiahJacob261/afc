@@ -155,7 +155,7 @@ export default function Account() {
       <Sncks />
       <Head>
         <title>{username ? `${username}` : 'Loading...'}&lsquo; Account</title>
-        <link rel="icon" href="/bradford.ico" />
+        <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Box sx={{ padding: "8px", background: "#06101F", width: '100%', minHeight: '90vh', paddingBottom: '5vh' }}>
@@ -385,8 +385,8 @@ export default function Account() {
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
 
-              <Divider sx={{ bgcolor: "#D4AF37" }} />
-              < Link href='https://t.me/bradfordfootball_Help' style={{ textDecoration: 'none' }}>
+              <Divider sx={{ bgcolor: "#1BB6FF" }} />
+              < Link href='https://t.me/europeanfootball_Help' style={{ textDecoration: 'none' }}>
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                   <Stack direction='row' spacing={1} justifyContent='start'>
                     <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
@@ -397,7 +397,7 @@ export default function Account() {
                 </Stack>
               </Link>
 
-              <Divider sx={{ bgcolor: "#D4AF37" }} />
+              <Divider sx={{ bgcolor: "#1BB6FF" }} />
               < Link href='https://t.me/+bfJIWHK3fKNkNjY1' style={{ textDecoration: 'none' }}>
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                   <Stack direction='row' spacing={1} justifyContent='start'>
@@ -409,9 +409,9 @@ export default function Account() {
                 </Stack>
               </Link>
 
-              <Divider sx={{ bgcolor: "#D4AF37" }} />
+              <Divider sx={{ bgcolor: "#1BB6FF" }} />
 
-              < Link href='https://t.me/bradfordfootball_Help' style={{ textDecoration: 'none' }}>
+              < Link href='https://t.me/europeanfootball_Help' style={{ textDecoration: 'none' }}>
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                   <Stack direction='row' spacing={1} justifyContent='start'>
                     <Icon icon="mdi:support" width="24" height="24" style={{ color: '#a3a3a3' }} />

@@ -56,7 +56,7 @@ export default function Footer() {
                 </div>
                 <div>
                     <Typography variant="subtitle" sx={{ color: "#1BB6FF", fontSize: '10px', fontWeight: '100', fontFamily: "Poppins, sans-serif" }}>
-                        © 2024 BRADFORD . All rights reserved.
+                        © 2024 EUROPEAN . All rights reserved.
                     </Typography>
                     {/* <Typography onClick={() => {
                         console.log('...started')

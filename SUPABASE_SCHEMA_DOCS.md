@@ -1,6 +1,6 @@
 # Supabase Database Schema Documentation
 
-**Project:** BRADFORD FC Betting Platform  
+**Project:** EUROPEAN FC Betting Platform  
 **Generated:** 2026-05-18  
 **Status:** Production Ready
 

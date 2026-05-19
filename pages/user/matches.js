@@ -36,9 +36,9 @@ export default function Matches({ footDat }) {
       </Backdrop>
       <Loading open={open} handleClose={handleClose} />
       <Head>
-        <title>BRADFORD - Matches</title>
-        <meta name="description" content="See the Best Matches Provided By BRADFORD FC- " />
-        <link rel="icon" href="/bradford.ico" />
+        <title>EUROPEAN - Matches</title>
+        <meta name="description" content="See the Best Matches Provided By EUROPEAN FC- " />
+        <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div style={{
