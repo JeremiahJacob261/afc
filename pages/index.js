@@ -20,7 +20,7 @@ export default function Home() {
       <Head>
         <title>European Football</title>
         <meta name="description" content="European football club" />
-        <link rel="icon" href="/logo.png" />
+        <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Navbar />

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { navItems } from "@/data/landing";
-import Logo from "@/public/logo.png";
+import Logo from "@/public/european.ico";
 
 export function Navbar() {
   return (
