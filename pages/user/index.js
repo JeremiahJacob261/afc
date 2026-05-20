@@ -15,6 +15,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Icon } from '@iconify/react'
 import Agent3 from '../../public/bfc4.jpg'
 import Agent4 from '../../public/bfc5.jpg'
+import AnimatedCarousel from '../../components/AnimatedCarousel'
 import Loading from "../components/loading";
 import Ims from '../../public/simps/ball.png'
 import { app } from '../api/firebase';
@@ -146,44 +147,7 @@ export default function Home() {
 
   const router = useRouter();
 
-  function Carousel() {
-    const images = {
-      0: Agent,
-      1: Agent1,
-      2: Agent2,
-      3: Agent3,
-      4: Agent4
-    };
-    const [current, setCurrent] = useState(0);
-    useEffect(() => {
-      const interval = setInterval(() => {
-        setCurrent((prevCurrent) => (prevCurrent === 1 ? 2 : prevCurrent === 2 ? 3 : 1));
-      }, 8000);
-
-      return () => clearInterval(interval);
-    }, []);
-
-    return (
-      <AnimatePresence>
-        <motion.div
-          key={current}
-          initial={{ opacity: 0, x: 100 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -100 }}
-          transition={{ duration: 0.5 }}
-          className="image-wrapper"
-        >
-          <Image
-            src={images[current]}
-            alt={`Slide ${current}`}
-            layout="responsive"
-            width={350} // Adjust based on your design
-            height={159} // Adjust based on your design
-          />
-        </motion.div>
-      </AnimatePresence>
-    );
-  }
+  
 
   return (
     <Stack justifyContent="start" alignItems="center"
@@ -243,7 +207,7 @@ export default function Home() {
           </Stack>
           <Divider sx={{ background: '#E9E5DA' }} />
 
-          <Carousel />
+          <AnimatedCarousel images={[Agent, Agent1, Agent2, Agent3, Agent4]} interval={5000} />
 
           <Stack direction='row' justifyContent='space-between' alignItems='center'>
             <Stack direction='row' spacing={1}>

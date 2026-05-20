@@ -64,12 +64,13 @@ function BottomNavi() {
         <Image src={LOGO} width={100} height={100} id='balls' alt="logo" sx={{ marginLeft: '8px' }} />
       </Backdrop>
         <BottomNavigation
+        className="dark-glass bottom-nav"
         showLabels
         value={value}
         onChange={(event, newValue) => {
           setValue(newValue);
         }}
-        sx={{background:'#06101F',position:'fixed',height:'72px',bottom:0,left:0,width:'100%'}}
+        sx={{background:'transparent', position:'fixed', height:'72px', bottom:0, left:0, width:'100%', zIndex: (theme) => theme.zIndex.drawer + 3, borderTopLeftRadius: '12px', borderTopRightRadius: '12px', px: 1}}
       >
         <BottomNavigationAction label={<p style={{ padding:0,margin:0,fontFamily:'Poppins,san-serif',color:'#D9D9D9' }}>Top</p>} onClick={home} icon={<Icon icon="ri:home-line" width="24" height="24"  style={{color: "#D9D9D9"}} />} sx={{width:"40px",color:"E9E5DA"}}/>
         <BottomNavigationAction label={<p style={{ padding:0,margin:0,fontFamily:'Poppins,san-serif',color:'#D9D9D9' }}>Matches</p>} onClick={matches} icon={<Icon icon="ion:football-outline" width="24" height="24"  style={{color: "#D9D9D9"}} />} sx={{width:"40px",color:"E9E5DA"}}/>

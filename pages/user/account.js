@@ -158,7 +158,25 @@ export default function Account() {
         <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Box sx={{ padding: "8px", background: "#06101F", width: '100%', minHeight: '90vh', paddingBottom: '5vh' }}>
+      <Box className="account-wrap" sx={{ padding: "8px", background: "#06101F", width: '100%', minHeight: '90vh', paddingBottom: '5vh' }}>
+        <div className="page-decor" aria-hidden="true">
+          <svg width="100%" height="100%" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" style={{position: 'absolute', inset: 0}}>
+            <defs>
+              <symbol id="ball" viewBox="0 0 64 64">
+                <circle cx="32" cy="32" r="30" fill="none" stroke="currentColor" strokeWidth="2" />
+                <g fill="currentColor" opacity="0.9">
+                  <path d="M32 10 L24 26 L32 34 L40 26 Z" />
+                  <path d="M32 54 L24 38 L32 30 L40 38 Z" />
+                </g>
+              </symbol>
+            </defs>
+            <g fill="#ffffff" opacity="0.04">
+              <use href="#ball" x="80" y="60" width="120" height="120" />
+              <use href="#ball" x="980" y="140" width="160" height="160" />
+              <use href="#ball" x="520" y="420" width="200" height="200" />
+            </g>
+          </svg>
+        </div>
         <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '5px', margin: '2px' }}>
           <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
             router.push('/user')
@@ -168,7 +186,7 @@ export default function Account() {
         {
           //start of profile
         }
-        <Stack spacing={4} sx={{ minWidth: '344px' }}>
+        <Stack spacing={4} className="dark-glass" sx={{ minWidth: '344px' }}>
           <Stack spacing={1} sx={{ background: '#10284D', padding: '8px', borderRadius: '5px' }}>
             <Stack direction='row' spacing={2} sx={{ padding: '8px' }} alignItems='center' justifyContent={"start"}>
               <Image src={profile} width={50} height={50} alt="profile" />

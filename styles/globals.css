@@ -152,3 +152,50 @@ html{
   text-align: center;
   color:#E9E5DA;
 }
+
+/* Account page decorative glass + subtle noise + football doodles */
+.account-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.page-decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page-decor::before {
+  /* subtle grain/noise using tiny SVG data URI */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.02' fill='black'/></svg>");
+  background-repeat: repeat;
+  z-index: 0;
+}
+
+.dark-glass {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 8px 30px rgba(2,6,23,0.5);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+/* make sure text and interactive elements sit above decorations */
+.account-wrap .MuiStack-root,
+.account-wrap .dark-glass {
+  position: relative;
+  z-index: 2;
+}
+
+/* smaller screens tweak */
+@media (max-width: 600px) {
+  .page-decor svg { transform: scale(0.7) translateY(-10%); }
+}
