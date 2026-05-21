@@ -15,6 +15,10 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
   global: {
     headers: { 'x-my-custom-header': 'my-app-name' },
   },
+   realtime: {
+    // Disables the realtime connection entirely
+    params: { eventsPerSecond: -1 },
+  },
 })
 
 export default function handler(req, res) {
