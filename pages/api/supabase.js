@@ -1,4 +1,10 @@
 import { createClient } from '@supabase/supabase-js'
+import { WebSocket } from 'ws'
+
+
+if (!globalThis.WebSocket) {
+  globalThis.WebSocket = WebSocket
+}
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://example.supabase.co'
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'missing-anon-key'
@@ -15,10 +21,7 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
   global: {
     headers: { 'x-my-custom-header': 'my-app-name' },
   },
-   realtime: {
-    // Disables the realtime connection entirely
-    params: { eventsPerSecond: -1 },
-  },
+  
 })
 
 export default function handler(req, res) {
