@@ -233,6 +233,64 @@ CREATE POLICY "Users see own data" ON users
 */
 
 -- ============================================================================
+-- RECOMMENDED RLS HARDENING FOR SUPABASE AUTH
+-- ============================================================================
+-- Run this after verifying users.userid contains auth.users.id values.
+-- Service-role API routes bypass RLS for trusted server-side operations.
+
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE placed ENABLE ROW LEVEL SECURITY;
+ALTER TABLE notification ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_wallets ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Users can read own profile" ON users;
+CREATE POLICY "Users can read own profile" ON users
+  FOR SELECT
+  USING (auth.uid()::text = userid);
+
+DROP POLICY IF EXISTS "Users can update own profile settings" ON users;
+CREATE POLICY "Users can update own profile settings" ON users
+  FOR UPDATE
+  USING (auth.uid()::text = userid)
+  WITH CHECK (auth.uid()::text = userid);
+
+DROP POLICY IF EXISTS "Users can read own bets" ON placed;
+CREATE POLICY "Users can read own bets" ON placed
+  FOR SELECT
+  USING (
+    username IN (
+      SELECT username FROM users WHERE userid = auth.uid()::text
+    )
+  );
+
+DROP POLICY IF EXISTS "Users can read own notifications" ON notification;
+CREATE POLICY "Users can read own notifications" ON notification
+  FOR SELECT
+  USING (
+    username IN (
+      SELECT username FROM users WHERE userid = auth.uid()::text
+    )
+  );
+
+DROP POLICY IF EXISTS "Users can read own wallets" ON user_wallets;
+CREATE POLICY "Users can read own wallets" ON user_wallets
+  FOR SELECT
+  USING (
+    uid IN (
+      SELECT userid FROM users WHERE userid = auth.uid()::text
+    )
+  );
+
+DROP POLICY IF EXISTS "Users can insert own wallets" ON user_wallets;
+CREATE POLICY "Users can insert own wallets" ON user_wallets
+  FOR INSERT
+  WITH CHECK (
+    uid IN (
+      SELECT userid FROM users WHERE userid = auth.uid()::text
+    )
+  );
+
+-- ============================================================================
 -- INITIAL DATA (Optional)
 -- ============================================================================
 

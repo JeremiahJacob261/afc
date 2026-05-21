@@ -1,4 +1,4 @@
-import { supabase } from '../supabase'
+import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
 
 /**
  * RPC Function Replacement: withdrawer
@@ -10,10 +10,12 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { names, amount } = req.body
+    const { profile, supabase } = await getCurrentProfile(req, 'username,balance')
+    const { amount } = req.body
+    const names = profile.username
 
-    if (!names || amount === undefined) {
-      return res.status(400).json({ error: 'Missing required parameters: names, amount' })
+    if (amount === undefined) {
+      return res.status(400).json({ error: 'Missing required parameter: amount' })
     }
 
     // Fetch current balance
@@ -57,9 +59,6 @@ export default async function handler(req, res) {
     })
   } catch (error) {
     console.error('Withdrawer error:', error)
-    res.status(500).json({
-      status: 'error',
-      message: error.message
-    })
+    return sendApiError(res, error)
   }
 }

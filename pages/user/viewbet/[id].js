@@ -7,7 +7,9 @@ import { onAuthStateChanged } from "firebase/auth";
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
-export default function Viewbets({ bets }) {
+import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
+
+export default function Viewbets() {
     const [drop, setDrop] = useState(false)
     const [league, setLeague] = useState([]);
     const [bet, setBet] = useState({})
@@ -19,61 +21,35 @@ export default function Viewbets({ bets }) {
     const [btn, setBtn] = useState((stams > curren) ? 'none' : 'visible');
     const [status, setStatus] = useState('');
     useEffect(() => {
-        bets.map((m) => {
-            setBet(m);
-        })
-        const useri = localStorage.getItem('signedIns');
-        if (useri) {
-            // User is signed in, see docs for a list of available properties
-            // https://firebase.google.com/docs/reference/js/auth.user
+        let active = true;
 
-            const uid = localStorage.getItem('signUids');
-            const name = localStorage.getItem('signNames');
-            // User is signed in, see docs for a list of available properties
-            // https://firebase.google.com/docs/reference/js/auth.user
-            console.log('...')
-            // ...
+        const GET = async () => {
+            const session = await requireSession(router);
+            if (!session) return;
+            clearLegacyAuthStorage();
 
-            const GET = async () => {
-                const { data, error } = await supabase
-                    .from('users')
-                    .select()
-                    .eq('userid', uid)
-                setInfo(data[0]);
-                console.log(data)
-            }
-            GET();
-
-
-        } else {
-            // User is signed out
-            // ...
-            signOut(auth);
-            console.log('sign out');
-            localStorage.removeItem('signedIns');
-            localStorage.removeItem('signUids');
-            localStorage.removeItem('signNames');
-            router.push('/login');
-        }
-
-
-        const getMatchDa = async () => {
             try {
+                const response = await authFetch('/api/my-bet?id=' + router.query.id);
+                if (response.status === 401 || response.status === 404) {
+                    router.push(response.status === 401 ? '/login' : '/user/bets');
+                    return;
+                }
 
-                const { data, error } = await supabase
-                    .from('bets')
-                    .select()
-                    .eq('match_id', bet.match_id);
-                data.map((m) => {
-                    setLeague(m);
-                })
+                const result = await response.json();
+                if (!active || result.status !== 'success') return;
+
+                setBet(result.bet || {});
+                setLeague(result.match || {});
             } catch (e) {
-                console.log(e)
+                console.log(e);
             }
         }
-        getMatchDa();
+        if (router.query.id) GET();
 
-    }, []);
+        return () => {
+            active = false;
+        }
+    }, [router]);
     const NUser = async (reason, username, amount) => {
         const { error } = await supabase
             .from('activa')
@@ -176,17 +152,4 @@ export default function Viewbets({ bets }) {
         }
 
     }
-}
-
-
-
-export async function getServerSideProps(context) {
-    const { params } = context;
-    const id = params.id;
-    const { data, error } = await supabase
-        .from('placed')
-        .select()
-        .eq('betid', id);
-        let bets = data;
-    return { props: { bets } }
 }

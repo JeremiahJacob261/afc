@@ -20,6 +20,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import TabPanel from '@mui/lab/TabPanel';
+import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 export default function Refferal() {
   const [value, setValue] = useState('1');
   const [xxx, setXxx] = useState(0);
@@ -38,60 +39,42 @@ export default function Refferal() {
   const [lvl3, setLvl3] = useState([]);
   const isMounted = useRef(true);
   const [refers, setRefers] = useState('')
-  let okx = 0;
   useEffect(() => {
-     
-      const refs = localStorage.getItem('signRef');
-      const useri = localStorage.getItem('signedIns');
-      if (useri) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/auth.user
-        setRefers(localStorage.getItem('signRef'))
-        const uid = localStorage.getItem('signUids');
-        const name = localStorage.getItem('signNames');
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/auth.user
+      let active = true;
 
-        // ...
-        async function getRef() {
-          try {
-            const { data, error } = await supabase
-              .from('users')
-              .select('*')
-              .or(`refer.eq.${refs},lvla.eq.${refs},lvlb.eq.${refs}`)
-            setLvl(data)
-            setLvlst(data)
-          } catch (e) {
-            console.log(e);
+      async function getRef() {
+        const session = await requireSession(router);
+        if (!session) return;
+        clearLegacyAuthStorage();
+
+        try {
+          const response = await authFetch('/api/my-referrals');
+          if (response.status === 401 || response.status === 404) {
+            router.push('/login');
+            return;
           }
 
+          const result = await response.json();
+          if (!active || result.status !== 'success') return;
+          setRefers(result.refer || '');
+          setLvl(result.referrals || []);
+          setLvlst(result.referrals || []);
+        } catch (e) {
+          console.log(e);
         }
-        if (okx === 0){
-          getRef();
-        }
-
-
-
-      } else {
-        // User is signed out
-        // ...
-        signOut(auth);
-        console.log('sign out');
-        localStorage.removeItem('signedIns');
-        localStorage.removeItem('signUids');
-        localStorage.removeItem('signNames');
-        router.push('/login');
       }
 
+      getRef();
 
-      const calculateTotal = () => {
-        const sum = lvl.reduce((acc, item) => acc + item.totald, 0);
-        setXxx(sum.toFixed(2));
-      };
+      return () => {
+        active = false;
+      }
+  }, [router]);
 
-      calculateTotal();
- okx = 1;
-  }, [xxx, lvl]);
+  useEffect(() => {
+    const sum = lvl.reduce((acc, item) => acc + Number(item.totald || 0), 0);
+    setXxx(sum.toFixed(2));
+  }, [lvl]);
   async function filterData(tofill) {
     setFshow((tofill === 'refer') ? 'Level 1' : (tofill === 'lvla') ? 'Level 2' : 'Level 3');
     const fill = lvlst.filter(i => i[tofill] === refers);

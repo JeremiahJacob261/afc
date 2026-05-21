@@ -19,6 +19,7 @@ import { Icon } from '@iconify/react'
 
 import { CookiesProvider, useCookies } from 'react-cookie';
 import toast, { Toaster } from 'react-hot-toast';
+import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 
 
 async function processBets(name) {
@@ -40,7 +41,7 @@ export default function Account() {
   const auth = getAuth(app);
   const [username, setUsername] = useState('')
   const router = useRouter()
-  const [info, setInfo] = useState([]);
+  const [info, setInfo] = useState(null);
   const [balance, setBalance] = useState(0);
   //snackbar1
   const [messages, setMessages] = useState("")
@@ -54,84 +55,51 @@ export default function Account() {
     setOpened(false);
   };
   let loads = 0;
-  const [usern, setUsern] = useState('')
-  const [userR, setUserR] = useState('')
+  const [loadingProfile, setLoadingProfile] = useState(true)
   //end of snackbar1
   useEffect(() => {
-    if (!hasRun.current) {
-      // processBets(localStorage.getItem('signNames'));
-      // ...
-      hasRun.current = true;
-    }
-    setUsername(localStorage.getItem('signNames'))
-    const useri = localStorage.getItem('signedIns');
-    setUsern(localStorage.getItem('signNames'));
-    setUserR(localStorage.getItem('signRef'));
-    if (useri) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
+    let active = true
 
-      const uid = localStorage.getItem('signUids');
-      const name = localStorage.getItem('signNames');
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
-      console.log('...')
-      // ...
+    async function loadProfile() {
+      const session = await requireSession(router)
+      if (!session) return
 
-      const GET = async () => {
-        try {
-          const { data, error } = await supabase
-            .from('users')
-            .select()
-            .eq('username', localStorage.getItem('signNames'))
-          setInfo(data[0])
-          setBalance(data[0].balance);
-          console.log(refCount)
-          localStorage.setItem('signRef', data[0].newrefer);
-          async function getReferCount() {
-            try {
-              const { count, error } = await supabase
-                .from('users')
-                .select('*', { count: 'exact', head: true })
-                .match({
-                  'refer': localStorage.getItem('signRef'),
-                  'firstd': true
-                });
-              setRefCount(count)
-              console.log(info.totald)
-              setViplevel((infox.totald < 50 || count < 5) ? '1' : (infox.totald < 100 || count < 10) ? '2' : (infox.totald < 200 || count < 15) ? '3' : (infox.totald < 300 || count < 20) ? '4' : (infox.totald < 500 || count < 30) ? '5' : (infox.totald < 1000 || count < 40) ? '6' : '7');
-              console.log(count)
-            } catch (e) {
-              console.log(e)
-            }
-          }
-          getReferCount();
-        } catch (e) {
-          console.log(e)
+      clearLegacyAuthStorage()
+
+      try {
+        const response = await authFetch('/api/me')
+        if (response.status === 401 || response.status === 404) {
+          await supabase.auth.signOut()
+          router.push('/login')
+          return
         }
 
-      }
-      GET();
+        const result = await response.json()
+        if (!active || result.status !== 'success') return
 
-    } else {
-      // User is signed out
-      // ...
-      const sOut = async () => {
-        const { error } = await supabase.auth.signOut();
-        console.log('sign out');
-        console.log(error);
-        localStorage.removeItem('signedIns');
-        localStorage.removeItem('signUids');
-        localStorage.removeItem('signNames');
-        localStorage.removeItem('signRef');
-        router.push('/login');
+        setInfo(result.profile)
+        setUsername(result.profile.username || '')
+        setBalance(Number(result.profile.balance || 0))
+        setRefCount(result.referralCount || 0)
+        setViplevel(result.vip?.viplevel || 1)
+
+        if (!hasRun.current) {
+          hasRun.current = true
+        }
+      } catch (e) {
+        console.log(e)
+        toast.error('Unable to load account. Please refresh.')
+      } finally {
+        if (active) setLoadingProfile(false)
       }
-      sOut();
     }
-    console.log(info)
-    //  console.log((info.totald < 20) ? '0' : (info.totald < 50) ? '1' : (info.totald < 100) ? '2' : (info.totald < 200) ? '3' : (info.totald < 300) ? '4' : (info.totald < 500) ? '5' : (info.totald < 1000) ? '6' : '7')
 
-  }, [balance]);
+    loadProfile()
+
+    return () => {
+      active = false
+    }
+  }, [router]);
 
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -178,22 +146,22 @@ export default function Account() {
           </svg>
         </div>
         <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '5px', margin: '2px' }}>
-          <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
+          <KeyboardArrowLeftOutlinedIcon sx={{ color: "#E9E5DA", width: '24px', height: '24px' }} onClick={() => {
             router.push('/user')
           }} />
-          <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Profile</Typography>
+          <Typography sx={{ color: "#E9E5DA",fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Profile</Typography>
         </Stack>
         {
           //start of profile
         }
         <Stack spacing={4} className="dark-glass" sx={{ minWidth: '344px' }}>
-          <Stack spacing={1} sx={{ background: '#10284D', padding: '8px', borderRadius: '5px' }}>
+          <Stack spacing={1} sx={{ background: 'inherit', padding: '8px', borderRadius: '5px' }}>
             <Stack direction='row' spacing={2} sx={{ padding: '8px' }} alignItems='center' justifyContent={"start"}>
               <Image src={profile} width={50} height={50} alt="profile" />
               <Stack direction='column' spacing={0}>
                 <Stack direction="row">
                    <Typography sx={{ color: "#FFFFFF", fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins, sans-serif' }}>Hello ,</Typography>
-                   <p className="notranslate" style={{ color: "#FFFFFF", fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins, sans-serif' }}>{username ? `${username}` : usern}</p>
+                   <p className="notranslate" style={{ color: "#FFFFFF", fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins, sans-serif' }}>{username || (loadingProfile ? 'Loading...' : 'Account')}</p>
                 </Stack>
                 <Typography sx={{ color: "#E9E5DA", fontSize: '14px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', width: '50px', textAlign: 'start' }}>VIP {viplevel}</Typography>
               </Stack>
@@ -205,10 +173,10 @@ export default function Account() {
               </Stack>
               <Link href='/user/fund' style={{ textDecoration: "none", color: 'white' }}>
                 <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#1BB6FF', borderRadius: '20px', padding: '8px', width: '95px', height: '32px' }}>
-                  <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: 'white', fontSize: '12px' }}>
+                  <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#10284D', fontSize: '12px' }}>
                     Deposit
                   </Typography>
-                  <KeyboardArrowRightIcon sx={{ width: '16px', height: '16px' }} />
+                  <KeyboardArrowRightIcon sx={{ width: '16px', height: '16px', color:"#10284D" }} />
                 </Stack>
               </Link>
             </Stack>
@@ -233,16 +201,17 @@ export default function Account() {
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} alignItems="center">
                 <Stack direction='row' spacing={1} justifyContent='center' alignItems="center">
                   <Icon icon="ant-design:link-outlined" width="24" height="24" style={{ color: "#a3a3a3" }} />
-                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>https://app.bfc01.com/register/{info ? info?.newrefer : userR}</Typography>
+                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>https://app.bfc01.com/register/{info?.newrefer || ''}</Typography>
                 </Stack>
                 <Icon icon="solar:copy-bold-duotone" width="24" height="24" style={{ color: '#a3a3a3' }} onClick={() => {
+                  if (!info?.newrefer) return
                   navigator.clipboard.writeText("https://app.bfc01.com/register/" + info.newrefer)
                   setMessages("Invite Link Copied")
                   toast.success("Invite link copied")
                 }} />
               </Stack>
               <Divider sx={{ bgcolor: "#1BB6FF" }} />
-              <Stack direction='row' justifyContent='space-between' alignItems={"center"} sx={{ padding: '8px' }}
+              <Stack direction='row' justifyContent='space-between' alignItems={"center"} sx={{ padding: '8px', cursor:'pointer' }}
                 onClick={() => {
                   router.push('/user/refferal');
                 }}>
@@ -268,7 +237,7 @@ export default function Account() {
               <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px' }} onClick={() => {
                 router.push('/user/fund');
               }}>
-                <Stack direction='row' spacing={1} justifyContent='start' alignItems={"center"}>
+                <Stack direction='row' spacing={1} justifyContent='start' alignItems={"center"} style={{  cursor:'pointer' }}>
                   <Icon icon="streamline:money-atm-card-3-deposit-money-payment-finance-atm-withdraw" width="24" height="24" style={{ color: "#a3a3a3" }} />
                   <Typography sx={{ color: '#E9E5DA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Fund Account</Typography>
                 </Stack>
@@ -277,7 +246,7 @@ export default function Account() {
 
               <Divider sx={{ bgcolor: "#1BB6FF" }} />
 
-              <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px' }} onClick={() => {
+              <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px', cursor:'pointer'  }} onClick={() => {
                 router.push('/user/vip');
               }}>
                 <Stack direction='row' spacing={1} justifyContent='start' alignItems={"center"}>
@@ -299,7 +268,7 @@ export default function Account() {
             <Divider />
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '150px', padding: '8px', background: '#06101F', borderRadius: '8px' }}>
 
-              <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} onClick={() => {
+              <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px', cursor:'pointer'  }} onClick={() => {
                 router.push('/user/withdraw');
               }}>
                 <Stack direction='row' spacing={1} justifyContent='start' alignItems="center">
@@ -311,7 +280,7 @@ export default function Account() {
 
               <Divider sx={{ bgcolor: "#1BB6FF" }} />
 
-              <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} onClick={() => {
+              <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px', cursor:'pointer'  }} onClick={() => {
                 router.push('/user/history');
               }}>
                 <Stack direction='row' spacing={1} justifyContent='start' alignItems="center">
@@ -323,7 +292,7 @@ export default function Account() {
 
               <Divider sx={{ bgcolor: "#1BB6FF" }} />
 
-              <Stack direction='row' justifyContent='space-between' alignItems="center" sx={{ padding: '8px' }} onClick={() => {
+              <Stack direction='row' justifyContent='space-between' alignItems="center" sx={{ padding: '8px', cursor:'pointer'  }} onClick={() => {
                 router.push('/user/codesetting');
               }}>
                 <Stack direction='row' spacing={1} justifyContent='start' alignItems="center">
@@ -335,7 +304,7 @@ export default function Account() {
 
               <Divider sx={{ bgcolor: "#1BB6FF" }} />
 
-              <Stack direction='row' justifyContent='space-between' alignItems="center" sx={{ padding: '8px' }} onClick={() => {
+              <Stack direction='row' justifyContent='space-between' alignItems="center" sx={{ padding: '8px', cursor:'pointer'  }} onClick={() => {
                 router.push('/user/bindwallet');
               }}>
                 <Stack direction='row' spacing={1} justifyContent='start'>
@@ -357,7 +326,7 @@ export default function Account() {
             <Divider />
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '50px', padding: '8px', background: '#06101F', borderRadius: '8px' }}>
 
-              <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px' }} onClick={() => {
+              <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px' , cursor:'pointer' }} onClick={() => {
                 router.push('/user/bets');
               }}>
                 <Stack direction='row' spacing={1} justifyContent='start' alignItems="center">
@@ -379,7 +348,7 @@ export default function Account() {
             <Divider />
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '50px', padding: '8px', background: '#06101F', borderRadius: '8px' }}>
 
-              <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} onClick={() => {
+              <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px', cursor:'pointer'  }} onClick={() => {
                 router.push("/user/faq")
               }
               }>
@@ -392,7 +361,7 @@ export default function Account() {
 
               <Divider sx={{ bgcolor: "#1BB6FF" }} />
 
-              <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} onClick={() => {
+              <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px', cursor:'pointer'  }} onClick={() => {
                 router.push("/user/faq")
               }
               }>
@@ -451,16 +420,13 @@ export default function Account() {
             <Divider />
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '50px', padding: '8px', background: '#06101F', borderRadius: '8px' }}>
 
-              <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px' }}
+              <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px', cursor:'pointer'  }}
                 onClick={() => {
                   const sOut = async () => {
                     const { error } = await supabase.auth.signOut();
                     console.log('sign out');
                     console.log(error);
-                    localStorage.removeItem('signedIns');
-                    localStorage.removeItem('signUids');
-                    localStorage.removeItem('signNames');
-                    localStorage.removeItem('signRef');
+                    clearLegacyAuthStorage();
                     setCookie('authdata', '', { path: '/', expires: new Date(0) });
                     setCookie('authed', '', { path: '/', expires: new Date(0) });
                     router.push('/login');
@@ -486,18 +452,4 @@ export default function Account() {
       </Box>
     </Cover>
   )
-}
-
-
-export async function getServerSideProps(context) {  
-  const { req } = context;
-  const { cookies } = req;
-  const myCookie = cookies.authdata;
-  let data = JSON.parse(myCookie);
-  let name = data['username'] ?? "";
-  console.log(myCookie)
-  processBets(name);
-  return {
-    props: {}, // will be passed to the page component as props
-  }
 }

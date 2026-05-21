@@ -19,6 +19,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import { getAuth, signOut } from "firebase/auth";
 import Translate from '@/pages/translator';
 import { useRouter } from "next/router";
+import { clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 export default function Cover({ children }) {
 
 
@@ -38,90 +39,15 @@ export default function Cover({ children }) {
   };
   let loads = 0;
   useEffect(() => {
-    const useri = localStorage.getItem('signedIns');
-    if (useri) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
-
-      const uid = localStorage.getItem('signUids');
-      const name = localStorage.getItem('signNames');
-      async function getData() {
-        console.log('get Data got the message')
-        try {
-          const { data, error } = await supabase
-            .from('notification')
-            .select()
-            .match({
-              sent: 'success',
-              type: 'deposit',
-              username: name
-            });
-          console.log('data obtained')
-          for (let i = 0; i < data.length; i++) {
-            const element = data[i];
-            const uploadData = async () => {
-              try {
-                await fetch('/api/rpc/gatherd', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ names: element.username, amount: parseFloat(element.amount) })
-                })
-              } catch (e) { console.log(e) }
-            }
-            uploadData(element)
-          }
-
-
-          async function Dcollect() {
-            try {
-              const { data, error } = await supabase
-                .from('users')
-                .update({ dcollect: true })
-                .eq('username', name)
-              console.log('dcollect done')
-              console.log(data)
-            } catch (e) {
-              console.log(e);
-            }
-
-          }
-          Dcollect();
-        } catch (e) {
-          console.log(e)
-        }
+    async function checkSession() {
+      const session = await requireSession(router);
+      if (session) {
+        clearLegacyAuthStorage();
       }
-      async function GetInfo() {
-        try {
-          const { data, error } = await supabase
-            .from('users')
-            .select('dcollect')
-            .eq('username', name)
-          let info = data[0].dcollect;
-          if (!info) {
-            // getData();
-          } else {
-            console.log('neve go tit')
-          }
-        } catch (e) {
-          console.log(e);
-        }
-      }
-      GetInfo();
-      // ...
-      console.log(loads)
-
-
-    } else {
-      // User is signed out
-      // ...
-      signOut(auth);
-      console.log('sign out');
-      localStorage.removeItem('signedIns');
-      localStorage.removeItem('signUids');
-      localStorage.removeItem('signNames');
-      router.push('/login');
     }
-  }, []);
+
+    checkSession();
+  }, [router]);
 
   return (
     <Stack direction="column"

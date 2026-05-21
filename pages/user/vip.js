@@ -9,15 +9,14 @@ import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgr
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import Logo from '../../public/logoclean.png'
 import Head from 'next/head'
+import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 export default function Vip() {
   const [rprogress, setRProgress] = useState(0);
   const [cprogress, setCProgress] = useState(0);
   const [refCount, setRefCount] = useState(0);
   const [viplevel, setViplevel] = useState(1);
-  const [usern, setUsern] = useState('')
-  const [userR, setUserR] = useState('')
   const router = useRouter()
-  const [info, setInfo] = useState([]);
+  const [info, setInfo] = useState(null);
   const [balance, setBalance] = useState(0);
   const [c1,setC1] = useState(0);
   const [r1,setR1] = useState(0);
@@ -65,79 +64,44 @@ export default function Vip() {
   };
   // end vip object
   useEffect(() => {
-    const useri = localStorage.getItem('signedIns');
-    setUsern(localStorage.getItem('signNames'));
-    setUserR(localStorage.getItem('signRef'));
-    if (useri) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
+    let active = true;
 
-      const uid = localStorage.getItem('signUids');
-      const name = localStorage.getItem('signNames');
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
-      console.log('...')
-      // ...
+    const GET = async () => {
+      const session = await requireSession(router);
+      if (!session) return;
+      clearLegacyAuthStorage();
 
-      const GET = async () => {
-        try {
-          const { data, error } = await supabase
-            .from('users')
-            .select()
-            .eq('username', localStorage.getItem('signNames'))
-          setInfo(data[0])
-          setBalance(data[0].balance);
-          console.log(refCount)
-          localStorage.setItem('signRef', data[0].newrefer);
-          async function getReferCount() {
-            try {
-              const { count, error } = await supabase
-                .from('users')
-                .select('*', { count: 'exact', head: true })
-                .match({
-              'refer':localStorage.getItem('signRef'),
-              'firstd':true
-            });
-              setRefCount(count)
-              setViplevel((infox.totald < 50 || count < 5) ? '1' : (infox.totald < 100 || count < 10) ? '2' : (infox.totald < 200 || count < 15) ? '3' : (infox.totald < 300 || count < 20) ? '4' : (infox.totald < 500 || count < 30) ? '5' : (infox.totald < 1000 || count < 40) ? '6' : '7');
-              let vipl = (infox.totald < 50 || count < 5) ? '1' : (infox.totald < 100 || count < 10) ? '2' : (infox.totald < 200 || count < 15) ? '3' : (infox.totald < 300 || count < 20) ? '4' : (infox.totald < 500 || count < 30) ? '5' : (infox.totald < 1000 || count < 40) ? '6' : '7';
-              setRProgress((parseInt(info.totald) / parseInt(viplimit[vipl])) * 100);
-              setCProgress((parseInt(count) / parseInt(vipclimit[vipl])) * 100);
-              setC1((Number(((parseInt(count) / parseInt(vipclimit[vipl])) * 100).toFixed(2)) > 100) ? 100 : Number(((parseInt(count) / parseInt(vipclimit[vipl])) * 100).toFixed(2)));
-              setR1((Number(((parseInt(info.totald) / parseInt(viplimit[vipl])) * 100).toFixed(2)) > 100) ? 100 : Number(((parseInt(info.totald) / parseInt(viplimit[vipl])) * 100).toFixed(2)));
-              console.log(data[0])
-              console.log((c1 + r1)/2)
-            } catch (e) {
-              console.log(e)
-            }
-          }
-          getReferCount();
-        } catch (e) {
-          console.log(e)
+      try {
+        const response = await authFetch('/api/me');
+        if (response.status === 401 || response.status === 404) {
+          await supabase.auth.signOut();
+          router.push('/login');
+          return;
         }
 
-      }
-      GET();
+        const result = await response.json();
+        if (!active || result.status !== 'success') return;
 
-    } else {
-      // User is signed out
-      // ...
-      const sOut = async () => {
-        const { error } = await supabase.auth.signOut();
-        console.log('sign out');
-        console.log(error);
-        localStorage.removeItem('signedIns');
-        localStorage.removeItem('signUids');
-        localStorage.removeItem('signNames');
-        localStorage.removeItem('signRef');
-        router.push('/login');
+        setInfo(result.profile);
+        setBalance(Number(result.profile.balance || 0));
+        setRefCount(result.referralCount || 0);
+        setViplevel(result.vip?.viplevel || 1);
+        setRProgress(result.vip?.depositProgress || 0);
+        setCProgress(result.vip?.referralProgress || 0);
+        setR1(Number((result.vip?.depositProgress || 0).toFixed(2)));
+        setC1(Number((result.vip?.referralProgress || 0).toFixed(2)));
+      } catch (e) {
+        console.log(e)
       }
-      sOut();
     }
-    console.log(info)
-    //  console.log((info.totald < 20) ? '0' : (info.totald < 50) ? '1' : (info.totald < 100) ? '2' : (info.totald < 200) ? '3' : (info.totald < 300) ? '4' : (info.totald < 500) ? '5' : (info.totald < 1000) ? '6' : '7')
+
+    GET();
+
+    return () => {
+      active = false;
+    }
     
-  }, [balance]);
+  }, [router]);
  
   return (
     <Cover>

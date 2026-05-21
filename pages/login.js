@@ -1,40 +1,23 @@
 import React, { useState, Suspense } from "react";
 import Head from "next/head";
-import { Avatar, Box, Stack, OutlinedInput, Button, Typography, Divider } from "@mui/material";
+import Backdrop from '@mui/material/Backdrop';
 import { ArrowLeft, Lock, ArrowRight, User } from "lucide-react";
-import InputAdornment from '@mui/material/InputAdornment';
-import FormHelperText from '@mui/material/FormHelperText';
-import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
 import { supabase } from './api/supabase'
-import { app } from './api/firebase'
-import { useContext } from "react";
 import Link from "next/link";
-import { getDatabase } from 'firebase/database'
 import SimpleDialog from './modal'
 import { useRouter } from 'next/router'
-import { getCookie, setCookie, removeCookies } from 'cookies-next';
 import LOGO from '../public/european.ico'
 import Image from 'next/image'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Backdrop from '@mui/material/Backdrop';
-import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
-import { useCookies } from 'react-cookie';
 import { useEffect } from "react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { clearLegacyAuthStorage } from '@/lib/clientAuth';
 
 export default function Login() {
-  const [cookies, setCookie] = useCookies(['authdata']);
-
-  const dbs = getDatabase(app);
-  const [username, setUsername] = useState("")
   const [open, setOpen] = React.useState(false);
   const [drop, setDrop] = useState(false)
   const router = useRouter();
   const [email, setEmail] = useState('')
-  const auth = getAuth(app);
 
 
   const handleClose = (value) => {
@@ -75,9 +58,9 @@ export default function Login() {
           try {
             const { data, error } = await supabase
               .from('users')
-              .select()
-              .eq('username', user.user_metadata.displayName);
-            localStorage.setItem('signRef', data[0].newrefer);
+              .select('newrefer')
+              .eq('userid', user.id)
+              .maybeSingle();
             console.log(data);
           } catch (e) {
 
@@ -85,181 +68,60 @@ export default function Login() {
 
         }
         GET();
-        localStorage.setItem('signedIns', true);
-        localStorage.setItem('signUids', user.id);
-        localStorage.setItem('signNames', user.user_metadata.displayName);
+        clearLegacyAuthStorage();
       } else {
 
         console.log('sign out');
-        localStorage.removeItem('signedIns');
-        localStorage.removeItem('signUids');
-        localStorage.removeItem('signNames');
-        localStorage.removeItem('signRef');
+        clearLegacyAuthStorage();
         router.push('/login');
       }
     }
     // getSe();
 
   }, [])
-  const supabaseMigrate = async (username, uid) => {
-    const { data, error } = await supabase.auth.signUp({
-      email: email,
-      password: values.password,
-      options: {
-        data: {
-          displayName: username,
-        }
-      }
-    })
-    //update email after migration
-    const uidch = async () => {
-
-      const { error } = await supabase
-        .from('users')
-        .update({ userid: data.user.id })
-        .eq('email', email);
-    }
-    uidch();
-    router.push('/user')
-
-  }
-
   const login = async () => {
-    //firebase
-    const fire = async (emailer) => {
-      signInWithEmailAndPassword(auth, emailer, values.password)
-        .then((userCredential) => {
-          // Signed in 
-          const user = userCredential.user;
-          // ...
-
-          supabaseMigrate(user.displayName, user.uid);
-          alert('you are Logged in');
-          router.push('/user');
-          console.log(user.displayName)
-          localStorage.setItem('signedIns', true);
-          localStorage.setItem('signUids', user.uid);
-          localStorage.setItem('signNames', user.displayName);
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(error.message)
-          setDrop(false)
-          alert(error.code);
-          if (error.code === 'network-request-failed') {
-            alert('Please Check Your internet connection or Check your password')
-          }
-        });
-    }
-
-    //end of firebase
-    async function findemail() {
-      const { data, error } = await supabase
-        .from('users')
-        .select('email')
-        .eq('username', email)
-
-      async function sign(emailer) {
-
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: emailer,
-          password: values.password,
-        })
-        if (error) {
-          // Handle authentication error
-          console.error(error);
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(error.message)
-          if (error.message === 'Invalid login credentials') {
-           alert("Check your Username and Password");
-          } else {
-            console.log(error.message)
-          }
-          setDrop(false)
-        } else {
-          // Set a cookie
-          let user = data.user;
-          let thecoook = JSON.stringify({ "username": user.user_metadata.displayName, "email": emailer, "id": user.id })
-          setCookie('authdata', thecoook);
-
-          setCookie('authed', true);
-          // User successfully signed in
-          alert('You are logged in');
-          console.log(user)
-          router.push('/user')
-          // localStorage.setItem('signRef', data[0].newrefer);
-
-          localStorage.setItem('signedIns', true);
-          localStorage.setItem('signUids', user.id);
-          localStorage.setItem('signNames', user.user_metadata.displayName);
-          console.log(user.user_metadata.displayName);
-        }
-      }
-      sign(data[0].email);
-      //end of supabase sgn in
-
-    }
     setDrop(true)
-    localStorage.clear()
-    if (!email.includes("@")) {
-      let usern = username.replace(/^\s+|\s+$/gm, '')
-      const { count, error } = await supabase
-        .from('users')
-        .select('*', { count: 'exact', head: true })
-        .eq('username', email)
-      console.log(count);
-      if (count > 0) {
+    clearLegacyAuthStorage()
 
-        findemail()
-      } else {
-        alert('username does not exist or check your internet connection')
-        setDrop(false)
-      }
-    } else {
-      async function sign(emailer) {
+    try {
+      let loginEmail = email.trim()
 
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: emailer,
-          password: values.password,
+      if (!loginEmail.includes("@")) {
+        const response = await fetch('/api/login-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: loginEmail })
         })
-        if (error) {
-          // Handle authentication error
-          console.error(error);
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(error.message)
-          if (error.message === 'Invalid login credentials') {
-            alert("Incorrect password or email");
-          } else {
-            console.log(error.message);
-            alert(errorMessage)
-          }
+        const result = await response.json()
+
+        if (!response.ok || result.status !== 'success') {
+          alert('Check your Username and Password')
           setDrop(false)
-        } else {
-          let user = data.user;
-          let thecoook = JSON.stringify({ "username": user.user_metadata.displayName, "email": emailer, "id": user.id })
-          setCookie('authdata', thecoook);
-          setCookie('authed', true);
-          // User successfully signed in
-          alert('you are logged in');
-          router.push('/user')
-          console.log(user)
-          // localStorage.setItem('signRef', data[0].newrefer);
-         
-
-          // console.log(test)
-          localStorage.setItem('signedIns', true);
-          localStorage.setItem('signUids', user.id);
-          localStorage.setItem('signNames', user.user_metadata.displayName);
-
+          return
         }
+
+        loginEmail = result.email
       }
-      sign(email);
+
+      const { error } = await supabase.auth.signInWithPassword({
+        email: loginEmail,
+        password: values.password,
+      })
+
+      if (error) {
+        console.error(error)
+        alert(error.message === 'Invalid login credentials' ? 'Incorrect login details' : error.message)
+        setDrop(false)
+        return
+      }
+
+      clearLegacyAuthStorage()
+      router.push('/user')
+    } catch (error) {
+      console.error(error)
+      alert('Please check your internet connection and try again')
+      setDrop(false)
     }
-
-
   }
 
 
@@ -372,6 +234,3 @@ export default function Login() {
     </div>
   )
 }
-
-
-

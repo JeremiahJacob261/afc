@@ -21,6 +21,7 @@ import Ims from '../../public/simps/ball.png'
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
+import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 
 
 
@@ -67,64 +68,38 @@ export default function Bets() {
     setValue(newValue);
   };
   useEffect(() => {
-    const useri = localStorage.getItem('signedIns');
-    if (useri) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
+    let active = true;
 
-      const uid = localStorage.getItem('signUids');
-      const name = localStorage.getItem('signNames');
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
+    const getbets = async () => {
+      const session = await requireSession(router);
+      if (!session) return;
+      clearLegacyAuthStorage();
 
-      // ...
-
-      //settle the match
-
-      const getbets = async () => {
-        try {
-          const { data, error } = await supabase
-            .from('placed')
-            .select('*')
-            .match({ username: name, won: 'null' });
-
-          setBets(data)
-        } catch (e) {
-          console.log(e)
+      try {
+        const response = await authFetch('/api/my-bets');
+        if (response.status === 401 || response.status === 404) {
+          router.push('/login');
+          return;
         }
-      }
-      getbets();
-      //bb
-      if (!hasRun.current) {
-        // processBets(name);
-        console.log('hi')
-        // ...
-        hasRun.current = true;
-      }
-      const GETn = async () => {
-        const { data, error } = await supabase
-          .from('placed')
-          .select()
-          .neq('won', 'null')
-          .match({ username: name });
 
-        setFina(data)
-        console.log(data)
+        const result = await response.json();
+        if (!active || result.status !== 'success') return;
+        setBets(result.unsettled || []);
+        setFina(result.settled || []);
+      } catch (e) {
+        console.log(e)
       }
-      GETn();
-    } else {
-      // User is signed out
-      // ...
-      signOut(auth);
-      console.log('sign out');
-      localStorage.removeItem('signedIns');
-      localStorage.removeItem('signUids');
-      localStorage.removeItem('signNames');
-      router.push('/login');
     }
 
+    getbets();
+    if (!hasRun.current) {
+      hasRun.current = true;
+    }
 
-  }, []);
+    return () => {
+      active = false;
+    }
+  }, [router]);
   return (
     <Cover>
 
@@ -290,19 +265,5 @@ export default function Bets() {
           </Stack>
         </TabPanel>
       </TabContext>);
-  }
-}
-
-
-export async function getServerSideProps(context) {  
-  const { req } = context;
-  const { cookies } = req;
-  const myCookie = cookies.authdata;
-  let data = JSON.parse(myCookie);
-  let name = data['username'] ?? "";
-  console.log(myCookie)
-  processBets(name);
-  return {
-    props: {}, // will be passed to the page component as props
   }
 }

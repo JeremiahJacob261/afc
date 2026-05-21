@@ -19,14 +19,11 @@ import Image from 'next/image'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { supabase } from '../api/supabase'
-import { app } from '../api/firebase'
 import Backdrop from '@mui/material/Backdrop';
 import Wig from '../../public/icon/wig.png'
 import Big from '../../public/icon/badge.png'
-import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, updateProfile } from "firebase/auth";
-import { async } from "@firebase/util";
-import { useCookies } from 'react-cookie';
 import codes from '../api/codeswithflag.json'
+import { clearLegacyAuthStorage } from '@/lib/clientAuth';
 export default function Register( {refer} ) {
   
   const [password, setPassword] = useState("")
@@ -36,14 +33,10 @@ export default function Register( {refer} ) {
   const [username, setUsername] = useState("")
   const [age, setAge] = useState("+91");
   
-  const [cookies, setCookie] = useCookies(['authdata']);
   const [drop, setDrop] = useState(false);
   const [idR, setidR] = useState(refer);
   const [agecheck, setAgecheck] = useState(false);
-  const [lvla, setLvla] = useState('');
-  const [lvlb, setLvlb] = useState('');
   const [email, setEmail] = useState('')
-  const auth = getAuth(app);
   //alerts
   const [ale, setAle] = useState('')
   const [open, setOpen] = useState(false)
@@ -54,11 +47,6 @@ export default function Register( {refer} ) {
     setOpen(true)
   }
 
-  const generateId = ()=> {
-    return Math.random().toString(36).substring(2, 12);
- }
-  //end
-  const nRef = generateRandomSevenDigitNumber().toString();
   const [values, setValues] = React.useState({
     amount: '',
     password: '',
@@ -89,100 +77,11 @@ export default function Register( {refer} ) {
   const handleClose = (value) => {
     setOpen(false);
   };
-  function generateRandomSevenDigitNumber() {
-    const min = 1000000; // Smallest 7-digit number (1,000,000)
-    const max = 9999999; // Largest 7-digit number (9,999,999)
-    const randomSevenDigitNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-    return randomSevenDigitNumber;
-  }
-  const updateRef = async () => {
-    const { data, error } = await supabase
-      .from('referral')
-      .insert({ refer: nRef, count: 0 })
-  }
-  const updateRefb = async () => {
-    try {
-      await fetch('/api/rpc/increment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ x: 1, row_id: idR })
-      })
-    } catch (e) { console.log(e) }
-  }
   useEffect(() => {
-    
-    async function lvls() {
-      try {
-        const { data, error } = await supabase
-          .from('users')
-          .select()
-          .eq('newrefer', refer)
-        console.log(data);
-        console.log(refer);
-        setLvla(data[0].refer);
-        setLvlb(data[0].lvla);
-      } catch (e) {
-        console.log(e);
-        setLvla('');
-        setLvlb('');
-      }
-
-    }
-    lvls();
-  }, []);
+  }, [refer]);
 
   const signup = async () => {
     setDrop(true);
-    const upload = async (user) => {
-
-      try {
-        console.log(nRef)
-        const { data, error } = await supabase
-          .from('users')
-          .insert({
-            userid: user.id,
-            uid: 'uid_' + generateId(),
-            password: values.password,
-            phone: phone,
-            refer: refer,
-            username: username,
-            countrycode: age,
-            newrefer: nRef,
-            lvla: lvla,
-            lvlb: lvlb,
-            email: email,
-          })
-        console.log(error);
-        console.log(data);
-        let thecoook = JSON.stringify({ "username": username, "email": email, "id": user.id })
-          setCookie('authdata', thecoook);
-
-          setCookie('authed', true);
-        localStorage.setItem('signedIns', true);
-        localStorage.setItem('signUids', user.id);
-        localStorage.setItem('signNames', username);
-        localStorage.setItem('signRef', nRef);
-        
-       
-
-        // const messageResponse = await fetch('https://telegram-iota-black.vercel.app/message', {
-        //   method: 'POST',
-        //   headers: {
-        //     'Content-Type': 'application/json'
-        //   },
-        //   body: JSON.stringify({
-        //     "topic": "NEW REGISTRATION 🔥🔥🔥",
-        //     "message": `${username} joined BFC01 🎉.\n\n`
-        //   })
-        // });
-
-        // console.log(messageResponse)
-        // Usage
-        
-      } catch (e) {
-        console.log(e)
-      }
-    }
     async function signUpWithEmail() {
 
       try {
@@ -203,10 +102,25 @@ export default function Register( {refer} ) {
         if (error) {
           throw error;
         } else {
-          //getlvl2
-          upload(data.user);
-          updateRef();
-          updateRefb();
+          const profileResponse = await fetch('/api/signup-profile', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userid: data.user.id,
+              username,
+              email,
+              phone,
+              countrycode: age,
+              refer: idR,
+            }),
+          })
+          const profileResult = await profileResponse.json()
+
+          if (!profileResponse.ok || profileResult.status !== 'success') {
+            throw new Error(profileResult.message || 'Unable to create user profile')
+          }
+
+          clearLegacyAuthStorage();
           Alerts(`Welcome To BFC `, true);
         }
       } catch (error) {
@@ -222,8 +136,12 @@ export default function Register( {refer} ) {
             if (error.message === 'Unable to validate email address: invalid format') {
               Alerts('Please enter a valid email address', false)
             } else {
+              if (error.message === 'Username Already Exist!') {
+                Alerts('Username Already Exist!', false)
+              } else {
 
-              Alerts('Please Chcek Your internet connection and try again, if problem persist please contact support', false)
+                Alerts('Please Chcek Your internet connection and try again, if problem persist please contact support', false)
+              }
             }
           }
         }
@@ -284,11 +202,15 @@ export default function Register( {refer} ) {
                 e.preventDefault(); 
                 if (phone.length >= 9) {
                   const checkDuplicate = async () => {
-                    const { count, error } = await supabase
-                      .from('users')
-                      .select('*', { count: 'exact', head: true })
-                      .eq('username', username)
-                    if (count > 0) {
+                    const response = await fetch('/api/check-username', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ username }),
+                    })
+                    const result = await response.json()
+                    if (!response.ok) {
+                      Alerts('Unable to validate username right now', false)
+                    } else if (!result.available) {
                       Alerts("Username Already Exist!", false);
                     } else {
                       if (agecheck === false) {

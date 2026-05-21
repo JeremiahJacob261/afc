@@ -21,6 +21,7 @@ import Ims from '../../../public/simps/ball.png'
 import Bal from '../../../public/bball.png'
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
+import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 
 
 
@@ -77,87 +78,44 @@ export default function Match({ matchDat }) {
 
 
     useEffect(() => {
-
+        let active = true;
        
         matchDat.map((m) => {
             setMatches(m)
         })
-        const useri = localStorage.getItem('signedIns');
-        if (useri) {
-            // User is signed in, see docs for a list of available properties
-            // https://firebase.google.com/docs/reference/js/auth.user
 
-            const uid = localStorage.getItem('signUids');
-            const name = localStorage.getItem('signNames');
-            if (!hasRun.current) {
-            async function processBets(name) {
-                try {
-                  await fetch('/api/rpc/process_bets', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name })
-                  })
-                  console.log('Bets processed for', name)
-                } catch (err) {
-                  console.error('Error processing bets:', err)
-                }
-                }
-              }
-                // processBets(name);
-            // ...
-            hasRun.current = true;
-        
-            const GET = async () => {
-                try {
-                    const { data, error } = await supabase
-                        .from('users')
-                        .select()
-                        .eq('username', name)
-                    setInfo(data[0]);
-                    setBalance(parseFloat(data[0].balance))
-                    let infox = data[0];
-                    localStorage.setItem('signRef', data[0].newrefer);
-                    async function getReferCount() {
-                        try {
-                            const { count, error } = await supabase
-                                .from('users')
-                                .select('*', { count: 'exact', head: true })
-                                .match({
-                                    'refer': localStorage.getItem('signRef'),
-                                    'firstd': true
-                                });
-                            setRefCount(count)
-                            setViplevel((infox.totald < 50 || count < 5) ? '1' : (infox.totald < 100 || count < 10) ? '2' : (infox.totald < 200 || count < 15) ? '3' : (infox.totald < 300 || count < 20) ? '4' : (infox.totald < 500 || count < 30) ? '5' : (infox.totald < 1000 || count < 40) ? '6' : '7');
-                            console.log(count)
-                            console.log(error)
-                            console.log(infox.totald)
-                        } catch (e) {
-                            console.log(e)
-                        }
-                    }
-                    getReferCount();
-                } catch (e) {
-                    console.log(e)
+        const GET = async () => {
+            const session = await requireSession(router);
+            if (!session) return;
+            clearLegacyAuthStorage();
+
+            try {
+                const response = await authFetch('/api/me');
+                if (response.status === 401 || response.status === 404) {
+                    await supabase.auth.signOut();
+                    router.push('/login');
+                    return;
                 }
 
+                const result = await response.json();
+                if (!active || result.status !== 'success') return;
+
+                setInfo(result.profile);
+                setBalance(Number(result.profile.balance || 0));
+                setRefCount(result.referralCount || 0);
+                setViplevel(result.vip?.viplevel || 1);
+                hasRun.current = true;
+            } catch (e) {
+                console.log(e)
             }
-            GET();
-
-        } else {
-            // User is signed out
-            const sOut = async () => {
-                const { error } = await supabase.auth.signOut();
-                console.log('sign out');
-                console.log(error);
-                localStorage.removeItem('signedIns');
-                localStorage.removeItem('signUids');
-                localStorage.removeItem('signNames');
-                localStorage.removeItem('signRef');
-                router.push('/login');
-            }
-            sOut();
         }
-    }, []);
+
+        GET();
+
+        return () => {
+            active = false;
+        }
+    }, [matchDat, router]);
     const router = useRouter()
     const markets = {
         "nilnil": "0 - 0",
@@ -447,71 +405,27 @@ export default function Match({ matchDat }) {
                                         handleOpenx()
                                         let balls = parseFloat(ball) - parseFloat(stake ?? 0);
                                         const deductBet = async () => {
-                                            const { error } = await supabase
-                                                .from('users')
-                                                .update({ balance: parseFloat(balls) })
-                                                .eq('username', info.username)
-                                            console.log(error)
-                                            setMessages("Bet Successful")
+                                            const response = await authFetch('/api/place-bet', {
+                                                method: 'POST',
+                                                headers: { 'Content-Type': 'application/json' },
+                                                body: JSON.stringify({
+                                                    match_id: matches.match_id,
+                                                    picked,
+                                                    stake: Number(stake),
+                                                }),
+                                            })
+                                            const result = await response.json()
+                                            if (!response.ok || result.status !== 'success') {
+                                                toast.error(result.message || 'Unable to place bet')
+                                                handleClosex()
+                                                return
+                                            }
+
+                                            setMessages(result.message || "Bet Successful")
                                             handleClick();
+                                            router.push('/user/bets');
                                         }
-                                        const saveToDB = async () => {
-                                            const { error } = await supabase
-                                                .from('placed')
-                                                .upsert({
-                                                    'match_id': matches.match_id,
-                                                    'market': markets[picked],
-                                                    'username': info.username,
-                                                    'started': false,
-                                                    'stake': Number(stake),
-                                                    'profit': Number(((tofal * stake) / 100)).toFixed(2),
-                                                    'aim': profit,
-                                                    "home": matches.home,
-                                                    "away": matches.away,
-                                                    "time": matches.time,
-                                                    "date": matches.date,
-                                                    "odd": tofal,
-                                                    "ihome": matches.ihome,
-                                                    "iaway": matches.iaway,
-                                                    "levelone": (info.refer.length < 2) ? 7705966 : info.refer,
-                                                    "leveltwo": (info.lvla.length < 2) ? 7705966 : info.lvla,
-                                                    "levelthree": (info.lvlb.length < 2) ? 7705966 : info.lvlb,
-                                                    "aone": (info.refer.length < 2) ? 0 : 0.05 * profit,
-                                                    "atwo": (info.lvla.length < 2) ? 0 : 0.03 * profit,
-                                                    "athree": (info.lvlb.length < 2) ? 0 : 0.01 * profit,
-                                                })
-                                            console.log(error)
-                                        }
-                                        const saveToUser = async () => {
-                                            const { error } = await supabase
-                                                .from('useractivity')
-                                                .upsert({
-                                                    'type': 'bets',
-                                                    'amount': stake + (tofal * stake) / 100,
-                                                    'user': info.username,
-                                                    'match_id': display.matchId,
-                                                    'stake': Number(stake),
-                                                    'profit': Number(((tofal * stake) / 100)),
-                                                    'market': markets[picked]
-                                                })
-                                            console.log(error)
-                                        }
-                                        const updategcount = async () => {
-
-                                            const { error: err } = await supabase
-                                                .from('users')
-                                                .update({
-                                                    'gcount': gcount + 1,
-                                                })
-                                                .eq('username', info.username);
-                                        }
-                                        updategcount();
-                                        saveToUser();
                                         deductBet();
-                                        saveToDB();
-                                        Reads('readbet', stake);
-
-                                        router.push('/user/bets');
                                     }
                                 } else {
                                     toast.error("You do not have Enough USDT to Complete this BET");
@@ -528,13 +442,6 @@ export default function Match({ matchDat }) {
 }
 
 export async function getServerSideProps(context) {
-const { req } = context;
-  const { cookies } = req;
-  const myCookie = cookies.authdata;
-  let datax = JSON.parse(myCookie);
-  let name = datax['username'] ?? "";
-
-  processBets(name);
     const { params } = context;
     const id = params.id;
     const { data, error } = await supabase
@@ -544,4 +451,3 @@ const { req } = context;
     let matchDat = data;
     return { props: { matchDat } }
 }
-

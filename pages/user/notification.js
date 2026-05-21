@@ -7,43 +7,36 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Rd from '../../public/icon/rounds.png'
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
+import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 export default function Notification() {
   const router = useRouter();
   const [not, setNot] = useState([]);
   const [info, setInfo] = useState({});
   const isMounted = useRef(true);
   useEffect(() => {
-    const useri = localStorage.getItem('signedIns');
-    if (useri) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
+    let active = true;
 
-      const uid = localStorage.getItem('signUids');
-      const name = localStorage.getItem('signNames');
-      const ref = localStorage.removeItem('signRef');
-      // ...
-      if (isMounted.current) {
-        console.log(ref)
-        const GET = async () => {
-          let test = await fetch('/api/notify', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ name: name, })
-          }).then(data => {
-            return data.json();
-          })
-          setNot(test);
-        }
-        GET();
+    async function GET() {
+      const session = await requireSession(router);
+      if (!session) return;
+      clearLegacyAuthStorage();
 
-        isMounted.current = false;
-      } else {
-
+      const response = await authFetch('/api/notify');
+      if (response.status === 401 || response.status === 404) {
+        router.push('/login');
+        return;
       }
+
+      const test = await response.json();
+      if (active) setNot(Array.isArray(test) ? test : []);
     }
 
+    GET();
+
+    return () => {
+      active = false;
+      isMounted.current = false;
+    }
   }, []);
 
   return (

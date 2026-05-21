@@ -1,4 +1,5 @@
-import { supabase } from '../supabase'
+import { requireInternalSecret, sendApiError } from '@/lib/apiAuth'
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 
 /**
  * RPC Function Replacement: increment
@@ -10,6 +11,8 @@ export default async function handler(req, res) {
   }
 
   try {
+    requireInternalSecret(req)
+    const supabase = getSupabaseAdmin()
     const { x, row_id } = req.body
 
     if (x === undefined || !row_id) {
@@ -48,9 +51,6 @@ export default async function handler(req, res) {
     })
   } catch (error) {
     console.error('Increment error:', error)
-    res.status(500).json({
-      status: 'error',
-      message: error.message
-    })
+    return sendApiError(res, error)
   }
 }

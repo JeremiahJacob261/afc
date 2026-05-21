@@ -14,6 +14,7 @@ import NativeSelect from '@mui/material/NativeSelect';
 import InputBase from '@mui/material/InputBase';
 import { supabase } from "@/pages/api/supabase";
 import { CookiesProvider, useCookies } from 'react-cookie';
+import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 
  
 export default function Home({ wallets }) {
@@ -48,12 +49,14 @@ export default function Home({ wallets }) {
     //the end of thellaoding modal control
     const updata = data;
     useEffect(() => {
-        setUids(localStorage.getItem('signUids'));
-        console.log(localStorage.getItem('signNames'))
-        // if (!localStorage.getItem('token')) {
-        //     router.push('/login')
-        // }
-    }, [uids]);
+        const check = async () => {
+            const session = await requireSession(router);
+            if (!session) return;
+            clearLegacyAuthStorage();
+        }
+
+        check();
+    }, [router]);
 
 
 
@@ -99,12 +102,12 @@ export default function Home({ wallets }) {
                     const make = async () => {
                         try {
                             handleOpen();
-                            const response = await fetch('/api/bindwallet', {
+                            const response = await authFetch('/api/bindwallet', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json'
                                 },
-                                body: JSON.stringify({ type: type, wallet: accountnumber, name: accountname,walletname:wallet, bank: bank, uid: uids })
+                                body: JSON.stringify({ type: type, wallet: accountnumber, name: accountname,walletname:wallet, bank: bank })
                             });
                             const datax = await response.json();
                             if (datax.status == 'success') {
@@ -149,12 +152,12 @@ export default function Home({ wallets }) {
                     const make = async () => {
                         try {
                             handleOpen();
-                            const response = await fetch('/api/bindwallet', {
+                            const response = await authFetch('/api/bindwallet', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json'
                                 },
-                                body: JSON.stringify({ wallet: address, type: type, name: "",walletname:"", bank: wallet, uid: uids })
+                                body: JSON.stringify({ wallet: address, type: type, name: "",walletname: wallet, bank: wallet })
                             });
                             const data = await response.json();
                             if (data.status == 'success') {

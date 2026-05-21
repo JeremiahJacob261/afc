@@ -14,6 +14,7 @@ import Backdrop from '@mui/material/Backdrop';
 import Cover from './cover'
 import CircularProgress from '@mui/material/CircularProgress';
 import toast ,{ Toaster } from 'react-hot-toast';
+import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 
 export default function Upload() {
 
@@ -39,16 +40,17 @@ export default function Upload() {
     try {
 
       let adminadd = localStorage.getItem('randomed');
-      const { data, error } = await supabase
-        .from('notification')
-        .insert({
-          'username': name,
-          'amount': amount,
-          'type': 'deposit',
-          'method': method,
-          'address': address,
-          'adminaddress': adminadd
-        })
+      const response = await authFetch('/api/create-deposit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount,
+          method,
+          address,
+          adminaddress: adminadd,
+        }),
+      })
+      if (!response.ok) throw new Error('Unable to create deposit')
       localStorage.removeItem('amo');
       handleClosex()
     } catch (error) {
@@ -120,9 +122,14 @@ export default function Upload() {
   //     4:'screenshot transaction'
   // }
   useEffect(() => {
+    const check = async () => {
+      const session = await requireSession(router);
+      if (session) clearLegacyAuthStorage();
+    }
+
+    check();
     console.log(localStorage.getItem('amo'))
     setAmount(localStorage.getItem('amo'));
-    setName(localStorage.getItem('signNames'));
     setMethod(localStorage.getItem('dm'));
     if (localStorage.getItem('amo') === null) {
       router.push('/user/fund')
@@ -130,7 +137,7 @@ export default function Upload() {
     // setInterval(()=>{
     //     setCurrentTxt(changingtext[Math.floor(Math.random() * 3) + 1])
     // },1000);
-  }, [])
+  }, [router])
   return (
     <Cover>
     <div className="backgrounds" style={{ minHeight: '99vh' }}>

@@ -23,7 +23,8 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { getAuth, signOut } from "firebase/auth";
 import Backdrop from '@mui/material/Backdrop';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
-import { CookiesProvider, useCookies } from 'react-cookie';
+import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
+import toast, { Toaster } from 'react-hot-toast';
 
 
 async function processBets(name) {
@@ -46,7 +47,6 @@ export default function Home() {
   const hasRun = useRef(false);
   const openr = Boolean(anchorEl);
   const [drop, setDrop] = useState(false);
-  const [cookies, setCookie] = useCookies(['authdata']);
   const handleClickr = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -63,9 +63,9 @@ export default function Home() {
   //the end of thellaoding modal control
 
   const [balance, setBalance] = useState(0)
-  const [info, setInfo] = useState([cookies.authdata])
   const auth = getAuth(app);
   const [draw, setDraw] = useState(false);
+  const router = useRouter();
   let loads = 0;
 
 
@@ -112,23 +112,38 @@ export default function Home() {
         });
     }
     //end of functions
-    const name = localStorage.getItem('signNames');
-    setUsername(name);
+    let active = true;
     if (!hasRun.current) {
 
       console.log('hi')
       // ...
       hasRun.current = true;
     }
+
     const runer = async () => {
+      const session = await requireSession(router);
+      if (!session) return;
+      clearLegacyAuthStorage();
+
       try {
-        const { data, error } = await supabase
-          .from('users')
-          .select('balance')
-          .eq('username', localStorage.getItem('signNames'))
-        setBalance(data[0].balance)
+        const response = await authFetch('/api/me');
+        if (response.status === 401 || response.status === 404) {
+          await supabase.auth.signOut();
+          router.push('/login');
+          return;
+        }
+
+        const result = await response.json();
+        if (!active) return;
+        if (result.status !== 'success') {
+          toast.error(result.message || 'Unable to load your account')
+          return
+        }
+        setUsername(result.profile.username || '');
+        setBalance(Number(result.profile.balance || 0));
       } catch (e) {
         console.log(e)
+        toast.error('Unable to load your account')
       }
     }
     runer();
@@ -143,9 +158,10 @@ export default function Home() {
       setFootDat(data);
     }
     getMatch();
-  }, [balance]);
-
-  const router = useRouter();
+    return () => {
+      active = false;
+    }
+  }, [router]);
 
   
 
@@ -155,6 +171,7 @@ export default function Home() {
     >
 
       <Loading open={open} handleClose={handleClose} />
+      <Toaster position="bottom-center" reverseOrder={false} />
 
       <Cover sx={{ background: '#06101F', minWidth: '100%', height: '100vh' }}>
         <Backdrop
@@ -315,17 +332,4 @@ export default function Home() {
       </Cover>
     </Stack>
   )
-}
-
-export async function getServerSideProps(context) {
-  const { req } = context;
-  const { cookies } = req;
-  const myCookie = cookies.authdata;
-  let data = JSON.parse(myCookie);
-  let name = data['username'] ?? "";
-  console.log(myCookie)
-  processBets(name);
-  return {
-    props: {}, // will be passed to the page component as props
-  }
 }

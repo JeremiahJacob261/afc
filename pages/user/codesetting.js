@@ -10,6 +10,7 @@ import Modal from '@mui/material/Modal';
 import Wig from '../../public/icon/wig.png'
 import Image from 'next/image'
 import { supabase } from "../api/supabase";
+import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 export default function Code() {
   const [pin, setPin] = useState('')
   const [cpin, setCPin] = useState('')
@@ -24,20 +25,23 @@ export default function Code() {
     setOpen(true)
   }
   useEffect(() => {
-    setName(localStorage.getItem('signNames'));
-  }, [])
+    const check = async () => {
+      const session = await requireSession(router);
+      if (session) clearLegacyAuthStorage();
+    }
+
+    check();
+  }, [router])
   const nextPage = () => {
     if (pin === cpin) {
       async function Update() {
-        const { data, error } = await supabase
-          .from('users')
-          .update(
-            {
-              'pin': pin,
-              'codeset': true
-            })
-          .eq('username', name);
-        Alerts('You have successfully set a new Pin', true)
+        const response = await authFetch('/api/set-pin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pin }),
+        })
+        const result = await response.json()
+        Alerts(result.message || 'Unable to set pin', response.ok && result.status === 'success')
       }
       Update();
     } else {

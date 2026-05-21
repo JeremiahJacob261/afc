@@ -1,16 +1,14 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { NextResponse } from 'next/server';
-import cookie from "cookie";
-export default function handler(req, res) {
+import { getCurrentUser, sendApiError } from '@/lib/apiAuth'
 
-    // res.setHeader("Set-Cookie", cookie.serialize("viewedWelcomeMessage", "true"));
-   
-  // Parsing the JSON string to obtain the object
-  
-    const theme = req.cookies.authdata;
-    // const decodedString = decodeURIComponent(theme);
-    // const jsonObject = JSON.parse(decodedString);
-    console.log(theme)
-    res.status(200).json(theme)
+export default async function handler(req, res) {
+  if (req.method !== 'GET') {
+    return res.status(405).json({ status: 'error', message: 'Method not allowed' })
   }
-  
+
+  try {
+    const user = await getCurrentUser(req)
+    return res.status(200).json({ status: 'success', user })
+  } catch (error) {
+    return sendApiError(res, error)
+  }
+}

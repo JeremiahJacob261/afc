@@ -24,6 +24,7 @@ import Wig from '../../public/icon/wig.png'
 import Image from 'next/image'
 import Big from '../../public/icon/badge.png'
 import { DriveFileRenameOutlineRounded } from "@mui/icons-material";
+import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 export default function Deposit() {
   const [wallx,setWallx] = useState([]);
   const getwallx = async () => {
@@ -85,42 +86,29 @@ export default function Deposit() {
     return wallets.find(obj => obj.wallet === id);
   }
 
-  const getVip = async () => {
-    let test = await fetch('/api/vipcalculate', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ 'username': localStorage.getItem('signNames') })
-    }).then(data => {
-      return data.json();
-    })
-    return test;
-  }
-
   const testRoute = () => {
     const aayncer = async () => {
       try {
-        getVip().then(async (data) => {
-          let viplevel = data.viplevel;
-          //this sends data to the withdraw in backend
-
-
-          let test = await fetch('/api/withdraw', {
+          let response = await authFetch('/api/withdraw', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
             },
-            //space here: crypto address for crypto , account number fro local banks
             body: JSON.stringify({
-              name: info.username, pass: pin, wallet: address, amount: parseFloat(amount).toFixed(3), method: currency,
-              "bank": bank, "accountname": swallet, vipamount: amountlimit[viplevel]
+              pass: pin,
+              wallet: address,
+              amount: parseFloat(amount).toFixed(3),
+              method: currency,
+              bank,
+              accountname: swallet,
             })
-          }).then(data => {
-
-            return data.json();
           })
+          let test = await response.json();
           console.log(test);
+          if (response.status === 401 || response.status === 404) {
+            router.push('/login');
+            return;
+          }
           if (test[0].status === 'Failed') {
             toast.error(test[0].message);
             handleClosex();
@@ -134,7 +122,6 @@ export default function Deposit() {
             router.push('/user/withdrawsuccess')
             
           }
-        })
       } catch (e) {
         console.log(e);
         handleClosex();
@@ -169,43 +156,43 @@ export default function Deposit() {
   }
 
   useEffect(() => {
+    let active = true;
 
-    const useri = localStorage.getItem('signedIns');
-    if (useri) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
+    const GET = async () => {
+      const session = await requireSession(router);
+      if (!session) return;
+      clearLegacyAuthStorage();
 
-      const uid = localStorage.getItem('signUids');
-      const name = localStorage.getItem('signNames');
-      // ...
-      const GET = async () => {
-
-        const names = localStorage.getItem('signNames');
-        try {
-          const { data, error } = await supabase
-            .from('users')
-            .select()
-            .eq('username', names)
-
-          //get the wallets
-          const { data: wall, error: wrr } = await supabase
-            .from('user_wallets')
-            .select()
-            .eq('uid', data[0].userid)
-          setWallet(wall ?? []);
-
-          setInfo(data[0]);
-          setBalance(data[0].balance);
-          localStorage.setItem('signRef', data[0].newrefer);
-        } catch (e) {
-          console.log(e)
-          toast.error('Please Check your Internet Connection and Refresh the Website')
+      try {
+        const response = await authFetch('/api/me');
+        if (response.status === 401 || response.status === 404) {
+          router.push('/login');
+          return;
         }
 
+        const result = await response.json();
+        if (!active || result.status !== 'success') return;
+
+        const { data: wall, error: wrr } = await supabase
+          .from('user_wallets')
+          .select()
+          .eq('uid', result.profile.userid)
+
+        if (wrr) throw wrr;
+
+        setWallet(wall ?? []);
+        setInfo(result.profile);
+        setBalance(Number(result.profile.balance || 0));
+      } catch (e) {
+        console.log(e)
+        toast.error('Please Check your Internet Connection and Refresh the Website')
       }
-      GET();
+    }
 
+    GET();
 
+    return () => {
+      active = false;
     }
   }, []);
   //end of snackbar1

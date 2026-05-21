@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react'
  import Cover from "./cover"
  import Head from 'next/head'
+import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 export default function Transaction({ transaction }) {
     const router = useRouter();
     const [selected, setSelected] = useState(0);
@@ -26,18 +27,13 @@ export default function Transaction({ transaction }) {
             2: 'withdraw'
         };
 
-        let usernam = localStorage.getItem('signNames');
-        console.log(usernam)
         const testRoute = async () => {
-            let test = await fetch('/api/test', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ name: usernam, type: typer[index], key: 'akpomoshi18+' })
-            }).then(data => {
-                return data.json();
-            })
+            let response = await authFetch('/api/my-transactions?type=' + typer[index]);
+            if (response.status === 401 || response.status === 404) {
+                router.push('/login');
+                return;
+            }
+            let test = await response.json();
             console.log(test)
             setContent(test.data);
             setUser(test.user)
@@ -45,23 +41,28 @@ export default function Transaction({ transaction }) {
         testRoute();
     }
     useEffect(() => {
-        let usernam = localStorage.getItem('signNames');
+        let active = true;
         const testRoute = async () => {
-            let test = await fetch('/api/test', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ name: usernam, type: 'all', key: 'akpomoshi18+' })
-            }).then(data => {
-                return data.json();
-            })
+            const session = await requireSession(router);
+            if (!session) return;
+            clearLegacyAuthStorage();
+
+            let response = await authFetch('/api/my-transactions?type=all');
+            if (response.status === 401 || response.status === 404) {
+                router.push('/login');
+                return;
+            }
+            let test = await response.json();
+            if (!active) return;
             console.log(test)
             setContent(test.data);
             setUser(test.user)
         }
         testRoute();
-    }, [])
+        return () => {
+            active = false;
+        }
+    }, [router])
     function ListedTransactions() {
         if (content && content.length > 0) {
             return (
@@ -133,8 +134,8 @@ export default function Transaction({ transaction }) {
                 <p style={{ fontSize: '16px', fontWeight: '600',color:'#cacaca' }}>Transactions</p>
             </Stack>
             <Stack className='betspent' direction="row" justifyContent="space-between">
-          <p    style={{ color:'#cacaca',fontWeight:'500' }}>Total Deposits<br/>$ {parseFloat(user.totald).toFixed(2) ?? 0}</p>
-          <p    style={{ color:'#cacaca',fontWeight:'500' }}>Total Withdraw<br/>$ {parseFloat(user.totalw).toFixed(2) ?? 0}</p>
+          <p    style={{ color:'#cacaca',fontWeight:'500' }}>Total Deposits<br/>$ {parseFloat(user.totald || 0).toFixed(2)}</p>
+          <p    style={{ color:'#cacaca',fontWeight:'500' }}>Total Withdraw<br/>$ {parseFloat(user.totalw || 0).toFixed(2)}</p>
       </Stack>
             <Stack direction="row" sx={{ width: '100%', marginTop: '5px', padding: '6px' }} spacing={2} justifyContent='center' alignItems="center">
                 <p className={(selected != 0) ? 'betTab' : 'betTabSelected'} onClick={() => { betSelectLogic(0) }}>All</p>

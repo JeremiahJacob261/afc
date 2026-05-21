@@ -12,6 +12,7 @@ import { getAuth, signOut } from "firebase/auth";
 import { motion } from 'framer-motion';
 import Loading from "@/pages/components/loading";
 import Loadingx from "@/pages/components/loadx";
+import { clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 
 
 
@@ -37,47 +38,14 @@ export default function Transaction({ wallx }) {
   const months = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"];
   useEffect(() => {
-    const useri = localStorage.getItem('signedIns');
-    if (useri) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
-
-      const uid = localStorage.getItem('signUids');
-      const name = localStorage.getItem('signNames');
-      // ...
-
-      const GET = async () => {
-        try {
-          const { data, error } = await supabase
-            .from('notification')
-            .select()
-            .eq('username', name)
-            .order('id', { ascending: false });
-          setTrans(data)
-          console.log(data.length)
-        } catch (e) {
-          console.log(e)
-        }
-
-      }
-      GET();
-
-    } else {
-      // User is signed out
-      const sOut = async () => {
-        const { error } = await supabase.auth.signOut();
-        console.log('sign out');
-        console.log(error);
-        localStorage.removeItem('signedIns');
-        localStorage.removeItem('signUids');
-        localStorage.removeItem('signNames');
-        localStorage.removeItem('signRef');
-        router.push('/login');
-      }
-      sOut();
+    const GET = async () => {
+      const session = await requireSession(router);
+      if (!session) return;
+      clearLegacyAuthStorage();
     }
 
-  }, [])
+    GET();
+  }, [router])
   var sn = 0;
   return (
     <Cover >

@@ -1,4 +1,4 @@
-import { supabase } from '../supabase'
+import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
 
 /**
  * RPC Function Replacement: process_bets
@@ -10,10 +10,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { name } = req.body
+    const { profile, supabase } = await getCurrentProfile(req, 'username')
+    const name = profile.username
 
     if (!name) {
-      return res.status(400).json({ error: 'Missing required parameter: name' })
+      return res.status(400).json({ error: 'Missing current profile username' })
     }
 
     // Get all pending bets for the user
@@ -188,9 +189,6 @@ export default async function handler(req, res) {
     })
   } catch (error) {
     console.error('Process bets error:', error)
-    res.status(500).json({
-      status: 'error',
-      message: error.message
-    })
+    return sendApiError(res, error)
   }
 }

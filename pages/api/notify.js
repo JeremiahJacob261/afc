@@ -1,100 +1,97 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { NextResponse } from 'next/server';
-import { supabase } from '../../pages/api/supabase';
+import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
+
 export default async function handler(req, res) {
-  const body = req.body;
-  const name = body.name;
+  if (req.method !== 'GET' && req.method !== 'POST') {
+    return res.status(405).json({ status: 'error', message: 'Method not allowed' })
+  }
 
-  const bonuscode = {
-    'depbonus': 'You have received a deposit bonus',
-    'affbonus': 'You have received an REBATE commission',
-  };
+  try {
+    const { profile, supabase } = await getCurrentProfile(req, 'username,newrefer')
+    const bonuscode = {
+      depbonus: 'You have received a deposit bonus',
+      affbonus: 'You have received an REBATE commission',
+    }
 
-  let datacontrol = [];
-  //what we want to do here is that we want to push data into an array using a loop and then send it to the client
-  const { data, error } = await supabase
-    .from('users')
-    .select()
-    .eq('username', name);
+    const datacontrol = []
 
-  const newref = data[0].newrefer;
-  //this is for just normal notifications
+    const { data: getr, error: getrerror } = await supabase
+      .from('activa')
+      .select()
+      .eq('code', profile.newrefer)
+      .order('id', { ascending: false })
 
-  //thi is for broadcasts to the users refer id
-  const { data: getr, error: getrerror } = await supabase
-    .from('activa')
-    .select()
-    .eq('code', newref)
-    .order('id', { ascending: false });
+    if (getrerror) throw getrerror
 
-  getr.map((item) => {
-    let objectitem = {
-      'message': `${bonuscode[item.type]} of ${parseFloat(item.amount).toFixed(4)} from ${item.username}`,
-      'time': item.created_at,
-    };
-    datacontrol.push(objectitem);
-  });
+    ;(getr || []).forEach((item) => {
+      datacontrol.push({
+        message: `${bonuscode[item.type] || 'You have received a bonus'} of ${parseFloat(item.amount || 0).toFixed(4)} from ${item.username}`,
+        time: item.created_at,
+      })
+    })
 
-  //thi is for broadcasts
-  const { data: getb, error: getberror } = await supabase
-    .from('activa')
-    .select()
-    .eq('code', 'broadcast')
-    .order('id', { ascending: false });
+    const { data: getb, error: getberror } = await supabase
+      .from('activa')
+      .select()
+      .eq('code', 'broadcast')
+      .order('id', { ascending: false })
 
-  getb.map((item) => {
-    let objectitem = {
-      'message': `${item.username}`,
-      'time': item.created_at,
-    };
-    datacontrol.push(objectitem);
-  });
+    if (getberror) throw getberror
 
+    ;(getb || []).forEach((item) => {
+      datacontrol.push({
+        message: `${item.username}`,
+        time: item.created_at,
+      })
+    })
 
-  //thi is for some notifications we want to send to the user throught the username
-  const { data: getu, error: getuerror } = await supabase
-    .from('activa')
-    .select()
-    .match({ 'username': name, 'code': 'bet' })
-    .order('id', { ascending: false });
-  getu.map((item) => {
-    let objectitem = {
-      'message': `You have won your bet of ${parseFloat(item.amount).toFixed(2)} USDT`,
-      'time': item.created_at,
-    };
-    datacontrol.push(objectitem);
-  });
-  //tis next part is for the notifications regarding transactions
-  const { data:getx, error:getxerror } = await supabase
-    .from('notification')
-    .select()
-    .eq('username', name)
-    .neq('sent', 'pending')
-    .order('id', { ascending: false });
-    getx.map((item) => {
-      let objectitem = {
-        'message':`Your ${item.type} of ${parseFloat(item.amount).toFixed(2)} ${item.method} is ${item.sent}`,
-        'time':item.time,
-      };
-      datacontrol.push(objectitem);
-    });
+    const { data: getu, error: getuerror } = await supabase
+      .from('activa')
+      .select()
+      .match({ username: profile.username, code: 'bet' })
+      .order('id', { ascending: false })
 
-     //tis next part is for the notifications regarding transactions bonus from admin
-  const { data:getad, error:getaderror } = await supabase
-  .from('notification')
-  .select()
-  .match({ 'username': name, 'address': 'admin' })
-  .order('id', { ascending: false });
-  getad.map((item) => {
-    let objectitem = {
-      'message':`You have received ${parseFloat(item.amount).toFixed(2)} USDT ${item.method} from admin`,
-      'time':item.time,
-    };
-    datacontrol.push(objectitem);
-  });
-  // console.log(data)
+    if (getuerror) throw getuerror
 
+    ;(getu || []).forEach((item) => {
+      datacontrol.push({
+        message: `You have won your bet of ${parseFloat(item.amount || 0).toFixed(2)} USDT`,
+        time: item.created_at,
+      })
+    })
 
-  res.status(200).json(datacontrol);
+    const { data: getx, error: getxerror } = await supabase
+      .from('notification')
+      .select()
+      .eq('username', profile.username)
+      .neq('sent', 'pending')
+      .order('id', { ascending: false })
 
+    if (getxerror) throw getxerror
+
+    ;(getx || []).forEach((item) => {
+      datacontrol.push({
+        message: `Your ${item.type} of ${parseFloat(item.amount || 0).toFixed(2)} ${item.method} is ${item.sent}`,
+        time: item.time,
+      })
+    })
+
+    const { data: getad, error: getaderror } = await supabase
+      .from('notification')
+      .select()
+      .match({ username: profile.username, address: 'admin' })
+      .order('id', { ascending: false })
+
+    if (getaderror) throw getaderror
+
+    ;(getad || []).forEach((item) => {
+      datacontrol.push({
+        message: `You have received ${parseFloat(item.amount || 0).toFixed(2)} USDT ${item.method} from admin`,
+        time: item.time,
+      })
+    })
+
+    return res.status(200).json(datacontrol)
+  } catch (error) {
+    return sendApiError(res, error)
+  }
 }

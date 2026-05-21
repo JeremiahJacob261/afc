@@ -1,4 +1,5 @@
-import { supabase } from '../supabase'
+import { requireInternalSecret, sendApiError } from '@/lib/apiAuth'
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 
 /**
  * RPC Function Replacement: affbonus
@@ -10,6 +11,8 @@ export default async function handler(req, res) {
   }
 
   try {
+    requireInternalSecret(req)
+    const supabase = getSupabaseAdmin()
     const { name, type, amount, refers, lvls, lvlss } = req.body
 
     if (!name || !amount) {
@@ -121,9 +124,6 @@ export default async function handler(req, res) {
     })
   } catch (error) {
     console.error('Affbonus error:', error)
-    res.status(500).json({
-      status: 'error',
-      message: error.message
-    })
+    return sendApiError(res, error)
   }
 }
