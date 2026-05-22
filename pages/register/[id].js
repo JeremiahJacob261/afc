@@ -18,11 +18,11 @@ import LOGO from '@/public/european.ico'
 import Image from 'next/image'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { supabase } from '../api/supabase'
+import { supabase } from '@/pages/api/supabase'
 import Backdrop from '@mui/material/Backdrop';
 import Wig from '@/public/icon/wig.png'
 import Big from '@/public/icon/badge.png'
-import codes from '../api/codeswithflag.json'
+import codes from '@/pages/api/codeswithflag.json'
 import { clearLegacyAuthStorage } from '@/lib/clientAuth';
 export default function Register( {refer} ) {
   

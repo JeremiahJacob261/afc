@@ -2,7 +2,7 @@ import { Stack, Typography } from '@mui/material'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useRouter } from 'next/router';
 import { useEffect, useState, useRef } from 'react';
-import { supabase } from '../api/supabase';
+import { supabase } from '@/pages/api/supabase';
 import Head from 'next/head'
 import Image from 'next/image'
 import Rd from '@/public/icon/rounds.png'

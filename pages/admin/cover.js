@@ -1,8 +1,9 @@
 import React from "react";
+import { callAdminRpc } from '@/lib/adminRpcClient';
 import Image from "next/image";
 
 import Logo from '@/public/favicon.ico'
-import { supabase } from './api/supabase'
+import { supabase } from '@/pages/api/supabase'
 import { motion } from "framer-motion";
 import { Stack,Box, Typography, Divider, Button } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
@@ -11,8 +12,7 @@ import Link from 'next/link'
 import Head from 'next/head'
 export default function Cover({children}) {
     const wih = async (damount, dusername) => {
-        const { data, error } = await supabase
-          .rpc('withdrawer', { amount: damount, names: dusername });
+        const { data, error } = await callAdminRpc('withdrawer', { amount: damount, names: dusername });
           console.log(error)
       }
       const rem = async (betd) => {
@@ -23,8 +23,7 @@ export default function Cover({children}) {
             .eq('betid', betd);
     }
     const Depositing = async (damount, dusername) => {
-        const { data, error } = await supabase
-          .rpc('depositor', { amount: damount, names: dusername })
+        const { data, error } = await callAdminRpc('depositor', { amount: damount, names: dusername })
         console.log(error);
       }
     async function deduct(){

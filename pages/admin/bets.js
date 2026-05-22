@@ -1,5 +1,6 @@
 import { Stack, Typography, Box, Button, TextField, Checkbox } from "@mui/material";
-import { supabase } from './api/supabase'
+import { callAdminRpc } from '@/lib/adminRpcClient';
+import { supabase } from '@/pages/api/supabase'
 import PageviewIcon from '@mui/icons-material/Pageview';
 import PreviewIcon from '@mui/icons-material/Preview';
 import { useState, useEffect, useRef } from 'react'
@@ -58,19 +59,16 @@ export default function Bets({ bets }) {
     };
 
     const Reads = async (dtype, damount) => {
-        const { data, error } = await supabase
-            .rpc(dtype, { amount: damount })
+        const { data, error } = await callAdminRpc(dtype, { amount: damount })
         console.log(error);
     }
     const Chan = async (bets, type) => {
-        const { data, error } = await supabase
-            .rpc('chan', { bet: bets, des: type })
+        const { data, error } = await callAdminRpc('chan', { bet: bets, des: type })
         console.log(error);
     }
     const AffBonus = async (damount, dusername, refer, lvla, lvlb) => {
         try {
-            const { data, error } = await supabase
-                .rpc('affbonus', { name: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
+            const { data, error } = await callAdminRpc('affbonus', { name: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
             console.log(error);
         } catch (e) {
             console.log(e)
@@ -125,8 +123,7 @@ export default function Bets({ bets }) {
                     if (d.market === market) {
                         console.log((d.market === market) ? 'true' : 'false');
                         const inBal = async () => {
-                            const { data, error } = await supabase
-                                .rpc('depositor', { amount: Number(d.aim) + Number(d.stake), names: d.username })
+                            const { data, error } = await callAdminRpc('depositor', { amount: Number(d.aim) + Number(d.stake), names: d.username })
                             console.log(error)
                         }
                         Reads('readwon', d.aim)
@@ -186,8 +183,7 @@ export default function Bets({ bets }) {
                 if (d.market != market) {
 
                     const inBal = async () => {
-                        const { data, error } = await supabase
-                            .rpc('depositor', { amount: Number(d.stake), names: d.username })
+                        const { data, error } = await callAdminRpc('depositor', { amount: Number(d.stake), names: d.username })
                         console.log(error)
                     }
                     Reads('readwon', d.stake)

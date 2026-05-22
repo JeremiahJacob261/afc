@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { callInternalRpc } from '@/lib/serverRpc';
 import axios from 'axios';
 import { headers } from 'next/headers'
 import { supabase } from './supabase';
@@ -13,8 +14,7 @@ export default async  function handler(req, res) {
     
             const reward = async (username, amount,profit) => { 
                 const Reads = async (dtype, damount) => {
-                    const { data, error } = await supabase
-                        .rpc(dtype, { amount: damount })
+                    const { data, error } = await callInternalRpc(req, dtype, { amount: damount })
                     console.log(error);
                 }
                 Reads('readwon', profit);
@@ -33,8 +33,7 @@ export default async  function handler(req, res) {
                                 try {
                                     const AffBonus = async (damount, dusername, refer, lvla, lvlb) => {
                                         try {
-                                            const { data, error } = await supabase
-                                                .rpc('affbonus', { name: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
+                                            const { data, error } = await callInternalRpc(req, 'affbonus', { name: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
                                             console.log(error, 'affbonus');
                                         } catch (e) {
                                             console.log(e, 'affbonus')
@@ -100,8 +99,7 @@ export default async  function handler(req, res) {
                                         //function for updating the users balance
         
                                         const updateBalance = async () => {
-                                            const { data, error } = await supabase
-                                                .rpc('depositor', { amount:parseFloat(d.stake), names: d.username })
+                                            const { data, error } = await callInternalRpc(req, 'depositor', { amount:parseFloat(d.stake), names: d.username })
                                             console.log(error)
                                         }
                                         updateBalance();
@@ -133,8 +131,7 @@ export default async  function handler(req, res) {
                                         //function for updating the users balance
         
                                         const updateBalance = async () => {
-                                            const { data, error } = await supabase
-                                                .rpc('depositor', { amount:parseFloat(d.stake), names: d.username })
+                                            const { data, error } = await callInternalRpc(req, 'depositor', { amount:parseFloat(d.stake), names: d.username })
                                             console.log(error)
                                         }
                                         updateBalance();
@@ -166,8 +163,7 @@ export default async  function handler(req, res) {
                                 //function for updating the users balance
     
                                 const updateBalance = async () => {
-                                    const { data, error } = await supabase
-                                        .rpc('depositor', { amount: parseFloat(d.aim) + parseFloat(d.stake), names: d.username })
+                                    const { data, error } = await callInternalRpc(req, 'depositor', { amount: parseFloat(d.aim) + parseFloat(d.stake), names: d.username })
                                     console.log(error)
                                 }
                                 updateBalance();

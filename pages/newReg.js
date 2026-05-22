@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import {supabase} from './api/supabase'
+import {supabase} from '@/pages/api/supabase'
 
 export default function VerticalLinearStepper() {
   

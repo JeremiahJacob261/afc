@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import HomeBottom from "../bottomNav";
 import { useState } from "react";
-import { supabase } from '../api/supabase'
+import { supabase } from '@/pages/api/supabase'
 export default function Home({test}) {
     const router = useRouter();
     const [userData, setUserData] = useState([1, 2, 6, 2, 6, 9, 4, 10, 12, 4]);

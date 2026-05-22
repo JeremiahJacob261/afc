@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material";
 import { Button, Stack } from "@mui/material";
-import { supabase } from '../api/supabase'
+import { supabase } from '@/pages/api/supabase'
 import { useState } from 'react';
 import { motion } from 'framer-motion'
 import { Icon } from '@iconify/react';

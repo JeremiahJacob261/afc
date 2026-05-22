@@ -1,5 +1,5 @@
 import { Button } from "@mui/material"
-import { supabase } from "./api/supabase"
+import { supabase } from "@/pages/api/supabase"
 export default function Search(){
     return(
         <div>

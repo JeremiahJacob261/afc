@@ -1,5 +1,5 @@
 import { Stack } from '@mui/material';
-import { supabase } from '../api/supabase';
+import { supabase } from '@/pages/api/supabase';
 import { Icon } from '@iconify/react';
 import { useRouter } from 'next/router'
 import { useEffect } from 'react';

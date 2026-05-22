@@ -1,8 +1,8 @@
 import { Typography, Stack, Divider, Button, Paper, Backdrop, CircularProgress } from "@mui/material"
-import { supabase } from "../../api/supabase"
+import { supabase } from "@/pages/api/supabase"
 import { useState, useEffect } from 'react'
 import Head from "next/head";
-import { app } from '../../api/firebase';
+import { app } from '@/pages/api/firebase';
 import { onAuthStateChanged } from "firebase/auth";
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import { getAuth, signOut } from "firebase/auth";

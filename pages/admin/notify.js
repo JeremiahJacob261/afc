@@ -1,6 +1,6 @@
 import { Button, Typography, Paper, Stack, Box, Divider } from "@mui/material"
 import React,{ useEffect, useState,useContext } from "react"
-import { supabase } from './api/supabase'
+import { supabase } from '@/pages/api/supabase'
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import CancelIcon from '@mui/icons-material/Cancel';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
@@ -11,7 +11,7 @@ import { motion } from "framer-motion";
 import styles from '@/styles/Home.module.css'
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import {AppContext} from './api/Context'
+import {AppContext} from '@/pages/api/Context'
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -87,64 +87,51 @@ export default function Noti({ notiS }) {
       .eq('uid', uid)
   }
 
-  const Depositing = () => {
-    console.log(name)
-    const cuBalance = async () => {
-      const { data, error } = await supabase
-        .rpc('depositor', { amount: deposit, names: name })
-    }
-    const getBalance = async () => {
-      const { data, error } = await supabase
-        .from('users')
-        .select('deposit')
-        .eq('username', name)
-      //the logic is ,if a users value of deposit-count is less than 1, the amount deposited with be 
-      //multiplied by ten percent ,1.1.
-      console.log(data)
-      if (data[0].deposit < 1) {
-        const depoIn = async () => {
-          const { data, error } = await supabase
-            .rpc('deposits', { name: name })
-        }
-        const bonus = async () => {
-          const { data, error } = await supabase
-            .rpc('bonus', { names: name, amount: deposit })
-        }
-        const cua = async () => {
-          const { data, error } = await supabase
-            .from('useractivity')
-            .insert({
-              type: 'deposit', amount: deposit,
-              user: name,
-              count: 0
-            })
-          console.log(error)
-        }
-        cua()
-        bonus()
-        depoIn()
-      } else {
-        const depoIn = async () => {
-          const { data, error } = await supabase
-            .rpc('deposits', { name: name })
-          console.log(error)
-        }
-        const cua = async () => {
-          const { data, error } = await supabase
-            .from('useractivity')
-            .insert({
-              type: 'deposit', amount: deposit,
-              user: name,
-              count: 0
-            })
-        }
-        cua()
-        depoIn()
+  const getAdminPassword = () => {
+    if (text) return text;
+    if (typeof window === 'undefined') return '';
+    let password = window.sessionStorage.getItem('adminActionPassword');
+    if (!password) {
+      password = window.prompt('Admin password') || '';
+      if (password) {
+        window.sessionStorage.setItem('adminActionPassword', password);
       }
     }
-    getBalance()
-    cuBalance()
+    return password;
+  }
 
+  const processFinanceAction = async (item, action) => {
+    const password = getAdminPassword();
+    if (!password) return;
+
+    try {
+      const response = await fetch('/api/admin/finance-action', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-password': password,
+        },
+        body: JSON.stringify({ uid: item.uid, action }),
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        if (response.status === 401 && typeof window !== 'undefined') {
+          window.sessionStorage.removeItem('adminActionPassword');
+        }
+        setMessages(result.message || 'Unable to process transaction');
+        handleClick();
+        return;
+      }
+
+      removeitem(item.uid);
+      setMessages(action === 'approve' ? 'Transaction confirmed' : 'Transaction cancelled');
+      handleClick();
+    } catch (error) {
+      console.log(error);
+      setMessages('Unknown error occurred, please try again');
+      handleClick();
+    }
   }
   return (
     <div>
@@ -238,29 +225,11 @@ export default function Noti({ notiS }) {
                      </motion.div> <Stack direction='row' style={{ width: "80px" }}>
                     <CheckIcon style={{ color: "green" }}
                       onClick={() => {
-                        const wih = async (damount, dusername) => {
-                          const { data, error } = await supabase
-                            .rpc('withdrawer', { amount: damount, names: dusername })
-                        }
-                        const cus = async (deposit, name) => {
-                          const { data, error } = await supabase
-                            .from('useractivity')
-                            .insert({
-                              type: 'withdraw', amount: deposit,
-                              user: name,
-                              count: 0
-                            })
-                          console.log(error)
-                        }
-                        cus(d.amount, d.username)
-                        wih(d.amount, d.username);
-                        update(d.uid);
-                        removeitem(d.uid)
+                        processFinanceAction(d, 'approve');
                       }}
                     />
                     <CancelIcon onClick={() => {
-                      update(d.uid);
-                      removeitem(d.uid)
+                      processFinanceAction(d, 'reject');
                     }}
                       style={{ color: "red" }} />
                   </Stack>
@@ -287,19 +256,14 @@ export default function Noti({ notiS }) {
                       <motion.div whileHover={{backgroundColor:'#C61F41',borderRadius:"8px",padding:'3px'}}>
                          <CheckIcon style={{ color: "green" }}
                         onClick={() => {
-                          setDeposit(d.amount)
-                          setName(d.username)
-                          Depositing()
-                          update(d.uid);
-                          removeitem(d.uid)
+                          processFinanceAction(d, 'approve');
                         }}
                       />
                       </motion.div>
                      <motion.div whileHover={{backgroundColor:'#C61F41',borderRadius:"8px",padding:'3px'}}>
                       
                       <CancelIcon onClick={() => {
-                        update(d.uid);
-                        removeitem(d.uid)
+                        processFinanceAction(d, 'reject');
                       }}
                         style={{ color: "red" }} />
                      </motion.div>

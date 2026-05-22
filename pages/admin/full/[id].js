@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
 import { Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { supabase } from '../api/supabase';
-import codes from '../api/codes.json';
+import { supabase } from '@/pages/api/supabase';
+import codes from '@/pages/api/codes.json';
 import { Icon } from '@iconify/react';
 import { motion } from 'framer-motion';
 import { toast, Toaster } from "react-hot-toast";

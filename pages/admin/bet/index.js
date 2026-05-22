@@ -1,4 +1,5 @@
 import { Stack, TextField } from "@mui/material"
+import { callAdminRpc } from '@/lib/adminRpcClient';
 import { Button } from "@mui/material"
 import { useState } from "react"
 import { useRouter } from 'next/router'
@@ -8,7 +9,7 @@ import { useEffect } from "react"
 import { Icon } from "@iconify/react"
 import Modal from "@mui/material/Modal"
 import Image from "next/image"
-import { supabase } from "../api/supabase"
+import { supabase } from "@/pages/api/supabase"
 export default function Home({ notification }) {
     const router = useRouter();
     const id = router.query.id;
@@ -35,8 +36,7 @@ export default function Home({ notification }) {
         }
       }
     const Depositing = async (damount, dusername) => {
-        const { data, error } = await supabase
-          .rpc('depositor', { amount: damount, names: dusername })
+        const { data, error } = await callAdminRpc('depositor', { amount: damount, names: dusername })
         console.log(error);
       }
     function DataShow() {
@@ -102,8 +102,7 @@ export default function Home({ notification }) {
                             let stams = Date.parse(s.date + " " + s.time) / 1000;
                             let curren = new Date().getTime() / 1000;
                             const Chan = async (bets, type) => {
-                                const { data, error } = await supabase
-                                    .rpc('chan', { bet: bets, des: type })
+                                const { data, error } = await callAdminRpc('chan', { bet: bets, des: type })
                                 console.log(error);
                             }
                             return (

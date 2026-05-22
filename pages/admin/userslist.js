@@ -1,6 +1,7 @@
 import { Stack, Paper, Typography, Button, TextField, Divider, Box, Backdrop } from '@mui/material';
-import { supabase } from './api/supabase';
-import { adminAuthClient } from './api/supabase-admin'
+import { callAdminRpc } from '@/lib/adminRpcClient';
+import { supabase } from '@/pages/api/supabase';
+import { adminAuthClient } from '@/pages/api/supabase-admin'
 import { useEffect, useState, useRef } from 'react';
 import ClearIcon from '@mui/icons-material/Clear';
 import RedeemIcon from '@mui/icons-material/Redeem';
@@ -18,7 +19,7 @@ import Diversity1Icon from '@mui/icons-material/Diversity1';
 import Modal from '@mui/material/Modal';
 import Cover from './cover'
 import { toast, Toaster } from "react-hot-toast";
-import { codes } from './api/codes.json'
+import { codes } from '@/pages/api/codes.json'
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import CancelIcon from '@mui/icons-material/Cancel';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
@@ -113,8 +114,7 @@ export default function Users({ refs }) {
   const Depositing = async (damount, dusername) => {
     try {
 
-      const { data, error } = await supabase
-        .rpc('depositor', { amount: damount, names: dusername })
+      const { data, error } = await callAdminRpc('depositor', { amount: damount, names: dusername })
       console.log(error);
       setPens(false);
     } catch (e) {
@@ -199,8 +199,7 @@ export default function Users({ refs }) {
       console.log(error);
     }
     async function deposit(damount, dusername) {
-      const { data, error } = await supabase
-        .rpc('depositor', { amount: damount, names: dusername })
+      const { data, error } = await callAdminRpc('depositor', { amount: damount, names: dusername })
       console.log(error);
       console.log('... deposited')
     }

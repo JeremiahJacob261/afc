@@ -1,6 +1,7 @@
 import { Button, Typography, Paper, Stack, Box, Divider } from "@mui/material"
+import { callAdminRpc } from '@/lib/adminRpcClient';
 import React, { useEffect, useState, useContext } from "react"
-import { supabase } from './api/supabase'
+import { supabase } from '@/pages/api/supabase'
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import CancelIcon from '@mui/icons-material/Cancel';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
@@ -11,8 +12,8 @@ import { motion } from "framer-motion";
 import styles from '@/styles/Home.module.css'
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import { sd, pass } from './api/pass'
-import { AppContext } from './api/Context'
+import { sd, pass } from '@/pages/api/pass'
+import { AppContext } from '@/pages/api/Context'
 import Image from 'next/image'
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import TextField from '@mui/material/TextField';
@@ -192,36 +193,30 @@ export default function Noti({ notiS }) {
       .eq('uid', uid)
   }
   const Depositing = async (damount, dusername) => {
-    const { data, error } = await supabase
-      .rpc('depositor', { amount: damount, names: dusername })
+    const { data, error } = await callAdminRpc('depositor', { amount: damount, names: dusername })
     console.log(error);
   }
   const SEL = async (damount, dusername) => {
-    const { data, error } = await supabase
-      .rpc('self', { amount: (damount < 20) ? 0 :damount * 0.1, name: dusername })
+    const { data, error } = await callAdminRpc('self', { amount: (damount < 20) ? 0 :damount * 0.1, name: dusername })
     console.log(error);
   }
   const uploadTotal = async (dname, damount) => {
-    const { data, error } = await supabase
-      .rpc('gatherd', { names: dname, amount: parseFloat(damount) })
+    const { data, error } = await callAdminRpc('gatherd', { names: dname, amount: parseFloat(damount) })
     console.log(error)
   }
 
   const RefBonus = async (damount, dusername, refer, lvla, lvlb) => {
     //if amount is greater than 1000 - not more than 60
     if (damount > 1000) {
-      const { data, error } = await supabase
-        .rpc('reffix', { amount: damount, name: dusername, refers: refer, lvls: lvla, lvlss: lvlb })
+      const { data, error } = await callAdminRpc('reffix', { amount: damount, name: dusername, refers: refer, lvls: lvla, lvlss: lvlb })
       console.log(error);
     } else {
-      const { data, error } = await supabase
-        .rpc('refbonus', { amount: damount, name: dusername, refers: refer, lvls: lvla, lvlss: lvlb })
+      const { data, error } = await callAdminRpc('refbonus', { amount: damount, name: dusername, refers: refer, lvls: lvla, lvlss: lvlb })
       console.log(error);
     }
   }
   const Reads = async (dtype, damount) => {
-    const { data, error } = await supabase
-      .rpc(dtype, { amount: damount })
+    const { data, error } = await callAdminRpc(dtype, { amount: damount })
     console.log(error);
   }
 

@@ -1,8 +1,8 @@
 import { useRef, useEffect, useState } from "react";
 import { DataGrid } from '@mui/x-data-grid';
-import { supabase } from '../api/supabase'
+import { supabase } from '@/pages/api/supabase'
 import Head from 'next/head';
-import { app } from '../api/firebase';
+import { app } from '@/pages/api/firebase';
 import Cover from './cover'
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";

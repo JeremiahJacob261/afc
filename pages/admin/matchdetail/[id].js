@@ -1,4 +1,5 @@
 import { Stack } from '@mui/material';
+import { callAdminRpc } from '@/lib/adminRpcClient';
 import Image from 'next/image'
 import { Icon } from '@iconify/react';
 import { motion } from 'framer-motion';
@@ -9,7 +10,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { useRouter } from 'next/router'
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
-import { supabase } from '../api/supabase'
+import { supabase } from '@/pages/api/supabase'
 import { Modal } from '@mui/material';
 // import { logics } from './logic';
 export default function Home({ datas, mist }) {
@@ -502,19 +503,16 @@ export async function getServerSideProps(context) {
 const scratch = async (home, away, chome, caway, check, matchid) => {
 
     const Reads = async (dtype, damount) => {
-        const { data, error } = await supabase
-            .rpc(dtype, { amount: damount })
+        const { data, error } = await callAdminRpc(dtype, { amount: damount })
         console.log(error);
     }
     const Chan = async (bets, type) => {
-        const { data, error } = await supabase
-            .rpc('chan', { bet: bets, des: type })
+        const { data, error } = await callAdminRpc('chan', { bet: bets, des: type })
         console.log(error);
     }
     const AffBonus = async (damount, dusername, refer, lvla, lvlb) => {
         try {
-            const { data, error } = await supabase
-                .rpc('affbonus', { name: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
+            const { data, error } = await callAdminRpc('affbonus', { name: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
             console.log(error);
         } catch (e) {
             console.log(e)
@@ -567,8 +565,7 @@ const scratch = async (home, away, chome, caway, check, matchid) => {
                                         //draw wins
                                         //rewards logic
                                         const inBal = async () => {
-                                            const { data, error } = await supabase
-                                                .rpc('depositor', { amount: Number(d.aim) + Number(d.stake), names: d.username })
+                                            const { data, error } = await callAdminRpc('depositor', { amount: Number(d.aim) + Number(d.stake), names: d.username })
                                             console.log(error)
                                         }
                                         Reads('readwon', d.aim)
@@ -609,8 +606,7 @@ const scratch = async (home, away, chome, caway, check, matchid) => {
                                         //home wins
                                         //rewards logic
                                         const inBal = async () => {
-                                            const { data, error } = await supabase
-                                                .rpc('depositor', { amount: Number(d.aim) + Number(d.stake), names: d.username })
+                                            const { data, error } = await callAdminRpc('depositor', { amount: Number(d.aim) + Number(d.stake), names: d.username })
                                             console.log(error)
                                         }
                                         Reads('readwon', d.aim)
@@ -651,8 +647,7 @@ const scratch = async (home, away, chome, caway, check, matchid) => {
                                         //draw
                                         //rewards logic
                                         const inBal = async () => {
-                                            const { data, error } = await supabase
-                                                .rpc('depositor', { amount: Number(d.aim) + Number(d.stake), names: d.username })
+                                            const { data, error } = await callAdminRpc('depositor', { amount: Number(d.aim) + Number(d.stake), names: d.username })
                                             console.log(error)
                                         }
                                         Reads('readwon', d.aim)
@@ -702,8 +697,7 @@ const scratch = async (home, away, chome, caway, check, matchid) => {
                                         //people who won the bet: reverse betting
                                         //rewards logic
                                         const inBal = async () => {
-                                            const { data, error } = await supabase
-                                                .rpc('depositor', { amount: Number(d.aim) + Number(d.stake), names: d.username })
+                                            const { data, error } = await callAdminRpc('depositor', { amount: Number(d.aim) + Number(d.stake), names: d.username })
                                             console.log(error)
                                         }
                                         Reads('readwon', d.aim)
@@ -746,8 +740,7 @@ const scratch = async (home, away, chome, caway, check, matchid) => {
                                         console.log((d.market === market) ? 'true' : 'false');
                                         //rewards logic
                                         const inBal = async () => {
-                                            const { data, error } = await supabase
-                                                .rpc('depositor', { amount: Number(d.aim) + Number(d.stake), names: d.username })
+                                            const { data, error } = await callAdminRpc('depositor', { amount: Number(d.aim) + Number(d.stake), names: d.username })
                                             console.log(error)
                                         }
                                         Reads('readwon', d.aim)
@@ -814,8 +807,7 @@ const scratch = async (home, away, chome, caway, check, matchid) => {
                 if (d.market == market) {
 
                     const inBal = async () => {
-                        const { data, error } = await supabase
-                            .rpc('depositor', { amount: Number(d.stake), names: d.username })
+                        const { data, error } = await callAdminRpc('depositor', { amount: Number(d.stake), names: d.username })
                         console.log(error)
                     }
                     Reads('readwon', d.stake)
@@ -857,8 +849,7 @@ const scratch = async (home, away, chome, caway, check, matchid) => {
                     if (d.market != market) {
                         console.log((d.market === market) ? 'true' : 'false');
                         const inBal = async () => {
-                            const { data, error } = await supabase
-                                .rpc('depositor', { amount: Number(d.aim) + Number(d.stake), names: d.username })
+                            const { data, error } = await callAdminRpc('depositor', { amount: Number(d.aim) + Number(d.stake), names: d.username })
                             console.log(error)
                         }
                         Reads('readwon', d.aim)
@@ -883,8 +874,7 @@ const scratch = async (home, away, chome, caway, check, matchid) => {
                         reward_upline();
                     } else {
                         const inBal = async () => {
-                            const { data, error } = await supabase
-                                .rpc('depositor', { amount: parseFloat(d.stake), names: d.username })
+                            const { data, error } = await callAdminRpc('depositor', { amount: parseFloat(d.stake), names: d.username })
                             console.log(error)
                         }
                         inBal()

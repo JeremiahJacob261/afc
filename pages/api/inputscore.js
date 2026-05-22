@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { NextResponse } from 'next/server';
+import { callInternalRpc } from '@/lib/serverRpc';
 import axios from 'axios';
 import { headers } from 'next/headers'
 import { supabase } from './supabase';
@@ -16,8 +17,7 @@ export default async function handler(req, res) {
 
 
     const Reads = async (dtype, damount) => {
-        const { data, error } = await supabase
-            .rpc(dtype, { amount: damount })
+        const { data, error } = await callInternalRpc(req, dtype, { amount: damount })
         console.log(error);
     }
     const Chan = async (bets, type) => {
@@ -32,8 +32,7 @@ export default async function handler(req, res) {
     }
     const AffBonus = async (damount, dusername, refer, lvla, lvlb) => {
         try {
-            const { data, error } = await supabase
-                .rpc('affbonus', { name: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
+            const { data, error } = await callInternalRpc(req, 'affbonus', { name: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
             console.log(error, 'affbonus');
         } catch (e) {
             console.log(e, 'affbonus')
@@ -42,13 +41,11 @@ export default async function handler(req, res) {
     }
 
     const Bspend = async (amount, name) => {
-        const { data, error } = await supabase
-            .rpc('betterspend', { amount: amount, names: name })
+        const { data, error } = await callInternalRpc(req, 'betterspend', { amount: amount, names: name })
         console.log(error)
     }
     const Bwon = async (amount, name) => {
-        const { data, error } = await supabase
-            .rpc('betterwon', { amount: amount, names: name })
+        const { data, error } = await callInternalRpc(req, 'betterwon', { amount: amount, names: name })
         console.log(error)
     }
 
@@ -112,8 +109,7 @@ export default async function handler(req, res) {
                     Chan();
                     console.log((d.market === market) ? 'true' : 'false');
                     const inBal = async () => {
-                        const { data, error } = await supabase
-                            .rpc('depositor', { amount: parseFloat(d.aim) + parseFloat(d.stake), names: d.username })
+                        const { data, error } = await callInternalRpc(req, 'depositor', { amount: parseFloat(d.aim) + parseFloat(d.stake), names: d.username })
                         console.log(error)
                     }
                     Reads('readwon', d.aim)
@@ -177,8 +173,7 @@ export default async function handler(req, res) {
                 if (d.market != market) {
                     console.log(d);
                     const inBal = async () => {
-                        const { data, error } = await supabase
-                            .rpc('depositor', { amount: Number(d.stake), names: d.username })
+                        const { data, error } = await callInternalRpc(req, 'depositor', { amount: Number(d.stake), names: d.username })
                         console.log(error)
                     }
                     Reads('readwon', d.stake)

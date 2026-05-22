@@ -4,13 +4,13 @@ import React, { useRef, useEffect, useState } from "react";
 import Head from 'next/head'
 import { Stack, Typography, Box, Paper, Divider } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { supabase } from '../api/supabase';
+import { supabase } from '@/pages/api/supabase';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { app } from '../api/firebase';
+import { app } from '@/pages/api/firebase';
 import Loading from "@/pages/components/loading";
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";

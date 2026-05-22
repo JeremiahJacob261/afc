@@ -1,5 +1,5 @@
 import Cover from './cover'
-import { supabase } from '../api/supabase'
+import { supabase } from '@/pages/api/supabase'
 import { useContext, useEffect, useState } from "react";
 import { Paper, Stack, Typography, Button, Divider } from '@mui/material'
 import Image from "next/image";

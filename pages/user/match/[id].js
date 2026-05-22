@@ -1,5 +1,5 @@
 import { Typography, Stack, Divider, Button, Paper } from "@mui/material"
-import { supabase } from "../../api/supabase"
+import { supabase } from "@/pages/api/supabase"
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { useRouter } from "next/router";
 import React, { useEffect, useState, useRef } from "react";
@@ -12,7 +12,7 @@ import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeft
 import Cover from '../cover'
 import { Drawer } from '@mui/material'
 import toast, { Toaster } from "react-hot-toast";
-import { app } from '../../api/firebase';
+import { app } from '@/pages/api/firebase';
 import Image from 'next/image'
 import Loading from "../../components/loading";
 import { motion } from 'framer-motion'

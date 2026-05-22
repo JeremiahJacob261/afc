@@ -40,10 +40,16 @@ export const rpc = {
   withdrawer: (names, amount) => callRpc('withdrawer', { names, amount }),
   dailywl: (names, amount) => callRpc('dailywl', { names, amount }),
   gatherd: (names, amount) => callRpc('gatherd', { names, amount }),
+  gatherw: (names, amount) => callRpc('gatherw', { names, amount }),
   chan: (bet, des) => callRpc('chan', { bet, des }),
   increment: (x, row_id) => callRpc('increment', { x, row_id }),
   affbonus: (name, type, amount, refers, lvls, lvlss) => 
     callRpc('affbonus', { name, type, amount, refers, lvls, lvlss }),
+  refbonus: (amount, name, refers, lvls, lvlss) =>
+    callRpc('refbonus', { amount, name, refers, lvls, lvlss }),
+  readdeposit: (amount) => callRpc('readdeposit', { amount }),
+  readwithdraw: (amount) => callRpc('readwithdraw', { amount }),
+  self: (name, amount) => callRpc('self', { name, amount }),
   processBets: (name) => callRpc('process_bets', { name })
 }
 

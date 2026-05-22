@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '../../pages/api/supabase';
+import { callInternalRpc } from '@/lib/serverRpc';
 export default async function handler(req, res) {
     const body = req.body;
     const name = body.name;
@@ -7,31 +8,19 @@ export default async function handler(req, res) {
     //guild functions (use backend RPC endpoints)
     const Depositing = async (damount, dusername) => {
         try {
-            await fetch('/api/rpc/depositor', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ names: dusername, amount: damount })
-            })
+            await callInternalRpc(req, 'depositor', { names: dusername, amount: damount })
         } catch (e) { console.log(e) }
     }
 
     const Chan = async (bets, type) => {
         try {
-            await fetch('/api/rpc/chan', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ bet: bets, des: type })
-            })
+            await callInternalRpc(req, 'chan', { bet: bets, des: type })
         } catch (e) { console.log(e) }
     }
 
     const AffBonus = async (damount, dusername, refer, lvla, lvlb) => {
         try {
-            await fetch('/api/rpc/affbonus', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
-            })
+            await callInternalRpc(req, 'affbonus', { name: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
         } catch (e) { console.log(e) }
     }
 

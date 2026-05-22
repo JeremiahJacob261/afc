@@ -9,7 +9,7 @@ import Big from '@/public/icon/badge.png'
 import Modal from '@mui/material/Modal';
 import Wig from '@/public/icon/wig.png'
 import Image from 'next/image'
-import { supabase } from "../api/supabase";
+import { supabase } from "@/pages/api/supabase";
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 export default function Code() {
   const [pin, setPin] = useState('')

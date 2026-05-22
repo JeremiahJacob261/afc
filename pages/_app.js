@@ -1,13 +1,13 @@
 import '@/styles/globals.css'
 import '@/styles/bind.css';
-import { AppContext, SlipContext } from './api/Context'
+import { AppContext, SlipContext } from '@/pages/api/Context'
 import { useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useCookies } from "react-cookie"
 import { Stack } from '@mui/material';
 import Head from 'next/head'
 import Footer from './footeras';
-import { BetContext } from './api/Context'
+import { BetContext } from '@/pages/api/Context'
 import { appWithTranslation } from 'next-i18next'
 function MyApp({ Component, pageProps }) {
 

@@ -10,7 +10,7 @@ import Wig from '@/public/icon/wig.png'
 import Image from 'next/image'
 import Loading from "@/pages/components/loading";
 import toast,{ Toaster } from "react-hot-toast";
-import { supabase } from "../api/supabase";
+import { supabase } from "@/pages/api/supabase";
  
 export async function getServerSideProps(context) {
   const met = context.query.dm;

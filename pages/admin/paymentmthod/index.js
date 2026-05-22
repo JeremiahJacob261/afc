@@ -4,7 +4,7 @@ import { Button, Stack, TextField } from '@mui/material'
 import { Icon } from '@iconify/react'
 import { toast, Toaster } from "react-hot-toast";
 import { motion } from 'framer-motion'
-import { supabase } from '../api/supabase'
+import { supabase } from '@/pages/api/supabase'
 import { useRouter } from 'next/router'
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';

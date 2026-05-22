@@ -14,7 +14,7 @@ import Input from '@mui/material/Input';
 import EmailIcon from '@mui/icons-material/Email';
 import LoginIcon from '@mui/icons-material/Login';
 import { writeBatch,doc, setDoc,getDocs,getDoc ,collection} from "firebase/firestore"; 
-import {db} from '../api/firebase'
+import {db} from '@/pages/api/firebase'
 import Spinner from 'react-bootstrap/Spinner';
 import {Form as Farm} from 'react-bootstrap'
 import SimpleDialog from '../modal'

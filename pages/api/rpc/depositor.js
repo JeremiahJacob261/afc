@@ -3,7 +3,7 @@ import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 
 /**
  * RPC Function Replacement: depositor
- * Adds deposit amount to user's balance and total deposits
+ * Adds amount to user's balance
  */
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -19,10 +19,10 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing required parameters: names, amount' })
     }
 
-    // Fetch current user balance and totald
+    // Fetch current user balance
     const { data: user, error: fetchErr } = await supabase
       .from('users')
-      .select('balance, totald')
+      .select('balance')
       .eq('username', names)
       .single()
 
@@ -32,14 +32,12 @@ export default async function handler(req, res) {
     }
 
     const newBalance = user.balance + parseFloat(amount)
-    const newTotald = user.totald + parseFloat(amount)
 
-    // Update user balance and total deposits
+    // Update user balance
     const { error } = await supabase
       .from('users')
       .update({
-        balance: newBalance,
-        totald: newTotald
+        balance: newBalance
       })
       .eq('username', names)
 
@@ -51,8 +49,7 @@ export default async function handler(req, res) {
     res.status(200).json({
       status: 'success',
       message: `Deposited ${amount} to user ${names}`,
-      newBalance,
-      newTotald
+      newBalance
     })
   } catch (error) {
     console.error('Depositor error:', error)

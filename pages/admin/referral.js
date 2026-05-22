@@ -1,6 +1,6 @@
 import {Paper, Stack, Typography} from '@mui/material'
 import { useEffect, useState } from 'react'
-import {supabase} from './api/supabase'
+import {supabase} from '@/pages/api/supabase'
 export default function Referral({refs}) {
 
     return(

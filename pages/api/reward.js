@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import axios from 'axios';
 import { headers } from 'next/headers'
 import { supabase } from './supabase';
+import { callInternalRpc } from '@/lib/serverRpc';
 let apiKey = 'akpomoshi18+'; // your api key
 export default async function handler(req, res) {
     const body = req.body;
@@ -12,8 +13,12 @@ export default async function handler(req, res) {
     let password = body.password;
     let reason = body.reason;
     const inBal = async () => {
-        const { data, error } = await supabase
-            .rpc('depositor', { amount: reward ?? 0, names: id })
+        let error = null;
+        try {
+            await callInternalRpc(req, 'depositor', { amount: reward ?? 0, names: id })
+        } catch (rpcError) {
+            error = rpcError;
+        }
         console.log(reward);
         if (checked) {
             const { data: nata, error: nerror } = await supabase

@@ -1,6 +1,6 @@
 import React from 'react'
 import HomeBottom from '../bottomNav'
-import { supabase } from '../api/supabase'
+import { supabase } from '@/pages/api/supabase'
 import Image from 'next/image'
 import { Stack, TextField, Modal } from '@mui/material'
 import { motion } from 'framer-motion'

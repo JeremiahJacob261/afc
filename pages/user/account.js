@@ -6,11 +6,11 @@ import Link from 'next/link';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
-import { supabase } from '../api/supabase'
+import { supabase } from '@/pages/api/supabase'
 import Head from 'next/head';
 import Image from 'next/image';
 import profile from '@/public/prof.png'
-import { app } from '../api/firebase';
+import { app } from '@/pages/api/firebase';
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';

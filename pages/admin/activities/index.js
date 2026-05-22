@@ -8,7 +8,7 @@ import { useEffect } from "react"
 import { Icon } from "@iconify/react"
 import Modal from "@mui/material/Modal"
 import Image from "next/image"
-import { supabase } from "../api/supabase"
+import { supabase } from "@/pages/api/supabase"
 export default function Home({ notification,newrefer }) {
     const noti = notification;
     const router = useRouter();

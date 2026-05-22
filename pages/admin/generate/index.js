@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import HomeBottom from '../bottomNav'
 import { Button, Stack, TextField } from '@mui/material'
 import { Icon } from '@iconify/react'
-import { supabase } from '../api/supabase'
+import { supabase } from '@/pages/api/supabase'
 import { useRouter } from 'next/router'
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';

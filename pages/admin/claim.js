@@ -1,5 +1,5 @@
 import React from 'react'
-import { supabase } from './api/supabase'
+import { supabase } from '@/pages/api/supabase'
 import { Button, Stack, TextField } from '@mui/material'
 export default function Claim() {
     const [code, setCode] = React.useState('');

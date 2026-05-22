@@ -53,9 +53,12 @@ export default function Upload() {
       if (!response.ok) throw new Error('Unable to create deposit')
       localStorage.removeItem('amo');
       handleClosex()
+      return true
     } catch (error) {
       handleClosex()
       console.log(error)
+      toast.error('Receipt uploaded, but deposit submission failed. Please contact support.')
+      return false
     }
   }
   const getURL = async (modifiede) => {
@@ -65,11 +68,13 @@ export default function Upload() {
         .storage
         .from('trcreceipt/public')
         .getPublicUrl(modifiede);
-      uploadData(data.publicUrl);
+      const submitted = await uploadData(data.publicUrl);
       console.log(data.publicUrl);
+      return submitted
     } catch (error) {
       handleClosex()
       console.log(error)
+      return false
     }
 
 
@@ -89,15 +94,19 @@ export default function Upload() {
         .from('trcreceipt/public')
         .upload(modifiede, file);
       console.log(data)
-      getURL(modifiede);
       if (error) {
         toast.error('Error uploading file.');
         handleClosex()
         console.log(error)
         return;
       }
+      const submitted = await getURL(modifiede);
+      if (!submitted) return;
     } catch (error) {
       console.log(error)
+      handleClosex()
+      toast.error('Error uploading file.');
+      return;
     }
 
 

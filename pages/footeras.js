@@ -5,7 +5,7 @@ import axios from 'axios';
 import usdt from '@/public/simps/tether.png'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { supabase } from './api/supabase'
+import { supabase } from '@/pages/api/supabase'
 export default function Footer() {
     const { locale, locales, push } = useRouter();
 //     const HttpProvider = TronWeb.providers.HttpProvider;

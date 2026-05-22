@@ -7,8 +7,8 @@ import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
-import { supabase } from './api/supabase'
-import { app } from './api/firebase'
+import { supabase } from '@/pages/api/supabase'
+import { app } from '@/pages/api/firebase'
 import { useContext } from "react";
 import Link from "next/link";
 import { getDatabase } from 'firebase/database'

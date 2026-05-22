@@ -1,7 +1,7 @@
 import { Modal, Stack, Typography, TextField } from "@mui/material"
 import React, { useRef } from "react"
 import { Icon } from '@iconify/react';
-import { supabase } from "../api/supabase";
+import { supabase } from "@/pages/api/supabase";
 import { useRouter } from "next/router";
 import toast, { Toaster } from 'react-hot-toast';
 import HomeBottom from "../bottomNav"
@@ -50,91 +50,63 @@ export default function Finances() {
                 .neq('address', 'admin')
                 .limit(150)
                 .order('id', { ascending: false });
-            setNotifications(data);
+            setNotifications(data || []);
         }
         fetchNotifications();
 
-    }, [notifications]);
+    }, []);
 
     //important functions
     const ref = useRef(null)
-    const updateS = async (uid) => {
-        const { error } = await supabase
-            .from('notification')
-            .update({ sent: 'success' })
-            .eq('uid', uid)
-    }
-    const updateC = async (uid) => {
-        const { error } = await supabase
-            .from('notification')
-            .update({ sent: 'failed' })
-            .eq('uid', uid)
-    }
-    const Depositing = async (damount, dusername) => {
-        const { data, error } = await supabase
-            .rpc('depositor', { amount: damount, names: dusername })
-        console.log(error);
-    }
-    const SEL = async (damount, dusername) => {
-        const { data, error } = await supabase
-            .rpc('self', { amount: (damount < 10) ? 0 : damount * 0.1, name: dusername })
-        console.log(error);
-    }
-    const uploadTotal = async (dname, damount) => {
-        try {
-            const { data, error } = await supabase
-                .rpc('gatherd', { names: dname, amount: parseFloat(damount) })
-            console.log('totald', error)
-        } catch (e) {
-            console.log(e)
-        }
-    }
-    const uploadTotalWithdraw = async (dname, damount) => {
-        try {
-            const { data, error } = await supabase
-                .rpc('gatherw', { names: dname, amount: parseFloat(damount) })
-            console.log('totalw', error)
-        } catch (e) {
-            console.log(e)
-        }
-    }
 
-    const RefBonus = async (damount, dusername, refer, lvla, lvlb) => {
-        const { data, error } = await supabase
-            .rpc('refbonus', { amount: damount, name: dusername, refers: refer, lvls: lvla, lvlss: lvlb })
-        console.log(error);
-    }
-    const Reads = async (dtype, damount) => {
-        const { data, error } = await supabase
-            .rpc(dtype, { amount: damount })
-        console.log(error);
-    }
-
-    //bonuses adding
-    const selfBonus = async (damount, dusername) => {
-        //check if user is eligible for bonus
-        let el = {};
-        const eligible = async (dusername, damount) => {
-            const { data, error } = await supabase
-                .from('users')
-                .select()
-                .eq('username', dusername);
-            let el = data[0];
-            console.log(el.firstd);
-            if (!el.firstd) {
-                if (damount > 99999) {
-                    SEL(damount, dusername);
-                    RefBonus(damount, dusername, el.refer, el.lvla, el.lvlb);
-                }
-            } else {
-
+    const getAdminPassword = () => {
+        if (typeof window === 'undefined') return '';
+        let password = window.sessionStorage.getItem('adminActionPassword');
+        if (!password) {
+            password = window.prompt('Admin password') || '';
+            if (password) {
+                window.sessionStorage.setItem('adminActionPassword', password);
             }
         }
-        eligible(dusername, damount)
-        //end of check
-        console.log(el)
+        return password;
     }
-    //end of bonuses adding
+
+    const runFinanceAction = async (transaction, action) => {
+        const password = getAdminPassword();
+        if (!password) return;
+
+        ref.current?.continuousStart();
+        try {
+            const response = await fetch('/api/admin/finance-action', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-admin-password': password,
+                },
+                body: JSON.stringify({ uid: transaction.uid, action }),
+            });
+            const result = await response.json();
+
+            if (!response.ok) {
+                if (response.status === 401 && typeof window !== 'undefined') {
+                    window.sessionStorage.removeItem('adminActionPassword');
+                }
+                toast.error(result.message || 'Unable to process transaction');
+                return;
+            }
+
+            setNotifications((current) => current.map((item) => {
+                if (item.uid !== transaction.uid) return item;
+                return { ...item, sent: result.sent };
+            }));
+            toast.success(action === 'approve' ? 'Transaction confirmed' : 'Transaction cancelled');
+        } catch (e) {
+            console.log(e);
+            toast.error('Unknown error occurred, please try again');
+        } finally {
+            ref.current?.complete();
+        }
+    }
     //end of important functions
     function ActionControl({ data, method }) {
         if (data.sent === 'pending') {
@@ -146,35 +118,7 @@ export default function Finances() {
                     >
                         <Icon icon="fluent-mdl2:accept-medium" width={24} height={24} alt="withdraw" style={{ color: 'green' }}
                             onClick={() => {
-                                if (method != 'usdt') {
-                                    if (data.type === 'withdraw') {
-                                        updateS(data.uid);
-                                        Reads('readwithdraw', parseFloat((data.amount * rates[data.method]).toFixed(3)))
-                                        uploadTotalWithdraw(data.username, parseFloat((data.amount * rates[data.method]).toFixed(3)))
-                                        alert('Withdraw confirmed')
-                                    } else {
-                                        Depositing(parseFloat((data.amount / rates[data.method]).toFixed(3)), data.username);
-                                        selfBonus(parseFloat((data.amount / rates[data.method]).toFixed(3)), data.username);
-                                        uploadTotal(data.username, parseFloat((data.amount / rates[data.method]).toFixed(3)))
-                                        Reads('readdeposit', parseFloat((data.amount / rates[data.method]).toFixed(3)))
-                                        updateS(data.uid);
-                                        alert('Deposit confirmed')
-                                    }
-                                } else {
-                                    if (data.type === 'withdraw') {
-                                        updateS(data.uid);
-                                        Reads('readwithdraw', data.amount)
-                                        uploadTotalWithdraw(data.username, data.amount)
-                                        alert('Withdraw confirmed')
-                                    } else {
-                                        Depositing(parseFloat((data.amount * rates[data.method]).toFixed(3)), data.username);
-                                        selfBonus(parseFloat((data.amount * rates[data.method]).toFixed(3)), data.username);
-                                        uploadTotal(data.username, parseFloat((data.amount * rates[data.method]).toFixed(3)))
-                                        Reads('readdeposit', parseFloat((data.amount * rates[data.method]).toFixed(3)))
-                                        updateS(data.uid);
-                                        alert('Deposit confirmed')
-                                    }
-                                }
+                                runFinanceAction(data, 'approve');
                             }}
                         />
                     </motion.div>
@@ -184,41 +128,7 @@ export default function Finances() {
                     >
                         <Icon icon="iconoir:cancel" width={24} height={24} alt="withdraw" style={{ color: 'red' }}
                             onClick={() => {
-                                if (data.method != 'usdt') {
-                                    if (data.type === 'deposit') {
-                                        ref.current.continuousStart();
-                                        updateC(data.uid);
-                                        alert('Deposit cancelled')
-                                        router.push('/admin/finances')
-                                        window.location.reload()
-                                        ref.current.complete()
-                                    } else {
-                                        ref.current.continuousStart()
-                                        Depositing(parseFloat((parseFloat(data.amount) / 0.92).toFixed(2)), data.username);
-                                        updateC(data.uid);
-                                        alert('Withdraw cancelled')
-                                        router.push('/admin/finances')
-                                        window.location.reload()
-                                        ref.current.complete()
-                                    }
-                                } else {
-                                    if (data.type === 'deposit') {
-                                        ref.current.continuousStart();
-                                        updateC(data.uid);
-                                        alert('Deposit cancelled')
-                                        router.push('/admin/finances')
-                                        window.location.reload()
-                                        ref.current.complete()
-                                    } else {
-                                        ref.current.continuousStart()
-                                        Depositing(parseFloat((parseFloat(data.amount) / 0.92).toFixed(2)), data.username);
-                                        updateC(data.uid);
-                                        alert('Withdraw cancelled')
-                                        router.push('/admin/finances')
-                                        window.location.reload()
-                                        ref.current.complete()
-                                    }
-                                }
+                                runFinanceAction(data, 'reject');
                             }}
                         />
                     </motion.div>

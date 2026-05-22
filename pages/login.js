@@ -2,7 +2,7 @@ import React, { useState, Suspense } from "react";
 import Head from "next/head";
 import Backdrop from '@mui/material/Backdrop';
 import { ArrowLeft, Lock, ArrowRight, User } from "lucide-react";
-import { supabase } from './api/supabase'
+import { supabase } from '@/pages/api/supabase'
 import Link from "next/link";
 import SimpleDialog from './modal'
 import { useRouter } from 'next/router'

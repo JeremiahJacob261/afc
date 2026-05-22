@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useRouter } from 'next/router'
 import { Icon } from "@iconify/react"
 import { motion } from "framer-motion"
-import { supabase } from "../api/supabase"
+import { supabase } from "@/pages/api/supabase"
 export default function Home({ id }) {
     const router = useRouter();
     const [amount, setAmount] = useState('');

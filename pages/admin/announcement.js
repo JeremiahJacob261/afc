@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {Typography,TextField,Button,Stack} from '@mui/material'
-import {supabase} from './api/supabase'
+import {supabase} from '@/pages/api/supabase'
 import Cover from './cover'
 export default function Announcement(){
     const [msg,setMsg] = useState('');

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react"
-import leagues from "../api/leagues.json";
+import leagues from "@/pages/api/leagues.json";
 import { Stack, Divider, TextField, Button } from "@mui/material";
-import { supabase } from "../api/supabase"
+import { supabase } from "@/pages/api/supabase"
 import Image from 'next/image';
 import axios from 'axios';
 import Cover from '../cover'

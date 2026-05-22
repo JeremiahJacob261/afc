@@ -1,4 +1,4 @@
-import { supabase } from "../api/supabase";
+import { supabase } from "@/pages/api/supabase";
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Stack, Typography } from '@mui/material';

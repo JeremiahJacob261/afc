@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import HomeBottom from '../bottomNav'
-import { supabase } from '../api/supabase'
+import { supabase } from '@/pages/api/supabase'
 import { Fab } from '@mui/material';
 import Image from 'next/image'
 import { Stack, TextField, Modal } from '@mui/material'

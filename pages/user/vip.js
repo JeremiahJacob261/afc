@@ -1,6 +1,6 @@
 import { Typography, Stack } from "@mui/material";
 import { useState, useEffect } from "react";
-import { supabase } from '../api/supabase'
+import { supabase } from '@/pages/api/supabase'
 import DiamondIcon from '@mui/icons-material/Diamond';
 import { useRouter } from 'next/router'
 import Cover from './cover'

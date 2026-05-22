@@ -1,5 +1,5 @@
 import { Stack, TextField, Typography, Button, Box } from "@mui/material";
-import { supabase } from '../api/supabase'
+import { supabase } from '@/pages/api/supabase'
 import { useContext, useEffect } from "react";
 import Cover from "./cover";
 import React, { useState, useRef } from "react";
@@ -8,7 +8,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Image from "next/image";
-import { app } from '../api/firebase';
+import { app } from '@/pages/api/firebase';
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
 import { v4 } from "uuid";

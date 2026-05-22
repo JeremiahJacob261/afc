@@ -13,8 +13,8 @@ import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import Image from 'next/image'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Icon } from '@iconify/react'
-import { app } from '../api/firebase';
-import { supabase } from '../api/supabase'
+import { app } from '@/pages/api/firebase';
+import { supabase } from '@/pages/api/supabase'
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { getAuth, signOut } from "firebase/auth";
 import Translate from '@/pages/translator';

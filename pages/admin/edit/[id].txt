@@ -3,7 +3,7 @@ import { Box, Button, Stack, Typography } from '@mui/material'
 import Head from 'next/head'
 import TextField from '@mui/material/TextField';
 import { useEffect } from 'react';
-import { supabase } from '../api/supabase'
+import { supabase } from '@/pages/api/supabase'
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -11,7 +11,7 @@ import Select from '@mui/material/Select';
 import { useRouter } from 'next/router';
 import axios from 'axios'
 import Image from 'next/image'
-import { competition } from '../api/competition';
+import { competition } from '@/pages/api/competition';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';

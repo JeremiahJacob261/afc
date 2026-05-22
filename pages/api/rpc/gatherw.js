@@ -2,8 +2,8 @@ import { requireInternalSecret, sendApiError } from '@/lib/apiAuth'
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 
 /**
- * RPC Function Replacement: gatherd
- * Adds amount to user's total deposit counter
+ * RPC Function Replacement: gatherw
+ * Adds amount to user's total withdrawal counter
  */
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -19,10 +19,9 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing required parameters: names, amount' })
     }
 
-    // Fetch current total deposits
     const { data: user, error: fetchErr } = await supabase
       .from('users')
-      .select('totald')
+      .select('totalw')
       .eq('username', names)
       .single()
 
@@ -32,26 +31,22 @@ export default async function handler(req, res) {
     }
 
     const amountNum = parseFloat(amount)
-    const newTotald = Number(user.totald || 0) + amountNum
+    const newTotalw = Number(user.totalw || 0) + amountNum
 
-    // Increment total deposits
     const { error } = await supabase
       .from('users')
-      .update({ totald: newTotald })
+      .update({ totalw: newTotalw })
       .eq('username', names)
 
-    if (error) {
-      console.error('Update error:', error)
-      throw error
-    }
+    if (error) throw error
 
     res.status(200).json({
       status: 'success',
-      message: `Total deposits increased by ${amount} for user ${names}`,
-      newTotald
+      message: `Total withdrawals increased by ${amount} for user ${names}`,
+      newTotalw,
     })
   } catch (error) {
-    console.error('Gatherd error:', error)
+    console.error('Gatherw error:', error)
     return sendApiError(res, error)
   }
 }

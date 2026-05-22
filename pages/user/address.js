@@ -8,7 +8,7 @@ import { motion } from 'framer-motion'
 import Modal from '@mui/material/Modal';
 import Wig from '@/public/icon/wig.png'
 import { Icon } from '@iconify/react'
-import { supabase } from "../api/supabase";
+import { supabase } from "@/pages/api/supabase";
 import Link from 'next/link'
 import Image from 'next/image'
 import Loading from "@/pages/components/loading";

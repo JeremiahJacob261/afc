@@ -1,13 +1,13 @@
 import { Divider, Stack, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useEffect } from 'react'
-import { supabase } from '../api/supabase'
+import { supabase } from '@/pages/api/supabase'
 import Cover from './cover'
 import Image from 'next/image'
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import { useRouter } from 'next/router'
 import CloseIcon from '@mui/icons-material/Close';
-import { app } from '../api/firebase';
+import { app } from '@/pages/api/firebase';
 import { getAuth, signOut } from "firebase/auth";
 import { motion } from 'framer-motion';
 import Loading from "@/pages/components/loading";

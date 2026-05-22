@@ -6,7 +6,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useRouter } from 'next/router'
-import faq from '../api/faq.json'
+import faq from '@/pages/api/faq.json'
 import CloseIcon from '@mui/icons-material/Close';
 export default function Faq() {
   const [expanded, setExpanded] = useState(false);

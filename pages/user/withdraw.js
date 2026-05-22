@@ -1,10 +1,10 @@
 import { Button, Stack, TextField, Typography, MenuItem, Divider } from "@mui/material";
 import React, { useState, useContext, useEffect } from "react";
-import { supabase } from '../api/supabase'
-import { AppContext } from '../api/Context'
+import { supabase } from '@/pages/api/supabase'
+import { AppContext } from '@/pages/api/Context'
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import { app } from '../api/firebase';
+import { app } from '@/pages/api/firebase';
 import { onAuthStateChanged } from "firebase/auth";
 import { useRouter } from 'next/router'
 import CloseIcon from '@mui/icons-material/Close';
