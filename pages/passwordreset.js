@@ -15,7 +15,7 @@ import { getDatabase } from 'firebase/database'
 import SimpleDialog from './modal'
 import { useRouter } from 'next/router'
 import { getCookie, setCookie, removeCookies } from 'cookies-next';
-import LOGO from '../public/european.ico'
+import LOGO from '@/public/european.ico'
 import Image from 'next/image'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -76,7 +76,7 @@ export default function PasswordReset() {
       </Head>
       <Stack direction="column" spacing={4} justifyContent="center" alignItems="center">
             <Link href="/" style={{ textDecoration: "none" }}>
-              <Typography style={{ fontFamily: 'Noto Serif, serif', color: "#242627", fontWeight: '400', fontSize: '20px' }}>BFC  </Typography>
+              <Typography style={{ fontFamily: 'Noto Serif, serif', color: "#242627", fontWeight: '400', fontSize: '20px' }}>EFC  </Typography>
             </Link>
             <Typography style={{ fontFamily: 'Poppins,sans-serif', color: '#242627', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
             Forgot Password? Dont worry

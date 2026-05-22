@@ -9,7 +9,7 @@ export default function SignupForm() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>BFC</h1>
+      <h1 className={styles.title}>EFC</h1>
       <p className={styles.subtitle}>
         Sign up now and get
         <br />a free USDT to invest!

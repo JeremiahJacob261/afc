@@ -6,7 +6,7 @@ import { app } from '../api/firebase';
 import Cover from './cover'
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
-import Rd from '../../public/icon/rounds.png'
+import Rd from '@/public/icon/rounds.png'
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import { Divider, Typography, Stack, Box } from "@mui/material";
 import Image from 'next/image'

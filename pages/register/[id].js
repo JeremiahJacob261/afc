@@ -14,14 +14,14 @@ import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import { Form as Farm } from 'react-bootstrap'
-import LOGO from '../../public/european.ico'
+import LOGO from '@/public/european.ico'
 import Image from 'next/image'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { supabase } from '../api/supabase'
 import Backdrop from '@mui/material/Backdrop';
-import Wig from '../../public/icon/wig.png'
-import Big from '../../public/icon/badge.png'
+import Wig from '@/public/icon/wig.png'
+import Big from '@/public/icon/badge.png'
 import codes from '../api/codeswithflag.json'
 import { clearLegacyAuthStorage } from '@/lib/clientAuth';
 export default function Register( {refer} ) {
@@ -121,7 +121,7 @@ export default function Register( {refer} ) {
           }
 
           clearLegacyAuthStorage();
-          Alerts(`Welcome To BFC `, true);
+          Alerts(`Welcome To EFC `, true);
         }
       } catch (error) {
         console.error('Error signing up:', error);

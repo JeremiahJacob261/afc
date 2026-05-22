@@ -1,0 +1,17 @@
+<Stack direction='column-reverse'>
+          {
+
+            activity.map((a) => {
+              return (
+                <Paper sx={{ border: "1px solid #F1A208", padding: "8px", marginTop: "4px" }} key={a.uid}>
+                  <Stack>
+                    <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '12px' }}>Transaction Type: {a.type}</Typography>
+                    <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#F1A208', fontSize: '12px' }}>Amount : {a.amount} USDT</Typography>
+                    <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#F1A208', fontSize: '12px' }}>Time : {a.created_at}</Typography>
+                  </Stack>
+                </Paper>
+              )
+            })
+          }
+        </Stack>
+        

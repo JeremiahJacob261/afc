@@ -5,7 +5,7 @@ import React from 'react'
 import { useRouter } from 'next/router'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
-import WS from '../../public/icon/vault.png'
+import WS from '@/public/icon/vault.png'
 import Head from 'next/head'
 import Loading from "@/pages/components/loading";
 export default function Funds() {

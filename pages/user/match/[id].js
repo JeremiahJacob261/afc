@@ -16,9 +16,9 @@ import { app } from '../../api/firebase';
 import Image from 'next/image'
 import Loading from "../../components/loading";
 import { motion } from 'framer-motion'
-import Ims from '../../../public/simps/ball.png'
-// import Depx from '../../../public/depx.png'
-import Bal from '../../../public/bball.png'
+import Ims from '../@/public/simps/ball.png'
+// import Depx from '../@/public/depx.png'
+import Bal from '../@/public/bball.png'
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
@@ -228,7 +228,7 @@ export default function Match({ matchDat }) {
                 <Sncks message={messages} />
                 <Head>
                     <title>{matches.home} VS {matches.away}</title>
-                    <meta name="description" content="A Premium BFC  match" />
+                    <meta name="description" content="A Premium EFC  match" />
                     <link rel="icon" href="/european.ico" />
                     <meta name="viewport" content="width=device-width, initial-scale=1" />
                 </Head>

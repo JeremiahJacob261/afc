@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { Paper, Stack, Typography, Button, Divider } from '@mui/material'
 import Image from "next/image";
 import Head from 'next/head'
-import Ims from '../../public/simps/ball.png'
+import Ims from '@/public/simps/ball.png'
 import { Icon } from '@iconify/react';
 import { useRouter } from "next/router";
 import Backdrop from '@mui/material/Backdrop';

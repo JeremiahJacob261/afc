@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@import url('https://fonts.googleapis.com/css2?family=Poor+Story&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Marhey&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&family=Solway&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Spectral:wght@200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Devanagari:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Overpass:ital,wght@1,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
+
 :root {
   --background: #f7fafc;
   --foreground: #06101f;
@@ -198,4 +212,307 @@ html{
 /* smaller screens tweak */
 @media (max-width: 600px) {
   .page-decor svg { transform: scale(0.7) translateY(-10%); }
+}
+
+
+
+
+.glass{
+ /* From https://css.glass */
+background: rgba(250, 250, 255, 0.34);
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(11.9px);
+-webkit-backdrop-filter: blur(11.9px);
+border: 1px solid rgba(250, 250, 255, 0.93);
+position:fixed;
+width:335px;
+}
+.backgrounds{
+  min-height: 90vh;
+  margin-bottom: 80px;
+  background: rgb(27,3,0);
+background: -moz-linear-gradient(24deg, rgba(27,3,0,1) 42%, rgba(44,4,10,1) 71%);
+background: -webkit-linear-gradient(24deg, rgba(27,3,0,1) 42%, rgba(44,4,10,1) 71%);
+background: linear-gradient(24deg, rgba(27,3,0,1) 42%, rgba(44,4,10,1) 71%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#1b0300",endColorstr="#2c040a",GradientType=1);
+}
+.login{
+  color:white;
+  background:rgba(198,31,65,1);
+  padding:8px;
+  border-radius: 6px;
+  text-align: center;
+}
+.iconbtn:hover{
+  color: #C61F41;
+}
+.bottombtn{
+  background: rgb(105,15,33);
+}
+p{
+  color:'black';
+  font-family:var(--font-poppins);
+}
+.bottomnav{
+  background-color: rgb(44, 2, 10);
+  padding: 8px;
+}
+.homebtn{
+  color:#573b41;
+  cursor:pointer;
+}
+.home:hover{
+  color:#f0e7e9;
+}
+.homebtnselected{
+  color:#C61F41;
+  cursor: pointer;
+}
+.chart1{
+  background: rgb(173,8,194);
+background: -moz-linear-gradient(307deg, rgba(173,8,194,1) 0%, rgba(79,93,245,1) 100%);
+background: -webkit-linear-gradient(307deg, rgba(173,8,194,1) 0%, rgba(79,93,245,1) 100%);
+background: linear-gradient(307deg, rgba(173,8,194,1) 0%, rgba(79,93,245,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ad08c2",endColorstr="#4f5df5",GradientType=1);
+margin: 4px;
+}
+.chart2{
+  background: rgb(14,8,194);
+background: -moz-linear-gradient(307deg, rgba(14,8,194,1) 0%, rgba(79,124,245,0.9248074229691877) 100%);
+background: -webkit-linear-gradient(307deg, rgba(14,8,194,1) 0%, rgba(79,124,245,0.9248074229691877) 100%);
+background: linear-gradient(307deg, rgba(14,8,194,1) 0%, rgba(79,124,245,0.9248074229691877) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#0e08c2",endColorstr="#4f7cf5",GradientType=1);
+margin: 4px;
+}
+.chart3{
+  background: rgb(131,58,180);
+background: -moz-linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+background: -webkit-linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#833ab4",endColorstr="#fcb045",GradientType=1);
+margin: 4px;
+}
+.chart4{
+  background: rgb(42,149,214);
+background: -moz-linear-gradient(90deg, rgba(42,149,214,1) 0%, rgba(81,74,162,1) 100%);
+background: -webkit-linear-gradient(90deg, rgba(42,149,214,1) 0%, rgba(81,74,162,1) 100%);
+background: linear-gradient(90deg, rgba(42,149,214,1) 0%, rgba(81,74,162,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#2a95d6",endColorstr="#514aa2",GradientType=1);
+  margin: 4px;
+}
+.chart1, .chart2, .chart3, .chart4 {
+  padding:8px;
+  border-radius: 5px;
+  width:310px;
+}
+.chartsline{
+  background: rgb(224, 218, 228);
+ }
+ .financerow{
+    background: rgb(83, 4, 20);
+    width: 80vw;
+    height: 123px;
+    border-radius: 12px;
+    padding: 8px;
+ }
+ .ppp{
+  color:whitesmoke;
+  font-size: small;
+  font-weight: 200;
+ }
+ .actions{
+  background:rgb(63, 3, 15);
+  padding:8px;
+  border-radius: 8px;
+  margin:2px;
+ }
+ .actreal{
+  background:rgb(99, 1, 21);
+  padding:4px;
+  border-radius: 8px;
+  margin:1px;
+ }
+ .in-chart{
+  width:93%;
+  height:93%;
+  background: #c0a9ae85;
+  border-radius: 5px;
+  padding: 5px;
+  flex: 1 0 auto;
+ }
+ .bi-txt{
+  color:black;
+  font-size: x-large;
+  font-weight: 600;
+  font-family: 'Poppins',sans-serif;
+ }
+ .sm-txt{
+color: rgb(241, 196, 196);
+font-size: small;
+font-weight: 300;
+font-family: 'Poppins',sans-serif;
+ }
+ .bi-txt-o{
+  color:rgb(46, 45, 45);
+  font-size: large;
+  font-weight: 400;
+  font-family: 'Poppins',sans-serif;
+ }
+ .sm-txt-o{
+color: rgb(184, 181, 181);
+font-size: x-small;
+font-weight: 200;
+font-family: 'Poppins',sans-serif;
+ }
+ .flexs{
+  display: flex;
+ flex-wrap: wrap;
+ padding: 4px;
+ margin-left: 12px;
+ width: 100vw;
+ }
+ .homecol, .awaycol, .drawcol{
+  background-color: #ad1c39;
+  padding: 8px;
+  border-radius: 12px;
+  width: 100%;
+}
+.odds{
+  box-shadow:1px 2px 2px 1px #420b16;
+  color:#e4264c;
+  background-color: whitesmoke;
+  padding:4px;
+  font-family:var(--font-lilpops);
+  font-size: 12px;
+  border-radius: 5px;
+  font-weight: 200;
+  text-align: center;
+  width: 73px;
+  display: inline;
+  height:60px;
+}
+.refback{
+  background: rgb(8,84,113);
+  background: -moz-linear-gradient(90deg, rgba(8,84,113,1) 0%, rgba(58,48,164,1) 100%);
+  background: -webkit-linear-gradient(90deg, rgba(8,84,113,1) 0%, rgba(58,48,164,1) 100%);
+  background: linear-gradient(90deg, rgba(8,84,113,1) 0%, rgba(58,48,164,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#085471",endColorstr="#3a30a4",GradientType=1);
+  font-size: medium;
+  font-weight: 400;
+  font-family: 'Poppins',sans-serif;
+}
+.rewback{
+  background: rgb(208,134,4);
+background: -moz-linear-gradient(90deg, rgba(208,134,4,1) 1%, rgba(158,128,25,1) 62%, rgba(200,123,5,1) 99%);
+background: -webkit-linear-gradient(90deg, rgba(208,134,4,1) 1%, rgba(158,128,25,1) 62%, rgba(200,123,5,1) 99%);
+background: linear-gradient(90deg, rgba(208,134,4,1) 1%, rgba(158,128,25,1) 62%, rgba(200,123,5,1) 99%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#d08604",endColorstr="#c87b05",GradientType=1);
+font-size: medium;
+font-weight: 400;
+font-family: 'Poppins',sans-serif;
+}
+.secback{
+  background: rgb(4,18,208);
+background: -moz-linear-gradient(90deg, rgba(4,18,208,1) 1%, rgba(80,10,149,1) 55%, rgba(161,15,30,1) 99%);
+background: -webkit-linear-gradient(90deg, rgba(4,18,208,1) 1%, rgba(80,10,149,1) 55%, rgba(161,15,30,1) 99%);
+background: linear-gradient(90deg, rgba(4,18,208,1) 1%, rgba(80,10,149,1) 55%, rgba(161,15,30,1) 99%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#0412d0",endColorstr="#a10f1e",GradientType=1);
+font-size: medium;
+font-weight: 400;
+font-family: 'Poppins',sans-serif;
+}
+.traback{
+  background: rgb(246,5,5);
+background: -moz-linear-gradient(90deg, rgba(246,5,5,1) 4%, rgba(177,4,22,1) 77%);
+background: -webkit-linear-gradient(90deg, rgba(246,5,5,1) 4%, rgba(177,4,22,1) 77%);
+background: linear-gradient(90deg, rgba(246,5,5,1) 4%, rgba(177,4,22,1) 77%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#f60505",endColorstr="#b10416",GradientType=1);
+font-size: medium;
+font-weight: 400;
+font-family: 'Poppins',sans-serif;
+}
+.betback{
+  background: linear-gradient(90deg, #3F2B96 0%, #A8C0FF 100%);
+  font-size: medium;
+  font-weight: 400;
+  font-family: 'Poppins',sans-serif;
+}
+p{
+  color: #f0e7e9;
+}
+.count{
+  background: -webkit-linear-gradient(#e3ffe7, #d9e7ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+  font-family: 'Poppins',sans-serif;
+}
+Typography{
+  font-family: 'Poppins',sans-serif;
+}
+.rewardbtn{
+  width:310px;
+  height: 50px;
+  border-radius: 5px;
+  color:#f0e7e9;
+  box-shadow: #e4264c 0px 0px 0px 1px inset;
+  background: rgb(93,5,246);
+background: -moz-linear-gradient(90deg, rgba(93,5,246,1) 0%, rgba(177,4,89,1) 91%);
+background: -webkit-linear-gradient(90deg, rgba(93,5,246,1) 0%, rgba(177,4,89,1) 91%);
+background: linear-gradient(90deg, rgba(93,5,246,1) 0%, rgba(177,4,89,1) 91%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#5d05f6",endColorstr="#b10459",GradientType=1);
+}
+.paisho{
+  background: rgb(82, 6, 13);
+  border-radius: 5px;
+  padding:12px;
+  color: #f0e7e9;
+  min-width: 310px;
+}
+.paisho-mini{
+  background: rgb(105, 4, 14);
+  border-radius: 5px;
+  padding:8px;
+  color: #f0e7e9;
+  min-width: 310px;
+}
+
+.acback {
+  background: rgb(7,190,184);
+background: -moz-linear-gradient(63deg, rgba(7,190,184,1) 0%, rgba(148,201,169,1) 74%);
+background: -webkit-linear-gradient(63deg, rgba(7,190,184,1) 0%, rgba(148,201,169,1) 74%);
+background: linear-gradient(63deg, rgba(7,190,184,1) 0%, rgba(148,201,169,1) 74%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#07beb8",endColorstr="#94c9a9",GradientType=1);
+font-size: medium;
+font-weight: 400;
+font-family: 'Poppins',sans-serif;
+}
+
+.tex{
+  width: 250px;
+  height: 50px;
+  background-color: #f5f5f5;
+  color: #1f1e1e;
+  font-size: medium;
+  padding: 8px;
+}
+
+
+.newbtn {
+  width: 250px;
+  height: 50px;
+  padding: 12px;
+  background-color: #1f1e1e;
+  color: #A8C0FF;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 6px;
+  align-items: center;
+}
+
+.newbtn p{
+  font-size: medium;
+  font-weight: 500;
+  font-family: Georgia, 'Times New Roman', Times, serif;
 }

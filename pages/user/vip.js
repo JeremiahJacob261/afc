@@ -7,7 +7,7 @@ import Cover from './cover'
 import { styled } from '@mui/material/styles';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
-import Logo from '../../public/logoclean.png'
+import Logo from '@/public/logoclean.png'
 import Head from 'next/head'
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 export default function Vip() {

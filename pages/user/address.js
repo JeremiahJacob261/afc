@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { motion } from 'framer-motion'
 import Modal from '@mui/material/Modal';
-import Wig from '../../public/icon/wig.png'
+import Wig from '@/public/icon/wig.png'
 import { Icon } from '@iconify/react'
 import { supabase } from "../api/supabase";
 import Link from 'next/link'

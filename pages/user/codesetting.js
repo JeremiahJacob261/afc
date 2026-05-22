@@ -5,9 +5,9 @@ import PriorityHighRoundedIcon from '@mui/icons-material/PriorityHighRounded';
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { motion } from 'framer-motion';
-import Big from '../../public/icon/badge.png'
+import Big from '@/public/icon/badge.png'
 import Modal from '@mui/material/Modal';
-import Wig from '../../public/icon/wig.png'
+import Wig from '@/public/icon/wig.png'
 import Image from 'next/image'
 import { supabase } from "../api/supabase";
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';

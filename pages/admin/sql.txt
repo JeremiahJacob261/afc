@@ -1,0 +1,14 @@
+DECLARE 
+var_refer TEXT;
+var_lvla TEXT;
+var_lvlb TEXT;
+SELECT refer, lvla, lvlb 
+INTO var_refer, var_lvla, var_lvlb 
+FROM users 
+WHERE username = name;
+
+UPDATE users SET balance = balance + amount*0.01 WHERE newrefer = refers;
+
+UPDATE users SET balance = balance + amount*0.03 WHERE newrefer = lvls;
+
+UPDATE users SET balance = balance + amount*0.05 WHERE newrefer = lvlss;

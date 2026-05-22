@@ -6,7 +6,7 @@ import { supabase } from './api/supabase'
 import Link from "next/link";
 import SimpleDialog from './modal'
 import { useRouter } from 'next/router'
-import LOGO from '../public/european.ico'
+import LOGO from '@/public/european.ico'
 import Image from 'next/image'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -169,7 +169,7 @@ export default function Login() {
             
             <div className="mb-8 text-center">
               <h1 className="text-2xl font-black tracking-tight mb-2">Welcome Back</h1>
-              <p className="text-gray-500 text-sm">Sign in to access your premium analytics</p>
+              <p className="text-gray-500 text-sm">Sign in to access your Investment Bets</p>
             </div>
 
             <form className="space-y-5" onSubmit={(e) => { e.preventDefault(); login(); }}>

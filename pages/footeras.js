@@ -1,8 +1,8 @@
 import { Divider, Typography, Stack } from "@mui/material";
 import TelegramIcon from '@mui/icons-material/Telegram';
-import gpay from '../public/simps/gpay.png'
+import gpay from '@/public/simps/gpay.png'
 import axios from 'axios';
-import usdt from '../public/simps/tether.png'
+import usdt from '@/public/simps/tether.png'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { supabase } from './api/supabase'
@@ -25,16 +25,16 @@ export default function Footer() {
                     <Stack direction="row" alignItems="center" justifyContent={"space-between"} spacing={5}>
                         <Stack direction='column' spacing={1}>
                             <Typography style={{ color: '#D4AF37', fontWeight: '900', fontFamily: "Poppins, sans-serif", fontSize: '24px' }}>
-                                BFC 
+                                EFC 
                             </Typography>
                             <Typography style={{ width: '193px', color: '#D4AF37', fontWeight: '100', fontFamily: "Poppins, sans-serif", fontSize: '10px' }}>
-                                BFC football investment is licenced by the national futures association
+                                EFC football investment is licenced by the national futures association
                             </Typography>
                             <Typography style={{ color: '#EE5600', fontWeight: '900', fontFamily: "Poppins, sans-serif", fontSize: '24px' }}>
                                 +18
                             </Typography>
                             <Typography style={{ width: '193px', color: '#FFE066', fontWeight: '100', fontFamily: "Poppins, sans-serif", fontSize: '10px' }}>
-                                Players must be 18 or older to register or play at BFC . Plase ensure that users follow the company daily release game plan to ensure return of investment fund when the game is lost.
+                                Players must be 18 or older to register or play at EFC . Plase ensure that users follow the company daily release game plan to ensure return of investment fund when the game is lost.
 
                             </Typography>
                             <Typography style={{ width: '193px', color: '#F5F5F5', fontWeight: '400', fontFamily: "Poppins, sans-serif", fontSize: '14px' }}>

@@ -5,10 +5,10 @@ import { Icon }from '@iconify/react'
 import { Paper, Box, Badge } from '@mui/material'
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { useRouter } from 'next/router';
-import Profile from '../../public/profile.png';
+import Profile from '@/public/profile.png';
 import Image from 'next/image'
 import {Backdrop} from '@mui/material'
-import LOGO from '../../public/european.ico';
+import LOGO from '@/public/european.ico';
 
  
 function BottomNavi() {

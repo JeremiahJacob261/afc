@@ -28,6 +28,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ status: 'success', email: data.email });
   } catch (error) {
+    console.log(error)
     return sendApiError(res, error);
   }
 }

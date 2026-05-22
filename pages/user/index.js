@@ -8,16 +8,16 @@ import Image from "next/image";
 import Link from 'next/link';
 import { Typography, Divider } from "@mui/material";
 import { supabase } from '../api/supabase'
-import Agent from '../../public/bfc1.jpg'
-import Agent1 from '../../public/bfc2.jpg'
-import Agent2 from '../../public/bfc3.jpg'
+import Agent from '@/public/bfc1.jpg'
+import Agent1 from '@/public/bfc2.jpg'
+import Agent2 from '@/public/bfc3.jpg'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Icon } from '@iconify/react'
-import Agent3 from '../../public/bfc4.jpg'
-import Agent4 from '../../public/bfc5.jpg'
+import Agent3 from '@/public/bfc4.jpg'
+import Agent4 from '@/public/bfc5.jpg'
 import AnimatedCarousel from '../../components/AnimatedCarousel'
 import Loading from "../components/loading";
-import Ims from '../../public/simps/ball.png'
+import Ims from '@/public/simps/ball.png'
 import { app } from '../api/firebase';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { getAuth, signOut } from "firebase/auth";

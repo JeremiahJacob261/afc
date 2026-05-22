@@ -4,7 +4,7 @@ import Cover from './cover'
 import React from 'react'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/router'
-import WS from '../../public/icon/wsuccess.png'
+import WS from '@/public/icon/wsuccess.png'
 export default function Wsuccess() {
   const router = useRouter();
     return(

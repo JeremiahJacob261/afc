@@ -18,7 +18,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <div style={{background: "#06101F",height:'100%'}}>
       <Head>
-        <title>BFC</title>
+        <title>EFC</title>
         <meta name="description" content="Login to your Account to see whats up with your investments
         " />
         <link rel="icon" href="/european.ico" />

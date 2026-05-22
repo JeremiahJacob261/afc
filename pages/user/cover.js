@@ -68,7 +68,7 @@ export default function Cover({ children }) {
           <Stack direction='column' sx={{ padding: '12px', background: '#06101F', height: '100%',position:'fixed' }}>
             <Stack direction='row' alignItems='center' justifyContent='space-between'>
               <Link href="/" style={{ textDecoration: "none" }}>
-                <p style={{ fontFamily: 'Noto Serif, serif', color: "#E9E5DA", fontWeight: '400', fontSize: '20px' }}>BFC  </p>
+                <p style={{ fontFamily: 'Noto Serif, serif', color: "#E9E5DA", fontWeight: '400', fontSize: '20px' }}>EFC  </p>
               </Link>
               <Icon icon="ri:close-fill" width="32" height="32"  style={{color: "#1BB6FF"}} onClick={()=>{
                 setDraw(false)

@@ -20,9 +20,9 @@ import FormControl from '@mui/material/FormControl';
 import { motion } from 'framer-motion'
 import { getAuth, signOut } from "firebase/auth";
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
-import Wig from '../../public/icon/wig.png'
+import Wig from '@/public/icon/wig.png'
 import Image from 'next/image'
-import Big from '../../public/icon/badge.png'
+import Big from '@/public/icon/badge.png'
 import { DriveFileRenameOutlineRounded } from "@mui/icons-material";
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 export default function Deposit() {

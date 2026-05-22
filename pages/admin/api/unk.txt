@@ -1,0 +1,96 @@
+  <Stack direction='column' spacing={2} key={market[0].type}>
+            <Typography variant='caption'>{market[0].type}</Typography>
+            <Stack direction='row' className='homeAwayDraw' spacing={3}>
+              <TextField label={market[0].homelabel} variant='standard' helperText={market[0].homehelper} name={market[0].home}
+                type='float' />
+              <TextField label={market[0].drawlabel} style={{ visibility: `${market[0].twoway}` }}
+                variant='standard' helperText={market[0].helper}
+                name={market[0].draw} type='float' />
+              <TextField label={market[0].awaylabel} variant='standard' helperText={market[0].awayhelper}
+                name={market[0].away} type='float' />
+            </Stack>
+          </Stack>
+          {//one
+          }
+          <Stack direction='column' spacing={2} key={market[1].type}>
+            <Typography variant='caption'>{market[1].type}</Typography>
+            <Stack direction='row' className='homeAwayDraw' spacing={3}>
+              <TextField label={market[1].homelabel} variant='standard' helperText={market[1].homehelper}
+               name={market[1].home} defaultValue={datas[market[1].home]}
+                type='float' />
+              <TextField label={market[1].drawlabel} style={{ visibility: `${market[1].twoway}` }}
+                variant='standard' helperText={market[1].helper}
+                name={market[1].draw} type='float' />
+              <TextField label={market[1].awaylabel} variant='standard' helperText={market[1].awayhelper}
+                name={market[1].away} type='float' defaultValue='mnn' />
+            </Stack>
+          </Stack>
+
+
+          <Stack direction='column' spacing={2} key={market[2].type}>
+            <Typography variant='caption'>{market[2].type}</Typography>
+            <Stack direction='row' className='homeAwayDraw' spacing={3}>
+              <TextField label={market[2].homelabel} variant='standard' helperText={market[2].homehelper} name={market[2].home}
+                type='float' />
+              <TextField label={market[2].drawlabel} style={{ visibility: `${market[2].twoway}` }}
+                variant='standard' helperText={market[2].helper}
+                name={market[2].draw} type='float' />
+              <TextField label={market[2].awaylabel} variant='standard' helperText={market[2].awayhelper}
+                name={market[2].away} type='float' />
+            </Stack>
+          </Stack>
+
+
+          <Stack direction='column' spacing={2} key={market[3].type}>
+            <Typography variant='caption'>{market[3].type}</Typography>
+            <Stack direction='row' className='homeAwayDraw' spacing={3}>
+              <TextField label={market[3].homelabel} variant='standard' helperText={market[3].homehelper} name={market[3].home}
+                type='float' />
+              <TextField label={market[3].drawlabel} style={{ visibility: `${market[3].twoway}` }}
+                variant='standard' helperText={market[3].helper}
+                name={market[3].draw} type='float' />
+              <TextField label={market[3].awaylabel} variant='standard' helperText={market[3].awayhelper}
+                name={market[3].away} type='float' />
+            </Stack>
+          </Stack>
+
+
+          <Stack direction='column' spacing={2} key={market[4].type}>
+            <Typography variant='caption'>{market[4].type}</Typography>
+            <Stack direction='row' className='homeAwayDraw' spacing={3}>
+              <TextField label={market[4].homelabel} variant='standard' helperText={market[4].homehelper} name={market[4].home}
+                type='float' />
+              <TextField label={market[4].drawlabel} style={{ visibility: `${market[4].twoway}` }}
+                variant='standard' helperText={market[4].helper}
+                name={market[4].draw} type='float' />
+              <TextField label={market[4].awaylabel} variant='standard' helperText={market[4].awayhelper}
+                name={market[4].away} type='float' />
+            </Stack>
+          </Stack>
+
+
+          <Stack direction='column' spacing={2} key={market[5].type}>
+            <Typography variant='caption'>{market[5].type}</Typography>
+            <Stack direction='row' className='homeAwayDraw' spacing={3}>
+              <TextField label={market[5].homelabel} variant='standard' helperText={market[5].homehelper} name={market[5].home}
+                type='float' />
+              <TextField label={market[5].drawlabel} style={{ visibility: `${market[5].twoway}` }}
+                variant='standard' helperText={market[5].helper}
+                name={market[5].draw} type='float' />
+              <TextField label={market[5].awaylabel} variant='standard' helperText={market[5].awayhelper}
+                name={market[5].away} type='float' />
+            </Stack>
+          </Stack>
+
+
+          <Stack direction='column' spacing={2} key={market[6].type}>
+            <Typography variant='caption'>{market[6].type}</Typography>
+            <Stack direction='row' className='homeAwayDraw' spacing={3}>
+              <TextField label={market[6].homelabel} variant='standard' helperText={market[6].homehelper} name={market[6].home}
+                type='float' />
+              <TextField label={market[6].drawlabel} style={{ visibility: `${market[6].twoway}` }}
+                variant='standard' helperText={market[6].helper}
+                name={market[6].draw} type='float' />
+              <TextField label={market[6].awaylabel} variant='standard' helperText={market[6].awayhelper}
+                name={market[6].away} type='float' />
+            </Stack>

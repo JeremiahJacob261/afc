@@ -17,7 +17,7 @@ import { getAuth, signOut } from "firebase/auth";
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import Image from 'next/image';
-import Ims from '../../public/simps/ball.png'
+import Ims from '@/public/simps/ball.png'
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
@@ -111,7 +111,7 @@ export default function Bets() {
         <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Bet History</Typography>
       </Stack>
       <Head>
-        <title>BFC - My Bets </title>
+        <title>EFC - My Bets </title>
         <meta name="description" content="View Your Recents Betslips" />
         <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

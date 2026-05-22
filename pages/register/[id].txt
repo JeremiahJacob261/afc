@@ -19,7 +19,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import {Form as Farm} from 'react-bootstrap'
 import SimpleDialog from '../modal'
 import { getCookies, getCookie, setCookie,setCookies, removeCookies } from 'cookies-next';
-import LOGO from '../../public/european.ico'
+import LOGO from '@/public/european.ico'
 import Image from 'next/image'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';

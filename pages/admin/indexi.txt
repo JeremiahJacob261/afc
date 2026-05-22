@@ -1,0 +1,43 @@
+import { Stack, TextField, Typography,Button } from '@mui/material'
+import Logo from '@/public/logos.jpg'
+import Image from 'next/image'
+import React, { useState } from 'react'
+import { useRouter } from 'next/router'
+export default function Admin(){
+  const [ppass,setPass] = useState('');
+  const [warn,setWarning] = useState('');
+  const [warns,setWarnings] = useState('');
+  const router = useRouter();
+  const validate = () => {
+     if( ppass === 'passwordadmin'){
+      setWarnings('Login Successful');
+    router.push('/admin/finance');
+     }else{
+      setWarning('InCorrect Password !')
+     }
+  }
+  return(
+    <Stack justifyContent='center' alignItems='center' spacing={3} sx={{minWidth:'100vh',minHeight:'100vh'}}>
+      <Stack justifyContent='center' alignItems='center' spacing={3} sx={{ background:'#FFFEFF',padding:'50px',border:'1px #FAFF00',borderRadius:'20px' }}>
+        <Image src={Logo} width={100} height={120} alt='logo'/>
+        <Typography sx={{fontFamily:'Poppins,sans-serif',fontWeight:'500',fontSize:'20px',color:'#000300'}}>ADMIN</Typography>
+        <Typography sx={{fontFamily:'Poppins,sans-serif',fontWeight:'300',fontSize:'10px',color:'#000300',opacity:0.7}}>Input your Name and Password</Typography>
+      <TextField placeholder='user' sx={{fontFamily:'Poppins,sans-serif',fontWeight:'500',fontSize:'16px',color:'#000300'}}/>
+      <TextField placeholder='pass' value={ppass} onChange={(p)=>{
+        setPass(p.target.value)
+        setWarning('')
+      }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+              validate();
+          }
+      }} sx={{fontFamily:'Poppins,sans-serif',fontWeight:'500',fontSize:'16px',color:'#000300'}}/>
+      <Typography sx={{fontFamily:'Poppins,sans-serif',fontWeight:'500',fontSize:'20px',color:'red'}}>{warn}</Typography>
+      <Typography sx={{fontFamily:'Poppins,sans-serif',fontWeight:'500',fontSize:'20px',color:'green'}}>{warns}</Typography>
+       
+      <Button onClick={validate} sx={{ fontFamily:'Poppins,sans-serif',background:'#02A9EA',fontWeight:'400',color:'#FAFF00'}} variant='dark'>Login</Button>
+      </Stack>
+      
+    </Stack>
+  )
+}

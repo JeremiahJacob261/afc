@@ -5,7 +5,7 @@ import { useEffect, useState, useRef } from 'react';
 import { supabase } from '../api/supabase';
 import Head from 'next/head'
 import Image from 'next/image'
-import Rd from '../../public/icon/rounds.png'
+import Rd from '@/public/icon/rounds.png'
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 export default function Notification() {

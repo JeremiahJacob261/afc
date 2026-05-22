@@ -1,0 +1,99 @@
+<AccordionDetails>
+                                            <Stack spacing={2}>
+                                                {
+                                                    //get odds
+                                                }
+                                                <Stack direction='row' spacing={2} justifyContent='space-between' sx={{ width: '100%' }}>
+                                                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                                                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>0-0</Typography>
+                                                        <TextField variant='standard' type='float' sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black', width: '50px', height: '30px' }} name="nilnil" />
+                                                    </Stack>
+                                                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                                                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>otherscores</Typography>
+                                                        <TextField variant='standard' sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black', width: '50px', height: '30px' }} name="otherscores" />
+                                                    </Stack>
+                                                </Stack>
+
+                                                <Stack direction='row' spacing={2} justifyContent='space-between' sx={{ width: '100%' }}>
+                                                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                                                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>1-0</Typography>
+                                                        <TextField variant='standard' type='float' sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black', width: '50px', height: '30px' }} name="onenil" />
+                                                    </Stack>
+                                                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                                                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>1-1</Typography>
+                                                        <TextField variant='standard' sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black', width: '50px', height: '30px' }} name="oneone" />
+                                                    </Stack>
+                                                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                                                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>0-1</Typography>
+                                                        <TextField variant='standard' sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black', width: '50px', height: '30px' }} name="nilone" />
+                                                    </Stack>
+                                                </Stack>
+
+                                                <Stack direction='row' spacing={2} justifyContent='space-between' sx={{ width: '100%' }}>
+                                                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                                                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>2-1</Typography>
+                                                        <TextField variant='standard' type='float' sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black', width: '50px', height: '30px' }} name="twoone" />
+                                                    </Stack>
+                                                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                                                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>2-2</Typography>
+                                                        <TextField variant='standard' sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black', width: '50px', height: '30px' }} name="twotwo" />
+                                                    </Stack>
+                                                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                                                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>1-2</Typography>
+                                                        <TextField variant='standard' sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black', width: '50px', height: '30px' }} name="onetwo" />
+                                                    </Stack>
+                                                </Stack>
+
+                                                <Stack direction='row' spacing={2} justifyContent='space-between' sx={{ width: '100%' }}>
+                                                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                                                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>2-0</Typography>
+                                                        <TextField variant='standard' type='float' sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black', width: '50px', height: '30px' }} name="twonil" />
+                                                    </Stack>
+                                                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                                                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>0-2</Typography>
+                                                        <TextField variant='standard' sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black', width: '50px', height: '30px' }} name="niltwo" />
+                                                    </Stack>
+                                                </Stack>
+
+                                                <Stack direction='row' spacing={2} justifyContent='space-between' sx={{ width: '100%' }}>
+                                                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                                                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>3-1</Typography>
+                                                        <TextField variant='standard' type='float' sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black', width: '50px', height: '30px' }} name="threeone" />
+                                                    </Stack>
+                                                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                                                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>1-3</Typography>
+                                                        <TextField variant='standard' sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black', width: '50px', height: '30px' }} name="onethree" />
+                                                    </Stack>
+                                                </Stack>
+
+                                                <Stack direction='row' spacing={2} justifyContent='space-between' sx={{ width: '100%' }}>
+                                                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                                                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>3-0</Typography>
+                                                        <TextField variant='standard' type='float' sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black', width: '50px', height: '30px' }} name="threenil" />
+                                                    </Stack>
+                                                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                                                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>0-3</Typography>
+                                                        <TextField variant='standard' sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black', width: '50px', height: '30px' }} name="nilthree" />
+                                                    </Stack>
+                                                </Stack>
+
+                                                <Stack direction='row' spacing={2} justifyContent='space-between' sx={{ width: '100%' }}>
+                                                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                                                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>3-2</Typography>
+                                                        <TextField variant='standard' type='float' sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black', width: '50px', height: '30px' }} name="threetwo" />
+                                                    </Stack>
+                                                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                                                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>3-3</Typography>
+                                                        <TextField variant='standard' sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black', width: '50px', height: '30px' }} name="threethree" />
+                                                    </Stack>
+                                                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
+                                                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>2-3</Typography>
+                                                        <TextField variant='standard' sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black', width: '50px', height: '30px' }} name="twothree" />
+                                                    </Stack>
+                                                </Stack>
+                                                {
+                                                    //end of oods
+                                                }
+                                            </Stack>
+                                        </AccordionDetails>
+                                    

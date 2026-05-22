@@ -1,0 +1,113 @@
+  {noti.map((d) => {
+            if (d.type === "withdrawer" && d.sent === false) {
+              return (
+                <Stack key={d.address} sx={{ margin: "3px" }} spacing={8} direction='row'>
+                  <Typography style={{ fontSize: '12px', color: 'white', fontFamily: "Source Sans Pro,sans-serif", width: "80px" }}>{d.created_at}</Typography>
+                  <Typography style={{ fontSize: '12px', color: 'white', fontFamily: "Source Sans Pro,sans-serif", width: "80px" }}> {d.type}</Typography>
+                  <Typography style={{ fontSize: '12px', color: 'white', fontFamily: "Source Sans Pro,sans-serif", width: "80px" }}>{d.username}</Typography>
+                  <Typography style={{ fontSize: '12px', color: 'white', fontFamily: "Source Sans Pro,sans-serif", width: "80px" }}>{d.amount}</Typography>
+                  <div style={{ background: '#EFEFD0', padding: "5px", borderRadius: '6px' }}>
+                    <Typography style={{ fontSize: '12px', color: '#F1A208', fontFamily: "Source Sans Pro,sans-serif" }}>PENDING</Typography>
+                  </div>
+                  <motion.div whileHover={{ backgroundColor: '#C61F41', borderRadius: "8px" }}>
+                    <Typography style={{ fontSize: '12px', color: '#F1A208', fontFamily: "Source Sans Pro,sans-serif", width: "80px", cursor: "pointer", textAlign: 'center', justifyContent: 'center' }} onClick={() => {
+                      navigator.clipboard.writeText(d.address)
+                      setMessages("USDT Address Copied Successfully!")
+                      handleClick()
+                    }}>COPY</Typography>
+                  </motion.div> <Stack direction='row' style={{ width: "80px" }}>
+                    <CheckIcon style={{ color: "green" }}
+                      onClick={() => {
+                        const wih = async (damount, dusername) => {
+                          const { data, error } = await supabase
+                            .rpc('withdrawer', { amount: damount, names: dusername })
+                        }
+                        const cus = async (deposit, name) => {
+                          const { data, error } = await supabase
+                            .from('useractivity')
+                            .insert({
+                              type: 'withdraw', amount: deposit,
+                              user: name,
+                              count: 0
+                            })
+                          console.log(error)
+                        }
+                        cus(d.amount, d.username)
+                        wih(d.amount, d.username);
+                        update(d.uid);
+                        removeitem(d.uid)
+                      }}
+                    />
+                    <CancelIcon onClick={() => {
+                      update(d.uid);
+                      removeitem(d.uid)
+                    }}
+                      style={{ color: "red" }} />
+                  </Stack>
+                </Stack>
+
+              )
+            } else {
+              if (d.type === "deposit" && d.status === pending) {
+                return (
+                  <Stack key={d.address} sx={{ margin: "3px" }} spacing={8} direction='row'>
+                    <Typography style={{ fontSize: '12px', color: 'white', fontFamily: "Source Sans Pro,sans-serif", width: "80px" }}>{d.created_at}</Typography>
+                    <Typography style={{ fontSize: '12px', color: 'white', fontFamily: "Source Sans Pro,sans-serif", width: "80px" }}> {d.type}</Typography>
+                    <Typography style={{ fontSize: '12px', color: 'white', fontFamily: "Source Sans Pro,sans-serif", width: "80px" }}>{d.username}</Typography>
+                    <Typography style={{ fontSize: '12px', color: 'white', fontFamily: "Source Sans Pro,sans-serif", width: "80px" }}>{d.amount}</Typography>
+                    <div style={{ background: '#EFEFD0', padding: "5px", borderRadius: '6px', width: '73px', alignItems: 'center' }}>
+                      <Typography style={{ fontSize: '12px', color: '#F1A208', fontFamily: "Source Sans Pro,sans-serif" }}>PENDING</Typography>
+                    </div>
+                    <motion.div whileHover={{ backgroundColor: '#C61F41', borderRadius: "8px" }}>
+                      <Typography style={{ fontSize: '12px', color: '#F1A208', fontFamily: "Source Sans Pro,sans-serif", width: "80px", cursor: "pointer", textAlign: 'center', justifyContent: 'center' }} onClick={() => {
+                        navigator.clipboard.writeText(d.address)
+                        setMessages("USDT Address Copied Successfully!")
+                        handleClick()
+                      }}>COPY</Typography>
+                    </motion.div>
+                    <Stack direction='row' style={{ width: "80px" }}>
+                      <motion.div whileHover={{ backgroundColor: '#C61F41', borderRadius: "8px", padding: '3px' }}>
+                        <CheckIcon style={{ color: "green" }}
+                          onClick={() => {
+                            setDeposit(d.amount)
+                            setName(d.username)
+                            Depositing()
+                            update(d.uid);
+                            removeitem(d.uid)
+                          }}
+                        />
+                      </motion.div>
+                      <motion.div whileHover={{ backgroundColor: '#C61F41', borderRadius: "8px", padding: '3px' }}>
+
+                        <CancelIcon onClick={() => {
+                          update(d.uid);
+                          removeitem(d.uid)
+                        }}
+                          style={{ color: "red" }} />
+                      </motion.div>
+                    </Stack>
+                  </Stack>
+                )
+              } else {
+                return (
+                  <Stack key={d.address} sx={{ margin: "3px" }} spacing={8} direction='row'>
+                    <Typography style={{ fontSize: '12px', color: 'white', fontFamily: "Source Sans Pro,sans-serif", width: "80px" }}>{d.created_at}</Typography>
+                    <Typography style={{ fontSize: '12px', color: 'white', fontFamily: "Source Sans Pro,sans-serif", width: "80px" }}> {d.type}</Typography>
+                    <Typography style={{ fontSize: '12px', color: 'white', fontFamily: "Source Sans Pro,sans-serif", width: "80px" }}>{d.username}</Typography>
+                    <Typography style={{ fontSize: '12px', color: 'white', fontFamily: "Source Sans Pro,sans-serif", width: "80px" }}>{d.amount}</Typography>
+                    <div style={{ background: '#A1EF8B', padding: "5px", borderRadius: '6px' }}>
+                      <Typography style={{ fontSize: '12px', color: '#539987', fontFamily: "Source Sans Pro,sans-serif" }}>COMPLETED</Typography>
+                    </div>
+                    <motion.div whileHover={{ backgroundColor: '#C61F41', borderRadius: "8px" }}>
+                      <Typography style={{ fontSize: '12px', color: '#F1A208', fontFamily: "Source Sans Pro,sans-serif", width: "80px", cursor: "pointer", textAlign: 'center', justifyContent: 'center' }} onClick={() => {
+                        navigator.clipboard.writeText(d.address)
+                        setMessages("USDT Address Copied Successfully!")
+                        handleClick()
+                      }}>COPY</Typography>
+                    </motion.div>
+                    <Typography sx={{ fontSize: '12px', color: '#E3E7AF', fontFamily: "Source Sans Pro,sans-serif", width: "80px", cursor: "pointer" }}>Done</Typography>
+                  </Stack>
+                )
+              }
+            }
+          })}
