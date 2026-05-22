@@ -8,7 +8,7 @@ import SoupKitchenIcon from '@mui/icons-material/SoupKitchen';
 import TimesOneMobiledataIcon from '@mui/icons-material/TimesOneMobiledata';
 import CheckIcon from '@mui/icons-material/Check';
 import { motion } from "framer-motion";
-import styles from '../styles/Home.module.css'
+import styles from '@/styles/Home.module.css'
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { sd, pass } from './api/pass'

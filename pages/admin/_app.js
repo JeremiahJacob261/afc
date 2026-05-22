@@ -1,4 +1,4 @@
-import '../styles/globals.css'
+import '@/styles/globals.css'
 import {Stack} from '@mui/material'
 import {AppContext} from './api/Context'
 import {useState} from 'react'
