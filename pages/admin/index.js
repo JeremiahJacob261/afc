@@ -1,5 +1,5 @@
 import { Stack,TextField } from '@mui/material'
-import  '@/styles/globals.css';
+
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
