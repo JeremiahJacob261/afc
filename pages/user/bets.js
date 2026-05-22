@@ -14,13 +14,9 @@ import { app } from '@/pages/api/firebase';
 import Loading from "@/pages/components/loading";
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
-import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
 import Image from 'next/image';
 import Ims from '@/public/simps/ball.png'
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 
 
@@ -124,24 +120,46 @@ export default function Bets() {
     </Cover>
   )
   function Tabx() {
+    const showingUnsettled = value === '1';
 
     return (
-      <TabContext value={value}>
-        <Stack sx={{ borderBottom: 1, borderColor: 'divider' }} justifyContent='center'>
-          <TabList onChange={handleChange} aria-label="lab API tabs example"
-            textColor="white"
-            indicatorColor="secondary"
+      <Stack spacing={2}>
+        <Stack
+          direction='row'
+          spacing={1}
+          sx={{ borderBottom: 1, borderColor: 'divider', px: 1 }}
+          justifyContent='center'
+        >
+          <Box
+            onClick={() => setValue('1')}
             sx={{
-              '.Mui-selected': {
-                color: 'orange', // Customize the color here
-              },
+              color: showingUnsettled ? 'orange' : '#E9E5DA',
+              width: '50%',
+              textAlign: 'center',
+              py: 1.5,
+              cursor: 'pointer',
+              borderBottom: showingUnsettled ? '2px solid orange' : '2px solid transparent',
+              fontFamily: 'Poppins,sans-serif'
             }}
           >
-            <Tab label="UnSettled Bets" value="1" sx={{ color: '#E9E5DA', width: '50%' }} />
-            <Tab label="Settled Bets" value="2" sx={{ color: '#E9E5DA', width: '50%' }} />
-          </TabList>
+            UnSettled Bets
+          </Box>
+          <Box
+            onClick={() => setValue('2')}
+            sx={{
+              color: showingUnsettled ? '#E9E5DA' : 'orange',
+              width: '50%',
+              textAlign: 'center',
+              py: 1.5,
+              cursor: 'pointer',
+              borderBottom: showingUnsettled ? '2px solid transparent' : '2px solid orange',
+              fontFamily: 'Poppins,sans-serif'
+            }}
+          >
+            Settled Bets
+          </Box>
         </Stack>
-        <TabPanel value="1">
+        {showingUnsettled && (
           <Stack spacing={2} direction='column-reverse'>
 
             {
@@ -200,11 +218,11 @@ export default function Bets() {
 
             }
           </Stack>
-        </TabPanel>
+        )}
         {
           //tab 2
         }
-        <TabPanel value="2">
+        {!showingUnsettled && (
           <Stack spacing={3} direction='column-reverse'>
 
 
@@ -263,7 +281,7 @@ export default function Bets() {
 
             }
           </Stack>
-        </TabPanel>
-      </TabContext>);
+        )}
+      </Stack>);
   }
 }

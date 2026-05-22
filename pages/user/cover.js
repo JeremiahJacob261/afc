@@ -6,7 +6,6 @@ import Link from 'next/link'
 import { onAuthStateChanged } from "firebase/auth";
 import { BiTimer } from 'react-icons/bi'
 import { GiPayMoney, GiReceiveMoney } from 'react-icons/gi'
-import TranslateIcon from '@mui/icons-material/Translate';
 import { BsFillPersonFill } from 'react-icons/bs'
 import { BiSolidContact } from 'react-icons/bi'
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
@@ -17,7 +16,6 @@ import { app } from '@/pages/api/firebase';
 import { supabase } from '@/pages/api/supabase'
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { getAuth, signOut } from "firebase/auth";
-import Translate from '@/pages/translator';
 import { useRouter } from "next/router";
 import { clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 export default function Cover({ children }) {
@@ -131,17 +129,7 @@ export default function Cover({ children }) {
                   </Stack>
                   <ArrowForwardIosIcon sx={{ width: '20px', height: '20px' }} />
                 </Stack></Link>
-
-              <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
-                <Stack direction='row' spacing={2}>
-                  <TranslateIcon sx={{ width: '20px', height: '20px', color: '#D14B45' }} />
-                  <Typography className='notranslate' sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#E9E5DA' }}>Language</Typography>
-                </Stack>
-                <ArrowForwardIosIcon sx={{ width: '20px', height: '20px', color: '#D14B45' }} />
-              </Stack>
             </Stack>
-            {/* the start of supported Languages */}
-            <Translate />
           </Stack>
         </Drawer>
       </React.Fragment>

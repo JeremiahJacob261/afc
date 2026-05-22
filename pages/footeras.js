@@ -4,10 +4,8 @@ import gpay from '@/public/simps/gpay.png'
 import axios from 'axios';
 import usdt from '@/public/simps/tether.png'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
 import { supabase } from '@/pages/api/supabase'
 export default function Footer() {
-    const { locale, locales, push } = useRouter();
 //     const HttpProvider = TronWeb.providers.HttpProvider;
 // const fullNode = new HttpProvider('https://api.trongrid.io'); 
 // const solidityNode = new HttpProvider('https://api.trongrid.io');
@@ -47,10 +45,9 @@ export default function Footer() {
                         </Stack>
                         <Stack direction='column' spacing={1}>
                             <Typography variant="subtitle" sx={{ color: "#EEF0F2", fontFamily: "Poppins, san-serif", fontSize: '11px', fontWeight: '400' }} >General</Typography>
-                            <Typography variant="subtitle" sx={{ color: "#EEF0F2", fontFamily: "Poppins, san-serif", fontSize: '11px', fontWeight: '400' }} onClick={() => { push('/', undefined, { locale: 'en' }) }}>English</Typography>
-                            <Typography variant="subtitle" sx={{ color: "#EEF0F2", fontFamily: "Poppins, san-serif", fontSize: '11px', fontWeight: '400' }} onClick={() => { push('/', undefined, { locale: 'es' }) }}>Spanish</Typography>
-                            <Typography variant="subtitle" sx={{ color: "#EEF0F2", fontFamily: "Poppins, san-serif", fontSize: '11px', fontWeight: '400' }} onClick={() => { push('/', undefined, { locale: 'it' }) }}>Italian</Typography>
-                            <Typography variant="subtitle" sx={{ color: "#EEF0F2", fontFamily: "Poppins, san-serif", fontSize: '11px', fontWeight: '400' }} onClick={() => { push('/', undefined, { locale: 'hi' }) }}>Hindi</Typography>
+                            <Typography variant="subtitle" sx={{ color: "#EEF0F2", fontFamily: "Poppins, san-serif", fontSize: '11px', fontWeight: '400' }}>
+                                Language support is temporarily unavailable.
+                            </Typography>
                         </Stack>
                     </Stack>
                 </div>

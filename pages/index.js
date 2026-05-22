@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import dynamic from "next/dynamic";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
@@ -30,15 +29,4 @@ export default function Home() {
       <FinalCtaFooter />
     </main>
   );
-}
-
-export async function getStaticProps({ locale }) {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, [
-        'common',
-      ])),
-      // Will be passed to the page component as props
-    },
-  }
 }

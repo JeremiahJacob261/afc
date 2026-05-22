@@ -8,7 +8,6 @@ import { Stack } from '@mui/material';
 import Head from 'next/head'
 import Footer from './footeras';
 import { BetContext } from '@/pages/api/Context'
-import { appWithTranslation } from 'next-i18next'
 function MyApp({ Component, pageProps }) {
 
   const [cookie, setCookie] = useCookies(["user"])
@@ -30,4 +29,4 @@ function MyApp({ Component, pageProps }) {
   )
 }
 
-export default appWithTranslation(MyApp)
+export default MyApp
