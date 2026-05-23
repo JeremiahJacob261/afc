@@ -6,7 +6,6 @@ import { Icon } from '@iconify/react';
 import { motion } from 'framer-motion';
 import { toast, Toaster } from "react-hot-toast";
 import { Modal, TextField, Button } from '@mui/material';
-import { Balance } from '@mui/icons-material';
 
 export default function Home() {
     const [id, setId] = useState(null);
@@ -199,7 +198,7 @@ export default function Home() {
                             setEditbal(!editbal)
                         }} />
                     </Stack>
-                    <p>Country: {codes.codes[datas?.countrycode]}</p>
+                    <p>Country: {datas?.countrycode}</p>
                     <p>Phone: {datas?.countrycode}{datas?.phone}</p>
 
                     <Stack direction="row" spacing={1} justifyContent="center" alignItems="center">
