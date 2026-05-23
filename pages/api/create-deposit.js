@@ -1,14 +1,10 @@
 import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
-
-const rates = {
-  mmk: 5000,
-  usdt: 1,
-  idr: 16500,
-  ngn: 1500,
-  fcfa: 600,
-  pkr: 280,
-  kes: 130,
-}
+import {
+  getPaymentMethod,
+  getPaymentRate,
+  methodCodeFromRow,
+  normalizePaymentCode,
+} from '@/lib/paymentMethods'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -16,19 +12,27 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { amount, method, address, adminaddress } = req.body || {}
+    const { amount, method, methodName, address, adminaddress } = req.body || {}
     const numericAmount = Number(amount)
+    const requestedMethod = normalizePaymentCode(methodName || method)
+    const requestedCode = normalizePaymentCode(method)
 
-    if (!Number.isFinite(numericAmount) || numericAmount <= 0 || !method || !address) {
+    if (!Number.isFinite(numericAmount) || numericAmount <= 0 || !requestedMethod || !requestedCode || !address) {
       return res.status(400).json({ status: 'error', message: 'Invalid deposit details' })
     }
 
-    const rate = rates[method]
+    const { profile, supabase } = await getCurrentProfile(req, 'username')
+    const savedMethod = await getPaymentMethod(supabase, requestedMethod, { requireAvailable: true })
+    if (!savedMethod) {
+      return res.status(400).json({ status: 'error', message: 'Unknown or unavailable deposit method' })
+    }
+
+    const rate = getPaymentRate(savedMethod)
     if (!rate || numericAmount / rate < 5) {
       return res.status(400).json({ status: 'error', message: 'Minimum deposit is 5 USDT equivalent' })
     }
 
-    const { profile, supabase } = await getCurrentProfile(req, 'username')
+    const notificationMethod = methodCodeFromRow(savedMethod) || requestedCode
     const { error } = await supabase
       .from('notification')
       .insert({
@@ -36,7 +40,7 @@ export default async function handler(req, res) {
         amount: numericAmount,
         type: 'deposit',
         sent: 'pending',
-        method,
+        method: notificationMethod,
         address,
         adminaddress,
       })

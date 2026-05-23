@@ -1,20 +1,29 @@
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 import { callInternalRpc } from '@/lib/serverRpc'
 import { requireAdmin } from '@/lib/adminAuth'
+import {
+  getPaymentMethod,
+  getPaymentRate,
+  normalizePaymentCode,
+} from '@/lib/paymentMethods'
 
-const rates = {
-  mmk: 5000,
-  usdt: 1,
-  idr: 16500,
-  ngn: 1500,
-  fcfa: 600,
-  pkr: 280,
-  kes: 130,
+async function getNotificationRate(supabase, notification) {
+  const method = normalizePaymentCode(notification.method || 'usdt')
+  const savedMethod = await getPaymentMethod(supabase, method)
+  const fallback = method === 'usdt' ? 1 : 0
+  const rate = getPaymentRate(savedMethod, fallback)
+
+  if (!rate) {
+    const error = new Error(`No saved rate found for ${method.toUpperCase()}`)
+    error.statusCode = 400
+    throw error
+  }
+
+  return { method, rate }
 }
 
-function getUsdtAmount(notification) {
-  const method = notification.method || 'usdt'
-  const rate = rates[method] || 1
+async function getUsdtAmount(supabase, notification) {
+  const { method, rate } = await getNotificationRate(supabase, notification)
   const amount = Number(notification.amount)
 
   if (!Number.isFinite(amount) || amount <= 0) {
@@ -26,10 +35,15 @@ function getUsdtAmount(notification) {
   return method === 'usdt' ? amount : amount / rate
 }
 
-function getLocalWithdrawAmount(notification) {
-  const method = notification.method || 'usdt'
-  const rate = rates[method] || 1
+async function getLocalWithdrawAmount(supabase, notification) {
+  const { method, rate } = await getNotificationRate(supabase, notification)
   const amount = Number(notification.amount)
+
+  if (!Number.isFinite(amount) || amount <= 0) {
+    const error = new Error('Invalid transaction amount')
+    error.statusCode = 400
+    throw error
+  }
 
   return method === 'usdt' ? amount : amount * rate
 }
@@ -62,6 +76,20 @@ export default async function handler(req, res) {
       return res.status(409).json({ status: 'error', message: 'Transaction already processed' })
     }
 
+    const isDeposit = notification.type === 'deposit'
+    const isWithdraw = notification.type === 'withdraw' || notification.type === 'withdrawer'
+
+    if (!isDeposit && !isWithdraw) {
+      return res.status(400).json({ status: 'error', message: 'Unsupported transaction type' })
+    }
+
+    let approvedAmount = 0
+    if (action === 'approve') {
+      approvedAmount = isDeposit
+        ? Number((await getUsdtAmount(supabase, notification)).toFixed(3))
+        : Number((await getLocalWithdrawAmount(supabase, notification)).toFixed(3))
+    }
+
     const claimQuery = supabase
       .from('notification')
       .update({ sent: 'processing' })
@@ -75,13 +103,6 @@ export default async function handler(req, res) {
     if (claimErr) throw claimErr
     if (!claimed) {
       return res.status(409).json({ status: 'error', message: 'Transaction already being processed' })
-    }
-
-    const isDeposit = notification.type === 'deposit'
-    const isWithdraw = notification.type === 'withdraw' || notification.type === 'withdrawer'
-
-    if (!isDeposit && !isWithdraw) {
-      return res.status(400).json({ status: 'error', message: 'Unsupported transaction type' })
     }
 
     if (action === 'reject') {
@@ -104,7 +125,7 @@ export default async function handler(req, res) {
     }
 
     if (isDeposit) {
-      const depositAmount = Number(getUsdtAmount(notification).toFixed(3))
+      const depositAmount = approvedAmount
 
       await callInternalRpc(req, 'depositor', {
         names: notification.username,
@@ -146,7 +167,7 @@ export default async function handler(req, res) {
 
       if (activityErr) throw activityErr
     } else {
-      const withdrawAmount = Number(getLocalWithdrawAmount(notification).toFixed(3))
+      const withdrawAmount = approvedAmount
 
       await callInternalRpc(req, 'gatherw', {
         names: notification.username,

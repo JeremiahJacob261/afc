@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import { v4 as uuidv4 } from 'uuid'
@@ -64,6 +63,18 @@ function normalizeCode(method) {
   return String(method?.currency_code || method?.name || '').toLowerCase()
 }
 
+function normalizeName(value) {
+  return String(value || '').trim().toLowerCase()
+}
+
+function isLocalDestination(destination) {
+  const type = normalizeName(destination?.type)
+  return type === 'local'
+    || type === 'local-transfer'
+    || type === 'bank'
+    || type === 'mobile-money'
+}
+
 function getRate(method) {
   const rate = Number(method?.rates)
   return Number.isFinite(rate) && rate > 0 ? rate : 1
@@ -87,6 +98,13 @@ function findDestination(destinations, method, transferKey) {
   const code = normalizeCode(method)
   if (!code) return null
 
+  const selectedName = normalizeName(method?.name)
+  const exactMethodDestination = destinations.find((destination) => (
+    selectedName && normalizeName(destination?.name) === selectedName
+  ))
+
+  if (exactMethodDestination) return exactMethodDestination
+
   const matches = destinations.filter((destination) => (
     String(destination?.currency_code || '').toLowerCase() === code
   ))
@@ -103,6 +121,15 @@ function findDestination(destinations, method, transferKey) {
   return matches[Math.floor(Math.random() * matches.length)]
 }
 
+function hasNamedDestination(destinations, method) {
+  const selectedName = normalizeName(method?.name)
+  if (!selectedName) return false
+
+  return destinations.some((destination) => (
+    normalizeName(destination?.name) === selectedName
+  ))
+}
+
 export default function Funds() {
   const router = useRouter()
   const fileInputRef = useRef(null)
@@ -116,7 +143,7 @@ export default function Funds() {
   const [file, setFile] = useState(null)
 
   const code = normalizeCode(selectedMethod)
-  const requiresTransfer = Boolean(transferOptions[code])
+  const requiresTransfer = Boolean(transferOptions[code]) && !hasNamedDestination(destinations, selectedMethod)
   const rate = getRate(selectedMethod)
   const minAmount = selectedMethod ? getMinimum(selectedMethod) : 0
   const numericAmount = Number(amount)
@@ -144,6 +171,7 @@ export default function Funds() {
           supabase.from('depositwallet').select('*'),
         ])
 
+        console.log(paymentDestinations);
         if (methodsError) throw methodsError
         if (destinationsError) throw destinationsError
         if (!active) return
@@ -224,6 +252,7 @@ export default function Funds() {
         body: JSON.stringify({
           amount: numericAmount,
           method: code,
+          methodName: selectedMethod.name,
           address: data?.publicUrl,
           adminaddress: destination.address,
         }),
@@ -445,8 +474,8 @@ export default function Funds() {
 
             {destination && amountIsValid && (
               <Stack spacing={1} sx={{ bgcolor: 'rgba(6,16,31,0.38)', borderRadius: 2, p: 1.5 }}>
-                <PaymentRow label={destination.type === 'local' ? 'Account number' : 'Address'} value={destination.address} onCopy={copyText} />
-                {destination.type === 'local' && (
+                <PaymentRow label={isLocalDestination(destination) ? 'Account number' : 'Address'} value={destination.address} onCopy={copyText} />
+                {isLocalDestination(destination) && (
                   <>
                     <PaymentRow label="Account name" value={destination.accountname} onCopy={copyText} />
                     <PaymentRow label="Bank" value={destination.bank} onCopy={copyText} />
@@ -454,7 +483,7 @@ export default function Funds() {
                 )}
                 {destination.image && (
                   <Box sx={{ borderRadius: 2, overflow: 'hidden', mt: 1, bgcolor: brand.bg }}>
-                    <Image src={destination.image} width={360} height={220} alt="Payment details" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                    <Box component="img" src={destination.image} alt="Payment details" sx={{ width: '100%', height: 'auto', display: 'block' }} />
                   </Box>
                 )}
               </Stack>
