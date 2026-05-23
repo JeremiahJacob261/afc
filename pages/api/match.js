@@ -1,9 +1,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { NextResponse } from 'next/server';
-import axios from 'axios';
-import { supabase } from './supabase';
-let apiKey = 'akpomoshi18+'; // your api key
+import { requireAdmin } from '@/lib/adminAuth'
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 export default async function handler(req, res) {
+  try {
+    requireAdmin(req)
+  } catch (error) {
+    return res.status(401).json({ status: 'error', message: 'Unauthorized' })
+  }
+
   const body = req.body;
   const page = body.page;
   console.log(page, 'value of page');
@@ -12,17 +16,7 @@ export default async function handler(req, res) {
   let year = date.getFullYear();
   let day = date.getDate();
   let fullDate = `${year}-${(month + 1 > 11) ? 1 : month + 1}-${(day > 31) ? 1 : day}`;
-   //generate match data
-   let match = await fetch('https://admin.dfco1.com/api/exitmatch', {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json'
-    }
-}).then(data => {
-    return data.json();
-})
-//generate match data
-console.log(match)
+  const supabase = getSupabaseAdmin()
   if (isNaN(page)) {
     console.log('a search bar was used');
     try {

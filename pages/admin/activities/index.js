@@ -209,7 +209,7 @@ export default function Home({ notification,newrefer }) {
     return (
         <div>
               <Icon icon="iconoir:cancel" color="gray" width="100" height="100" onClick={() => {
-                    router.push(`/full/${id}`)
+                    router.push(`/admin/full/${id}`)
                 }} />
             <h1 style={{ color:'wheat'}}>Activities</h1>
             <DataShow />

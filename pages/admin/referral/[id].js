@@ -28,7 +28,7 @@ export default function Home({ referd, lvlad, lvlbd,getup1,refid }) {
                 <Stack direction='column' alignItems="center" spacing={3} justifyContent='space-around' sx={{ width: '100vw', padding: '8px' }}>
                 {
                     getup1.map((m,index) => {
-                        let date = new Date(m.crdate);
+                        let date = new Date(m.created_at || m.crdate);
                         let day = date.getDate();
                         let month = date.getMonth() + 1;
                         let year = date.getFullYear();
@@ -39,7 +39,7 @@ export default function Home({ referd, lvlad, lvlbd,getup1,refid }) {
                             whileTap={{ scale: 0.6 }}
                             key={m.uid}
                             onClick={() => {
-                                router.push(`/full/${m.uid}`)
+                                router.push(`/admin/full/${m.uid}`)
                             }}
                         >
                             <p>{(m.newrefer === refid.refer) ? 'Direct Upline' : (m.newrefer === refid.lvla) ? 'Second Upline' : 'Third Upline'}</p>
@@ -48,7 +48,7 @@ export default function Home({ referd, lvlad, lvlbd,getup1,refid }) {
                                 direction='row' alignItems="center" justifyContent='start'
                                 sx={{ width: '280px', padding: '6px', borderRadius: '8px', background: colors[index] }}
                                 onClick={() => {
-                                    router.push(`/full/${m.uid}`)
+                                    router.push(`/admin/full/${m.uid}`)
                                 }}>
                                 <Stack>
                                     <p style={{ color: '#F2EDEB', margin: 0, fontFamily: 'Poppins,sans-serif' }}>{m.username}</p>
@@ -77,7 +77,7 @@ export default function Home({ referd, lvlad, lvlbd,getup1,refid }) {
                 </Stack>
                 {
                     referd.map((m) => {
-                        let date = new Date(m.crdate);
+                        let date = new Date(m.created_at || m.crdate);
                         let day = date.getDate();
                         let month = date.getMonth() + 1;
                         let year = date.getFullYear();
@@ -88,7 +88,7 @@ export default function Home({ referd, lvlad, lvlbd,getup1,refid }) {
                                 whileTap={{ scale: 0.6 }}
                                 key={m.uid}
                                 onClick={() => {
-                                    router.push(`/full/${m.uid}`)
+                                    router.push(`/admin/full/${m.uid}`)
                                 }}
                             >
                                 <Stack
@@ -96,7 +96,7 @@ export default function Home({ referd, lvlad, lvlbd,getup1,refid }) {
                                     direction='row' alignItems="center" justifyContent='start'
                                     sx={{ width: '310px', padding: '6px', borderRadius: '8px', background: '#F56960' }}
                                     onClick={() => {
-                                        router.push(`/full/${m.uid}`)
+                                        router.push(`/admin/full/${m.uid}`)
                                     }}>
                                     <Stack>
                                         <p style={{ color: '#F2EDEB', margin: 0, fontFamily: 'Poppins,sans-serif' }}>{m.username}</p>
@@ -119,7 +119,7 @@ export default function Home({ referd, lvlad, lvlbd,getup1,refid }) {
 
                 {
                     lvlad.map((m) => {
-                        let date = new Date(m.crdate);
+                        let date = new Date(m.created_at || m.crdate);
                         let day = date.getDate();
                         let month = date.getMonth() + 1;
                         let year = date.getFullYear();
@@ -130,7 +130,7 @@ export default function Home({ referd, lvlad, lvlbd,getup1,refid }) {
                             whileTap={{ scale: 0.6 }}
                             key={m.uid}
                             onClick={() => {
-                                router.push(`/full/${m.uid}`)
+                                router.push(`/admin/full/${m.uid}`)
                             }}
                         >
                             <Stack
@@ -138,7 +138,7 @@ export default function Home({ referd, lvlad, lvlbd,getup1,refid }) {
                                 direction='row' alignItems="center" justifyContent='start'
                                 sx={{ width: '310px', padding: '6px', borderRadius: '8px', background: '#F56960' }}
                                 onClick={() => {
-                                    router.push(`/full/${m.uid}`)
+                                    router.push(`/admin/full/${m.uid}`)
                                 }}>
                                 <Stack>
                                     <p style={{ color: '#F2EDEB', margin: 0, fontFamily: 'Poppins,sans-serif' }}>{m.username}</p>
@@ -161,7 +161,7 @@ export default function Home({ referd, lvlad, lvlbd,getup1,refid }) {
                 </Stack>
                 {
                     lvlbd.map((m) => {
-                        let date = new Date(m.crdate);
+                        let date = new Date(m.created_at || m.crdate);
                         let day = date.getDate();
                         let month = date.getMonth() + 1;
                         let year = date.getFullYear();
@@ -172,7 +172,7 @@ export default function Home({ referd, lvlad, lvlbd,getup1,refid }) {
                             whileTap={{ scale: 0.6 }}
                             key={m.uid}
                             onClick={() => {
-                                router.push(`/full/${m.uid}`)
+                                router.push(`/admin/full/${m.uid}`)
                             }}
                         >
                             <Stack
@@ -180,7 +180,7 @@ export default function Home({ referd, lvlad, lvlbd,getup1,refid }) {
                                 direction='row' alignItems="center" justifyContent='start'
                                 sx={{ width: '310px', padding: '6px', borderRadius: '8px', background: '#F56960' }}
                                 onClick={() => {
-                                    router.push(`/full/${m.uid}`)
+                                    router.push(`/admin/full/${m.uid}`)
                                 }}>
                                 <Stack>
                                     <p style={{ color: '#F2EDEB', margin: 0, fontFamily: 'Poppins,sans-serif' }}>{m.username}</p>

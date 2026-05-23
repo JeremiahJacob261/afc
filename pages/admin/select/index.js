@@ -15,22 +15,19 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { Backdrop, CircularProgress } from "@mui/material";
 import FormControl from '@mui/material/FormControl';
 import { Select as Sel } from '@mui/material';
+import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 //serversideprops
 export async function getServerSideProps(context) {
 
     const searchParams = context.query;
     try {
-        const id = context.query.id;
-        let test = await fetch('https://admin.dfco1.com/api/match', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ page: '1' })
-        }).then(data => {
-            return data.json();
-        })
-        console.log(test)
+        const supabase = getSupabaseAdmin();
+        const { data: test, error } = await supabase
+            .from('upcoming_matches')
+            .select('*')
+            .order('id', { ascending: false })
+            .limit(250)
+        if (error) throw error
         return { props: { final: test,ids:searchParams.id } }
 
     } catch (e) {
@@ -54,7 +51,7 @@ export default function Select({ final,ids }) {
     const search = async () => {
       try {
           //send data to serverside
-          let test = await fetch('https://admin.dfco1.com/api/match', {
+          let test = await fetch('/api/admin/matches', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -64,7 +61,7 @@ export default function Select({ final,ids }) {
             return data.json();
         })
         setFixturex(test)
-        router.push(`/select?id=${searchValue}`);
+        router.push(`/admin/select?id=${searchValue}`);
       } catch (error) {
         console.log(error)
       }
@@ -159,7 +156,7 @@ const handleOpen = () => {
                        <CancelIcon 
              style={{ width:'50px',height:'50px',color:'white'}}
              onClick={() => {
-                router.push("/home")
+                router.push("/admin/home")
           }} /> 
                 </motion.div>
                 </Stack>
@@ -227,7 +224,7 @@ const handleOpen = () => {
                                     </Stack>
                                     <Button 
                                         onClick={() => {
-                                          router.push(`/input?id=${f.id}`)
+                                          router.push(`/admin/input?id=${f.id}`)
                                           localStorage.setItem('prevurl',ids);
                                         }}
                                         sx={{ fontFamily: 'Poppins,sans-serif', margin: '8px', fontSize: '16', fontWeight: '300', color: 'white', background: "#03045E", padding: '10px' }} >

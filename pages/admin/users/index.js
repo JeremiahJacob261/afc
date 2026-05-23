@@ -1,131 +1,184 @@
-import React, { useState } from 'react'
-import HomeBottom from '../bottomNav'
-import { supabase } from '@/pages/api/supabase'
-import { Fab } from '@mui/material';
-import Image from 'next/image'
-import { Stack, TextField, Modal } from '@mui/material'
-import { motion } from 'framer-motion'
-import { Icon } from '@iconify/react';
+import Head from 'next/head'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { useEffect } from 'react';
-export default function Users({ dount, count, datw }) {
-    const [opened, setOpened] = useState(false);
-    const router = useRouter();
-    const [searchValue, setSearchValue] = React.useState('');
+import { ArrowUpRight, Search, UserCheck, Users as UsersIcon, X } from 'lucide-react'
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
+import { requireAdmin } from '@/lib/adminAuth'
 
-    const [data, setData] = React.useState(datw);
-    const search = async () => {
-        try {
-            let test = await fetch('/api/user', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ find: searchValue })
-            }).then(data => {
-                return data.json();
-            })
-            setData(test);
-        } catch (e) {
-            console.log(e)
-        }
-
-    }
-    return (
-        <Stack direction='column' alignItems='center' spacing={1} sx={{ width: '100vw', minHeight: '100vh', marginBottom: '120px' }}>
-
-            <Stack direction='column' spacing={2} sx={{ width: '100vw', minHeight: '75vh' }} justifyContent='center' alignItems='center'>
-
-                <Stack sx={{ width: '100vw', background: 'rgb(99, 1, 21)', position: 'relative', top: '0px' }} justifyContent='center' alignItems='center'>
-                    <h1 style={{ color: 'whitesmoke' }}>Users</h1>
-                    <Stack direction='row' spacing={1} justifyContent='center' alignItems='center' sx={{ width: '100vw', padding: '8px' }}>
-                        <TextField id="standard-basic" label="search by username or referral code" variant="standard"
-                            inputProps={{ style: { color: "white" } }}
-                            value={searchValue}
-                            onChange={(e) => { setSearchValue(e.target.value); }}
-                            sx={{ background: 'rgb(99, 1, 21)', paddding: '8px', color: 'white', borderRadius: '8px', letterSpacing: 2, flex: 1 }} />
-                        <Icon icon="iconoir:search" color="gray" width="24" height="24" onClick={search} />
-                        <Icon icon="mdi:cancel-bold" color="#FCBA04" width="24" height="24" onClick={() => {
-                            setData(datw)
-                            setSearchValue('');
-                        }} />
-                    </Stack>
-                </Stack>
-                <Stack direction='row' sx={{ background: 'rgb(99, 1, 21)', padding: '10px', borderRadius: '8px', width: '90vw', maxWidth: '350px' }} spacing={1} >
-                    <Stack direction='row' spacing={1} justifyContent='center' alignItems='center'>
-                        <p>Total Users : {count}</p>
-                    </Stack>
-                    <Stack direction='row' spacing={1} justifyContent='center' alignItems='center'>
-                        <p>Active Users : {dount}</p>
-                    </Stack>
-                </Stack>
-                <Stack direction='column' spacing={1} >
-                    {
-                        data.map((m) => {
-                            const handleOpened = () => setOpened(true);
-                            const handleClosed = () => setOpened(false);
-                            let date = new Date(m.crdate);
-                            let day = date.getDate();
-                            let month = date.getMonth() + 1;
-                            let year = date.getFullYear();
-                            let hours = date.getHours();
-                            let minutes = date.getMinutes();
-                            let fullDay = day + '/' + month + '/' + year + ' ' + hours + ':' + minutes;
-                            return (
-                                <motion.div
-                                    key={m.uid}
-                                    onClick={() => {
-                                        router.push(`/full/${m.uid}`)
-                                    }}
-                                    whileHover={{ scale: 1.1 }}
-                                    whileTap={{ scale: 0.6 }}
-                                    style={{ padding: '2px', width: '200px', background: 'grey', borderRadius: '8px', width: '90vw', maxWidth: '350px' }}>
-                                    <Stack direction='row' alignItems='center' spacing={2} sx={{ height: '85px' }}>
-                                        <Stack direction='column' justifyContent='center' alignItems='start' sx={{ flex: 1 }}>
-                                            <p style={{ color: '#FABC2A', padding: '3px', margin: '4px', fontFamily: 'Poppins,sans-serif' }}>{m.username}</p>
-                                            <p style={{ color: 'whitesmoke', fontSize: '13px', padding: '3px', margin: '2px', fontFamily: 'Poppins,sans-serif' }}>{m.uid}</p>
-                                            <p style={{ color: 'whitesmoke', fontSize: '13px', padding: '3px', margin: '2px', fontFamily: 'Poppins,sans-serif' }}>{fullDay}</p>
-                                        </Stack>
-                                    </Stack>
-                                </motion.div>
-                            )
-                        })
-                    }
-                </Stack>
-            </Stack>
-            <Fab color="white" aria-label="add" sx={{ background: 'white', position: 'fixed', bottom: '15vh', right: '5vw' }}
-                onClick={() => {
-                    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-                }}>
-                <KeyboardArrowUpIcon sx={{ color: '#ad1c39' }} />
-            </Fab>
-            <HomeBottom />
-        </Stack>
-    )
+function formatDate(value) {
+  if (!value) return 'No date'
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return 'No date'
+  return new Intl.DateTimeFormat('en', {
+    month: 'short',
+    day: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(date)
 }
-export async function getServerSideProps(context) {
 
+function formatBalance(value) {
+  const number = Number(value || 0)
+  return `${Number.isFinite(number) ? number.toFixed(2) : '0.00'} USDT`
+}
+
+export default function Users({ dount = 0, count = 0, datw = [] }) {
+  const router = useRouter()
+  const [searchValue, setSearchValue] = useState('')
+  const [data, setData] = useState(datw)
+  const [loading, setLoading] = useState(false)
+
+  const search = async () => {
+    setLoading(true)
     try {
-        const { data: depe, count: dount } = await supabase
-            .from('users')
-            .select('*', { count: 'exact', head: true })
-            .eq('firstd', true)
-        const { data, count } = await supabase
-            .from('users')
-            .select('crdate,uid,profile,username', { count: 'exact' })
-            .order('keyf', { ascending: false })
-        // console.log(dount, count, data)
-        return {
-            props: {
-                dount: dount,
-                count: count,
-                datw: data
-            },
-        }
-    } catch (e) {
-        console.log(e)
-
+      const response = await fetch('/api/admin/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ find: searchValue }),
+      })
+      const result = await response.json()
+      if (!response.ok) {
+        if (response.status === 401) window.location.href = '/admin'
+        return
+      }
+      setData(result || [])
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
     }
+  }
 
+  const clear = () => {
+    setSearchValue('')
+    setData(datw)
+  }
+
+  return (
+    <>
+      <Head>
+        <title>Admin Users</title>
+      </Head>
+
+      <div className="space-y-5">
+        <section className="grid gap-3 md:grid-cols-3">
+          <article className="rounded-[24px] border border-white/10 bg-[#151515] p-4">
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-zinc-500">Total users</p>
+              <UsersIcon className="h-4 w-4 text-[#1BB6FF]" />
+            </div>
+            <p className="mt-4 text-3xl font-semibold text-white">{count}</p>
+          </article>
+          <article className="rounded-[24px] border border-white/10 bg-[#151515] p-4">
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-zinc-500">Active users</p>
+              <UserCheck className="h-4 w-4 text-emerald-300" />
+            </div>
+            <p className="mt-4 text-3xl font-semibold text-[#1BB6FF]">{dount}</p>
+          </article>
+          <article className="rounded-[24px] border border-white/10 bg-[#151515] p-4">
+            <p className="text-sm text-zinc-500">Visible rows</p>
+            <p className="mt-4 text-3xl font-semibold text-[#B96CFF]">{data.length}</p>
+          </article>
+        </section>
+
+        <section className="rounded-[24px] border border-white/10 bg-[#151515] p-4">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <h2 className="text-xl font-semibold text-white">User Directory</h2>
+              <p className="text-sm text-zinc-500">Search by username or referral code, then open a user profile.</p>
+            </div>
+            <div className="flex min-w-0 items-center gap-2 rounded-full bg-white/[0.06] p-1">
+              <input
+                value={searchValue}
+                onChange={(event) => setSearchValue(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') search()
+                }}
+                placeholder="Username or referral code"
+                className="min-w-0 flex-1 bg-transparent px-4 py-2 text-sm text-white outline-none placeholder:text-zinc-600"
+              />
+              <button type="button" onClick={search} className="rounded-full bg-white px-3 py-2 text-black">
+                <Search className="h-4 w-4" />
+              </button>
+              <button type="button" onClick={clear} className="rounded-full px-3 py-2 text-[#ff8ca0]">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+
+          <div className="mt-5 overflow-hidden rounded-[22px] border border-white/10">
+            <div className="hidden grid-cols-[1fr_1fr_1fr_auto] gap-4 bg-white/[0.04] px-4 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500 md:grid">
+              <span>User</span>
+              <span>Registered</span>
+              <span>Balance</span>
+              <span>Open</span>
+            </div>
+            <div className="divide-y divide-white/10">
+              {data.length ? data.map((user) => (
+                <button
+                  key={user.uid}
+                  type="button"
+                  onClick={() => router.push(`/admin/full/${user.uid}`)}
+                  className="grid w-full gap-3 px-4 py-4 text-left transition hover:bg-white/[0.04] md:grid-cols-[1fr_1fr_1fr_auto] md:items-center"
+                >
+                  <div>
+                    <p className="font-semibold text-white">{user.username}</p>
+                    <p className="text-xs text-zinc-500">{user.uid}</p>
+                  </div>
+                  <p className="text-sm text-zinc-400">{formatDate(user.created_at || user.crdate)}</p>
+                  <p className="text-sm font-semibold text-[#1BB6FF]">{formatBalance(user.balance)}</p>
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/[0.06] text-zinc-300">
+                    <ArrowUpRight className="h-4 w-4" />
+                  </span>
+                </button>
+              )) : (
+                <div className="px-4 py-10 text-center text-sm text-zinc-500">
+                  {loading ? 'Searching users...' : 'No users found.'}
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      </div>
+    </>
+  )
+}
+
+export async function getServerSideProps(context) {
+  try {
+    requireAdmin(context.req)
+    const supabaseAdmin = getSupabaseAdmin()
+    const [{ count: dount }, { data, count }] = await Promise.all([
+      supabaseAdmin
+        .from('users')
+        .select('*', { count: 'exact', head: true })
+        .eq('firstd', true),
+      supabaseAdmin
+        .from('users')
+        .select('created_at,uid,username,balance', { count: 'exact' })
+        .order('id', { ascending: false })
+        .limit(250),
+    ])
+
+    return {
+      props: {
+        dount: dount || 0,
+        count: count || 0,
+        datw: data || [],
+      },
+    }
+  } catch (error) {
+    if (error.statusCode === 401) {
+      return {
+        redirect: {
+          destination: `/admin?next=${encodeURIComponent('/admin/users')}`,
+          permanent: false,
+        },
+      }
+    }
+    console.log(error)
+    return { props: { dount: 0, count: 0, datw: [] } }
+  }
 }

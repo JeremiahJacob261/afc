@@ -8,12 +8,17 @@ import { Stack } from '@mui/material';
 import Head from 'next/head'
 import Footer from './footeras';
 import { BetContext } from '@/pages/api/Context'
+import { useRouter } from 'next/router'
+import AdminShell from '@/components/admin/AdminShell'
 function MyApp({ Component, pageProps }) {
 
   const [cookie, setCookie] = useCookies(["user"])
   const [info, setInfo] = useState({ "logged": false, "username": "", "phone": "", "password": "" })
   const [bets, setBets] = useState([])
   const [slip, setSlip] = useState(0)
+  const router = useRouter()
+  const shouldUseAdminShell = router.pathname.startsWith('/admin') && router.pathname !== '/admin'
+
   return (
     <div style={{background: "#06101F",height:'100%'}}>
       <Head>
@@ -23,7 +28,13 @@ function MyApp({ Component, pageProps }) {
         <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Component {...pageProps} style={{ background: "#06101F" ,width:"100%",display:'flex'}} />
+      {shouldUseAdminShell ? (
+        <AdminShell>
+          <Component {...pageProps} style={{ background: "#06101F" ,width:"100%",display:'flex'}} />
+        </AdminShell>
+      ) : (
+        <Component {...pageProps} style={{ background: "#06101F" ,width:"100%",display:'flex'}} />
+      )}
       
 </div>
   )

@@ -1,11 +1,32 @@
 import { NextResponse } from 'next/server';
 import { callInternalRpc } from '@/lib/serverRpc';
+import { requireAdmin } from '@/lib/adminAuth';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import axios from 'axios';
 import { headers } from 'next/headers'
-import { supabase } from './supabase';
 let apiKey = 'akpomoshi18+'; // your api key
 export default async  function handler(req, res) {
+    try {
+        requireAdmin(req)
+    } catch (error) {
+        return res.status(401).json({ status: 'error', message: 'Unauthorized' })
+    }
+
+    const supabase = getSupabaseAdmin()
     const body = req.body;
+    const { data: existingMatch, error: existingError } = await supabase
+        .from('bets')
+        .select('verified')
+        .eq('match_id', body.matchid)
+        .maybeSingle()
+
+    if (existingError) {
+        return res.status(500).json({ status: 'error', message: 'Unable to read match status' })
+    }
+
+    if (existingMatch?.verified) {
+        return res.status(409).json({ status: 'error', message: 'Match already settled' })
+    }
     const scratch = async (home, away, chome, caway, check, matchid) => {
         let resluts = home + " - " + away;
         let ceslut = chome + " - " + caway;

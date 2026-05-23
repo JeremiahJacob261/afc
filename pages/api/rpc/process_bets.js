@@ -50,14 +50,22 @@ export default async function handler(req, res) {
     // Process each pending bet
     for (const bet of pendingBets) {
       try {
-        // Determine if bet was won (profit > 0 indicates a win)
-        const betWon = bet.profit > 0
+        const { data: match, error: matchError } = await supabase
+          .from('bets')
+          .select('verified,results')
+          .eq('match_id', bet.match_id)
+          .maybeSingle()
+
+        if (matchError) throw matchError
+        if (!match?.verified) continue
+
+        const betWon = bet.market === match.results
 
         if (betWon) {
           // Deposit stake + winnings to user
           const totalReturn = parseFloat(bet.stake) + parseFloat(bet.aim)
-          const newBalance = userData.balance + totalReturn
-          const newTotald = userData.totald + totalReturn
+          const newBalance = Number(userData.balance || 0) + totalReturn
+          const newTotald = Number(userData.totald || 0) + totalReturn
 
           // Update user balance
           const { error: depError } = await supabase
@@ -69,6 +77,8 @@ export default async function handler(req, res) {
             .eq('username', name)
 
           if (depError) throw depError
+          userData.balance = newBalance
+          userData.totald = newTotald
 
           // Mark bet as won
           const { error: chanError } = await supabase

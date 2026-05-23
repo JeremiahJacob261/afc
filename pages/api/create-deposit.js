@@ -35,6 +35,7 @@ export default async function handler(req, res) {
         username: profile.username,
         amount: numericAmount,
         type: 'deposit',
+        sent: 'pending',
         method,
         address,
         adminaddress,

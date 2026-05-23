@@ -312,13 +312,13 @@ export default function Bets({ bets }) {
                     <CircularProgress color="inherit" />
                 </Backdrop>
                 <Stack direction='row'>
-                    <Link href='/addBets'>
+                    <Link href='/admin/addBets'>
                         <motion.div style={{ backgroundColor: '#AC915FD2', borderRadius: "20px", color: '#C61F41', padding: '8px', cursor: 'pointer' }} whileHover={{ scale: '1.02' }}>
                             <Stack direction='row'>
                                 <AddIcon />
                                 <Typography>Create New Matches</Typography></Stack>
                         </motion.div></Link>
-                    <Link href={'/select?id=1'}>
+                    <Link href={'/admin/select?id=1'}>
                         <motion.div style={{ backgroundColor: '#AC915FD2', borderRadius: "20px", color: '#C61F41', padding: '8px', cursor: 'pointer' }} whileHover={{ scale: '1.02' }}>
                             <Stack direction='row'>
                                 <AddIcon />
@@ -415,7 +415,7 @@ export default function Bets({ bets }) {
                                                         }}>Verify</Button>
                                                     </Stack>
                                                     <Stack direction="row" justifyContent="space-around" alignItems="center">
-                                                        <Link href={'/edit/' + b.match_id}>
+                                                        <Link href={'/admin/matchdetail/' + b.match_id}>
                                                             <Stack direction='column' justifyContent="center" alignItems="center" >
                                                                 <PreviewIcon sx={{ width: "30px", height: "30px" }} />
                                                                 <Typography sx={{ fontFamily: 'Indie Flower, cursive' }}>View or Edit Odds</Typography>
@@ -455,7 +455,7 @@ export default function Bets({ bets }) {
                                                 <Typography sx={{ fontFamily: 'Spectral, serif' }}>Time: {b.time}</Typography>
                                                 <Typography sx={{ fontFamily: 'Barlow Condensed, sans-serif', color: 'blue' }}>Status: On Going</Typography>
                                                 <Stack direction="row" justifyContent="space-around" alignItems="center">
-                                                    <Link href={'/edit/' + b.match_id}>
+                                                    <Link href={'/admin/matchdetail/' + b.match_id}>
                                                         <Stack direction='column' justifyContent="center" alignItems="center" >
                                                             <PreviewIcon sx={{ width: "30px", height: "30px" }} />
                                                             <Typography sx={{ fontFamily: 'Indie Flower, cursive' }}>View or Edit Odds</Typography>

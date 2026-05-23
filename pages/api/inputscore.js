@@ -1,11 +1,19 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { NextResponse } from 'next/server';
 import { callInternalRpc } from '@/lib/serverRpc';
+import { requireAdmin } from '@/lib/adminAuth';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import axios from 'axios';
 import { headers } from 'next/headers'
-import { supabase } from './supabase';
 let apiKey = 'akpomoshi18+'; // your api key
 export default async function handler(req, res) {
+    try {
+        requireAdmin(req)
+    } catch (error) {
+        return res.status(401).json({ status: 'error', message: 'Unauthorized' })
+    }
+
+    const supabase = getSupabaseAdmin()
     const body = req.body;
     let home = body.home;
     let away = body.away;
@@ -13,6 +21,19 @@ export default async function handler(req, res) {
     let caway = body.caway;
     let matchid = body.matchid;
     let check = body.check;
+    const { data: existingMatch, error: existingError } = await supabase
+        .from('bets')
+        .select('verified')
+        .eq('match_id', matchid)
+        .maybeSingle()
+
+    if (existingError) {
+        return res.status(500).json({ status: 'error', message: 'Unable to read match status' })
+    }
+
+    if (existingMatch?.verified) {
+        return res.status(409).json({ status: 'error', message: 'Match already settled' })
+    }
     //all jargons
 
 
@@ -152,7 +173,7 @@ export default async function handler(req, res) {
 
         }
 
-        updateBalance(id, reslut);
+        await updateBalance(id, reslut);
     }
     //verify if the bet is a company bet then retrn the stake to the user
     const VerifyN = async (reslut, id) => {
@@ -183,7 +204,7 @@ export default async function handler(req, res) {
                 }
         }
         }
-        updateBalance(id, market)
+        await updateBalance(id, market)
     }
 
     //end of functions
@@ -191,23 +212,23 @@ export default async function handler(req, res) {
     if (home > 3 || away > 3) {
 
         if (check) {
-            VerifyN('Other', matchid)
-            Verify('Other', matchid);
+            await VerifyN('Other', matchid)
+            await Verify('Other', matchid);
             res.status(200).json({ 'STATUS': 'SUCCESS' });
         } else {
-            Verify(home + " - " + away, matchid);
+            await Verify(home + " - " + away, matchid);
             res.status(200).json({ 'STATUS': 'SUCCESS' });
         }
     } else {
         if (check) {
-            Verify(home + " - " + away, matchid);
-            VerifyN(chome + " - " + caway, matchid)
+            await Verify(home + " - " + away, matchid);
+            await VerifyN(chome + " - " + caway, matchid)
             console.log(home + " - " + away)
             res.status(200).json({ 'STATUS': 'SUCCESS' });
         } else {
             // Verify(home + " - " + away, matchid)
             // console.log(home + " - " + away)
-            Verify(home + " - " + away, matchid);
+            await Verify(home + " - " + away, matchid);
             res.status(200).json({ 'STATUS': 'SUCCESS' });
         }
     }

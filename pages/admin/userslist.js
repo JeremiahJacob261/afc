@@ -1,7 +1,6 @@
 import { Stack, Paper, Typography, Button, TextField, Divider, Box, Backdrop } from '@mui/material';
 import { callAdminRpc } from '@/lib/adminRpcClient';
 import { supabase } from '@/pages/api/supabase';
-import { adminAuthClient } from '@/pages/api/supabase-admin'
 import { useEffect, useState, useRef } from 'react';
 import ClearIcon from '@mui/icons-material/Clear';
 import RedeemIcon from '@mui/icons-material/Redeem';
@@ -19,12 +18,14 @@ import Diversity1Icon from '@mui/icons-material/Diversity1';
 import Modal from '@mui/material/Modal';
 import Cover from './cover'
 import { toast, Toaster } from "react-hot-toast";
-import { codes } from '@/pages/api/codes.json'
+import codesData from '@/pages/api/codes.json'
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import CancelIcon from '@mui/icons-material/Cancel';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import SoupKitchenIcon from '@mui/icons-material/SoupKitchen';
 import TimesOneMobiledataIcon from '@mui/icons-material/TimesOneMobiledata';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
+const codes = Object.fromEntries((codesData.countries || []).map((country) => [country.code, country.name]))
 export default function Users({ refs }) {
   const [searchR, setSearchR] = useState([])
   const [open, setOpen] = useState(false);
@@ -140,10 +141,15 @@ export default function Users({ refs }) {
     async function changePassword() {
       try {
 
-        const { data: user, error } = await adminAuthClient.updateUserById(
-          display.description,
-          { password: pass }
-        )
+        const response = await fetch('/api/admin/auth-user-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: display.description, password: pass }),
+        })
+        if (!response.ok) {
+          const result = await response.json().catch(() => ({}))
+          throw new Error(result.message || 'Password update failed')
+        }
         toast.success("Password Changed")
         handleClosep();
         alert('success')
@@ -730,7 +736,7 @@ export default function Users({ refs }) {
                             , lvl2: d.lvla
                             , lvl3: d.lvlb
                             , firstd: d.firstd
-                            , cr: d.crdate
+                            , cr: d.created_at || d.crdate
                             , totald: d.totald
                           })
                           setOpen(true)
@@ -779,7 +785,7 @@ export default function Users({ refs }) {
                               , lvl2: d.lvla
                               , lvl3: d.lvlb
                               , firstd: d.firstd
-                              , cr: d.crdate
+                              , cr: d.created_at || d.crdate
                               , totald: d.totald
                             })
                             getRefCount(d.newrefer);
@@ -868,10 +874,11 @@ export default function Users({ refs }) {
   )
 }
 export async function getServerSideProps(context) {
-  const { data, error } = await supabase
+  const supabaseAdmin = getSupabaseAdmin()
+  const { data, error } = await supabaseAdmin
     .from('users')
     .select()
-    .order('keyf', { ascending: false });
+    .order('id', { ascending: false });
 
   const refs = data;
   return {

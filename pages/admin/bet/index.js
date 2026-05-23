@@ -146,7 +146,7 @@ export default function Home({ notification }) {
                                                 Depositing(m.stake, m.username);
                                                 ChangeGcount(m.username);
                                                 toast.success('Bet Deleted Successfully');
-                                                router.push(`/full/${id}`)
+                                                router.push(`/admin/full/${id}`)
                                             }
                                         }}
                                         style={{ cursor: 'pointer', width: '100%', height: '40px', background: '#ad1c39', borderRadius: '8px', display: (stams < curren) ? 'none' : 'visible', justifyContent: 'center', alignItems: 'center' }}
@@ -166,7 +166,7 @@ export default function Home({ notification }) {
     return (
         <div>
             <Icon icon="iconoir:cancel" color="gray" width="100" height="100" onClick={() => {
-                router.push(`/full/${id}`)
+                router.push(`/admin/full/${id}`)
             }} />
             <h1 style={{ color: 'wheat' }}>Bets</h1>
             <DataShow />

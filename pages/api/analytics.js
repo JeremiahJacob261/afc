@@ -1,22 +1,32 @@
-import { NextResponse } from 'next/server';
-import axios from 'axios';
-import { headers } from 'next/headers'
-import { supabase } from './supabase';
+import { requireAdmin } from '@/lib/adminAuth';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 export default async function handler(req, res) {
     try{
+        requireAdmin(req)
+        const supabase = getSupabaseAdmin()
+        const start = new Date()
+        start.setHours(0, 0, 0, 0)
+        const end = new Date(start)
+        end.setDate(end.getDate() + 1)
         const { data, count } = await supabase
   .from('users')
   .select('*', { count: 'exact', head: true })
-  const { data:pata, error } = await supabase
+  const { count: betCount, error } = await supabase
   .from('placed')
-  .select('*')
-  .filter('created_at', 'eq', new Date().toISOString().split('T')[0])
+  .select('*', { count: 'exact', head: true })
+  .gte('created_at', start.toISOString())
+  .lt('created_at', end.toISOString())
   const { data:rata, error:rerror } = await supabase
   .from('reading')
-  .select('*')
-    res.status(200).json({ status: 'success',user:count,bet:pata.length,depo:rata[0].deposit,with:rata[0].withdraw })
+  .select('deposit,withdraw')
+  .limit(1)
+  .maybeSingle()
+    if (error) throw error
+    if (rerror) throw rerror
+    res.status(200).json({ status: 'success',user:count || 0,bet:betCount || 0,depo:Number(rata?.deposit || 0),with:Number(rata?.withdraw || 0) })
     }catch(e){
-res.status(400).json({ status: 'failed',error:e })
+const status = e.statusCode || 400
+res.status(status).json({ status: 'failed',error:e.message || e })
     }
   }
   

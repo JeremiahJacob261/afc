@@ -1,5 +1,6 @@
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 import { callInternalRpc } from '@/lib/serverRpc'
+import { requireAdmin } from '@/lib/adminAuth'
 
 const rates = {
   mmk: 5000,
@@ -9,20 +10,6 @@ const rates = {
   fcfa: 600,
   pkr: 280,
   kes: 130,
-}
-
-function requireAdminPassword(req) {
-  const expected = process.env.ADMIN_ACTION_PASSWORD || 'passwordadmin'
-  const provided = req.headers['x-admin-password'] || req.body?.password
-  const fallbackPasswords = process.env.ADMIN_ACTION_PASSWORD
-    ? [expected]
-    : [expected, 'invisibleadmin']
-
-  if (!provided || !fallbackPasswords.includes(provided)) {
-    const error = new Error('Unauthorized')
-    error.statusCode = 401
-    throw error
-  }
 }
 
 function getUsdtAmount(notification) {
@@ -53,7 +40,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    requireAdminPassword(req)
+    requireAdmin(req)
 
     const { uid, action } = req.body || {}
     if (!uid || !['approve', 'reject'].includes(action)) {
@@ -71,8 +58,23 @@ export default async function handler(req, res) {
       return res.status(404).json({ status: 'error', message: 'Transaction not found' })
     }
 
-    if (notification.sent === 'success' || notification.sent === 'failed' || notification.sent === true) {
+    if (['success', 'failed', 'processing'].includes(notification.sent) || notification.sent === true) {
       return res.status(409).json({ status: 'error', message: 'Transaction already processed' })
+    }
+
+    const claimQuery = supabase
+      .from('notification')
+      .update({ sent: 'processing' })
+      .eq('uid', uid)
+      .select('uid')
+
+    const { data: claimed, error: claimErr } = notification.sent === null || notification.sent === undefined
+      ? await claimQuery.is('sent', null).maybeSingle()
+      : await claimQuery.eq('sent', notification.sent).maybeSingle()
+
+    if (claimErr) throw claimErr
+    if (!claimed) {
+      return res.status(409).json({ status: 'error', message: 'Transaction already being processed' })
     }
 
     const isDeposit = notification.type === 'deposit'

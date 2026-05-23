@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router'
 import { Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { supabase } from '@/pages/api/supabase';
 import codes from '@/pages/api/codes.json';
 import { Icon } from '@iconify/react';
 import { motion } from 'framer-motion';
@@ -29,13 +28,15 @@ export default function Home() {
     const deleteuserwallet = () => {
         try {
             async function deletewallet() {
-                const { error } = await supabase
-                    .from('wallets')
-                    .delete()
-                    .eq('username', datas?.username)
-                if (error) {
-                    console.log(error)
-                    toast.success("an error occurred")
+                const response = await fetch('/api/admin/user-action', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'delete-wallet', username: datas?.username }),
+                })
+                if (!response.ok) {
+                    const result = await response.json().catch(() => ({}))
+                    console.log(result)
+                    toast.error("an error occurred")
                 } else {
                     toast.success("Wallet deleted successfully")
                 }
@@ -50,12 +51,20 @@ export default function Home() {
     const updatebalance = () => {
         async function runner() {
             try {
-                const { data, error } = await supabase
-                    .from('users')
-                    .update({ 'balance': parseFloat(balance) })
-                    .eq('username', datas?.username);
+                const response = await fetch('/api/admin/user-action', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'update-balance',
+                        username: datas?.username,
+                        newBalance: parseFloat(balance),
+                    }),
+                })
+                if (!response.ok) {
+                    const result = await response.json().catch(() => ({}))
+                    throw new Error(result.message || 'Balance update failed')
+                }
                 toast.success("balance updated")
-                console.log(error, balance, datas?.username);
                 setEditbal(false);
             } catch (e) {
                 console.log(e);
@@ -75,39 +84,18 @@ export default function Home() {
         if (id) {
             async function run() {
                 try {
-                    const { data, error } = await supabase
-                        .from('users')
-                        .select('newrefer,username,email,uid,phone,countrycode,refer,lvla,lvlb,password,balance,totald')
-                        .eq('uid', id);
-                    const { data: refer, error: refererror } = await supabase
-                        .from('users')
-                        .select('*')
-                        .or(`refer.eq.${data[0].newrefer},lvla.eq.${data[0].newrefer},lvlb.eq.${data[0].newrefer}`)
-                    const { data: bets, error: betserror } = await supabase
-                        .from('placed')
-                        .select('*')
-                        .eq('username', data[0].username)
+                    const response = await fetch(`/api/admin/user-detail?uid=${encodeURIComponent(id)}`)
+                    const result = await response.json()
+                    if (!response.ok) {
+                        throw new Error(result.message || 'Unable to load user')
+                    }
 
-                    let wonbet = bets.filter((value) => {
-                        return value.won === 'true'
-                    })
-                    let lostbet = bets.filter((value) => {
-                        return value.won === 'false'
-                    })
-                    let referusers = refer.length;
-                    let datas = data[0];
-                    const { data: referby, error: referbyerror } = await supabase
-                        .from('users')
-                        .select('username')
-                        .eq('newrefer', datas['refer'])
-                    console.log(referby)
-
-                    setDatas(datas);
-                    setReferusers(referusers);
-                    setBets(bets);
-                    setWonbet(wonbet);
-                    setLostbet(lostbet);
-                    setReferredby(referby[0] ? referby[0].username : "None");
+                    setDatas(result.user);
+                    setReferusers(result.referusers);
+                    setBets(result.bets);
+                    setWonbet(result.wonbet);
+                    setLostbet(result.lostbet);
+                    setReferredby(result.referredby);
                     setLoading(false);
                 } catch (e) {
                     console.log(e)
@@ -123,21 +111,20 @@ export default function Home() {
 
         const switcher = async () => {
             try {
-                const { data, error } = await supabase
-                    .from('users')
-                    .select('refer,lvla')
-                    .eq('newrefer', news)
-                //chnage the refer of the new refer to the old refer
-                const { data: oldrefer, error: oldrefererror } = await supabase
-                    .from('users')
-                    .update({ refer: news, lvla: data[0].refer ?? 0, lvlb: data[0].lvla ?? 0 })
-                    .eq('newrefer', datas?.newrefer)
-                if (oldrefererror) {
-                    toast.error("Error Occured")
-                } else {
-                    toast.success("Switched Successfully")
-
+                const response = await fetch('/api/admin/user-action', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'switch-referral',
+                        currentRefer: datas?.newrefer,
+                        newRefer: news,
+                    }),
+                })
+                if (!response.ok) {
+                    const result = await response.json().catch(() => ({}))
+                    throw new Error(result.message || 'Referral switch failed')
                 }
+                toast.success("Switched Successfully")
             } catch (e) {
                 console.log(e)
                 toast.error("Error Occured")
@@ -243,7 +230,7 @@ export default function Home() {
                     whileHover={{ scale: 1.04 }}
                     whileTap={{ scale: 0.6 }}
                     onClick={() => {
-                        router.push(`/referral/${datas?.newrefer}`)
+                        router.push(`/admin/referral/${datas?.newrefer}`)
                     }}
                     className='refback' style={{ width: '310px', borderRadius: '12px', padding: '4px' }}>
                     <p>Referral</p>
@@ -252,7 +239,7 @@ export default function Home() {
                     whileHover={{ scale: 1.04 }}
                     whileTap={{ scale: 0.6 }}
                     onClick={() => {
-                        router.push(`/reward?id=${datas?.uid}`)
+                        router.push(`/admin/reward?id=${datas?.uid}`)
                     }} className='rewback' style={{ width: '310px', borderRadius: '12px', padding: '4px' }}>
                     <p>Reward</p>
                 </motion.div>
@@ -260,7 +247,7 @@ export default function Home() {
                     whileHover={{ scale: 1.04 }}
                     whileTap={{ scale: 0.6 }}
                     onClick={() => {
-                        router.push(`/bet?id=${datas?.uid}`)
+                        router.push(`/admin/bet?id=${datas?.uid}`)
                     }} className='betback' style={{ width: '310px', borderRadius: '12px', padding: '4px' }}>
                     <p>Bets</p>
                 </motion.div>
@@ -268,7 +255,7 @@ export default function Home() {
                     whileHover={{ scale: 1.04 }}
                     whileTap={{ scale: 0.6 }}
                     onClick={() => {
-                        router.push(`/security?id=${datas?.uid}`)
+                        router.push(`/admin/security?id=${datas?.uid}`)
                     }} className='secback' style={{ width: '310px', borderRadius: '12px', padding: '4px' }}>
                     <p>Security</p>
                 </motion.div>
@@ -276,7 +263,7 @@ export default function Home() {
                     whileHover={{ scale: 1.04 }}
                     whileTap={{ scale: 0.6 }}
                     onClick={() => {
-                        router.push(`/transaction?id=${datas?.uid}`)
+                        router.push(`/admin/transaction?id=${datas?.uid}`)
                     }} className='traback' style={{ width: '310px', borderRadius: '12px', padding: '6px' }}>
 
                     <Stack direction="column" sx={{ width: '100%', height: '100%' }} justifyContent={"center"} spacing={1} alignItems={"start"}>
@@ -289,7 +276,7 @@ export default function Home() {
                     whileHover={{ scale: 1.04 }}
                     whileTap={{ scale: 0.6 }}
                     onClick={() => {
-                        router.push(`/activities?id=${datas?.uid}`)
+                        router.push(`/admin/activities?id=${datas?.uid}`)
                     }} className='acback' style={{ width: '310px', borderRadius: '12px', padding: '6px' }}>
                     <Stack direction="column" sx={{ width: '100%', height: '100%' }} justifyContent={"center"} spacing={1} alignItems={"start"}>
                         <p>Activities</p>

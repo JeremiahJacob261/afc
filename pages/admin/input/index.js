@@ -169,7 +169,7 @@ export default function Input({ datas }) {
                     <CancelIcon
                         style={{ width: '50px', height: '50px', color: 'white' }}
                         onClick={() => {
-                            router.push("/select?id=1")
+                            router.push("/admin/select?id=1")
                         }} />
                 </motion.div>
             </Stack>

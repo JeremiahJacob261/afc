@@ -146,7 +146,7 @@ export default function AddB() {
       console.log(error)
       if (error === null) {
         alert("bet uploaded")
-        router.push("/")
+        router.push("/admin/bets")
       }
     }
     upbet();

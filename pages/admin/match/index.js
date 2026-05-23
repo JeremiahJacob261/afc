@@ -1,108 +1,118 @@
-import React from 'react'
-import HomeBottom from '../bottomNav'
-import { supabase } from '@/pages/api/supabase'
-import Image from 'next/image'
-import { Stack, TextField, Modal } from '@mui/material'
-import { motion } from 'framer-motion'
-import { Fab } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import { Icon } from '@iconify/react';
+import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react';
-import { useState } from 'react';
-export default function Bet({datas}) {
-    const router = useRouter();
-    useEffect(() => {
-        
-    }, []);
+import { CalendarDays, Plus, Trophy } from 'lucide-react'
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
+import { requireAdmin } from '@/lib/adminAuth'
 
-    function BetRow() {
-        return(
-            <Stack direction='column' spacing={2} sx={{ marginBottom:'120px'}}>
-            {
-                datas.map((m) => {
+export default function Bet({ datas = [] }) {
+  const router = useRouter()
 
-                    return (
-                        <motion.div
-                            key={m.match_id}
-                            onClick={() => {
-                                router.push('/admin/matchdetail/' + m.match_id)
-                            }}
-                            whileHover={{ scale: 1.03 }}
-                            whileTap={{ scale: 0.9 }}
-                        >
-                            <Stack direction='column' spacing={1} sx={{ background: 'rgb(99, 1, 21)', padding: '10px', borderRadius: '8px',width:'310px' }} >
-                                <Stack direction='row' spacing={1} justifyContent='center' alignItems='center'>
-                                    <p>Match ID : {m.match_id}</p>
-                                </Stack>
-                                <p style={{ width:'100%',textAlign:"center",color:'grey'}}>{m.league}</p>
-                                <Stack direction='row' spacing={1} justifyContent='space-between' alignItems='center'>
-                                   
-                                    <Stack direction='column' spacing={1} justifyContent='space-between' alignItems='center'>
-                                        <Image src={m.ihome ?? "https://www.sfcsports01.com/ball.png"} width={50} height={50} />
-                                         <p style={{ width:'80px',color:'whitesmoke',textAlign:'center'}}>{m.home}</p>
-                                    </Stack>
-                                    <p>VS</p>
-                                    <Stack direction='column' spacing={1} justifyContent='space-between' alignItems='center'>
-                                        <Image src={m.iaway ?? "https://www.sfcsports01.com/ball.png"} width={50} height={50} />
-                                         <p style={{ width:'80px',color:'whitesmoke',textAlign:'center'}}>{m.away}</p>
-                                    </Stack>
-                                </Stack>
-                                <Stack direction='row' spacing={1} justifyContent='center' alignItems='center'>
-                                    <p>{m.time}</p><p>Date : {m.date}</p>
-                                </Stack>
-                                    <p>{m.company ? 'Company Game' : '.'}</p>
-                            </Stack>
-                        </motion.div>
-                    )
-                })
-            }
-        </Stack>
+  return (
+    <>
+      <Head>
+        <title>Admin Bets</title>
+      </Head>
 
-        )
-    }
-    return (
-        <Stack direction='column' alignItems='center' spacing={1} sx={{ width: '100vw', minHeight: '100vh' }}>
-            <h1>Bets</h1>
-            <Stack direction="column" justifyContent='center'>
-                <BetRow />
-            </Stack>
-            <Fab color="white" aria-label="add" sx={{ background:'white',position:'fixed',bottom:'15vh',right:'5vw'}}
-             onClick={()=>{
-                router.push('/admin/select?id=1')
-            }}>
-  <AddIcon sx={{color:'#ad1c39'}}
-   onClick={()=>{
-    router.push('/admin/select?id=1')
-}}
-  />
-</Fab>
-            <HomeBottom />
-        </Stack>
-    )
+      <div className="space-y-5">
+        <section className="flex flex-col gap-3 rounded-[24px] border border-white/10 bg-[#151515] p-4 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <h2 className="text-xl font-semibold text-white">Open Bet Markets</h2>
+            <p className="text-sm text-zinc-500">Review active match markets and add new odds from upcoming fixtures.</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => router.push('/admin/select?id=1')}
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-black transition hover:bg-[#1BB6FF]"
+          >
+            <Plus className="h-4 w-4" />
+            Add Match
+          </button>
+        </section>
+
+        <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+          {datas.length ? datas.map((match) => (
+            <button
+              key={match.match_id || match.id}
+              type="button"
+              onClick={() => router.push(`/admin/matchdetail/${match.match_id}`)}
+              className="rounded-[24px] border border-white/10 bg-[#151515] p-4 text-left transition hover:-translate-y-0.5 hover:border-[#1BB6FF]/40 hover:bg-[#202020]"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <span className="rounded-full bg-[#1BB6FF]/10 px-3 py-1 text-xs font-semibold text-[#8EE5FF]">
+                  Match ID: {match.match_id}
+                </span>
+                {match.company && (
+                  <span className="rounded-full bg-[#B96CFF]/15 px-3 py-1 text-xs font-semibold text-[#dcb3ff]">
+                    Company Game
+                  </span>
+                )}
+              </div>
+
+              <p className="mt-4 truncate text-sm text-zinc-500">{match.league || 'League'}</p>
+
+              <div className="mt-5 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+                <div className="min-w-0 text-center">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={match.ihome || '/ball.png'} alt={match.home || 'Home'} className="mx-auto h-14 w-14 rounded-full object-contain" />
+                  <p className="mt-3 truncate text-sm font-semibold text-white">{match.home || 'Home'}</p>
+                </div>
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/[0.06] text-sm font-semibold text-[#1BB6FF]">
+                  VS
+                </div>
+                <div className="min-w-0 text-center">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={match.iaway || '/ball.png'} alt={match.away || 'Away'} className="mx-auto h-14 w-14 rounded-full object-contain" />
+                  <p className="mt-3 truncate text-sm font-semibold text-white">{match.away || 'Away'}</p>
+                </div>
+              </div>
+
+              <div className="mt-5 flex items-center justify-between rounded-2xl bg-white/[0.04] px-4 py-3 text-sm text-zinc-400">
+                <span className="inline-flex items-center gap-2">
+                  <CalendarDays className="h-4 w-4 text-[#1BB6FF]" />
+                  {match.date || 'No date'}
+                </span>
+                <span>{match.time || 'No time'}</span>
+              </div>
+            </button>
+          )) : (
+            <div className="rounded-[24px] border border-dashed border-white/10 p-10 text-center md:col-span-2 xl:col-span-3">
+              <Trophy className="mx-auto h-8 w-8 text-zinc-600" />
+              <p className="mt-3 text-sm text-zinc-500">No open bet markets found.</p>
+            </div>
+          )}
+        </section>
+      </div>
+    </>
+  )
 }
+
 export async function getServerSideProps(context) {
+  try {
+    requireAdmin(context.req)
+    const supabase = getSupabaseAdmin()
+    const { data, error } = await supabase
+      .from('bets')
+      .select('*')
+      .eq('verified', false)
+      .order('id', { ascending: false })
 
-    try {
-        const { data, error } = await supabase
-        .from('bets')
-        .select('*')
-        .eq('verified', false)
-        .order('id', { ascending: false });
-        let datas = data;
-        return {
-            props: {
-               datas:datas
-            },
-        }
-    } catch (e) {
-        console.log(e)
-        let datas = [];
-        return {
-            props: {
-               datas:datas
-            },
-        }
+    if (error) throw error
+
+    return {
+      props: {
+        datas: data || [],
+      },
     }
-
+  } catch (error) {
+    if (error.statusCode === 401) {
+      return {
+        redirect: {
+          destination: `/admin?next=${encodeURIComponent('/admin/match')}`,
+          permanent: false,
+        },
+      }
+    }
+    console.log(error)
+    return { props: { datas: [] } }
+  }
 }

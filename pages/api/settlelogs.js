@@ -1,7 +1,15 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '../../pages/api/supabase';
+import { requireAdmin } from '@/lib/adminAuth';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import { callInternalRpc } from '@/lib/serverRpc';
 export default async function handler(req, res) {
+    try {
+        requireAdmin(req)
+    } catch (error) {
+        return res.status(401).json({ status: 'error', message: 'Unauthorized' })
+    }
+
+    const supabase = getSupabaseAdmin()
     const body = req.body;
     const name = body.name;
 

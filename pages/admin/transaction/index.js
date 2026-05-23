@@ -121,7 +121,7 @@ export default function Home({ notification }) {
     return (
         <div>
               <Icon icon="iconoir:cancel" color="gray" width="100" height="100" onClick={() => {
-                    router.push(`/full/${id}`)
+                    router.push(`/admin/full/${id}`)
                 }} />
             <h1 style={{ color:'wheat'}}>Transaction</h1>
             <DataShow />

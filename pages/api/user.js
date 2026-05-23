@@ -1,10 +1,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { NextResponse } from 'next/server';
-import axios from 'axios';
-import { headers } from 'next/headers'
-import { supabase } from './supabase';
-let apiKey = 'akpomoshi18+'; // your api key
+import { requireAdmin } from '@/lib/adminAuth';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 export default async  function handler(req, res) {
+    try {
+      requireAdmin(req)
+    } catch (error) {
+      return res.status(401).json({ error: 'Unauthorized' })
+    }
+    const supabase = getSupabaseAdmin()
     const body = req.body;
     let find = body.find;
     if(isNaN(find)){

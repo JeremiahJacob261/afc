@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import HomeBottom from '../bottomNav'
 import { Button, Stack, TextField } from '@mui/material'
 import { Icon } from '@iconify/react'
 import { supabase } from '@/pages/api/supabase'
@@ -90,7 +89,6 @@ export default function Generate() {
                 <TextField placeholder='input admin password' sx={{ background: 'whitesmoke', color: 'black' }} value={admin} onChange={(event) => { setAdmin(event.target.value) }} />
                 <Button onClick={claim} variant='contained' sx={{ background: 'black', color: 'white', padding: '8px', width: '310px' }}>Generate</Button>
             </Stack>
-            <HomeBottom />
         </Stack>
     )
 }

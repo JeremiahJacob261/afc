@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import HomeBottom from '../bottomNav'
 import { Button, Stack, TextField } from '@mui/material'
 import { Icon } from '@iconify/react'
 import { toast, Toaster } from "react-hot-toast";
@@ -69,7 +68,6 @@ export default function Generate() {
                     <p>set new account details</p>
                 </motion.div>
             </Stack>
-            <HomeBottom />
         </Stack>
     )
 }

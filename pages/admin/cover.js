@@ -90,21 +90,21 @@ style={{maxHeight:"100px",background:'rgb(44, 2, 10)',width:"100vw",padding:"12p
         </Stack>
         <Stack direction='row' spacing={4}>
             <motion.div whileHover={{backgroundColor:'#AC915FD2',borderRadius:"27px",color:'#C61F41',scale:'1.05'}} style={{padding:"6px 18px 6px 18px"}}>
-                <Link href='/userslist'> <Typography sx={{color:'white',fontFamily:"Source Sans Pro,sans-serif",cursor:'pointer'}}>Users</Typography></Link>
+                <Link href='/admin/userslist'> <Typography sx={{color:'white',fontFamily:"Source Sans Pro,sans-serif",cursor:'pointer'}}>Users</Typography></Link>
                </motion.div>
             <motion.div whileHover={{backgroundColor:'#AC915FD2',borderRadius:"20px",color:'#C61F41',scale:'1.05'}} style={{padding:"6px 18px 6px 18px"}}> 
-            <Link href='/finance'><Typography sx={{color:'white',fontFamily:"Source Sans Pro,sans-serif",cursor:'pointer'}}>Finances</Typography>
+            <Link href='/admin/finance'><Typography sx={{color:'white',fontFamily:"Source Sans Pro,sans-serif",cursor:'pointer'}}>Finances</Typography>
               </Link>
                   </motion.div>
             <motion.div whileHover={{backgroundColor:'#AC915FD2',borderRadius:"20px",color:'#C61F41',scale:'1.05'}} style={{padding:"6px 18px 6px 18px"}}> 
-                <Link  href='/bets'> <Typography sx={{color:'white',fontFamily:"Source Sans Pro,sans-serif",cursor:'pointer'}}>Matches</Typography>
+                <Link  href='/admin/bets'> <Typography sx={{color:'white',fontFamily:"Source Sans Pro,sans-serif",cursor:'pointer'}}>Matches</Typography>
                </Link>
                 </motion.div>
-                <Link href='/announcement'>
+                <Link href='/admin/announcement'>
             <motion.div whileHover={{backgroundColor:'#AC915FD2',borderRadius:"20px",color:'#C61F41',scale:'1.05'}} style={{padding:"6px 18px 6px 18px"}}>
                  <Typography sx={{color:'white',cursor:'pointer'}}>Announcement</Typography>
                 </motion.div></Link>
-                <Link href='/claim'>
+                <Link href='/admin/claim'>
             <motion.div whileHover={{backgroundColor:'#AC915FD2',borderRadius:"20px",color:'#C61F41',scale:'1.05'}} style={{padding:"6px 18px 6px 18px"}}>
                  <Typography sx={{color:'white',cursor:'pointer'}}>Generate Code</Typography>
                 </motion.div></Link>

@@ -1,18 +1,5 @@
 import { callInternalRpc } from '@/lib/serverRpc'
-
-function requireAdminPassword(req) {
-  const expected = process.env.ADMIN_ACTION_PASSWORD || 'passwordadmin'
-  const provided = req.headers['x-admin-password'] || req.body?.password
-  const fallbackPasswords = process.env.ADMIN_ACTION_PASSWORD
-    ? [expected]
-    : [expected, 'invisibleadmin', 'nopassword']
-
-  if (!provided || !fallbackPasswords.includes(provided)) {
-    const error = new Error('Unauthorized')
-    error.statusCode = 401
-    throw error
-  }
-}
+import { requireAdmin } from '@/lib/adminAuth'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -20,7 +7,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    requireAdminPassword(req)
+    requireAdmin(req)
 
     const { functionName, params } = req.body || {}
     if (!functionName || typeof functionName !== 'string') {
