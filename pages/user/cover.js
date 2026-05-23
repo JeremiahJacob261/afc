@@ -49,9 +49,7 @@ export default function Cover({ children }) {
 
   return (
     <Stack direction="column"
-      justifyContent="center"
-      alignItems="center" 
-      style={{ width: '100%', background: "#06101F",paddingTop:'#50px',marginTop:'-10px' }}>
+      style={{ width: '100%', minHeight:'100vh', background: "#06101F",paddingTop:'50px',display:'flex',alignItems:'center',justifyContent:'center' }}>
       {
         //drawer layout
       }
@@ -136,8 +134,10 @@ export default function Cover({ children }) {
       {
         //drawer layout end
       }
-      <Stack direction="row" style={{ background: '#06101F', width: '100%', height: '64px', padding: '12px',position:'fixed',top:'0px'}}
-        alignItems='center' justifyContent="space-around">
+      <Stack direction="row" style={{ background: '#06101F', width: '100%', height: '64px', padding: '12px',position:'fixed',top:'0px',
+        display:'flex',alignItems:'center',justifyContent:'space-between',zIndex:'100'
+      }}
+        >
         <div style={{ display: 'inline-flex', alignItems: 'center' }}>
           <Icon icon="tabler:grid-dots" width="24" height="24" style={{ color: '#1BB6FF' }} onClick={() => {
             setDraw(true)

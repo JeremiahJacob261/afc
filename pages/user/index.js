@@ -163,7 +163,7 @@ export default function Home() {
     }
   }, [router]);
 
-  
+
 
   return (
     <Stack justifyContent="start" alignItems="center"
@@ -184,13 +184,13 @@ export default function Home() {
           <title>Welcome - {username ? `${username}` : 'Loading...'}</title>
           <link rel="icon" href="/european.ico" />
         </Head>
-        <Stack sx={{ background: "#06101F", marginTop: '10px', minWidth: '350px', maxWidth: '450px' }} spacing={2} justifyContent='center' >
+        <Stack sx={{ background: "#06101F", marginTop: '10px', minWidth: '380px',  display: 'flex', justifyContent: 'center', alignItems:'center' }} spacing={2} >
 
-          <Stack direction="column" spacing={1} sx={{ background: '#10284D', padding: '12px', borderRadius: '10px' }}>
+          <Stack direction="column" spacing={1} style={{ background: '#10284D', maxWidth: '450px', padding: '12px', borderRadius: '10px' }}>
 
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
               <Typography style={{ fontSize: '16px', fontWeight: '600', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: 'auto', textAlign: 'left', color: '#1BB6FF' }} >Hello .</Typography>
-              <p className="notranslate" style={{ fontSize: '16px', margin:0, textAlign: 'center', fontWeight: '600', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: 'auto', textAlign: 'left', color: '#1BB6FF' }}>{username ? ` ${username}` : 'Loading...'}</p>
+              <p className="notranslate" style={{ fontSize: '16px', margin: 0, textAlign: 'center', fontWeight: '600', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: 'auto', textAlign: 'left', color: '#1BB6FF' }}>{username ? ` ${username}` : 'Loading...'}</p>
 
             </div>
 
@@ -199,7 +199,7 @@ export default function Home() {
                 <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>Current Balance </Typography>
                 <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>{balance ? ` ${balance.toFixed(3)}` : '0'} USDT</Typography>
               </Stack>
-                <Link href='/user/fund' style={{ textDecoration: "none", color: 'white' }}>
+              <Link href='/user/fund' style={{ textDecoration: "none", color: 'white' }}>
                 <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#1BB6FF', borderRadius: '20px', padding: '8px', width: '95px', height: '32px' }}>
                   <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: 'white', fontSize: '12px' }}>
                     Deposit
@@ -295,7 +295,7 @@ export default function Home() {
                       </Stack>
                       <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
                         <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{timex}</Typography>
-                        <p style={{color:'#E9E5DA'}}>|</p>
+                        <p style={{ color: '#E9E5DA' }}>|</p>
                         <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
                       </Stack>
                       <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>

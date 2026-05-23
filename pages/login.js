@@ -94,12 +94,23 @@ export default function Login() {
         })
         const result = await response.json()
 
+        console.log(result);
+
+        if(result?.message === 'TypeError: fetch failed') {
+          alert('Network error, please check your connection and try again')
+          setDrop(false)
+          return
+        }else if(result?.message === 'Invalid login credentials') {
+          alert('Incorrect Email or Password')
+          setDrop(false)
+          return
+        }else{
         if (!response.ok || result.status !== 'success') {
-          alert('Check your Username and Password')
+          alert('An error occured, please try again')
           setDrop(false)
           return
         }
-
+      }
         loginEmail = result.email
       }
 
