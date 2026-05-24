@@ -1,4 +1,5 @@
 import { requireAdmin } from '@/lib/adminAuth'
+import { ensureUpcomingMatchesCurrent } from '@/lib/apiFootballSync'
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 
 export default async function handler(req, res) {
@@ -10,15 +11,20 @@ export default async function handler(req, res) {
     requireAdmin(req)
     const supabase = getSupabaseAdmin()
     const search = String(req.method === 'POST' ? req.body?.page || '' : req.query?.search || '').trim()
+    try {
+      await ensureUpcomingMatchesCurrent(supabase)
+    } catch (syncError) {
+      console.error('Unable to refresh upcoming matches:', syncError)
+    }
 
     let query = supabase
       .from('upcoming_matches')
       .select('*')
-      .order('id', { ascending: false })
+      .order('timest', { ascending: true })
       .limit(250)
 
     if (search && Number.isNaN(Number(search))) {
-      query = query.or(`home_name.ilike.%${search}%,away_name.ilike.%${search}%`)
+      query = query.or(`home_name.ilike.%${search}%,away_name.ilike.%${search}%,league.ilike.%${search}%`)
     }
 
     const { data, error } = await query

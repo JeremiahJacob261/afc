@@ -2,6 +2,8 @@
 -- Generated: 2026-05-18
 -- This schema matches the application structure used in the Next.js project
 
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
 -- ============================================================================
 -- AUTH & USER MANAGEMENT TABLES
 -- ============================================================================
@@ -28,6 +30,7 @@ CREATE TABLE IF NOT EXISTS users (
   codeset BOOLEAN DEFAULT FALSE,
   pin TEXT,
   firstd BOOLEAN DEFAULT FALSE,
+  gcount INTEGER DEFAULT 0,
   dailywl DECIMAL(15, 4) DEFAULT 0.00,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -54,6 +57,24 @@ CREATE TABLE IF NOT EXISTS user_wallets (
 -- BETTING & MATCHES TABLES
 -- ============================================================================
 
+-- Fixture source table populated from API-Football for admin match selection
+CREATE TABLE IF NOT EXISTS upcoming_matches (
+  id BIGINT PRIMARY KEY,
+  league TEXT,
+  home_name TEXT,
+  away_name TEXT,
+  home_logo TEXT,
+  away_logo TEXT,
+  hour TEXT,
+  minute TEXT,
+  date DATE,
+  day INTEGER,
+  month INTEGER,
+  timest TIMESTAMPTZ,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Available matches for betting
 CREATE TABLE IF NOT EXISTS bets (
   id BIGSERIAL PRIMARY KEY,
@@ -62,12 +83,36 @@ CREATE TABLE IF NOT EXISTS bets (
   away TEXT NOT NULL,
   league TEXT,
   otherl TEXT,
+  ihome TEXT,
+  iaway TEXT,
   date TEXT,
   time TEXT,
   tsgmt BIGINT,
+  nilnil DECIMAL(8, 3),
+  onenil DECIMAL(8, 3),
+  nilone DECIMAL(8, 3),
+  oneone DECIMAL(8, 3),
+  twonil DECIMAL(8, 3),
+  niltwo DECIMAL(8, 3),
+  twoone DECIMAL(8, 3),
+  onetwo DECIMAL(8, 3),
+  twotwo DECIMAL(8, 3),
+  threenil DECIMAL(8, 3),
+  nilthree DECIMAL(8, 3),
+  threeone DECIMAL(8, 3),
+  onethree DECIMAL(8, 3),
+  twothree DECIMAL(8, 3),
+  threetwo DECIMAL(8, 3),
+  threethree DECIMAL(8, 3),
+  otherscores DECIMAL(8, 3),
+  fourfour DECIMAL(8, 3),
+  hd DECIMAL(8, 3),
+  ha DECIMAL(8, 3),
+  da DECIMAL(8, 3),
   verified BOOLEAN DEFAULT FALSE,
   results TEXT,
   company BOOLEAN DEFAULT FALSE,
+  comarket TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -75,17 +120,26 @@ CREATE TABLE IF NOT EXISTS bets (
 -- Placed bets by users
 CREATE TABLE IF NOT EXISTS placed (
   id BIGSERIAL PRIMARY KEY,
-  betid TEXT UNIQUE NOT NULL,
+  betid TEXT UNIQUE DEFAULT gen_random_uuid()::TEXT NOT NULL,
   username TEXT NOT NULL,
   match_id TEXT NOT NULL,
   home TEXT,
   away TEXT,
+  ihome TEXT,
+  iaway TEXT,
   stake DECIMAL(15, 4) NOT NULL,
   aim DECIMAL(15, 4) NOT NULL,
   profit DECIMAL(15, 4) DEFAULT 0.00,
   market TEXT,
   odd DECIMAL(5, 2),
   won TEXT DEFAULT 'null',
+  started BOOLEAN DEFAULT FALSE,
+  levelone TEXT,
+  leveltwo TEXT,
+  levelthree TEXT,
+  aone DECIMAL(15, 4) DEFAULT 0.00,
+  atwo DECIMAL(15, 4) DEFAULT 0.00,
+  athree DECIMAL(15, 4) DEFAULT 0.00,
   date TEXT,
   time TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -163,6 +217,10 @@ CREATE INDEX IF NOT EXISTS idx_users_refer ON users(refer);
 CREATE INDEX IF NOT EXISTS idx_users_created_at ON users(created_at);
 
 -- Bets indexes
+CREATE INDEX IF NOT EXISTS idx_upcoming_matches_date ON upcoming_matches(date);
+CREATE INDEX IF NOT EXISTS idx_upcoming_matches_timest ON upcoming_matches(timest);
+CREATE INDEX IF NOT EXISTS idx_upcoming_matches_home_name ON upcoming_matches(home_name);
+CREATE INDEX IF NOT EXISTS idx_upcoming_matches_away_name ON upcoming_matches(away_name);
 CREATE INDEX IF NOT EXISTS idx_bets_match_id ON bets(match_id);
 CREATE INDEX IF NOT EXISTS idx_bets_verified ON bets(verified);
 CREATE INDEX IF NOT EXISTS idx_bets_tsgmt ON bets(tsgmt);

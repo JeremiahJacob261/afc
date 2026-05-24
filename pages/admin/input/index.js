@@ -17,6 +17,8 @@ import { motion } from 'framer-motion';
 import { Icon } from '@iconify/react';
 import moment from 'moment';
 import 'moment-timezone';
+import { requireAdmin } from '@/lib/adminAuth';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 export default function Input({ datas }) {
     const dateObj = new Date(datas.timest);
     const [drop, setDrop] = useState(false);
@@ -360,16 +362,36 @@ export default function Input({ datas }) {
     )
 }
 export async function getServerSideProps(context) {
-    let id = context.query.id;
-    console.log(id);
-    const { data, error } = await supabase
-        .from('upcoming_matches')
-        .select('*')
-        .eq('id', id)
-    let datas = data[0];
-    return {
-        props: {
-            datas: datas
-        },
+    try {
+        requireAdmin(context.req);
+        let id = context.query.id;
+        const supabaseAdmin = getSupabaseAdmin();
+        const { data, error } = await supabaseAdmin
+            .from('upcoming_matches')
+            .select('*')
+            .eq('id', id)
+            .single();
+
+        if (error) throw error;
+
+        return {
+            props: {
+                datas: data
+            },
+        }
+    } catch (error) {
+        if (error.statusCode === 401) {
+            const nextPath = context.resolvedUrl || '/admin/input';
+            return {
+                redirect: {
+                    destination: `/admin?next=${encodeURIComponent(nextPath)}`,
+                    permanent: false,
+                },
+            }
+        }
+
+        return {
+            notFound: true,
+        }
     }
 }

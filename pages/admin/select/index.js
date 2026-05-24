@@ -16,21 +16,38 @@ import { Backdrop, CircularProgress } from "@mui/material";
 import FormControl from '@mui/material/FormControl';
 import { Select as Sel } from '@mui/material';
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
+import { requireAdmin } from "@/lib/adminAuth";
+import { ensureUpcomingMatchesCurrent } from "@/lib/apiFootballSync";
 //serversideprops
 export async function getServerSideProps(context) {
 
     const searchParams = context.query;
     try {
+        requireAdmin(context.req)
         const supabase = getSupabaseAdmin();
+        try {
+            await ensureUpcomingMatchesCurrent(supabase);
+        } catch (syncError) {
+            console.error('Unable to refresh upcoming matches:', syncError);
+        }
         const { data: test, error } = await supabase
             .from('upcoming_matches')
             .select('*')
-            .order('id', { ascending: false })
+            .order('timest', { ascending: true })
             .limit(250)
         if (error) throw error
         return { props: { final: test,ids:searchParams.id } }
 
     } catch (e) {
+        if (e.statusCode === 401) {
+            const nextPath = context.resolvedUrl || '/admin/select';
+            return {
+                redirect: {
+                    destination: `/admin?next=${encodeURIComponent(nextPath)}`,
+                    permanent: false,
+                },
+            }
+        }
         let test = [];
         return { props: { final: test,ids:searchParams.id } }
     }
