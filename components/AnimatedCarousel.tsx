@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import Image from 'next/image'
 
 type Props = {
   images: any[] // StaticImageData[] or string[]
@@ -17,6 +16,8 @@ export default function AnimatedCarousel({ images, interval = 4000 }: Props) {
   const [[page, direction], setPage] = useState([0, 0])
   const timeoutRef = useRef<any>(null)
   const length = images?.length || 0
+  const currentImage = images?.[page]
+  const currentSrc = typeof currentImage === 'string' ? currentImage : currentImage?.src
 
   useEffect(() => {
     start()
@@ -44,7 +45,7 @@ export default function AnimatedCarousel({ images, interval = 4000 }: Props) {
     setPage([i, dir])
   }
 
-  if (!length) return null
+  if (!length || !currentSrc) return null
 
   return (
     <div style={{ width: '100%', maxWidth: 350 }}>
@@ -69,7 +70,14 @@ export default function AnimatedCarousel({ images, interval = 4000 }: Props) {
               else if (offset > 50) paginate(-1)
             }}
           >
-            <Image src={images[page]} alt={`slide-${page}`} width={350} height={159} style={{ display: 'block', width: '100%', height: 'auto' }} />
+            <img
+              src={currentSrc}
+              alt={`slide-${page}`}
+              width={350}
+              height={195}
+              loading={page === 0 ? 'eager' : 'lazy'}
+              style={{ display: 'block', width: '100%', aspectRatio: '16 / 9', objectFit: 'cover' }}
+            />
           </motion.div>
         </AnimatePresence>
 

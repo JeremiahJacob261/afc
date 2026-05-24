@@ -173,7 +173,7 @@ export default function Home() {
       <Loading open={open} handleClose={handleClose} />
       <Toaster position="bottom-center" reverseOrder={false} />
 
-      <Cover sx={{ background: '#06101F', minWidth: '100%', height: '100vh' }}>
+      <Cover sx={{ background: '#06101F', minWidth: '100%', minHeight: '100vh' }}>
         <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={drop}

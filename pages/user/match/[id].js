@@ -26,6 +26,101 @@ import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientA
 
 
 
+const markets = {
+    "nilnil": "0 - 0",
+    "onenil": "1 - 0",
+    "nilone": "0 - 1",
+    "oneone": "1 - 1",
+    "twonil": "2 - 0",
+    "niltwo": "0 - 2",
+    "twoone": "2 - 1",
+    "onetwo": "1 - 2",
+    "twotwo": "2 - 2",
+    "threenil": "3 - 0",
+    "nilthree": "0 - 3",
+    "threeone": "3 - 1",
+    "onethree": "1 - 3",
+    "twothree": "2 - 3",
+    "threetwo": "3 - 2",
+    "threethree": "3 - 3",
+    "otherscores": "Other"
+}
+
+const marketsArray = [
+    { word: "nilnil", num: "0 - 0" },
+    { word: "onenil", num: "1 - 0" },
+    { word: "nilone", num: "0 - 1" },
+    { word: "oneone", num: "1 - 1" },
+    { word: "twonil", num: "2 - 0" },
+    { word: "niltwo", num: "0 - 2" },
+    { word: "twoone", num: "2 - 1" },
+    { word: "onetwo", num: "1 - 2" },
+    { word: "twotwo", num: "2 - 2" },
+    { word: "threenil", num: "3 - 0" },
+    { word: "nilthree", num: "0 - 3" },
+    { word: "threeone", num: "3 - 1" },
+    { word: "onethree", num: "1 - 3" },
+    { word: "twothree", num: "2 - 3" },
+    { word: "threetwo", num: "3 - 2" },
+    { word: "threethree", num: "3 - 3" },
+    { word: "otherscores", num: "Other" }
+];
+
+const vip = {
+    '1': 0,
+    '2': 0.015,
+    '3': 0.030,
+    '4': 0.050,
+    '5': 0.070,
+    '6': 0.095,
+    '7': 0.125
+}
+
+function getMatchOdd(match, market, level) {
+    const baseOdd = Number(match?.[market] || 0)
+    const vipBonus = Number(vip[level] || 0)
+    const value = baseOdd + vipBonus
+    return Number.isFinite(value) ? value : 0
+}
+
+function formatOdd(value) {
+    return Number.isFinite(value) && value > 0 ? value.toFixed(3) : 'N/A'
+}
+
+function getValidDate(value) {
+    const date = new Date(value || '')
+    return Number.isNaN(date.getTime()) ? null : date
+}
+
+function formatMatchDate(match) {
+    const date = getValidDate(match?.date || match?.timest)
+    if (!date) return 'TBD'
+    return `${date.getMonth() + 1}/${date.getDate()}`
+}
+
+function formatMatchTime(match) {
+    const rawTime = String(match?.time || '')
+    const [hour, minute] = rawTime.split(':')
+    const numericHour = Number(hour)
+
+    if (!Number.isFinite(numericHour) || !minute) return 'TBD'
+
+    return `${numericHour - 1}:${minute.padStart(2, '0')}`
+}
+
+function getLeagueName(match) {
+    return (match?.league === 'others' ? match?.otherl : match?.league) || 'League unavailable'
+}
+
+function getTeamName(name, fallback) {
+    return name || fallback
+}
+
+function getMatchStartSeconds(match) {
+    const timestamp = Number(match?.tsgmt || 0)
+    return Number.isFinite(timestamp) ? timestamp / 1000 : 0
+}
+
 async function processBets(name) {
     try {
         await fetch('/api/rpc/process_bets', {
@@ -40,6 +135,8 @@ async function processBets(name) {
 }
 
 export default function Match({ matchDat }) {
+    const router = useRouter()
+    const initialMatch = Array.isArray(matchDat) && matchDat.length ? matchDat[0] : null
     //backdrop
     const hasRun = useRef(false);
     //end of backdrop
@@ -52,7 +149,7 @@ export default function Match({ matchDat }) {
     });
     //end of snackbar1
 
-    const [matches, setMatches] = useState({})
+    const [matches, setMatches] = useState(initialMatch || {})
     const [display, setDisplay] = useState({})
     const [open, setOpen] = useState(false)
     const [picked, setPicked] = useState('')
@@ -80,9 +177,7 @@ export default function Match({ matchDat }) {
     useEffect(() => {
         let active = true;
        
-        matchDat.map((m) => {
-            setMatches(m)
-        })
+        setMatches(initialMatch || {})
 
         const GET = async () => {
             const session = await requireSession(router);
@@ -107,6 +202,7 @@ export default function Match({ matchDat }) {
                 hasRun.current = true;
             } catch (e) {
                 console.log(e)
+                toast.error('Unable to load your account')
             }
         }
 
@@ -115,56 +211,7 @@ export default function Match({ matchDat }) {
         return () => {
             active = false;
         }
-    }, [matchDat, router]);
-    const router = useRouter()
-    const markets = {
-        "nilnil": "0 - 0",
-        "onenil": "1 - 0",
-        "nilone": "0 - 1",
-        "oneone": "1 - 1",
-        "twonil": "2 - 0",
-        "niltwo": "0 - 2",
-        "twoone": "2 - 1",
-        "onetwo": "1 - 2",
-        "twotwo": "2 - 2",
-        "threenil": "3 - 0",
-        "nilthree": "0 - 3",
-        "threeone": "3 - 1",
-        "onethree": "1 - 3",
-        "twothree": "2 - 3",
-        "threetwo": "3 - 2",
-        "threethree": "3 - 3",
-        "otherscores": "Other"
-    }
-
-    const marketsArray = [
-        { word: "nilnil", num: "0 - 0" },
-        { word: "onenil", num: "1 - 0" },
-        { word: "nilone", num: "0 - 1" },
-        { word: "oneone", num: "1 - 1" },
-        { word: "twonil", num: "2 - 0" },
-        { word: "niltwo", num: "0 - 2" },
-        { word: "twoone", num: "2 - 1" },
-        { word: "onetwo", num: "1 - 2" },
-        { word: "twotwo", num: "2 - 2" },
-        { word: "threenil", num: "3 - 0" },
-        { word: "nilthree", num: "0 - 3" },
-        { word: "threeone", num: "3 - 1" },
-        { word: "onethree", num: "1 - 3" },
-        { word: "twothree", num: "2 - 3" },
-        { word: "threetwo", num: "3 - 2" },
-        { word: "threethree", num: "3 - 3" },
-        { word: "otherscores", num: "Other" }
-    ];
-    const vip = {
-        '1': 0,
-        '2': 0.015,
-        '3': 0.030,
-        '4': 0.050,
-        '5': 0.070,
-        '6': 0.095,
-        '7': 0.125
-    }
+    }, [initialMatch, router]);
 
     //the below controls the loading modal
     const [openx, setOpenx] = useState(false);
@@ -203,13 +250,31 @@ export default function Match({ matchDat }) {
             </Snackbar>
         )
     }
-    console.log(new Date(matches.date))
-    console.log(matches)
-    let date = parseInt(new Date(matches.date).getMonth() + 1);
-    let day = new Date(matches.date).getDate();
-    let tix = matches.time ?? '00:00:00';
-    let [th, tm, ts] = tix.split(':');
-    let time = parseFloat(th - 1) + ":" + tm;
+    const displayDate = formatMatchDate(matches)
+    const displayTime = formatMatchTime(matches)
+    const leagueName = getLeagueName(matches)
+    const homeName = getTeamName(matches.home, 'Home')
+    const awayName = getTeamName(matches.away, 'Away')
+
+    if (!initialMatch) {
+        return (
+            <Cover>
+                <Stack style={{ width: "100%", minHeight: '100vh', background: '#06101F', padding: '24px' }} alignItems="center" justifyContent="center" spacing={2}>
+                    <Head>
+                        <title>Match unavailable</title>
+                        <link rel="icon" href="/european.ico" />
+                    </Head>
+                    <Typography sx={{ color: '#E9E5DA', fontFamily: 'Poppins,sans-serif', fontWeight: '600' }}>Match unavailable</Typography>
+                    <Typography sx={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '13px', textAlign: 'center' }}>
+                        This match could not be found or is no longer available.
+                    </Typography>
+                    <Button variant="contained" onClick={() => router.push('/user/matches')} sx={{ background: '#1BB6FF', color: '#06101F' }}>
+                        Back to matches
+                    </Button>
+                </Stack>
+            </Cover>
+        )
+    }
 
     //main ui
     return (
@@ -227,7 +292,7 @@ export default function Match({ matchDat }) {
                 </Backdrop>
                 <Sncks message={messages} />
                 <Head>
-                    <title>{matches.home} VS {matches.away}</title>
+                    <title>{homeName} VS {awayName}</title>
                     <meta name="description" content="A Premium EFC  match" />
                     <link rel="icon" href="/european.ico" />
                     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -247,22 +312,22 @@ export default function Match({ matchDat }) {
                         borderRadius: '5px',
                     }} >
                     <Stack direction='column'>
-                        <Typography style={{ color: '#E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{(matches.league === 'others') ? matches.otherl : matches.league} </Typography>
+                        <Typography style={{ color: '#E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{leagueName}</Typography>
                         <Divider sx={{ background: '#E9E5DA' }} />
                     </Stack>
                     <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
                         <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                             <Image src={matches.ihome ? matches.ihome : Ims} width={50} height={50} alt='home' sx={{ borderRadius: '10px' }} />
-                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{matches.home}</Typography>
+                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{homeName}</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
+                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{displayTime}</Typography>
                             <p style={{color:'#E9E5DA'}}>|</p>
-                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
+                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{displayDate}</Typography>
                         </Stack>
                         <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                             <Image src={matches.iaway ? matches.iaway : Ims} width={50} height={50} alt='away' sx={{ borderRadius: '10px' }} />
-                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{matches.away}</Typography>
+                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{awayName}</Typography>
                         </Stack>
                     </Stack>
                     <Divider sx={{ background: '#E9E5DA' }} />
@@ -273,9 +338,13 @@ export default function Match({ matchDat }) {
                                 <Stack direction="column" spacing={1} key={m.num}>
                                     <Stack direction="row" alignItems="center" justifyContent={"space-around"} sx={{ minWidth: '300px', height: '40px' }}>
                                         <p style={{ color: '#E9E5DA', padding: '8px' }}>{m.num}</p>
-                                        <p style={{ color: '#1BB6FF', padding: '8px' }}>{parseFloat(matches[m.word] + vip[viplevel]).toFixed(3)}%</p>
+                                        <p style={{ color: '#1BB6FF', padding: '8px' }}>{formatOdd(getMatchOdd(matches, m.word, viplevel))}%</p>
                                         <motion.div
                                             onClick={() => {
+                                                if (getMatchOdd(matches, m.word, viplevel) <= 0) {
+                                                    toast.error('This market is not available')
+                                                    return
+                                                }
                                                 setPicked(m.word)
                                                 setBottom(true)
                                             }}
@@ -295,14 +364,14 @@ export default function Match({ matchDat }) {
     );
     function Draws() {
         const [stake, setStake] = useState('');
-        let tofal = Number((parseFloat(matches[picked]) + vip[viplevel]).toFixed(3));
-        let profit = parseFloat((stake * tofal) / 100);
-        let expext = Number((parseFloat(stake) + profit).toFixed(3));
-        console.log(profit)
+        const tofal = Number(getMatchOdd(matches, picked, viplevel).toFixed(3));
+        const stakeAmount = Number(stake || 0);
+        const profit = Number(((stakeAmount * tofal) / 100).toFixed(3));
+        const expext = Number((stakeAmount + profit).toFixed(3));
         let gcount = info.gcount ?? 0;
-        let ball = parseFloat(balance.toFixed(3));
+        let ball = Number(balance || 0);
 
-        let stamx = matches.tsgmt / 1000;
+        let stamx = getMatchStartSeconds(matches);
         let d1 = new Date();
         d1.toUTCString();
         // two hours less than my local time
@@ -327,22 +396,22 @@ export default function Match({ matchDat }) {
                             <Typography sx={{ width: '100%', fontFamily: 'Poppins,sans-serif', textAlign: 'center', color: '#E9E5DA' }}>Stake your bet</Typography>
                         </Stack>
                         <Stack direction='column' alignItems='center' justifyContent='center'>
-                            <Typography style={{ color: '#E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{(matches.league === 'others') ? matches.otherl : matches.league} </Typography>
+                            <Typography style={{ color: '#E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{leagueName}</Typography>
                             <Divider sx={{ background: '#E9E5DA' }} />
                         </Stack>
                         <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
                             <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                                 <Image src={matches.ihome ? matches.ihome : Ims} width={50} height={50} alt='home' />
-                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{matches.home}</Typography>
+                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{homeName}</Typography>
                             </Stack>
                             <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{time}</Typography>
+                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{displayTime}</Typography>
                                 <p style={{color:'#E9E5DA'}}>|</p>
-                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
+                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{displayDate}</Typography>
                             </Stack>
                             <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                                 <Image src={matches.iaway ? matches.iaway : Ims} width={50} height={50} alt='away' />
-                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{matches.away}</Typography>
+                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{awayName}</Typography>
                             </Stack>
 
                         </Stack>
@@ -350,15 +419,15 @@ export default function Match({ matchDat }) {
                         <Stack direction='column' spacing={3}>
                             <Stack direction='row' justifyContent='space-between' alignItems='center'>
                                 <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#E9E5DA' }}>Match ID</Typography>
-                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{matches.match_id}</Typography>
+                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{matches.match_id || 'Unavailable'}</Typography>
                             </Stack>
                             <Stack direction='row' justifyContent='space-between' alignItems='center'>
                                 <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#E9E5DA' }}>Market</Typography>
-                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{markets[picked]}</Typography>
+                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{markets[picked] || 'No market selected'}</Typography>
                             </Stack>
                             <Stack direction='row' justifyContent='space-between' alignItems='center'>
                                 <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#E9E5DA' }}>Odds</Typography>
-                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{tofal}</Typography>
+                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{formatOdd(tofal)}</Typography>
                             </Stack>
                         </Stack>
                         <Divider sx={{ background: '#E9E5DA' }} />
@@ -370,7 +439,7 @@ export default function Match({ matchDat }) {
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#E9E5DA' }}>Account Balance</Typography>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{ball} USDT</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{ball.toFixed(3)} USDT</Typography>
                         </Stack>
                         <input placeholder='stake' type='text'
                             style={{ fontFamily: 'Poppins, sans-serif', padding: "10px", borderRadius: '12px', width: '100%', background: '#06101F', color: '#FFFFFF', border: '3px solid #E9E5DA' }}
@@ -383,16 +452,18 @@ export default function Match({ matchDat }) {
                             }} />
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#E9E5DA' }}>Profit</Typography>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{parseFloat(profit).toFixed(3)} USDT</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{profit.toFixed(3)} USDT</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#E9E5DA' }}>Expected Profit</Typography>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#E9E5DA' }}>{expext} USDT</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#E9E5DA' }}>{expext.toFixed(3)} USDT</Typography>
                         </Stack>
                         <Button sx={{ fontFamily: 'Poppins,sans-serif', margin: '8px', fontSize: '16', fontWeight: '300', color: '#06101F', background: "#1BB6FF", padding: '10px' }}
                             onClick={() => {
-                                if (stake - 1 < info.balance) {
-                                    if (stake < 1) {
+                                if (!picked || tofal <= 0) {
+                                    toast.error('Please choose an available market')
+                                } else if (stakeAmount - 1 < Number(info.balance || 0)) {
+                                    if (stakeAmount < 1) {
                                         toast.error('You do not have sufficient balance for this transaction')
                                     } else if (stamx < currenv) {
                                         toast.error('This Match has expired')
@@ -403,27 +474,32 @@ export default function Match({ matchDat }) {
                                     } else {
                                         handleClose();
                                         handleOpenx()
-                                        let balls = parseFloat(ball) - parseFloat(stake ?? 0);
                                         const deductBet = async () => {
-                                            const response = await authFetch('/api/place-bet', {
-                                                method: 'POST',
-                                                headers: { 'Content-Type': 'application/json' },
-                                                body: JSON.stringify({
-                                                    match_id: matches.match_id,
-                                                    picked,
-                                                    stake: Number(stake),
-                                                }),
-                                            })
-                                            const result = await response.json()
-                                            if (!response.ok || result.status !== 'success') {
-                                                toast.error(result.message || 'Unable to place bet')
-                                                handleClosex()
-                                                return
-                                            }
+                                            try {
+                                                const response = await authFetch('/api/place-bet', {
+                                                    method: 'POST',
+                                                    headers: { 'Content-Type': 'application/json' },
+                                                    body: JSON.stringify({
+                                                        match_id: matches.match_id,
+                                                        picked,
+                                                        stake: stakeAmount,
+                                                    }),
+                                                })
+                                                const result = await response.json().catch(() => ({}))
+                                                if (!response.ok || result.status !== 'success') {
+                                                    toast.error(result.message || 'Unable to place bet')
+                                                    handleClosex()
+                                                    return
+                                                }
 
-                                            setMessages(result.message || "Bet Successful")
-                                            handleClick();
-                                            router.push('/user/bets');
+                                                setMessages(result.message || "Bet Successful")
+                                                handleClick();
+                                                router.push('/user/bets');
+                                            } catch (error) {
+                                                console.log(error)
+                                                toast.error('Unable to place bet. Please try again.')
+                                                handleClosex()
+                                            }
                                         }
                                         deductBet();
                                     }
@@ -442,12 +518,26 @@ export default function Match({ matchDat }) {
 }
 
 export async function getServerSideProps(context) {
-    const { params } = context;
-    const id = params.id;
-    const { data, error } = await supabase
-        .from('bets')
-        .select()
-        .eq('match_id', id);
-    let matchDat = data;
-    return { props: { matchDat } }
+    try {
+        const id = context.params?.id;
+        if (!id) {
+            return { props: { matchDat: [] } }
+        }
+
+        const { data, error } = await supabase
+            .from('bets')
+            .select('*')
+            .eq('match_id', id)
+            .maybeSingle();
+
+        if (error) {
+            console.error('Unable to load match:', error);
+            return { props: { matchDat: [] } }
+        }
+
+        return { props: { matchDat: data ? [data] : [] } }
+    } catch (error) {
+        console.error('Match page error:', error);
+        return { props: { matchDat: [] } }
+    }
 }
