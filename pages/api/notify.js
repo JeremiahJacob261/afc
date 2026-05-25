@@ -59,6 +59,21 @@ export default async function handler(req, res) {
       })
     })
 
+    const { data: firstDepositBonuses, error: firstDepositBonusError } = await supabase
+      .from('activa')
+      .select()
+      .match({ username: profile.username, code: 'firstdepositbonus' })
+      .order('id', { ascending: false })
+
+    if (firstDepositBonusError) throw firstDepositBonusError
+
+    ;(firstDepositBonuses || []).forEach((item) => {
+      datacontrol.push({
+        message: `You have received a first deposit bonus of ${parseFloat(item.amount || 0).toFixed(4)} USDT`,
+        time: item.created_at,
+      })
+    })
+
     const { data: getx, error: getxerror } = await supabase
       .from('notification')
       .select()

@@ -201,7 +201,26 @@ This schema is designed for a sports betting platform with the following key fea
 
 ---
 
-### 7. **referral** (Referral Tracking)
+### 7. **admin_settings** (Admin Platform Settings)
+**Purpose:** Store admin-configurable platform values
+
+| Column | Type | Constraints | Description |
+|--------|------|-------------|-------------|
+| id | INTEGER | PRIMARY KEY, CHECK id = 1 | Singleton settings row |
+| first_deposit_bonus_percent | DECIMAL(6,3) | DEFAULT 3.000, CHECK 0-100 | Bonus percentage applied to first approved deposit |
+| updated_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP | Last settings update time |
+
+**Seed row:**
+
+```sql
+INSERT INTO admin_settings (id, first_deposit_bonus_percent)
+VALUES (1, 3.000)
+ON CONFLICT (id) DO NOTHING;
+```
+
+---
+
+### 8. **referral** (Referral Tracking)
 **Purpose:** Track referral program data
 
 | Column | Type | Constraints | Description |

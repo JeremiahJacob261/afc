@@ -1,6 +1,7 @@
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 import { callInternalRpc } from '@/lib/serverRpc'
 import { requireAdmin } from '@/lib/adminAuth'
+import { getFirstDepositBonusPercent } from '@/lib/adminSettings'
 import {
   getPaymentMethod,
   getPaymentRate,
@@ -160,7 +161,7 @@ export default async function handler(req, res) {
         await runBookkeeping('global deposit total', () => callInternalRpc(req, 'readdeposit', { amount: depositAmount }), warnings)
         await runBookkeeping('deposit count', () => callInternalRpc(req, 'deposits', { name: notification.username }), warnings)
 
-        await runBookkeeping('referral bonus', async () => {
+        await runBookkeeping('first deposit bonuses', async () => {
           const { data: user, error: userErr } = await supabase
             .from('users')
             .select('firstd,refer,lvla,lvlb')
@@ -170,13 +171,52 @@ export default async function handler(req, res) {
           if (userErr) throw userErr
 
           if (!user.firstd) {
-            await callInternalRpc(req, 'refbonus', {
-              amount: depositAmount,
-              name: notification.username,
-              refers: user.refer,
-              lvls: user.lvla,
-              lvlss: user.lvlb,
-            })
+            const firstDepositBonusPercent = await getFirstDepositBonusPercent(supabase)
+            const firstDepositBonus = Number(((depositAmount * firstDepositBonusPercent) / 100).toFixed(3))
+            let firstDepositHandled = firstDepositBonus <= 0
+
+            if (firstDepositBonus > 0) {
+              await callInternalRpc(req, 'self', {
+                name: notification.username,
+                amount: firstDepositBonus,
+              })
+              firstDepositHandled = true
+
+              const { error: bonusActivityErr } = await supabase
+                .from('activa')
+                .insert({
+                  code: 'firstdepositbonus',
+                  username: notification.username,
+                  type: 'depbonus',
+                  amount: firstDepositBonus,
+                })
+
+              if (bonusActivityErr) {
+                console.error('First deposit bonus activity log failed:', bonusActivityErr)
+                warnings.push('first deposit bonus log')
+              }
+            }
+
+            try {
+              await callInternalRpc(req, 'refbonus', {
+                amount: depositAmount,
+                name: notification.username,
+                refers: user.refer,
+                lvls: user.lvla,
+                lvlss: user.lvlb,
+              })
+            } catch (error) {
+              if (firstDepositHandled) {
+                const { error: firstDepositErr } = await supabase
+                  .from('users')
+                  .update({ firstd: true })
+                  .eq('username', notification.username)
+
+                if (firstDepositErr) throw firstDepositErr
+              }
+
+              throw error
+            }
           }
         }, warnings)
 

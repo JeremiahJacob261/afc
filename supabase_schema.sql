@@ -180,6 +180,20 @@ CREATE TABLE IF NOT EXISTS activa (
   FOREIGN KEY (username) REFERENCES users(username)
 );
 
+-- Admin-configurable platform settings
+CREATE TABLE IF NOT EXISTS admin_settings (
+  id INTEGER PRIMARY KEY DEFAULT 1 CHECK (id = 1),
+  first_deposit_bonus_percent DECIMAL(6, 3) NOT NULL DEFAULT 3.000 CHECK (
+    first_deposit_bonus_percent >= 0
+    AND first_deposit_bonus_percent <= 100
+  ),
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO admin_settings (id, first_deposit_bonus_percent)
+VALUES (1, 3.000)
+ON CONFLICT (id) DO NOTHING;
+
 -- ============================================================================
 -- REFERRAL & AFFILIATE TABLES
 -- ============================================================================
@@ -247,6 +261,9 @@ CREATE INDEX IF NOT EXISTS idx_activa_code ON activa(code);
 CREATE INDEX IF NOT EXISTS idx_activa_username ON activa(username);
 CREATE INDEX IF NOT EXISTS idx_activa_type ON activa(type);
 
+-- Admin settings index
+CREATE INDEX IF NOT EXISTS idx_admin_settings_updated_at ON admin_settings(updated_at);
+
 -- Referral indexes
 CREATE INDEX IF NOT EXISTS idx_referral_refer ON referral(refer);
 
@@ -284,6 +301,7 @@ ALTER TABLE notification ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_wallets ENABLE ROW LEVEL SECURITY;
 ALTER TABLE bets ENABLE ROW LEVEL SECURITY;
 ALTER TABLE activa ENABLE ROW LEVEL SECURITY;
+ALTER TABLE admin_settings ENABLE ROW LEVEL SECURITY;
 
 -- Policy: Users can only see their own records
 CREATE POLICY "Users see own data" ON users
