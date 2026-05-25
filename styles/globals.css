@@ -74,6 +74,14 @@ a {
 }
 html{
   scroll-behavior: smooth;
+  min-height: 100%;
+  background: #06101F;
+}
+
+body,
+#__next {
+  min-height: 100dvh;
+  background: #06101F;
 }
 .MuiInputLabel-root {
   color: #06101F !important;

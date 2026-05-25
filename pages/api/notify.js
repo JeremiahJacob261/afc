@@ -63,7 +63,7 @@ export default async function handler(req, res) {
       .from('notification')
       .select()
       .eq('username', profile.username)
-      .neq('sent', 'pending')
+      .in('sent', ['success', 'failed'])
       .order('id', { ascending: false })
 
     if (getxerror) throw getxerror

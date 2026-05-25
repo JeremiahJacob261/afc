@@ -23,6 +23,29 @@ function formatBalance(value) {
   return `${Number.isFinite(number) ? number.toFixed(2) : '0.00'} USDT`
 }
 
+function isMissingColumnError(error, column) {
+  if (!error) return false
+  const message = `${error.message || ''} ${error.details || ''} ${error.hint || ''}`.toLowerCase()
+  return error.code === '42703' || message.includes(column.toLowerCase())
+}
+
+async function readUsersPageRows(supabaseAdmin) {
+  const queryUsers = (dateColumn) => supabaseAdmin
+    .from('users')
+    .select(`${dateColumn},uid,username,balance`, { count: 'exact' })
+    .order('id', { ascending: false })
+    .limit(250)
+
+  const result = await queryUsers('created_at')
+  if (!result.error) return result
+
+  if (!isMissingColumnError(result.error, 'created_at')) return result
+
+  const fallbackResult = await queryUsers('crdate')
+  if (fallbackResult.error) console.warn('Admin users crdate fallback query failed:', fallbackResult.error)
+  return fallbackResult
+}
+
 export default function Users({ dount = 0, count = 0, datw = [] }) {
   const router = useRouter()
   const [searchValue, setSearchValue] = useState('')
@@ -150,23 +173,22 @@ export async function getServerSideProps(context) {
   try {
     requireAdmin(context.req)
     const supabaseAdmin = getSupabaseAdmin()
-    const [{ count: dount }, { data, count }] = await Promise.all([
+    const [activeUsersResult, usersResult] = await Promise.all([
       supabaseAdmin
         .from('users')
         .select('*', { count: 'exact', head: true })
         .eq('firstd', true),
-      supabaseAdmin
-        .from('users')
-        .select('created_at,uid,username,balance', { count: 'exact' })
-        .order('id', { ascending: false })
-        .limit(250),
+      readUsersPageRows(supabaseAdmin),
     ])
+
+    if (activeUsersResult.error) throw activeUsersResult.error
+    if (usersResult.error) throw usersResult.error
 
     return {
       props: {
-        dount: dount || 0,
-        count: count || 0,
-        datw: data || [],
+        dount: activeUsersResult.count || 0,
+        count: usersResult.count || 0,
+        datw: usersResult.data || [],
       },
     }
   } catch (error) {

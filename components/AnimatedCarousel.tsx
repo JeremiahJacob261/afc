@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 import { AnimatePresence, motion } from 'framer-motion'
 
 type Props = {
@@ -17,7 +18,6 @@ export default function AnimatedCarousel({ images, interval = 4000 }: Props) {
   const timeoutRef = useRef<any>(null)
   const length = images?.length || 0
   const currentImage = images?.[page]
-  const currentSrc = typeof currentImage === 'string' ? currentImage : currentImage?.src
 
   useEffect(() => {
     start()
@@ -26,6 +26,7 @@ export default function AnimatedCarousel({ images, interval = 4000 }: Props) {
   }, [page, images])
 
   const start = () => {
+    if (!length) return
     stop()
     timeoutRef.current = setTimeout(() => paginate(1), interval)
   }
@@ -45,11 +46,11 @@ export default function AnimatedCarousel({ images, interval = 4000 }: Props) {
     setPage([i, dir])
   }
 
-  if (!length || !currentSrc) return null
+  if (!length || !currentImage) return null
 
   return (
-    <div style={{ width: '100%', maxWidth: 350 }}>
-      <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 8 }}>
+    <div style={{ width: '100%', maxWidth: 350, margin: '0 auto' }}>
+      <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 8, width: '100%', aspectRatio: '16 / 9', background: '#10284D' }}>
         <AnimatePresence custom={direction} initial={false} mode="wait">
           <motion.div
             key={page}
@@ -59,7 +60,7 @@ export default function AnimatedCarousel({ images, interval = 4000 }: Props) {
             animate="center"
             exit="exit"
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            style={{ position: 'relative' }}
+            style={{ position: 'absolute', inset: 0 }}
             onMouseEnter={stop}
             onMouseLeave={start}
             drag="x"
@@ -70,13 +71,15 @@ export default function AnimatedCarousel({ images, interval = 4000 }: Props) {
               else if (offset > 50) paginate(-1)
             }}
           >
-            <img
-              src={currentSrc}
+            <Image
+              src={currentImage}
               alt={`slide-${page}`}
-              width={350}
-              height={195}
+              fill
+              sizes="(max-width: 450px) calc(100vw - 24px), 350px"
+              priority={page === 0}
+              unoptimized
               loading={page === 0 ? 'eager' : 'lazy'}
-              style={{ display: 'block', width: '100%', aspectRatio: '16 / 9', objectFit: 'cover' }}
+              style={{ objectFit: 'cover' }}
             />
           </motion.div>
         </AnimatePresence>

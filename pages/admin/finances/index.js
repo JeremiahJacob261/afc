@@ -130,13 +130,12 @@ export default function Finances() {
         return
       }
 
-      setNotifications((current) => current.map((item) => (
-        (item.id ?? item.uid) === transactionId ? { ...item, sent: result.sent } : item
-      )))
-      setAllNotifications((current) => current.map((item) => (
-        (item.id ?? item.uid) === transactionId ? { ...item, sent: result.sent } : item
-      )))
-      toast.success(action === 'approve' ? 'Transaction confirmed' : 'Transaction cancelled')
+      await fetchNotifications(searchValue.trim())
+      if (result.warning) {
+        toast.success(result.warning)
+      } else {
+        toast.success(action === 'approve' ? 'Transaction confirmed' : 'Transaction cancelled')
+      }
     } catch (error) {
       console.log(error)
       toast.error('Unknown error occurred, please try again')

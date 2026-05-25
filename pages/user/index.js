@@ -167,7 +167,7 @@ export default function Home() {
 
   return (
     <Stack justifyContent="start" alignItems="center"
-      style={{ background: "#06101F", marginBottom: "50px", minHeight: '95vh', }}
+      style={{ background: "#06101F", width: '100%', minHeight: '100dvh', overflowX: 'hidden' }}
     >
 
       <Loading open={open} handleClose={handleClose} />
@@ -184,22 +184,22 @@ export default function Home() {
           <title>Welcome - {username ? `${username}` : 'Loading...'}</title>
           <link rel="icon" href="/european.ico" />
         </Head>
-        <Stack sx={{ background: "#06101F", marginTop: '10px', minWidth: '380px',  display: 'flex', justifyContent: 'center', alignItems:'center' }} spacing={2} >
+        <Stack sx={{ background: "#06101F", marginTop: '10px', width: '100%', maxWidth: '450px', display: 'flex', justifyContent: 'center', alignItems:'center' }} spacing={2} >
 
-          <Stack direction="column" spacing={1} style={{ background: '#10284D', maxWidth: '450px', padding: '12px', borderRadius: '10px' }}>
+          <Stack direction="column" spacing={1} style={{ background: '#10284D', width: '100%', maxWidth: '450px', padding: '12px', borderRadius: '10px' }}>
 
-            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center', minWidth: 0 }}>
               <Typography style={{ fontSize: '16px', fontWeight: '600', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: 'auto', textAlign: 'left', color: '#1BB6FF' }} >Hello .</Typography>
-              <p className="notranslate" style={{ fontSize: '16px', margin: 0, textAlign: 'center', fontWeight: '600', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: 'auto', textAlign: 'left', color: '#1BB6FF' }}>{username ? ` ${username}` : 'Loading...'}</p>
+              <p className="notranslate" style={{ fontSize: '16px', margin: 0, textAlign: 'left', fontWeight: '600', fontFamily: 'Poppins, sans-serif', minHeight: '24px', padding: '1px', width: 'auto', minWidth: 0, color: '#1BB6FF', overflowWrap: 'anywhere' }}>{username ? ` ${username}` : 'Loading...'}</p>
 
             </div>
 
-            <Stack direction='row' justifyContent='space-between' alignItems='center' >
-              <Stack>
+            <Stack direction='row' justifyContent='space-between' alignItems='center' flexWrap='wrap' gap={1} >
+              <Stack sx={{ minWidth: 0, flex: '1 1 150px' }}>
                 <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>Current Balance </Typography>
-                <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>{balance ? ` ${balance.toFixed(3)}` : '0'} USDT</Typography>
+                <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', minHeight: '24px', padding: '1px', width: '100%', color: '#E9E5DA', overflowWrap: 'anywhere' }}>{balance ? ` ${balance.toFixed(3)}` : '0'} USDT</Typography>
               </Stack>
-              <Link href='/user/fund' style={{ textDecoration: "none", color: 'white' }}>
+              <Link href='/user/fund' style={{ textDecoration: "none", color: 'white', flexShrink: 0 }}>
                 <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#1BB6FF', borderRadius: '20px', padding: '8px', width: '95px', height: '32px' }}>
                   <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: 'white', fontSize: '12px' }}>
                     Deposit
@@ -210,13 +210,13 @@ export default function Home() {
             </Stack>
             <Divider sx={{ bgcolor: "secondary.light" }} />
             < Link href='https://t.me/+bfJIWHK3fKNkNjY1' target="_blank" style={{ textDecoration: 'none' }}>
-              <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
-                <Stack direction='row' spacing={1} justifyContent='start'>
+              <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px', minWidth: 0 }} >
+                <Stack direction='row' spacing={1} justifyContent='start' sx={{ minWidth: 0 }}>
                   <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#1BB6FF' }} />
 
-                  <Stack direction='column' spacing={0} justifyContent='start'>
+                  <Stack direction='column' spacing={0} justifyContent='start' sx={{ minWidth: 0 }}>
                     <Typography sx={{ color: '#1BB6FF', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif', textDecoration: 'underline' }}>Telegram Channel</Typography>
-                    <Typography sx={{ color: '#1BB6FF', fontSize: '12px', fontWeight: 300, fontFamily: 'Inter,sans-serif', textDecoration: 'underline' }}>Join our telegram group to earn more</Typography>
+                    <Typography sx={{ color: '#1BB6FF', fontSize: '12px', fontWeight: 300, fontFamily: 'Inter,sans-serif', textDecoration: 'underline', overflowWrap: 'anywhere' }}>Join our telegram group to earn more</Typography>
                   </Stack>
                 </Stack>
               </Stack>
@@ -226,21 +226,21 @@ export default function Home() {
 
           <AnimatedCarousel images={[Agent, Agent1, Agent2, Agent3, Agent4]} interval={5000} />
 
-          <Stack direction='row' justifyContent='space-between' alignItems='center'>
+          <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ width: '100%', gap: 1 }}>
             <Stack direction='row' spacing={1}>
               <Icon icon="carbon:football-american" width="24" height="24" style={{ color: '#E9E5DA' }} />
               <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '16px', fontWeight: '600' }}>Top Football Matches</Typography>
             </Stack>
             <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>see all</Typography>
           </Stack>
-          <Stack direction='row' spacing={1}>
+          <Stack direction='row' spacing={1} sx={{ width: '100%', overflowX: 'auto', pb: 0.5 }}>
             <Stack sx={{ background: '#10284D', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>This Week</Typography></Stack>
             <Stack sx={{ background: '#1BB6FF', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#06101F', fontSize: '12px', fontWeight: '100' }}>Today</Typography></Stack>
             <Stack sx={{ background: '#10284D', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>Next 3 hrs</Typography></Stack>
             <Stack sx={{ background: '#10284D', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>Next 30 mins</Typography></Stack>
           </Stack>
 
-          <Stack alignItems='center' direction={"column-reverse"}>
+          <Stack alignItems='center' direction={"column-reverse"} sx={{ width: '100%' }}>
             {
               footDat.map((pro) => {
                 // let stams = Date.parse(pro.date + " " + pro.time) / 1000;
@@ -265,7 +265,9 @@ export default function Home() {
                       marginBottom: "8px", padding: "18.5px",
                       display: (stams < curren) ? 'none' : 'visible',
                       background: '#10284D',
-                      width: '343px',
+                      width: '100%',
+                      maxWidth: '343px',
+                      boxSizing: 'border-box',
                       borderRadius: '5px',
                       height: '210px',
                       border: pro.company ? '1px solid #1BB6FF' : ''
@@ -288,7 +290,7 @@ export default function Home() {
                       <Typography style={{ color: '#E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{league} </Typography>
                       <Divider sx={{ background: '#1BB6FF' }} />
                     </Stack>
-                    <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
+                    <Stack direction='row' justifyContent='space-between' alignItems='center' spacing={1} sx={{ width: '100%' }}>
                       <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                         <Image src={pro.ihome ? pro.ihome : Ims} width={50} height={50} alt='home' />
                         <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
@@ -303,16 +305,16 @@ export default function Home() {
                         <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{pro.away}</Typography>
                       </Stack>
                     </Stack>
-                    <Stack direction='row' spacing={2} >
-                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3', border: '3px solid #1BB6FF' }}>
+                    <Stack direction='row' spacing={1} sx={{ width: '100%' }} >
+                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', flex: '1 1 0', minWidth: 0, height: '40px', background: '#E6E8F3', border: '3px solid #1BB6FF' }}>
                         <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#06101F' }}>1-0</Typography>
                         <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#06101F' }}>{pro.onenil}</Typography>
                       </Stack>
-                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3', border: '3px solid #1BB6FF' }}>
+                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', flex: '1 1 0', minWidth: 0, height: '40px', background: '#E6E8F3', border: '3px solid #1BB6FF' }}>
                         <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#06101F' }}>1-1</Typography>
                         <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#06101F' }}>{pro.oneone}</Typography>
                       </Stack>
-                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3', border: '3px solid #1BB6FF' }}>
+                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', flex: '1 1 0', minWidth: 0, height: '40px', background: '#E6E8F3', border: '3px solid #1BB6FF' }}>
                         <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#06101F' }}>1-2</Typography>
                         <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#06101F' }}>{pro.onetwo}</Typography>
                       </Stack>

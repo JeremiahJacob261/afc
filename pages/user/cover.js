@@ -49,7 +49,7 @@ export default function Cover({ children }) {
 
   return (
     <Stack direction="column"
-      style={{ width: '100%', minHeight:'100vh', background: "#06101F",paddingTop:'50px',display:'flex',alignItems:'center',justifyContent:'center' }}>
+      style={{ width: '100%', minHeight:'100dvh', background: "#06101F", display:'flex', alignItems:'center', justifyContent:'flex-start', overflowX: 'hidden', paddingBottom: 'calc(88px + env(safe-area-inset-bottom))' }}>
       {
         //drawer layout
       }
@@ -150,7 +150,7 @@ export default function Cover({ children }) {
               router.push('/user/notification');
             }} />
         </div> </Stack>
-      <div style={{ paddingBottom: "50px",paddingTop:'70px' }}>  {children}</div>
+      <div style={{ width: '100%', maxWidth: '450px', padding: '70px 12px 0', boxSizing: 'border-box' }}>  {children}</div>
       <Divider sx={{ bgcolor: "#1BB6FF" }} />
       <BottomNavi />
 

@@ -290,7 +290,7 @@ export default function AdminHome({ dashboard }) {
               <Users className="h-4 w-4 text-[#1BB6FF]" />
             </div>
             <div className="grid gap-2">
-              {latestUsers.map((user) => (
+              {latestUsers.length ? latestUsers.map((user) => (
                 <div key={user.uid} className="flex items-center justify-between gap-3 rounded-2xl bg-white/[0.04] p-3">
                   <div>
                     <p className="text-sm font-semibold text-white">{user.username}</p>
@@ -298,7 +298,9 @@ export default function AdminHome({ dashboard }) {
                   </div>
                   <p className="text-sm text-zinc-300">{formatNumber(user.balance, { decimals: 2 })} USDT</p>
                 </div>
-              ))}
+              )) : (
+                <p className="rounded-2xl bg-white/[0.04] p-4 text-sm text-zinc-500">No users found.</p>
+              )}
             </div>
           </section>
 
@@ -308,7 +310,7 @@ export default function AdminHome({ dashboard }) {
               <Wallet className="h-4 w-4 text-[#1BB6FF]" />
             </div>
             <div className="grid gap-2">
-              {matches.map((match) => (
+              {matches.length ? matches.map((match) => (
                 <div key={match.match_id || match.id} className="rounded-2xl bg-white/[0.04] p-3">
                   <p className="text-xs text-zinc-500">{match.league || 'League'}</p>
                   <div className="mt-2 flex items-center justify-between gap-3 text-sm font-semibold text-white">
@@ -317,7 +319,9 @@ export default function AdminHome({ dashboard }) {
                     <span className="truncate text-right">{match.away}</span>
                   </div>
                 </div>
-              ))}
+              )) : (
+                <p className="rounded-2xl bg-white/[0.04] p-4 text-sm text-zinc-500">No open matches found.</p>
+              )}
             </div>
           </section>
         </section>
