@@ -1,108 +1,126 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import { AnimatePresence, motion } from 'framer-motion'
+import useEmblaCarousel from 'embla-carousel-react'
 
 type Props = {
   images: any[] // StaticImageData[] or string[]
   interval?: number
 }
 
-const variants = {
-  enter: (dir: number) => ({ x: dir > 0 ? 300 : -300, opacity: 0, scale: 0.95 }),
-  center: { x: 0, opacity: 1, scale: 1 },
-  exit: (dir: number) => ({ x: dir > 0 ? -300 : 300, opacity: 0, scale: 0.95 }),
-}
-
 export default function AnimatedCarousel({ images, interval = 4000 }: Props) {
-  const [[page, direction], setPage] = useState([0, 0])
-  const timeoutRef = useRef<any>(null)
   const length = images?.length || 0
-  const currentImage = images?.[page]
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([])
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'start' })
+  const autoplayRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  const stopAutoplay = useCallback(() => {
+    if (!autoplayRef.current) return
+    clearInterval(autoplayRef.current)
+    autoplayRef.current = null
+  }, [])
+
+  const startAutoplay = useCallback(() => {
+    if (!emblaApi || length <= 1) return
+    stopAutoplay()
+    autoplayRef.current = setInterval(() => {
+      emblaApi.scrollNext()
+    }, interval)
+  }, [emblaApi, interval, length, stopAutoplay])
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return
+    setSelectedIndex(emblaApi.selectedScrollSnap())
+  }, [emblaApi])
 
   useEffect(() => {
-    start()
-    return () => stop()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, images])
+    if (!emblaApi) return
 
-  const start = () => {
-    if (!length) return
-    stop()
-    timeoutRef.current = setTimeout(() => paginate(1), interval)
-  }
-  const stop = () => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current)
-  }
+    setScrollSnaps(emblaApi.scrollSnapList())
+    onSelect()
+    emblaApi.on('select', onSelect)
+    emblaApi.on('reInit', onSelect)
+    startAutoplay()
 
-  const paginate = (newDirection: number) => {
-    setPage(([p]) => {
-      const next = (p + newDirection + length) % length
-      return [next, newDirection]
-    })
-  }
+    return () => {
+      emblaApi.off('select', onSelect)
+      emblaApi.off('reInit', onSelect)
+      stopAutoplay()
+    }
+  }, [emblaApi, onSelect, startAutoplay, stopAutoplay])
 
-  const handleDot = (i: number) => {
-    const dir = i > page ? 1 : -1
-    setPage([i, dir])
-  }
+  const scrollPrev = useCallback(() => {
+    emblaApi?.scrollPrev()
+    startAutoplay()
+  }, [emblaApi, startAutoplay])
 
-  if (!length || !currentImage) return null
+  const scrollNext = useCallback(() => {
+    emblaApi?.scrollNext()
+    startAutoplay()
+  }, [emblaApi, startAutoplay])
+
+  const scrollTo = useCallback((index: number) => {
+    emblaApi?.scrollTo(index)
+    startAutoplay()
+  }, [emblaApi, startAutoplay])
+
+  if (!length) return null
 
   return (
     <div style={{ width: '100%', maxWidth: 350, margin: '0 auto' }}>
-      <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 8, width: '100%', aspectRatio: '16 / 9', background: '#10284D' }}>
-        <AnimatePresence custom={direction} initial={false} mode="wait">
-          <motion.div
-            key={page}
-            custom={direction}
-            variants={variants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            style={{ position: 'absolute', inset: 0 }}
-            onMouseEnter={stop}
-            onMouseLeave={start}
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            onDragEnd={(e, info) => {
-              const offset = info.offset.x
-              if (offset < -50) paginate(1)
-              else if (offset > 50) paginate(-1)
-            }}
-          >
-            <Image
-              src={currentImage}
-              alt={`slide-${page}`}
-              fill
-              sizes="(max-width: 450px) calc(100vw - 24px), 350px"
-              priority={page === 0}
-              unoptimized
-              loading={page === 0 ? 'eager' : 'lazy'}
-              style={{ objectFit: 'cover' }}
-            />
-          </motion.div>
-        </AnimatePresence>
+      <div
+        ref={emblaRef}
+        role="region"
+        aria-roledescription="carousel"
+        onMouseEnter={stopAutoplay}
+        onMouseLeave={startAutoplay}
+        onFocus={stopAutoplay}
+        onBlur={startAutoplay}
+        style={{ position: 'relative', overflow: 'hidden', borderRadius: 8, width: '100%', aspectRatio: '16 / 9', background: '#10284D' }}
+      >
+        <div style={{ display: 'flex', height: '100%', touchAction: 'pan-y pinch-zoom' }}>
+          {images.map((image, index) => (
+            <div
+              key={index}
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`${index + 1} of ${length}`}
+              style={{ position: 'relative', flex: '0 0 100%', minWidth: 0 }}
+            >
+              <Image
+                src={image}
+                alt={`slide-${index + 1}`}
+                fill
+                sizes="(max-width: 450px) calc(100vw - 24px), 350px"
+                priority={index === 0}
+                unoptimized
+                loading={index === 0 ? 'eager' : 'lazy'}
+                style={{ objectFit: 'cover' }}
+              />
+            </div>
+          ))}
+        </div>
 
         <button
-          aria-label="prev"
-          onClick={() => paginate(-1)}
+          aria-label="Previous slide"
+          onClick={scrollPrev}
           style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.4)', border: 'none', color: 'white', padding: 8, borderRadius: 6 }}
         >‹</button>
         <button
-          aria-label="next"
-          onClick={() => paginate(1)}
+          aria-label="Next slide"
+          onClick={scrollNext}
           style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.4)', border: 'none', color: 'white', padding: 8, borderRadius: 6 }}
         >›</button>
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 8 }}>
-        {images.map((_, i) => (
+        {scrollSnaps.map((_, i) => (
           <button
             key={i}
-            onClick={() => handleDot(i)}
-            aria-label={`go-to-${i}`}
-            style={{ width: 10, height: 10, borderRadius: 10, border: 'none', background: i === page ? '#1BB6FF' : '#ccc' }}
+            onClick={() => scrollTo(i)}
+            aria-label={`Go to slide ${i + 1}`}
+            aria-current={i === selectedIndex}
+            style={{ width: 10, height: 10, borderRadius: 10, border: 'none', background: i === selectedIndex ? '#1BB6FF' : '#ccc' }}
           />
         ))}
       </div>
