@@ -238,14 +238,15 @@ export default function Funds() {
     setSubmitting(true)
     try {
       const fileName = `${uuidv4()}-${file.name.replace(/\s+/g, '-')}`
+      const receiptPath = `public/${fileName}`
       const { error: uploadError } = await supabase
         .storage
-        .from('trcreceipt/public')
-        .upload(fileName, file)
+        .from('trcreceipt')
+        .upload(receiptPath, file)
 
       if (uploadError) throw uploadError
 
-      const { data } = supabase.storage.from('trcreceipt/public').getPublicUrl(fileName)
+      const { data } = supabase.storage.from('trcreceipt').getPublicUrl(receiptPath)
       const response = await authFetch('/api/create-deposit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

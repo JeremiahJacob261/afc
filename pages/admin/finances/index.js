@@ -109,12 +109,18 @@ export default function Finances() {
   }, [])
 
   const runFinanceAction = async (transaction, action) => {
+    const transactionId = transaction.id ?? transaction.uid
+    if (!transactionId) {
+      toast.error('Transaction ID is missing')
+      return
+    }
+
     ref.current?.continuousStart()
     try {
       const response = await fetch('/api/admin/finance-action', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ uid: transaction.uid, action }),
+        body: JSON.stringify({ id: transaction.id, uid: transaction.uid, action }),
       })
       const result = await response.json()
 
@@ -125,10 +131,10 @@ export default function Finances() {
       }
 
       setNotifications((current) => current.map((item) => (
-        item.uid === transaction.uid ? { ...item, sent: result.sent } : item
+        (item.id ?? item.uid) === transactionId ? { ...item, sent: result.sent } : item
       )))
       setAllNotifications((current) => current.map((item) => (
-        item.uid === transaction.uid ? { ...item, sent: result.sent } : item
+        (item.id ?? item.uid) === transactionId ? { ...item, sent: result.sent } : item
       )))
       toast.success(action === 'approve' ? 'Transaction confirmed' : 'Transaction cancelled')
     } catch (error) {
@@ -257,7 +263,11 @@ export default function Finances() {
                     <button
                       type="button"
                       onClick={() => {
-                        if (isDeposit && data.address) setProofImage(data.address)
+                        if (isDeposit) {
+                          if (data.address) setProofImage(data.address)
+                          else toast.error('No receipt is attached to this deposit')
+                          return
+                        }
                         if (!isDeposit && data.address) {
                           navigator.clipboard.writeText(data.address)
                           toast.success('Copied to clipboard')

@@ -56,8 +56,11 @@ export default async function handler(req, res) {
   try {
     requireAdmin(req)
 
-    const { uid, action } = req.body || {}
-    if (!uid || !['approve', 'reject'].includes(action)) {
+    const { id, uid, action } = req.body || {}
+    const transactionId = id ?? uid
+    const idColumn = id ? 'id' : 'uid'
+
+    if (!transactionId || !['approve', 'reject'].includes(action)) {
       return res.status(400).json({ status: 'error', message: 'Invalid finance action' })
     }
 
@@ -65,7 +68,7 @@ export default async function handler(req, res) {
     const { data: notification, error: fetchErr } = await supabase
       .from('notification')
       .select('*')
-      .eq('uid', uid)
+      .eq(idColumn, transactionId)
       .single()
 
     if (fetchErr || !notification) {
@@ -93,8 +96,8 @@ export default async function handler(req, res) {
     const claimQuery = supabase
       .from('notification')
       .update({ sent: 'processing' })
-      .eq('uid', uid)
-      .select('uid')
+      .eq(idColumn, transactionId)
+      .select(idColumn)
 
     const { data: claimed, error: claimErr } = notification.sent === null || notification.sent === undefined
       ? await claimQuery.is('sent', null).maybeSingle()
@@ -117,7 +120,7 @@ export default async function handler(req, res) {
       const { error } = await supabase
         .from('notification')
         .update({ sent: 'failed' })
-        .eq('uid', uid)
+        .eq(idColumn, transactionId)
 
       if (error) throw error
 
@@ -190,7 +193,7 @@ export default async function handler(req, res) {
     const { error } = await supabase
       .from('notification')
       .update({ sent: 'success' })
-      .eq('uid', uid)
+      .eq(idColumn, transactionId)
 
     if (error) throw error
 
