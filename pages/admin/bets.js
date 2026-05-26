@@ -1,4 +1,4 @@
-import { Stack, Typography, Box, Button, TextField, Checkbox } from "@mui/material";
+import { Stack, Typography, Box, Button, TextField } from "@mui/material";
 import { callAdminRpc } from '@/lib/adminRpcClient';
 import { supabase } from '@/pages/api/supabase'
 import PageviewIcon from '@mui/icons-material/Pageview';
@@ -24,8 +24,6 @@ export default function Bets({ bets }) {
     const [matchid, setMatchid] = useState('')
     const [home, setHome] = useState(0)
     const [away, setAway] = useState(0)
-    const [cGame, setCGame] = useState('');
-    const [check, setCheck] = useState(false);
     const today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth() + 1; // getMonth() is zero-based
@@ -252,7 +250,7 @@ export default function Bets({ bets }) {
     }
     //form
     const form = useRef();
-    function submitForm(event) {
+    async function submitForm(event) {
 
         // Prevent the form from submitting.
         event.preventDefault();
@@ -263,40 +261,27 @@ export default function Bets({ bets }) {
 
         formData.forEach((value, key) => (data[key] = value));
         // Log the data.
-        let home = data.home;
-        let away = data.away;
-        console.log(data)
         setDrop(true)
-        if (home > 3 || away > 3) {
-
-            if (check) {
-                VerifyN('Other', matchid)
-                Verify('Other', matchid);
-                setDrop(false)
-                toast.success("bet uploaded")
-            } else {
-                Verify(home + " - " + away, matchid);
-                setDrop(false)
-                toast.success("bet uploaded")
+        try {
+            const response = await fetch('/api/inputscore', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    home: data.home,
+                    away: data.away,
+                    matchid: data.matchid || matchid,
+                }),
+            })
+            const result = await response.json().catch(() => ({}))
+            if (!response.ok) {
+                throw new Error(result.message || 'Unable to settle match')
             }
-
-        } else {
-            if (check) {
-                Verify(home + " - " + away, matchid);
-                VerifyN(home + " - " + away, matchid)
-                setDrop(false)
-                console.log(home + " - " + away)
-                toast.success("bet uploaded")
-            } else {
-                // Verify(home + " - " + away, matchid)
-                // console.log(home + " - " + away)
-                Verify(home + " - " + away, matchid);
-                setDrop(false)
-                toast.success("Bet uploaded")
-            }
-
+            const summary = result.summary
+            toast.success(summary ? `Settled: ${summary.won} won, ${summary.lost} lost, ${summary.refunded} refunded` : "Bet settled")
+        } catch (error) {
+            toast.error(error.message)
+        } finally {
             setDrop(false)
-            toast.success("bet uploaded")
         }
     }
     //end form
@@ -386,6 +371,7 @@ export default function Bets({ bets }) {
                                             }
                                         }>
                                             <form onSubmit={submitForm} ref={form}>
+                                                <input type="hidden" name="matchid" value={b.match_id} />
                                                 <Typography variant="caption">Match Id : {b.match_id}</Typography>
                                                 <Typography color="#061A40" sx={{ fontFamily: 'Solway, serif' }}>{b.home} vs {b.away}</Typography>
                                                 <Box>
@@ -400,15 +386,6 @@ export default function Bets({ bets }) {
                                                             />
                                                             <TextField label="away" required name='away' sx={{ margin: "4px" }} variant="filled" type='number'
                                                             /></Box>
-                                                        <Stack direction="row" justifyContent="center" alignItems="center">
-                                                            <Checkbox value={check} onChange={(e) => {
-                                                                setCheck(!check);
-                                                            }} />
-                                                            <Typography color="#061A40" sx={{}}>Is this a Company Game ?</Typography>
-                                                        </Stack>
-                                                        <TextField placeholder='companys market example: 0-0' sx={{ width: '100%', display: (check ? 'visible' : 'none') }} value={cGame} onChange={(e) => {
-                                                            setCGame(e.target.value);
-                                                        }} />
                                                         <Button variant="contained" type="submit" onClick={() => {
                                                             setDrop(true);
                                                             setMatchid(b.match_id);

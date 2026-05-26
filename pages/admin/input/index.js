@@ -44,49 +44,23 @@ export default function Input({ datas }) {
     console.log(datas)
 
 
-    const markets = {
-        "nilnil": "0 : 0",
-        "onenil": "1 : 0",
-        "nilone": "0 : 1",
-        "oneone": "1 : 1",
-        "twonil": "2 : 0",
-        "niltwo": "0 : 2",
-        "twoone": "2 : 1",
-        "onetwo": "1 : 2",
-        "twotwo": "2 : 2",
-        "threenil": "3 : 0",
-        "nilthree": "0 : 3",
-        "threeone": "3 : 1",
-        "onethree": "1 : 3",
-        "twothree": "2 : 3",
-        "threetwo": "3 : 2",
-        "threethree": "3 : 3",
-        "otherscores": "Other",
-        "hd": "Home or Draw",
-        "ha": "Home or Away",
-        "da": "Draw or Away"
-    }
-
     const mapmarkets = [
-        { "name": "hd", "count": "home or draw" },
-        { "name": "ha", "count": "home or away" },
-        { "name": "da", "count": "draw or away" },
-        { "name": "nilnil", "count": "0 : 0" },
-        { "name": "onenil", "count": "1 : 0" },
-        { "name": "nilone", "count": "0 : 1" },
-        { "name": "oneone", "count": "1 : 1" },
-        { "name": "twonil", "count": "2 : 0" },
-        { "name": "niltwo", "count": "0 : 2" },
-        { "name": "twoone", "count": "2 : 1" },
-        { "name": "onetwo", "count": "1 : 2" },
-        { "name": "twotwo", "count": "2 : 2" },
-        { "name": "threenil", "count": "3 : 0" },
-        { "name": "nilthree", "count": "0 : 3" },
-        { "name": "threeone", "count": "3 : 1" },
-        { "name": "onethree", "count": "1 : 3" },
-        { "name": "twothree", "count": "2 : 3" },
-        { "name": "threetwo", "count": "3 : 2" },
-        { "name": "threethree", "count": "3 : 3" },
+        { "name": "nilnil", "count": "0 - 0" },
+        { "name": "onenil", "count": "1 - 0" },
+        { "name": "nilone", "count": "0 - 1" },
+        { "name": "oneone", "count": "1 - 1" },
+        { "name": "twonil", "count": "2 - 0" },
+        { "name": "niltwo", "count": "0 - 2" },
+        { "name": "twoone", "count": "2 - 1" },
+        { "name": "onetwo", "count": "1 - 2" },
+        { "name": "twotwo", "count": "2 - 2" },
+        { "name": "threenil", "count": "3 - 0" },
+        { "name": "nilthree", "count": "0 - 3" },
+        { "name": "threeone", "count": "3 - 1" },
+        { "name": "onethree", "count": "1 - 3" },
+        { "name": "twothree", "count": "2 - 3" },
+        { "name": "threetwo", "count": "3 - 2" },
+        { "name": "threethree", "count": "3 - 3" },
         { "name": "otherscores", "count": "Other" }
     ];
 
@@ -95,6 +69,11 @@ export default function Input({ datas }) {
         setDrop(true)
         // Prevent the form from submitting.
         event.preventDefault();
+        if (checked && !company) {
+            alert('Please select the protected company market')
+            setDrop(false)
+            return
+        }
         // Set url for submission and collect data.
         const formData = new FormData(event.target);
         // Build the data object.
@@ -227,30 +206,11 @@ export default function Input({ datas }) {
                     </Select>
                 </FormControl>
             </Stack>
-            <p>HD - Home or Draw</p>
-            <p>HA - Home or Away</p>
-            <p>DA - Draw or Away</p>
             <form onSubmit={submitForm} ref={form}>
                 <Stack spacing={2}>
                     {
                         //get odds
                     }
-                    <Stack direction='row' spacing={2} justifyContent='space-between' sx={{ width: '100%' }}>
-                        <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
-                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>HD</Typography>
-                            <TextField variant='standard' type='float' sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black', width: '50px', height: '30px' }} name="hd" />
-                        </Stack>
-                        <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
-                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>HA</Typography>
-                            <TextField variant='standard' sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black', width: '50px', height: '30px' }} name="ha" />
-                        </Stack>
-                        <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
-                            <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>DA</Typography>
-                            <TextField variant='standard' sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black', width: '50px', height: '30px' }} name="da" />
-                        </Stack>
-                    </Stack>
-
-
                     <Stack direction='row' spacing={2} justifyContent='space-between' sx={{ width: '100%' }}>
                         <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3' }}>
                             <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: 'black' }}>0-0</Typography>
