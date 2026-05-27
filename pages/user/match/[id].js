@@ -6,8 +6,6 @@ import React, { useEffect, useState, useRef } from "react";
 import Head from 'next/head';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import Cover from '../cover'
 import { Drawer } from '@mui/material'
@@ -22,6 +20,8 @@ import Bal from '@/public/bball.png'
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
+import { formatMatchDate, formatMatchTime } from '@/lib/matchDisplay';
+import { waitForPaint } from '@/lib/uiFeedback';
 
 
 
@@ -87,27 +87,6 @@ function formatOdd(value) {
     return Number.isFinite(value) && value > 0 ? value.toFixed(3) : 'N/A'
 }
 
-function getValidDate(value) {
-    const date = new Date(value || '')
-    return Number.isNaN(date.getTime()) ? null : date
-}
-
-function formatMatchDate(match) {
-    const date = getValidDate(match?.date || match?.timest)
-    if (!date) return 'TBD'
-    return `${date.getMonth() + 1}/${date.getDate()}`
-}
-
-function formatMatchTime(match) {
-    const rawTime = String(match?.time || '')
-    const [hour, minute] = rawTime.split(':')
-    const numericHour = Number(hour)
-
-    if (!Number.isFinite(numericHour) || !minute) return 'TBD'
-
-    return `${numericHour - 1}:${minute.padStart(2, '0')}`
-}
-
 function getLeagueName(match) {
     return (match?.league === 'others' ? match?.otherl : match?.league) || 'League unavailable'
 }
@@ -137,10 +116,7 @@ async function processBets(name) {
 export default function Match({ matchDat }) {
     const router = useRouter()
     const initialMatch = Array.isArray(matchDat) && matchDat.length ? matchDat[0] : null
-    //backdrop
     const hasRun = useRef(false);
-    //end of backdrop
-    const [drop, setDrop] = useState(false)
     //snackbar1
     const [messages, setMessages] = useState("")
     const [opened, setOpened] = useState(false)
@@ -284,12 +260,6 @@ export default function Match({ matchDat }) {
             <Loading open={openx} handleClose={handleClosex} />
             <Stack style={{ width: "100%", minHeight: '100vh', background: '#06101F' }} alignItems="center">
                 <Draws />
-                <Backdrop
-                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                    open={drop}
-                >
-                    <CircularProgress color="inherit" />
-                </Backdrop>
                 <Sncks message={messages} />
                 <Head>
                     <title>{homeName} VS {awayName}</title>
@@ -306,6 +276,7 @@ export default function Match({ matchDat }) {
                 <Stack direction="column" spacing={2} justifyContent='center' alignItems='center'
 
                     style={{
+                        display:'flex',flexDirection:'column', justifyContent:'center', alignItems:'space-between',
                         marginBottom: "8px", padding: "18.5px",
                         background: '#10284D',
                         width: '343px',
@@ -336,7 +307,8 @@ export default function Match({ matchDat }) {
                         marketsArray.map((m) => {
                             return (
                                 <Stack direction="column" spacing={1} key={m.num}>
-                                    <Stack direction="row" alignItems="center" justifyContent={"space-around"} sx={{ minWidth: '300px', height: '40px' }}>
+                                    <Stack  style={{ minWidth: '300px', height: '40px'
+                                        ,display:'flex',flexDirection:'row', justifyContent:'space-between', alignItems:'center', }}>
                                         <p style={{ color: '#E9E5DA', padding: '8px' }}>{m.num}</p>
                                         <p style={{ color: '#1BB6FF', padding: '8px' }}>{formatOdd(getMatchOdd(matches, m.word, viplevel))}%</p>
                                         <motion.div
@@ -458,8 +430,9 @@ export default function Match({ matchDat }) {
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#E9E5DA' }}>Expected Profit</Typography>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#E9E5DA' }}>{expext.toFixed(3)} USDT</Typography>
                         </Stack>
-                        <Button sx={{ fontFamily: 'Poppins,sans-serif', margin: '8px', fontSize: '16', fontWeight: '300', color: '#06101F', background: "#1BB6FF", padding: '10px' }}
+                        <Button disabled={openx} sx={{ fontFamily: 'Poppins,sans-serif', margin: '8px', fontSize: '16', fontWeight: '300', color: '#06101F', background: "#1BB6FF", padding: '10px' }}
                             onClick={() => {
+                                if (openx) return
                                 if (!picked || tofal <= 0) {
                                     toast.error('Please choose an available market')
                                 } else if (stakeAmount - 1 < Number(info.balance || 0)) {
@@ -476,6 +449,7 @@ export default function Match({ matchDat }) {
                                         handleOpenx()
                                         const deductBet = async () => {
                                             try {
+                                                await waitForPaint()
                                                 const response = await authFetch('/api/place-bet', {
                                                     method: 'POST',
                                                     headers: { 'Content-Type': 'application/json' },

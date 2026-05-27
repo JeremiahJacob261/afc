@@ -1,4 +1,4 @@
-import { Typography, Stack, Divider, Button, Paper, Backdrop, CircularProgress } from "@mui/material"
+import { Typography, Stack, Divider, Button, Paper } from "@mui/material"
 import { supabase } from "@/pages/api/supabase"
 import { useState, useEffect } from 'react'
 import Head from "next/head";
@@ -10,7 +10,6 @@ import { useRouter } from "next/router";
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 
 export default function Viewbets() {
-    const [drop, setDrop] = useState(false)
     const [league, setLeague] = useState([]);
     const [bet, setBet] = useState({})
     const router = useRouter();
@@ -71,12 +70,6 @@ export default function Viewbets() {
 
     return (
         <div>
-            <Backdrop
-                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={drop}
-            >
-                <CircularProgress color="inherit" />
-            </Backdrop>
             <Head>
                 <title>Bet Details</title>
                 <meta name="description" content="Login to your Account to see more info about your bets" />

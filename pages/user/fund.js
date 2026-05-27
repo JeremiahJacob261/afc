@@ -31,6 +31,7 @@ import Cover from './cover'
 import Loading from '@/pages/components/loading'
 import { supabase } from '@/pages/api/supabase'
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth'
+import { waitForPaint } from '@/lib/uiFeedback'
 
 const brand = {
   bg: '#06101F',
@@ -236,6 +237,7 @@ export default function Funds() {
     }
 
     setSubmitting(true)
+    await waitForPaint()
     try {
       const fileName = `${uuidv4()}-${file.name.replace(/\s+/g, '-')}`
       const receiptPath = `public/${fileName}`

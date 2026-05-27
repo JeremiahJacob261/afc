@@ -25,16 +25,14 @@ import Image from 'next/image'
 import Big from '@/public/icon/badge.png'
 import { DriveFileRenameOutlineRounded } from "@mui/icons-material";
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
+import { waitForPaint } from '@/lib/uiFeedback';
+
+function isLocalMethod(type) {
+  return ['local', 'local-transfer', 'bank', 'mobile-money'].includes(String(type || '').trim().toLowerCase());
+}
+
 export default function Deposit() {
   const [wallx,setWallx] = useState([]);
-  const getwallx = async () => {
-    const { data: wallets, error: walleterror } = await supabase
-      .from('walle')
-      .select('*')
-      .eq('available', true);
-      setWallx(wallets)
-  }
-  getwallx()
   //86f36a9d-c8e8-41cb-a8aa-3bbe7b66d0a5
   function findObjectById(id) {
     return wallx.find(obj => obj.name === id);
@@ -53,7 +51,7 @@ export default function Deposit() {
   const [wallets, setWallet] = useState([]);
   const [info, setInfo] = useState({});
   const [rate,setRate] = useState(1);
-  const [currency,setCurrency] = useState({});
+  const [currency,setCurrency] = useState('USDT');
   const [swallet,setSWallet] = useState({});
   const [bank,setBank] = useState('');
   //the below controls the loading modal
@@ -132,14 +130,13 @@ export default function Deposit() {
     aayncer();
 
   }
-  const transaction = () => {
+  const transaction = async () => {
+    if (openx) return
 
     if (pin === '') {
       toast.error('Please enter your password')
-    } else if (pin === '') {
-      toast.error('Please confirm your password')
-    } else if (pin !== pin) {
-      toast.error('Password does not match')
+    } else if (method === '' || address === '') {
+      toast.error('Please select a wallet')
     } else if (amount === '') {
       toast.error('Please enter amount')
     } else if (amount < 11) {
@@ -151,6 +148,7 @@ export default function Deposit() {
     } else {
 
       handleOpenx()
+      await waitForPaint()
       testRoute();
     }
   }
@@ -173,14 +171,22 @@ export default function Deposit() {
         const result = await response.json();
         if (!active || result.status !== 'success') return;
 
-        const { data: wall, error: wrr } = await supabase
+        const [{ data: wall, error: wrr }, { data: methods, error: methodError }] = await Promise.all([
+          supabase
           .from('user_wallets')
           .select()
-          .eq('uid', result.profile.userid)
+          .eq('uid', result.profile.userid),
+          supabase
+            .from('walle')
+            .select('*')
+            .eq('available', true),
+        ])
 
         if (wrr) throw wrr;
+        if (methodError) throw methodError;
 
         setWallet(wall ?? []);
+        setWallx(methods ?? []);
         setInfo(result.profile);
         setBalance(Number(result.profile.balance || 0));
       } catch (e) {
@@ -194,7 +200,7 @@ export default function Deposit() {
     return () => {
       active = false;
     }
-  }, []);
+  }, [router]);
   //end of snackbar1
 
   const Withdrawal = async () => {
@@ -202,7 +208,7 @@ export default function Deposit() {
   }
 
   function findUserWalletsById(id) {
-    return wallets.find(obj => obj.wallid === id);
+    return wallets.find(obj => String(obj.wallid ?? obj.id) === String(id));
   }
   //snackbar2
   const handleClick = () => {
@@ -263,8 +269,8 @@ export default function Deposit() {
             <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{total} USDT</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Total Amount in {(currency.currency_code  ?? "USDT").toUpperCase()}</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{parseFloat(total * rate).toFixed(2)} {(currency.currency_code ?? "USDT").toUpperCase()}</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Total Amount in {String(currency || "USDT").toUpperCase()}</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{parseFloat(total * rate).toFixed(2)} {String(currency || "USDT").toUpperCase()}</Typography>
           </Stack>
           <Divider sx={{ color: 'white' }} />
           <motion.div
@@ -299,30 +305,32 @@ export default function Deposit() {
                 value={method}
                 style={{ background: "#06101F", color: '#E9E5DA', border: '1px solid #E9E5DA' }}
                 onChange={(e) => {
-                try{
-                  let walletid = findUserWalletsById(e.target.value);
-                  console.log(walletid)
-                  const [n, t, c] = walletid[(walletid.method === 'local') ? 'walletnames' : 'bank'].split('-');
-                  setAddress(walletid.wallet);
-                  setSWallet(walletid.names)
-                  let current = findObjectById(n);
-                  setRate(current.rates);
-                  setMethod(c);
-                  setCurrency(current['currency_code']);
-                  setBank((walletid.method === 'local') ? walletid.bank : 'usdt')
-                  console.log(current)
-                }catch(e){
-                  console.log(e)
-                  
-                }finally{
                   setMethod(e.target.value);
-                }
+                  const walletid = findUserWalletsById(e.target.value);
+
+                  if (!walletid) {
+                    setAddress('');
+                    setSWallet('');
+                    setBank('');
+                    setRate(1);
+                    setCurrency('USDT');
+                    return;
+                  }
+
+                  const current = findObjectById(walletid.walletnames);
+                  const currentRate = Number(current?.rates);
+                  setAddress(walletid.wallet || '');
+                  setSWallet(walletid.names || '');
+                  setRate(Number.isFinite(currentRate) && currentRate > 0 ? currentRate : 1);
+                  setCurrency(current?.currency_code || walletid.walletnames || 'USDT');
+                  setBank(isLocalMethod(walletid.method) ? walletid.bank : (walletid.bank || walletid.walletnames || 'usdt'));
                 }}
               >
                 <MenuItem value=''>none</MenuItem>
                 {
                   wallets.map((w) => {
-                    return <MenuItem value={w.wallid} key={w.id}>{w.wallet} {w.walletnames ?? w.bank}</MenuItem>
+                    const walletValue = w.wallid ?? w.id;
+                    return <MenuItem value={walletValue} key={walletValue}>{w.wallet} {w.walletnames ?? w.bank}</MenuItem>
                   })
                 }
 

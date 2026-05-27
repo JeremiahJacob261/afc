@@ -7,14 +7,12 @@ import Head from 'next/head'
 import Ims from '@/public/simps/ball.png'
 import { Icon } from '@iconify/react';
 import { useRouter } from "next/router";
-import Backdrop from '@mui/material/Backdrop';
 import Loading from "../components/loading";
-import CircularProgress from '@mui/material/CircularProgress';
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
+import { formatMatchDate, formatMatchTime } from '@/lib/matchDisplay';
 
 
 export default function Matches({ footDat }) {
-  const [drop, setDrop] = useState(false)
   const [info, setInfo] = useState({})
   console.log(footDat)
   const router = useRouter()
@@ -28,12 +26,6 @@ export default function Matches({ footDat }) {
 
   return (
     <Cover>
-      <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={drop}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
       <Loading open={open} handleClose={handleClose} />
       <Head>
         <title>EUROPEAN - Matches</title>
@@ -64,11 +56,8 @@ export default function Matches({ footDat }) {
               let curren = d1utc;
               // let curren = new Date().getTime() / 1000;
               const league = (pro.league === 'others') ? pro.otherl : pro.league;
-              let date = parseInt(new Date(pro.date).getMonth() + 1);
-              let day = new Date(pro.date).getDate();
-              let time = pro.time.substring(0, pro.time.length - 3);
-              const [h,m] = time.split(':');
-              let timex = parseFloat(h)-1 + ':' + m;
+              const displayDate = formatMatchDate(pro);
+              const displayTime = formatMatchTime(pro);
               return (
                 <Stack direction="column" spacing={2} justifyContent='center' alignItems='center'
                   key={pro.match_id}
@@ -105,9 +94,9 @@ export default function Matches({ footDat }) {
                       <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
                     </Stack>
                     <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{timex}</Typography>
+                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{displayTime}</Typography>
                       <p>|</p>
-                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
+                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{displayDate}</Typography>
                     </Stack>
                     <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                       <Image src={pro.iaway ? pro.iaway : Ims} width={50} height={50} alt='away' />

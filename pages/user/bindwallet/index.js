@@ -1,6 +1,5 @@
 import { Stack } from '@mui/material';
 import Head from 'next/head';
-import Image from "next/image";
 import { styled } from '@mui/material/styles';
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -13,29 +12,37 @@ import { motion } from "framer-motion";
 import NativeSelect from '@mui/material/NativeSelect';
 import InputBase from '@mui/material/InputBase';
 import { supabase } from "@/pages/api/supabase";
-import { CookiesProvider, useCookies } from 'react-cookie';
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
+import { waitForPaint } from '@/lib/uiFeedback';
 
  
-export default function Home({ wallets }) {
+function normalize(value) {
+    return String(value || '').trim();
+}
+
+function isLocalMethod(type) {
+    return ['local', 'local-transfer', 'bank', 'mobile-money'].includes(normalize(type).toLowerCase());
+}
+
+export default function Home() {
     const router = useRouter();
-    const [cookies, setCookie] = useCookies(['authdata']);
-    const [amount, setAmount] = useState('');
-    const [wallet, setWallet] = useState([]);
+    const [paymentMethods, setPaymentMethods] = useState([]);
+    const [loadingMethods, setLoadingMethods] = useState(true);
+    const [selectedMethodId, setSelectedMethodId] = useState('');
     const [address, setAddress] = useState('')
-    const [ uids,setUids] = useState('');
-    const data = cookies.authdata;
     const [bank, setBank] = useState('')
     const [accountnumber, setAccountNumber] = useState('')
     const [accountname, setAccountName] = useState('')
-    const [curcode,setCurcode] = useState('usdt');
-    const [type, setType] = useState('');
+    const selectedMethod = paymentMethods.find((method) => String(method.id) === String(selectedMethodId));
+    const type = selectedMethod?.type || '';
+    const curcode = normalize(selectedMethod?.currency_code || selectedMethod?.name).toLowerCase();
+    const isLocal = isLocalMethod(type);
     const handleChange = (event) => {
-        const [v, t,cc] = event.target.value.split('-')
-        setWallet(event.target.value);
-        setType(t)
-        setCurcode(cc);
-        console.log(event.target.value)
+        setSelectedMethodId(event.target.value);
+        setAddress('');
+        setBank('');
+        setAccountNumber('');
+        setAccountName('');
     };
 
     const handleBhange = (event) => {
@@ -46,148 +53,98 @@ export default function Home({ wallets }) {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    //the end of thellaoding modal control
-    const updata = data;
     useEffect(() => {
+        let active = true;
+
         const check = async () => {
             const session = await requireSession(router);
             if (!session) return;
             clearLegacyAuthStorage();
+
+            try {
+                const { data: methods, error } = await supabase
+                    .from('walle')
+                    .select('*')
+                    .eq('available', true);
+
+                if (error) throw error;
+                if (!active) return;
+
+                setPaymentMethods(Array.isArray(methods) ? methods : []);
+            } catch (error) {
+                console.log(error);
+                toast.error('Unable to load payment methods');
+            } finally {
+                if (active) setLoadingMethods(false);
+            }
         }
 
         check();
+
+        return () => {
+            active = false;
+        }
     }, [router]);
 
+    const nextfund = async () => {
+        if (open) return;
 
-
-    function CryptoOptions({ image }) {
-        return (
-            <motion.div whileTap={{ scale: 0.9 }}>
-                <Stack direction="column" alignItems="center" justifyContent={"center"} style={{ width: '55px', height: '42px', borderRadius: '4px', border: '1px solid #4C4A44' }}>
-                    <Image src={image} width={32} height={32} alt="bitcoin" />
-                </Stack>
-            </motion.div>
-        )
-    }
-
-    const methodx = {
-        "bitcoin": "Bitcoin",
-        "usdt": "USDT",
-        "eth": "ETH",
-        "tron": "TRON"
-    };
-
-    const rate = {
-        "bitcoin": 0.000018,
-        "usdt": 1,
-        "eth": 0.00032,
-        "tron": 8
-    }
-    const nextfund = () => {
         try {
-            if (type === 'local') {
-                if (accountname.length < 3 || accountnumber < 3 || bank < 3 || wallet < 3) {
-                    toast('Please fill all details correctly',
-                        {
-                            icon: '🤦‍♀️',
-                            style: {
-                                borderRadius: '10px',
-                                background: '#DE1A1A',
-                                color: '#fff',
-                            },
-                        }
-                    );
-                } else {
-                    //send the data
-                    const make = async () => {
-                        try {
-                            handleOpen();
-                            const response = await authFetch('/api/bindwallet', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({ type: type, wallet: accountnumber, name: accountname,walletname:wallet, bank: bank })
-                            });
-                            const datax = await response.json();
-                            if (datax.status == 'success') {
-                                toast('Binding Wallet successful',
-                                    {
-                                        icon: '🥳',
-                                        style: {
-                                            borderRadius: '10px',
-                                            background: '#26A69A',
-                                            color: '#fff',
-                                        },
-                                    }
-                                );
-                                router.push('/user/account');
+            const walletValue = isLocal ? normalize(accountnumber) : normalize(address);
+            const accountNameValue = normalize(accountname);
+            const bankValue = normalize(bank);
 
-                            } else {
-                                toast.error(datax.message)
-                                handleClose();
-                            }
-                        } catch (e) {
-                            console.log(e)
-                            handleClose();
-                        }
+            if (!selectedMethodId || walletValue.length < 3 || (isLocal && (accountNameValue.length < 3 || bankValue.length < 2))) {
+                toast('Please fill all details correctly',
+                    {
+                        icon: '🤦‍♀️',
+                        style: {
+                            borderRadius: '10px',
+                            background: '#DE1A1A',
+                            color: '#fff',
+                        },
                     }
-                    make();
-                }
+                );
+                return;
+            }
+
+            handleOpen();
+            await waitForPaint();
+
+            const response = await authFetch('/api/bindwallet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    methodId: selectedMethodId,
+                    wallet: walletValue,
+                    name: isLocal ? accountNameValue : '',
+                    bank: isLocal ? bankValue : '',
+                })
+            });
+            const data = await response.json();
+            if (data.status == 'success') {
+                toast('Binding Wallet successful',
+                    {
+                        icon: '🥳',
+                        style: {
+                            borderRadius: '10px',
+                            background: '#26A69A',
+                            color: '#fff',
+                        },
+                    }
+                );
+                router.push('/user/account');
+
             } else {
-                // this is for crypto methods
-                if (address < 3 || wallet < 3) {
-                    toast('Please fill all details correctly',
-                        {
-                            icon: '🤦‍♀️',
-                            style: {
-                                borderRadius: '10px',
-                                background: '#DE1A1A',
-                                color: '#fff',
-                            },
-                        }
-                    );
-                } else {
-                    //send the data
-                    const make = async () => {
-                        try {
-                            handleOpen();
-                            const response = await authFetch('/api/bindwallet', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({ wallet: address, type: type, name: "",walletname: wallet, bank: wallet })
-                            });
-                            const data = await response.json();
-                            if (data.status == 'success') {
-                                toast('Binding Wallet successful',
-                                    {
-                                        icon: '🥳',
-                                        style: {
-                                            borderRadius: '10px',
-                                            background: '#26A69A',
-                                            color: '#fff',
-                                        },
-                                    }
-                                );
-                                handleClose();
-                                router.back();
-
-                            } else {
-                                toast.error(data.message)
-                                handleClose();
-                            }
-                        } catch (e) {
-                            console.log(e)
-                            handleClose();
-                        }
-                    }
-                    make();
-                }
+                toast.error(data.message || 'Unable to bind wallet')
+                handleClose();
             }
         } catch (e) {
             console.log(e);
+            toast.error('Unable to bind wallet');
+            handleClose();
         }
     }
 
@@ -249,24 +206,30 @@ export default function Home({ wallets }) {
                             <FormControl sx={{ m: 1, width: '100%', maxWidth: '301px' }} variant="standard">
                                 <NativeSelect
                                     id="demo-customized-select-native"
-                                    value={wallet}
+                                    value={selectedMethodId}
                                     onChange={handleChange}
                                     input={<BootstrapInput />}
+                                    disabled={loadingMethods}
                                 >
-                                    <option aria-label="None" value="" style={{ color: '#D9D8D4', background: '#212121' }} />
+                                    <option value="" style={{ color: '#D9D8D4', background: '#212121' }}>
+                                        {loadingMethods ? 'Loading methods...' : 'Select a method'}
+                                    </option>
                                     {
-                                        wallets.map((w) => {
+                                        paymentMethods.map((w) => {
                                             return (
-                                                <option key={w.name} value={w.name + '-' + w.type + '-' + w.currency_code} style={{ color: '#D9D8D4', background: '#212121' }}>{w.name.toUpperCase()}</option>
+                                                <option key={w.id ?? w.name} value={w.id} style={{ color: '#D9D8D4', background: '#212121' }}>{String(w.name || '').toUpperCase()}</option>
                                             )
                                         })
                                     }
                                 </NativeSelect>
                             </FormControl>
+                            {!loadingMethods && paymentMethods.length === 0 && (
+                                <p className='normal-bold' style={{ color: '#DE1A1A', textAlign: 'start' }}>No payment methods are available right now.</p>
+                            )}
                         </Stack>
 
                         {
-                            (type === 'local') ?
+                            isLocal ?
                                 <>
                                     <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#06101F', padding: '8px', width: '100%', borderRadius: '8px' }}>
                                         <p className='normal-bold' style={{ textAlign: 'start' }}>Account Number</p>
@@ -349,23 +312,4 @@ export default function Home({ wallets }) {
             </Stack>
         </Cover>
     )
-}
-
-export const getServerSideProps = async (context) => {
-
-    try {
-        const { data: wallets, error: walleterror } = await supabase
-            .from('walle')
-            .select('*')
-            console.log(wallets)
-        return {
-            props: { wallets: wallets }
-        }
-    } catch (e) {
-        return {
-            props: { wallets: [] }
-        }
-    }
-
-
 }

@@ -1,28 +1,25 @@
-import React, { useState, Suspense } from "react";
+import React, { useState } from "react";
 import Head from "next/head";
-import Backdrop from '@mui/material/Backdrop';
 import { ArrowLeft, Lock, ArrowRight, User } from "lucide-react";
 import { supabase } from '@/pages/api/supabase'
 import Link from "next/link";
-import SimpleDialog from './modal'
 import { useRouter } from 'next/router'
 import LOGO from '@/public/european.ico'
 import Image from 'next/image'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { useEffect } from "react";
 import { clearLegacyAuthStorage } from '@/lib/clientAuth';
+import AppLoadingOverlay from '@/components/AppLoadingOverlay';
+import FeedbackDialog from '@/components/FeedbackDialog';
+import { waitForPaint } from '@/lib/uiFeedback';
+import { Toaster } from 'react-hot-toast';
 
 export default function Login() {
-  const [open, setOpen] = React.useState(false);
-  const [drop, setDrop] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [feedback, setFeedback] = useState(null)
   const router = useRouter();
   const [email, setEmail] = useState('')
 
-
-  const handleClose = (value) => {
-    setOpen(false);
-  };
   const [values, setValues] = React.useState({
     amount: '',
     password: '',
@@ -45,42 +42,12 @@ export default function Login() {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-  useEffect(() => {
-
-    async function getSe() {
-
-      const { data, error } = await supabase.auth.getSession();
-      if (data.session != null) {
-        console.log(data.session)
-        let user = data.session.user;
-        router.push('/user');
-        async function GET() {
-          try {
-            const { data, error } = await supabase
-              .from('users')
-              .select('newrefer')
-              .eq('userid', user.id)
-              .maybeSingle();
-            console.log(data);
-          } catch (e) {
-
-          }
-
-        }
-        GET();
-        clearLegacyAuthStorage();
-      } else {
-
-        console.log('sign out');
-        clearLegacyAuthStorage();
-        router.push('/login');
-      }
-    }
-    // getSe();
-
-  }, [])
   const login = async () => {
-    setDrop(true)
+    if (loading) return
+
+    setLoading(true)
+    let navigating = false
+    await waitForPaint()
     clearLegacyAuthStorage()
 
     try {
@@ -92,22 +59,31 @@ export default function Login() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username: loginEmail })
         })
-        const result = await response.json()
+        const result = await response.json().catch(() => ({}))
 
         console.log(result);
 
         if(result?.message === 'TypeError: fetch failed') {
-          alert('Network error, please check your connection and try again')
-          setDrop(false)
+          setFeedback({
+            type: 'error',
+            title: 'Network error',
+            message: 'Please check your connection and try again.',
+          })
           return
         }else if(result?.message === 'Invalid login credentials') {
-          alert('Incorrect Email or Password')
-          setDrop(false)
+          setFeedback({
+            type: 'error',
+            title: 'Incorrect details',
+            message: 'The email, username, or password you entered is incorrect.',
+          })
           return
         }else{
         if (!response.ok || result.status !== 'success') {
-          alert('An error occured, please try again')
-          setDrop(false)
+          setFeedback({
+            type: 'error',
+            title: 'Unable to sign in',
+            message: 'An error occurred. Please try again.',
+          })
           return
         }
       }
@@ -121,17 +97,26 @@ export default function Login() {
 
       if (error) {
         console.error(error)
-        alert(error.message === 'Invalid login credentials' ? 'Incorrect login details' : error.message)
-        setDrop(false)
+        setFeedback({
+          type: 'error',
+          title: 'Unable to sign in',
+          message: error.message === 'Invalid login credentials' ? 'Incorrect login details.' : error.message,
+        })
         return
       }
 
       clearLegacyAuthStorage()
+      navigating = true
       router.push('/user')
     } catch (error) {
       console.error(error)
-      alert('Please check your internet connection and try again')
-      setDrop(false)
+      setFeedback({
+        type: 'error',
+        title: 'Connection problem',
+        message: 'Please check your internet connection and try again.',
+      })
+    } finally {
+      if (!navigating) setLoading(false)
     }
   }
 
@@ -144,16 +129,15 @@ export default function Login() {
         <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={drop}
-      >
-        <Image src={LOGO} width={100} height={100} id='balls' alt="logo" />
-      </Backdrop>
-      <SimpleDialog
-        open={open}
-        onClose={handleClose}
+      <AppLoadingOverlay open={loading} title="Signing in" message="Checking your account details." />
+      <FeedbackDialog
+        open={Boolean(feedback)}
+        type={feedback?.type}
+        title={feedback?.title}
+        message={feedback?.message}
+        onClose={() => setFeedback(null)}
       />
+      <Toaster position="bottom-center" reverseOrder={false} />
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-[#1BB6FF]/10 blur-[120px]" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-[#FF4FA3]/10 blur-[120px]" />
@@ -226,9 +210,10 @@ export default function Login() {
 
               <button 
                 type="submit"
+                disabled={loading}
                 className="w-full flex items-center justify-center gap-2 bg-[#1BB6FF] hover:bg-[#2ECFC4] text-[#06101F] font-bold rounded-xl py-3.5 transition-all hover:shadow-[0_0_20px_rgba(27,182,255,0.3)] mt-2 group"
               >
-                Sign In
+                {loading ? 'Signing In...' : 'Sign In'}
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </form>

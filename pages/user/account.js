@@ -20,6 +20,8 @@ import { Icon } from '@iconify/react'
 import { CookiesProvider, useCookies } from 'react-cookie';
 import toast, { Toaster } from 'react-hot-toast';
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
+import AppLoadingOverlay from '@/components/AppLoadingOverlay';
+import { waitForPaint } from '@/lib/uiFeedback';
 
 
 async function processBets(name) {
@@ -56,6 +58,7 @@ export default function Account() {
   };
   let loads = 0;
   const [loadingProfile, setLoadingProfile] = useState(true)
+  const [accountActionLoading, setAccountActionLoading] = useState(false)
   //end of snackbar1
   useEffect(() => {
     let active = true
@@ -115,9 +118,30 @@ export default function Account() {
       </Snackbar>
     )
   }
+  const signOutAccount = async () => {
+    if (accountActionLoading) return
+
+    setAccountActionLoading(true)
+    await waitForPaint()
+
+    try {
+      const { error } = await supabase.auth.signOut();
+      console.log('sign out');
+      console.log(error);
+      clearLegacyAuthStorage();
+      setCookie('authdata', '', { path: '/', expires: new Date(0) });
+      setCookie('authed', '', { path: '/', expires: new Date(0) });
+      router.push('/login');
+    } catch (error) {
+      console.log(error)
+      toast.error('Unable to sign out. Please try again.')
+      setAccountActionLoading(false)
+    }
+  }
   //end of snackbar2
   return (
     <Cover style={{ width: "100%", paddingBottom: '100px' }}>
+      <AppLoadingOverlay open={accountActionLoading} title="Signing out" message="Securing your account session." />
       <Toaster position="bottom-center"
         reverseOrder={false} />
       <Sncks />
@@ -166,13 +190,13 @@ export default function Account() {
                 <Typography sx={{ color: "#E9E5DA", fontSize: '14px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', width: '50px', textAlign: 'start' }}>VIP {viplevel}</Typography>
               </Stack>
             </Stack>
-            <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px', borderRadius: '10px' }}>
+            <Stack  style={{ padding: '8px', borderRadius: '10px',display:'flex',flexDirection:'row', justifyContent:'space-between', alignItems:'center' }}>
               <Stack>
                 <Typography style={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>Current Balance </Typography>
                 <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>{balance.toFixed(3)} USDT</Typography>
               </Stack>
               <Link href='/user/fund' style={{ textDecoration: "none", color: 'white' }}>
-                <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#1BB6FF', borderRadius: '20px', padding: '8px', width: '95px', height: '32px' }}>
+                <Stack style={{ background: '#1BB6FF', borderRadius: '20px', padding: '8px', width: '95px', height: '32px',display:'flex',flexDirection:'row', justifyContent:'space-between', alignItems:'center' }}>
                   <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#10284D', fontSize: '12px' }}>
                     Deposit
                   </Typography>
@@ -201,11 +225,11 @@ export default function Account() {
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} alignItems="center">
                 <Stack direction='row' spacing={1} justifyContent='center' alignItems="center">
                   <Icon icon="ant-design:link-outlined" width="24" height="24" style={{ color: "#a3a3a3" }} />
-                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>https://app.europeanfc01.com/register/{info?.newrefer || ''}</Typography>
+                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>europeanfc01.com/register/{info?.newrefer || ''}</Typography>
                 </Stack>
                 <Icon icon="solar:copy-bold-duotone" width="24" height="24" style={{ color: '#a3a3a3' }} onClick={() => {
                   if (!info?.newrefer) return
-                  navigator.clipboard.writeText("https://app.europeanfc01.com/register/" + info.newrefer)
+                  navigator.clipboard.writeText("https://europeanfc01.com/register/" + info.newrefer)
                   setMessages("Invite Link Copied")
                   toast.success("Invite link copied")
                 }} />
@@ -421,19 +445,7 @@ export default function Account() {
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '50px', padding: '8px', background: '#06101F', borderRadius: '8px' }}>
 
               <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px', cursor:'pointer'  }}
-                onClick={() => {
-                  const sOut = async () => {
-                    const { error } = await supabase.auth.signOut();
-                    console.log('sign out');
-                    console.log(error);
-                    clearLegacyAuthStorage();
-                    setCookie('authdata', '', { path: '/', expires: new Date(0) });
-                    setCookie('authed', '', { path: '/', expires: new Date(0) });
-                    router.push('/login');
-                  }
-                  sOut();
-                }
-                }>
+                onClick={signOutAccount}>
                 <Stack direction='row' spacing={1} justifyContent='start' >
                   <Icon icon="hugeicons:logout-05" width="24" height="24" style={{ color: '#a3a3a3' }} />
                   <Typography sx={{ color: '#E9E5DA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Sign out</Typography>

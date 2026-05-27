@@ -1,29 +1,20 @@
 import React, { useState, useContext, useEffect } from "react";
 import Head from "next/head";
 import Link from 'next/link'
-import { Modal, Box, Stack, OutlinedInput, Button, Typography, Divider } from "@mui/material";
+import { Stack } from "@mui/material";
 import { ArrowLeft, Mail, Lock, ArrowRight, User, Globe, Phone, Hash } from "lucide-react";
-import MenuItem from '@mui/material/MenuItem';
 import { useRouter } from 'next/router'
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import InputAdornment from '@mui/material/InputAdornment';
-import FormHelperText from '@mui/material/FormHelperText';
-import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
-import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
-import { Form as Farm } from 'react-bootstrap'
 import LOGO from '@/public/european.ico'
 import Image from 'next/image'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { supabase } from '@/pages/api/supabase'
-import Backdrop from '@mui/material/Backdrop';
-import Wig from '@/public/icon/wig.png'
-import Big from '@/public/icon/badge.png'
 import codes from '@/pages/api/codeswithflag.json'
 import { clearLegacyAuthStorage } from '@/lib/clientAuth';
+import AppLoadingOverlay from '@/components/AppLoadingOverlay';
+import FeedbackDialog from '@/components/FeedbackDialog';
+import { waitForPaint } from '@/lib/uiFeedback';
+import toast, { Toaster } from 'react-hot-toast';
 export default function Register( {refer} ) {
   
   const [password, setPassword] = useState("")
@@ -33,19 +24,11 @@ export default function Register( {refer} ) {
   const [username, setUsername] = useState("")
   const [age, setAge] = useState("+91");
   
-  const [drop, setDrop] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [idR, setidR] = useState(refer);
   const [agecheck, setAgecheck] = useState(false);
   const [email, setEmail] = useState('')
-  //alerts
-  const [ale, setAle] = useState('')
-  const [open, setOpen] = useState(false)
-  const [aleT, setAleT] = useState(false)
-  const Alerts = (m, t) => {
-    setAle(m)
-    setAleT(t)
-    setOpen(true)
-  }
+  const [feedback, setFeedback] = useState(null)
 
   const [values, setValues] = React.useState({
     amount: '',
@@ -70,86 +53,108 @@ export default function Register( {refer} ) {
     event.preventDefault();
   };
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = (value) => {
-    setOpen(false);
-  };
   useEffect(() => {
   }, [refer]);
 
-  const signup = async () => {
-    setDrop(true);
-    async function signUpWithEmail() {
+  const showErrorDialog = (message, title = 'Unable to create account') => {
+    setFeedback({ type: 'error', title, message })
+  }
 
-      try {
-        const { data, error } = await supabase.auth.signUp({
-          email: email,
-          password: values.password,
-          options: {
-            data: {
-              displayName: username,
-              phoneNumber: phone,
-            }
-          }
-        })
-        console.log('User registered successfully:', data.user);
+  const handleRegister = async () => {
+    if (loading) return
 
-
-        console.log(data)
-        if (error) {
-          throw error;
-        } else {
-          const profileResponse = await fetch('/api/signup-profile', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              userid: data.user.id,
-              username,
-              email,
-              phone,
-              countrycode: age,
-              refer: idR,
-            }),
-          })
-          const profileResult = await profileResponse.json()
-
-          if (!profileResponse.ok || profileResult.status !== 'success') {
-            throw new Error(profileResult.message || 'Unable to create user profile')
-          }
-
-          clearLegacyAuthStorage();
-          Alerts(`Welcome To EFC `, true);
-        }
-      } catch (error) {
-        console.error('Error signing up:', error);
-        setDrop(false);
-        console.error('Error signing up:', error.message);
-        if (error.message === 'User already registered') {
-          Alerts('Email already exists!', false)
-        } else {
-          if (error.message === 'Password should be at least 6 characters') {
-            Alerts('For security reasons, please choose a stronger password. It should be at least 8 characters long and include a mix of letters, numbers, and symbols', false)
-          } else {
-            if (error.message === 'Unable to validate email address: invalid format') {
-              Alerts('Please enter a valid email address', false)
-            } else {
-              if (error.message === 'Username Already Exist!') {
-                Alerts('Username Already Exist!', false)
-              } else {
-
-                Alerts('Please Chcek Your internet connection and try again, if problem persist please contact support', false)
-              }
-            }
-          }
-        }
-      }
+    if (phone.length < 9) {
+      toast.error('Please input a complete phone number with at least 9 digits')
+      return
     }
-    signUpWithEmail()
 
+    if (!agecheck) {
+      toast.error('Please accept the terms and conditions before you continue')
+      return
+    }
 
+    if (cpassword !== values.password) {
+      toast.error('Please make sure both passwords are the same')
+      return
+    }
+
+    setLoading(true)
+    await waitForPaint()
+
+    try {
+      const response = await fetch('/api/check-username', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username }),
+      })
+      const result = await response.json().catch(() => ({}))
+      if (!response.ok) {
+        toast.error('Unable to validate username right now')
+        return
+      }
+
+      if (!result.available) {
+        toast.error('Username already exists')
+        return
+      }
+
+      const { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: values.password,
+        options: {
+          data: {
+            displayName: username,
+            phoneNumber: phone,
+          }
+        }
+      })
+
+      console.log('User registered successfully:', data.user);
+      console.log(data)
+
+      if (error) throw error;
+
+      const profileResponse = await fetch('/api/signup-profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userid: data.user.id,
+          username,
+          email,
+          phone,
+          countrycode: age,
+          refer: idR,
+        }),
+      })
+      const profileResult = await profileResponse.json().catch(() => ({}))
+
+      if (!profileResponse.ok || profileResult.status !== 'success') {
+        throw new Error(profileResult.message || 'Unable to create user profile')
+      }
+
+      clearLegacyAuthStorage();
+      setLoading(false)
+      setFeedback({
+        type: 'success',
+        title: 'Welcome to EFC',
+        message: 'Your account has been created successfully.',
+      })
+    } catch (error) {
+      console.error('Error signing up:', error);
+      if (error.message === 'User already registered') {
+        showErrorDialog('Email already exists!', 'Email already registered')
+      } else if (error.message === 'Password should be at least 6 characters') {
+        showErrorDialog('For security reasons, please choose a stronger password. It should be at least 8 characters long and include a mix of letters, numbers, and symbols.', 'Use a stronger password')
+      } else if (error.message === 'Unable to validate email address: invalid format') {
+        showErrorDialog('Please enter a valid email address.', 'Invalid email')
+      } else if (error.message === 'Username Already Exist!') {
+        toast.error('Username already exists')
+      } else {
+        showErrorDialog('Please check your internet connection and try again. If the problem persists, please contact support.')
+      }
+    } finally {
+      setLoading(false)
+    }
   }
 
 
@@ -161,13 +166,19 @@ export default function Register( {refer} ) {
         <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={drop}
-      >
-        <SportsSoccerIcon id='balls' sx={{ marginLeft: '8px' }} />
-      </Backdrop>
-      <Alertz />
+      <AppLoadingOverlay open={loading} title="Creating account" message="Setting up your EFC profile." />
+      <FeedbackDialog
+        open={Boolean(feedback)}
+        type={feedback?.type}
+        title={feedback?.title}
+        message={feedback?.message}
+        onClose={() => {
+          const shouldGoHome = feedback?.type === 'success'
+          setFeedback(null)
+          if (shouldGoHome) route.push('/user')
+        }}
+      />
+      <Toaster position="bottom-center" reverseOrder={false} />
       
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-[#1BB6FF]/10 blur-[120px]" />
@@ -198,36 +209,9 @@ export default function Register( {refer} ) {
               <p className="text-gray-500 text-sm">Join EFC and start your premium analytics journey</p>
             </div>
 
-            <form className="space-y-4" onSubmit={(e) => { 
-                e.preventDefault(); 
-                if (phone.length >= 9) {
-                  const checkDuplicate = async () => {
-                    const response = await fetch('/api/check-username', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ username }),
-                    })
-                    const result = await response.json()
-                    if (!response.ok) {
-                      Alerts('Unable to validate username right now', false)
-                    } else if (!result.available) {
-                      Alerts("Username Already Exist!", false);
-                    } else {
-                      if (agecheck === false) {
-                        Alerts('Please click the checkBox before you continue', false)
-                      } else {
-                        if (cpassword === values.password) {
-                          signup()
-                        } else {
-                          Alerts('ensure the passowords are same', false)
-                        }
-                      }
-                    }
-                  }
-                  checkDuplicate()
-                } else {
-                  Alerts('Please Input a Complete Phone Number! at least 9 digits', false)
-                }
+            <form className="space-y-4" onSubmit={(e) => {
+                e.preventDefault();
+                handleRegister()
             }}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
@@ -374,9 +358,10 @@ export default function Register( {refer} ) {
 
               <button 
                 type="submit"
+                disabled={loading}
                 className="w-full flex items-center justify-center gap-2 bg-[#1BB6FF] hover:bg-[#2ECFC4] text-[#06101F] font-bold rounded-xl py-3.5 transition-all hover:shadow-[0_0_20px_rgba(27,182,255,0.3)] mt-4 group"
               >
-                Create Account
+                {loading ? 'Creating Account...' : 'Create Account'}
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </form>
@@ -392,51 +377,6 @@ export default function Register( {refer} ) {
       </main>
     </div>
   )
-  function Alertz() {
-    return (
-      <Modal
-        open={open}
-        onClose={() => {
-          if (aleT) {
-            setOpen(false)
-            route.push('/user')
-          } else {
-            setOpen(false)
-          }
-        }}
-        aria-placeholderledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Stack alignItems='center' justifyContent='space-evenly' sx={{
-          background: '#CACACA', width: '290px', height: '330px', borderRadius: '20px',
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          padding: '12px'
-        }}>
-          <Image src={aleT ? Big : Wig} width={120} height={120} alt='widh' />
-          <Typography id="modal-modal-title" sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '20px', fontWeight: '500' }}>
-
-            {aleT ? 'Success' : 'Eh Sorry!'}
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ fontFamily: 'Poppins,sans-serif', mt: 2, fontSize: '14px', fontWeight: '300' }}>
-            {ale}
-          </Typography>
-          <Divider sx={{ background: '#CACACA' }} />
-          <Button variant='contained' sx={{ fontFamily: 'Poppins,sans-serif', color: '#CACACA', background: '#242627', padding: '8px', width: '100%' }} onClick={() => {
-            if (aleT) {
-              setOpen(false)
-              route.push('/user')
-            } else {
-
-              setOpen(false)
-            }
-          }}>Okay</Button>
-        </Stack>
-
-      </Modal>)
-  }
 }
 
 export async function getServerSideProps(context) {

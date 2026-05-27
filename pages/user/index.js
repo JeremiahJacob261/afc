@@ -21,10 +21,9 @@ import Ims from '@/public/simps/ball.png'
 import { app } from '@/pages/api/firebase';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { getAuth, signOut } from "firebase/auth";
-import Backdrop from '@mui/material/Backdrop';
-import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 import toast, { Toaster } from 'react-hot-toast';
+import { formatMatchDate, formatMatchTime } from '@/lib/matchDisplay';
 
 
 async function processBets(name) {
@@ -46,7 +45,6 @@ export default function Home() {
   const [username, setUsername] = useState('');
   const hasRun = useRef(false);
   const openr = Boolean(anchorEl);
-  const [drop, setDrop] = useState(false);
   const handleClickr = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -174,12 +172,6 @@ export default function Home() {
       <Toaster position="bottom-center" reverseOrder={false} />
 
       <Cover sx={{ background: '#06101F', minWidth: '100%', minHeight: '100vh' }}>
-        <Backdrop
-          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={drop}
-        >
-          <SportsSoccerIcon id='balls' sx={{ marginLeft: '8px' }} />
-        </Backdrop>
         <Head>
           <title>Welcome - {username ? `${username}` : 'Loading...'}</title>
           <link rel="icon" href="/european.ico" />
@@ -252,11 +244,8 @@ export default function Home() {
                 // let curren = new Date().getTime() / 1000;
                 let curren = d1utc;
                 const league = (pro.league === 'others') ? pro.otherl : pro.league;
-                let date = parseInt(new Date(pro.date).getMonth() + 1);
-                let day = new Date(pro.date).getDate();
-                let time = pro.time.substring(0, pro.time.length - 3);
-                const [h, m] = time.split(':');
-                let timex = parseFloat(h) - 1 + ':' + m;
+                const displayDate = formatMatchDate(pro);
+                const displayTime = formatMatchTime(pro);
                 return (
 
                   <Stack direction="column" spacing={2} justifyContent='center' alignItems='center'
@@ -296,9 +285,9 @@ export default function Home() {
                         <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
                       </Stack>
                       <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{timex}</Typography>
+                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{displayTime}</Typography>
                         <p style={{ color: '#E9E5DA' }}>|</p>
-                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{date}/{day}</Typography>
+                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{displayDate}</Typography>
                       </Stack>
                       <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                         <Image src={pro.iaway ? pro.iaway : Ims} width={50} height={50} alt='away' />

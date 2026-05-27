@@ -7,8 +7,7 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { useRouter } from 'next/router';
 import Profile from '@/public/profile.png';
 import Image from 'next/image'
-import {Backdrop} from '@mui/material'
-import LOGO from '@/public/european.ico';
+import Loading from '@/pages/components/loading';
 
  
 function BottomNavi() {
@@ -21,6 +20,7 @@ function BottomNavi() {
   const router = useRouter()
   const home = () => {
    if(router.pathname == '/user'){
+    handleOpen()
     window.location.reload()
    }else{
     handleOpen()
@@ -31,6 +31,7 @@ function BottomNavi() {
   }
   const matches = () => {
   if(router.pathname == '/user/matches'){
+    handleOpen()
     window.location.reload()
   }else{
     handleOpen()
@@ -39,6 +40,7 @@ function BottomNavi() {
   }
   const me = () => {
     if(router.pathname == '/user/account'){
+      handleOpen()
       window.location.reload()
     }else{
       handleOpen()
@@ -47,6 +49,7 @@ function BottomNavi() {
   }
   const bets = () => {
     if(router.pathname == '/user/bets'){
+      handleOpen()
       window.location.reload()
     }else{
       handleOpen()
@@ -57,12 +60,7 @@ function BottomNavi() {
   
   return (
     <Box xc='true'>
-       <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={open}
-      >
-        <Image src={LOGO} width={100} height={100} id='balls' alt="logo" sx={{ marginLeft: '8px' }} />
-      </Backdrop>
+       <Loading open={open} handleClose={handleClose} />
         <BottomNavigation
         className="dark-glass bottom-nav"
         showLabels
