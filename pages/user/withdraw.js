@@ -175,7 +175,7 @@ export default function Deposit() {
           supabase
           .from('user_wallets')
           .select()
-          .eq('uid', result.profile.userid),
+          .eq('uid', result.profile.uid || result.profile.userid),
           supabase
             .from('walle')
             .select('*')

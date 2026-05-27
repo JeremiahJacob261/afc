@@ -18,6 +18,7 @@ function BottomNavi() {
   const handleClose = () => setOpen(false);
   
   const router = useRouter()
+  const isBetsPage = router.pathname == '/user/bets'
   const home = () => {
    if(router.pathname == '/user'){
     handleOpen()
@@ -62,13 +63,13 @@ function BottomNavi() {
     <Box xc='true'>
        <Loading open={open} handleClose={handleClose} />
         <BottomNavigation
-        className="dark-glass bottom-nav"
+        className={isBetsPage ? 'bottom-nav' : 'dark-glass bottom-nav'}
         showLabels
         value={value}
         onChange={(event, newValue) => {
           setValue(newValue);
         }}
-        sx={{background:'rgba(6, 16, 31, 0.96)', position:'fixed', minHeight:'72px', height:'calc(72px + env(safe-area-inset-bottom))', bottom:0, left:0, width:'100%', zIndex: (theme) => theme.zIndex.drawer + 3, borderTopLeftRadius: '12px', borderTopRightRadius: '12px', px: 1, pb: 'env(safe-area-inset-bottom)'}}
+        sx={{background: isBetsPage ? '#06101F' : 'rgba(6, 16, 31, 0.96)', position:'fixed', minHeight:'72px', height:'calc(72px + env(safe-area-inset-bottom))', bottom:0, left:0, width:'100%', zIndex: (theme) => theme.zIndex.drawer + 3, borderTop: isBetsPage ? '1px solid #1D3658' : 'none', borderTopLeftRadius: '12px', borderTopRightRadius: '12px', px: 1, pb: 'env(safe-area-inset-bottom)'}}
       >
         <BottomNavigationAction label={<p style={{ padding:0,margin:0,fontFamily:'Poppins,san-serif',color:'#D9D9D9' }}>Top</p>} onClick={home} icon={<Icon icon="ri:home-line" width="24" height="24"  style={{color: "#D9D9D9"}} />} sx={{width:"40px",color:"E9E5DA"}}/>
         <BottomNavigationAction label={<p style={{ padding:0,margin:0,fontFamily:'Poppins,san-serif',color:'#D9D9D9' }}>Matches</p>} onClick={matches} icon={<Icon icon="ion:football-outline" width="24" height="24"  style={{color: "#D9D9D9"}} />} sx={{width:"40px",color:"E9E5DA"}}/>

@@ -15,7 +15,8 @@ export default async function handler(req, res) {
 
   try {
     const body = req.body || {}
-    const { profile, supabase } = await getCurrentProfile(req, 'userid')
+    const { profile, supabase } = await getCurrentProfile(req, 'userid,uid')
+    const walletOwnerId = clean(profile.uid || profile.userid)
     const methodId = clean(body.methodId)
     const legacyWalletName = clean(body.walletname)
     const wallet = clean(body.wallet)
@@ -50,7 +51,7 @@ export default async function handler(req, res) {
     const { data, error: readError } = await supabase
       .from('user_wallets')
       .select('id')
-      .match({ uid: profile.userid, walletnames: walletname })
+      .match({ uid: walletOwnerId, walletnames: walletname })
 
     if (readError) throw readError
 
@@ -65,7 +66,7 @@ export default async function handler(req, res) {
         names: isLocal ? name : '',
         wallet,
         method: type,
-        uid: profile.userid,
+        uid: walletOwnerId,
         walletnames: walletname,
       })
 

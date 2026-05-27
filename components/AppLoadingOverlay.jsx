@@ -15,26 +15,12 @@ export default function AppLoadingOverlay({
       open={Boolean(open)}
       sx={{
         zIndex: (theme) => theme.zIndex.modal + 20,
-        bgcolor: 'rgba(6, 16, 31, 0.78)',
+        bgcolor: 'transparent ',
         backdropFilter: 'blur(8px)',
         WebkitBackdropFilter: 'blur(8px)',
         color: '#E9E5DA',
       }}
     >
-      <Stack
-        spacing={1.5}
-        alignItems="center"
-        justifyContent="center"
-        sx={{
-          width: 'min(86vw, 280px)',
-          minHeight: 190,
-          p: 3,
-          borderRadius: 2,
-          bgcolor: 'rgba(16, 40, 77, 0.94)',
-          border: '1px solid rgba(27, 182, 255, 0.32)',
-          boxShadow: '0 18px 48px rgba(0, 0, 0, 0.38)',
-        }}
-      >
         <Box
           sx={{
             width: 86,
@@ -53,13 +39,6 @@ export default function AppLoadingOverlay({
         >
           <Image src={LOGO} width={58} height={58} alt="EFC loading" />
         </Box>
-        <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: 17, fontWeight: 700, color: '#FFFFFF', textAlign: 'center' }}>
-          {title}
-        </Typography>
-        <Typography sx={{ fontFamily: 'Inter,sans-serif', fontSize: 13, fontWeight: 300, color: 'rgba(233, 229, 218, 0.78)', textAlign: 'center' }}>
-          {message}
-        </Typography>
-      </Stack>
     </Backdrop>
   )
 }

@@ -54,7 +54,7 @@ function MyApp({ Component, pageProps }) {
       ) : (
         <Component {...pageProps} style={{ background: "#06101F" ,width:"100%",display:'flex'}} />
       )}
-      <AppLoadingOverlay open={routeLoading} title="Loading" message="Opening the next screen." />
+      <AppLoadingOverlay open={routeLoading} title="" message="" />
       
 </div>
   )
