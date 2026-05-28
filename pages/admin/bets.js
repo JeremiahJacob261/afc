@@ -56,10 +56,6 @@ export default function Bets({ bets }) {
         setQuest(false);
     };
 
-    const Reads = async (dtype, damount) => {
-        const { data, error } = await callAdminRpc(dtype, { amount: damount })
-        console.log(error);
-    }
     const Chan = async (bets, type) => {
         const { data, error } = await callAdminRpc('chan', { bet: bets, des: type })
         console.log(error);
@@ -124,7 +120,6 @@ export default function Bets({ bets }) {
                             const { data, error } = await callAdminRpc('depositor', { amount: Number(d.aim) + Number(d.stake), names: d.username })
                             console.log(error)
                         }
-                        Reads('readwon', d.aim)
                         inBal()
                         Chan(d.betid, 'true');
                         const reward_upline = async () => {
@@ -184,7 +179,6 @@ export default function Bets({ bets }) {
                         const { data, error } = await callAdminRpc('depositor', { amount: Number(d.stake), names: d.username })
                         console.log(error)
                     }
-                    Reads('readwon', d.stake)
                     inBal()
                 }
             })

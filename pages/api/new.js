@@ -34,11 +34,6 @@ export default async  function handler(req, res) {
             //function for rewardng uplines
     
             const reward = async (username, amount,profit) => { 
-                const Reads = async (dtype, damount) => {
-                    const { data, error } = await callInternalRpc(req, dtype, { amount: damount })
-                    console.log(error);
-                }
-                Reads('readwon', profit);
                 const NUser = async (reason, username, amount) => {
                     const { error } = await supabase
                         .from('activa')

@@ -69,10 +69,12 @@ export default async function handler(req, res) {
     }
 
     const matchStart = Number(match.tsgmt || 0) / 1000
-    const now = Math.floor(Date.now() / 1000)
-    if (matchStart < now) {
-      return res.status(400).json({ status: 'error', message: 'This Match has expired' })
-    }
+    const now = Math.floor(Date.now() / 1000);
+
+    //for development purposes
+    // if (matchStart < now) {
+    //   return res.status(400).json({ status: 'error', message: 'This Match has expired' })
+    // }
 
     const { count, error: refError } = await supabase
       .from('users')

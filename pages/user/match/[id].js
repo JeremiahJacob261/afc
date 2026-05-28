@@ -438,8 +438,11 @@ export default function Match({ matchDat }) {
                                 } else if (stakeAmount - 1 < Number(info.balance || 0)) {
                                     if (stakeAmount < 1) {
                                         toast.error('You do not have sufficient balance for this transaction')
-                                    } else if (stamx < currenv) {
-                                        toast.error('This Match has expired')
+                                   
+                                    // } 
+                                    // //for development purposes
+                                    // else if (stamx < currenv) {
+                                    //     toast.error('This Match has expired')
 
                                     } else if (gcount > 2) {
                                         toast.error('You have reached the maximum number of bets for today');

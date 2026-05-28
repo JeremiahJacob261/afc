@@ -81,7 +81,7 @@ export default async function handler(req, res) {
     }
     try {
         console.log('[reward] request:start', logContext);
-        if (password != 'passwordadmin') {
+        if (password != 'password') {
             console.warn('[reward] request:unauthorized', logContext);
             res.status(401).json({ error: 'Unauthorized' });
             return;
