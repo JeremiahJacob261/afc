@@ -1,5 +1,7 @@
 import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
 
+const PIN_LOCKED_MESSAGE = 'You already have a transaction PIN. Please contact admin to reset or change it.'
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ status: 'error', message: 'Method not allowed' })
@@ -11,11 +13,17 @@ export default async function handler(req, res) {
       return res.status(400).json({ status: 'error', message: 'Pin must be 4 digits' })
     }
 
-    const { profile, supabase } = await getCurrentProfile(req, 'username')
+    const { profile, supabase } = await getCurrentProfile(req, 'userid,codeset,pin')
+    const hasExistingPin = Boolean(profile.codeset) || String(profile.pin || '').trim().length > 0
+
+    if (hasExistingPin) {
+      return res.status(409).json({ status: 'error', message: PIN_LOCKED_MESSAGE })
+    }
+
     const { error } = await supabase
       .from('users')
       .update({ pin, codeset: true })
-      .eq('username', profile.username)
+      .eq('userid', profile.userid)
 
     if (error) throw error
 
