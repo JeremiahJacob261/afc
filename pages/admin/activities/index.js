@@ -216,6 +216,15 @@ export default function Home({ notification,newrefer }) {
         </div>
     )
 }
+
+function isActivityVisibleForUser(item, username, newrefer) {
+    if (['affbonus', 'depbonus'].includes(item.type) && item.code !== 'firstdepositbonus') {
+        return item.code === newrefer
+    }
+
+    return item.username === username || item.code === newrefer
+}
+
 export async function getServerSideProps(context) {
     let id = context.query.id;
     try {
@@ -237,7 +246,7 @@ export async function getServerSideProps(context) {
         }
         return {
             props: {
-                notification: trans,
+                notification: (trans || []).filter((item) => isActivityVisibleForUser(item, username, newrefer)),
                 newrefer:newrefer
             },
         }

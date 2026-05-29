@@ -62,7 +62,7 @@ export default function Bets({ bets }) {
     }
     const AffBonus = async (damount, dusername, refer, lvla, lvlb) => {
         try {
-            const { data, error } = await callAdminRpc('affbonus', { name: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
+            const { data, error } = await callAdminRpc('affbonus', { name: dusername, sourceUsername: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
             console.log(error);
         } catch (e) {
             console.log(e)

@@ -49,7 +49,7 @@ export default async  function handler(req, res) {
                                 try {
                                     const AffBonus = async (damount, dusername, refer, lvla, lvlb) => {
                                         try {
-                                            const { data, error } = await callInternalRpc(req, 'affbonus', { name: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
+                                            const { data, error } = await callInternalRpc(req, 'affbonus', { name: dusername, sourceUsername: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
                                             console.log(error, 'affbonus');
                                         } catch (e) {
                                             console.log(e, 'affbonus')

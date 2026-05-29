@@ -43,8 +43,8 @@ export const rpc = {
   gatherw: (names, amount) => callRpc('gatherw', { names, amount }),
   chan: (bet, des) => callRpc('chan', { bet, des }),
   increment: (x, row_id) => callRpc('increment', { x, row_id }),
-  affbonus: (name, type, amount, refers, lvls, lvlss) => 
-    callRpc('affbonus', { name, type, amount, refers, lvls, lvlss }),
+  affbonus: (name, type, amount, refers, lvls, lvlss, sourceUsername = name) =>
+    callRpc('affbonus', { name, sourceUsername, type, amount, refers, lvls, lvlss }),
   refbonus: (amount, name, refers, lvls, lvlss) =>
     callRpc('refbonus', { amount, name, refers, lvls, lvlss }),
   readdeposit: (amount) => callRpc('readdeposit', { amount }),

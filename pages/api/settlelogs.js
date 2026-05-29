@@ -28,7 +28,7 @@ export default async function handler(req, res) {
 
     const AffBonus = async (damount, dusername, refer, lvla, lvlb) => {
         try {
-            await callInternalRpc(req, 'affbonus', { name: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
+            await callInternalRpc(req, 'affbonus', { name: dusername, sourceUsername: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
         } catch (e) { console.log(e) }
     }
 
@@ -63,10 +63,12 @@ export default async function handler(req, res) {
                         const { data: user, error: uerror } = await supabase
                             .from('users')
                             .select('refer,lvla,lvlb')
-                            .eq('username', name);
+                            .eq('username', d.username)
+                            .maybeSingle();
                         Depositing(d.stake + d.aim, name);
                         Chan(d.betid, 'true');
-                        AffBonus(parseFloat(d.profit), d.username, user.refer, user.lvla, user.lvlb);
+                        if (uerror) throw uerror
+                        AffBonus(parseFloat(d.profit), d.username, user?.refer, user?.lvla, user?.lvlb);
                         NUser('bet', d.username, Number(d.aim) + Number(d.stake))
                     } else {
                         Chan(d.betid, 'false');

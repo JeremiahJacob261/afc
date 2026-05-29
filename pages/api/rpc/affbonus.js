@@ -13,11 +13,12 @@ export default async function handler(req, res) {
   try {
     requireInternalSecret(req)
     const supabase = getSupabaseAdmin()
-    const { name, type, amount, refers, lvls, lvlss } = req.body
+    const { name, type, amount, refers, lvls, lvlss, sourceUsername } = req.body
+    const bonusSourceUsername = String(sourceUsername || name || '').trim()
 
-    if (!name || !amount) {
+    if (!bonusSourceUsername || !amount) {
       return res.status(400).json({
-        error: 'Missing required parameters: name, amount'
+        error: 'Missing required parameters: sourceUsername, amount'
       })
     }
 
@@ -46,7 +47,7 @@ export default async function handler(req, res) {
         // Log to activity
         await supabase.from('activa').insert({
           code: refers,
-          username: referrer.username,
+          username: bonusSourceUsername,
           amount: l1Bonus,
           type: 'affbonus'
         })
@@ -77,7 +78,7 @@ export default async function handler(req, res) {
         // Log to activity
         await supabase.from('activa').insert({
           code: lvls,
-          username: referrer2.username,
+          username: bonusSourceUsername,
           amount: l2Bonus,
           type: 'affbonus'
         })
@@ -108,7 +109,7 @@ export default async function handler(req, res) {
         // Log to activity
         await supabase.from('activa').insert({
           code: lvlss,
-          username: referrer3.username,
+          username: bonusSourceUsername,
           amount: l3Bonus,
           type: 'affbonus'
         })
@@ -119,7 +120,7 @@ export default async function handler(req, res) {
 
     res.status(200).json({
       status: 'success',
-      message: `Affiliate bonuses distributed for ${name}`,
+      message: `Affiliate bonuses distributed for ${bonusSourceUsername}`,
       breakdown: results
     })
   } catch (error) {

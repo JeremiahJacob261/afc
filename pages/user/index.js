@@ -95,7 +95,7 @@ export default function Home() {
         await fetch('/api/rpc/affbonus', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
+          body: JSON.stringify({ name: dusername, sourceUsername: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
         })
       } catch (e) { console.log(e) }
     }

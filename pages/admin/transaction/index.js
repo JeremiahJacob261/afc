@@ -441,6 +441,14 @@ function isDuplicateFinanceActivity(row) {
   return row.code === 'finance' && ['deposit', 'withdraw', 'withdrawal'].includes(String(row.type || '').toLowerCase())
 }
 
+function isActivityVisibleForUser(row, user) {
+  if (['affbonus', 'depbonus'].includes(row.type) && row.code !== 'firstdepositbonus') {
+    return row.code === user.newrefer
+  }
+
+  return row.username === user.username || row.code === user.newrefer
+}
+
 function normalizeActivity(row, user) {
   return {
     id: `activa-${row.id}`,
@@ -527,6 +535,7 @@ export async function getServerSideProps(context) {
       ...(betsResult.data || []).map(normalizeBet),
       ...(activitiesResult.data || [])
         .filter((item) => !isDuplicateFinanceActivity(item))
+        .filter((item) => isActivityVisibleForUser(item, user))
         .map((item) => normalizeActivity(item, user)),
     ])
 
