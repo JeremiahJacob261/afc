@@ -3,6 +3,28 @@
 -- This schema matches the application structure used in the Next.js project
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
+CREATE EXTENSION IF NOT EXISTS pg_cron WITH SCHEMA pg_catalog;
+
+-- ============================================================================
+-- SCHEDULED JOBS
+-- ============================================================================
+
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM cron.job
+    WHERE jobname = 'reset-users-gcount-daily-utc'
+  ) THEN
+    PERFORM cron.unschedule('reset-users-gcount-daily-utc');
+  END IF;
+END $$;
+
+SELECT cron.schedule(
+  'reset-users-gcount-daily-utc',
+  '0 0 * * *',
+  $$UPDATE public.users SET gcount = 0 WHERE gcount IS DISTINCT FROM 0;$$
+);
 
 -- ============================================================================
 -- AUTH & USER MANAGEMENT TABLES
