@@ -8,6 +8,7 @@ import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeft
 import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
+import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay';
 
 export default function Viewbets() {
     const [league, setLeague] = useState([]);
@@ -15,9 +16,9 @@ export default function Viewbets() {
     const router = useRouter();
     const auth = getAuth(app);
     const [info, setInfo] = useState({});
-    let stams = Date.parse(bet.date + " " + bet.time) / 1000;
-    let curren = new Date().getTime() / 1000;
-    const [btn, setBtn] = useState((stams > curren) ? 'none' : 'visible');
+    const matchDisplay = useClientMatchDisplay(bet);
+    const startMs = matchDisplay.startMs || getMatchStartMs(bet);
+    const isFutureMatch = Boolean(startMs && startMs > Date.now());
     const [status, setStatus] = useState('');
     useEffect(() => {
         let active = true;
@@ -87,8 +88,7 @@ export default function Viewbets() {
                 <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif' }}>Match Name : {bet.home} vs {bet.away}</Typography>
                 <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif' }}>{bet.home} vs {bet.away}</Typography>
                 <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif' }}>Stake : {bet.stake} USDT</Typography>
-                <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif' }}>Time : {bet.time}</Typography>
-                <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif' }}>Date : {bet.date} </Typography>
+                <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif' }}>Kickoff : {matchDisplay.dateTime}</Typography>
                 <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif' }}>%odds : {bet.odd}%</Typography>
                 <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif' }}>League Name:{(league.league === 'other') ? league.league : league.otherl}</Typography>
 
@@ -98,17 +98,17 @@ export default function Viewbets() {
                     <Typography direction="column" style={{ color: 'yellow', fontFamily: 'Poppins, sans-serif' }}>Results</Typography>
 
                     <Typography style={{ color: 'yellow', fontFamily: 'Poppins, sans-serif', backgroundColor: '#F05D5E', padding: '5px', borderRadius: '8px', margin: '3px' }}>
-                        {(stams > curren) ? 'Not Started' : (bet.won === 'null') ? 'Processing' : (bet.won === 'true') ? 'Won' : 'Lost'}
+                        {isFutureMatch ? 'Not Started' : (bet.won === 'null') ? 'Processing' : (bet.won === 'true') ? 'Won' : 'Lost'}
                     </Typography>
                 </Stack>
-                <Button variant='standard' style={{ color: '#F05D5E', display: (stams < curren) ? 'none' : 'visible' }} onClick={() => {
+                <Button variant='standard' style={{ color: '#F05D5E', display: isFutureMatch ? 'visible' : 'none' }} onClick={() => {
 
                 }}>Cancel this bet - Please Contact Admin to remove this bet</Button>
             </Stack>
         </div>
     )
     function Btns() {
-        if (stams < curren) {
+        if (!isFutureMatch) {
             return (
                 <Button variant='standard' style={{ color: '#F05D5E', display: 'none' }} onClick={() => {
                     //  setDrop(true);

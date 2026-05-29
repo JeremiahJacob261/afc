@@ -9,6 +9,7 @@ import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRound
 import Loading from '@/pages/components/loading'
 import Ims from '@/public/simps/ball.png'
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth'
+import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay'
 
 const colors = {
   page: '#06101F',
@@ -38,8 +39,8 @@ const toNumber = (value) => {
 const formatUsdt = (value) => `${toNumber(value).toFixed(3)} USDT`
 
 const getBetStatus = (bet) => {
-  const startTime = Date.parse(`${bet.date || ''} ${bet.time || ''}`)
-  const hasFutureStart = Number.isFinite(startTime) && startTime > Date.now()
+  const startTime = getMatchStartMs(bet)
+  const hasFutureStart = Boolean(startTime && startTime > Date.now())
 
   if (hasFutureStart) {
     return { label: 'Not Started', color: colors.muted, bg: '#121E2D' }
@@ -206,6 +207,7 @@ export default function Bets() {
   function BetCard({ bet, onClick }) {
     const status = getBetStatus(bet)
     const returnAmount = toNumber(bet.stake) + toNumber(bet.profit)
+    const display = useClientMatchDisplay(bet)
 
     return (
       <Box
@@ -258,11 +260,11 @@ export default function Bets() {
           </Box>
         </Stack>
 
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          sx={{
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+            sx={{
             background: '#081223',
             borderTop: `1px solid ${colors.border}`,
             px: 1.5,
@@ -270,6 +272,9 @@ export default function Bets() {
           }}
         >
           <Typography sx={{ color: colors.muted, fontFamily: 'Poppins,sans-serif', fontSize: 12 }}>
+            Kickoff: {display.dateTime}
+          </Typography>
+          <Typography sx={{ color: colors.muted, fontFamily: 'Poppins,sans-serif', fontSize: 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             Bet ID: {bet.betid}
           </Typography>
           <ArrowForwardIosRoundedIcon sx={{ width: 14, height: 14, color: colors.accent }} />

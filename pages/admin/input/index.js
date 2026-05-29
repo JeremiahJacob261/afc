@@ -15,18 +15,14 @@ import { Select, MenuItem } from '@mui/material';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { motion } from 'framer-motion';
 import { Icon } from '@iconify/react';
-import moment from 'moment';
-import 'moment-timezone';
 import { requireAdmin } from '@/lib/adminAuth';
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
+import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay';
 export default function Input({ datas }) {
-    const dateObj = new Date(datas.timest);
     const [drop, setDrop] = useState(false);
-
-    // Format the Date object to a string suitable for SQL
-    const sqlDateTime = dateObj.toISOString();
-    const timest = sqlDateTime;
     let f = datas;
+    const fixtureDisplay = useClientMatchDisplay(f);
+    const fixtureStartMs = getMatchStartMs(f);
     const [checked, setCheck] = useState(false);
     const [company, setCompany] = useState('');
     const router = useRouter();
@@ -81,13 +77,10 @@ export default function Input({ datas }) {
         formData.forEach((value, key) => (data[key] = value));
         // Log the data.
         console.log(data)
-        let dateTimeStr = f.date + " " + f.hour + ":" + f.minute + ":00";
-        console.log(dateTimeStr.toString());
-        console.log(moment(dateTimeStr.toString()).unix() * 1000);
         let comms = {
             "company": checked,
             "comarket": company,
-            "tsgmt": moment(dateTimeStr.toString()).unix() * 1000
+            "tsgmt": fixtureStartMs
         }
         let fData = {
             ...data,
@@ -160,9 +153,9 @@ export default function Input({ datas }) {
                     <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'whitesmoke', fontSize: '12px', fontWeight: '100' }} name='home'>{f.home_name}</Typography>
                 </Stack>
                 <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                    <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'whitesmoke', fontSize: '14px', fontWeight: '100' }} name='time'>{f.hour}:{f.minute}</Typography>
+                    <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'whitesmoke', fontSize: '14px', fontWeight: '100' }} name='time'>{fixtureDisplay.time}</Typography>
                     <p>|</p>
-                    <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'whitesmoke', fontSize: '14px', fontWeight: '100' }} name='date'>{f.day}/{f.month}</Typography>
+                    <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'whitesmoke', fontSize: '14px', fontWeight: '100' }} name='date'>{fixtureDisplay.date}</Typography>
                 </Stack>
                 <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                     <Image src={f.away_logo} width={50} height={50} alt='away' name='iaway' />

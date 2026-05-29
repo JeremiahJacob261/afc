@@ -10,6 +10,7 @@ import { Icon } from "@iconify/react"
 import Modal from "@mui/material/Modal"
 import Image from "next/image"
 import { supabase } from "@/pages/api/supabase"
+import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay'
 export default function Home({ notification }) {
     const router = useRouter();
     const id = router.query.id;
@@ -98,9 +99,9 @@ export default function Home({ notification }) {
 
                                 )
                             }
-                            let s = e;
-                            let stams = Date.parse(s.date + " " + s.time) / 1000;
-                            let curren = new Date().getTime() / 1000;
+                            const startMs = getMatchStartMs(e);
+                            const curren = Date.now();
+                            const isStarted = Boolean(startMs && startMs < curren);
                             const Chan = async (bets, type) => {
                                 const { data, error } = await callAdminRpc('chan', { bet: bets, des: type })
                                 console.log(error);
@@ -129,11 +130,11 @@ export default function Home({ notification }) {
                                     <p style={{ fontSize: '13px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Market: {e.market}</p>
                                     <p style={{ fontSize: '13px', fontFamily: 'Poppins,sans-serif', fontWeight: '500', color: 'lavenderblush' }}>Username: {e.username}</p>
                                     <GetLeagues />
-                                    <p style={{ fontSize: '15px', fontFamily: 'Poppins,sans-serif', fontWeight: '400' }}> Date: {e.date} {e.time}</p>
+                                    <p style={{ fontSize: '15px', fontFamily: 'Poppins,sans-serif', fontWeight: '400' }}>Date: <BetKickoff bet={e} /></p>
                                     <p style={{ fontSize: '15px', fontFamily: 'Poppins,sans-serif', fontWeight: '400' }}>Stake: {e.stake} USDT</p>
                                     <p style={{ fontSize: '15px', fontFamily: 'Poppins,sans-serif', fontWeight: '400' }}>Total: {parseFloat(e.stake) + parseFloat(e.aim)} USDT</p>
                                     <p style={{ fontSize: '15px', fontFamily: 'Poppins,sans-serif', fontWeight: '400' }}>Odd: {e.odd}</p>
-                                    <p style={{ fontSize: '15px', fontFamily: 'Poppins,sans-serif', fontWeight: '400' }}>Status: {(e.won === "true") ? 'Won' : (e.won === "false") ? 'Lost' : (stams + 5400 < curren) ? 'Processing' : (stams < curren) ? 'Ongoing' : 'Not Started'}</p>
+                                    <p style={{ fontSize: '15px', fontFamily: 'Poppins,sans-serif', fontWeight: '400' }}>Status: {(e.won === "true") ? 'Won' : (e.won === "false") ? 'Lost' : (startMs && startMs + 5400000 < curren) ? 'Processing' : isStarted ? 'Ongoing' : 'Not Started'}</p>
 
                                     <motion.div
                                         whileHover={{ scale: 1.1 }}
@@ -149,7 +150,7 @@ export default function Home({ notification }) {
                                                 router.push(`/admin/full/${id}`)
                                             }
                                         }}
-                                        style={{ cursor: 'pointer', width: '100%', height: '40px', background: '#ad1c39', borderRadius: '8px', display: (stams < curren) ? 'none' : 'visible', justifyContent: 'center', alignItems: 'center' }}
+                                        style={{ cursor: 'pointer', width: '100%', height: '40px', background: '#ad1c39', borderRadius: '8px', display: isStarted ? 'none' : 'visible', justifyContent: 'center', alignItems: 'center' }}
                                     >
                                         <Stack sx={{ width:'100%',height:'100%'}} justifyContent="center" alignItems="center">
                                         <p>Cancel this Bet</p>
@@ -173,6 +174,10 @@ export default function Home({ notification }) {
         </div>
     )
 }
+function BetKickoff({ bet }) {
+    const display = useClientMatchDisplay(bet);
+    return <>{display.dateTime}</>
+}
 export async function getServerSideProps(context) {
     let id = context.query.id;
     try {
@@ -190,9 +195,27 @@ export async function getServerSideProps(context) {
         if (transerror) {
             console.log(transerror);
         }
+        const matchIds = [...new Set((trans || []).map((bet) => bet.match_id).filter(Boolean))];
+        let rows = trans || [];
+        if (matchIds.length) {
+            const { data: matches, error: matchesError } = await supabase
+                .from('bets')
+                .select('match_id,tsgmt,date,time')
+                .in('match_id', matchIds);
+            if (matchesError) {
+                console.log(matchesError);
+            } else {
+                const matchById = new Map((matches || []).map((match) => [match.match_id, match]));
+                rows = rows.map((bet) => {
+                    const match = matchById.get(bet.match_id);
+                    return match ? { ...bet, tsgmt: match.tsgmt, match_date: match.date, match_time: match.time } : bet;
+                });
+            }
+        }
+
         return {
             props: {
-                notification: trans
+                notification: rows
             },
         }
     } catch (e) {

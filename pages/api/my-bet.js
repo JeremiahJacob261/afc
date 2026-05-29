@@ -31,7 +31,12 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       status: 'success',
-      bet,
+      bet: {
+        ...bet,
+        tsgmt: match?.tsgmt || null,
+        match_date: match?.date || null,
+        match_time: match?.time || null,
+      },
       match: match || {},
     })
   } catch (error) {

@@ -18,6 +18,7 @@ import { Select as Sel } from '@mui/material';
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { requireAdmin } from "@/lib/adminAuth";
 import { ensureUpcomingMatchesCurrent } from "@/lib/apiFootballSync";
+import { useClientMatchDisplay } from "@/lib/matchDisplay";
 //serversideprops
 export async function getServerSideProps(context) {
 
@@ -203,57 +204,53 @@ const handleOpen = () => {
                 <Typography sx={{ fontFamily: 'Poppins, sans-serif', fontSize: '16px', color: 'white', fontWeight: '400', textAlign: 'center' }}>Number of Games Left Today: {fixturex ? fixturex.length : '0'}</Typography>
                 <Stack direction='column-reverse'>
 
-                {
-                    fixturex.map((f) => {
-
-                        return (
-                            <Stack direction="column" spacing={3} justifyContent='center' alignItems='center'
-                                key={f.id}
-                                style={{
-                                    marginBottom: "8px", padding: "18.5px",
-                                    background: '#EFEFEF',
-                                    width: '343px',
-                                    borderRadius: '5px',
-                                    height: 'auto'
-                                }} onClick={() => {
-
-                                }}>
-
-                                <form onSubmit={submitForm} ref={form}>
-                                    <Stack direction='column'>
-                                        <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }} name='league' >{f.league} </Typography>
-                                        <Divider sx={{ background: 'black' }} />
-                                    </Stack>
-                                    <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
-                                        <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                                            <Image src={f.home_logo} width={50} height={50} alt='home' name='ihome' />
-                                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }} name='home'>{f.home_name}</Typography>
-                                        </Stack>
-                                        <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }} name='time'>{f.hour}:{f.minute}</Typography>
-                                            <p>|</p>
-                                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }} name='date'>{f.day}/{f.month}</Typography>
-                                        </Stack>
-                                        <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                                            <Image src={f.away_logo} width={50} height={50} alt='away' name='iaway' />
-                                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }} name='away'>{f.away_name}</Typography>
-                                        </Stack>
-                                    </Stack>
-                                    <Button 
-                                        onClick={() => {
-                                          router.push(`/admin/input?id=${f.id}`)
-                                          localStorage.setItem('prevurl',ids);
-                                        }}
-                                        sx={{ fontFamily: 'Poppins,sans-serif', margin: '8px', fontSize: '16', fontWeight: '300', color: 'white', background: "#03045E", padding: '10px' }} >
-                                        Input ODDS.
-                                    </Button>
-                                </form>
-                            </Stack>
-                        )
-                    })
-                }
+                {fixturex.map((fixture) => (
+                    <FixtureCard key={fixture.id} fixture={fixture} ids={ids} router={router} />
+                ))}
                 </Stack>
             </Stack>
                    </Stack>
+    )
+}
+
+function FixtureCard({ fixture, ids, router }) {
+    const display = useClientMatchDisplay(fixture);
+
+    return (
+        <Stack direction="column" spacing={3} justifyContent='center' alignItems='center'
+            style={{
+                marginBottom: "8px", padding: "18.5px",
+                background: '#EFEFEF',
+                width: '343px',
+                borderRadius: '5px',
+                height: 'auto'
+            }}>
+            <Stack direction='column' sx={{ width: '100%' }}>
+                <Typography style={{ color: 'black', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }} name='league' >{fixture.league} </Typography>
+                <Divider sx={{ background: 'black' }} />
+            </Stack>
+            <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
+                <Stack direction='column' justifyContent='center' alignItems='center' spacing={1} sx={{ minWidth: 0 }}>
+                    <Image src={fixture.home_logo} width={50} height={50} alt='home' name='ihome' />
+                    <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100', overflowWrap: 'anywhere' }} name='home'>{fixture.home_name}</Typography>
+                </Stack>
+                <Stack direction='column' justifyContent='center' alignItems='center' spacing={0}>
+                    <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '14px', fontWeight: '100' }} name='time'>{display.time}</Typography>
+                    <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100' }} name='date'>{display.date}</Typography>
+                </Stack>
+                <Stack direction='column' justifyContent='center' alignItems='center' spacing={1} sx={{ minWidth: 0 }}>
+                    <Image src={fixture.away_logo} width={50} height={50} alt='away' name='iaway' />
+                    <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'black', fontSize: '12px', fontWeight: '100', overflowWrap: 'anywhere' }} name='away'>{fixture.away_name}</Typography>
+                </Stack>
+            </Stack>
+            <Button
+                onClick={() => {
+                    router.push(`/admin/input?id=${fixture.id}`)
+                    localStorage.setItem('prevurl', ids);
+                }}
+                sx={{ fontFamily: 'Poppins,sans-serif', margin: '8px', fontSize: '16', fontWeight: '300', color: 'white', background: "#03045E", padding: '10px' }} >
+                Input ODDS.
+            </Button>
+        </Stack>
     )
 }

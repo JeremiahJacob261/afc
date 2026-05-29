@@ -23,7 +23,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { getAuth, signOut } from "firebase/auth";
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 import toast, { Toaster } from 'react-hot-toast';
-import { formatMatchDate, formatMatchTime } from '@/lib/matchDisplay';
+import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay';
 
 
 async function processBets(name) {
@@ -232,88 +232,15 @@ export default function Home() {
             <Stack sx={{ background: '#10284D', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>Next 30 mins</Typography></Stack>
           </Stack>
 
-          <Stack alignItems='center' direction={"column-reverse"} sx={{ width: '100%' }}>
-            {
-              footDat.map((pro) => {
-                // let stams = Date.parse(pro.date + " " + pro.time) / 1000;
-                let stams = pro.tsgmt / 1000;
-                let d1 = new Date();
-                d1.toUTCString();
-                // two hours less than my local time
-                let d1utc = Math.floor(d1.getTime() / 1000);
-                // let curren = new Date().getTime() / 1000;
-                let curren = d1utc;
-                const league = (pro.league === 'others') ? pro.otherl : pro.league;
-                const displayDate = formatMatchDate(pro);
-                const displayTime = formatMatchTime(pro);
-                return (
-
-                  <Stack direction="column" spacing={2} justifyContent='center' alignItems='center'
-                    key={pro.match_id}
-                    style={{
-                      marginBottom: "8px", padding: "18.5px",
-                      display: (stams < curren) ? 'none' : 'visible',
-                      background: '#10284D',
-                      width: '100%',
-                      maxWidth: '343px',
-                      boxSizing: 'border-box',
-                      borderRadius: '5px',
-                      height: '210px',
-                      border: pro.company ? '1px solid #1BB6FF' : ''
-                    }} onClick={() => {
-                      handleOpen()
-                      //register/000208
-                      router.push("/user/match/" + pro.match_id)
-                    }}>
-                    <Stack direction='column'>
-                      <Stack direction="rows" alignItems="center" justifyContent="center">
-                        {
-                          (pro.company) ?
-                            <>
-                              <Icon icon="solar:star-bold-duotone" width="24" height="24" style={{ color: '#1BB6FF' }} />
-                              <Typography style={{ color: '#E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Verified Company Game</Typography>
-                            </>
-                            : <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}></Typography>
-                        }
-                      </Stack>
-                      <Typography style={{ color: '#E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{league} </Typography>
-                      <Divider sx={{ background: '#1BB6FF' }} />
-                    </Stack>
-                    <Stack direction='row' justifyContent='space-between' alignItems='center' spacing={1} sx={{ width: '100%' }}>
-                      <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                        <Image src={pro.ihome ? pro.ihome : Ims} width={50} height={50} alt='home' />
-                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
-                      </Stack>
-                      <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{displayTime}</Typography>
-                        <p style={{ color: '#E9E5DA' }}>|</p>
-                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{displayDate}</Typography>
-                      </Stack>
-                      <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                        <Image src={pro.iaway ? pro.iaway : Ims} width={50} height={50} alt='away' />
-                        <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{pro.away}</Typography>
-                      </Stack>
-                    </Stack>
-                    <Stack direction='row' spacing={1} sx={{ width: '100%' }} >
-                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', flex: '1 1 0', minWidth: 0, height: '40px', background: '#E6E8F3', border: '3px solid #1BB6FF' }}>
-                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#06101F' }}>1-0</Typography>
-                        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#06101F' }}>{pro.onenil}</Typography>
-                      </Stack>
-                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', flex: '1 1 0', minWidth: 0, height: '40px', background: '#E6E8F3', border: '3px solid #1BB6FF' }}>
-                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#06101F' }}>1-1</Typography>
-                        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#06101F' }}>{pro.oneone}</Typography>
-                      </Stack>
-                      <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', flex: '1 1 0', minWidth: 0, height: '40px', background: '#E6E8F3', border: '3px solid #1BB6FF' }}>
-                        <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#06101F' }}>1-2</Typography>
-                        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#06101F' }}>{pro.onetwo}</Typography>
-                      </Stack>
-                    </Stack>
-                  </Stack>
-                )
-              })
-            }
-
-
+          <Stack alignItems='center' sx={{ width: '100%' }}>
+            {footDat.map((match) => (
+              <DashboardMatchCard
+                key={match.match_id}
+                match={match}
+                onOpen={handleOpen}
+                onSelect={(matchId) => router.push(`/user/match/${matchId}`)}
+              />
+            ))}
           </Stack>
 
           <Stack>
@@ -321,6 +248,107 @@ export default function Home() {
           </Stack>
         </Stack>
       </Cover>
+    </Stack>
+  )
+}
+
+function DashboardMatchCard({ match, onOpen, onSelect }) {
+  const display = useClientMatchDisplay(match)
+  const startMs = display.startMs || getMatchStartMs(match)
+
+  if (startMs && startMs < Date.now()) return null
+
+  const league = (match.league === 'others' ? match.otherl : match.league) || 'League'
+
+  return (
+    <Stack
+      direction="column"
+      spacing={2}
+      justifyContent="center"
+      alignItems="center"
+      sx={{
+        mb: 1,
+        p: '18.5px',
+        background: '#10284D',
+        width: '100%',
+        maxWidth: '343px',
+        boxSizing: 'border-box',
+        borderRadius: '5px',
+        minHeight: '210px',
+        border: match.company ? '1px solid #1BB6FF' : '1px solid transparent',
+        cursor: 'pointer',
+      }}
+      onClick={() => {
+        onOpen()
+        onSelect(match.match_id)
+      }}
+    >
+      <Stack direction="column" sx={{ width: '100%', minWidth: 0 }}>
+        {match.company ? (
+          <Stack direction="row" alignItems="center" justifyContent="center" spacing={0.5}>
+            <Icon icon="solar:star-bold-duotone" width="24" height="24" style={{ color: '#1BB6FF', flexShrink: 0 }} />
+            <Typography sx={{ color: '#E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: 12 }}>
+              Verified Company Game
+            </Typography>
+          </Stack>
+        ) : null}
+        <Typography sx={{ color: '#E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          {league}
+        </Typography>
+        <Divider sx={{ background: '#1BB6FF' }} />
+      </Stack>
+
+      <Box sx={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 82px minmax(0, 1fr)', alignItems: 'center', gap: 1, width: '100%' }}>
+        <DashboardTeam image={match.ihome} name={match.home} />
+        <Box sx={{ textAlign: 'center', color: '#E9E5DA', fontFamily: 'Poppins,sans-serif' }}>
+          <Typography sx={{ fontSize: 14, fontWeight: 300, lineHeight: 1.3 }}>{display.time}</Typography>
+          <Typography sx={{ fontSize: 12, fontWeight: 300, lineHeight: 1.3 }}>{display.date}</Typography>
+        </Box>
+        <DashboardTeam image={match.iaway} name={match.away} />
+      </Box>
+
+      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 1, width: '100%' }}>
+        <DashboardOdd label="1-0" value={match.onenil} />
+        <DashboardOdd label="1-1" value={match.oneone} />
+        <DashboardOdd label="1-2" value={match.onetwo} />
+      </Box>
+    </Stack>
+  )
+}
+
+function DashboardTeam({ image, name }) {
+  return (
+    <Stack direction="column" justifyContent="center" alignItems="center" spacing={1} sx={{ minWidth: 0 }}>
+      <Image src={image || Ims} width={50} height={50} alt={name || 'team'} />
+      <Typography
+        sx={{
+          minHeight: 34,
+          textAlign: 'center',
+          fontFamily: 'Poppins,sans-serif',
+          color: '#E9E5DA',
+          fontSize: 12,
+          fontWeight: 300,
+          lineHeight: 1.35,
+          overflow: 'hidden',
+          display: '-webkit-box',
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical',
+          overflowWrap: 'anywhere',
+        }}
+      >
+        {name || 'Team'}
+      </Typography>
+    </Stack>
+  )
+}
+
+function DashboardOdd({ label, value }) {
+  return (
+    <Stack direction="row" justifyContent="space-around" alignItems="center" sx={{ borderRadius: '5px', minWidth: 0, height: 40, background: '#E6E8F3', border: '3px solid #1BB6FF' }}>
+      <Typography sx={{ fontSize: 12, fontFamily: 'Poppins,sans-serif', fontWeight: 400, color: '#06101F' }}>{label}</Typography>
+      <Typography sx={{ minWidth: 0, fontSize: 16, fontFamily: 'Poppins,sans-serif', fontWeight: 400, color: '#06101F', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+        {value}
+      </Typography>
     </Stack>
   )
 }

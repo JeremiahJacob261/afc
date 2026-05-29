@@ -25,6 +25,7 @@ import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import SoupKitchenIcon from '@mui/icons-material/SoupKitchen';
 import TimesOneMobiledataIcon from '@mui/icons-material/TimesOneMobiledata';
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
+import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay';
 const codes = Object.fromEntries((codesData.countries || []).map((country) => [country.code, country.name]))
 export default function Users({ refs }) {
   const [searchR, setSearchR] = useState([])
@@ -524,8 +525,29 @@ export default function Users({ refs }) {
           .select('*')
           .eq('username', display.title)
           .order('id', { ascending: false });
-        setUserBet(data)
-        console.log(data)
+        const rows = data || []
+        const matchIds = [...new Set(rows.map((bet) => bet.match_id).filter(Boolean))]
+        if (!matchIds.length) {
+          setUserBet(rows)
+          return
+        }
+
+        const { data: matches, error: matchError } = await supabase
+          .from('bets')
+          .select('match_id,tsgmt,date,time')
+          .in('match_id', matchIds)
+
+        if (matchError) {
+          console.log(matchError)
+          setUserBet(rows)
+          return
+        }
+
+        const matchById = new Map((matches || []).map((match) => [match.match_id, match]))
+        setUserBet(rows.map((bet) => {
+          const match = matchById.get(bet.match_id)
+          return match ? { ...bet, tsgmt: match.tsgmt, match_date: match.date, match_time: match.time } : bet
+        }))
       }
       getUserBets();
     }, [])
@@ -552,19 +574,21 @@ export default function Users({ refs }) {
           {
             userbet.map((b) => {
               let day = new Date(b.created_at);
-              let stams = Date.parse(b.date + " " + b.time) / 1000;
-              let curren = new Date().getTime() / 1000;
+              const stams = getMatchStartMs(b);
+              const curren = Date.now();
+              const isFutureMatch = Boolean(stams && stams > curren);
               return (
                 <Stack sx={{ border: "1px solid #90E0EF", padding: "8px", width: '100%' }} key={b.betid}>
                   <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#90E0EF', fontSize: '12px' }}>Match Name: {b.home} vs {b.away}</Typography>
                   <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#CAF0F8', fontSize: '12px' }}>Stake : {b.stake} USDT</Typography>
                   <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#CAF0F8', fontSize: '12px' }}>ODD : {b.odd}</Typography>
                   <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#CAF0F8', fontSize: '12px' }}>Market : {b.market}</Typography>
-                  <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#CAF0F8', fontSize: '12px' }}>Status : {(stams > curren) ? 'Not Started' : (b.won === 'null') ? 'Processing' : (b.won === 'true') ? 'Won' : 'Lost'} </Typography>
-                  <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#CAF0F8', fontSize: '12px' }}>Time : {day.getDate() + '/' + day.getMonth() + '/' + day.getFullYear() + ' ' + day.getUTCHours() + ':' + day.getMinutes() + '  UTC'}</Typography>
+                  <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#CAF0F8', fontSize: '12px' }}>Status : {isFutureMatch ? 'Not Started' : (b.won === 'null') ? 'Processing' : (b.won === 'true') ? 'Won' : 'Lost'} </Typography>
+                  <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#CAF0F8', fontSize: '12px' }}>Kickoff : <BetKickoff bet={b} /></Typography>
+                  <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#CAF0F8', fontSize: '12px' }}>Placed : {day.getDate() + '/' + day.getMonth() + '/' + day.getFullYear() + ' ' + day.getUTCHours() + ':' + day.getMinutes() + '  UTC'}</Typography>
                   <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#CAF0F8', fontSize: '12px' }}>Total : {parseInt(b.stake + b.aim)}</Typography>
 
-                  <Button variant='standard' style={{ color: '#F05D5E', display: (stams < curren) ? 'none' : 'visible' }} onClick={() => {
+                  <Button variant='standard' style={{ color: '#F05D5E', display: isFutureMatch ? 'visible' : 'none' }} onClick={() => {
                     const rem = async () => {
 
                       const { error } = await supabase
@@ -873,6 +897,12 @@ export default function Users({ refs }) {
     </Cover>
   )
 }
+
+function BetKickoff({ bet }) {
+  const display = useClientMatchDisplay(bet)
+  return <>{display.dateTime}</>
+}
+
 export async function getServerSideProps(context) {
   const supabaseAdmin = getSupabaseAdmin()
   const { data, error } = await supabaseAdmin

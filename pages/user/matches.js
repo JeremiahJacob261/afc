@@ -1,28 +1,169 @@
 import Cover from './cover'
 import { supabase } from '@/pages/api/supabase'
-import { useContext, useEffect, useState } from "react";
-import { Paper, Stack, Typography, Button, Divider } from '@mui/material'
-import Image from "next/image";
+import { useState } from 'react'
+import { Box, Stack, Typography } from '@mui/material'
+import Image from 'next/image'
 import Head from 'next/head'
 import Ims from '@/public/simps/ball.png'
-import { Icon } from '@iconify/react';
-import { useRouter } from "next/router";
-import Loading from "../components/loading";
-import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
-import { formatMatchDate, formatMatchTime } from '@/lib/matchDisplay';
+import { Icon } from '@iconify/react'
+import { useRouter } from 'next/router'
+import Loading from '../components/loading'
+import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined'
+import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay'
 
+function TeamBlock({ image, name, align = 'center' }) {
+  return (
+    <Box sx={{ minWidth: 0, textAlign: align }}>
+      <Box sx={{ display: 'grid', placeItems: 'center' }}>
+        <Image src={image || Ims} width={50} height={50} alt={name || 'team'} style={{ objectFit: 'contain' }} />
+      </Box>
+      <Typography
+        sx={{
+          mt: 1,
+          minHeight: 34,
+          color: '#E9E5DA',
+          fontFamily: 'Poppins,sans-serif',
+          fontSize: 12,
+          fontWeight: 300,
+          lineHeight: 1.35,
+          overflow: 'hidden',
+          display: '-webkit-box',
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical',
+          overflowWrap: 'anywhere',
+        }}
+      >
+        {name || 'Team'}
+      </Typography>
+    </Box>
+  )
+}
 
-export default function Matches({ footDat }) {
-  const [info, setInfo] = useState({})
-  console.log(footDat)
+function OddChip({ label, value, company }) {
+  return (
+    <Box
+      sx={{
+        height: 40,
+        minWidth: 0,
+        borderRadius: '5px',
+        background: '#E6E8F3',
+        border: `3px solid ${company ? '#FFB400' : '#D4AF37'}`,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        gap: 0.5,
+        px: 0.5,
+      }}
+    >
+      <Typography sx={{ fontSize: 12, fontFamily: 'Poppins,sans-serif', fontWeight: 400, color: '#808080' }}>
+        {label}
+      </Typography>
+      <Typography
+        sx={{
+          minWidth: 0,
+          fontSize: 16,
+          fontFamily: 'Poppins,sans-serif',
+          fontWeight: 400,
+          color: '#808080',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+        }}
+      >
+        {value}
+      </Typography>
+    </Box>
+  )
+}
+
+function MatchCard({ match, onOpen, onSelect }) {
+  const display = useClientMatchDisplay(match)
+  const startMs = display.startMs || getMatchStartMs(match)
+
+  if (startMs && startMs < Date.now()) return null
+
+  const league = (match.league === 'others' ? match.otherl : match.league) || 'League'
+
+  return (
+    <Box
+      component="button"
+      type="button"
+      onClick={() => {
+        onOpen()
+        onSelect(match.match_id)
+      }}
+      sx={{
+        width: '100%',
+        maxWidth: 343,
+        minHeight: 210,
+        mb: 1,
+        p: '18px',
+        boxSizing: 'border-box',
+        borderRadius: '5px',
+        border: match.company ? '1px solid #1BB6FF' : '1px solid transparent',
+        background: '#10284D',
+        color: 'inherit',
+        cursor: 'pointer',
+        textAlign: 'left',
+      }}
+    >
+      <Stack spacing={1.5}>
+        <Box sx={{ minWidth: 0 }}>
+          {match.company ? (
+            <Stack direction="row" alignItems="center" justifyContent="center" spacing={0.5} sx={{ mb: 0.5 }}>
+              <Icon icon="solar:star-bold-duotone" width="24" height="24" style={{ color: '#1BB6FF', flexShrink: 0 }} />
+              <Typography sx={{ color: '#E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: 12 }}>
+                Verified Company Game
+              </Typography>
+            </Stack>
+          ) : null}
+          <Typography
+            sx={{
+              color: '#E9E5DA',
+              fontFamily: 'Poppins,sans-serif',
+              fontSize: 12,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {league}
+          </Typography>
+          <Box sx={{ mt: 0.5, height: 1, background: '#1BB6FF' }} />
+        </Box>
+
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: 'minmax(0, 1fr) 82px minmax(0, 1fr)',
+            alignItems: 'center',
+            gap: 1,
+          }}
+        >
+          <TeamBlock image={match.ihome} name={match.home} />
+          <Box sx={{ textAlign: 'center', color: '#CACACA', fontFamily: 'Poppins,sans-serif' }}>
+            <Typography sx={{ fontSize: 14, lineHeight: 1.3 }}>{display.time}</Typography>
+            <Typography sx={{ fontSize: 12, lineHeight: 1.3 }}>{display.date}</Typography>
+          </Box>
+          <TeamBlock image={match.iaway} name={match.away} />
+        </Box>
+
+        <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 1 }}>
+          <OddChip label="1-0" value={match.onenil} company={match.company} />
+          <OddChip label="1-1" value={match.oneone} company={match.company} />
+          <OddChip label="1-2" value={match.onetwo} company={match.company} />
+        </Box>
+      </Stack>
+    </Box>
+  )
+}
+
+export default function Matches({ footDat = [] }) {
   const router = useRouter()
-  //the below controls the loading modal
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [open, setOpen] = useState(false)
+  const matches = Array.isArray(footDat) ? footDat : []
 
-  //the end of thellaoding modal control
-
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
 
   return (
     <Cover>
@@ -33,114 +174,38 @@ export default function Matches({ footDat }) {
         <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <div style={{
-        minWidth: '370px', maxWidth: "450px", background: "#06101F", minHeight: '90vh'
-      }}>
-        <Stack >
-          <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
-            router.push('/user')
-          }} />
-          <Typography sx={{ fontSize: '16px', color: 'white', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Matches</Typography>
-
+      <Box sx={{ width: '100%', maxWidth: 450, minHeight: '90vh', mx: 'auto', px: 1.5, pb: 3, boxSizing: 'border-box', background: '#06101F' }}>
+        <Stack direction="row" alignItems="center" spacing={1} sx={{ py: 1 }}>
+          <KeyboardArrowLeftOutlinedIcon sx={{ width: 24, height: 24, color: '#E9E5DA' }} onClick={() => router.push('/user')} />
+          <Typography sx={{ flex: 1, fontSize: 16, color: 'white', fontFamily: 'Poppins,sans-serif', fontWeight: 300, textAlign: 'center', pr: 3 }}>
+            Matches
+          </Typography>
         </Stack>
-        <Stack alignItems='center' direction={"column-reverse"}>
-          {
-            footDat.map((pro) => {
-              // let stams = Date.parse(pro.date + " " + pro.time) / 1000;
-              let stams = pro.tsgmt / 1000;
-              let d1 = new Date();
-              d1.toUTCString();
-              // two hours less than my local time
-              let d1utc = Math.floor(d1.getTime() / 1000);
-              // let curren = new Date().getTime() / 1000;
-              let curren = d1utc;
-              // let curren = new Date().getTime() / 1000;
-              const league = (pro.league === 'others') ? pro.otherl : pro.league;
-              const displayDate = formatMatchDate(pro);
-              const displayTime = formatMatchTime(pro);
-              return (
-                <Stack direction="column" spacing={2} justifyContent='center' alignItems='center'
-                  key={pro.match_id}
-                  style={{
-                    marginBottom: "8px", padding: "18.5px",
-                    display: (stams < curren) ? 'none' : 'visible',
-                    background: '#10284D',
-                    width: '343px',
-                    borderRadius: '5px',
-                    minHeight: '210px',
-                    border:pro.company ? '1px solid #1BB6FF' : ''
-                  }} onClick={() => {
-                    handleOpen()
-                    //register/000208
-                    router.push("/user/match/" + pro.match_id)
-                  }}>
-                  <Stack direction='column' >
-                    <Stack direction="rows" alignItems="center" justifyContent="center">
-                      {
-                        (pro.company) ?
-                          <>
-                            <Icon icon="solar:star-bold-duotone" width="24" height="24" style={{ color: '#1BB6FF' }} />
-                            <Typography style={{ color: '#E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>Verified Company Game</Typography>
-                          </>
-                          : <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}></Typography>
-                      }
-                    </Stack>
-                    <Typography style={{ color: '#E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{league} </Typography>
-                    <Divider sx={{ background: '#1BB6FF' }} />
-                  </Stack>
-                  <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
-                    <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                      <Image src={pro.ihome ? pro.ihome : Ims} width={50} height={50} alt='home' />
-                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{pro.home}</Typography>
-                    </Stack>
-                    <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{displayTime}</Typography>
-                      <p>|</p>
-                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#CACACA', fontSize: '14px', fontWeight: '100' }}>{displayDate}</Typography>
-                    </Stack>
-                    <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                      <Image src={pro.iaway ? pro.iaway : Ims} width={50} height={50} alt='away' />
-                      <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{pro.away}</Typography>
-                    </Stack>
-                  </Stack>
-                  <Stack direction='row' spacing={2} >
-                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3', border: pro.company ? '3px solid #FFB400' : '3px solid #D4AF37' }}>
-                      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>1-0</Typography>
-                      <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>{pro.onenil}</Typography>
-                    </Stack>
-                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3', border: pro.company ? '3px solid #FFB400' : '3px solid #D4AF37' }}>
-                      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>1-1</Typography>
-                      <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>{pro.oneone}</Typography>
-                    </Stack>
-                    <Stack direction='row' justifyContent='space-around' alignItems='center' sx={{ borderRadius: '5px', width: '96px', height: '40px', background: '#E6E8F3', border: pro.company ? '3px solid #FFB400' : '3px solid #D4AF37' }}>
-                      <Typography sx={{ fontSize: '12px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>1-2</Typography>
-                      <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '400', color: '#808080' }}>{pro.onetwo}</Typography>
-                    </Stack>
-                  </Stack>
-                </Stack>
-              )
-            })
-          }
 
-
+        <Stack alignItems="center">
+          {matches.map((match) => (
+            <MatchCard
+              key={match.match_id}
+              match={match}
+              onOpen={handleOpen}
+              onSelect={(matchId) => router.push(`/user/match/${matchId}`)}
+            />
+          ))}
         </Stack>
-      </div>
+      </Box>
     </Cover>
-
   )
 }
-export async function getServerSideProps(context) {
-  console.log('hello')
-  const { data, error } = await supabase
+
+export async function getServerSideProps() {
+  const { data } = await supabase
     .from('bets')
     .select('*')
     .eq('verified', false)
     .limit(50)
-    .order('tsgmt', { ascending: false });
-  let footDat = data;
-  console.log(data)
-  console.log(error)
+    .order('tsgmt', { ascending: true })
+
   return {
-    props: { footDat }, // will be passed to the page component as props
+    props: { footDat: data || [] },
   }
 }

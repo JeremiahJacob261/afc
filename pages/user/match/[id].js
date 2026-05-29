@@ -20,7 +20,7 @@ import Bal from '@/public/bball.png'
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
-import { formatMatchDate, formatMatchTime } from '@/lib/matchDisplay';
+import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay';
 import { waitForPaint } from '@/lib/uiFeedback';
 
 
@@ -96,8 +96,8 @@ function getTeamName(name, fallback) {
 }
 
 function getMatchStartSeconds(match) {
-    const timestamp = Number(match?.tsgmt || 0)
-    return Number.isFinite(timestamp) ? timestamp / 1000 : 0
+    const timestamp = getMatchStartMs(match)
+    return timestamp ? timestamp / 1000 : 0
 }
 
 async function processBets(name) {
@@ -226,8 +226,7 @@ export default function Match({ matchDat }) {
             </Snackbar>
         )
     }
-    const displayDate = formatMatchDate(matches)
-    const displayTime = formatMatchTime(matches)
+    const matchDisplay = useClientMatchDisplay(matches)
     const leagueName = getLeagueName(matches)
     const homeName = getTeamName(matches.home, 'Home')
     const awayName = getTeamName(matches.away, 'Away')
@@ -292,9 +291,9 @@ export default function Match({ matchDat }) {
                             <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{homeName}</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{displayTime}</Typography>
+                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{matchDisplay.time}</Typography>
                             <p style={{color:'#E9E5DA'}}>|</p>
-                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{displayDate}</Typography>
+                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{matchDisplay.date}</Typography>
                         </Stack>
                         <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                             <Image src={matches.iaway ? matches.iaway : Ims} width={50} height={50} alt='away' sx={{ borderRadius: '10px' }} />

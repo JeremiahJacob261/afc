@@ -20,6 +20,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { supabase } from '@/pages/api/supabase'
 import { requireAdmin } from '@/lib/adminAuth'
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
+import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay'
 
 const marketGroups = [
   {
@@ -81,7 +82,7 @@ function compactDate(value) {
 function statusFor(match) {
   if (match?.verified) return { label: 'Settled', tone: 'emerald' }
 
-  const startsAt = Number(match?.tsgmt) || Date.parse(`${match?.date || ''} ${match?.time || ''}`)
+  const startsAt = getMatchStartMs(match)
   if (startsAt && startsAt > Date.now()) return { label: 'Upcoming', tone: 'cyan' }
   if (startsAt && startsAt <= Date.now()) return { label: 'Ready to settle', tone: 'amber' }
 
@@ -130,7 +131,8 @@ export default function MatchDetail({ datas = {}, mist = [] }) {
   const [score, setScore] = useState({ home: '', away: '' })
 
   const status = statusFor(match)
-  const startsAt = match.tsgmt ? compactDate(Number(match.tsgmt)) : compactDate(`${match.date || ''} ${match.time || ''}`)
+  const matchDisplay = useClientMatchDisplay(match)
+  const startsAt = matchDisplay.dateTime
 
   const totals = useMemo(() => {
     return bets.reduce(

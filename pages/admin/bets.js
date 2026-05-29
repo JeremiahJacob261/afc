@@ -16,6 +16,7 @@ import Link from "next/link";
 import { toast, Toaster } from "react-hot-toast";
 import Cover from './cover'
 import { motion } from "framer-motion";
+import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay'
 export default function Bets({ bets }) {
     const [open, setOpen] = useState(false);
     const [quest, setQuest] = useState(false)
@@ -310,8 +311,8 @@ export default function Bets({ bets }) {
                 <Stack direction="column-reverse">
                     {
                         bets.map((b) => {
-                            let stams = Date.parse(b.date + " " + b.time) / 1000;
-                            let curren = new Date().getTime() / 1000;
+                            const stams = getMatchStartMs(b);
+                            const curren = Date.now();
                             if (stams > curren) {
                                 return (
                                     <Stack key={b.match_id} direction="column" style={
@@ -328,8 +329,8 @@ export default function Bets({ bets }) {
                                         <Box>
                                             <Typography sx={{ fontFamily: 'Rajdhani, sans-serif' }}>Match Details</Typography>
                                             <Typography sx={{ fontFamily: 'Spectral, serif' }}>League: {b.league}</Typography>
-                                            <Typography sx={{ fontFamily: 'Spectral, serif' }}>Date: {b.date}</Typography>
-                                            <Typography sx={{ fontFamily: 'Spectral, serif' }}>Time: {b.time}</Typography>
+                                            <Typography sx={{ fontFamily: 'Spectral, serif' }}>Date: <MatchDate match={b} /></Typography>
+                                            <Typography sx={{ fontFamily: 'Spectral, serif' }}>Time: <MatchTime match={b} /></Typography>
                                             <Typography sx={{ fontFamily: 'Barlow Condensed, sans-serif', color: 'blue' }}>Status: Not Started</Typography>
                                             <Stack direction="row" justifyContent="space-around" alignItems="center">
 
@@ -353,7 +354,7 @@ export default function Bets({ bets }) {
                                 )
                             } else {
                                 //for finished matches
-                                if (stams + 6600 < curren) {
+                                if (stams && stams + 6600000 < curren) {
                                     return (
                                         <Stack key={b.match_id} direction="column" style={
                                             {
@@ -371,8 +372,8 @@ export default function Bets({ bets }) {
                                                 <Box>
                                                     <Typography color="#061A40" sx={{ fontFamily: 'Rajdhani, sans-serif' }}>Match Details</Typography>
                                                     <Typography color="#061A40" sx={{ fontFamily: 'Spectral, serif' }}>League: {b.league}</Typography>
-                                                    <Typography color="#061A40" sx={{ fontFamily: 'Spectral, serif' }}>Date: {b.date}</Typography>
-                                                    <Typography color="#061A40" sx={{ fontFamily: 'Spectral, serif' }}>Time: {b.time}</Typography>
+                                                    <Typography color="#061A40" sx={{ fontFamily: 'Spectral, serif' }}>Date: <MatchDate match={b} /></Typography>
+                                                    <Typography color="#061A40" sx={{ fontFamily: 'Spectral, serif' }}>Time: <MatchTime match={b} /></Typography>
                                                     <Typography color="#061A40" sx={{ fontFamily: 'Barlow Condensed, sans-serif', color: 'orange' }}>Status: Match Ended ... Please Input the Results below</Typography>
                                                     <Stack direction="column" spacing={3} justifyContent="center" alignItems="center">
                                                         <Box sx={{ padding: "8px" }}>
@@ -422,8 +423,8 @@ export default function Bets({ bets }) {
                                             <Box>
                                                 <Typography sx={{ fontFamily: 'Rajdhani, sans-serif' }}>Match Details</Typography>
                                                 <Typography sx={{ fontFamily: 'Spectral, serif' }}>League: {b.league}</Typography>
-                                                <Typography sx={{ fontFamily: 'Spectral, serif' }}>Date: {b.date}</Typography>
-                                                <Typography sx={{ fontFamily: 'Spectral, serif' }}>Time: {b.time}</Typography>
+                                                <Typography sx={{ fontFamily: 'Spectral, serif' }}>Date: <MatchDate match={b} /></Typography>
+                                                <Typography sx={{ fontFamily: 'Spectral, serif' }}>Time: <MatchTime match={b} /></Typography>
                                                 <Typography sx={{ fontFamily: 'Barlow Condensed, sans-serif', color: 'blue' }}>Status: On Going</Typography>
                                                 <Stack direction="row" justifyContent="space-around" alignItems="center">
                                                     <Link href={'/admin/matchdetail/' + b.match_id}>
@@ -455,6 +456,16 @@ export default function Bets({ bets }) {
         </Cover>
     )
 }
+function MatchDate({ match }) {
+    const display = useClientMatchDisplay(match);
+    return <>{display.date}</>
+}
+
+function MatchTime({ match }) {
+    const display = useClientMatchDisplay(match);
+    return <>{display.time}</>
+}
+
 export async function getServerSideProps(context) {
     const { data, error } = await supabase
         .from('bets')
