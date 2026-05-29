@@ -68,6 +68,19 @@ function normalizeName(value) {
   return String(value || '').trim().toLowerCase()
 }
 
+function paymentMethodIdentity(method) {
+  if (!method) return ''
+
+  const id = String(method.id ?? '').trim()
+  if (id) return `id:${id}`
+
+  const name = normalizeName(method.name)
+  if (name) return `name:${name}`
+
+  const code = normalizeCode(method)
+  return code ? `code:${code}` : ''
+}
+
 function isLocalDestination(destination) {
   const type = normalizeName(destination?.type)
   return type === 'local'
@@ -144,6 +157,7 @@ export default function Funds() {
   const [file, setFile] = useState(null)
 
   const code = normalizeCode(selectedMethod)
+  const selectedMethodIdentity = paymentMethodIdentity(selectedMethod)
   const requiresTransfer = Boolean(transferOptions[code]) && !hasNamedDestination(destinations, selectedMethod)
   const rate = getRate(selectedMethod)
   const minAmount = selectedMethod ? getMinimum(selectedMethod) : 0
@@ -332,10 +346,11 @@ export default function Funds() {
             <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 1 }}>
               {methods.map((method) => {
                 const methodCode = normalizeCode(method)
-                const selected = methodCode === code
+                const methodIdentity = paymentMethodIdentity(method)
+                const selected = Boolean(selectedMethodIdentity && methodIdentity === selectedMethodIdentity)
                 return (
                   <Button
-                    key={method.id || method.name}
+                    key={methodIdentity}
                     onClick={() => selectMethod(method)}
                     sx={{
                       alignItems: 'stretch',
