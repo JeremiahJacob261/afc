@@ -383,18 +383,7 @@ export default function Account() {
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
 
-              <Divider sx={{ bgcolor: "#1BB6FF" }} />
-
-              <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px', cursor:'pointer'  }} onClick={() => {
-                router.push("/user/faq")
-              }
-              }>
-                <Stack direction='row' spacing={1} justifyContent='start'>
-                  <Icon icon="ph:info-duotone" width="24" height="24" style={{ color: '#a3a3a3' }} />
-                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>About Us</Typography>
-                </Stack>
-                <KeyboardArrowRightIcon width={24} height={24} />
-              </Stack>
+           
 
               <Divider sx={{ bgcolor: "#1BB6FF" }} />
               < Link href='https://t.me/EFC_Support' style={{ textDecoration: 'none' }}>
