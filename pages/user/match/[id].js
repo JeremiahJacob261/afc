@@ -376,9 +376,9 @@ export default function Match({ matchDat }) {
                                 <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{homeName}</Typography>
                             </Stack>
                             <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{displayTime}</Typography>
+                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{matchDisplay.time}</Typography>
                                 <p style={{color:'#E9E5DA'}}>|</p>
-                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{displayDate}</Typography>
+                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{matchDisplay.date}</Typography>
                             </Stack>
                             <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                                 <Image src={matches.iaway ? matches.iaway : Ims} width={50} height={50} alt='away' />
