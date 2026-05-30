@@ -15,7 +15,6 @@ import Image from 'next/image'
 import Loading from "../../components/loading";
 import { motion } from 'framer-motion'
 import Ims from '@/public/simps/ball.png'
-// import Depx from '@/public/depx.png'
 import Bal from '@/public/bball.png'
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
@@ -113,6 +112,24 @@ async function processBets(name) {
     }
 }
 
+// ─── Liquid glow animation keyframes ─────────────────────────────────────────
+// The inset shadow shifts vertically (top ↔ bottom) to simulate liquid sloshing
+// inside the container; the outer glow pulses in sync to radiate outward.
+const liquidBoxShadow = [
+    'inset 0 0 10px 3px rgba(178,34,34,0.20), 0 0 8px 2px rgba(178,34,34,0.38)',
+    'inset 0 5px 22px 7px rgba(210,52,20,0.55), 0 0 18px 5px rgba(204,44,18,0.72)',
+    'inset 0 -5px 20px 7px rgba(190,38,14,0.48), inset 0 3px 12px 4px rgba(215,58,22,0.32), 0 0 14px 4px rgba(192,40,16,0.58)',
+    'inset 0 5px 22px 7px rgba(210,52,20,0.55), 0 0 18px 5px rgba(204,44,18,0.72)',
+    'inset 0 0 10px 3px rgba(178,34,34,0.20), 0 0 8px 2px rgba(178,34,34,0.38)',
+]
+
+const liquidTransition = {
+    duration: 2.8,
+    repeat: Infinity,
+    ease: 'easeInOut',
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 export default function Match({ matchDat }) {
     const router = useRouter()
     const initialMatch = Array.isArray(matchDat) && matchDat.length ? matchDat[0] : null
@@ -152,7 +169,6 @@ export default function Match({ matchDat }) {
 
     useEffect(() => {
         let active = true;
-       
         setMatches(initialMatch || {})
 
         const GET = async () => {
@@ -301,27 +317,139 @@ export default function Match({ matchDat }) {
                         </Stack>
                     </Stack>
                     <Divider sx={{ background: '#E9E5DA' }} />
-
+                        <p>{ matches?.company ? matches.company : 'NO' }</p> 
                     {
                         marketsArray.map((m) => {
+                            // ── Protection check ──────────────────────────────────────────────
+                            // A market is "company protected" when matches.company is truthy
+                            // AND this row's key matches the comarket field.
+                            const isProtected = Boolean(matches.company) && matches.comarket === m.word
+
                             return (
-                                <Stack direction="column" spacing={1} key={m.num}>
-                                    <Stack  style={{ minWidth: '300px', height: '40px'
-                                        ,display:'flex',flexDirection:'row', justifyContent:'space-between', alignItems:'center', }}>
-                                        <p style={{ color: '#E9E5DA', padding: '8px' }}>{m.num}</p>
-                                        <p style={{ color: '#1BB6FF', padding: '8px' }}>{formatOdd(getMatchOdd(matches, m.word, viplevel))}%</p>
-                                        <motion.div
-                                            onClick={() => {
-                                                if (getMatchOdd(matches, m.word, viplevel) <= 0) {
-                                                    toast.error('This market is not available')
-                                                    return
-                                                }
-                                                setPicked(m.word)
-                                                setBottom(true)
+                                <Stack direction="column" spacing={1} key={m.num} style={{ width: '100%' }}>
+                                    {/*
+                                     * Outer motion.div handles the liquid-glow effect:
+                                     *   • inset boxShadow shifts top ↔ bottom  → liquid sloshing
+                                     *   • outer boxShadow pulses               → radiating brick-red light
+                                     * A secondary motion.div sweeps a gradient across like flowing lava.
+                                     */}
+                                    <motion.div
+                                        animate={isProtected ? { boxShadow: liquidBoxShadow } : {}}
+                                        transition={isProtected ? liquidTransition : {}}
+                                        style={{
+                                            position: 'relative',
+                                            overflow: 'hidden',
+                                            borderRadius: '8px',
+                                            border: isProtected
+                                                ? '1px solid rgba(0, 202, 229, 0.55)'
+                                                : '1px solid transparent',
+                                            background: isProtected
+                                                ? 'rgba(32, 255, 244, 0.22)'
+                                                : 'transparent',
+                                        }}
+                                    >
+                                        {/* Liquid shimmer sweep – only rendered when protected */}
+                                        {isProtected && (
+                                            <motion.div
+                                                animate={{ x: ['-130%', '230%'] }}
+                                                transition={{
+                                                    duration: 2.8,
+                                                    repeat: Infinity,
+                                                    ease: 'easeInOut',
+                                                    repeatDelay: 0.2,
+                                                }}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: 0,
+                                                    left: 0,
+                                                    width: '60%',
+                                                    height: '100%',
+                                                    background:
+                                                        'linear-gradient(90deg, transparent, rgba(20, 185, 210, 0.16), rgba(26, 211, 228, 0.3), rgba(20, 178, 210, 0.16), transparent)',
+                                                    pointerEvents: 'none',
+                                                    zIndex: 0,
+                                                }}
+                                            />
+                                        )}
+
+                                        {/* Row content sits above the shimmer layer */}
+                                        <Stack
+                                            style={{
+                                                minWidth: '300px',
+                                                height: '44px',
+                                                display: 'flex',
+                                                flexDirection: 'row',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center',
+                                                position: 'relative',
+                                                zIndex: 1,
+                                                padding: '0 4px',
                                             }}
-                                            whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}
-                                            style={{ cursor: 'pointer', color: '#06101F', background: (matches.comarket != m.word) ? '#1BB6FF' : '#1BB6FF', padding: '4px', borderRadius: '5px' }}>choose</motion.div>
-                                    </Stack>
+                                        >
+                                            {/* Score label + optional badge */}
+                                            <Stack direction='row' alignItems='center' spacing={0.5}>
+                                                <p
+                                                    style={{
+                                                        color: isProtected ? '#7af6ff' : '#E9E5DA',
+                                                        padding: '8px',
+                                                        fontWeight: isProtected ? '600' : '400',
+                                                        margin: 0,
+                                                    }}
+                                                >
+                                                    {m.num}
+                                                </p>
+                                                {isProtected && (
+                                                    <motion.span
+                                                        animate={{ opacity: [0.65, 1, 0.65] }}
+                                                        transition={{
+                                                            duration: 1.6,
+                                                            repeat: Infinity,
+                                                            ease: 'easeInOut',
+                                                        }}
+                                                        style={{
+                                                            fontSize: '8px',
+                                                            color: '#00fffb',
+                                                            fontFamily: 'Poppins, sans-serif',
+                                                            fontWeight: '700',
+                                                            letterSpacing: '0.06em',
+                                                            textTransform: 'uppercase',
+                                                            lineHeight: 1,
+                                                        }}
+                                                    >
+                                                        ● COMPANY GAME
+                                                    </motion.span>
+                                                )}
+                                            </Stack>
+
+                                            {/* Odds */}
+                                            <p style={{ color: '#1BB6FF', padding: '8px', margin: 0 }}>
+                                                {formatOdd(getMatchOdd(matches, m.word, viplevel))}%
+                                            </p>
+
+                                            {/* Choose button */}
+                                            <motion.div
+                                                onClick={() => {
+                                                    if (getMatchOdd(matches, m.word, viplevel) <= 0) {
+                                                        toast.error('This market is not available')
+                                                        return
+                                                    }
+                                                    setPicked(m.word)
+                                                    setBottom(true)
+                                                }}
+                                                whileHover={{ scale: 1.1 }}
+                                                whileTap={{ scale: 0.95 }}
+                                                style={{
+                                                    cursor: 'pointer',
+                                                    color: '#06101F',
+                                                    background: '#1BB6FF',
+                                                    padding: '4px 8px',
+                                                    borderRadius: '5px',
+                                                }}
+                                            >
+                                                choose
+                                            </motion.div>
+                                        </Stack>
+                                    </motion.div>
                                     <Divider sx={{ bgcolor: "secondary.light" }} />
                                 </Stack>
                             )
@@ -404,9 +532,6 @@ export default function Match({ matchDat }) {
                         <Divider sx={{ background: '#E9E5DA' }} />
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#E9E5DA', width: '210px' }}>Enter the amount you wish to stake</Typography>
-                            {/* <Image src={Depx} alt="deposit" width={87} height={32} onClick={()=>{
-                                router.push('/user/deposit')
-                            }}/> */}
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#E9E5DA' }}>Account Balance</Typography>
