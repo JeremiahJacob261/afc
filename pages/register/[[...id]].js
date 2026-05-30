@@ -381,6 +381,6 @@ export default function Register( {refer} ) {
 
 export async function getServerSideProps(context) {
   const { params } = context;
-  const id = params.id;
+  const id = params?.id?.[0] ?? null;  // catch-all gives array; grab first element
   return { props: { refer: id } }
 }
