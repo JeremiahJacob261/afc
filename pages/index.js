@@ -15,10 +15,13 @@ const FinalCtaFooter = dynamic(() =>
 
 export default function Home() {
   return (
-    <main className="bg-slate-50 min-h-screen text-slate-900 font-sans antialiased selection:bg-electric-500/20">
+    <main className="min-h-screen bg-slate-50 text-slate-900 font-sans antialiased selection:bg-electric-500/20">
       <Head>
-        <title>European Football</title>
-        <meta name="description" content="European football club" />
+        <title>EFC Football Betting | Live Odds and Football Markets</title>
+        <meta
+          name="description"
+          content="Bet on football with EFC. Browse football markets, compare live odds, manage your wallet, and play responsibly."
+        />
         <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

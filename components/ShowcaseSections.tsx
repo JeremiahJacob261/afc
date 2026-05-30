@@ -1,130 +1,272 @@
-"use client";
-
-import { CheckCircle2, CircleDollarSign, Radio, TrendingUp } from "lucide-react";
-import { marketRows } from "@/data/landing";
+import Link from "next/link";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Clock3,
+  Gift,
+  Radio,
+  ShieldCheck,
+  TrendingUp,
+  WalletCards,
+} from "lucide-react";
+import Image from "next/image";
+import {
+  agentRebates,
+  agentSalaryLevels,
+  bonuses,
+  invitationTiers,
+  liveMatches,
+  trustItems,
+} from "@/data/landing";
 import { Button } from "./Button";
 import { ChartLine } from "./ChartLine";
-import { DeviceMockup } from "./DeviceMockup";
-import { GlassCard } from "./GlassCard";
-import { MotionReveal } from "./MotionReveal";
 import { Section } from "./Section";
+import bfc2 from "@/public/bfc2.jpg";
+import bfc3 from "@/public/bfc3.jpg";
+import bfc5 from "@/public/bfc5.jpg";
 
 export function ShowcaseSections() {
   return (
     <>
-      <Section id="markets" dark className="py-10 lg:py-16">
-        <MotionReveal>
-          <div className="relative overflow-hidden rounded-[2.25rem] bg-premium-radial p-6 text-white shadow-[0_34px_100px_rgba(6,16,31,0.35)] sm:p-10 lg:p-14">
-            <div className="absolute inset-0 bg-[linear-gradient(120deg,transparent,rgba(255,255,255,0.08),transparent)] animate-shimmer" />
-            <div className="relative grid items-center gap-8 lg:grid-cols-[1fr_360px]">
+      <Section
+        id="live"
+        dark
+        eyebrow="Live football betting"
+        title="Follow the match and react to the odds"
+        copy="Live betting lets users respond to pressure, goals, cards, and momentum while the football match is still running."
+        className="bg-[#06101F]"
+      >
+        <div className="grid items-stretch gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+          <div className="rounded-lg border border-white/10 bg-white/[0.04] p-6 text-white sm:p-8">
+            <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.22em] text-electric-400">Sports market pulse</p>
-                <h2 className="mt-4 text-balance text-4xl font-black leading-none sm:text-6xl">
-                  Keep Your Finger on the Investment Market Pulse
-                </h2>
-                <p className="mt-5 max-w-xl text-base leading-7 text-white/68">
-                  Monitor odds movement, player performance indexes, market heatmaps, and exposure curves in one cinematic analytics layer.
+                <p className="text-sm font-black uppercase text-[#1BB6FF]">
+                  In-play board
                 </p>
-                <div className="mt-8">
-                  <Button href="#app" variant="light" icon="arrow">Get Started</Button>
-                </div>
+                <h3 className="mt-3 text-3xl font-black leading-tight">
+                  Odds shift as the match changes.
+                </h3>
               </div>
-              <GlassCard dark className="p-5">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-white/56">Total balance</p>
-                    <p className="text-3xl font-black">$128,604</p>
-                  </div>
-                  <span className="rounded-full bg-electric-400/20 px-3 py-1 text-xs font-black text-electric-400">+19.7%</span>
+              <Radio className="h-8 w-8 shrink-0 text-[#1BB6FF]" aria-hidden="true" />
+            </div>
+            <ChartLine className="mt-8 h-28 w-full" color="#23B5FF" />
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              {["Shots", "Corners", "Cards"].map((label, index) => (
+                <div key={label} className="rounded-lg bg-white/[0.08] p-4">
+                  <p className="text-xs font-bold uppercase text-white/[0.48]">
+                    {label}
+                  </p>
+                  <p className="mt-2 text-2xl font-black">
+                    {["12", "7", "3"][index]}
+                  </p>
                 </div>
-                <ChartLine className="mt-8 h-24 w-full" color="#23B5FF" />
-                <div className="mt-5 grid grid-cols-3 gap-2 text-center text-xs font-bold text-white/62">
-                  <span>Odds</span>
-                  <span>Risk</span>
-                  <span>Yield</span>
-                </div>
-              </GlassCard>
+              ))}
+            </div>
+            <div className="mt-7">
+              <Button href="/register/000208" variant="light">
+                Start Betting
+              </Button>
             </div>
           </div>
-        </MotionReveal>
-      </Section>
 
-      <Section
-        eyebrow="Live exchange"
-        title="Trade in Real Time"
-        copy="Orders, hedges, and portfolio adjustments are updated with live sports data and market conviction."
-      >
-        <div className="grid items-center gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-          <MotionReveal>
-            <GlassCard className="relative overflow-hidden bg-navy-950 p-6 text-white">
-              <div className="absolute -left-16 -top-16 h-48 w-48 rounded-full bg-electric-400/20 blur-3xl" />
-              <div className="relative">
-                <div className="flex items-center justify-between">
-                  <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-electric-400">Volatility</span>
-                  <TrendingUp className="h-6 w-6 text-electric-400" aria-hidden />
-                </div>
-                <ChartLine className="mt-9 h-32 w-full" color="#F8FAFC" muted />
-                <div className="mt-6 grid grid-cols-3 gap-3">
-                  {["Liquidity", "Spread", "Signal"].map((item, index) => (
-                    <div key={item} className="rounded-2xl bg-white/8 p-3">
-                      <p className="text-xs text-white/50">{item}</p>
-                      <p className="mt-1 text-lg font-black">{["84%", "1.6", "BUY"][index]}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </GlassCard>
-          </MotionReveal>
           <div className="space-y-3">
-            {marketRows.map((row, index) => (
-              <MotionReveal key={row.label} delay={index * 0.05}>
-                <div className="glass flex flex-col gap-4 rounded-3xl p-4 sm:flex-row sm:items-center sm:justify-between">
+            {liveMatches.map((match) => (
+              <div
+                key={match.fixture}
+                className="rounded-lg border border-white/10 bg-white p-4 shadow-[0_16px_44px_rgba(0,0,0,0.16)]"
+              >
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-center gap-4">
-                    <span className={`grid h-12 w-12 place-items-center rounded-2xl ${row.hot ? "bg-electric-400/15 text-electric-600" : "bg-brick-500/12 text-brick-600"}`}>
-                      {row.hot ? <Radio className="h-5 w-5" aria-hidden /> : <CircleDollarSign className="h-5 w-5" aria-hidden />}
+                    <span className="grid h-12 w-12 place-items-center rounded-lg bg-[#1BB6FF]/12 text-[#1294D4]">
+                      <Clock3 className="h-5 w-5" aria-hidden="true" />
                     </span>
                     <div>
-                      <h3 className="font-black text-navy-950">{row.label}</h3>
-                      <p className="text-sm text-slate-500">{row.sport} market</p>
+                      <h3 className="font-black text-navy-950">
+                        {match.fixture}
+                      </h3>
+                      <p className="text-sm text-slate-500">{match.market}</p>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between gap-8 sm:justify-end">
+                  <div className="flex items-center justify-between gap-5 sm:justify-end">
+                    <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-black text-emerald-700">
+                      {match.status}
+                    </span>
                     <div className="text-right">
-                      <p className="text-sm text-slate-500">Price</p>
-                      <p className="text-lg font-black text-navy-950">{row.odds}</p>
+                      <p className="text-xs font-bold uppercase text-slate-400">
+                        Odds
+                      </p>
+                      <p className="text-xl font-black text-navy-950">
+                        {match.price}
+                      </p>
                     </div>
-                    <p className={`min-w-16 text-right text-sm font-black ${row.move.startsWith("-") ? "text-brick-600" : "text-emerald-600"}`}>
-                      {row.move}
-                    </p>
                   </div>
                 </div>
-              </MotionReveal>
+              </div>
             ))}
           </div>
         </div>
       </Section>
 
       <Section
-        id="app"
-        eyebrow="Mobile command center"
-        title="100,000+ Sports Signals in Your App"
-        copy="Track match forecasts, live scores, portfolio exposure, and investment metrics in an interface designed for repeated professional use."
+        id="bonuses"
+        eyebrow="Bonuses and rewards"
+        title="EFC bonus and invitation program"
+        copy="Match the EFC invitation bonus card with tiered active-member rewards, welcome bonus details, and agent rebate information."
       >
-        <div className="grid items-center gap-10 lg:grid-cols-2">
-          <MotionReveal>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {["Live score tracking", "Betting insights", "Portfolio management", "Secure withdrawals"].map((item) => (
-                <div key={item} className="flex items-center gap-3 rounded-3xl bg-white p-4 shadow-[0_14px_40px_rgba(6,16,31,0.08)] ring-1 ring-navy-900/5">
-                  <CheckCircle2 className="h-5 w-5 text-electric-600" aria-hidden />
-                  <span className="text-sm font-black text-navy-950">{item}</span>
+        <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-[0_20px_60px_rgba(6,16,31,0.12)]">
+            <Image
+              src={bfc3}
+              alt="European Football Clubs invitation bonus tiers from 10 to 100 active members"
+              sizes="(min-width: 1024px) 56vw, 100vw"
+              className="aspect-[16/9] h-auto w-full object-cover"
+            />
+            <div className="grid gap-3 p-5 sm:grid-cols-2 lg:grid-cols-3">
+              {invitationTiers.map((tier) => (
+                <div key={tier.members} className="rounded-lg bg-slate-100 p-4">
+                  <p className="text-xs font-black uppercase text-slate-500">
+                    Invite {tier.members} active members
+                  </p>
+                  <p className="mt-2 text-2xl font-black text-navy-950">
+                    Earn {tier.reward}
+                  </p>
                 </div>
               ))}
             </div>
-          </MotionReveal>
-          <MotionReveal delay={0.1} className="relative">
-            <div className="absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-electric-400/18 blur-3xl" />
-            <DeviceMockup className="relative rotate-3" />
-          </MotionReveal>
+          </div>
+
+          <div className="grid gap-5">
+            {bonuses.map((bonus) => (
+              <div
+                key={bonus.title}
+                className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm"
+              >
+                <span className="grid h-12 w-12 place-items-center rounded-lg bg-[#1BB6FF]/12 text-[#1294D4]">
+                  <Gift className="h-6 w-6" aria-hidden="true" />
+                </span>
+                <h3 className="mt-5 text-2xl font-black text-navy-950">
+                  {bonus.title}
+                </h3>
+                <p className="mt-3 text-sm leading-6 text-slate-600">
+                  {bonus.copy}
+                </p>
+                <Link
+                  href="/register/000208"
+                  className="mt-6 inline-flex items-center gap-2 text-sm font-black text-[#1294D4] transition hover:text-navy-950"
+                >
+                  View offers
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Section>
+
+      <Section
+        id="agents"
+        eyebrow="Agent rewards"
+        title="15% agent rebates and salary levels"
+        copy="Add the EFC agent program details from the provided rebate and salary cards."
+        className="bg-white"
+      >
+        <div className="grid gap-6 lg:grid-cols-2">
+          <div className="overflow-hidden rounded-lg border border-slate-200 bg-slate-50 shadow-sm">
+            <Image
+              src={bfc5}
+              alt="European Football Clubs agent rebate levels showing 7 percent, 5 percent, and 3 percent"
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="aspect-[16/9] h-auto w-full object-cover"
+            />
+            <div className="grid gap-3 p-5 sm:grid-cols-3">
+              {agentRebates.map((rebate) => (
+                <div key={rebate.level} className="rounded-lg bg-white p-4">
+                  <p className="text-xs font-black uppercase text-slate-500">
+                    {rebate.level}
+                  </p>
+                  <p className="mt-2 text-3xl font-black text-navy-950">
+                    {rebate.rebate}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="overflow-hidden rounded-lg border border-slate-200 bg-slate-50 shadow-sm">
+            <Image
+              src={bfc2}
+              alt="European Football Clubs agent salary levels from Agent A to Agent G"
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="aspect-[16/9] h-auto w-full object-cover"
+            />
+            <div className="overflow-x-auto p-5">
+              <table className="w-full min-w-[560px] text-left text-sm">
+                <thead>
+                  <tr className="border-b border-slate-200 text-xs uppercase text-slate-500">
+                    <th className="py-3 pr-4 font-black">Agent</th>
+                    <th className="py-3 pr-4 font-black">Team level</th>
+                    <th className="py-3 pr-4 font-black">Team volume</th>
+                    <th className="py-3 font-black">Salary</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {agentSalaryLevels.map((row) => (
+                    <tr key={row.agent} className="border-b border-slate-200 last:border-b-0">
+                      <td className="py-3 pr-4 font-black text-navy-950">{row.agent}</td>
+                      <td className="py-3 pr-4 text-slate-600">{row.teamLevel}</td>
+                      <td className="py-3 pr-4 font-bold text-slate-800">{row.teamVolume}</td>
+                      <td className="py-3 font-black text-[#1294D4]">{row.salary}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      <Section
+        id="trust"
+        dark
+        eyebrow="Trust and control"
+        title="Bet on football with clearer guardrails"
+        copy="Security, account records, and responsible betting reminders help users stay in control before and after each football bet."
+        className="bg-[#10284D]"
+      >
+        <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
+          <div className="rounded-lg border border-white/10 bg-[#06101F] p-6 text-white sm:p-8">
+            <ShieldCheck className="h-10 w-10 text-[#1BB6FF]" aria-hidden="true" />
+            <h3 className="mt-5 text-3xl font-black leading-tight">
+              Responsible football betting belongs on the page.
+            </h3>
+            <p className="mt-4 text-sm leading-6 text-white/[0.62]">
+              Users should set limits, review bet details, and avoid chasing
+              losses. Football betting carries risk, so stakes should remain
+              within a personal budget.
+            </p>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            {trustItems.map((item, index) => {
+              const Icon = [ShieldCheck, WalletCards, TrendingUp, CheckCircle2][index] || CheckCircle2;
+
+              return (
+                <div
+                  key={item}
+                  className="rounded-lg border border-white/10 bg-white p-5"
+                >
+                  <Icon className="h-6 w-6 text-[#1294D4]" aria-hidden="true" />
+                  <h3 className="mt-4 text-lg font-black text-navy-950">
+                    {item}
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                    Clear controls and records help users make better football
+                    betting decisions.
+                  </p>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </Section>
     </>

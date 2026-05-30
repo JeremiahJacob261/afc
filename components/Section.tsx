@@ -25,7 +25,7 @@ export function Section({ id, eyebrow, title, copy, children, dark, className = 
               </h2>
             )}
             {copy && (
-              <p className={`mt-5 max-w-2xl text-base leading-7 sm:text-lg ${dark ? "text-white/68" : "text-slate-600"}`}>
+              <p className={`mt-5 max-w-2xl text-base leading-7 sm:text-lg ${dark ? "text-white/[0.68]" : "text-slate-600"}`}>
                 {copy}
               </p>
             )}
