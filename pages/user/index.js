@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useMemo } from "react";
 import { useRouter } from 'next/router'
 import Head from "next/head";
 import Cover from './cover'
@@ -24,6 +24,42 @@ import { getAuth, signOut } from "firebase/auth";
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 import toast, { Toaster } from 'react-hot-toast';
 import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay';
+
+const MATCH_FILTERS = [
+  { key: 'today', label: 'Today' },
+  { key: 'next3h', label: 'Next 3 hrs' },
+  { key: 'next12h', label: 'Next 12 hrs' },
+  { key: 'tomorrow', label: 'Tomorrow' },
+]
+
+const HOUR_MS = 60 * 60 * 1000
+
+function getLocalDateKey(date) {
+  return [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, '0'),
+    String(date.getDate()).padStart(2, '0'),
+  ].join('-')
+}
+
+function getFilteredMatches(matches, activeFilter, nowMs = Date.now()) {
+  const todayKey = getLocalDateKey(new Date(nowMs))
+  const tomorrow = new Date(nowMs)
+  tomorrow.setDate(tomorrow.getDate() + 1)
+  const tomorrowKey = getLocalDateKey(tomorrow)
+
+  return (Array.isArray(matches) ? matches : [])
+    .map((match) => ({ match, startMs: getMatchStartMs(match) }))
+    .filter(({ startMs }) => Number.isFinite(startMs) && startMs > nowMs)
+    .sort((a, b) => a.startMs - b.startMs)
+    .filter(({ startMs }) => {
+      if (activeFilter === 'next3h') return startMs <= nowMs + (3 * HOUR_MS)
+      if (activeFilter === 'next12h') return startMs <= nowMs + (12 * HOUR_MS)
+      if (activeFilter === 'tomorrow') return getLocalDateKey(new Date(startMs)) === tomorrowKey
+      return getLocalDateKey(new Date(startMs)) === todayKey
+    })
+    .map(({ match }) => match)
+}
 
 
 async function processBets(name) {
@@ -52,6 +88,7 @@ export default function Home() {
     setAnchorEl(null);
   };
   const [footDat, setFootDat] = useState([]);
+  const [activeMatchFilter, setActiveMatchFilter] = useState('today');
 
   //the below controls the loading modal
   const [open, setOpen] = useState(false);
@@ -65,6 +102,9 @@ export default function Home() {
   const [draw, setDraw] = useState(false);
   const router = useRouter();
   let loads = 0;
+  const visibleMatches = useMemo(() => (
+    getFilteredMatches(footDat, activeMatchFilter)
+  ), [footDat, activeMatchFilter]);
 
 
   useEffect(() => {
@@ -147,13 +187,20 @@ export default function Home() {
     runer();
 
     const getMatch = async () => {
+      const nowMs = Date.now()
       const { data, error } = await supabase
         .from('bets')
         .select('*')
         .eq('verified', false)
+        .gt('tsgmt', nowMs)
         .limit(50)
-        .order('tsgmt', { ascending: false });
-      setFootDat(data);
+        .order('tsgmt', { ascending: true });
+      if (error) {
+        console.log(error)
+        setFootDat([])
+        return
+      }
+      setFootDat(data || []);
     }
     getMatch();
     return () => {
@@ -223,17 +270,23 @@ export default function Home() {
               <Icon icon="carbon:football-american" width="24" height="24" style={{ color: '#E9E5DA' }} />
               <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '16px', fontWeight: '600' }}>Top Football Matches</Typography>
             </Stack>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>see all</Typography>
+            <Link href="/user/matches" style={{ textDecoration: 'none' }}>
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>see all</Typography>
+            </Link>
           </Stack>
           <Stack direction='row' spacing={1} sx={{ width: '100%', overflowX: 'auto', pb: 0.5 }}>
-            <Stack sx={{ background: '#10284D', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>This Week</Typography></Stack>
-            <Stack sx={{ background: '#1BB6FF', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#06101F', fontSize: '12px', fontWeight: '100' }}>Today</Typography></Stack>
-            <Stack sx={{ background: '#10284D', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>Next 3 hrs</Typography></Stack>
-            <Stack sx={{ background: '#10284D', padding: '10px', borderRadius: '20px' }}><Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>Next 30 mins</Typography></Stack>
+            {MATCH_FILTERS.map((filter) => (
+              <MatchFilterPill
+                key={filter.key}
+                label={filter.label}
+                active={activeMatchFilter === filter.key}
+                onClick={() => setActiveMatchFilter(filter.key)}
+              />
+            ))}
           </Stack>
 
           <Stack alignItems='center' sx={{ width: '100%' }}>
-            {footDat.map((match) => (
+            {visibleMatches.map((match) => (
               <DashboardMatchCard
                 key={match.match_id}
                 match={match}
@@ -248,6 +301,30 @@ export default function Home() {
           </Stack>
         </Stack>
       </Cover>
+    </Stack>
+  )
+}
+
+function MatchFilterPill({ label, active, onClick }) {
+  return (
+    <Stack
+      component="button"
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      sx={{
+        flex: '0 0 auto',
+        minHeight: 36,
+        background: active ? '#1BB6FF' : '#10284D',
+        padding: '10px',
+        borderRadius: '20px',
+        border: 0,
+        cursor: 'pointer',
+      }}
+    >
+      <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: active ? '#06101F' : '#E9E5DA', fontSize: '12px', fontWeight: '100', whiteSpace: 'nowrap' }}>
+        {label}
+      </Typography>
     </Stack>
   )
 }
