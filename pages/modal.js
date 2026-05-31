@@ -10,7 +10,7 @@ export default function SimpleDialog(props) {
 
   const handleClose = () => {
     onClose(selectedValue);
-    router.push("/dashboard")
+    router.push("/user")
   };
 
   return (

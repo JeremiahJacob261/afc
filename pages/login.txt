@@ -53,7 +53,7 @@ export default function Deposit() {
         // User is signed out
         // ...
         console.log('sign out');
-        router.push('/signin');
+        router.push('/login');
       }
     });
   }, []);
@@ -116,7 +116,7 @@ export default function Deposit() {
     <Stack spacing={3} sx={{ padding: '8px' }}>
       <CloseIcon style={{ color: '#CACACA', margin: '12px', width: '50px', height: '50px' }}
         onClick={() => {
-          router.push('/dashboard/account')
+          router.push('/user/account')
         }}
       />
       <div style={{ display: 'flex', justifyContent: "center" }}>

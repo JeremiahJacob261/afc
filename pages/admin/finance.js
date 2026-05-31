@@ -292,7 +292,7 @@ export default function Noti({ notiS }) {
           </DialogActions>
         </Dialog>
         {
-          //signin screen ends
+          //login screen ends
         }
         <Stack direction='column' spacing={3} style={{ border: "1px solid #C61F41", padding: "15px", borderRadius: "12px", marginTop: "8px" }}>
           <Typography style={{ color: '#E6E8E6', fontFamily: "Source Sans Pro,sans-serif" }}> Summary</Typography>

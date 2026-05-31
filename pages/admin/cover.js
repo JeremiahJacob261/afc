@@ -90,7 +90,7 @@ export default function Cover({ children }) {
                 </Stack>
                 <Stack direction='row' spacing={4}>
                     <motion.div whileHover={{ backgroundColor: '#AC915FD2', borderRadius: "27px", color: '#C61F41', scale: '1.05' }} style={{ padding: "6px 18px 6px 18px" }}>
-                        <Link href='/admin/dashboardslist'> <Typography sx={{ color: 'white', fontFamily: "Source Sans Pro,sans-serif", cursor: 'pointer' }}>Users</Typography></Link>
+                        <Link href='/admin/userslist'> <Typography sx={{ color: 'white', fontFamily: "Source Sans Pro,sans-serif", cursor: 'pointer' }}>Users</Typography></Link>
                     </motion.div>
                     <motion.div whileHover={{ backgroundColor: '#AC915FD2', borderRadius: "20px", color: '#C61F41', scale: '1.05' }} style={{ padding: "6px 18px 6px 18px" }}>
                         <Link href='/admin/finance'><Typography sx={{ color: 'white', fontFamily: "Source Sans Pro,sans-serif", cursor: 'pointer' }}>Finances</Typography>

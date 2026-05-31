@@ -86,8 +86,8 @@ function ActionButton({ label, description, icon: Icon, onClick, danger }) {
       type="button"
       onClick={onClick}
       className={`group rounded-3xl border p-4 text-left transition hover:-translate-y-0.5 ${danger
-          ? 'border-[#C61F41]/25 bg-[#C61F41]/10 hover:bg-[#C61F41]/20'
-          : 'border-white/10 bg-white/[0.06] hover:bg-white/[0.1]'
+        ? 'border-[#C61F41]/25 bg-[#C61F41]/10 hover:bg-[#C61F41]/20'
+        : 'border-white/10 bg-white/[0.06] hover:bg-white/[0.1]'
         }`}
     >
       <div className="flex items-center justify-between gap-3">
@@ -128,7 +128,7 @@ export default function UserDetailModal() {
     async function run() {
       setLoading(true)
       try {
-        const response = await fetch(`/api/admin/dashboard-detail?uid=${encodeURIComponent(uid)}`)
+        const response = await fetch(`/api/admin/user-detail?uid=${encodeURIComponent(uid)}`)
         const result = await response.json()
         if (!response.ok) {
           if (response.status === 401) {
@@ -172,7 +172,7 @@ export default function UserDetailModal() {
 
   const updateBalance = async () => {
     try {
-      const response = await fetch('/api/admin/dashboard-action', {
+      const response = await fetch('/api/admin/user-action', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -194,7 +194,7 @@ export default function UserDetailModal() {
 
   const deleteUserWallet = async () => {
     try {
-      const response = await fetch('/api/admin/dashboard-action', {
+      const response = await fetch('/api/admin/user-action', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'delete-wallet', username: datas?.username }),
@@ -210,7 +210,7 @@ export default function UserDetailModal() {
 
   const switchReferral = async () => {
     try {
-      const response = await fetch('/api/admin/dashboard-action', {
+      const response = await fetch('/api/admin/user-action', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -233,7 +233,7 @@ export default function UserDetailModal() {
 
   const close = () => {
     if (window.history.length > 1) router.back()
-    else router.push('/admin/dashboards')
+    else router.push('/admin/users')
   }
 
   return (

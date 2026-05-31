@@ -34,7 +34,7 @@ export default function Loadingx({ open, handleClose, currency }) {
                                 onClick={() => {
                                     localStorage.setItem('dm', 'fcfa');
                                     localStorage.setItem('dmmv', 'wave');
-                                    router.push('/dashboard/inputvalue?dm=fcfa');
+                                    router.push('/user/inputvalue?dm=fcfa');
                                 }}>
                                 <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#242627', borderRadius: '8px' }}>
                                     <p style={{ color: '#D4AF37', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 1: WAVE</p>
@@ -46,7 +46,7 @@ export default function Loadingx({ open, handleClose, currency }) {
                                 onClick={() => {
                                     localStorage.setItem('dm', 'fcfa');
                                     localStorage.setItem('dmmv', 'mtn');
-                                    router.push('/dashboard/inputvalue?dm=fcfa');
+                                    router.push('/user/inputvalue?dm=fcfa');
                                 }}>
                                 <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#06101F', borderRadius: '8px' }}>
                                     <p style={{ color: '#1BB6FF', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 2: MTN MONEY</p>
@@ -71,7 +71,7 @@ export default function Loadingx({ open, handleClose, currency }) {
                                     onClick={() => {
                                         localStorage.setItem('dm', 'idr');
                                         localStorage.setItem('dmmv', 'DANA');
-                                        router.push('/dashboard/inputvalue?dm=idr');
+                                        router.push('/user/inputvalue?dm=idr');
                                     }}>
                                     <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#06101F', borderRadius: '8px' }}>
                                         <p style={{ color: '#1BB6FF', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 1: DANA</p>
@@ -83,7 +83,7 @@ export default function Loadingx({ open, handleClose, currency }) {
                 onClick={()=>{
                     localStorage.setItem('dm','idr');
                     localStorage.setItem('dmmv','bca');
-                    router.push('/dashboard/inputvalue?dm=idr');
+                    router.push('/user/inputvalue?dm=idr');
                }}>
                    <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#06101F', borderRadius: '8px' }}>
                        <p style={{ color: '#1BB6FF', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 2: BANK CENTRAL ASIA</p>
@@ -108,7 +108,7 @@ export default function Loadingx({ open, handleClose, currency }) {
                                     onClick={() => {
                                         localStorage.setItem('dm', 'mmk');
                                         localStorage.setItem('dmmv', 'wave');
-                                        router.push('/dashboard/inputvalue?dm=mmk');
+                                        router.push('/user/inputvalue?dm=mmk');
                                     }}>
                                     <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#242627', borderRadius: '8px' }}>
                                         <p style={{ color: '#D4AF37', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 1: WAVE</p>
@@ -120,7 +120,7 @@ export default function Loadingx({ open, handleClose, currency }) {
                                     onClick={() => {
                                         localStorage.setItem('dm', 'mmk');
                                         localStorage.setItem('dmmv', 'kpay');
-                                        router.push('/dashboard/inputvalue?dm=mmk');
+                                        router.push('/user/inputvalue?dm=mmk');
                                     }}>
                                     <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#06101F', borderRadius: '8px' }}>
                                         <p style={{ color: '#1BB6FF', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 2: KPAY</p>
@@ -131,7 +131,7 @@ export default function Loadingx({ open, handleClose, currency }) {
                      onClick={()=>{
                          localStorage.setItem('dm','mmk');
                          localStorage.setItem('dmmv','kbz');
-                         router.push('/dashboard/inputvalue?dm=mmk');
+                         router.push('/user/inputvalue?dm=mmk');
                     }}>
                         <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#06101F', borderRadius: '8px' }}>
                             <p style={{ color: '#1BB6FF', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 3: KBZ Bank</p>

@@ -142,7 +142,7 @@ export default function Home({ id }) {
                                 setAmount('');
                                 setReason('');
                                 setPassword('');
-                                router.push('/admin/dashboards');
+                                router.push('/admin/users');
                             } else {
                                 alert(res.statusText);
                             }

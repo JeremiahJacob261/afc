@@ -65,7 +65,7 @@ export default function PasswordReset() {
         onClose={() => {
           const shouldReturn = feedback?.type === 'success'
           setFeedback(null)
-          if (shouldReturn) router.push('/signin')
+          if (shouldReturn) router.push('/login')
         }}
       />
       <Toaster position="bottom-center" reverseOrder={false} />
@@ -99,7 +99,7 @@ export default function PasswordReset() {
           <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "#242627smoke" }}>{loading ? 'Sending...' : 'Send Email'}</Typography>
         </Button>
         <Typography>
-          <Link href="/signin" style={{ textDecoration: "none", fontSize: '14px', fontWeight: '100', color: "#242627", opacity: '1.0', fontFamily: 'Poppins,sans-serif' }}>Return To Login</Link>
+          <Link href="/login" style={{ textDecoration: "none", fontSize: '14px', fontWeight: '100', color: "#242627", opacity: '1.0', fontFamily: 'Poppins,sans-serif' }}>Return To Login</Link>
           <Divider sx={{ background: '#242627' }} />
         </Typography>
 

@@ -72,7 +72,7 @@ export default function Reward({ id = '', uid = '' }) {
       setAmount('')
       setReason('')
       setPassword('')
-      router.push('/admin/dashboards')
+      router.push('/admin/users')
     } catch (error) {
       console.log(error)
       toast.error(error.message || 'Unable to send reward')
@@ -220,7 +220,7 @@ export default function Reward({ id = '', uid = '' }) {
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <button
                     type="button"
-                    onClick={() => router.push('/admin/dashboards')}
+                    onClick={() => router.push('/admin/users')}
                     className="h-12 rounded-full border border-white/10 px-5 text-sm font-semibold text-zinc-300 transition hover:bg-white hover:text-black"
                   >
                     Cancel
@@ -248,7 +248,7 @@ export default function Reward({ id = '', uid = '' }) {
                 </p>
                 <button
                   type="button"
-                  onClick={() => router.push('/admin/dashboards')}
+                  onClick={() => router.push('/admin/users')}
                   className="mt-5 rounded-full bg-white px-5 py-3 text-sm font-semibold text-black transition hover:bg-[#8EE5FF]"
                 >
                   Back to users

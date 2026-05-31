@@ -5,7 +5,7 @@
 ### 1. Create Supabase Project (2 min)
 ```
 1. Visit https://supabase.com
-2. Sign up/signin
+2. Sign up/login
 3. Click "New Project"
 4. Fill: Project name, Database password, Region
 5. Click "Create new project" and wait for initialization

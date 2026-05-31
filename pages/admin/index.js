@@ -18,7 +18,7 @@ export default function Home() {
 
     setLoading(true)
     try {
-      const response = await fetch('/api/admin/signin', {
+      const response = await fetch('/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
