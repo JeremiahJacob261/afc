@@ -9,6 +9,7 @@ import {
   Clipboard,
   GitBranch,
   KeyRound,
+  LogIn,
   Pencil,
   Shield,
   Trash2,
@@ -18,6 +19,8 @@ import {
   X,
 } from 'lucide-react'
 import codes from '@/pages/api/codes.json'
+import { supabase } from '@/pages/api/supabase'
+import { clearLegacyAuthStorage } from '@/lib/clientAuth'
 
 function SkeletonLine({ className = '' }) {
   return <div className={`animate-pulse rounded-full bg-white/[0.08] ${className}`} />
@@ -80,12 +83,13 @@ function StatCard({ label, value, icon: Icon, tone = 'text-[#1BB6FF]' }) {
   )
 }
 
-function ActionButton({ label, description, icon: Icon, onClick, danger }) {
+function ActionButton({ label, description, icon: Icon, onClick, danger, disabled }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`group rounded-3xl border p-4 text-left transition hover:-translate-y-0.5 ${danger
+      disabled={disabled}
+      className={`group rounded-3xl border p-4 text-left transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 ${danger
         ? 'border-[#C61F41]/25 bg-[#C61F41]/10 hover:bg-[#C61F41]/20'
         : 'border-white/10 bg-white/[0.06] hover:bg-white/[0.1]'
         }`}
@@ -115,6 +119,7 @@ export default function UserDetailModal() {
   const [editbal, setEditbal] = useState(false)
   const [switchOpen, setSwitchOpen] = useState(false)
   const [newRefer, setNewRefer] = useState('')
+  const [impersonating, setImpersonating] = useState(false)
 
   const uid = useMemo(() => {
     if (!router.query?.id) return ''
@@ -228,6 +233,51 @@ export default function UserDetailModal() {
     } catch (error) {
       console.log(error)
       toast.error(error.message || 'Error occurred')
+    }
+  }
+
+  const loginAsUser = async () => {
+    if (!datas?.uid || impersonating) return
+
+    const confirmed = window.confirm(`Login as ${datas.username}? This browser will switch to the user's account.`)
+    if (!confirmed) return
+
+    setImpersonating(true)
+    try {
+      const response = await fetch('/api/admin/impersonate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ uid: datas.uid }),
+      })
+      const result = await response.json().catch(() => ({}))
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          router.push('/admin')
+          return
+        }
+        throw new Error(result.message || 'Login-as-user failed')
+      }
+
+      if (!result?.session?.access_token || !result?.session?.refresh_token) {
+        throw new Error('Login-as-user did not return a valid session')
+      }
+
+      clearLegacyAuthStorage()
+
+      const { error } = await supabase.auth.setSession({
+        access_token: result.session.access_token,
+        refresh_token: result.session.refresh_token,
+      })
+
+      if (error) throw error
+
+      toast.success(`Signed in as ${datas.username}`)
+      router.push('/user')
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message || 'Unable to login as user')
+      setImpersonating(false)
     }
   }
 
@@ -392,6 +442,13 @@ export default function UserDetailModal() {
                   </div>
 
                   <div className="mt-5 grid gap-3">
+                    <ActionButton
+                      label={impersonating ? 'Signing in...' : 'Login as user'}
+                      description="Open this account using a full user session."
+                      icon={LogIn}
+                      onClick={loginAsUser}
+                      disabled={impersonating}
+                    />
                     <ActionButton
                       label="Referral"
                       description="View the user's referral tree."

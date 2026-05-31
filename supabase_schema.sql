@@ -235,6 +235,19 @@ INSERT INTO admin_settings (id, first_deposit_bonus_percent)
 VALUES (1, 3.000)
 ON CONFLICT (id) DO NOTHING;
 
+CREATE TABLE IF NOT EXISTS admin_impersonation_audit (
+  id BIGSERIAL PRIMARY KEY,
+  target_userid TEXT,
+  target_uid TEXT,
+  target_username TEXT,
+  target_email TEXT,
+  status TEXT NOT NULL CHECK (status IN ('success', 'error')),
+  error_message TEXT,
+  ip_address TEXT,
+  user_agent TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- ============================================================================
 -- REFERRAL & AFFILIATE TABLES
 -- ============================================================================
@@ -307,6 +320,8 @@ CREATE INDEX IF NOT EXISTS idx_useractivity_match_id ON useractivity(match_id);
 
 -- Admin settings index
 CREATE INDEX IF NOT EXISTS idx_admin_settings_updated_at ON admin_settings(updated_at);
+CREATE INDEX IF NOT EXISTS idx_admin_impersonation_audit_created_at ON admin_impersonation_audit(created_at);
+CREATE INDEX IF NOT EXISTS idx_admin_impersonation_audit_target_uid ON admin_impersonation_audit(target_uid);
 
 -- Referral indexes
 CREATE INDEX IF NOT EXISTS idx_referral_refer ON referral(refer);
@@ -838,6 +853,7 @@ ALTER TABLE user_wallets ENABLE ROW LEVEL SECURITY;
 ALTER TABLE bets ENABLE ROW LEVEL SECURITY;
 ALTER TABLE activa ENABLE ROW LEVEL SECURITY;
 ALTER TABLE admin_settings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE admin_impersonation_audit ENABLE ROW LEVEL SECURITY;
 
 -- Policy: Users can only see their own records
 CREATE POLICY "Users see own data" ON users
@@ -854,6 +870,7 @@ ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE placed ENABLE ROW LEVEL SECURITY;
 ALTER TABLE notification ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_wallets ENABLE ROW LEVEL SECURITY;
+ALTER TABLE admin_impersonation_audit ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Users can read own profile" ON users;
 CREATE POLICY "Users can read own profile" ON users
