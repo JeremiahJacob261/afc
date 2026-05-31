@@ -1,7 +1,7 @@
-import {  Paper} from '@mui/material'
-import { Stack as Contain,Typography} from '@mui/material'
+import { Paper } from '@mui/material'
+import { Stack as Contain, Typography } from '@mui/material'
 import PropTypes from 'prop-types';
-import {Button,Modal} from 'react-bootstrap'
+import { Button, Modal } from 'react-bootstrap'
 import { useRouter } from 'next/router'
 
 export default function SimpleDialog(props) {
@@ -10,27 +10,27 @@ export default function SimpleDialog(props) {
 
   const handleClose = () => {
     onClose(selectedValue);
-    router.push("/user")
+    router.push("/dashboard")
   };
 
   return (
-      <Modal show={open} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>european Football Club</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Paper elevation={3} style={{padding:"10px",backgroundColor:"#F4F3EE"}} >
-            <Typography align="center" style={{padding:"4px"}} >Welcome to european Football Club,where you can get 
+    <Modal show={open} onHide={handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>european Football Club</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Paper elevation={3} style={{ padding: "10px", backgroundColor: "#F4F3EE" }} >
+          <Typography align="center" style={{ padding: "4px" }} >Welcome to european Football Club,where you can get
             the best Odds in the European Betting Market
-            </Typography>
-          </Paper>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="dark" onClick={handleClose}>
-                Ok
-          </Button>
-        </Modal.Footer>
-      </Modal>
+          </Typography>
+        </Paper>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="dark" onClick={handleClose}>
+          Ok
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 }
 

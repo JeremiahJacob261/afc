@@ -154,8 +154,8 @@ export const footerGroups = [
   {
     title: "Account",
     links: [
-      { label: "Register", href: "/register/000208" },
-      { label: "Log in", href: "/login" },
+      { label: "Register", href: "/signup/000208" },
+      { label: "Log in", href: "/signin" },
     ],
   },
   {

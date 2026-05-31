@@ -43,7 +43,7 @@ export default function Noti({ notiS }) {
   console.log('loaded ...');
   const rates = {
     'usdt': 1,
-    'idr':16255
+    'idr': 16255
   };
   const [noti, setNoti] = useState(notiS);
   const [name, setName] = useState('')
@@ -197,7 +197,7 @@ export default function Noti({ notiS }) {
     console.log(error);
   }
   const SEL = async (damount, dusername) => {
-    const { data, error } = await callAdminRpc('self', { amount: (damount < 20) ? 0 :damount * 0.1, name: dusername })
+    const { data, error } = await callAdminRpc('self', { amount: (damount < 20) ? 0 : damount * 0.1, name: dusername })
     console.log(error);
   }
   const uploadTotal = async (dname, damount) => {
@@ -292,7 +292,7 @@ export default function Noti({ notiS }) {
           </DialogActions>
         </Dialog>
         {
-          //login screen ends
+          //signin screen ends
         }
         <Stack direction='column' spacing={3} style={{ border: "1px solid #C61F41", padding: "15px", borderRadius: "12px", marginTop: "8px" }}>
           <Typography style={{ color: '#E6E8E6', fontFamily: "Source Sans Pro,sans-serif" }}> Summary</Typography>
@@ -405,13 +405,13 @@ export default function Noti({ notiS }) {
                             setNoti(data);
                             Reads('readwithdraw', d.amount)
                           } else {
-                           
-                              //use rates always 
-                              Depositing(d.amount/rates[d.method], d.username);
-                              selfBonus(d.amount/rates[d.method], d.username);
-                              uploadTotal(d.username, d.amount/rates[d.method])
-                              Reads('readdeposit', d.amount/rates[d.method])
-                              updateS(d.uid);
+
+                            //use rates always 
+                            Depositing(d.amount / rates[d.method], d.username);
+                            selfBonus(d.amount / rates[d.method], d.username);
+                            uploadTotal(d.username, d.amount / rates[d.method])
+                            Reads('readdeposit', d.amount / rates[d.method])
+                            updateS(d.uid);
 
                           }
                         }}
@@ -420,7 +420,7 @@ export default function Noti({ notiS }) {
                         NUser(d.method + d.type + 'failed', d.username, d.amount);
                         if (d.type === 'withdraw') {
                           ///the reason san1 was in existence was because the cancellation would return an unconverted value to the user 
-                          let san1 = d.amount/rates[d.method]; //d.amount / rates[d.method];
+                          let san1 = d.amount / rates[d.method]; //d.amount / rates[d.method];
                           Depositing(san1, d.username);
                           updateC(d.uid);
                           removeitem(d.uid);

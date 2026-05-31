@@ -16,7 +16,7 @@ import Logo from '@/public/european.ico'
 const navItems = [
   { label: 'Overview', href: '/admin/home', icon: LayoutDashboard },
   { label: 'Finance', href: '/admin/finances', icon: CircleDollarSign },
-  { label: 'Users', href: '/admin/users', icon: Users },
+  { label: 'Users', href: '/admin/dashboards', icon: Users },
   { label: 'Bets', href: '/admin/match', icon: Trophy },
   { label: 'Control', href: '/admin/control', icon: ShieldCheck },
 ]
@@ -24,7 +24,7 @@ const navItems = [
 const pageTitles = {
   '/admin/home': 'Admin Overview',
   '/admin/finances': 'Finance',
-  '/admin/users': 'Users',
+  '/admin/dashboards': 'Users',
   '/admin/match': 'Bets',
   '/admin/control': 'Control',
   '/admin/generate': 'Generate Claim Code',
@@ -99,11 +99,10 @@ export default function AdminShell({ children }) {
                     key={href}
                     type="button"
                     onClick={() => router.push(href)}
-                    className={`flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition ${
-                      active
+                    className={`flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition ${active
                         ? 'bg-white text-black'
                         : 'text-zinc-300 hover:bg-white/[0.08] hover:text-white'
-                    }`}
+                      }`}
                   >
                     <Icon className="h-4 w-4" />
                     {label}

@@ -46,10 +46,10 @@ export function FinalCtaFooter() {
               with clear markets and secure account controls.
             </p>
             <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
-              <Button href="/register/000208" variant="light">
+              <Button href="/signup/000208" variant="light">
                 Create Account
               </Button>
-              <Button href="/login" variant="secondary" icon="arrow">
+              <Button href="/signin" variant="secondary" icon="arrow">
                 Log in
               </Button>
             </div>

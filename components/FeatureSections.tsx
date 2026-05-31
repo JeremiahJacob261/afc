@@ -65,7 +65,7 @@ export function FeatureSections() {
                   </p>
                 </div>
                 <Link
-                  href="/register/000208"
+                  href="/signup/000208"
                   className="mt-6 inline-flex items-center gap-2 text-sm font-black text-[#1294D4] transition hover:text-navy-950"
                 >
                   Pick market

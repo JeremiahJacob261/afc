@@ -63,7 +63,7 @@ export function ShowcaseSections() {
               ))}
             </div>
             <div className="mt-7">
-              <Button href="/register/000208" variant="light">
+              <Button href="/signup/000208" variant="light">
                 Start Betting
               </Button>
             </div>
@@ -151,7 +151,7 @@ export function ShowcaseSections() {
                   {bonus.copy}
                 </p>
                 <Link
-                  href="/register/000208"
+                  href="/signup/000208"
                   className="mt-6 inline-flex items-center gap-2 text-sm font-black text-[#1294D4] transition hover:text-navy-950"
                 >
                   View offers

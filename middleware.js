@@ -12,7 +12,7 @@ async function getAdminSessionToken(secret) {
 
 function isPublicAdminPath(pathname) {
   return pathname === '/admin'
-    || pathname === '/api/admin/login'
+    || pathname === '/api/admin/signin'
     || pathname === '/api/admin/logout'
     || pathname === '/api/admin/session'
 }

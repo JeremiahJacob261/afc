@@ -18,7 +18,7 @@ export function Hero() {
     >
       <div className="mx-auto grid w-full max-w-[1420px] items-center gap-10 lg:min-h-[calc(100vh-92px)] lg:grid-cols-[0.48fr_0.52fr]">
         <div>
-         
+
 
           <h1 className="mt-6 max-w-3xl text-4xl font-black leading-tight text-white sm:text-5xl lg:text-6xl xl:text-7xl">
             Football Betting Made Simple
@@ -31,14 +31,14 @@ export function Hero() {
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             <Link
-              href="/register/000208"
+              href="/signup/000208"
               className="inline-flex min-h-[50px] items-center justify-center gap-2 rounded-lg bg-[#1BB6FF] px-7 text-base font-black text-[#06101F] shadow-[0_18px_45px_rgba(27,182,255,0.24)] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1BB6FF]"
             >
               Create Account
               <ArrowRight className="h-5 w-5" aria-hidden="true" />
             </Link>
             <Link
-              href="/login"
+              href="/signin"
               className="inline-flex min-h-[50px] items-center justify-center rounded-lg border border-white/[0.18] px-7 text-base font-bold text-white transition hover:border-white/40 hover:bg-white/[0.08] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
             >
               Log in

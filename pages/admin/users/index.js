@@ -55,7 +55,7 @@ export default function Users({ dount = 0, count = 0, datw = [] }) {
   const search = async () => {
     setLoading(true)
     try {
-      const response = await fetch('/api/admin/users', {
+      const response = await fetch('/api/admin/dashboards', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ find: searchValue }),
@@ -195,7 +195,7 @@ export async function getServerSideProps(context) {
     if (error.statusCode === 401) {
       return {
         redirect: {
-          destination: `/admin?next=${encodeURIComponent('/admin/users')}`,
+          destination: `/admin?next=${encodeURIComponent('/admin/dashboards')}`,
           permanent: false,
         },
       }

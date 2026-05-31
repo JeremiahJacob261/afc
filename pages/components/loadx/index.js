@@ -7,7 +7,7 @@ import { motion } from 'framer-motion'
 import { useRouter } from 'next/router';
 import Refresh from '@/public/refresh.png';
 
-export default function Loadingx({ open, handleClose,currency }) {
+export default function Loadingx({ open, handleClose, currency }) {
     const router = useRouter();
     if (!open) return null;
     return (
@@ -20,70 +20,70 @@ export default function Loadingx({ open, handleClose,currency }) {
         >
             <Stack className="loading" direction="column" alignItems="center" justifyContent={"center"} sx={{ outline: 0, width: '100%', height: '100vh' }}>
                 {
-                    (currency === 'fcfa') ? 
-                    <Stack direction="column" spacing={2} alignItems="center" justifyContent={"center"} sx={{ padding: '12px', width: '300px', height: 'auto', background: '#353431', borderRadius: '16px' }}>
-                
-                    <Stack direction='column' alignItems="center" justifyContent={"center"}>
-                        
-                        <Image src={Logo} alt="european fc" width={70} height={70} />
-                        <p style={{ color: '#CACACA', width: '100%', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>Choose any Transaction method</p>
-                        <p style={{ color: '#CACACA', width: '100%', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '300', fontSize: '13px' }}>you can Choose any transaction type that is available in your location</p>
-                    </Stack>
+                    (currency === 'fcfa') ?
+                        <Stack direction="column" spacing={2} alignItems="center" justifyContent={"center"} sx={{ padding: '12px', width: '300px', height: 'auto', background: '#353431', borderRadius: '16px' }}>
 
-                    <motion.div whileTap={{ scale: 0.8 }} style={{ width: '100%',cursor:'pointer' }} 
-                    onClick={()=>{
-                         localStorage.setItem('dm','fcfa');
-                         localStorage.setItem('dmmv','wave');
-                         router.push('/user/inputvalue?dm=fcfa');
-                    }}>
-                        <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#242627', borderRadius: '8px' }}>
-                            <p style={{ color: '#D4AF37', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 1: WAVE</p>
+                            <Stack direction='column' alignItems="center" justifyContent={"center"}>
+
+                                <Image src={Logo} alt="european fc" width={70} height={70} />
+                                <p style={{ color: '#CACACA', width: '100%', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>Choose any Transaction method</p>
+                                <p style={{ color: '#CACACA', width: '100%', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '300', fontSize: '13px' }}>you can Choose any transaction type that is available in your location</p>
+                            </Stack>
+
+                            <motion.div whileTap={{ scale: 0.8 }} style={{ width: '100%', cursor: 'pointer' }}
+                                onClick={() => {
+                                    localStorage.setItem('dm', 'fcfa');
+                                    localStorage.setItem('dmmv', 'wave');
+                                    router.push('/dashboard/inputvalue?dm=fcfa');
+                                }}>
+                                <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#242627', borderRadius: '8px' }}>
+                                    <p style={{ color: '#D4AF37', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 1: WAVE</p>
+                                </Stack>
+                            </motion.div>
+
+
+                            <motion.div whileTap={{ scale: 0.8 }} style={{ width: '100%', cursor: 'pointer' }}
+                                onClick={() => {
+                                    localStorage.setItem('dm', 'fcfa');
+                                    localStorage.setItem('dmmv', 'mtn');
+                                    router.push('/dashboard/inputvalue?dm=fcfa');
+                                }}>
+                                <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#06101F', borderRadius: '8px' }}>
+                                    <p style={{ color: '#1BB6FF', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 2: MTN MONEY</p>
+                                </Stack>
+                            </motion.div>
+
+
                         </Stack>
-                    </motion.div>
+
+                        : (currency === 'idr') ?
+
+                            <Stack direction="column" spacing={2} alignItems="center" justifyContent={"center"} sx={{ padding: '12px', width: '300px', height: 'auto', background: '#353431', borderRadius: '16px' }}>
+
+                                <Stack direction='column' alignItems="center" justifyContent={"center"}>
+
+                                    <Image src={Logo} alt="european fc" width={70} height={70} />
+                                    <p style={{ color: '#E9E5DA', width: '100%', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>Choose any Transaction method</p>
+                                    <p style={{ color: '#E9E5DA', width: '100%', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '300', fontSize: '13px' }}>you can Choose any transaction type that is available in your location</p>
+                                </Stack>
+
+                                <motion.div whileTap={{ scale: 0.8 }} style={{ width: '100%', cursor: 'pointer' }}
+                                    onClick={() => {
+                                        localStorage.setItem('dm', 'idr');
+                                        localStorage.setItem('dmmv', 'DANA');
+                                        router.push('/dashboard/inputvalue?dm=idr');
+                                    }}>
+                                    <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#06101F', borderRadius: '8px' }}>
+                                        <p style={{ color: '#1BB6FF', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 1: DANA</p>
+                                    </Stack>
+                                </motion.div>
 
 
-                    <motion.div whileTap={{ scale: 0.8 }} style={{ width: '100%',cursor:'pointer' }}
-                     onClick={()=>{
-                         localStorage.setItem('dm','fcfa');
-                         localStorage.setItem('dmmv','mtn');
-                         router.push('/user/inputvalue?dm=fcfa');
-                    }}>
-                        <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#06101F', borderRadius: '8px' }}>
-                            <p style={{ color: '#1BB6FF', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 2: MTN MONEY</p>
-                        </Stack>
-                    </motion.div>
-
-
-                </Stack>
-                
-               : (currency === 'idr') ? 
-                
-               <Stack direction="column" spacing={2} alignItems="center" justifyContent={"center"} sx={{ padding: '12px', width: '300px', height: 'auto', background: '#353431', borderRadius: '16px' }}>
-                
-               <Stack direction='column' alignItems="center" justifyContent={"center"}>
-                   
-                   <Image src={Logo} alt="european fc" width={70} height={70} />
-                   <p style={{ color: '#E9E5DA', width: '100%', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>Choose any Transaction method</p>
-                   <p style={{ color: '#E9E5DA', width: '100%', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '300', fontSize: '13px' }}>you can Choose any transaction type that is available in your location</p>
-               </Stack>
-
-               <motion.div whileTap={{ scale: 0.8 }} style={{ width: '100%',cursor:'pointer' }} 
-               onClick={()=>{
-                    localStorage.setItem('dm','idr');
-                    localStorage.setItem('dmmv','DANA');
-                    router.push('/user/inputvalue?dm=idr');
-               }}>
-                   <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#06101F', borderRadius: '8px' }}>
-                       <p style={{ color: '#1BB6FF', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 1: DANA</p>
-                   </Stack>
-               </motion.div>
-
-
-               {/* <motion.div whileTap={{ scale: 0.8 }} style={{ width: '100%',cursor:'pointer' }}
+                                {/* <motion.div whileTap={{ scale: 0.8 }} style={{ width: '100%',cursor:'pointer' }}
                 onClick={()=>{
                     localStorage.setItem('dm','idr');
                     localStorage.setItem('dmmv','bca');
-                    router.push('/user/inputvalue?dm=idr');
+                    router.push('/dashboard/inputvalue?dm=idr');
                }}>
                    <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#06101F', borderRadius: '8px' }}>
                        <p style={{ color: '#1BB6FF', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 2: BANK CENTRAL ASIA</p>
@@ -91,54 +91,54 @@ export default function Loadingx({ open, handleClose,currency }) {
                </motion.div>
  */}
 
-           </Stack>
-                
-                :
+                            </Stack>
 
-                    <Stack direction="column" spacing={2} alignItems="center" justifyContent={"center"} sx={{ padding: '12px', width: '300px', height: 'auto', background: '#353431', borderRadius: '16px' }}>
-                
-                    <Stack direction='column' alignItems="center" justifyContent={"center"}>
-                        
-                        <Image src={Logo} alt="european fc" width={70} height={70} />
-                        <p style={{ color: '#CACACA', width: '100%', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>Choose any Transaction method</p>
-                        <p style={{ color: '#CACACA', width: '100%', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '300', fontSize: '13px' }}>you can Choose any transaction type that is available in your location</p>
-                    </Stack>
+                            :
 
-                    <motion.div whileTap={{ scale: 0.8 }} style={{ width: '100%',cursor:'pointer' }} 
-                    onClick={()=>{
-                         localStorage.setItem('dm','mmk');
-                         localStorage.setItem('dmmv','wave');
-                         router.push('/user/inputvalue?dm=mmk');
-                    }}>
-                        <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#242627', borderRadius: '8px' }}>
-                            <p style={{ color: '#D4AF37', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 1: WAVE</p>
-                        </Stack>
-                    </motion.div>
+                            <Stack direction="column" spacing={2} alignItems="center" justifyContent={"center"} sx={{ padding: '12px', width: '300px', height: 'auto', background: '#353431', borderRadius: '16px' }}>
+
+                                <Stack direction='column' alignItems="center" justifyContent={"center"}>
+
+                                    <Image src={Logo} alt="european fc" width={70} height={70} />
+                                    <p style={{ color: '#CACACA', width: '100%', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>Choose any Transaction method</p>
+                                    <p style={{ color: '#CACACA', width: '100%', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '300', fontSize: '13px' }}>you can Choose any transaction type that is available in your location</p>
+                                </Stack>
+
+                                <motion.div whileTap={{ scale: 0.8 }} style={{ width: '100%', cursor: 'pointer' }}
+                                    onClick={() => {
+                                        localStorage.setItem('dm', 'mmk');
+                                        localStorage.setItem('dmmv', 'wave');
+                                        router.push('/dashboard/inputvalue?dm=mmk');
+                                    }}>
+                                    <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#242627', borderRadius: '8px' }}>
+                                        <p style={{ color: '#D4AF37', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 1: WAVE</p>
+                                    </Stack>
+                                </motion.div>
 
 
-                    <motion.div whileTap={{ scale: 0.8 }} style={{ width: '100%',cursor:'pointer' }}
-                     onClick={()=>{
-                         localStorage.setItem('dm','mmk');
-                         localStorage.setItem('dmmv','kpay');
-                         router.push('/user/inputvalue?dm=mmk');
-                    }}>
-                        <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#06101F', borderRadius: '8px' }}>
-                            <p style={{ color: '#1BB6FF', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 2: KPAY</p>
-                        </Stack>
-                    </motion.div>
+                                <motion.div whileTap={{ scale: 0.8 }} style={{ width: '100%', cursor: 'pointer' }}
+                                    onClick={() => {
+                                        localStorage.setItem('dm', 'mmk');
+                                        localStorage.setItem('dmmv', 'kpay');
+                                        router.push('/dashboard/inputvalue?dm=mmk');
+                                    }}>
+                                    <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#06101F', borderRadius: '8px' }}>
+                                        <p style={{ color: '#1BB6FF', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 2: KPAY</p>
+                                    </Stack>
+                                </motion.div>
 
-                    {/* <motion.div whileTap={{ scale: 0.8 }} style={{ width: '100%',cursor:'pointer' }}
+                                {/* <motion.div whileTap={{ scale: 0.8 }} style={{ width: '100%',cursor:'pointer' }}
                      onClick={()=>{
                          localStorage.setItem('dm','mmk');
                          localStorage.setItem('dmmv','kbz');
-                         router.push('/user/inputvalue?dm=mmk');
+                         router.push('/dashboard/inputvalue?dm=mmk');
                     }}>
                         <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ padding: '8px', width: '100%', height: '60px', background: '#06101F', borderRadius: '8px' }}>
                             <p style={{ color: '#1BB6FF', width: '100%', margin: '0', textAlign: 'center', fontFamily: 'Poppins,sans-serif', fontWeight: '600', fontSize: '16px' }}>TRANSFER 3: KBZ Bank</p>
                         </Stack>
                     </motion.div> */}
 
-                </Stack>
+                            </Stack>
                 }
             </Stack>
         </Modal>
