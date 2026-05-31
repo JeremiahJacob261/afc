@@ -1,7 +1,7 @@
 
 import { useState } from "react"
 import { Visibility, VisibilityOff } from "@mui/icons-material"
-import styles from "./register-form.module.css"
+import styles from "./signup-form.module.css"
 
 export default function SignupForm() {
   const [showPassword, setShowPassword] = useState(false)
