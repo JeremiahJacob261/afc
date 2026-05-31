@@ -19,11 +19,10 @@ import {
 } from "@/data/landing";
 import { Section } from "./Section";
 import ballPng from "@/public/soccer_ball_icon.png";
+import feature1 from "@/public/features-1.png";
 import feature2 from "@/public/features-2.png";
 import advan1 from "@/public/advan-1.png";
 import advan2 from "@/public/advan-2.png";
-import bfc1 from "@/public/bfc1.jpg";
-import bfc4 from "@/public/bfc4.jpg";
 
 const marketIcons = [Trophy, Goal, BarChart3, CircleDollarSign, Clock3];
 const featureIcons = [BarChart3, Clock3, WalletCards, ShieldCheck];
@@ -82,7 +81,7 @@ export function FeatureSections() {
         id="how-it-works"
         eyebrow="How it works"
         title="From fixture to confirmed football bet"
-        copy="A simple path for users who want to register, fund, select a football market, and track the result."
+        copy="A simple path for users who want to register, explore available football markets, and track results."
         className="bg-white"
       >
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
@@ -136,14 +135,14 @@ export function FeatureSections() {
 
       <Section
         eyebrow="Platform operations"
-        title="EFC football platform terms at a glance"
-        copy="The landing page now reflects the EFC operation card: deposit bonus, minimum deposit, daily percentage, and minimum withdrawal."
+        title="EFC football platform metrics at a glance"
+        copy="EFC provides real-time updates and active coverage across dozens of football leagues worldwide."
       >
         <div className="grid items-center gap-6 lg:grid-cols-[1.15fr_0.85fr]">
           <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-[0_20px_60px_rgba(6,16,31,0.12)]">
             <Image
-              src={bfc1}
-              alt="European Football Clubs platform operations showing deposit bonus, minimum deposit, daily percentage, and minimum withdrawal"
+              src={feature1}
+              alt="EFC Football Clubs platform overview showing live matches and leagues board"
               sizes="(min-width: 1024px) 58vw, 100vw"
               className="aspect-[16/9] h-auto w-full object-cover"
             />
@@ -170,7 +169,7 @@ export function FeatureSections() {
       <Section
         eyebrow="Betting features"
         title="Everything focused on football betting"
-        copy="Clear football markets, secure wallet controls, and simple bet tracking keep users close to the next match."
+        copy="Clear football markets, secure account controls, and simple bet tracking keep users close to the next match."
       >
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="space-y-5">
@@ -212,8 +211,8 @@ export function FeatureSections() {
 
           <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-[0_20px_60px_rgba(6,16,31,0.12)]">
             <Image
-              src={bfc4}
-              alt="European Football Clubs wallet rewards showing first deposit bonus, bet unlock target, referral bonus, and withdrawal charge"
+              src={feature2}
+              alt="EFC platform features highlight"
               sizes="(min-width: 1024px) 52vw, 100vw"
               className="aspect-[16/9] h-auto w-full object-cover"
             />

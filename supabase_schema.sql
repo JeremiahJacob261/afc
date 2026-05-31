@@ -54,12 +54,17 @@ CREATE TABLE IF NOT EXISTS users (
   firstd BOOLEAN DEFAULT FALSE,
   gcount INTEGER DEFAULT 0,
   dailywl DECIMAL(15, 4) DEFAULT 0.00,
+  betspend DECIMAL(15, 4) DEFAULT 0.00,
+  betwon DECIMAL(15, 4) DEFAULT 0.00,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (refer) REFERENCES users(newrefer),
   FOREIGN KEY (lvla) REFERENCES users(newrefer),
   FOREIGN KEY (lvlb) REFERENCES users(newrefer)
 );
+
+ALTER TABLE users ADD COLUMN IF NOT EXISTS betspend DECIMAL(15, 4) DEFAULT 0.00;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS betwon DECIMAL(15, 4) DEFAULT 0.00;
 
 -- User wallet bindings
 CREATE TABLE IF NOT EXISTS user_wallets (
@@ -202,6 +207,20 @@ CREATE TABLE IF NOT EXISTS activa (
   FOREIGN KEY (username) REFERENCES users(username)
 );
 
+CREATE TABLE IF NOT EXISTS useractivity (
+  id BIGSERIAL PRIMARY KEY,
+  type TEXT,
+  amount DECIMAL(15, 4),
+  "user" TEXT,
+  count INTEGER DEFAULT 0,
+  uid TEXT,
+  match_id TEXT,
+  stake DECIMAL(15, 4),
+  profit DECIMAL(15, 4),
+  market TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Admin-configurable platform settings
 CREATE TABLE IF NOT EXISTS admin_settings (
   id INTEGER PRIMARY KEY DEFAULT 1 CHECK (id = 1),
@@ -283,11 +302,506 @@ CREATE INDEX IF NOT EXISTS idx_activa_code ON activa(code);
 CREATE INDEX IF NOT EXISTS idx_activa_username ON activa(username);
 CREATE INDEX IF NOT EXISTS idx_activa_type ON activa(type);
 
+CREATE INDEX IF NOT EXISTS idx_useractivity_user ON useractivity("user");
+CREATE INDEX IF NOT EXISTS idx_useractivity_match_id ON useractivity(match_id);
+
 -- Admin settings index
 CREATE INDEX IF NOT EXISTS idx_admin_settings_updated_at ON admin_settings(updated_at);
 
 -- Referral indexes
 CREATE INDEX IF NOT EXISTS idx_referral_refer ON referral(refer);
+
+-- ============================================================================
+-- ATOMIC BETTING RPCS
+-- ============================================================================
+
+CREATE OR REPLACE FUNCTION public.score_market_key(market_value TEXT)
+RETURNS TEXT
+LANGUAGE plpgsql
+IMMUTABLE
+AS $$
+DECLARE
+  raw_value TEXT := btrim(COALESCE(market_value, ''));
+  label_value TEXT;
+BEGIN
+  IF raw_value IN (
+    'nilnil', 'onenil', 'nilone', 'oneone', 'twonil', 'niltwo',
+    'twoone', 'onetwo', 'twotwo', 'threenil', 'nilthree',
+    'threeone', 'onethree', 'twothree', 'threetwo',
+    'threethree', 'otherscores'
+  ) THEN
+    RETURN raw_value;
+  END IF;
+
+  label_value := btrim(regexp_replace(raw_value, '\s*:\s*', ' - ', 'g'));
+
+  CASE label_value
+    WHEN '0 - 0' THEN RETURN 'nilnil';
+    WHEN '1 - 0' THEN RETURN 'onenil';
+    WHEN '0 - 1' THEN RETURN 'nilone';
+    WHEN '1 - 1' THEN RETURN 'oneone';
+    WHEN '2 - 0' THEN RETURN 'twonil';
+    WHEN '0 - 2' THEN RETURN 'niltwo';
+    WHEN '2 - 1' THEN RETURN 'twoone';
+    WHEN '1 - 2' THEN RETURN 'onetwo';
+    WHEN '2 - 2' THEN RETURN 'twotwo';
+    WHEN '3 - 0' THEN RETURN 'threenil';
+    WHEN '0 - 3' THEN RETURN 'nilthree';
+    WHEN '3 - 1' THEN RETURN 'threeone';
+    WHEN '1 - 3' THEN RETURN 'onethree';
+    WHEN '2 - 3' THEN RETURN 'twothree';
+    WHEN '3 - 2' THEN RETURN 'threetwo';
+    WHEN '3 - 3' THEN RETURN 'threethree';
+    WHEN 'Other' THEN RETURN 'otherscores';
+    ELSE RETURN NULL;
+  END CASE;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.score_market_label(market_value TEXT)
+RETURNS TEXT
+LANGUAGE plpgsql
+IMMUTABLE
+AS $$
+DECLARE
+  market_key TEXT := public.score_market_key(market_value);
+BEGIN
+  CASE market_key
+    WHEN 'nilnil' THEN RETURN '0 - 0';
+    WHEN 'onenil' THEN RETURN '1 - 0';
+    WHEN 'nilone' THEN RETURN '0 - 1';
+    WHEN 'oneone' THEN RETURN '1 - 1';
+    WHEN 'twonil' THEN RETURN '2 - 0';
+    WHEN 'niltwo' THEN RETURN '0 - 2';
+    WHEN 'twoone' THEN RETURN '2 - 1';
+    WHEN 'onetwo' THEN RETURN '1 - 2';
+    WHEN 'twotwo' THEN RETURN '2 - 2';
+    WHEN 'threenil' THEN RETURN '3 - 0';
+    WHEN 'nilthree' THEN RETURN '0 - 3';
+    WHEN 'threeone' THEN RETURN '3 - 1';
+    WHEN 'onethree' THEN RETURN '1 - 3';
+    WHEN 'twothree' THEN RETURN '2 - 3';
+    WHEN 'threetwo' THEN RETURN '3 - 2';
+    WHEN 'threethree' THEN RETURN '3 - 3';
+    WHEN 'otherscores' THEN RETURN 'Other';
+    ELSE RETURN NULL;
+  END CASE;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.score_market_from_score(home_score INTEGER, away_score INTEGER)
+RETURNS TEXT
+LANGUAGE plpgsql
+IMMUTABLE
+AS $$
+DECLARE
+  score_label TEXT;
+BEGIN
+  IF home_score IS NULL OR away_score IS NULL OR home_score < 0 OR away_score < 0 THEN
+    RAISE EXCEPTION 'Invalid score';
+  END IF;
+
+  IF home_score > 3 OR away_score > 3 THEN
+    RETURN 'Other';
+  END IF;
+
+  score_label := home_score::TEXT || ' - ' || away_score::TEXT;
+  IF public.score_market_key(score_label) IS NULL THEN
+    RAISE EXCEPTION 'Unsupported score market';
+  END IF;
+
+  RETURN score_label;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.vip_bonus_for_level(vip_level INTEGER)
+RETURNS NUMERIC
+LANGUAGE sql
+IMMUTABLE
+AS $$
+  SELECT CASE vip_level
+    WHEN 2 THEN 0.015
+    WHEN 3 THEN 0.030
+    WHEN 4 THEN 0.050
+    WHEN 5 THEN 0.070
+    WHEN 6 THEN 0.095
+    WHEN 7 THEN 0.125
+    ELSE 0
+  END::NUMERIC;
+$$;
+
+CREATE OR REPLACE FUNCTION public.vip_level_for_user(total_deposit NUMERIC, referral_count INTEGER)
+RETURNS INTEGER
+LANGUAGE sql
+IMMUTABLE
+AS $$
+  SELECT CASE
+    WHEN COALESCE(total_deposit, 0) >= 5000 OR COALESCE(referral_count, 0) >= 500 THEN 7
+    WHEN COALESCE(total_deposit, 0) >= 1000 OR COALESCE(referral_count, 0) >= 40 THEN 6
+    WHEN COALESCE(total_deposit, 0) >= 500 OR COALESCE(referral_count, 0) >= 30 THEN 5
+    WHEN COALESCE(total_deposit, 0) >= 300 OR COALESCE(referral_count, 0) >= 20 THEN 4
+    WHEN COALESCE(total_deposit, 0) >= 200 OR COALESCE(referral_count, 0) >= 15 THEN 3
+    WHEN COALESCE(total_deposit, 0) >= 100 OR COALESCE(referral_count, 0) >= 10 THEN 2
+    ELSE 1
+  END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.place_bet_atomic(
+  p_userid TEXT,
+  p_match_id TEXT,
+  p_picked TEXT,
+  p_stake NUMERIC,
+  p_client_bet_id UUID DEFAULT NULL
+)
+RETURNS JSONB
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  user_row users%ROWTYPE;
+  match_row bets%ROWTYPE;
+  market_key TEXT;
+  market_label TEXT;
+  base_odd NUMERIC;
+  final_odd NUMERIC;
+  profit_amount NUMERIC;
+  next_balance NUMERIC;
+  referral_count INTEGER;
+  vip_level INTEGER;
+  start_ms NUMERIC;
+  now_ms NUMERIC;
+  inserted_betid TEXT;
+BEGIN
+  IF p_userid IS NULL OR btrim(p_userid) = '' THEN
+    RAISE EXCEPTION 'Authentication required';
+  END IF;
+
+  IF p_match_id IS NULL OR btrim(p_match_id) = '' THEN
+    RAISE EXCEPTION 'Match not found';
+  END IF;
+
+  IF p_stake IS NULL OR p_stake < 1 THEN
+    RAISE EXCEPTION 'Invalid bet details';
+  END IF;
+
+  market_key := public.score_market_key(p_picked);
+  market_label := public.score_market_label(p_picked);
+  IF market_key IS NULL OR market_label IS NULL THEN
+    RAISE EXCEPTION 'Invalid bet details';
+  END IF;
+
+  SELECT *
+  INTO user_row
+  FROM users
+  WHERE userid = p_userid
+  FOR UPDATE;
+
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'Profile not found';
+  END IF;
+
+  IF COALESCE(user_row.balance, 0) < p_stake THEN
+    RAISE EXCEPTION 'You do not have Enough USDT to Complete this BET';
+  END IF;
+
+  IF COALESCE(user_row.gcount, 0) > 2 THEN
+    RAISE EXCEPTION 'You have reached the maximum number of bets for today';
+  END IF;
+
+  SELECT *
+  INTO match_row
+  FROM bets
+  WHERE match_id = p_match_id
+  FOR UPDATE;
+
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'Match not found';
+  END IF;
+
+  IF COALESCE(match_row.verified, FALSE) THEN
+    RAISE EXCEPTION 'Match already settled';
+  END IF;
+
+  start_ms := COALESCE(match_row.tsgmt, 0);
+  IF start_ms > 0 AND start_ms < 1000000000000 THEN
+    start_ms := start_ms * 1000;
+  END IF;
+  now_ms := EXTRACT(EPOCH FROM now()) * 1000;
+
+  IF start_ms <= now_ms THEN
+    RAISE EXCEPTION 'This Match has expired';
+  END IF;
+
+  base_odd := COALESCE(NULLIF(to_jsonb(match_row) ->> market_key, '')::NUMERIC, 0);
+  IF base_odd <= 0 THEN
+    RAISE EXCEPTION 'This market is not available';
+  END IF;
+
+  SELECT COUNT(*)::INTEGER
+  INTO referral_count
+  FROM users
+  WHERE refer = user_row.newrefer
+    AND firstd IS TRUE;
+
+  vip_level := public.vip_level_for_user(user_row.totald, referral_count);
+  final_odd := base_odd + public.vip_bonus_for_level(vip_level);
+  profit_amount := round((final_odd * p_stake) / 100, 2);
+
+  IF p_client_bet_id IS NULL THEN
+    INSERT INTO placed (
+      match_id, market, username, started, stake, profit, aim,
+      home, away, time, date, odd, ihome, iaway,
+      levelone, leveltwo, levelthree, aone, atwo, athree
+    )
+    VALUES (
+      match_row.match_id, market_label, user_row.username, FALSE, p_stake, profit_amount, profit_amount,
+      match_row.home, match_row.away, match_row.time, match_row.date, final_odd, match_row.ihome, match_row.iaway,
+      CASE WHEN length(COALESCE(user_row.refer, '')) < 2 THEN '7705966' ELSE user_row.refer END,
+      CASE WHEN length(COALESCE(user_row.lvla, '')) < 2 THEN '7705966' ELSE user_row.lvla END,
+      CASE WHEN length(COALESCE(user_row.lvlb, '')) < 2 THEN '7705966' ELSE user_row.lvlb END,
+      CASE WHEN length(COALESCE(user_row.refer, '')) < 2 THEN 0 ELSE 0.05 * profit_amount END,
+      CASE WHEN length(COALESCE(user_row.lvla, '')) < 2 THEN 0 ELSE 0.03 * profit_amount END,
+      CASE WHEN length(COALESCE(user_row.lvlb, '')) < 2 THEN 0 ELSE 0.01 * profit_amount END
+    )
+    RETURNING betid::TEXT INTO inserted_betid;
+  ELSE
+    INSERT INTO placed (
+      betid, match_id, market, username, started, stake, profit, aim,
+      home, away, time, date, odd, ihome, iaway,
+      levelone, leveltwo, levelthree, aone, atwo, athree
+    )
+    VALUES (
+      p_client_bet_id, match_row.match_id, market_label, user_row.username, FALSE, p_stake, profit_amount, profit_amount,
+      match_row.home, match_row.away, match_row.time, match_row.date, final_odd, match_row.ihome, match_row.iaway,
+      CASE WHEN length(COALESCE(user_row.refer, '')) < 2 THEN '7705966' ELSE user_row.refer END,
+      CASE WHEN length(COALESCE(user_row.lvla, '')) < 2 THEN '7705966' ELSE user_row.lvla END,
+      CASE WHEN length(COALESCE(user_row.lvlb, '')) < 2 THEN '7705966' ELSE user_row.lvlb END,
+      CASE WHEN length(COALESCE(user_row.refer, '')) < 2 THEN 0 ELSE 0.05 * profit_amount END,
+      CASE WHEN length(COALESCE(user_row.lvla, '')) < 2 THEN 0 ELSE 0.03 * profit_amount END,
+      CASE WHEN length(COALESCE(user_row.lvlb, '')) < 2 THEN 0 ELSE 0.01 * profit_amount END
+    )
+    ON CONFLICT (betid) DO NOTHING
+    RETURNING betid::TEXT INTO inserted_betid;
+
+    IF inserted_betid IS NULL THEN
+      SELECT betid::TEXT
+      INTO inserted_betid
+      FROM placed
+      WHERE betid::TEXT = p_client_bet_id::TEXT
+        AND username = user_row.username
+        AND match_id = match_row.match_id;
+
+      IF inserted_betid IS NULL THEN
+        RAISE EXCEPTION 'Duplicate bet id';
+      END IF;
+
+      RETURN jsonb_build_object(
+        'status', 'success',
+        'message', 'Bet Successful',
+        'betid', inserted_betid,
+        'balance', user_row.balance,
+        'profit', profit_amount,
+        'odd', final_odd,
+        'reused', TRUE
+      );
+    END IF;
+  END IF;
+
+  UPDATE users
+  SET balance = COALESCE(balance, 0) - p_stake,
+      gcount = COALESCE(gcount, 0) + 1
+  WHERE username = user_row.username
+  RETURNING balance INTO next_balance;
+
+  INSERT INTO useractivity (type, amount, "user", match_id, stake, profit, market)
+  VALUES ('bets', p_stake + profit_amount, user_row.username, match_row.match_id, p_stake, profit_amount, market_label);
+
+  RETURN jsonb_build_object(
+    'status', 'success',
+    'message', 'Bet Successful',
+    'betid', inserted_betid,
+    'balance', next_balance,
+    'profit', profit_amount,
+    'odd', final_odd
+  );
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.settle_reverse_match_atomic(
+  p_match_id TEXT,
+  p_home_score INTEGER,
+  p_away_score INTEGER
+)
+RETURNS JSONB
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  match_row bets%ROWTYPE;
+  bet_row placed%ROWTYPE;
+  actual_label TEXT;
+  actual_key TEXT;
+  protected_key TEXT;
+  selected_key TEXT;
+  payout_amount NUMERIC;
+  bonus_amount NUMERIC;
+  total_bets INTEGER := 0;
+  won_count INTEGER := 0;
+  lost_count INTEGER := 0;
+  refunded_count INTEGER := 0;
+  user_refers RECORD;
+BEGIN
+  IF p_match_id IS NULL OR btrim(p_match_id) = '' THEN
+    RAISE EXCEPTION 'Missing match id';
+  END IF;
+
+  actual_label := public.score_market_from_score(p_home_score, p_away_score);
+  actual_key := public.score_market_key(actual_label);
+
+  SELECT *
+  INTO match_row
+  FROM bets
+  WHERE match_id = p_match_id
+  FOR UPDATE;
+
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'Match not found';
+  END IF;
+
+  SELECT COUNT(*)::INTEGER
+  INTO total_bets
+  FROM placed
+  WHERE match_id = p_match_id;
+
+  IF COALESCE(match_row.verified, FALSE) THEN
+    RETURN jsonb_build_object(
+      'status', 'success',
+      'alreadySettled', TRUE,
+      'matchId', p_match_id,
+      'result', match_row.results,
+      'resultKey', public.score_market_key(match_row.results),
+      'company', COALESCE(match_row.company, FALSE),
+      'protectedMarket', public.score_market_label(match_row.comarket),
+      'summary', jsonb_build_object('won', 0, 'lost', 0, 'refunded', 0, 'total', total_bets)
+    );
+  END IF;
+
+  IF COALESCE(match_row.company, FALSE) THEN
+    protected_key := public.score_market_key(match_row.comarket);
+    IF protected_key IS NULL THEN
+      RAISE EXCEPTION 'Company match is missing a supported protected market';
+    END IF;
+  END IF;
+
+  FOR bet_row IN
+    SELECT *
+    FROM placed
+    WHERE match_id = p_match_id
+      AND won = 'null'
+    FOR UPDATE
+  LOOP
+    selected_key := public.score_market_key(bet_row.market);
+    IF selected_key IS NULL THEN
+      RAISE EXCEPTION 'Unsupported placed market for bet %', bet_row.betid;
+    END IF;
+
+    UPDATE users
+    SET betspend = COALESCE(betspend, 0) + COALESCE(bet_row.stake, 0)
+    WHERE username = bet_row.username;
+
+    IF selected_key <> actual_key THEN
+      payout_amount := COALESCE(bet_row.stake, 0) + COALESCE(bet_row.aim, 0);
+
+      UPDATE users
+      SET balance = COALESCE(balance, 0) + payout_amount,
+          betwon = COALESCE(betwon, 0) + payout_amount
+      WHERE username = bet_row.username;
+
+      UPDATE placed
+      SET won = 'true'
+      WHERE betid = bet_row.betid;
+
+      INSERT INTO activa (code, username, amount, type)
+      VALUES ('bet', bet_row.username, payout_amount, 'rebate');
+
+      SELECT refer, lvla, lvlb
+      INTO user_refers
+      FROM users
+      WHERE username = bet_row.username;
+
+      IF user_refers.refer IS NOT NULL AND user_refers.refer <> '' AND user_refers.refer <> 'null' THEN
+        bonus_amount := COALESCE(bet_row.profit, 0) * 0.06;
+        UPDATE users
+        SET balance = COALESCE(balance, 0) + bonus_amount
+        WHERE newrefer = user_refers.refer;
+        IF FOUND THEN
+          INSERT INTO activa (username, type, amount, code)
+          VALUES (bet_row.username, 'affbonus', bonus_amount, user_refers.refer);
+        END IF;
+      END IF;
+
+      IF user_refers.lvla IS NOT NULL AND user_refers.lvla <> '' AND user_refers.lvla <> 'null' THEN
+        bonus_amount := COALESCE(bet_row.profit, 0) * 0.03;
+        UPDATE users
+        SET balance = COALESCE(balance, 0) + bonus_amount
+        WHERE newrefer = user_refers.lvla;
+        IF FOUND THEN
+          INSERT INTO activa (username, type, amount, code)
+          VALUES (bet_row.username, 'affbonus', bonus_amount, user_refers.lvla);
+        END IF;
+      END IF;
+
+      IF user_refers.lvlb IS NOT NULL AND user_refers.lvlb <> '' AND user_refers.lvlb <> 'null' THEN
+        bonus_amount := COALESCE(bet_row.profit, 0) * 0.01;
+        UPDATE users
+        SET balance = COALESCE(balance, 0) + bonus_amount
+        WHERE newrefer = user_refers.lvlb;
+        IF FOUND THEN
+          INSERT INTO activa (username, type, amount, code)
+          VALUES (bet_row.username, 'affbonus', bonus_amount, user_refers.lvlb);
+        END IF;
+      END IF;
+
+      won_count := won_count + 1;
+    ELSIF protected_key IS NOT NULL AND protected_key = selected_key THEN
+      UPDATE users
+      SET balance = COALESCE(balance, 0) + COALESCE(bet_row.stake, 0)
+      WHERE username = bet_row.username;
+
+      UPDATE placed
+      SET won = 'true'
+      WHERE betid = bet_row.betid;
+
+      refunded_count := refunded_count + 1;
+    ELSE
+      UPDATE placed
+      SET won = 'false'
+      WHERE betid = bet_row.betid;
+
+      lost_count := lost_count + 1;
+    END IF;
+  END LOOP;
+
+  UPDATE bets
+  SET verified = TRUE,
+      results = actual_label
+  WHERE match_id = p_match_id;
+
+  RETURN jsonb_build_object(
+    'status', 'success',
+    'alreadySettled', FALSE,
+    'matchId', p_match_id,
+    'result', actual_label,
+    'resultKey', actual_key,
+    'company', COALESCE(match_row.company, FALSE),
+    'protectedMarket', CASE WHEN protected_key IS NULL THEN NULL ELSE public.score_market_label(protected_key) END,
+    'summary', jsonb_build_object('won', won_count, 'lost', lost_count, 'refunded', refunded_count, 'total', total_bets)
+  );
+END;
+$$;
+
+REVOKE ALL ON FUNCTION public.place_bet_atomic(TEXT, TEXT, TEXT, NUMERIC, UUID) FROM PUBLIC;
+REVOKE ALL ON FUNCTION public.settle_reverse_match_atomic(TEXT, INTEGER, INTEGER) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.place_bet_atomic(TEXT, TEXT, TEXT, NUMERIC, UUID) TO service_role;
+GRANT EXECUTE ON FUNCTION public.settle_reverse_match_atomic(TEXT, INTEGER, INTEGER) TO service_role;
 
 -- ============================================================================
 -- VIEWS (Optional - for common queries)
