@@ -225,11 +225,11 @@ export default function Account() {
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} alignItems="center">
                 <Stack direction='row' spacing={1} justifyContent='center' alignItems="center">
                   <Icon icon="ant-design:link-outlined" width="24" height="24" style={{ color: "#a3a3a3" }} />
-                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>signup/{info?.newrefer || ''}</Typography>
+                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>register/{info?.newrefer || ''}</Typography>
                 </Stack>
                 <Icon icon="solar:copy-bold-duotone" width="24" height="24" style={{ color: '#a3a3a3' }} onClick={() => {
                   if (!info?.newrefer) return
-                  navigator.clipboard.writeText("https://europeanfc01.vercel.app/register/" + info.newrefer)
+                  navigator.clipboard.writeText("https://europeanfc01.com/register/" + info.newrefer)
                   setMessages("Invite Link Copied")
                   toast.success("Invite link copied")
                 }} />
