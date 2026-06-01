@@ -72,10 +72,10 @@ export default function FeedbackDialog({
           <Image src={LOGO} width={44} height={44} alt="EFC" />
           <Icon sx={{ position: 'absolute', right: -2, bottom: 2, color: content.color, bgcolor: '#10284D', borderRadius: '50%' }} />
         </Box>
-        <Typography id="feedback-dialog-title" sx={{ fontFamily: 'Poppins,sans-serif', fontSize: 20, fontWeight: 700, textAlign: 'center', color: '#FFFFFF' }}>
+        <Typography id="feedback-dialog-title" sx={{ fontFamily: 'Poppins,sans-serif', fontSize: 20, fontWeight: 700, textAlign: 'center', color: '#0e1068' }}>
           {dialogTitle}
         </Typography>
-        <Typography id="feedback-dialog-description" sx={{ fontFamily: 'Inter,sans-serif', fontSize: 14, lineHeight: 1.55, color: 'rgba(233, 229, 218, 0.82)', textAlign: 'center' }}>
+        <Typography id="feedback-dialog-description" sx={{ fontFamily: 'Inter,sans-serif', fontSize: 14, lineHeight: 1.55, color: 'rgba(26, 8, 118, 0.82)', textAlign: 'center' }}>
           {message}
         </Typography>
         <Button
