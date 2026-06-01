@@ -114,7 +114,7 @@ export default function Register({ refer }) {
 
       if (error) throw error;
 
-      const profileResponse = await fetch('/api/register-profile', {
+      const profileResponse = await fetch('/api/signup-profile', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
