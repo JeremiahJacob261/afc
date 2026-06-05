@@ -38,16 +38,6 @@ export default function Deposit() {
     return wallx.find(obj => obj.name === id);
   }
   
-  let amountlimit = {
-    '1': 20,
-    '2': 50,
-    '3': 100,
-    '4': 200,
-    '5': 300,
-    '6': 500,
-    '7': 1000
-}
-
   const [wallets, setWallet] = useState([]);
   const [info, setInfo] = useState({});
   const [rate,setRate] = useState(1);
@@ -139,11 +129,8 @@ export default function Deposit() {
       toast.error('Please select a wallet')
     } else if (amount === '') {
       toast.error('Please enter amount')
-    } else if (amount < 11) {
-      toast.error(`Minimum amount to withdraw is 11 USDT`)
-
-    } else if (amount > 100) {
-      toast.error(`Maximum amount to withdraw including charges is 100 USDT`)
+    } else if (Number(amount) < 5) {
+      toast.error(`Minimum amount to withdraw is 5 USDT`)
 
     } else {
 

@@ -86,7 +86,7 @@ This schema is designed for a sports betting platform with the following key fea
 | codeset | BOOLEAN | DEFAULT FALSE | Whether 2FA/PIN is enabled |
 | pin | TEXT | - | Transaction PIN |
 | firstd | BOOLEAN | DEFAULT FALSE | Whether user made first deposit |
-| dailywl | DECIMAL(15,4) | DEFAULT 0.00 | Daily withdrawal limit tracking |
+| dailywl | DECIMAL(15,4) | DEFAULT 0.00 | Legacy daily withdrawal tracking |
 | created_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP | Account creation time |
 | updated_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP | Last update time |
 
@@ -374,20 +374,9 @@ Users can set a transaction PIN (`users.pin`):
 2. Set `codeset = true` when PIN is created
 3. Validate PIN before withdrawal operations
 
-### 💰 VIP Withdrawal Limits
+### 💰 Withdrawal Limits
 
-Daily withdrawal limits are set by VIP level in the app:
-```javascript
-const viplimit = {
-  '1': 50,
-  '2': 100,
-  '3': 200,
-  '4': 300,
-  '5': 500,
-  '6': 1000,
-  '7': 5000  // Daily limit in USDT
-}
-```
+Withdrawals currently require a minimum amount of 5 USDT. There is no maximum withdrawal amount or VIP-based daily withdrawal cap enforced by the app.
 
 ### 📱 Supported Payment Methods
 
