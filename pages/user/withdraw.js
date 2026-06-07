@@ -31,6 +31,8 @@ function isLocalMethod(type) {
   return ['local', 'local-transfer', 'bank', 'mobile-money'].includes(String(type || '').trim().toLowerCase());
 }
 
+const MIN_WITHDRAWAL_USDT = 10;
+
 export default function Deposit() {
   const [wallx,setWallx] = useState([]);
   //86f36a9d-c8e8-41cb-a8aa-3bbe7b66d0a5
@@ -129,8 +131,8 @@ export default function Deposit() {
       toast.error('Please select a wallet')
     } else if (amount === '') {
       toast.error('Please enter amount')
-    } else if (Number(amount) < 5) {
-      toast.error(`Minimum amount to withdraw is 5 USDT`)
+    } else if (Number(amount) < MIN_WITHDRAWAL_USDT) {
+      toast.error(`Minimum amount to withdraw is ${MIN_WITHDRAWAL_USDT} USDT`)
 
     } else {
 

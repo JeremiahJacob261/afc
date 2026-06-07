@@ -1,5 +1,7 @@
 import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
 
+const MIN_WITHDRAWAL_USDT = 10
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json([{ status: 'Failed', message: 'Method not allowed' }])
@@ -13,8 +15,8 @@ export default async function handler(req, res) {
       return res.status(400).json([{ status: 'Failed', message: 'Invalid amount' }])
     }
 
-    if (amount < 5) {
-      return res.status(200).json([{ status: 'Failed', message: 'Minimum amount to withdraw is 5 USDT' }])
+    if (amount < MIN_WITHDRAWAL_USDT) {
+      return res.status(200).json([{ status: 'Failed', message: `Minimum amount to withdraw is ${MIN_WITHDRAWAL_USDT} USDT` }])
     }
 
     const { profile, supabase } = await getCurrentProfile(

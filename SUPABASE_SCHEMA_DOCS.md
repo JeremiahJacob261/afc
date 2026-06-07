@@ -376,7 +376,7 @@ Users can set a transaction PIN (`users.pin`):
 
 ### 💰 Withdrawal Limits
 
-Withdrawals currently require a minimum amount of 5 USDT. There is no maximum withdrawal amount or VIP-based daily withdrawal cap enforced by the app.
+Withdrawals currently require a minimum amount of 10 USDT. There is no maximum withdrawal amount or VIP-based daily withdrawal cap enforced by the app.
 
 ### 📱 Supported Payment Methods
 

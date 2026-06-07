@@ -63,7 +63,7 @@ export const platformOperations = [
   { label: "Deposit bonus", value: "1USDT" },
   { label: "Minimum deposit", value: "5USDT" },
   { label: "Daily percentage", value: "3-4%" },
-  { label: "Minimum withdrawal", value: "5USDT" },
+  { label: "Minimum withdrawal", value: "10USDT" },
 ];
 
 export const walletRewards = [
