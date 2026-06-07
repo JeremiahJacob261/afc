@@ -211,20 +211,22 @@ function TransactionCard({ item }) {
               </Typography>
             </Stack>
 
-            <Stack
-              sx={{
-                flex: '0 0 auto',
-                borderRadius: '999px',
-                border: `1px solid ${status.border}`,
-                background: status.bg,
-                color: status.color,
-                padding: '5px 9px',
-              }}
-            >
-              <Typography sx={{ fontFamily: 'Inter, Poppins, sans-serif', fontSize: '11px', fontWeight: 800, lineHeight: 1 }}>
-                {item.statusLabel || status.label}
-              </Typography>
-            </Stack>
+            {item.hideStatusTag ? null : (
+              <Stack
+                sx={{
+                  flex: '0 0 auto',
+                  borderRadius: '999px',
+                  border: `1px solid ${status.border}`,
+                  background: status.bg,
+                  color: status.color,
+                  padding: '5px 9px',
+                }}
+              >
+                <Typography sx={{ fontFamily: 'Inter, Poppins, sans-serif', fontSize: '11px', fontWeight: 800, lineHeight: 1 }}>
+                  {item.statusLabel || status.label}
+                </Typography>
+              </Stack>
+            )}
           </Stack>
 
           <Stack spacing={0.25}>

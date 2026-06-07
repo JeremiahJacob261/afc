@@ -96,6 +96,12 @@ function transactionDetail(row, type) {
   ].filter(Boolean).join(' / ') || 'Withdrawal request'
 }
 
+function shouldHideStatusTag(row, type, status) {
+  return type === 'deposit'
+    && status === 'pending'
+    && String(row.method || '').trim().length > 6
+}
+
 function normalizeTransaction(row, methods) {
   const type = normalizeType(row.type)
   const amount = amountValue(row.amount)
@@ -141,6 +147,7 @@ function normalizeTransaction(row, methods) {
     legacyType: row.type || type,
     status,
     statusLabel: statusLabel(status),
+    hideStatusTag: shouldHideStatusTag(row, type, status),
     methodCode: method.methodCode,
     methodLabel: method.methodLabel,
     primaryAmount,
