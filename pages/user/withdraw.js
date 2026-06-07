@@ -226,8 +226,11 @@ export default function Deposit() {
     setOpen(true)
   }
   //end of snackbar2
-  let charge = (amount * 5) / 100;
-  let total = Number(amount) + ((amount * 5) / 100);
+  const requestedAmount = Number(amount) || 0;
+  const charge = (requestedAmount * 5) / 100;
+  const payoutAmount = requestedAmount - charge;
+  const currencyCode = String(currency || "USDT").toUpperCase();
+  const showConvertedPayout = currencyCode !== 'USDT';
   return (
     <Cover style={{ minHeight: '95vh', paddingBottom: '100px' }}>
       <Head>
@@ -250,17 +253,23 @@ export default function Deposit() {
             <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{(info.balance) ? info.balance.toFixed(3) : info.balance} USDT</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Charge Amount</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Withdrawal Fee</Typography>
             <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{(charge) ? charge.toFixed(3) : charge} USDT</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Total Amount</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{total} USDT</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Requested Amount</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{requestedAmount ? requestedAmount.toFixed(3) : requestedAmount} USDT</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Total Amount in {String(currency || "USDT").toUpperCase()}</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{parseFloat(total * rate).toFixed(2)} {String(currency || "USDT").toUpperCase()}</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>You Receive</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{payoutAmount ? payoutAmount.toFixed(3) : payoutAmount} USDT</Typography>
           </Stack>
+          {showConvertedPayout && (
+            <Stack direction='row' alignItems='center' justifyContent='space-between'>
+              <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>You Receive in {currencyCode}</Typography>
+              <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{parseFloat(payoutAmount * rate).toFixed(2)} {currencyCode}</Typography>
+            </Stack>
+          )}
           <Divider sx={{ color: 'white' }} />
           <motion.div
             whileHover={{ scale: 1.04 }}

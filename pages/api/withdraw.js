@@ -47,10 +47,12 @@ export default async function handler(req, res) {
       return res.status(200).json([{ status: 'Failed', message: 'Insufficient funds' }])
     }
 
+    const payoutAmount = Number((amount * 0.95).toFixed(3))
+
     const { error: insertError } = await supabase.from('notification').insert({
       address: body.wallet,
       username: profile.username,
-      amount: amount * 0.93,
+      amount: payoutAmount,
       sent: 'pending',
       type: 'withdraw',
       method: body.method,

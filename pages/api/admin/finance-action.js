@@ -133,7 +133,7 @@ export default async function handler(req, res) {
     try {
       if (action === 'reject') {
         if (isWithdraw) {
-          const refundAmount = Number(notification.amount) / 0.93
+          const refundAmount = Number(notification.amount) / 0.95
           await callInternalRpc(req, 'depositor', {
             names: notification.username,
             amount: Number(refundAmount.toFixed(3)),
