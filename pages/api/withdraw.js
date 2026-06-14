@@ -21,7 +21,7 @@ export default async function handler(req, res) {
 
     const { profile, supabase } = await getCurrentProfile(
       req,
-      'username,balance,codeset,pin,newrefer'
+      'userid,username,codeset,pin,newrefer'
     )
 
     const { data: bets, error: betError } = await supabase
@@ -43,33 +43,24 @@ export default async function handler(req, res) {
       return res.status(200).json([{ status: 'Failed', message: 'Wrong password' }])
     }
 
-    if (Number(profile.balance || 0) < amount) {
-      return res.status(200).json([{ status: 'Failed', message: 'Insufficient funds' }])
-    }
-
     const payoutAmount = Number((amount * 0.95).toFixed(3))
 
-    const { error: insertError } = await supabase.from('notification').insert({
-      address: body.wallet,
-      username: profile.username,
-      amount: payoutAmount,
-      sent: 'pending',
-      type: 'withdraw',
-      method: body.method,
-      bank: body.bank,
-      accountname: body.accountname,
+    const { error: withdrawError } = await supabase.rpc('create_withdrawal_request_atomic', {
+      p_userid: profile.userid,
+      p_amount: amount,
+      p_payout_amount: payoutAmount,
+      p_wallet: body.wallet || null,
+      p_method: body.method || null,
+      p_bank: body.bank || null,
+      p_accountname: body.accountname || null,
     })
 
-    if (insertError) throw insertError
-
-    const { error: updateError } = await supabase
-      .from('users')
-      .update({
-        balance: Number(profile.balance || 0) - amount,
-      })
-      .eq('username', profile.username)
-
-    if (updateError) throw updateError
+    if (withdrawError) {
+      if (/Insufficient funds/i.test(withdrawError.message || '')) {
+        return res.status(200).json([{ status: 'Failed', message: 'Insufficient funds' }])
+      }
+      throw withdrawError
+    }
 
     return res.status(200).json([{ status: 'Success', message: 'Withdrawal Request as been sent' }])
   } catch (error) {
