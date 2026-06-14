@@ -83,12 +83,12 @@ export default function Home({ notification }) {
                                         <Stack direction='row' justifyContent='space-between' alignItems="center" sx={{ width: '100%' }}>
                                             <Stack direction='row' justifyContent='center' alignItems="center" spacing={1}>
                                                 
-                                                <Image src={league.ihome ?? ''} width={20} height={20} alt='home_logo' />
+                                                <Image src={league.ihome ?? ''} width={20} height={20} alt='home_logo' style={{ objectFit: 'contain' }} unoptimized />
                                                 <p style={{ fontSize: '13px', fontFamily: 'Poppins,sans-serif', fontWeight: '400' }}>{league.home}</p>
                                             </Stack>
                                             VS
                                             <Stack direction='row' justifyContent='center' alignItems="center" spacing={1}>
-                                                <Image src={league.iaway ?? ''} width={20} height={20} alt='away_logo' />
+                                                <Image src={league.iaway ?? ''} width={20} height={20} alt='away_logo' style={{ objectFit: 'contain' }} unoptimized />
                                                 <p style={{ fontSize: '13px', fontFamily: 'Poppins,sans-serif', fontWeight: '400' }}>{league.away}</p>
 
                                             </Stack>

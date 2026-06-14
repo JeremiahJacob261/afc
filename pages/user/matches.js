@@ -15,7 +15,7 @@ function TeamBlock({ image, name, align = 'center' }) {
   return (
     <Box sx={{ minWidth: 0, textAlign: align }}>
       <Box sx={{ display: 'grid', placeItems: 'center' }}>
-        <Image src={image || Ims} width={50} height={50} alt={name || 'team'} style={{ objectFit: 'contain' }} />
+        <Image src={image || Ims} width={50} height={50} alt={name || 'team'} style={{ objectFit: 'contain' }} unoptimized />
       </Box>
       <Typography
         sx={{

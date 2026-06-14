@@ -396,7 +396,7 @@ function DashboardMatchCard({ match, onOpen, onSelect }) {
 function DashboardTeam({ image, name }) {
   return (
     <Stack direction="column" justifyContent="center" alignItems="center" spacing={1} sx={{ minWidth: 0 }}>
-      <Image src={image || Ims} width={50} height={50} alt={name || 'team'} />
+      <Image src={image || Ims} width={50} height={50} alt={name || 'team'} style={{ objectFit: 'contain' }} unoptimized />
       <Typography
         sx={{
           minHeight: 34,

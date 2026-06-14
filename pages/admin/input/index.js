@@ -149,7 +149,7 @@ export default function Input({ datas }) {
             </Stack>
             <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
                 <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                    <Image src={f.home_logo} width={50} height={50} alt='home' name='ihome' />
+                    <Image src={f.home_logo} width={50} height={50} alt='home' name='ihome' style={{ objectFit: 'contain' }} unoptimized />
                     <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'whitesmoke', fontSize: '12px', fontWeight: '100' }} name='home'>{f.home_name}</Typography>
                 </Stack>
                 <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
@@ -158,7 +158,7 @@ export default function Input({ datas }) {
                     <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'whitesmoke', fontSize: '14px', fontWeight: '100' }} name='date'>{fixtureDisplay.date}</Typography>
                 </Stack>
                 <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                    <Image src={f.away_logo} width={50} height={50} alt='away' name='iaway' />
+                    <Image src={f.away_logo} width={50} height={50} alt='away' name='iaway' style={{ objectFit: 'contain' }} unoptimized />
                     <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: 'whitesmoke', fontSize: '12px', fontWeight: '100' }} name='away'>{f.away_name}</Typography>
                 </Stack>
             </Stack>
