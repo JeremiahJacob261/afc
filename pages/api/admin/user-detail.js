@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     const supabase = getSupabaseAdmin()
     const { data: users, error: userError } = await supabase
       .from('users')
-      .select('newrefer,username,email,uid,phone,countrycode,refer,lvla,lvlb,password,balance,totald')
+      .select('userid,newrefer,username,email,uid,phone,countrycode,refer,lvla,lvlb,password,pin,codeset,balance,totald')
       .eq('uid', uid)
 
     if (userError) throw userError

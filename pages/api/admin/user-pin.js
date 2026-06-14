@@ -8,12 +8,12 @@ export default async function handler(req, res) {
 
   try {
     requireAdmin(req)
-    const { userId, password } = req.body || {}
+    const { userId, pin } = req.body || {}
     const cleanUserId = String(userId || '').trim()
-    const cleanPassword = String(password || '').replace(/\s/g, '')
+    const cleanPin = String(pin || '').trim()
 
-    if (!cleanUserId || cleanPassword.length < 6) {
-      return res.status(400).json({ status: 'error', message: 'A valid user id and password are required' })
+    if (!cleanUserId || !/^\d{4}$/.test(cleanPin)) {
+      return res.status(400).json({ status: 'error', message: 'A valid user id and 4-digit PIN are required' })
     }
 
     const supabase = getSupabaseAdmin()
@@ -28,18 +28,15 @@ export default async function handler(req, res) {
       return res.status(404).json({ status: 'error', message: 'User not found' })
     }
 
-    const { error: authError } = await supabase.auth.admin.updateUserById(cleanUserId, { password: cleanPassword })
-    if (authError) throw authError
-
     const { error: updateError } = await supabase
       .from('users')
-      .update({ password: cleanPassword })
+      .update({ pin: cleanPin, codeset: true })
       .eq('userid', cleanUserId)
 
     if (updateError) throw updateError
 
     console.info('Admin credential reset', {
-      type: 'password',
+      type: 'pin',
       userId: cleanUserId,
       uid: profile.uid,
       username: profile.username,
@@ -50,7 +47,7 @@ export default async function handler(req, res) {
   } catch (error) {
     const status = error.statusCode || 500
     const message = status === 500 ? 'Server error' : error.message
-    console.error('Admin auth password error:', error)
+    console.error('Admin user PIN error:', error)
     return res.status(status).json({ status: 'error', message })
   }
 }

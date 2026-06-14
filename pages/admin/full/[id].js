@@ -120,6 +120,10 @@ export default function UserDetailModal() {
   const [switchOpen, setSwitchOpen] = useState(false)
   const [newRefer, setNewRefer] = useState('')
   const [impersonating, setImpersonating] = useState(false)
+  const [credentialOpen, setCredentialOpen] = useState(false)
+  const [newPassword, setNewPassword] = useState('')
+  const [newPin, setNewPin] = useState('')
+  const [credentialSaving, setCredentialSaving] = useState(null)
 
   const uid = useMemo(() => {
     if (!router.query?.id) return ''
@@ -281,6 +285,92 @@ export default function UserDetailModal() {
     }
   }
 
+  const resetPassword = async () => {
+    const password = newPassword.replace(/\s/g, '')
+    if (!datas?.userid) {
+      toast.error('Missing Supabase user id')
+      return
+    }
+
+    if (password.length < 6) {
+      toast.error('Password must be at least 6 characters')
+      return
+    }
+
+    const confirmed = window.confirm(`Reset ${datas.username}'s login password?`)
+    if (!confirmed) return
+
+    setCredentialSaving('password')
+    try {
+      const response = await fetch('/api/admin/auth-user-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: datas.userid, password }),
+      })
+      const result = await response.json().catch(() => ({}))
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          router.push('/admin')
+          return
+        }
+        throw new Error(result.message || 'Password reset failed')
+      }
+
+      setDatas((current) => ({ ...current, password }))
+      setNewPassword('')
+      toast.success('Password reset')
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message || 'Password reset failed')
+    } finally {
+      setCredentialSaving(null)
+    }
+  }
+
+  const resetPin = async () => {
+    const pin = newPin.trim()
+    if (!datas?.userid) {
+      toast.error('Missing Supabase user id')
+      return
+    }
+
+    if (!/^\d{4}$/.test(pin)) {
+      toast.error('PIN must be 4 digits')
+      return
+    }
+
+    const confirmed = window.confirm(`Reset ${datas.username}'s transaction PIN?`)
+    if (!confirmed) return
+
+    setCredentialSaving('pin')
+    try {
+      const response = await fetch('/api/admin/user-pin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: datas.userid, pin }),
+      })
+      const result = await response.json().catch(() => ({}))
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          router.push('/admin')
+          return
+        }
+        throw new Error(result.message || 'PIN reset failed')
+      }
+
+      setDatas((current) => ({ ...current, pin, codeset: true }))
+      setNewPin('')
+      toast.success('Transaction PIN reset')
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message || 'PIN reset failed')
+    } finally {
+      setCredentialSaving(null)
+    }
+  }
+
   const close = () => {
     if (window.history.length > 1) router.back()
     else router.push('/admin/users')
@@ -366,6 +456,7 @@ export default function UserDetailModal() {
                       <p className="mt-3 truncate text-lg font-semibold text-white">{datas.newrefer}</p>
                     </button>
                     <StatCard label="Password" value={datas.password || 'N/A'} icon={KeyRound} tone="text-[#B96CFF]" />
+                    <StatCard label="Transaction PIN" value={datas.codeset ? (datas.pin || 'Set') : 'Not set'} icon={Shield} tone="text-emerald-300" />
                     <StatCard label="Country" value={countryName(datas.countrycode)} icon={User} />
                     <StatCard label="Phone" value={`${datas.countrycode || ''}${datas.phone || ''}`} icon={Clipboard} />
                     <StatCard label="Referred Users" value={referusers} icon={GitBranch} tone="text-emerald-300" />
@@ -448,6 +539,12 @@ export default function UserDetailModal() {
                       icon={LogIn}
                       onClick={loginAsUser}
                       disabled={impersonating}
+                    />
+                    <ActionButton
+                      label="Reset Credentials"
+                      description="Change login password or transaction PIN."
+                      icon={KeyRound}
+                      onClick={() => setCredentialOpen(true)}
                     />
                     <ActionButton
                       label="Referral"
@@ -533,6 +630,85 @@ export default function UserDetailModal() {
             >
               Switch referral
             </button>
+          </div>
+        </div>
+      )}
+
+      {credentialOpen && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4 backdrop-blur-md">
+          <div className="w-full max-w-lg rounded-[30px] border border-white/20 bg-[#161616]/85 p-5 text-white shadow-2xl backdrop-blur-2xl">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#1BB6FF]">Credential Reset</p>
+                <h2 className="mt-1 text-xl font-semibold">{datas?.username}</h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => setCredentialOpen(false)}
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/[0.08] text-zinc-300 hover:bg-white hover:text-black"
+                aria-label="Close credential dialog"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="mt-5 grid gap-4">
+              <section className="rounded-3xl border border-white/10 bg-white/[0.06] p-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/[0.08] text-[#B96CFF]">
+                    <KeyRound className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-semibold">Login Password</p>
+                    <p className="text-xs text-zinc-500">Current: {datas?.password || 'N/A'}</p>
+                  </div>
+                </div>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(event) => setNewPassword(event.target.value.replace(/\s/g, ''))}
+                  placeholder="New password"
+                  className="mt-4 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none placeholder:text-zinc-600 focus:border-[#1BB6FF]"
+                />
+                <button
+                  type="button"
+                  onClick={resetPassword}
+                  disabled={credentialSaving !== null}
+                  className="mt-3 w-full rounded-full bg-white px-5 py-3 text-sm font-semibold text-black transition hover:bg-[#1BB6FF] disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {credentialSaving === 'password' ? 'Resetting password...' : 'Reset password'}
+                </button>
+              </section>
+
+              <section className="rounded-3xl border border-white/10 bg-white/[0.06] p-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/[0.08] text-emerald-300">
+                    <Shield className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-semibold">Transaction PIN</p>
+                    <p className="text-xs text-zinc-500">Current: {datas?.codeset ? (datas?.pin || 'Set') : 'Not set'}</p>
+                  </div>
+                </div>
+                <input
+                  type="password"
+                  inputMode="numeric"
+                  maxLength={4}
+                  value={newPin}
+                  onChange={(event) => setNewPin(event.target.value.replace(/\D/g, '').slice(0, 4))}
+                  placeholder="4-digit PIN"
+                  className="mt-4 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none placeholder:text-zinc-600 focus:border-[#1BB6FF]"
+                />
+                <button
+                  type="button"
+                  onClick={resetPin}
+                  disabled={credentialSaving !== null}
+                  className="mt-3 w-full rounded-full bg-white px-5 py-3 text-sm font-semibold text-black transition hover:bg-[#1BB6FF] disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {credentialSaving === 'pin' ? 'Resetting PIN...' : 'Reset PIN'}
+                </button>
+              </section>
+            </div>
           </div>
         </div>
       )}
