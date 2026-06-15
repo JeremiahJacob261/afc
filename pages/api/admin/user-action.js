@@ -8,7 +8,7 @@ export default async function handler(req, res) {
 
   try {
     requireAdmin(req)
-    const { action, username, newBalance, currentRefer, newRefer } = req.body || {}
+    const { action, username, uid, newBalance, currentRefer, newRefer } = req.body || {}
     const supabase = getSupabaseAdmin()
 
     if (action === 'update-balance') {
@@ -27,17 +27,48 @@ export default async function handler(req, res) {
     }
 
     if (action === 'delete-wallet') {
-      if (!username) {
-        return res.status(400).json({ status: 'error', message: 'Missing username' })
+      const requestedUid = String(uid || '').trim()
+      const requestedUsername = String(username || '').trim()
+
+      if (!requestedUid && !requestedUsername) {
+        return res.status(400).json({ status: 'error', message: 'Missing user id' })
       }
 
-      const { error } = await supabase
-        .from('wallets')
+      let walletOwnerId = requestedUid
+
+      if (!walletOwnerId) {
+        const { data: user, error: userError } = await supabase
+          .from('users')
+          .select('uid,userid')
+          .eq('username', requestedUsername)
+          .maybeSingle()
+
+        if (userError) throw userError
+        if (!user) {
+          return res.status(404).json({ status: 'error', message: 'User not found' })
+        }
+
+        walletOwnerId = user.uid || user.userid
+      }
+
+      const { data: deletedWallets, error } = await supabase
+        .from('user_wallets')
         .delete()
-        .eq('username', username)
+        .eq('uid', walletOwnerId)
+        .select('id')
 
       if (error) throw error
-      return res.status(200).json({ status: 'success' })
+
+      const deletedCount = deletedWallets?.length || 0
+      if (deletedCount === 0) {
+        return res.status(404).json({ status: 'error', message: 'No linked wallet found for this user' })
+      }
+
+      return res.status(200).json({
+        status: 'success',
+        deletedCount,
+        message: `${deletedCount} wallet record${deletedCount === 1 ? '' : 's'} deleted`,
+      })
     }
 
     if (action === 'switch-referral') {

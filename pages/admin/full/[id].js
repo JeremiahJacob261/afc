@@ -206,11 +206,11 @@ export default function UserDetailModal() {
       const response = await fetch('/api/admin/user-action', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'delete-wallet', username: datas?.username }),
+        body: JSON.stringify({ action: 'delete-wallet', username: datas?.username, uid: datas?.uid }),
       })
       const result = await response.json().catch(() => ({}))
       if (!response.ok) throw new Error(result.message || 'Wallet delete failed')
-      toast.success('Wallet deleted successfully')
+      toast.success(result.message || 'Wallet deleted successfully')
     } catch (error) {
       console.log(error)
       toast.error(error.message || 'An error occurred')

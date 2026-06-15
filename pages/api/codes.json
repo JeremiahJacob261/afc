@@ -1,6 +1,10 @@
 {
   "countries": [
     {
+      "name": "Algeria",
+      "code": "+213"
+    },
+    {
       "name": "Australia",
       "code": "+61"
     },
