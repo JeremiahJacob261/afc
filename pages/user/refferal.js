@@ -7,7 +7,7 @@ import RefreshIcon from '@mui/icons-material/Refresh'
 import { Box, Button, CircularProgress, Divider, Stack, Typography } from '@mui/material'
 import Cover from './cover'
 import Rd from '@/public/icon/rounds.png'
-import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth'
+import { authFetch, requireSession } from '@/lib/clientAuth'
 
 const FILTERS = [
   { key: 'All', label: 'All' },
@@ -59,8 +59,6 @@ export default function Refferal() {
       if (mountedRef.current) setLoading(false)
       return
     }
-
-    clearLegacyAuthStorage()
 
     try {
       const response = await authFetch('/api/my-referrals')

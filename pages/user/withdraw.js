@@ -24,7 +24,7 @@ import Wig from '@/public/icon/wig.png'
 import Image from 'next/image'
 import Big from '@/public/icon/badge.png'
 import { DriveFileRenameOutlineRounded } from "@mui/icons-material";
-import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
+import { authFetch, requireSession } from '@/lib/clientAuth';
 import { waitForPaint } from '@/lib/uiFeedback';
 
 function isLocalMethod(type) {
@@ -148,7 +148,6 @@ export default function Deposit() {
     const GET = async () => {
       const session = await requireSession(router);
       if (!session) return;
-      clearLegacyAuthStorage();
 
       try {
         const response = await authFetch('/api/me');

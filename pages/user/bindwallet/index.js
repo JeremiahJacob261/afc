@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 import NativeSelect from '@mui/material/NativeSelect';
 import InputBase from '@mui/material/InputBase';
 import { supabase } from "@/pages/api/supabase";
-import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
+import { authFetch, requireSession } from '@/lib/clientAuth';
 import { waitForPaint } from '@/lib/uiFeedback';
 
 
@@ -59,7 +59,6 @@ export default function Home() {
         const check = async () => {
             const session = await requireSession(router);
             if (!session) return;
-            clearLegacyAuthStorage();
 
             try {
                 const { data: methods, error } = await supabase

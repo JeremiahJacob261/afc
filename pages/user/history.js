@@ -4,7 +4,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import Cover from './cover'
-import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth'
+import { authFetch, requireSession } from '@/lib/clientAuth'
 
 const tabs = [
   { key: 'all', label: 'All', icon: 'solar:bill-list-bold' },
@@ -350,7 +350,6 @@ export default function TransactionHistory() {
     async function loadTransactions() {
       const session = await requireSession(router)
       if (!session) return
-      clearLegacyAuthStorage()
 
       try {
         setLoading(true)

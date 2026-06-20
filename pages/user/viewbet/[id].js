@@ -7,7 +7,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
-import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
+import { authFetch, requireSession } from '@/lib/clientAuth';
 import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay';
 
 export default function Viewbets() {
@@ -26,7 +26,6 @@ export default function Viewbets() {
         const GET = async () => {
             const session = await requireSession(router);
             if (!session) return;
-            clearLegacyAuthStorage();
 
             try {
                 const response = await authFetch('/api/my-bet?id=' + router.query.id);

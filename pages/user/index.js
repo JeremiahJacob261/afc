@@ -21,7 +21,7 @@ import Ims from '@/public/simps/ball.png'
 import { app } from '@/pages/api/firebase';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { getAuth, signOut } from "firebase/auth";
-import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
+import { authFetch, requireSession } from '@/lib/clientAuth';
 import toast, { Toaster } from 'react-hot-toast';
 import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay';
 
@@ -161,7 +161,6 @@ export default function Home() {
     const runer = async () => {
       const session = await requireSession(router);
       if (!session) return;
-      clearLegacyAuthStorage();
 
       try {
         const response = await authFetch('/api/me');

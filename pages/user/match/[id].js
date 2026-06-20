@@ -18,7 +18,7 @@ import Ims from '@/public/simps/ball.png'
 import Bal from '@/public/bball.png'
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth, signOut } from "firebase/auth";
-import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
+import { authFetch, requireSession } from '@/lib/clientAuth';
 import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay';
 import { waitForPaint } from '@/lib/uiFeedback';
 
@@ -174,7 +174,6 @@ export default function Match({ matchDat }) {
         const GET = async () => {
             const session = await requireSession(router);
             if (!session) return;
-            clearLegacyAuthStorage();
 
             try {
                 const response = await authFetch('/api/me');

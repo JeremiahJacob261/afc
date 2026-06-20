@@ -30,7 +30,7 @@ import UploadFileRoundedIcon from '@mui/icons-material/UploadFileRounded'
 import Cover from './cover'
 import Loading from '@/pages/components/loading'
 import { supabase } from '@/pages/api/supabase'
-import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth'
+import { authFetch, requireSession } from '@/lib/clientAuth'
 import { waitForPaint } from '@/lib/uiFeedback'
 
 const brand = {
@@ -178,7 +178,6 @@ export default function Funds() {
     async function loadDepositData() {
       const session = await requireSession(router)
       if (!session) return
-      clearLegacyAuthStorage()
 
       try {
         const [{ data: walletMethods, error: methodsError }, { data: paymentDestinations, error: destinationsError }] = await Promise.all([

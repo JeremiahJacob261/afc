@@ -5,7 +5,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import Cover from './cover'
-import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth'
+import { authFetch, requireSession } from '@/lib/clientAuth'
 
 const categoryMeta = {
   bonus: {
@@ -188,7 +188,6 @@ export default function Notification() {
     async function loadNotifications() {
       const session = await requireSession(router)
       if (!session) return
-      clearLegacyAuthStorage()
 
       try {
         setError('')
