@@ -9,7 +9,7 @@ import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgr
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import Logo from '@/public/logoclean.png'
 import Head from 'next/head'
-import { authFetch, requireSession } from '@/lib/clientAuth';
+import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 export default function Vip() {
   const [rprogress, setRProgress] = useState(0);
   const [cprogress, setCProgress] = useState(0);
@@ -69,6 +69,7 @@ export default function Vip() {
     const GET = async () => {
       const session = await requireSession(router);
       if (!session) return;
+      clearLegacyAuthStorage();
 
       try {
         const response = await authFetch('/api/me');

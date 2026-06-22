@@ -8,7 +8,7 @@ import LOGO from '@/public/european.ico'
 import Image from 'next/image'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { writeLegacyAuthStorage } from '@/lib/clientAuth';
+import { clearLegacyAuthStorage } from '@/lib/clientAuth';
 import AppLoadingOverlay from '@/components/AppLoadingOverlay';
 import FeedbackDialog from '@/components/FeedbackDialog';
 import { waitForPaint } from '@/lib/uiFeedback';
@@ -48,39 +48,64 @@ export default function Login() {
     setLoading(true)
     let navigating = false
     await waitForPaint()
+    clearLegacyAuthStorage()
 
     try {
-      const response = await fetch('/api/legacy-login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          identifier: email.trim(),
-          password: values.password,
-        }),
-      })
-      const result = await response.json().catch(() => ({}))
+      let loginEmail = email.trim()
 
-      if (!response.ok || result.status !== 'success' || !result.profile) {
+      if (!loginEmail.includes("@")) {
+        const response = await fetch('/api/login-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: loginEmail })
+        })
+        const result = await response.json().catch(() => ({}))
+
+        console.log(result);
+
+        if (result?.message === 'TypeError: fetch failed') {
+          setFeedback({
+            type: 'error',
+            title: 'Network error',
+            message: 'Please check your connection and try again.',
+          })
+          return
+        } else if (result?.message === 'Invalid login credentials') {
+          setFeedback({
+            type: 'error',
+            title: 'Incorrect details',
+            message: 'The email, username, or password you entered is incorrect.',
+          })
+          return
+        } else {
+          if (!response.ok || result.status !== 'success') {
+            setFeedback({
+              type: 'error',
+              title: 'Unable to sign in',
+              message: 'An error occurred. Please try again.',
+            })
+            return
+          }
+        }
+        loginEmail = result.email
+      }
+
+      const { error } = await supabase.auth.signInWithPassword({
+        email: loginEmail,
+        password: values.password,
+      })
+
+      if (error) {
+        console.error(error)
         setFeedback({
           type: 'error',
-          title: response.status === 401 ? 'Incorrect details' : 'Unable to sign in',
-          message: response.status === 401
-            ? 'The email, username, or password you entered is incorrect.'
-            : result.message || 'An error occurred. Please try again.',
+          title: 'Unable to sign in',
+          message: error.message === 'Invalid login credentials' ? 'Incorrect login details.' : error.message,
         })
         return
       }
 
-      writeLegacyAuthStorage(result.profile)
-      if (result.profile.email) {
-        supabase.auth.signInWithPassword({
-          email: result.profile.email,
-          password: values.password,
-        }).catch((error) => {
-          console.error('Supabase compatibility sign-in failed:', error)
-        })
-      }
-
+      clearLegacyAuthStorage()
       navigating = true
       router.push('/user')
     } catch (error) {

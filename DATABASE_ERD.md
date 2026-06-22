@@ -321,7 +321,7 @@
     ┌─────────────────────────────┐
     │ INSERT NOTIFICATION         │
     │ (type=withdraw, sent=pending)
-    │ - 93% sent, 7% fee retained │
+    │ - 100% sent, 7% fee added    │
     └────────┬────────────────────┘
              │
              ▼
@@ -363,7 +363,7 @@
 ### Withdrawal Requirements
 - User must have at least 5 placed bets
 - User PIN must be set (`codeset=true`)
-- Balance sufficient after fee (7% deducted)
+- Balance sufficient for requested amount plus 7% fee
 - Daily withdrawal limit not exceeded
 
 ### VIP Level Calculation

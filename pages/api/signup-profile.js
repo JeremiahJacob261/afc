@@ -38,7 +38,6 @@ export default async function handler(req, res) {
     const phone = String(body.phone || '').trim()
     const countrycode = String(body.countrycode || '+1').trim()
     const referCode = String(body.refer || '').trim()
-    const password = String(body.password || '')
 
     if (!userid || !username || !email) {
       return res.status(400).json({ status: 'error', message: 'Missing required signup fields' })
@@ -48,13 +47,13 @@ export default async function handler(req, res) {
 
     const { data: existingUser, error: existingUserError } = await supabase
       .from('users')
-      .select('userid,uid,username,email,newrefer')
+      .select('id')
       .eq('userid', userid)
       .maybeSingle()
 
     if (existingUserError) throw existingUserError
     if (existingUser) {
-      return res.status(200).json({ status: 'success', message: 'Profile already exists', profile: existingUser })
+      return res.status(200).json({ status: 'success', message: 'Profile already exists' })
     }
 
     const { count, error: usernameError } = await supabase
@@ -87,13 +86,11 @@ export default async function handler(req, res) {
 
     const newrefer = await getUniqueReferralCode(supabase)
 
-    const uid = generateUid()
-
-    const { data: profile, error: insertError } = await supabase
+    const { error: insertError } = await supabase
       .from('users')
       .insert({
         userid,
-        uid,
+        uid: generateUid(),
         phone,
         refer: referCode || null,
         username,
@@ -102,10 +99,7 @@ export default async function handler(req, res) {
         lvla: lvla || null,
         lvlb: lvlb || null,
         email,
-        password,
       })
-      .select('userid,uid,username,email,newrefer')
-      .single()
 
     if (insertError) throw insertError
       console.log('User profile created with referral code:', newrefer)
@@ -116,7 +110,6 @@ export default async function handler(req, res) {
     return res.status(200).json({
       status: 'success',
       newrefer,
-      profile,
     })
   } catch (error) {
     console.log(error);

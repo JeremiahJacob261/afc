@@ -126,11 +126,11 @@ export default function Deposit() {
         </Typography></div>
       <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif' }}>
         Please note that the minimum withdraw is 20 USDT,
-        there is a 5% fee charge on every Withdrawal.
+        there is a 7% fee charge on every Withdrawal.
       </Typography>
       <Sncks message={messages} />
       <Typography style={{ color: '#DBE9EE', fontFamily: 'Poppyins, sans-serif' }}>Requested Amount : {amount} USDT</Typography>
-      <Typography style={{ color: '#DBE9EE', fontFamily: 'Poppins, sans-serif' }}>Charge Amount : {(amount * 5) / 100} USDT</Typography>
+      <Typography style={{ color: '#DBE9EE', fontFamily: 'Poppins, sans-serif' }}>Charge Amount : {(amount * 7) / 100} USDT</Typography>
       <Typography style={{ color: '#DBE9EE', fontFamily: 'Poppins, sans-serif' }}>Total : {total} USDT</Typography>
       <Typography style={{ color: '#DBE9EE', fontFamily: 'Poppins, sans-serif' }}>Available Account Balance : {Number(info.balance).toFixed(2)} USDT</Typography>
       <div style={{ display: 'grid', justifyContent: 'center', minWidth: '300px' }}>
@@ -154,7 +154,7 @@ export default function Deposit() {
           value={amount}
           onChange={(a) => {
             setAmount(a.target.value)
-            setTotal(Number(a.target.value) + ((a.target.value * 5) / 100));
+            setTotal(Number(a.target.value) + ((a.target.value * 7) / 100));
           }} />
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Select your Withdrawal Method</InputLabel>

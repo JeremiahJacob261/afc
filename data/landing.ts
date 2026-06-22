@@ -70,7 +70,7 @@ export const walletRewards = [
   { label: "First deposit bonus", value: "3%" },
   { label: "Bet unlock target", value: "5 bets" },
   { label: "Referral bonus", value: "5%" },
-  { label: "Withdrawal charge", value: "5%" },
+  { label: "Withdrawal charge", value: "7%" },
 ];
 
 export const bettingFeatures = [

@@ -1,4 +1,5 @@
 import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
+import { calculateWithdrawalAmounts } from '@/lib/withdrawalFee'
 
 const MIN_WITHDRAWAL_USDT = 10
 
@@ -43,12 +44,12 @@ export default async function handler(req, res) {
       return res.status(200).json([{ status: 'Failed', message: 'Wrong password' }])
     }
 
-    const payoutAmount = Number((amount * 0.95).toFixed(3))
+    const { requestedAmount, totalAmount } = calculateWithdrawalAmounts(amount)
 
     const { error: withdrawError } = await supabase.rpc('create_withdrawal_request_atomic', {
       p_userid: profile.userid,
-      p_amount: amount,
-      p_payout_amount: payoutAmount,
+      p_amount: totalAmount,
+      p_payout_amount: requestedAmount,
       p_wallet: body.wallet || null,
       p_method: body.method || null,
       p_bank: body.bank || null,

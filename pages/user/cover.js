@@ -17,7 +17,7 @@ import { supabase } from '@/pages/api/supabase'
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
-import { requireSession } from '@/lib/clientAuth';
+import { clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 export default function Cover({ children }) {
 
 
@@ -38,7 +38,10 @@ export default function Cover({ children }) {
   let loads = 0;
   useEffect(() => {
     async function checkSession() {
-      await requireSession(router);
+      const session = await requireSession(router);
+      if (session) {
+        clearLegacyAuthStorage();
+      }
     }
 
     checkSession();

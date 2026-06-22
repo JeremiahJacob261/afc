@@ -10,7 +10,7 @@ import Modal from '@mui/material/Modal';
 import Wig from '@/public/icon/wig.png'
 import Image from 'next/image'
 import toast, { Toaster } from 'react-hot-toast'
-import { authFetch, requireSession } from '@/lib/clientAuth';
+import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 
 const PIN_LOCKED_MESSAGE = 'You already have a transaction PIN. Please contact admin to reset or change it.'
 
@@ -35,6 +35,8 @@ export default function Code() {
     const check = async () => {
       const session = await requireSession(router);
       if (!session) return;
+
+      clearLegacyAuthStorage();
 
       try {
         const response = await authFetch('/api/me');

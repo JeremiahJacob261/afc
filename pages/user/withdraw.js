@@ -24,8 +24,9 @@ import Wig from '@/public/icon/wig.png'
 import Image from 'next/image'
 import Big from '@/public/icon/badge.png'
 import { DriveFileRenameOutlineRounded } from "@mui/icons-material";
-import { authFetch, requireSession } from '@/lib/clientAuth';
+import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 import { waitForPaint } from '@/lib/uiFeedback';
+import { WITHDRAWAL_FEE_RATE, calculateWithdrawalAmounts } from '@/lib/withdrawalFee';
 
 function isLocalMethod(type) {
   return ['local', 'local-transfer', 'bank', 'mobile-money'].includes(String(type || '').trim().toLowerCase());
@@ -133,6 +134,8 @@ export default function Deposit() {
       toast.error('Please enter amount')
     } else if (Number(amount) < MIN_WITHDRAWAL_USDT) {
       toast.error(`Minimum amount to withdraw is ${MIN_WITHDRAWAL_USDT} USDT`)
+    } else if (totalAmount > balance) {
+      toast.error('Insufficient funds')
 
     } else {
 
@@ -148,6 +151,7 @@ export default function Deposit() {
     const GET = async () => {
       const session = await requireSession(router);
       if (!session) return;
+      clearLegacyAuthStorage();
 
       try {
         const response = await authFetch('/api/me');
@@ -225,11 +229,10 @@ export default function Deposit() {
     setOpen(true)
   }
   //end of snackbar2
-  const requestedAmount = Number(amount) || 0;
-  const charge = (requestedAmount * 5) / 100;
-  const payoutAmount = requestedAmount - charge;
+  const { requestedAmount, feeAmount, totalAmount } = calculateWithdrawalAmounts(amount);
   const currencyCode = String(currency || "USDT").toUpperCase();
   const showConvertedPayout = currencyCode !== 'USDT';
+  const feePercent = Number((WITHDRAWAL_FEE_RATE * 100).toFixed(2));
   return (
     <Cover style={{ minHeight: '95vh', paddingBottom: '100px' }}>
       <Head>
@@ -253,7 +256,7 @@ export default function Deposit() {
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
             <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Withdrawal Fee</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{(charge) ? charge.toFixed(3) : charge} USDT</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{feeAmount ? feeAmount.toFixed(3) : feeAmount} USDT ({feePercent}%)</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
             <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Requested Amount</Typography>
@@ -261,12 +264,16 @@ export default function Deposit() {
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
             <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>You Receive</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{payoutAmount ? payoutAmount.toFixed(3) : payoutAmount} USDT</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{requestedAmount ? requestedAmount.toFixed(3) : requestedAmount} USDT</Typography>
+          </Stack>
+          <Stack direction='row' alignItems='center' justifyContent='space-between'>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Total Deducted</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{totalAmount ? totalAmount.toFixed(3) : totalAmount} USDT</Typography>
           </Stack>
           {showConvertedPayout && (
             <Stack direction='row' alignItems='center' justifyContent='space-between'>
               <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>You Receive in {currencyCode}</Typography>
-              <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{parseFloat(payoutAmount * rate).toFixed(2)} {currencyCode}</Typography>
+              <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{parseFloat(requestedAmount * rate).toFixed(2)} {currencyCode}</Typography>
             </Stack>
           )}
           <Divider sx={{ color: 'white' }} />

@@ -130,12 +130,11 @@ function normalizeTransaction(row, methods) {
 
     if (isUsdt) {
       primaryAmount = amountPayload(amount, 'USDT', 'Payout amount')
-      secondaryAmount = amountPayload(amount, 'USDT', 'Net after fee')
     } else if (method.rate) {
       primaryAmount = amountPayload(amount * method.rate, method.methodCurrency, 'Payout amount')
-      secondaryAmount = amountPayload(amount, 'USDT', 'Net after fee')
+      secondaryAmount = amountPayload(amount, 'USDT', 'Payout amount')
     } else {
-      primaryAmount = amountPayload(amount, 'USDT', 'Net after fee')
+      primaryAmount = amountPayload(amount, 'USDT', 'Payout amount')
       conversionNote = `${method.methodCurrency} payout unavailable because rate is missing`
     }
   }

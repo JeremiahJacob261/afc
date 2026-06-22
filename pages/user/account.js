@@ -67,6 +67,8 @@ export default function Account() {
       const session = await requireSession(router)
       if (!session) return
 
+      clearLegacyAuthStorage()
+
       try {
         const response = await authFetch('/api/me')
         if (response.status === 401 || response.status === 404) {

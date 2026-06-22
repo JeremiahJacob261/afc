@@ -10,7 +10,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { supabase } from '@/pages/api/supabase'
 import codes from '@/pages/api/codeswithflag.json'
-import { writeLegacyAuthStorage } from '@/lib/clientAuth';
+import { clearLegacyAuthStorage } from '@/lib/clientAuth';
 import AppLoadingOverlay from '@/components/AppLoadingOverlay';
 import FeedbackDialog from '@/components/FeedbackDialog';
 import { waitForPaint } from '@/lib/uiFeedback';
@@ -124,7 +124,6 @@ export default function Register({ refer }) {
           phone,
           countrycode: age,
           refer: idR,
-          password: values.password,
         }),
       })
       const profileResult = await profileResponse.json().catch(() => ({}))
@@ -133,12 +132,7 @@ export default function Register({ refer }) {
         throw new Error(profileResult.message || 'Unable to create user profile')
       }
 
-      writeLegacyAuthStorage(profileResult.profile || {
-        userid: data.user?.id,
-        username,
-        email,
-        newrefer: profileResult.newrefer,
-      });
+      clearLegacyAuthStorage();
       setLoading(false)
       setFeedback({
         type: 'success',

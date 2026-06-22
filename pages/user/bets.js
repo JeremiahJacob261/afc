@@ -8,7 +8,7 @@ import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeft
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded'
 import Loading from '@/pages/components/loading'
 import Ims from '@/public/simps/ball.png'
-import { authFetch, requireSession } from '@/lib/clientAuth'
+import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth'
 import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay'
 
 const colors = {
@@ -74,6 +74,7 @@ export default function Bets() {
     const getbets = async () => {
       const session = await requireSession(router)
       if (!session) return
+      clearLegacyAuthStorage()
 
       try {
         const response = await authFetch('/api/my-bets')
