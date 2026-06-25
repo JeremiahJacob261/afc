@@ -12,7 +12,7 @@ export default function SignupForm() {
       <h1 className={styles.title}>EFC</h1>
       <p className={styles.subtitle}>
         Sign up now and get
-        <br />a free USDT to invest!
+        <br />to invest!
       </p>
 
       <form className={styles.form}>

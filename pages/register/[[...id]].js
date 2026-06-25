@@ -161,8 +161,9 @@ export default function Register({ refer }) {
   return (
     <div className="min-h-screen bg-white text-gray-900 flex flex-col relative overflow-hidden">
       <Head>
-        <title>Register</title>
-        <meta name="description" content="Register With us to get the latest betting market and fantantic Bonus" />
+        <title>Create an EFC account</title>
+        <meta name="description" content="Create an EFC account to access your football markets and wallet." />
+        <meta name="robots" content="noindex,nofollow,noarchive" />
         <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
@@ -225,6 +226,7 @@ export default function Register({ refer }) {
                       placeholder="johndoe"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
+                      autoComplete="username"
                       className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all text-sm"
                       required
                     />
@@ -242,6 +244,7 @@ export default function Register({ refer }) {
                       placeholder="you@example.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
+                      autoComplete="email"
                       className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all text-sm"
                       required
                     />
@@ -282,6 +285,7 @@ export default function Register({ refer }) {
                       placeholder="5550000000"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
+                      autoComplete="tel"
                       className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all text-sm"
                       required
                     />
@@ -317,6 +321,7 @@ export default function Register({ refer }) {
                       placeholder="••••••••"
                       value={values.password}
                       onChange={handleChange('password')}
+                      autoComplete="new-password"
                       className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-10 pr-10 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all text-sm"
                       required
                     />
@@ -337,6 +342,7 @@ export default function Register({ refer }) {
                       placeholder="••••••••"
                       value={cpassword}
                       onChange={(e) => setcPassword(e.target.value)}
+                      autoComplete="new-password"
                       className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all text-sm"
                       required
                     />
@@ -352,7 +358,12 @@ export default function Register({ refer }) {
                     onChange={(e) => setAgecheck(e.target.checked)}
                     className="w-4 h-4 rounded border-gray-300 text-[#1BB6FF] focus:ring-[#1BB6FF]"
                   />
-                  <span className="text-sm text-gray-600">I accept the Terms and Conditions</span>
+                  <span className="text-sm text-gray-600">
+                    I am at least 18 and accept the{' '}
+                    <Link href="/terms" className="text-gray-900 font-semibold hover:text-[#1BB6FF]">Terms</Link>
+                    {' '}and{' '}
+                    <Link href="/privacy" className="text-gray-900 font-semibold hover:text-[#1BB6FF]">Privacy Policy</Link>
+                  </span>
                 </label>
               </div>
 

@@ -126,6 +126,7 @@ export default function Login() {
       <Head>
         <title>Login</title>
         <meta name="description" content="Login to your Account to see whats up with your bets" />
+        <meta name="robots" content="noindex,nofollow,noarchive" />
         <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
@@ -179,6 +180,7 @@ export default function Login() {
                     placeholder="Email or Username"
                     value={email}
                     onChange={(e) => setEmail(e.target.value.replace(/\s/g, ''))}
+                    autoComplete="username"
                     className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-12 pr-4 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all"
                     required
                   />
@@ -199,6 +201,7 @@ export default function Login() {
                     placeholder="••••••••"
                     value={values.password}
                     onChange={handleChange('password')}
+                    autoComplete="current-password"
                     className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-12 pr-12 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all"
                     required
                   />
