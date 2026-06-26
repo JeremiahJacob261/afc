@@ -1,7 +1,6 @@
 import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
+import { getWithdrawalSettings } from '@/lib/adminSettings'
 import { calculateWithdrawalAmounts } from '@/lib/withdrawalFee'
-
-const MIN_WITHDRAWAL_USDT = 10
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -16,14 +15,22 @@ export default async function handler(req, res) {
       return res.status(400).json([{ status: 'Failed', message: 'Invalid amount' }])
     }
 
-    if (amount < MIN_WITHDRAWAL_USDT) {
-      return res.status(200).json([{ status: 'Failed', message: `Minimum amount to withdraw is ${MIN_WITHDRAWAL_USDT} USDT` }])
-    }
-
     const { profile, supabase } = await getCurrentProfile(
       req,
       'userid,username,codeset,pin,newrefer'
     )
+
+    const withdrawalSettings = await getWithdrawalSettings(supabase, {
+      allowDefaultOnMissingTable: true,
+    })
+
+    if (amount < withdrawalSettings.minWithdrawalAmount) {
+      return res.status(200).json([{ status: 'Failed', message: `Minimum amount to withdraw is ${withdrawalSettings.minWithdrawalAmount} USDT` }])
+    }
+
+    if (amount > withdrawalSettings.maxWithdrawalAmount) {
+      return res.status(200).json([{ status: 'Failed', message: `Maximum amount to withdraw is ${withdrawalSettings.maxWithdrawalAmount} USDT` }])
+    }
 
     const { data: bets, error: betError } = await supabase
       .from('placed')
@@ -44,7 +51,10 @@ export default async function handler(req, res) {
       return res.status(200).json([{ status: 'Failed', message: 'Wrong password' }])
     }
 
-    const { requestedAmount, totalAmount } = calculateWithdrawalAmounts(amount)
+    const { requestedAmount, totalAmount } = calculateWithdrawalAmounts(
+      amount,
+      withdrawalSettings.withdrawalFeePercent
+    )
 
     const { error: withdrawError } = await supabase.rpc('create_withdrawal_request_atomic', {
       p_userid: profile.userid,

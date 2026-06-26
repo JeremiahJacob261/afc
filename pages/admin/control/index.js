@@ -38,6 +38,9 @@ const tools = [
 export default function Controls() {
   const router = useRouter()
   const [bonusPercent, setBonusPercent] = useState('3')
+  const [minWithdrawalAmount, setMinWithdrawalAmount] = useState('10')
+  const [maxWithdrawalAmount, setMaxWithdrawalAmount] = useState('100000')
+  const [withdrawalFeePercent, setWithdrawalFeePercent] = useState('7')
   const [loadingSettings, setLoadingSettings] = useState(true)
   const [savingSettings, setSavingSettings] = useState(false)
 
@@ -54,7 +57,12 @@ export default function Controls() {
           throw new Error(result.message || 'Unable to load settings')
         }
 
-        if (active) setBonusPercent(String(result.settings?.firstDepositBonusPercent ?? 3))
+        if (active) {
+          setBonusPercent(String(result.settings?.firstDepositBonusPercent ?? 3))
+          setMinWithdrawalAmount(String(result.settings?.minWithdrawalAmount ?? 10))
+          setMaxWithdrawalAmount(String(result.settings?.maxWithdrawalAmount ?? 100000))
+          setWithdrawalFeePercent(String(result.settings?.withdrawalFeePercent ?? 7))
+        }
       } catch (error) {
         console.log(error)
         toast.error(error.message || 'Unable to load settings')
@@ -71,8 +79,32 @@ export default function Controls() {
 
   const saveSettings = async () => {
     const firstDepositBonusPercent = Number(bonusPercent)
+    const minAmount = Number(minWithdrawalAmount)
+    const maxAmount = Number(maxWithdrawalAmount)
+    const feePercent = Number(withdrawalFeePercent)
+
     if (!Number.isFinite(firstDepositBonusPercent) || firstDepositBonusPercent < 0 || firstDepositBonusPercent > 100) {
       toast.error('Bonus percent must be between 0 and 100')
+      return
+    }
+
+    if (!Number.isFinite(minAmount) || minAmount < 0) {
+      toast.error('Minimum withdrawal amount must be zero or greater')
+      return
+    }
+
+    if (!Number.isFinite(maxAmount) || maxAmount < 0) {
+      toast.error('Maximum withdrawal amount must be zero or greater')
+      return
+    }
+
+    if (maxAmount < minAmount) {
+      toast.error('Maximum withdrawal amount cannot be lower than minimum')
+      return
+    }
+
+    if (!Number.isFinite(feePercent) || feePercent < 0 || feePercent > 100) {
+      toast.error('Withdrawal fee percent must be between 0 and 100')
       return
     }
 
@@ -81,7 +113,12 @@ export default function Controls() {
       const response = await fetch('/api/admin/settings', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ firstDepositBonusPercent }),
+        body: JSON.stringify({ 
+          firstDepositBonusPercent,
+          minWithdrawalAmount: minAmount,
+          maxWithdrawalAmount: maxAmount,
+          withdrawalFeePercent: feePercent,
+        }),
       })
       const result = await response.json()
 
@@ -91,7 +128,10 @@ export default function Controls() {
       }
 
       setBonusPercent(String(result.settings?.firstDepositBonusPercent ?? firstDepositBonusPercent))
-      toast.success('Bonus settings saved')
+      setMinWithdrawalAmount(String(result.settings?.minWithdrawalAmount ?? minAmount))
+      setMaxWithdrawalAmount(String(result.settings?.maxWithdrawalAmount ?? maxAmount))
+      setWithdrawalFeePercent(String(result.settings?.withdrawalFeePercent ?? feePercent))
+      toast.success('Settings saved successfully')
     } catch (error) {
       console.log(error)
       toast.error(error.message || 'Unable to save settings')
@@ -163,6 +203,72 @@ export default function Controls() {
           </div>
         </section>
 
+        <section className="rounded-[24px] border border-white/10 bg-[#151515] p-5">
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#ff8ca0]/10 text-[#ff8ca0]">
+                <ArrowUpRight className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-white">Withdrawal Settings</h3>
+                <p className="text-sm text-zinc-500">Configure minimum, maximum, and fee for user withdrawals.</p>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-semibold text-white">Minimum Withdrawal Amount (USDT)</label>
+                <label className="flex h-12 items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4">
+                  <input
+                    type="number"
+                    inputMode="decimal"
+                    min="0"
+                    step="0.001"
+                    value={minWithdrawalAmount}
+                    disabled={loadingSettings || savingSettings}
+                    onChange={(event) => setMinWithdrawalAmount(event.target.value)}
+                    className="min-w-0 flex-1 bg-transparent text-lg font-semibold text-white outline-none disabled:text-zinc-500"
+                  />
+                </label>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-semibold text-white">Maximum Withdrawal Amount (USDT)</label>
+                <label className="flex h-12 items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4">
+                  <input
+                    type="number"
+                    inputMode="decimal"
+                    min="0"
+                    step="0.001"
+                    value={maxWithdrawalAmount}
+                    disabled={loadingSettings || savingSettings}
+                    onChange={(event) => setMaxWithdrawalAmount(event.target.value)}
+                    className="min-w-0 flex-1 bg-transparent text-lg font-semibold text-white outline-none disabled:text-zinc-500"
+                  />
+                </label>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-semibold text-white">Withdrawal Fee Percent (%)</label>
+                <label className="flex h-12 items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4">
+                  <input
+                    type="number"
+                    inputMode="decimal"
+                    min="0"
+                    max="100"
+                    step="0.001"
+                    value={withdrawalFeePercent}
+                    disabled={loadingSettings || savingSettings}
+                    onChange={(event) => setWithdrawalFeePercent(event.target.value)}
+                    className="min-w-0 flex-1 bg-transparent text-lg font-semibold text-white outline-none disabled:text-zinc-500"
+                  />
+                  <span className="text-sm font-semibold text-zinc-400">%</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="grid gap-3 md:grid-cols-2">
           {tools.map(({ label, description, href, icon: Icon, tone }) => (
             <button
@@ -184,6 +290,18 @@ export default function Controls() {
             </button>
           ))}
         </section>
+
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={saveSettings}
+            disabled={loadingSettings || savingSettings}
+            className="flex h-12 items-center justify-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-black transition hover:bg-[#8EE5FF] disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-zinc-400"
+          >
+            <Save className="h-4 w-4" />
+            {savingSettings ? 'Saving' : 'Save All Settings'}
+          </button>
+        </div>
       </div>
     </>
   )

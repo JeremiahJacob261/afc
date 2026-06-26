@@ -240,11 +240,21 @@ CREATE TABLE IF NOT EXISTS admin_settings (
     first_deposit_bonus_percent >= 0
     AND first_deposit_bonus_percent <= 100
   ),
+  min_withdrawal_amount DECIMAL(15, 3) NOT NULL DEFAULT 10.000 CHECK (
+    min_withdrawal_amount >= 0
+  ),
+  max_withdrawal_amount DECIMAL(15, 3) NOT NULL DEFAULT 100000.000 CHECK (
+    max_withdrawal_amount >= 0
+  ),
+  withdrawal_fee_percent DECIMAL(6, 3) NOT NULL DEFAULT 7.000 CHECK (
+    withdrawal_fee_percent >= 0
+    AND withdrawal_fee_percent <= 100
+  ),
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO admin_settings (id, first_deposit_bonus_percent)
-VALUES (1, 3.000)
+INSERT INTO admin_settings (id, first_deposit_bonus_percent, min_withdrawal_amount, max_withdrawal_amount, withdrawal_fee_percent)
+VALUES (1, 3.000, 10.000, 100000.000, 7.000)
 ON CONFLICT (id) DO NOTHING;
 
 CREATE TABLE IF NOT EXISTS reading (

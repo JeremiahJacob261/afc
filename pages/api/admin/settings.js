@@ -2,7 +2,9 @@ import { requireAdmin } from '@/lib/adminAuth'
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 import {
   getFirstDepositBonusPercent,
+  getWithdrawalSettings,
   saveFirstDepositBonusPercent,
+  saveWithdrawalSettings,
 } from '@/lib/adminSettings'
 
 export default async function handler(req, res) {
@@ -11,18 +13,48 @@ export default async function handler(req, res) {
     const supabase = getSupabaseAdmin()
 
     if (req.method === 'GET') {
-      const firstDepositBonusPercent = await getFirstDepositBonusPercent(supabase, {
-        allowDefaultOnMissingTable: true,
+      const [firstDepositBonusPercent, withdrawalSettings] = await Promise.all([
+        getFirstDepositBonusPercent(supabase, {
+          allowDefaultOnMissingTable: true,
+        }),
+        getWithdrawalSettings(supabase, {
+          allowDefaultOnMissingTable: true,
+        }),
+      ])
+
+      return res.status(200).json({
+        status: 'success',
+        settings: {
+          firstDepositBonusPercent,
+          ...withdrawalSettings,
+        },
       })
-      return res.status(200).json({ status: 'success', settings: { firstDepositBonusPercent } })
     }
 
     if (req.method === 'PUT') {
-      const firstDepositBonusPercent = await saveFirstDepositBonusPercent(
+      const payload = req.body || {}
+      const [firstDepositBonusPercent, currentWithdrawalSettings] = await Promise.all([
+        getFirstDepositBonusPercent(supabase, { allowDefaultOnMissingTable: true }),
+        getWithdrawalSettings(supabase, { allowDefaultOnMissingTable: true }),
+      ])
+
+      const nextBonusPercent = await saveFirstDepositBonusPercent(
         supabase,
-        req.body?.firstDepositBonusPercent
+        payload.firstDepositBonusPercent ?? firstDepositBonusPercent
       )
-      return res.status(200).json({ status: 'success', settings: { firstDepositBonusPercent } })
+      const nextWithdrawalSettings = await saveWithdrawalSettings(supabase, {
+        minWithdrawalAmount: payload.minWithdrawalAmount ?? currentWithdrawalSettings.minWithdrawalAmount,
+        maxWithdrawalAmount: payload.maxWithdrawalAmount ?? currentWithdrawalSettings.maxWithdrawalAmount,
+        withdrawalFeePercent: payload.withdrawalFeePercent ?? currentWithdrawalSettings.withdrawalFeePercent,
+      })
+
+      return res.status(200).json({
+        status: 'success',
+        settings: {
+          firstDepositBonusPercent: nextBonusPercent,
+          ...nextWithdrawalSettings,
+        },
+      })
     }
 
     return res.status(405).json({ status: 'error', message: 'Method not allowed' })

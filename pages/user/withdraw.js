@@ -26,13 +26,11 @@ import Big from '@/public/icon/badge.png'
 import { DriveFileRenameOutlineRounded } from "@mui/icons-material";
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 import { waitForPaint } from '@/lib/uiFeedback';
-import { WITHDRAWAL_FEE_RATE, calculateWithdrawalAmounts } from '@/lib/withdrawalFee';
+import { calculateWithdrawalAmounts } from '@/lib/withdrawalFee';
 
 function isLocalMethod(type) {
   return ['local', 'local-transfer', 'bank', 'mobile-money'].includes(String(type || '').trim().toLowerCase());
 }
-
-const MIN_WITHDRAWAL_USDT = 10;
 
 export default function Deposit() {
   const [wallx,setWallx] = useState([]);
@@ -47,6 +45,10 @@ export default function Deposit() {
   const [currency,setCurrency] = useState('USDT');
   const [swallet,setSWallet] = useState({});
   const [bank,setBank] = useState('');
+  //withdrawal settings
+  const [minWithdrawalAmount, setMinWithdrawalAmount] = useState(10);
+  const [maxWithdrawalAmount, setMaxWithdrawalAmount] = useState(100000);
+  const [withdrawalFeePercent, setWithdrawalFeePercent] = useState(7);
   //the below controls the loading modal
   const [openx, setOpenx] = useState(false);
   const handleOpenx = () => setOpenx(true);
@@ -132,8 +134,10 @@ export default function Deposit() {
       toast.error('Please select a wallet')
     } else if (amount === '') {
       toast.error('Please enter amount')
-    } else if (Number(amount) < MIN_WITHDRAWAL_USDT) {
-      toast.error(`Minimum amount to withdraw is ${MIN_WITHDRAWAL_USDT} USDT`)
+    } else if (Number(amount) < minWithdrawalAmount) {
+      toast.error(`Minimum amount to withdraw is ${minWithdrawalAmount} USDT`)
+    } else if (Number(amount) > maxWithdrawalAmount) {
+      toast.error(`Maximum amount to withdraw is ${maxWithdrawalAmount} USDT`)
     } else if (totalAmount > balance) {
       toast.error('Insufficient funds')
 
@@ -163,7 +167,7 @@ export default function Deposit() {
         const result = await response.json();
         if (!active || result.status !== 'success') return;
 
-        const [{ data: wall, error: wrr }, { data: methods, error: methodError }] = await Promise.all([
+        const [{ data: wall, error: wrr }, { data: methods, error: methodError }, settingsResponse] = await Promise.all([
           supabase
           .from('user_wallets')
           .select()
@@ -172,6 +176,7 @@ export default function Deposit() {
             .from('walle')
             .select('*')
             .eq('available', true),
+          authFetch('/api/admin/settings').catch(() => null),
         ])
 
         if (wrr) throw wrr;
@@ -181,6 +186,16 @@ export default function Deposit() {
         setWallx(methods ?? []);
         setInfo(result.profile);
         setBalance(Number(result.profile.balance || 0));
+
+        // Load withdrawal settings
+        if (settingsResponse?.ok) {
+          const settingsData = await settingsResponse.json();
+          if (settingsData.settings) {
+            setMinWithdrawalAmount(settingsData.settings.minWithdrawalAmount ?? 10);
+            setMaxWithdrawalAmount(settingsData.settings.maxWithdrawalAmount ?? 100000);
+            setWithdrawalFeePercent(settingsData.settings.withdrawalFeePercent ?? 7);
+          }
+        }
       } catch (e) {
         console.log(e)
         toast.error('Please Check your Internet Connection and Refresh the Website')
@@ -229,10 +244,10 @@ export default function Deposit() {
     setOpen(true)
   }
   //end of snackbar2
-  const { requestedAmount, feeAmount, totalAmount } = calculateWithdrawalAmounts(amount);
+  const { requestedAmount, feeAmount, totalAmount } = calculateWithdrawalAmounts(amount, withdrawalFeePercent);
   const currencyCode = String(currency || "USDT").toUpperCase();
   const showConvertedPayout = currencyCode !== 'USDT';
-  const feePercent = Number((WITHDRAWAL_FEE_RATE * 100).toFixed(2));
+  const feePercent = Number(withdrawalFeePercent.toFixed(2));
   return (
     <Cover style={{ minHeight: '95vh', paddingBottom: '100px' }}>
       <Head>
