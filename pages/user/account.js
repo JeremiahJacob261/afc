@@ -229,7 +229,7 @@ export default function Account() {
                 </Stack>
                 <Icon icon="solar:copy-bold-duotone" width="24" height="24" style={{ color: '#a3a3a3' }} onClick={() => {
                   if (!info?.newrefer) return
-                  navigator.clipboard.writeText("https://new-efc.vercel.app.vercel.app/register/" + info.newrefer)
+                  navigator.clipboard.writeText("https://new-efc.vercel.app/register/" + info.newrefer)
                   setMessages("Invite Link Copied")
                   toast.success("Invite link copied")
                 }} />
