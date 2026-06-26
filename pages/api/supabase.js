@@ -27,7 +27,7 @@ function decodeJwtPayload(token) {
 
 const supabaseKeyPayload = decodeJwtPayload(supabaseKey)
 if (supabaseKeyPayload?.role === 'service_role') {
-  throw new Error('SUPABASE_SERVICE_ROLE_KEY must be the Supabase anon public key, not the service_role key.')
+  throw new Error('NEXT_PUBLIC_SUPABASE_ANON_KEY must be the Supabase anon public key, not the service_role key.')
 }
 
 export const supabase = createClient(supabaseUrl, supabaseKey, {
