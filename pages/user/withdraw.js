@@ -48,7 +48,7 @@ export default function Deposit() {
   //withdrawal settings
   const [minWithdrawalAmount, setMinWithdrawalAmount] = useState(10);
   const [maxWithdrawalAmount, setMaxWithdrawalAmount] = useState(100000);
-  const [withdrawalFeePercent, setWithdrawalFeePercent] = useState(7);
+  const [withdrawalFeePercent, setWithdrawalFeePercent] = useState(5);
   //the below controls the loading modal
   const [openx, setOpenx] = useState(false);
   const handleOpenx = () => setOpenx(true);
@@ -193,7 +193,7 @@ export default function Deposit() {
           if (settingsData.settings) {
             setMinWithdrawalAmount(settingsData.settings.minWithdrawalAmount ?? 10);
             setMaxWithdrawalAmount(settingsData.settings.maxWithdrawalAmount ?? 100000);
-            setWithdrawalFeePercent(settingsData.settings.withdrawalFeePercent ?? 7);
+            setWithdrawalFeePercent(settingsData.settings.withdrawalFeePercent ?? 5);
           }
         }
       } catch (e) {
