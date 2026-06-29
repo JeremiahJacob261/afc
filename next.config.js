@@ -29,6 +29,8 @@ const securityHeaders = [
       "font-src 'self' data: https://fonts.gstatic.com",
       "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://v3.football.api-sports.io https://api-football-v1.p.rapidapi.com https://translate.googleapis.com https://api.iconify.design https://api.simplesvg.com https://api.unisvg.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebasestorage.googleapis.com https://*.firebasedatabase.app wss://*.firebasedatabase.app",
       "frame-src https://translate.google.com",
+      "manifest-src 'self'",
+      "worker-src 'self'",
       "form-action 'self'",
       "upgrade-insecure-requests",
     ].join('; '),
@@ -52,6 +54,45 @@ const nextConfig = {
       {
         source: '/:path*',
         headers: securityHeaders,
+      },
+      {
+        source: '/sw.js',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-cache, no-store, must-revalidate',
+          },
+          {
+            key: 'Service-Worker-Allowed',
+            value: '/',
+          },
+          {
+            key: 'Content-Type',
+            value: 'application/javascript; charset=utf-8',
+          },
+        ],
+      },
+      {
+        source: '/manifest.webmanifest',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'application/manifest+json; charset=utf-8',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600',
+          },
+        ],
+      },
+      {
+        source: '/icons/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
       },
       {
         source: '/register/:path*',

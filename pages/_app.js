@@ -38,13 +38,51 @@ function MyApp({ Component, pageProps }) {
     }
   }, [router])
 
+  useEffect(() => {
+    if (!('serviceWorker' in navigator)) return
+
+    const isLocalhost = ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname)
+    const isSecureContext = window.location.protocol === 'https:' || isLocalhost
+
+    if (!isSecureContext) return
+
+    const registerServiceWorker = () => {
+      navigator.serviceWorker
+        .register('/sw.js', { scope: '/' })
+        .then((registration) => registration.update())
+        .catch((error) => {
+          console.error('Service worker registration failed:', error)
+        })
+    }
+
+    if (document.readyState === 'complete') {
+      registerServiceWorker()
+    } else {
+      window.addEventListener('load', registerServiceWorker)
+    }
+
+    return () => window.removeEventListener('load', registerServiceWorker)
+  }, [])
+
   return (
     <div style={{background: "#06101F",height:'100%'}}>
       <Head>
         <title>EFC</title>
         <meta name="description" content="Login to your Account to see whats up with your investments
         " />
+        <meta name="application-name" content="EFC" />
+        <meta name="apple-mobile-web-app-title" content="EFC" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="theme-color" content="#06101F" />
+        <meta name="msapplication-TileColor" content="#06101F" />
+        <meta name="format-detection" content="telephone=no" />
+        <link rel="manifest" href="/manifest.webmanifest" />
         <link rel="icon" href="/european.ico" />
+        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       {shouldUseAdminShell ? (
