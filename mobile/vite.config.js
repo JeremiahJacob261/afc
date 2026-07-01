@@ -31,7 +31,7 @@ export default defineConfig(({ mode }) => {
   const rootEnv = loadEnv(mode, process.cwd(), '')
   const mobileEnv = loadEnv(mode, __dirname, '')
   const env = { ...rootEnv, ...mobileEnv }
-  const apiBaseUrl = env.VITE_API_BASE_URL || 'https://europeanfc01.com'
+  const apiBaseUrl = env.VITE_API_BASE_URL || 'https://www.europeanfc01.com'
   const updateManifestUrl =
     env.VITE_UPDATE_MANIFEST_URL || `${apiBaseUrl}/mobile-updates/android/latest.json`
   const supabaseAnonKey = getPublicSupabaseAnonKey(env)

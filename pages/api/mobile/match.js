@@ -13,10 +13,24 @@ const MATCH_COLUMNS = [
   'time',
   'tsgmt',
   'company',
-  'onenil',
-  'oneone',
-  'onetwo',
   'verified',
+  'nilnil',
+  'onenil',
+  'nilone',
+  'oneone',
+  'twonil',
+  'niltwo',
+  'twoone',
+  'onetwo',
+  'twotwo',
+  'threenil',
+  'nilthree',
+  'threeone',
+  'onethree',
+  'twothree',
+  'threetwo',
+  'threethree',
+  'otherscores',
 ].join(',')
 
 export default async function handler(req, res) {
@@ -24,27 +38,30 @@ export default async function handler(req, res) {
     return res.status(405).json({ status: 'error', message: 'Method not allowed' })
   }
 
-  const limit = Math.min(Math.max(Number(req.query.limit || 6), 1), 50)
+  const id = String(req.query.id || '').trim()
+  if (!id) {
+    return res.status(400).json({ status: 'error', message: 'Match id is required' })
+  }
 
   try {
     const supabase = getSupabaseAdmin()
-    const nowMs = Date.now()
     const { data, error } = await supabase
       .from('bets')
       .select(MATCH_COLUMNS)
-      .eq('verified', false)
-      .gt('tsgmt', nowMs)
-      .order('tsgmt', { ascending: true })
-      .limit(limit)
+      .eq('match_id', id)
+      .maybeSingle()
 
     if (error) throw error
+    if (!data) {
+      return res.status(404).json({ status: 'error', message: 'Match not found' })
+    }
 
     return res.status(200).json({
       status: 'success',
-      matches: data || [],
+      match: data,
     })
   } catch (error) {
-    console.error('Unable to load mobile matches:', error)
+    console.error('Unable to load mobile match:', error)
     return res.status(500).json({ status: 'error', message: 'Server error' })
   }
 }
