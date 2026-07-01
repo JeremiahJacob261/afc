@@ -24,6 +24,12 @@ const referralCode = '000208'
 
 const onboardingSlides = [
   {
+    title: 'Start with 1 USDT bonus',
+    text: 'See the current EFC deposit bonus, minimum deposit, daily percentage, and withdrawal details before signing in.',
+    image: '/bfc1.jpg',
+    accent: 'cyan',
+  },
+  {
     title: 'Earn from football activity',
     text: 'Track agent levels, team volume, and weekly salary opportunities from the EFC mobile app.',
     image: '/bfc2.jpg',
