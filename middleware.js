@@ -1,6 +1,37 @@
 import { NextResponse } from 'next/server'
 
 const ADMIN_COOKIE_NAME = 'admin_session'
+const API_CORS_ALLOWED_ORIGINS = new Set([
+  'capacitor://localhost',
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:4173',
+  'http://127.0.0.1:4173',
+])
+
+function getCorsHeaders(request) {
+  const origin = request.headers.get('origin')
+
+  if (!origin || !API_CORS_ALLOWED_ORIGINS.has(origin)) {
+    return {}
+  }
+
+  return {
+    'Access-Control-Allow-Origin': origin,
+    'Access-Control-Allow-Credentials': 'true',
+    'Access-Control-Allow-Methods': 'GET,POST,PUT,PATCH,DELETE,OPTIONS',
+    'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Admin-Password, X-Internal-Secret',
+    'Access-Control-Max-Age': '86400',
+    Vary: 'Origin',
+  }
+}
+
+function withCors(response, headers) {
+  Object.entries(headers).forEach(([key, value]) => {
+    response.headers.set(key, value)
+  })
+  return response
+}
 
 async function getAdminSessionToken(secret) {
   const input = new TextEncoder().encode(`afc-admin-session:${secret}`)
@@ -19,13 +50,22 @@ function isPublicAdminPath(pathname) {
 
 export async function middleware(request) {
   const { pathname } = request.nextUrl
+  const isApiPath = pathname.startsWith('/api')
+  const corsHeaders = isApiPath ? getCorsHeaders(request) : {}
+
+  if (isApiPath && request.method === 'OPTIONS') {
+    return new NextResponse(null, {
+      status: 204,
+      headers: corsHeaders,
+    })
+  }
 
   if (!pathname.startsWith('/admin') && !pathname.startsWith('/api/admin')) {
-    return NextResponse.next()
+    return withCors(NextResponse.next(), corsHeaders)
   }
 
   if (isPublicAdminPath(pathname)) {
-    return NextResponse.next()
+    return withCors(NextResponse.next(), corsHeaders)
   }
 
   const secret = process.env.ADMIN_SESSION_SECRET
@@ -37,18 +77,18 @@ export async function middleware(request) {
   const headerPassword = request.headers.get('x-admin-password')
 
   if (secret && session === await getAdminSessionToken(secret)) {
-    return NextResponse.next()
+    return withCors(NextResponse.next(), corsHeaders)
   }
 
   if (adminPassword && headerPassword === adminPassword) {
-    return NextResponse.next()
+    return withCors(NextResponse.next(), corsHeaders)
   }
 
   if (pathname.startsWith('/api/admin')) {
-    return NextResponse.json(
+    return withCors(NextResponse.json(
       { status: 'error', message: 'Unauthorized' },
       { status: 401 }
-    )
+    ), corsHeaders)
   }
 
   const loginUrl = new URL('/admin', request.url)
@@ -57,5 +97,5 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/api/admin/:path*'],
+  matcher: ['/admin/:path*', '/api/:path*'],
 }

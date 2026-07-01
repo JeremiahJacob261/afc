@@ -6,9 +6,20 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "mobile:dev": "vite --config mobile/vite.config.js --host 0.0.0.0",
+    "mobile:build": "vite build --config mobile/vite.config.js",
+    "mobile:package-update": "bun run mobile:build && node scripts/package-mobile-update.mjs",
+    "cap:sync": "bun run mobile:build && cap sync android",
+    "android:open": "cap open android",
+    "android:run": "bun run mobile:build && cap run android",
+    "android:apk": "bun run mobile:build && cap sync android && cd android && ./gradlew assembleDebug"
   },
   "dependencies": {
+    "@capacitor/android": "6.2.1",
+    "@capacitor/core": "6.2.1",
+    "@capacitor/splash-screen": "6.0.4",
+    "@capgo/capacitor-updater": "6.50.1",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^5.10.9",
@@ -20,6 +31,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@supabase/supabase-js": "^2.1.0",
     "@syncfusion/ej2-calendars": "^20.3.56",
+    "@vitejs/plugin-react": "^6.0.3",
     "autoprefixer": "^10.4.20",
     "axios": "^1.2.0",
     "bootstrap": "5.2.0-beta1",
@@ -58,9 +70,12 @@
     "tailwindcss-animate": "^1.0.7",
     "tronweb": "^5.3.0",
     "uuid": "^9.0.0",
+    "vite": "^8.1.1",
     "ws": "^8.20.1"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "6.2.1",
     "@iconify/react": "^5.0.2",
     "@types/node": "^25.8.0",
     "@types/react": "^19.2.14",
