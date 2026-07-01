@@ -1,4 +1,5 @@
 import { Typography, Stack, Divider, Button, Paper } from "@mui/material"
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { supabase } from "@/pages/api/supabase"
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { useRouter } from "next/router";
@@ -619,10 +620,12 @@ export default function Match({ matchDat }) {
 }
 
 export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
     try {
         const id = context.params?.id;
         if (!id) {
-            return { props: { matchDat: [] } }
+            return { props: {
+      ...i18nProps, matchDat: [] } }
         }
 
         const { data, error } = await supabase
@@ -633,12 +636,15 @@ export async function getServerSideProps(context) {
 
         if (error) {
             console.error('Unable to load match:', error);
-            return { props: { matchDat: [] } }
+            return { props: {
+      ...i18nProps, matchDat: [] } }
         }
 
-        return { props: { matchDat: data ? [data] : [] } }
+        return { props: {
+      ...i18nProps, matchDat: data ? [data] : [] } }
     } catch (error) {
         console.error('Match page error:', error);
-        return { props: { matchDat: [] } }
+        return { props: {
+      ...i18nProps, matchDat: [] } }
     }
 }

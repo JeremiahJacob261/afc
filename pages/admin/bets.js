@@ -1,4 +1,5 @@
 import { Stack, Typography, Box, Button, TextField } from "@mui/material";
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { callAdminRpc } from '@/lib/adminRpcClient';
 import { supabase } from '@/pages/api/supabase'
 import PageviewIcon from '@mui/icons-material/Pageview';
@@ -467,6 +468,7 @@ function MatchTime({ match }) {
 }
 
 export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
     const { data, error } = await supabase
         .from('bets')
         .select()
@@ -475,6 +477,7 @@ export async function getServerSideProps(context) {
     let bets = data
     console.log(error)
     return {
-        props: { bets }, // will be passed to the page component as props
+        props: {
+      ...i18nProps, bets }, // will be passed to the page component as props
     }
 }

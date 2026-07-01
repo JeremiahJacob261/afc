@@ -10,7 +10,10 @@ import AppLoadingOverlay from '@/components/AppLoadingOverlay';
 import FeedbackDialog from '@/components/FeedbackDialog';
 import { waitForPaint } from '@/lib/uiFeedback';
 import toast, { Toaster } from 'react-hot-toast';
+import { useTranslation } from 'next-i18next';
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 export default function PasswordReset() {
+  const { t } = useTranslation('common')
   const [email, setEmail] = useState('')
   const auth = getAuth(app);
   const router = useRouter();
@@ -19,7 +22,7 @@ export default function PasswordReset() {
   async function reset() {
     if (loading) return
     if (!email.trim()) {
-      toast.error('Please enter your email address')
+      toast.error(t('messages.enterEmailAddress'))
       return
     }
 
@@ -30,14 +33,14 @@ export default function PasswordReset() {
       await sendPasswordResetEmail(auth, email.trim())
       setFeedback({
         type: 'success',
-        title: 'Reset email sent',
-        message: 'A message has been sent to your email. Follow the instructions there to change your password.',
+        title: t('messages.resetEmailSentTitle'),
+        message: t('messages.resetEmailSentMessage'),
       })
     } catch (error) {
       setFeedback({
         type: 'error',
-        title: 'Unable to send email',
-        message: error?.code || error?.message || 'Please try again.',
+        title: t('messages.unableSendEmail'),
+        message: error?.code || error?.message || t('messages.pleaseTryAgain'),
       })
     } finally {
       setLoading(false)
@@ -56,7 +59,7 @@ export default function PasswordReset() {
         background: '#0B122C'
         , position: 'relative'
       }}>
-      <AppLoadingOverlay open={loading} title="Sending email" message="Preparing your password reset link." />
+      <AppLoadingOverlay open={loading} title={t('messages.sendingEmailTitle')} message={t('messages.sendingEmailMessage')} />
       <FeedbackDialog
         open={Boolean(feedback)}
         type={feedback?.type}
@@ -70,23 +73,23 @@ export default function PasswordReset() {
       />
       <Toaster position="bottom-center" reverseOrder={false} />
       <Head>
-        <title>Password Reset</title>
-        <meta name="description" content="european security settings" />
+        <title>{t('auth.reset.title')}</title>
+        <meta name="description" content={t('auth.reset.subtitle')} />
         <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Stack direction="column" spacing={4} justifyContent="center" alignItems="center">
         <Link href="/" style={{ textDecoration: "none" }}>
-          <Typography style={{ fontFamily: 'Noto Serif, serif', color: "#242627", fontWeight: '400', fontSize: '20px' }}>EFC  </Typography>
+          <Typography style={{ fontFamily: 'Noto Serif, serif', color: "#242627", fontWeight: '400', fontSize: '20px' }}>{t('common.appName')}</Typography>
         </Link>
         <Typography style={{ fontFamily: 'Poppins,sans-serif', color: '#242627', fontSize: '25px', fontWeight: '400', width: '240px', textAlign: 'center' }}>
-          Forgot Password? Dont worry
+          {t('auth.reset.title')}
         </Typography>
         <Typography style={{ opacity: '0.7', fontFamily: 'Poppins,sans-serif', color: '#242627', fontSize: '14px', fontWeight: '100', width: '292px', textAlign: 'center' }}>
-          We would send you a link to your email so you can reset your password
+          {t('auth.reset.subtitle')}
         </Typography>
       </Stack>
-      <TextField id="outlined-basic" label="Email" variant="filled"
+      <TextField id="outlined-basic" label={t('auth.register.email')} variant="filled"
         sx={{ padding: 0, fontSize: '14', fontWeight: '300', border: '1px solid #242627', borderRadius: '4px', fontFamily: 'Poppins, sans-serif', width: "100%", background: '#172242', input: { color: '#242627', } }}
 
         value={email}
@@ -96,10 +99,10 @@ export default function PasswordReset() {
       />
       <Stack direction="column" spacing={2} justifyContent='center' alignItems='center' sx={{ width: '343px', position: 'absolute', bottom: 55 }}>
         <Button variant="contained" disabled={loading} sx={{ fontFamily: 'Poppins, sans-serif', padding: "10px", width: '100%', background: '#FE9D16' }} onClick={reset}>
-          <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "#242627smoke" }}>{loading ? 'Sending...' : 'Send Email'}</Typography>
+          <Typography sx={{ fontFamily: 'Poppins, sans-serif', marginLeft: "3px", color: "#242627smoke" }}>{loading ? t('auth.reset.submitting') : t('auth.reset.submit')}</Typography>
         </Button>
         <Typography>
-          <Link href="/login" style={{ textDecoration: "none", fontSize: '14px', fontWeight: '100', color: "#242627", opacity: '1.0', fontFamily: 'Poppins,sans-serif' }}>Return To Login</Link>
+          <Link href="/login" style={{ textDecoration: "none", fontSize: '14px', fontWeight: '100', color: "#242627", opacity: '1.0', fontFamily: 'Poppins,sans-serif' }}>{t('common.login')}</Link>
           <Divider sx={{ background: '#242627' }} />
         </Typography>
 
@@ -109,4 +112,12 @@ export default function PasswordReset() {
 
     </Stack>
   )
+}
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await getI18nServerSideProps(locale)),
+    },
+  }
 }

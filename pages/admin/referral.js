@@ -1,4 +1,5 @@
 import {Paper, Stack, Typography} from '@mui/material'
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { useEffect, useState } from 'react'
 import {supabase} from '@/pages/api/supabase'
 export default function Referral({refs}) {
@@ -18,12 +19,14 @@ export default function Referral({refs}) {
     )
 }
 export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
   const {data,error} = await supabase
   .from('referral')
   .select()
   const refs = data;
  
   return {
-    props: {refs}, // will be passed to the page component as props
+    props: {
+      ...i18nProps,refs}, // will be passed to the page component as props
   }
 }

@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { useRouter } from 'next/router'
 import { CalendarDays, Plus, Trophy } from 'lucide-react'
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
@@ -95,6 +96,7 @@ function AdminMatchCard({ match, onClick }) {
 }
 
 export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
   try {
     requireAdmin(context.req)
     const supabase = getSupabaseAdmin()
@@ -108,6 +110,7 @@ export async function getServerSideProps(context) {
 
     return {
       props: {
+      ...i18nProps,
         datas: data || [],
       },
     }
@@ -121,6 +124,7 @@ export async function getServerSideProps(context) {
       }
     }
     console.log(error)
-    return { props: { datas: [] } }
+    return { props: {
+      ...i18nProps, datas: [] } }
   }
 }

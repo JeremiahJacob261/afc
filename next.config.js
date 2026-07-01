@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const { i18n } = require('./next-i18next.config')
+
 const securityHeaders = [
   {
     key: 'X-Content-Type-Options',
@@ -23,12 +25,12 @@ const securityHeaders = [
       "base-uri 'self'",
       "frame-ancestors 'none'",
       "object-src 'none'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://translate.google.com https://translate.googleapis.com https://www.gstatic.com",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "img-src 'self' data: blob: https:",
       "font-src 'self' data: https://fonts.gstatic.com",
-      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://v3.football.api-sports.io https://api-football-v1.p.rapidapi.com https://translate.googleapis.com https://api.iconify.design https://api.simplesvg.com https://api.unisvg.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebasestorage.googleapis.com https://*.firebasedatabase.app wss://*.firebasedatabase.app",
-      "frame-src https://translate.google.com",
+      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://v3.football.api-sports.io https://api-football-v1.p.rapidapi.com https://api.iconify.design https://api.simplesvg.com https://api.unisvg.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebasestorage.googleapis.com https://*.firebasedatabase.app wss://*.firebasedatabase.app",
+      "frame-src 'self'",
       "manifest-src 'self'",
       "worker-src 'self'",
       "form-action 'self'",
@@ -46,6 +48,7 @@ const privatePageHeaders = [
 
 const nextConfig = {
   reactStrictMode: true,
+  i18n,
   images: {
   domains: ['pctajnbqkposgymgbqkc.supabase.co','restcountries.eu','firebasestorage.googleapis.com','media-1.api-sports.io','media-2.api-sports.io','media-3.api-sports.io','media.api-sports.io','media-4.api-sports.io','upload.wikimedia.org'],
 },

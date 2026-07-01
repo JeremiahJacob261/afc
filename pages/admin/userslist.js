@@ -1,4 +1,5 @@
 import { Stack, Paper, Typography, Button, TextField, Divider, Box, Backdrop } from '@mui/material';
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { callAdminRpc } from '@/lib/adminRpcClient';
 import { supabase } from '@/pages/api/supabase';
 import { useEffect, useState, useRef } from 'react';
@@ -904,6 +905,7 @@ function BetKickoff({ bet }) {
 }
 
 export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
   const supabaseAdmin = getSupabaseAdmin()
   const { data, error } = await supabaseAdmin
     .from('users')
@@ -912,6 +914,7 @@ export async function getServerSideProps(context) {
 
   const refs = data;
   return {
-    props: { refs }, // will be passed to the page component as props
+    props: {
+      ...i18nProps, refs }, // will be passed to the page component as props
   }
 }

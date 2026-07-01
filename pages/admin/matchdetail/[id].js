@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 import { toast, Toaster } from 'react-hot-toast'
@@ -494,6 +495,7 @@ export default function MatchDetail({ datas = {}, mist = [] }) {
 }
 
 export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
   const id = context.params.id
 
   try {
@@ -510,6 +512,7 @@ export async function getServerSideProps(context) {
 
     return {
       props: {
+      ...i18nProps,
         datas: match || {},
         mist: placed || [],
       },
@@ -527,6 +530,7 @@ export async function getServerSideProps(context) {
     console.log(error)
     return {
       props: {
+      ...i18nProps,
         datas: {},
         mist: [],
       },

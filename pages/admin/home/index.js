@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import Image from 'next/image'
 import {
   ArrowUpRight,
@@ -331,10 +332,12 @@ export default function AdminHome({ dashboard }) {
 }
 
 export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
   try {
     requireAdmin(context.req)
     const dashboard = await getAdminDashboardData()
-    return { props: { dashboard } }
+    return { props: {
+      ...i18nProps, dashboard } }
   } catch (error) {
     if (error.statusCode === 401) {
       return {
@@ -348,6 +351,7 @@ export async function getServerSideProps(context) {
     console.log(error)
     return {
       props: {
+      ...i18nProps,
         dashboard: {
           summary: {},
           finance: { latest: [] },

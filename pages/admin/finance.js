@@ -1,4 +1,5 @@
 import { Button, Typography, Paper, Stack, Box, Divider } from "@mui/material"
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { callAdminRpc } from '@/lib/adminRpcClient';
 import React, { useEffect, useState, useContext } from "react"
 import { supabase } from '@/pages/api/supabase'
@@ -484,6 +485,7 @@ export default function Noti({ notiS }) {
   )
 }
 export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
   const { data, error } = await supabase
     .from('notification')
     .select()
@@ -491,6 +493,7 @@ export async function getServerSideProps(context) {
     .order('id', { ascending: false });
   const notiS = data;
   return {
-    props: { notiS }, // will be passed to the page component as props
+    props: {
+      ...i18nProps, notiS }, // will be passed to the page component as props
   }
 }

@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
@@ -263,11 +264,13 @@ export default function Reward({ id = '', uid = '' }) {
 }
 
 export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
   const uid = context.query.id ? String(context.query.id) : ''
 
   if (!uid) {
     return {
       props: {
+      ...i18nProps,
         id: '',
         uid: '',
       },
@@ -286,6 +289,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
+      ...i18nProps,
       id: data?.[0]?.username || '',
       uid,
     },

@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import Head from "next/head";
 import Link from 'next/link'
 import { Stack } from "@mui/material";
@@ -15,7 +16,9 @@ import AppLoadingOverlay from '@/components/AppLoadingOverlay';
 import FeedbackDialog from '@/components/FeedbackDialog';
 import { waitForPaint } from '@/lib/uiFeedback';
 import toast, { Toaster } from 'react-hot-toast';
+import { useTranslation } from 'next-i18next';
 export default function Register({ refer }) {
+  const { t } = useTranslation('common')
 
   const [password, setPassword] = useState("")
   const [cpassword, setcPassword] = useState("")
@@ -56,7 +59,7 @@ export default function Register({ refer }) {
   useEffect(() => {
   }, [refer]);
 
-  const showErrorDialog = (message, title = 'Unable to create account') => {
+  const showErrorDialog = (message, title = t('messages.unableCreateAccount')) => {
     setFeedback({ type: 'error', title, message })
   }
 
@@ -64,17 +67,17 @@ export default function Register({ refer }) {
     if (loading) return
 
     if (phone.length < 9) {
-      toast.error('Please input a complete phone number with at least 9 digits')
+      toast.error(t('messages.phoneNineDigits'))
       return
     }
 
     if (!agecheck) {
-      toast.error('Please accept the terms and conditions before you continue')
+      toast.error(t('messages.acceptTerms'))
       return
     }
 
     if (cpassword !== values.password) {
-      toast.error('Please make sure both passwords are the same')
+      toast.error(t('messages.passwordsMustMatch'))
       return
     }
 
@@ -89,12 +92,12 @@ export default function Register({ refer }) {
       })
       const result = await response.json().catch(() => ({}))
       if (!response.ok) {
-        toast.error('Unable to validate username right now')
+        toast.error(t('messages.unableValidateUsername'))
         return
       }
 
       if (!result.available) {
-        toast.error('Username already exists')
+        toast.error(t('messages.usernameExists'))
         return
       }
 
@@ -129,28 +132,28 @@ export default function Register({ refer }) {
       const profileResult = await profileResponse.json().catch(() => ({}))
 
       if (!profileResponse.ok || profileResult.status !== 'success') {
-        throw new Error(profileResult.message || 'Unable to create user profile')
+        throw new Error(profileResult.message || t('messages.unableCreateProfile'))
       }
 
       clearLegacyAuthStorage();
       setLoading(false)
       setFeedback({
         type: 'success',
-        title: 'Welcome to EFC',
-        message: 'Your account has been created successfully.',
+        title: t('messages.welcomeToEfc'),
+        message: t('messages.accountCreated'),
       })
     } catch (error) {
       console.error('Error signing up:', error);
       if (error.message === 'User already registered') {
-        showErrorDialog('Email already exists!', 'Email already registered')
+        showErrorDialog(t('messages.emailExists'), t('messages.emailRegistered'))
       } else if (error.message === 'Password should be at least 6 characters') {
-        showErrorDialog('For security reasons, please choose a stronger password. It should be at least 8 characters long and include a mix of letters, numbers, and symbols.', 'Use a stronger password')
+        showErrorDialog(t('messages.strongerPasswordMessage'), t('messages.strongerPasswordTitle'))
       } else if (error.message === 'Unable to validate email address: invalid format') {
-        showErrorDialog('Please enter a valid email address.', 'Invalid email')
+        showErrorDialog(t('messages.invalidEmailMessage'), t('messages.invalidEmailTitle'))
       } else if (error.message === 'Username Already Exist!') {
-        toast.error('Username already exists')
+        toast.error(t('messages.usernameExists'))
       } else {
-        showErrorDialog('Please check your internet connection and try again. If the problem persists, please contact support.')
+        showErrorDialog(t('messages.checkConnectionTryAgain'))
       }
     } finally {
       setLoading(false)
@@ -161,13 +164,13 @@ export default function Register({ refer }) {
   return (
     <div className="min-h-screen bg-white text-gray-900 flex flex-col relative overflow-hidden">
       <Head>
-        <title>Create an EFC account</title>
-        <meta name="description" content="Create an EFC account to access your football markets and wallet." />
+        <title>{t('auth.register.title')}</title>
+        <meta name="description" content={t('auth.register.subtitle')} />
         <meta name="robots" content="noindex,nofollow,noarchive" />
         <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <AppLoadingOverlay open={loading} title="Creating account" message="Setting up your EFC profile." />
+      <AppLoadingOverlay open={loading} title={t('auth.register.submitting')} message={t('auth.register.subtitle')} />
       <FeedbackDialog
         open={Boolean(feedback)}
         type={feedback?.type}
@@ -189,7 +192,7 @@ export default function Register({ refer }) {
       <header className="relative z-10 px-6 py-6 sm:px-10">
         <Link href="/" className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors">
           <ArrowLeft className="w-5 h-5" />
-          <span className="font-medium">Back to Home</span>
+          <span className="font-medium">{t('common.backToHome')}</span>
         </Link>
       </header>
 
@@ -198,7 +201,7 @@ export default function Register({ refer }) {
           <div className="flex justify-center mb-6">
             <Link href="/" className="flex items-center gap-2">
               <Image src={LOGO} alt="EFC Logo" width={40} height={40} className="w-10 h-10 object-contain" />
-              <span className="text-3xl font-black tracking-[-0.04em] text-gray-900">EFC</span>
+              <span className="text-3xl font-black tracking-[-0.04em] text-gray-900">{t('common.appName')}</span>
             </Link>
           </div>
 
@@ -206,8 +209,8 @@ export default function Register({ refer }) {
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#2ECFC4] to-[#1BB6FF]" />
 
             <div className="mb-8 text-center">
-              <h1 className="text-2xl font-black tracking-tight mb-2">Create an Account</h1>
-              <p className="text-gray-500 text-sm">Join EFC and start your premium analytics journey</p>
+              <h1 className="text-2xl font-black tracking-tight mb-2">{t('auth.register.title')}</h1>
+              <p className="text-gray-500 text-sm">{t('auth.register.subtitle')}</p>
             </div>
 
             <form className="space-y-4" onSubmit={(e) => {
@@ -216,14 +219,14 @@ export default function Register({ refer }) {
             }}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-gray-700 ml-1">Username</label>
+                  <label className="text-sm font-medium text-gray-700 ml-1">{t('auth.register.username')}</label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                       <User className="w-4 h-4 text-gray-400" />
                     </div>
                     <input
                       type="text"
-                      placeholder="johndoe"
+                      placeholder={t('auth.register.usernamePlaceholder')}
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       autoComplete="username"
@@ -234,14 +237,14 @@ export default function Register({ refer }) {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-gray-700 ml-1">Email Address</label>
+                  <label className="text-sm font-medium text-gray-700 ml-1">{t('common.emailAddress')}</label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                       <Mail className="w-4 h-4 text-gray-400" />
                     </div>
                     <input
                       type="email"
-                      placeholder="you@example.com"
+                      placeholder={t('auth.register.emailPlaceholder')}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       autoComplete="email"
@@ -254,7 +257,7 @@ export default function Register({ refer }) {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-gray-700 ml-1">Country Code</label>
+                  <label className="text-sm font-medium text-gray-700 ml-1">{t('auth.register.code')}</label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                       <Globe className="w-4 h-4 text-gray-400" />
@@ -275,7 +278,7 @@ export default function Register({ refer }) {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-gray-700 ml-1">Phone Number</label>
+                  <label className="text-sm font-medium text-gray-700 ml-1">{t('auth.register.phone')}</label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                       <Phone className="w-4 h-4 text-gray-400" />
@@ -294,14 +297,14 @@ export default function Register({ refer }) {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-gray-700 ml-1">Referral Code (Optional)</label>
+                <label className="text-sm font-medium text-gray-700 ml-1">{t('auth.register.referralCode')}</label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                     <Hash className="w-4 h-4 text-gray-400" />
                   </div>
                   <input
                     type="text"
-                    placeholder="Enter referral code"
+                    placeholder={t('auth.register.referralCode')}
                     value={idR}
                     onChange={(e) => setidR(e.target.value)}
                     className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all text-sm"
@@ -311,7 +314,7 @@ export default function Register({ refer }) {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-gray-700 ml-1">Password</label>
+                  <label className="text-sm font-medium text-gray-700 ml-1">{t('auth.register.password')}</label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                       <Lock className="w-4 h-4 text-gray-400" />
@@ -332,7 +335,7 @@ export default function Register({ refer }) {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-gray-700 ml-1">Confirm Password</label>
+                  <label className="text-sm font-medium text-gray-700 ml-1">{t('auth.register.confirmPassword')}</label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                       <Lock className="w-4 h-4 text-gray-400" />
@@ -359,7 +362,7 @@ export default function Register({ refer }) {
                     className="w-4 h-4 rounded border-gray-300 text-[#1BB6FF] focus:ring-[#1BB6FF]"
                   />
                   <span className="text-sm text-gray-600">
-                    I am at least 18 and accept the{' '}
+                    {t('auth.register.terms')}{' '}
                     <Link href="/terms" className="text-gray-900 font-semibold hover:text-[#1BB6FF]">Terms</Link>
                     {' '}and{' '}
                     <Link href="/privacy" className="text-gray-900 font-semibold hover:text-[#1BB6FF]">Privacy Policy</Link>
@@ -372,15 +375,15 @@ export default function Register({ refer }) {
                 disabled={loading}
                 className="w-full flex items-center justify-center gap-2 bg-[#1BB6FF] hover:bg-[#2ECFC4] text-[#06101F] font-bold rounded-xl py-3.5 transition-all hover:shadow-[0_0_20px_rgba(27,182,255,0.3)] mt-4 group"
               >
-                {loading ? 'Creating Account...' : 'Create Account'}
+                {loading ? t('auth.register.submitting') : t('auth.register.submit')}
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </form>
 
             <div className="mt-6 text-center text-sm text-gray-500">
-              Already have an account?{" "}
+              {t('auth.register.hasAccount')}{" "}
               <Link href="/login" className="text-gray-900 font-semibold hover:text-[#1BB6FF] transition-colors">
-                Sign In
+                {t('auth.login.submit')}
               </Link>
             </div>
           </div>
@@ -391,7 +394,9 @@ export default function Register({ refer }) {
 }
 
 export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
   const { params } = context;
   const id = params?.id?.[0] ?? null;  // catch-all gives array; grab first element
-  return { props: { refer: id } }
+  return { props: {
+      ...i18nProps, refer: id } }
 }

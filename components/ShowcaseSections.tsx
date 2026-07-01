@@ -10,14 +10,7 @@ import {
   WalletCards,
 } from "lucide-react";
 import Image from "next/image";
-import {
-  agentRebates,
-  agentSalaryLevels,
-  bonuses,
-  invitationTiers,
-  liveMatches,
-  trustItems,
-} from "@/data/landing";
+import { useTranslation } from "next-i18next";
 import { Button } from "./Button";
 import { ChartLine } from "./ChartLine";
 import { Section } from "./Section";
@@ -26,14 +19,41 @@ import bfc3 from "@/public/bfc3.jpg";
 import bfc5 from "@/public/bfc5.jpg";
 
 export function ShowcaseSections() {
+  const { t } = useTranslation("common");
+  const liveMatches = t("landing.live.matches", { returnObjects: true }) as Array<{
+    fixture: string;
+    market: string;
+    price: string;
+    status: string;
+  }>;
+  const invitationTiers = t("landing.bonuses.tiers", { returnObjects: true }) as Array<{
+    members: string;
+    reward: string;
+  }>;
+  const bonuses = t("landing.bonuses.items", { returnObjects: true }) as Array<{
+    title: string;
+    copy: string;
+  }>;
+  const agentRebates = t("landing.agents.rebates", { returnObjects: true }) as Array<{
+    level: string;
+    rebate: string;
+  }>;
+  const agentSalaryLevels = t("landing.agents.salaryLevels", { returnObjects: true }) as Array<{
+    agent: string;
+    teamLevel: string;
+    teamVolume: string;
+    salary: string;
+  }>;
+  const trustItems = t("landing.trust.items", { returnObjects: true }) as string[];
+
   return (
     <>
       <Section
         id="live"
         dark
-        eyebrow="Live football betting"
-        title="Follow the match and react to the odds"
-        copy="Live betting lets users respond to pressure, goals, cards, and momentum while the football match is still running."
+        eyebrow={t("landing.live.eyebrow")}
+        title={t("landing.live.title")}
+        copy={t("landing.live.copy")}
         className="bg-[#06101F]"
       >
         <div className="grid items-stretch gap-6 lg:grid-cols-[0.95fr_1.05fr]">
@@ -41,17 +61,17 @@ export function ShowcaseSections() {
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-sm font-black uppercase text-[#1BB6FF]">
-                  In-play board
+                  {t("landing.live.board")}
                 </p>
                 <h3 className="mt-3 text-3xl font-black leading-tight">
-                  Odds shift as the match changes.
+                  {t("landing.live.boardTitle")}
                 </h3>
               </div>
               <Radio className="h-8 w-8 shrink-0 text-[#1BB6FF]" aria-hidden="true" />
             </div>
             <ChartLine className="mt-8 h-28 w-full" color="#23B5FF" />
             <div className="mt-6 grid gap-3 sm:grid-cols-3">
-              {["Shots", "Corners", "Cards"].map((label, index) => (
+              {[t("landing.live.shots"), t("landing.live.corners"), t("landing.live.cards")].map((label, index) => (
                 <div key={label} className="rounded-lg bg-white/[0.08] p-4">
                   <p className="text-xs font-bold uppercase text-white/[0.48]">
                     {label}
@@ -64,7 +84,7 @@ export function ShowcaseSections() {
             </div>
             <div className="mt-7">
               <Button href="/register/000208" variant="light">
-                Start Betting
+                {t("landing.live.startBetting")}
               </Button>
             </div>
           </div>
@@ -93,7 +113,7 @@ export function ShowcaseSections() {
                     </span>
                     <div className="text-right">
                       <p className="text-xs font-bold uppercase text-slate-400">
-                        Odds
+                        {t("landing.live.odds")}
                       </p>
                       <p className="text-xl font-black text-navy-950">
                         {match.price}
@@ -109,15 +129,15 @@ export function ShowcaseSections() {
 
       <Section
         id="bonuses"
-        eyebrow="Bonuses and rewards"
-        title="EFC bonus and invitation program"
-        copy="Match the EFC invitation bonus card with tiered active-member rewards, welcome bonus details, and agent rebate information."
+        eyebrow={t("landing.bonuses.eyebrow")}
+        title={t("landing.bonuses.title")}
+        copy={t("landing.bonuses.copy")}
       >
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-[0_20px_60px_rgba(6,16,31,0.12)]">
             <Image
               src={bfc3}
-              alt="European Football Clubs invitation bonus tiers from 10 to 100 active members"
+              alt={t("landing.bonuses.imageAlt")}
               sizes="(min-width: 1024px) 56vw, 100vw"
               className="aspect-[16/9] h-auto w-full object-cover"
             />
@@ -125,10 +145,10 @@ export function ShowcaseSections() {
               {invitationTiers.map((tier) => (
                 <div key={tier.members} className="rounded-lg bg-slate-100 p-4">
                   <p className="text-xs font-black uppercase text-slate-500">
-                    Invite {tier.members} active members
+                    {t("landing.bonuses.inviteActive", { members: tier.members })}
                   </p>
                   <p className="mt-2 text-2xl font-black text-navy-950">
-                    Earn {tier.reward}
+                    {t("landing.bonuses.earnReward", { reward: tier.reward })}
                   </p>
                 </div>
               ))}
@@ -154,7 +174,7 @@ export function ShowcaseSections() {
                   href="/register/000208"
                   className="mt-6 inline-flex items-center gap-2 text-sm font-black text-[#1294D4] transition hover:text-navy-950"
                 >
-                  View offers
+                  {t("landing.bonuses.viewOffers")}
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
               </div>
@@ -165,16 +185,16 @@ export function ShowcaseSections() {
 
       <Section
         id="agents"
-        eyebrow="Agent rewards"
-        title="15% agent rebates and salary levels"
-        copy="Add the EFC agent program details from the provided rebate and salary cards."
+        eyebrow={t("landing.agents.eyebrow")}
+        title={t("landing.agents.title")}
+        copy={t("landing.agents.copy")}
         className="bg-white"
       >
         <div className="grid gap-6 lg:grid-cols-2">
           <div className="overflow-hidden rounded-lg border border-slate-200 bg-slate-50 shadow-sm">
             <Image
               src={bfc5}
-              alt="European Football Clubs agent rebate levels showing 7 percent, 5 percent, and 3 percent"
+              alt={t("landing.agents.rebateAlt")}
               sizes="(min-width: 1024px) 50vw, 100vw"
               className="aspect-[16/9] h-auto w-full object-cover"
             />
@@ -195,7 +215,7 @@ export function ShowcaseSections() {
           <div className="overflow-hidden rounded-lg border border-slate-200 bg-slate-50 shadow-sm">
             <Image
               src={bfc2}
-              alt="European Football Clubs agent salary levels from Agent A to Agent G"
+              alt={t("landing.agents.salaryAlt")}
               sizes="(min-width: 1024px) 50vw, 100vw"
               className="aspect-[16/9] h-auto w-full object-cover"
             />
@@ -203,10 +223,10 @@ export function ShowcaseSections() {
               <table className="w-full min-w-[560px] text-left text-sm">
                 <thead>
                   <tr className="border-b border-slate-200 text-xs uppercase text-slate-500">
-                    <th className="py-3 pr-4 font-black">Agent</th>
-                    <th className="py-3 pr-4 font-black">Team level</th>
-                    <th className="py-3 pr-4 font-black">Team volume</th>
-                    <th className="py-3 font-black">Salary</th>
+                    <th className="py-3 pr-4 font-black">{t("landing.agents.agent")}</th>
+                    <th className="py-3 pr-4 font-black">{t("landing.agents.teamLevel")}</th>
+                    <th className="py-3 pr-4 font-black">{t("landing.agents.teamVolume")}</th>
+                    <th className="py-3 font-black">{t("landing.agents.salary")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -228,21 +248,19 @@ export function ShowcaseSections() {
       <Section
         id="trust"
         dark
-        eyebrow="Trust and control"
-        title="Bet on football with clearer guardrails"
-        copy="Security, account records, and responsible betting reminders help users stay in control before and after each football bet."
+        eyebrow={t("landing.trust.eyebrow")}
+        title={t("landing.trust.title")}
+        copy={t("landing.trust.copy")}
         className="bg-[#10284D]"
       >
         <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
           <div className="rounded-lg border border-white/10 bg-[#06101F] p-6 text-white sm:p-8">
             <ShieldCheck className="h-10 w-10 text-[#1BB6FF]" aria-hidden="true" />
             <h3 className="mt-5 text-3xl font-black leading-tight">
-              Responsible football betting belongs on the page.
+              {t("landing.trust.cardTitle")}
             </h3>
             <p className="mt-4 text-sm leading-6 text-white/[0.62]">
-              Users should set limits, review bet details, and avoid chasing
-              losses. Football betting carries risk, so stakes should remain
-              within a personal budget.
+              {t("landing.trust.cardCopy")}
             </p>
           </div>
 
@@ -260,8 +278,7 @@ export function ShowcaseSections() {
                     {item}
                   </h3>
                   <p className="mt-2 text-sm leading-6 text-slate-600">
-                    Clear controls and records help users make better football
-                    betting decisions.
+                    {t("landing.trust.itemCopy")}
                   </p>
                 </div>
               );

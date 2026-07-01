@@ -1,4 +1,5 @@
 import { Stack, TextField } from "@mui/material"
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { callAdminRpc } from '@/lib/adminRpcClient';
 import { Button } from "@mui/material"
 import { useState } from "react"
@@ -179,6 +180,7 @@ function BetKickoff({ bet }) {
     return <>{display.dateTime}</>
 }
 export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
     let id = context.query.id;
     try {
         const { data, error } = await supabase
@@ -215,6 +217,7 @@ export async function getServerSideProps(context) {
 
         return {
             props: {
+      ...i18nProps,
                 notification: rows
             },
         }
@@ -223,6 +226,7 @@ export async function getServerSideProps(context) {
         let trans = [];
         return {
             props: {
+      ...i18nProps,
                 notification: trans
             },
         }

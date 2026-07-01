@@ -1,18 +1,28 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Facebook, Instagram, Linkedin, Mail, Send, Twitter } from "lucide-react";
-import { faqItems, footerGroups } from "@/data/landing";
+import { useTranslation } from "next-i18next";
 import { Button } from "./Button";
 import { Section } from "./Section";
 
 export function FinalCtaFooter() {
+  const { t } = useTranslation("common");
+  const faqItems = t("landing.faq.items", { returnObjects: true }) as Array<{
+    question: string;
+    answer: string;
+  }>;
+  const footerGroups = t("landing.footer.groups", { returnObjects: true }) as Array<{
+    title: string;
+    links: Array<{ label: string; href: string }>;
+  }>;
+
   return (
     <>
       <Section
         id="faq"
-        eyebrow="Football betting FAQ"
-        title="Answers before the next fixture"
-        copy="A quick guide for users who want to understand football markets, live betting, and safer staking."
+        eyebrow={t("landing.faq.eyebrow")}
+        title={t("landing.faq.title")}
+        copy={t("landing.faq.copy")}
         className="bg-white"
       >
         <div className="grid gap-4 md:grid-cols-2">
@@ -36,21 +46,20 @@ export function FinalCtaFooter() {
         <div className="relative overflow-hidden rounded-lg bg-[linear-gradient(135deg,#091B34,#06101F)] px-6 py-14 text-center text-white shadow-[0_34px_100px_rgba(6,16,31,0.28)] sm:px-10 lg:py-20">
           <div className="relative mx-auto max-w-3xl">
             <p className="text-xs font-black uppercase text-[#1BB6FF]">
-              EFC football betting
+              {t("landing.cta.eyebrow")}
             </p>
             <h2 className="mt-4 text-4xl font-black leading-tight sm:text-6xl">
-              Ready for your next football pick?
+              {t("landing.cta.title")}
             </h2>
             <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-white/[0.68]">
-              Create an account, choose a football fixture, and place your bet
-              with clear markets and secure account controls.
+              {t("landing.cta.copy")}
             </p>
             <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
               <Button href="/register/000208" variant="light">
-                Create Account
+                {t("common.createAccount")}
               </Button>
               <Button href="/login" variant="secondary" icon="arrow">
-                Log in
+                {t("common.login")}
               </Button>
             </div>
           </div>
@@ -65,28 +74,27 @@ export function FinalCtaFooter() {
               <div className="flex items-center gap-3">
                 <Image
                   src="/assets/efc-logo.jpg"
-                  alt="EFC European Football Clubs logo"
+                  alt={t("landing.footer.logoAlt")}
                   width={48}
                   height={48}
                   className="h-12 w-12 rounded-full object-cover"
                 />
                 <div>
-                  <p className="text-lg font-black">EFC</p>
+                  <p className="text-lg font-black">{t("common.appName")}</p>
                   <p className="text-sm text-white/50">
-                    European Football Clubs
+                    {t("common.brandCompany")}
                   </p>
                 </div>
               </div>
               <p className="mt-6 max-w-sm text-sm leading-6 text-white/[0.52]">
-                Football betting markets, live odds, secure wallet controls,
-                and responsible staking guidance in one EFC experience.
+                {t("landing.footer.copy")}
               </p>
               <div className="mt-6 flex gap-3">
                 {[Twitter, Linkedin, Instagram, Facebook].map((Icon, index) => (
                   <a
                     key={index}
                     href="#contact"
-                    aria-label="Football community link"
+                    aria-label={t("landing.footer.communityLink")}
                     className="grid h-10 w-10 place-items-center rounded-full bg-white/[0.08] text-white/70 transition hover:bg-[#1BB6FF] hover:text-navy-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1BB6FF]"
                   >
                     <Icon className="h-4 w-4" aria-hidden="true" />
@@ -116,23 +124,23 @@ export function FinalCtaFooter() {
             </div>
 
             <div>
-              <h3 className="text-sm font-black">Football match news</h3>
+              <h3 className="text-sm font-black">{t("landing.footer.matchNews")}</h3>
               <form className="mt-4 flex rounded-full border border-white/10 bg-white/[0.05] p-1">
                 <label className="sr-only" htmlFor="email">
-                  Email address
+                  {t("common.emailAddress")}
                 </label>
                 <div className="flex min-w-0 flex-1 items-center gap-2 px-4">
                   <Mail className="h-4 w-4 shrink-0 text-white/[0.32]" aria-hidden="true" />
                   <input
                     id="email"
                     type="email"
-                    placeholder="Your e-mail"
+                    placeholder={t("landing.footer.emailPlaceholder")}
                     className="min-w-0 flex-1 bg-transparent py-3 text-sm text-white outline-none placeholder:text-white/[0.32]"
                   />
                 </div>
                 <button
                   type="submit"
-                  aria-label="Subscribe"
+                  aria-label={t("common.subscribe")}
                   className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[#1BB6FF] text-navy-950 transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1BB6FF]"
                 >
                   <Send className="h-4 w-4" aria-hidden="true" />

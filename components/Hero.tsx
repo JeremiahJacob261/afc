@@ -2,15 +2,17 @@ import { ArrowRight, CheckCircle2, ShieldCheck, WalletCards } from "lucide-react
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { useTranslation } from "next-i18next";
 import heroFootball from "@/public/kick1.jpg";
 
-const heroStats = [
-  { label: "Popular markets", value: "1X2, Goals, BTTS" },
-  { label: "Account safety", value: "Secure wallet" },
-  { label: "Football focus", value: "Fixtures and live odds" },
-];
-
 export function Hero() {
+  const { t } = useTranslation("common");
+  const heroStats = [
+    { label: t("landing.hero.stats.marketsLabel"), value: t("landing.hero.stats.marketsValue") },
+    { label: t("landing.hero.stats.safetyLabel"), value: t("landing.hero.stats.safetyValue") },
+    { label: t("landing.hero.stats.focusLabel"), value: t("landing.hero.stats.focusValue") },
+  ];
+
   return (
     <section
       id="home"
@@ -21,12 +23,11 @@ export function Hero() {
 
 
           <h1 className="mt-6 max-w-3xl text-4xl font-black leading-tight text-white sm:text-5xl lg:text-6xl xl:text-7xl">
-            Football Betting Made Simple
+            {t("landing.hero.title")}
           </h1>
 
           <p className="mt-6 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
-            Pick football matches, compare odds, place secure bets, and follow
-            every result from one clear EFC betting experience.
+            {t("landing.hero.copy")}
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -34,14 +35,14 @@ export function Hero() {
               href="/register/000208"
               className="inline-flex min-h-[50px] items-center justify-center gap-2 rounded-lg bg-[#1BB6FF] px-7 text-base font-black text-[#06101F] shadow-[0_18px_45px_rgba(27,182,255,0.24)] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1BB6FF]"
             >
-              Create Account
+              {t("landing.hero.createAccount")}
               <ArrowRight className="h-5 w-5" aria-hidden="true" />
             </Link>
             <Link
               href="/login"
               className="inline-flex min-h-[50px] items-center justify-center rounded-lg border border-white/[0.18] px-7 text-base font-bold text-white transition hover:border-white/40 hover:bg-white/[0.08] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
             >
-              Log in
+              {t("common.login")}
             </Link>
           </div>
 
@@ -63,7 +64,7 @@ export function Hero() {
         <div className="relative overflow-hidden rounded-lg border border-white/10 bg-[#10284D] shadow-[0_28px_90px_rgba(0,0,0,0.32)]">
           <Image
             src={heroFootball}
-            alt="Football player kicking a ball"
+            alt={t("landing.hero.imageAlt")}
             priority
             sizes="(min-width: 1024px) 52vw, 100vw"
             className="aspect-[16/11] h-auto w-full object-cover"
@@ -72,19 +73,19 @@ export function Hero() {
             <div className="rounded-lg bg-[#06101F]/88 p-4 text-white backdrop-blur">
               <div className="flex items-center gap-2">
                 <WalletCards className="h-5 w-5 text-[#1BB6FF]" aria-hidden="true" />
-                <span className="text-sm font-black">Secure Deposits</span>
+                <span className="text-sm font-black">{t("landing.hero.secureDeposits")}</span>
               </div>
               <p className="mt-2 text-xs leading-5 text-white/[0.62]">
-                Fund your wallet and confirm football slips with confidence.
+                {t("landing.hero.secureDepositsCopy")}
               </p>
             </div>
             <div className="rounded-lg bg-[#06101F]/88 p-4 text-white backdrop-blur">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="h-5 w-5 text-[#1BB6FF]" aria-hidden="true" />
-                <span className="text-sm font-black">Responsible Play</span>
+                <span className="text-sm font-black">{t("landing.hero.responsiblePlay")}</span>
               </div>
               <p className="mt-2 text-xs leading-5 text-white/[0.62]">
-                Set a budget, bet on football you understand, and stay in control.
+                {t("landing.hero.responsiblePlayCopy")}
               </p>
             </div>
           </div>

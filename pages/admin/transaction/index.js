@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { useMemo, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 import {
@@ -491,13 +492,15 @@ async function readUser(supabaseAdmin, uid) {
 }
 
 export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
   const uid = String(context.query.id || '').trim()
 
   try {
     requireAdmin(context.req)
 
     if (!uid) {
-      return { props: { user: null, ledger: [] } }
+      return { props: {
+      ...i18nProps, user: null, ledger: [] } }
     }
 
     const supabaseAdmin = getSupabaseAdmin()
@@ -505,7 +508,8 @@ export async function getServerSideProps(context) {
 
     if (userError) throw userError
     if (!user) {
-      return { props: { user: null, ledger: [] } }
+      return { props: {
+      ...i18nProps, user: null, ledger: [] } }
     }
 
     const [notificationsResult, betsResult, activitiesResult] = await Promise.all([
@@ -541,6 +545,7 @@ export async function getServerSideProps(context) {
 
     return {
       props: {
+      ...i18nProps,
         user,
         ledger,
       },
@@ -558,6 +563,7 @@ export async function getServerSideProps(context) {
     console.error('Admin transaction ledger error:', error)
     return {
       props: {
+      ...i18nProps,
         user: null,
         ledger: [],
       },

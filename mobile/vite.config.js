@@ -35,6 +35,7 @@ export default defineConfig(({ mode }) => {
   const updateManifestUrl =
     env.VITE_UPDATE_MANIFEST_URL || `${apiBaseUrl}/mobile-updates/android/latest.json`
   const supabaseAnonKey = getPublicSupabaseAnonKey(env)
+  const usePolling = env.VITE_USE_POLLING !== 'false'
 
   if (decodeJwtPayload(supabaseAnonKey)?.role === 'service_role') {
     throw new Error('Mobile auth must use a Supabase anon public key, not the service_role key.')
@@ -56,6 +57,21 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 5173,
       strictPort: true,
+      fs: {
+        allow: [__dirname, resolve(__dirname, '../locales')],
+      },
+      watch: {
+        usePolling,
+        interval: 300,
+        ignored: [
+          '**/.next/**',
+          '**/android/**',
+          '**/node_modules/**',
+          '**/mobile/dist/**',
+          '**/public/mobile-updates/**',
+          '**/*.backup',
+        ],
+      },
     },
     preview: {
       port: 4173,

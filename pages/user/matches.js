@@ -1,4 +1,5 @@
 import Cover from './cover'
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { supabase } from '@/pages/api/supabase'
 import { useState } from 'react'
 import { Box, Stack, Typography } from '@mui/material'
@@ -197,7 +198,8 @@ export default function Matches({ footDat = [] }) {
   )
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
   const { data } = await supabase
     .from('bets')
     .select('*')
@@ -206,6 +208,7 @@ export async function getServerSideProps() {
     .order('tsgmt', { ascending: true })
 
   return {
-    props: { footDat: data || [] },
+    props: {
+      ...i18nProps, footDat: data || [] },
   }
 }

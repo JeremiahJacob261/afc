@@ -1,4 +1,5 @@
 import { Stack, TextField } from "@mui/material"
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { Button } from "@mui/material"
 import { useState } from "react"
 import { useRouter } from 'next/router'
@@ -157,6 +158,7 @@ export default function Home({ id }) {
     )
 }
 export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
     let id = context.query.id;
     const { data, error } = await supabase
         .from('users')
@@ -167,6 +169,7 @@ export async function getServerSideProps(context) {
     }
     return {
         props: {
+      ...i18nProps,
             id: data[0].username
         },
     }

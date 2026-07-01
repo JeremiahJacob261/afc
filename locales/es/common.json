@@ -1,0 +1,889 @@
+{
+  "common": {
+    "appName": "EFC",
+    "brandFull": "European Football",
+    "brandCompany": "European Football Clubs",
+    "login": "Iniciar sesión",
+    "signIn": "Iniciar sesión",
+    "signOut": "Cerrar sesión",
+    "register": "Registrarse",
+    "joinNow": "Únete ahora",
+    "createAccount": "Crear cuenta",
+    "continue": "Continuar",
+    "back": "Atrás",
+    "backToHome": "Volver al inicio",
+    "next": "Siguiente",
+    "copy": "Copiar",
+    "refresh": "Actualizar",
+    "submit": "Enviar",
+    "save": "Guardar",
+    "close": "Cerrar",
+    "yes": "Sí",
+    "no": "No",
+    "all": "Todos",
+    "verified": "Verificado",
+    "language": "Idioma",
+    "changeLanguage": "Cambiar idioma",
+    "emailAddress": "Correo electrónico",
+    "subscribe": "Suscribirse",
+    "notAvailable": "No aplica",
+    "placeholderDash": "-",
+    "team": "Equipo",
+    "league": "Liga",
+    "upcoming": "Próximos",
+    "justNow": "Justo ahora",
+    "home": "Local",
+    "away": "Visitante",
+    "score": "Marcador",
+    "player": "Jugador",
+    "account": "Cuenta",
+    "transaction": "Transacción",
+    "method": "Método",
+    "destination": "Destino",
+    "amount": "Cantidad",
+    "wallet": "Billetera",
+    "balance": "Saldo",
+    "currentBalance": "Saldo actual",
+    "deposit": "Depósito",
+    "withdraw": "Retirar",
+    "matches": "Partidos",
+    "myBets": "Mis apuestas",
+    "profile": "Perfil",
+    "faq": "FAQ",
+    "vip": "VIP",
+    "usdt": "USDT"
+  },
+  "auth": {
+    "login": {
+      "title": "Bienvenido de nuevo",
+      "subtitle": "Inicia sesión para abrir tu cuenta EFC.",
+      "identityLabel": "Correo electrónico o nombre de usuario",
+      "identityPlaceholder": "nombre de usuario o correo electrónico",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "Contraseña",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "submit": "Iniciar sesión",
+      "submitting": "Iniciando sesión...",
+      "newAccount": "Crear una nueva cuenta",
+      "adminTitle": "Iniciar sesión en administración",
+      "adminIntro": "Bienvenido de nuevo",
+      "adminUsername": "Nombre de usuario",
+      "adminUsernamePlaceholder": "Introduce el nombre de usuario de administrador",
+      "adminPasswordPlaceholder": "Introduce la contraseña"
+    },
+    "register": {
+      "title": "Crear cuenta",
+      "subtitle": "Únete con el flujo móvil EFC.",
+      "username": "Nombre de usuario",
+      "usernamePlaceholder": "johndoe",
+      "email": "Correo electrónico",
+      "emailPlaceholder": "tu@ejemplo.com",
+      "code": "Código",
+      "phone": "Teléfono",
+      "phonePlaceholder": "8000000000",
+      "referralCode": "Código de referido",
+      "password": "Contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "confirmPasswordPlaceholder": "Confirmar contraseña",
+      "terms": "Tengo al menos 18 años y acepto los términos de EFC.",
+      "submit": "Crear cuenta",
+      "submitting": "Creando cuenta...",
+      "hasAccount": "Ya tengo una cuenta"
+    },
+    "reset": {
+      "title": "Restablecer contraseña",
+      "subtitle": "Enviar un enlace de restablecimiento a tu correo electrónico.",
+      "submit": "Enviar correo de restablecimiento",
+      "submitting": "Enviando..."
+    }
+  },
+  "forms": {
+    "chooseMethod": "Elegir método",
+    "chooseWallet": "Elegir billetera",
+    "autoSelect": "Selección automática",
+    "bank": "Banco",
+    "bankName": "Nombre del banco",
+    "accountName": "Nombre de la cuenta",
+    "accountHolder": "Titular de la cuenta",
+    "accountNumber": "Número de cuenta",
+    "walletAddress": "Dirección de la billetera",
+    "transactionPin": "PIN de transacción",
+    "pinPlaceholder": "PIN de 4 dígitos",
+    "enterPin": "Ingresar PIN",
+    "confirmPin": "Confirmar PIN",
+    "uploadReceipt": "Subir recibo",
+    "searchUsername": "Buscar nombre de usuario",
+    "searchMethod": "Buscar método, moneda, banco...",
+    "newReferralCode": "Nuevo código de referido",
+    "newPassword": "Nueva contraseña"
+  },
+  "messages": {
+    "mobileAuthMissing": "La autenticación móvil no tiene configuración de Supabase.",
+    "mobileStorageMissing": "El almacenamiento móvil no tiene configuración de Supabase.",
+    "unableSignIn": "No se puede iniciar sesión. Compruebe su conexión y los detalles.",
+    "networkError": "Error de red",
+    "checkConnectionTryAgain": "Por favor, compruebe su conexión y vuelva a intentarlo.",
+    "incorrectDetails": "Detalles incorrectos",
+    "incorrectLoginDetails": "Detalles de inicio de sesión incorrectos.",
+    "loginDetailsIncorrect": "El correo electrónico, nombre de usuario o contraseña que ingresaste es incorrecto.",
+    "anErrorOccurred": "Ocurrió un error. Por favor, inténtalo de nuevo.",
+    "connectionProblem": "Problema de conexión",
+    "signingInTitle": "Iniciando sesión",
+    "signingInMessage": "Verificando los detalles de tu cuenta.",
+    "phoneIncomplete": "Por favor, ingresa un número de teléfono completo.",
+    "phoneNineDigits": "Por favor, ingresa un número de teléfono completo con al menos 9 dígitos",
+    "passwordsMustMatch": "Las contraseñas deben coincidir.",
+    "acceptTerms": "Por favor, acepta los términos antes de continuar.",
+    "usernameExists": "El nombre de usuario ya existe.",
+    "unableValidateUsername": "No se puede validar el nombre de usuario en este momento",
+    "unableCreateProfile": "No se puede crear el perfil de usuario",
+    "welcomeToEfc": "Bienvenido a EFC",
+    "accountCreated": "Su cuenta ha sido creada exitosamente.",
+    "emailExists": "¡El correo electrónico ya existe!",
+    "emailRegistered": "Correo electrónico ya registrado",
+    "strongerPasswordTitle": "Usa una contraseña más segura",
+    "strongerPasswordMessage": "Por razones de seguridad, por favor elija una contraseña más segura. Debe tener al menos 8 caracteres e incluir una mezcla de letras, números y símbolos.",
+    "invalidEmailTitle": "Correo electrónico no válido",
+    "invalidEmailMessage": "Por favor ingrese una dirección de correo electrónico válida.",
+    "unableCreateAccount": "No se puede crear la cuenta. Verifique su conexión.",
+    "resetEmailSent": "Correo de restablecimiento enviado. Revise su bandeja de entrada.",
+    "resetEmailSentTitle": "Correo de restablecimiento enviado",
+    "resetEmailSentMessage": "Se ha enviado un mensaje a su correo electrónico. Siga las instrucciones allí para cambiar su contraseña.",
+    "unableSendEmail": "No se pudo enviar el correo electrónico",
+    "pleaseTryAgain": "Por favor, inténtelo de nuevo.",
+    "enterEmailAddress": "Por favor, ingrese su dirección de correo electrónico",
+    "sendingEmailTitle": "Enviando correo electrónico",
+    "sendingEmailMessage": "Preparando su enlace de restablecimiento de contraseña.",
+    "unableSendReset": "No se pudo enviar el correo de restablecimiento.",
+    "sessionExpired": "Su sesión ha expirado. Por favor, inicie sesión nuevamente.",
+    "unableRefreshAccount": "No se pueden actualizar los datos de la cuenta en este momento.",
+    "unableLoadMatches": "No se pueden cargar los partidos.",
+    "unableLoadMatch": "No se puede cargar el partido.",
+    "chooseScoreMarket": "Elija primero un mercado de puntuación.",
+    "stakeMinimum": "La apuesta debe ser al menos de 1 USDT.",
+    "betPlaced": "Apuesta realizada con éxito.",
+    "unablePlaceBet": "No se puede realizar la apuesta.",
+    "unableLoadBets": "No se pueden cargar las apuestas.",
+    "unableLoadBet": "No se puede cargar la apuesta.",
+    "unableLoadProfile": "No se puede cargar el perfil.",
+    "chooseDepositMethod": "Elija un método de depósito.",
+    "noPaymentDestination": "No hay un destino de pago disponible para este método.",
+    "minimumDeposit": "El depósito mínimo es {{amount}} {{currency}}.",
+    "uploadPaymentReceipt": "Suba su comprobante de pago.",
+    "depositFailed": "La presentación del depósito falló.",
+    "chooseWalletFirst": "Elija primero una billetera.",
+    "enterTransactionPin": "Ingrese su PIN de transacción.",
+    "minimumWithdrawal": "El retiro mínimo es {{amount}} USDT.",
+    "unableSubmitWithdrawal": "No se puede enviar el retiro.",
+    "walletDetailsInvalid": "Por favor, complete todos los datos de la billetera correctamente.",
+    "walletBindSuccess": "Vinculación de billetera exitosa.",
+    "unableBindWallet": "No se puede vincular la billetera.",
+    "unableLoadTransactions": "No se pueden cargar las transacciones.",
+    "unableLoadReferrals": "No se pueden cargar las referencias.",
+    "unableLoadVip": "No se puede cargar el progreso de VIP.",
+    "pinAlreadySet": "Ya tienes un PIN de transacción. Contacta al administrador para restablecerlo.",
+    "unableLoadPin": "No se puede cargar el estado del PIN.",
+    "pinFourDigits": "El PIN debe tener 4 dígitos.",
+    "pinEntriesMustMatch": "Ambas entradas del PIN deben coincidir.",
+    "pinSet": "PIN establecido con éxito.",
+    "unableSetPin": "No se puede establecer el PIN.",
+    "unableLoadNotifications": "No se pueden cargar las notificaciones.",
+    "unableLoadPaymentData": "No se pueden cargar los datos de pago.",
+    "depositSubmitted": "Tu recibo ha sido enviado y está a la espera de la confirmación del administrador.",
+    "depositSubmittedWithAmount": "Su recibo para {{amount}} USDT ha sido enviado y está esperando la confirmación del administrador.",
+    "withdrawalSent": "Su solicitud de retiro ha sido enviada.",
+    "copied": "copiado",
+    "copiedToClipboard": "Copiado al portapapeles",
+    "addressCopied": "Dirección copiada",
+    "inviteLinkCopied": "Enlace de invitación copiado",
+    "unableCopy": "No se puede copiar",
+    "adminCredentialsRequired": "Por favor, ingrese sus credenciales de administrador",
+    "adminLoginFailed": "error de inicio de sesión",
+    "adminLoginSuccess": "inicio de sesión exitoso"
+  },
+  "status": {
+    "active": "Activo",
+    "pending": "Pendiente",
+    "success": "Éxito",
+    "failed": "Fallido",
+    "completed": "Completado",
+    "live": "En vivo",
+    "notStarted": "No iniciado",
+    "ongoing": "En curso",
+    "won": "Ganado",
+    "lost": "Perdido",
+    "settled": "Liquidado",
+    "unsettled": "No liquidado",
+    "offlineMode": "Modo sin conexión"
+  },
+  "emptyStates": {
+    "noUpcomingMatches": "Aún no se han cargado partidos próximos.",
+    "offlineShellReady": "Entorno sin conexión listo.",
+    "liveRefreshOnline": "Actualización en vivo de cuenta y datos de partidos cuando la aplicación está en línea.",
+    "noMatches": "Sin partidos",
+    "matchesComing": "Los partidos próximos aparecerán aquí.",
+    "noBets": "Sin apuestas",
+    "betsComing": "El historial de tus apuestas aparecerá aquí.",
+    "noTransactions": "Sin transacciones",
+    "transactionsComing": "Los depósitos y retiros aparecerán aquí.",
+    "noReferrals": "Aún no hay referidos",
+    "referralsComing": "Comparte tu enlace de invitación para construir tu equipo.",
+    "noNotifications": "Sin notificaciones",
+    "notificationsComing": "Las actualizaciones de la cuenta nueva aparecerán aquí.",
+    "noData": "No hay datos disponibles",
+    "checkConnection": "Por favor, revise su conexión a internet."
+  },
+  "landing": {
+    "meta": {
+      "title": "EFC Apuestas de Fútbol | Cuotas en Vivo y Mercados de Fútbol",
+      "description": "Apueste en fútbol con EFC. Explore los mercados de fútbol, compare cuotas en vivo, gestione su billetera y juegue responsablemente."
+    },
+    "nav": {
+      "markets": "Mercados",
+      "liveBetting": "Apuestas en Vivo",
+      "howItWorks": "Cómo Funciona",
+      "bonuses": "Bonos",
+      "agents": "Agentes",
+      "faq": "FAQ"
+    },
+    "hero": {
+      "title": "Apuestas de Fútbol Hechas Simples",
+      "copy": "Elija partidos de fútbol, compare cuotas, haga apuestas seguras y siga cada resultado desde una experiencia clara de apuestas en EFC.",
+      "createAccount": "Crear Cuenta",
+      "imageAlt": "Jugador de fútbol pateando un balón",
+      "stats": {
+        "marketsLabel": "Mercados populares",
+        "marketsValue": "1X2, Goles, BTTS",
+        "safetyLabel": "Seguridad de la cuenta",
+        "safetyValue": "Cartera segura",
+        "focusLabel": "Enfoque en el fútbol",
+        "focusValue": "Partidos y cuotas en vivo"
+      },
+      "secureDeposits": "Depósitos seguros",
+      "secureDepositsCopy": "Financia tu cartera y confirma apuestas de fútbol con confianza.",
+      "responsiblePlay": "Juego responsable",
+      "responsiblePlayCopy": "Establece un presupuesto, apuesta en el fútbol que entiendas y mantén el control."
+    },
+    "markets": {
+      "eyebrow": "Mercados de fútbol",
+      "title": "Apuesta en los momentos que deciden un partido",
+      "copy": "Elige mercados de fútbol simples antes del inicio o sigue las cuotas en vivo mientras se juega el partido.",
+      "pickMarket": "Elegir mercado",
+      "items": [
+        {
+          "title": "Resultado del partido 1X2",
+          "label": "Local / Empate / Visitante",
+          "copy": "Elige el ganador del partido o apuesta al empate antes del inicio.",
+          "odds": "2.18"
+        },
+        {
+          "title": "Más / Menos goles",
+          "label": "Goles totales",
+          "copy": "Apuesta si el resultado final supera la línea de goles indicada.",
+          "odds": "1.82"
+        },
+        {
+          "title": "Ambos equipos marcan",
+          "label": "BTTS",
+          "copy": "Apuesta a que ambos equipos encuentren la portería en el mismo partido.",
+          "odds": "1.74"
+        },
+        {
+          "title": "Marcador exacto",
+          "label": "Resultado exacto",
+          "copy": "Elige el resultado final para obtener cuotas de fútbol más altas.",
+          "odds": "8.50"
+        },
+        {
+          "title": "Apuestas en vivo",
+          "label": "En juego",
+          "copy": "Reacciona a goles, tarjetas, presión y el impulso final.",
+          "odds": "Live"
+        }
+      ]
+    },
+    "howItWorks": {
+      "eyebrow": "Cómo funciona",
+      "title": "De un partido a una apuesta de fútbol confirmada",
+      "copy": "Un camino sencillo para los usuarios que desean registrarse, financiar su cuenta, seleccionar un mercado de fútbol y seguir el resultado.",
+      "matchDayFlow": "Flujo del día del partido",
+      "featureTitle": "Crea un boleto de apuestas basado en el fútbol que conoces.",
+      "featureCopy": "Revisa el partido, elige el mercado, ingresa tu apuesta y confirma solo cuando los detalles de la apuesta se vean correctos.",
+      "featureAlt": "Vista previa de la función de apuestas de fútbol",
+      "ballAlt": "Icono de fútbol",
+      "steps": [
+        {
+          "title": "Crea tu cuenta",
+          "copy": "Regístrate en EFC y asegura tu perfil de apuestas de fútbol."
+        },
+        {
+          "title": "Financia tu billetera",
+          "copy": "Comienza desde el depósito mínimo de 5 USDT y verifica el bono de depósito activo."
+        },
+        {
+          "title": "Elige un partido de fútbol",
+          "copy": "Explora los partidos, compara mercados y selecciona la apuesta que deseas."
+        },
+        {
+          "title": "Realiza y sigue",
+          "copy": "Confirma tu boleto, sigue el partido y revisa el estado de retiro desde 10 USDT."
+        }
+      ]
+    },
+    "operations": {
+      "eyebrow": "Operaciones de la plataforma",
+      "title": "Términos de la plataforma de fútbol EFC de un vistazo",
+      "copy": "La página de inicio ahora refleja la tarjeta de operación de EFC: bono de depósito, depósito mínimo, porcentaje diario y retiro mínimo.",
+      "imageAlt": "Operaciones de la plataforma de clubes de fútbol europeos mostrando bono de depósito, depósito mínimo, porcentaje diario y retiro mínimo",
+      "items": [
+        {
+          "label": "Bono de depósito",
+          "value": "1USDT"
+        },
+        {
+          "label": "Depósito mínimo",
+          "value": "5USDT"
+        },
+        {
+          "label": "Porcentaje diario",
+          "value": "3-4%"
+        },
+        {
+          "label": "Retiro mínimo",
+          "value": "10USDT"
+        }
+      ]
+    },
+    "features": {
+      "eyebrow": "Funciones de apuestas",
+      "title": "Todo enfocado en apuestas de fútbol",
+      "copy": "Mercados de fútbol claros, controles de billetera seguros y seguimiento de apuestas sencillo mantienen a los usuarios cerca del próximo partido.",
+      "walletAlt": "Recompensas de la billetera de clubes de fútbol europeos mostrando bono por primer depósito, objetivo de desbloqueo de apuestas, bono por referidos y cargo por retiro",
+      "items": [
+        {
+          "title": "Cuotas de fútbol competitivas",
+          "copy": "Compara precios claros en los mercados de partidos populares."
+        },
+        {
+          "title": "Actualizaciones de partidos en vivo",
+          "copy": "Sigue el movimiento en tiempo real mientras los partidos de fútbol cambian minuto a minuto."
+        },
+        {
+          "title": "Controles de cartera segura",
+          "copy": "Gestiona depósitos, retiros e historial de apuestas desde tu cuenta."
+        },
+        {
+          "title": "Flujo rápido de boleto de apuesta",
+          "copy": "Pasa de un partido a una apuesta confirmada con menos pasos."
+        }
+      ],
+      "walletRewards": [
+        {
+          "label": "Bono por primer depósito",
+          "value": "3%"
+        },
+        {
+          "label": "Desbloquear objetivo de apuesta",
+          "value": "5 apuestas"
+        },
+        {
+          "label": "Bono por recomendación",
+          "value": "5%"
+        },
+        {
+          "label": "Cargo por retiro",
+          "value": "7%"
+        }
+      ]
+    },
+    "live": {
+      "eyebrow": "Apuestas de fútbol en vivo",
+      "title": "Sigue el partido y reacciona a las cuotas",
+      "copy": "Las apuestas en vivo permiten a los usuarios reaccionar ante la presión, los goles, las tarjetas y el impulso mientras el partido de fútbol todavía se está jugando.",
+      "board": "Tablero en juego",
+      "boardTitle": "Las probabilidades cambian a medida que cambia el partido.",
+      "shots": "Disparos",
+      "corners": "Tiros de esquina",
+      "cards": "Tarjetas",
+      "startBetting": "Comenzar a apostar",
+      "odds": "Odds",
+      "matches": [
+        {
+          "fixture": "London FC vs Madrid City",
+          "market": "Más de 2.5 goles",
+          "price": "1.91",
+          "status": "62 min"
+        },
+        {
+          "fixture": "Milan United vs Paris Club",
+          "market": "Ambos equipos marcarán",
+          "price": "1.76",
+          "status": "En vivo"
+        },
+        {
+          "fixture": "Lisbon Athletic vs Berlin Town",
+          "market": "Victoria local",
+          "price": "2.24",
+          "status": "84 min"
+        }
+      ]
+    },
+    "bonuses": {
+      "eyebrow": "Bonos y recompensas",
+      "title": "Programa de bonificación e invitación EFC",
+      "copy": "Combine la tarjeta de bonificación de invitación EFC con recompensas por miembros activos por niveles, detalles del bono de bienvenida e información de reembolso para agentes.",
+      "imageAlt": "Niveles de bonificación por invitación de clubes de fútbol europeos de 10 a 100 miembros activos",
+      "inviteActive": "Invita a {{members}} miembros activos",
+      "earnReward": "Gana {{reward}}",
+      "viewOffers": "Ver ofertas",
+      "items": [
+        {
+          "title": "Bono de depósito de bienvenida",
+          "copy": "Los nuevos usuarios pueden comenzar con el bono de depósito de 1 USDT mostrado en las operaciones de la plataforma EFC."
+        },
+        {
+          "title": "Bono por invitación",
+          "copy": "Invita miembros activos y desbloquea recompensas escalonadas de USDT a medida que tu red de fútbol crece."
+        },
+        {
+          "title": "Reembolsos para agentes",
+          "copy": "Los niveles de reembolso para agentes van del 7% en el primer nivel hasta el 3% en el tercer nivel."
+        }
+      ],
+      "tiers": [
+        {
+          "members": "10",
+          "reward": "10USDT"
+        },
+        {
+          "members": "20",
+          "reward": "30USDT"
+        },
+        {
+          "members": "30",
+          "reward": "50USDT"
+        },
+        {
+          "members": "50",
+          "reward": "70USDT"
+        },
+        {
+          "members": "80",
+          "reward": "100USDT"
+        },
+        {
+          "members": "100",
+          "reward": "150USDT"
+        }
+      ]
+    },
+    "agents": {
+      "eyebrow": "Recompensas para agentes",
+      "title": "Reembolsos y niveles salariales para agentes del 15%",
+      "copy": "Agregue los detalles del programa de agentes EFC a partir de las tarjetas de reembolso y salario proporcionadas.",
+      "rebateAlt": "Niveles de reembolso de agentes de clubes de fútbol europeos mostrando 7 por ciento, 5 por ciento y 3 por ciento",
+      "salaryAlt": "Niveles de salario de agentes de clubes de fútbol europeos desde el Agente A hasta el Agente G",
+      "agent": "Agente",
+      "teamLevel": "Nivel del equipo",
+      "teamVolume": "Volumen del equipo",
+      "salary": "Salario",
+      "rebates": [
+        {
+          "level": "1er nivel",
+          "rebate": "7%"
+        },
+        {
+          "level": "2do nivel",
+          "rebate": "5%"
+        },
+        {
+          "level": "3er nivel",
+          "rebate": "3%"
+        }
+      ],
+      "salaryLevels": [
+        {
+          "agent": "Agente A",
+          "teamLevel": "Nivel 1-3",
+          "teamVolume": "$2500",
+          "salary": "$100 semanal"
+        },
+        {
+          "agent": "Agente B",
+          "teamLevel": "Nivel 1-3",
+          "teamVolume": "$5000",
+          "salary": "$250 semanal"
+        },
+        {
+          "agent": "Agente C",
+          "teamLevel": "Nivel 1-3",
+          "teamVolume": "$10000",
+          "salary": "$500 semanales"
+        },
+        {
+          "agent": "Agente D",
+          "teamLevel": "Nivel 1-3",
+          "teamVolume": "$15000",
+          "salary": "$750 semanales"
+        },
+        {
+          "agent": "Agente E",
+          "teamLevel": "Nivel 1-3",
+          "teamVolume": "$20000",
+          "salary": "$1250 semanales"
+        },
+        {
+          "agent": "Agente F",
+          "teamLevel": "Nivel 1-3",
+          "teamVolume": "$50000",
+          "salary": "$3000 semanales"
+        },
+        {
+          "agent": "Agente G",
+          "teamLevel": "Nivel 1-3",
+          "teamVolume": "$100000",
+          "salary": "$7500 semanales"
+        }
+      ]
+    },
+    "trust": {
+      "eyebrow": "Confianza y control",
+      "title": "Apuesta en fútbol con límites más claros",
+      "copy": "La seguridad, los registros de cuentas y los recordatorios de apuestas responsables ayudan a los usuarios a mantenerse en control antes y después de cada apuesta de fútbol.",
+      "cardTitle": "La apuesta responsable en el fútbol pertenece a la página.",
+      "cardCopy": "Los usuarios deben establecer límites, revisar los detalles de las apuestas y evitar perseguir pérdidas. Las apuestas de fútbol conllevan riesgo, por lo que las apuestas deben permanecer dentro de un presupuesto personal.",
+      "items": [
+        "Acceso seguro a la cuenta",
+        "Flujo de pago protegido",
+        "Historial de apuestas claro",
+        "Recordatorio de apuestas responsables"
+      ],
+      "itemCopy": "Controles y registros claros ayudan a los usuarios a tomar mejores decisiones en las apuestas de fútbol."
+    },
+    "faq": {
+      "eyebrow": "Preguntas frecuentes sobre apuestas de fútbol",
+      "title": "Respuestas antes del próximo partido",
+      "copy": "Una guía rápida para los usuarios que quieren entender los mercados de fútbol, las apuestas en vivo y las apuestas más seguras.",
+      "items": [
+        {
+          "question": "¿En qué mercados de fútbol puedo apostar?",
+          "answer": "EFC destaca los mercados de resultados populares, goles, ambos equipos marcan (BTTS), marcador correcto y fútbol en vivo."
+        },
+        {
+          "question": "¿Cómo empiezo a apostar?",
+          "answer": "Crea una cuenta, financia tu billetera, elige un partido de fútbol, selecciona tu mercado y confirma tu apuesta."
+        },
+        {
+          "question": "¿Puedo apostar durante un partido de fútbol en vivo?",
+          "answer": "Sí. Se presentan mercados en vivo para los partidos disponibles para que puedas reaccionar mientras el partido se desarrolla."
+        },
+        {
+          "question": "¿Cómo debo gestionar el riesgo?",
+          "answer": "Establece un presupuesto antes de apostar, evita perseguir pérdidas y solo apuesta lo que puedas permitirte perder."
+        }
+      ]
+    },
+    "cta": {
+      "eyebrow": "EFC apuestas de fútbol",
+      "title": "¿Listo para tu próxima apuesta de fútbol?",
+      "copy": "Crea una cuenta, elige un partido de fútbol y realiza tu apuesta con mercados claros y controles de cuenta seguros."
+    },
+    "footer": {
+      "logoAlt": "Logo de EFC Clubes de Fútbol Europeos",
+      "copy": "Mercados de apuestas de fútbol, cuotas en vivo, controles seguros de la cartera y orientación para apostar de manera responsable en una sola experiencia EFC.",
+      "communityLink": "Enlace a la comunidad de fútbol",
+      "matchNews": "Noticias de partidos de fútbol",
+      "emailPlaceholder": "Tu correo electrónico",
+      "groups": [
+        {
+          "title": "Apuestas",
+          "links": [
+            {
+              "label": "Mercados",
+              "href": "#markets"
+            },
+            {
+              "label": "Apuestas en vivo",
+              "href": "#live"
+            },
+            {
+              "label": "Cómo Funciona",
+              "href": "#how-it-works"
+            }
+          ]
+        },
+        {
+          "title": "Cuenta",
+          "links": [
+            {
+              "label": "Registrarse",
+              "href": "/register/000208"
+            },
+            {
+              "label": "Iniciar sesión",
+              "href": "/login"
+            },
+            {
+              "label": "Bonos",
+              "href": "#bonuses"
+            },
+            {
+              "label": "Agentes",
+              "href": "#agents"
+            }
+          ]
+        },
+        {
+          "title": "Ayuda",
+          "links": [
+            {
+              "label": "FAQ",
+              "href": "#faq"
+            },
+            {
+              "label": "Juego Responsable",
+              "href": "#trust"
+            },
+            {
+              "label": "Contacto",
+              "href": "#contact"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "mobile": {
+    "splash": {
+      "eyebrow": "EFC Fútbol",
+      "title": "Diseñado para el día del partido"
+    },
+    "onboarding": {
+      "eyebrow": "Aplicación móvil",
+      "slidesLabel": "Diapositivas de incorporación",
+      "promoLabel": "Imágenes promocionales",
+      "openSlide": "Abrir diapositiva {{number}}",
+      "alreadyHaveAccount": "Ya tengo una cuenta",
+      "slides": [
+        {
+          "title": "Apuestas de fútbol simplificadas",
+          "text": "Elige partidos, compara cuotas, realiza apuestas seguras y sigue los resultados desde una experiencia móvil clara de EFC.",
+          "image": "/bfc1.jpg"
+        },
+        {
+          "title": "Acceso seguro a la billetera",
+          "text": "Gestiona depósitos, retiros, referidos, progreso de VIP y actualizaciones de cuenta desde la aplicación.",
+          "image": "/bfc2.jpg"
+        },
+        {
+          "title": "Construido para el día del partido",
+          "text": "Abre tu cuenta para ver mercados de fútbol en vivo, probabilidades de marcador exacto y tu historial de apuestas activas.",
+          "image": "/bfc4.jpg"
+        }
+      ]
+    },
+    "countryCodes": {
+      "nigeria": "Nigeria",
+      "india": "India",
+      "pakistan": "Pakistán",
+      "indonesia": "Indonesia",
+      "unitedStates": "Estados Unidos",
+      "unitedKingdom": "Reino Unido",
+      "southAfrica": "Sudáfrica"
+    },
+    "filters": {
+      "today": "Hoy",
+      "next3h": "Próximas 3 horas",
+      "next12h": "Próximas 12 horas",
+      "tomorrow": "Mañana"
+    },
+    "markets": {
+      "other": "Otros"
+    },
+    "topBar": {
+      "profile": "Abrir perfil",
+      "notifications": "Notificaciones"
+    },
+    "nav": {
+      "label": "Navegación principal",
+      "top": "Principio",
+      "matches": "Partidos",
+      "bets": "Mis Apuestas",
+      "profile": "Perfil"
+    },
+    "home": {
+      "hello": "Hola",
+      "telegram": "Canal de Telegram",
+      "telegramCopy": "Únete a nuestro grupo de Telegram para ganar más",
+      "topMatches": "Principales partidos de fútbol"
+    },
+    "match": {
+      "details": "Detalles del partido",
+      "stakeAmount": "Monto de la apuesta",
+      "placeBet": "Realizar apuesta",
+      "placingBet": "Realizando apuesta...",
+      "loading": "Cargando partido..."
+    },
+    "matches": {
+      "loading": "Cargando partidos..."
+    },
+    "bets": {
+      "details": "Detalles de la apuesta",
+      "loading": "Cargando apuestas...",
+      "loadingOne": "Cargando apuesta...",
+      "unsettledWithCount": "No saldado ({{count}})",
+      "settledWithCount": "Saldado ({{count}})",
+      "match": "Partido",
+      "stake": "Apuesta",
+      "pick": "Elección",
+      "kickoff": "Inicio",
+      "status": "Estado"
+    },
+    "profile": {
+      "vipReferralLine": "VIP {{level}} · referencias {{count}}",
+      "hello": "Hola,",
+      "currentBalance": "Saldo Actual",
+      "referralsTitle": "REFERENCIAS",
+      "allReferral": "Todas las Referencias",
+      "fundAccount": "Financiar Cuenta",
+      "vipProgress": "Progreso de VIP",
+      "withdrawalTitle": "Retiro",
+      "history": "Historial",
+      "codeSetting": "Configuración de Código",
+      "linkWallets": "Vincular Carteras",
+      "betsTitle": "Apuestas",
+      "aboutTitle": "Acerca de",
+      "language": "Idioma",
+      "telegramChannel": "Canal de Telegram",
+      "customerService": "Servicio al Cliente",
+      "telegramGroup": "Grupo de Telegram",
+      "contact": "Contacto",
+      "closureTitle": "Cierre",
+      "bindWallet": "Vincular Cartera",
+      "transactions": "Transacciones",
+      "referrals": "Referencias",
+      "transactionPin": "PIN de transacción"
+    },
+    "deposit": {
+      "title": "Depósito",
+      "loading": "Cargando métodos de pago...",
+      "paymentDestination": "Destino de pago",
+      "amountWithMinimum": "Cantidad · min {{amount}}",
+      "submit": "Enviar depósito",
+      "submitting": "Enviando...",
+      "successTitle": "Depósito enviado"
+    },
+    "withdraw": {
+      "title": "Retirar",
+      "loading": "Cargando billeteras...",
+      "bindFirst": "Vincula una billetera primero",
+      "fee": "Tarifa {{percent}}%",
+      "totalDebit": "Débito total: {{amount}} USDT",
+      "submit": "Enviar retiro",
+      "successTitle": "Retiro exitoso"
+    },
+    "wallet": {
+      "bind": "Vincular billetera",
+      "loading": "Cargando métodos...",
+      "submit": "Vincular billetera",
+      "saving": "Guardando..."
+    },
+    "transactions": {
+      "title": "Transacciones",
+      "deposits": "Depósitos",
+      "withdrawals": "Retiros",
+      "loading": "Cargando transacciones..."
+    },
+    "referrals": {
+      "title": "Referidos",
+      "inviteCode": "Código de invitación",
+      "copyInvite": "Copiar enlace de invitación",
+      "level": "Nivel {{level}}",
+      "totalDeposit": "Depósito total {{amount}}"
+    },
+    "vip": {
+      "totalDeposit": "Depósito total",
+      "referrals": "Referidos",
+      "total": "Total"
+    },
+    "pin": {
+      "checking": "Verificando estado del PIN...",
+      "warning": "Su PIN de transacción no se puede cambiar en la aplicación después de configurarlo.",
+      "set": "Establecer PIN"
+    },
+    "notifications": {
+      "title": "Notificaciones",
+      "loading": "Cargando notificaciones...",
+      "fallbackTitle": "Notificación"
+    },
+    "faq": {
+      "items": [
+        {
+          "q": "¿Cómo deposito?",
+          "a": "Abra Depósito, elija un método disponible, ingrese el monto, pague al destino mostrado y luego cargue su comprobante."
+        },
+        {
+          "q": "¿Cómo retiro?",
+          "a": "Vincule primero una cartera o cuenta bancaria, luego abra Retiro, elija la cuenta, ingrese su monto y PIN de transacción."
+        },
+        {
+          "q": "¿Dónde puedo ver mis apuestas?",
+          "a": "Use Mis Apuestas desde la navegación inferior para alternar entre registros de apuestas no liquidadas y liquidadas."
+        }
+      ]
+    }
+  },
+  "user": {
+    "pages": {
+      "account": "Cuenta",
+      "address": "Dirección",
+      "bets": "Apuestas",
+      "deposit": "Depósito",
+      "fund": "Fondo",
+      "history": "Historial",
+      "matches": "Partidos",
+      "notification": "Notificación",
+      "transaction": "Transacción",
+      "withdraw": "Retirar"
+    }
+  },
+  "admin": {
+    "common": {
+      "overview": "Resumen de Administrador",
+      "login": "Inicio de Sesión de Administrador",
+      "dashboard": "Panel de Administración",
+      "summary": "Resumen",
+      "pendingReview": "Revisión pendiente",
+      "depositRows": "Filas de depósitos",
+      "withdrawalRows": "Filas de retiros",
+      "decision": "Decisión",
+      "copy": "COPY",
+      "done": "Hecho",
+      "pending": "PENDING",
+      "completed": "COMPLETADO",
+      "viewProof": "Ver comprobante",
+      "copyAddress": "Copiar dirección",
+      "approve": "Aprobar",
+      "reject": "Rechazar"
+    },
+    "finance": {
+      "title": "Finanzas de Administrador",
+      "queueTitle": "Cola de Finanzas",
+      "queueCopy": "Aprobar depósitos, liquidar retiros e inspeccionar comprobantes de pago.",
+      "latestFinance": "Últimas Finanzas",
+      "depositsWithdrawals": "Depósitos y retiros"
+    },
+    "control": {
+      "title": "Centro de Control",
+      "copy": "Herramientas administrativas operativas para recompensas, monederos, anuncios y seguridad.",
+      "firstDepositBonus": "Bono por Primer Depósito",
+      "firstDepositBonusCopy": "Aplicado una vez cuando un administrador aprueba un primer depósito.",
+      "withdrawalSettings": "Configuración de Retiros",
+      "withdrawalSettingsCopy": "Configurar monto mínimo, máximo y comisión para retiros de usuarios."
+    }
+  },
+  "errors": {
+    "generic": "Algo salió mal.",
+    "unableToLoad": "No se puede cargar este contenido."
+  }
+}

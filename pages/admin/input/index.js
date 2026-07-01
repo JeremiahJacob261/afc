@@ -1,4 +1,5 @@
 import { supabase } from "@/pages/api/supabase";
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Stack, Typography } from '@mui/material';
@@ -315,6 +316,7 @@ export default function Input({ datas }) {
     )
 }
 export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
     try {
         requireAdmin(context.req);
         let id = context.query.id;
@@ -329,6 +331,7 @@ export async function getServerSideProps(context) {
 
         return {
             props: {
+      ...i18nProps,
                 datas: data
             },
         }

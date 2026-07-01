@@ -1,4 +1,5 @@
 import { Stack } from '@mui/material';
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { supabase } from '@/pages/api/supabase';
 import { Icon } from '@iconify/react';
 import { useRouter } from 'next/router'
@@ -204,6 +205,7 @@ export default function Home({ referd, lvlad, lvlbd,getup1,refid }) {
     )
 }
 export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
     const id = context.query.id;
     try {
         const { data: depe, error: derror } = await supabase
@@ -225,6 +227,7 @@ export async function getServerSideProps(context) {
         .or(`newrefer.eq.${getUser[0].refer},newrefer.eq.${getUser[0].lvla},newrefer.eq.${getUser[0].lvlb}`)
         return {
             props: {
+      ...i18nProps,
                 refid:getUser[0],
                 referd: referd,
                 lvlad: lvlad,
@@ -241,6 +244,7 @@ export async function getServerSideProps(context) {
         const vi = {};
         return {
             props: {
+      ...i18nProps,
                 refid:vi,
                 referd: referd,
                 lvlad: lvlad,

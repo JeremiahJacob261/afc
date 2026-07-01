@@ -7,11 +7,7 @@ if (!globalThis.WebSocket) {
 }
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://example.supabase.co'
-const supabaseKey =
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-  process.env.NEXT_PUBLIC_SUPABASE_KEY ||
-  process.env.SUPABASE_ANON_KEY ||
-  'missing-anon-key'
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'missing-anon-key'
 
 function decodeJwtPayload(token) {
   try {

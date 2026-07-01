@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { SplashScreen } from '@capacitor/splash-screen'
+import { useTranslation } from 'react-i18next'
+import toast, { Toaster } from 'react-hot-toast'
 import {
   ArrowLeft,
   ArrowRight,
@@ -12,11 +14,14 @@ import {
   HelpCircle,
   History,
   Home,
+  Link2,
   Lock,
   LogOut,
   Mail,
   Medal,
+  MessageCircle,
   RefreshCw,
+  Languages,
   ShieldCheck,
   Ticket,
   Trophy,
@@ -34,40 +39,13 @@ import { checkForBundleUpdate, markBundleReady } from './lib/updater.js'
 const referralCode = '000208'
 const bfcImages = ['/bfc1.jpg', '/bfc2.jpg', '/bfc3.jpg', '/bfc4.jpg', '/bfc5.jpg']
 const ballImage = '/simps/ball.png'
-
-const onboardingSlides = [
-  {
-    title: 'Football Betting Made Simple',
-    text: 'Pick matches, compare odds, place secure bets, and follow results from one clear EFC mobile experience.',
-    image: '/bfc1.jpg',
-  },
-  {
-    title: 'Secure wallet access',
-    text: 'Manage deposits, withdrawals, referrals, VIP progress, and account updates from the app.',
-    image: '/bfc2.jpg',
-  },
-  {
-    title: 'Built for match day',
-    text: 'Open your account to see live football markets, exact score odds, and your active bet history.',
-    image: '/bfc4.jpg',
-  },
-]
-
-const countryCodes = [
-  { code: '+234', name: 'Nigeria' },
-  { code: '+91', name: 'India' },
-  { code: '+92', name: 'Pakistan' },
-  { code: '+62', name: 'Indonesia' },
-  { code: '+1', name: 'United States' },
-  { code: '+44', name: 'United Kingdom' },
-  { code: '+27', name: 'South Africa' },
-]
-
-const matchFilters = [
-  { key: 'today', label: 'Today' },
-  { key: 'next3h', label: 'Next 3 hrs' },
-  { key: 'next12h', label: 'Next 12 hrs' },
-  { key: 'tomorrow', label: 'Tomorrow' },
+const languageStorageKey = 'efc-language'
+const languageOptions = [
+  { code: 'en', label: 'English' },
+  { code: 'fr', label: 'Français' },
+  { code: 'es', label: 'Español' },
+  { code: 'my', label: 'မြန်မာ' },
+  { code: 'ru', label: 'Русский' },
 ]
 
 const markets = [
@@ -87,7 +65,7 @@ const markets = [
   ['twothree', '2 - 3'],
   ['threetwo', '3 - 2'],
   ['threethree', '3 - 3'],
-  ['otherscores', 'Other'],
+  ['otherscores', 'mobile.markets.other'],
 ]
 
 const vipBonus = {
@@ -100,26 +78,12 @@ const vipBonus = {
   7: 0.125,
 }
 
-const faqItems = [
-  {
-    q: 'How do I deposit?',
-    a: 'Open Deposit, choose an available method, enter the amount, pay to the shown destination, then upload your receipt.',
-  },
-  {
-    q: 'How do I withdraw?',
-    a: 'Bind a wallet or bank account first, then open Withdraw, choose the account, enter your amount and transaction PIN.',
-  },
-  {
-    q: 'Where can I see my bets?',
-    a: 'Use My Bets from the bottom navigation to switch between unsettled and settled bet records.',
-  },
-]
-
 function makeRoute(name, params = {}) {
   return { name, params }
 }
 
 export default function App() {
+  const { t } = useTranslation('common')
   const [screen, setScreen] = useState('splash')
   const [route, setRoute] = useState(makeRoute('home'))
   const [booted, setBooted] = useState(false)
@@ -180,7 +144,7 @@ export default function App() {
       {!online ? (
         <div className="offline-pill">
           <WifiOff size={14} />
-          Offline mode
+          {t('status.offlineMode')}
         </div>
       ) : null}
 
@@ -216,26 +180,65 @@ export default function App() {
       ) : null}
 
       {!booted && screen !== 'splash' ? <InAppSplash /> : null}
+      <Toaster
+        position="top-center"
+        gutter={8}
+        containerStyle={{
+          top: 'calc(env(safe-area-inset-top) + 14px)',
+          left: 12,
+          right: 12,
+        }}
+        toastOptions={{
+          duration: 2200,
+          style: {
+            maxWidth: 'calc(100vw - 24px)',
+            borderRadius: 14,
+            border: '1px solid rgba(255,255,255,0.12)',
+            background: 'rgba(5,13,25,0.94)',
+            color: '#f7fbff',
+            boxShadow: '0 18px 50px rgba(0,0,0,0.34)',
+            backdropFilter: 'blur(16px)',
+            fontSize: 13,
+            fontWeight: 800,
+          },
+          success: {
+            iconTheme: {
+              primary: '#1BB6FF',
+              secondary: '#06101F',
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: '#ff6b7f',
+              secondary: '#06101F',
+            },
+          },
+        }}
+      />
     </div>
   )
 }
 
 function InAppSplash() {
+  const { t } = useTranslation('common')
+
   return (
     <main className="splash-screen">
       <div className="splash-image">
         <img src="/bfc4.jpg" alt="" />
       </div>
       <div className="splash-copy">
-        <p className="eyebrow">EFC Football</p>
-        <h1>Built for match day</h1>
+        <p className="eyebrow">{t('mobile.splash.eyebrow')}</p>
+        <h1>{t('mobile.splash.title')}</h1>
       </div>
     </main>
   )
 }
 
 function Onboarding({ onLogin, onRegister }) {
+  const { t } = useTranslation('common')
   const [index, setIndex] = useState(0)
+  const onboardingSlides = t('mobile.onboarding.slides', { returnObjects: true })
   const current = onboardingSlides[index]
 
   return (
@@ -243,10 +246,10 @@ function Onboarding({ onLogin, onRegister }) {
       <header className="brand-row">
         <span className="brand-lockup">
           <img src="/european.ico" alt="EFC" />
-          <strong>EFC</strong>
+          <strong>{t('common.appName')}</strong>
         </span>
         <button className="text-action" type="button" onClick={onLogin}>
-          Sign in
+          {t('common.signIn')}
         </button>
       </header>
 
@@ -255,13 +258,13 @@ function Onboarding({ onLogin, onRegister }) {
           <img src={current.image} alt="" />
         </div>
         <div className="slide-copy">
-          <p className="eyebrow">Mobile app</p>
+          <p className="eyebrow">{t('mobile.onboarding.eyebrow')}</p>
           <h1>{current.title}</h1>
           <p>{current.text}</p>
         </div>
       </section>
 
-      <Dots length={onboardingSlides.length} index={index} onChange={setIndex} label="Onboarding slides" />
+      <Dots length={onboardingSlides.length} index={index} onChange={setIndex} label={t('mobile.onboarding.slidesLabel')} />
 
       <div className="action-stack">
         <button
@@ -272,11 +275,11 @@ function Onboarding({ onLogin, onRegister }) {
             else onRegister()
           }}
         >
-          {index < onboardingSlides.length - 1 ? 'Next' : 'Create account'}
+          {index < onboardingSlides.length - 1 ? t('common.next') : t('common.createAccount')}
           <ArrowRight size={18} />
         </button>
         <button className="secondary-button" type="button" onClick={onLogin}>
-          I already have an account
+          {t('mobile.onboarding.alreadyHaveAccount')}
         </button>
       </div>
     </main>
@@ -284,16 +287,18 @@ function Onboarding({ onLogin, onRegister }) {
 }
 
 function AuthFrame({ title, subtitle, children, onBack }) {
+  const { t } = useTranslation('common')
+
   return (
     <main className="screen auth-screen">
       <button className="back-button" type="button" onClick={onBack}>
         <ArrowLeft size={18} />
-        Back
+        {t('common.back')}
       </button>
       <section className="auth-card">
         <div className="auth-logo">
           <img src="/european.ico" alt="EFC" />
-          <span>EFC</span>
+          <span>{t('common.appName')}</span>
         </div>
         <h1>{title}</h1>
         <p>{subtitle}</p>
@@ -308,7 +313,20 @@ function Message({ value }) {
   return <div className={`message ${value.type || 'info'}`}>{value.text}</div>
 }
 
+function notifyMessage(setMessage, type, text) {
+  setMessage({ type, text })
+
+  if (type === 'success') {
+    toast.success(text)
+  } else if (type === 'error') {
+    toast.error(text)
+  } else {
+    toast(text)
+  }
+}
+
 function LoginScreen({ onBack, onReset, onRegister, onSignedIn }) {
+  const { t } = useTranslation('common')
   const [identity, setIdentity] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -320,7 +338,7 @@ function LoginScreen({ onBack, onReset, onRegister, onSignedIn }) {
     setMessage(null)
 
     if (!hasSupabaseConfig() || !supabase) {
-      setMessage({ type: 'error', text: 'Mobile auth is missing Supabase config.' })
+      notifyMessage(setMessage, 'error', t('messages.mobileAuthMissing'))
       return
     }
 
@@ -341,28 +359,25 @@ function LoginScreen({ onBack, onReset, onRegister, onSignedIn }) {
 
       onSignedIn()
     } catch (error) {
-      setMessage({
-        type: 'error',
-        text: error?.message || 'Unable to sign in. Check your connection and details.',
-      })
+      notifyMessage(setMessage, 'error', error?.message || t('messages.unableSignIn'))
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <AuthFrame title="Welcome back" subtitle="Sign in to open your EFC account." onBack={onBack}>
+    <AuthFrame title={t('auth.login.title')} subtitle={t('auth.login.subtitle')} onBack={onBack}>
       <form className="form-stack" onSubmit={submit}>
-        <InputShell icon={<User size={18} />} label="Email or username">
+        <InputShell icon={<User size={18} />} label={t('auth.login.identityLabel')}>
           <input
             value={identity}
             onChange={(event) => setIdentity(event.target.value.replace(/\s/g, ''))}
             autoComplete="username"
-            placeholder="username or email"
+            placeholder={t('auth.login.identityPlaceholder')}
             required
           />
         </InputShell>
-        <InputShell icon={<Lock size={18} />} label="Password" action={
+        <InputShell icon={<Lock size={18} />} label={t('auth.login.passwordLabel')} action={
           <button type="button" onClick={() => setShowPassword((value) => !value)}>
             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
           </button>
@@ -372,27 +387,37 @@ function LoginScreen({ onBack, onReset, onRegister, onSignedIn }) {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             autoComplete="current-password"
-            placeholder="Password"
+            placeholder={t('auth.login.passwordPlaceholder')}
             required
           />
         </InputShell>
         <button className="link-button right" type="button" onClick={onReset}>
-          Forgot password?
+          {t('auth.login.forgotPassword')}
         </button>
         <Message value={message} />
         <button className="primary-button" type="submit" disabled={loading}>
-          {loading ? 'Signing in...' : 'Sign in'}
+          {loading ? t('auth.login.submitting') : t('auth.login.submit')}
           <ArrowRight size={18} />
         </button>
       </form>
       <button className="link-button centered" type="button" onClick={onRegister}>
-        Create a new account
+        {t('auth.login.newAccount')}
       </button>
     </AuthFrame>
   )
 }
 
 function RegisterScreen({ onBack, onLogin, onSignedIn }) {
+  const { t } = useTranslation('common')
+  const countryCodes = [
+    { code: '+234', name: t('mobile.countryCodes.nigeria') },
+    { code: '+91', name: t('mobile.countryCodes.india') },
+    { code: '+92', name: t('mobile.countryCodes.pakistan') },
+    { code: '+62', name: t('mobile.countryCodes.indonesia') },
+    { code: '+1', name: t('mobile.countryCodes.unitedStates') },
+    { code: '+44', name: t('mobile.countryCodes.unitedKingdom') },
+    { code: '+27', name: t('mobile.countryCodes.southAfrica') },
+  ]
   const [form, setForm] = useState({
     username: '',
     email: '',
@@ -416,22 +441,22 @@ function RegisterScreen({ onBack, onLogin, onSignedIn }) {
     setMessage(null)
 
     if (!hasSupabaseConfig() || !supabase) {
-      setMessage({ type: 'error', text: 'Mobile auth is missing Supabase config.' })
+      notifyMessage(setMessage, 'error', t('messages.mobileAuthMissing'))
       return
     }
 
     if (form.phone.length < 9) {
-      setMessage({ type: 'error', text: 'Please enter a complete phone number.' })
+      notifyMessage(setMessage, 'error', t('messages.phoneIncomplete'))
       return
     }
 
     if (form.password !== form.confirmPassword) {
-      setMessage({ type: 'error', text: 'Passwords must match.' })
+      notifyMessage(setMessage, 'error', t('messages.passwordsMustMatch'))
       return
     }
 
     if (!form.accepted) {
-      setMessage({ type: 'error', text: 'Please accept the terms before continuing.' })
+      notifyMessage(setMessage, 'error', t('messages.acceptTerms'))
       return
     }
 
@@ -443,7 +468,7 @@ function RegisterScreen({ onBack, onLogin, onSignedIn }) {
         body: { username: form.username.trim() },
       })
 
-      if (!usernameResult.available) throw new Error('Username already exists.')
+      if (!usernameResult.available) throw new Error(t('messages.usernameExists'))
 
       const { data, error } = await supabase.auth.signUp({
         email: form.email.trim(),
@@ -472,40 +497,37 @@ function RegisterScreen({ onBack, onLogin, onSignedIn }) {
 
       onSignedIn()
     } catch (error) {
-      setMessage({
-        type: 'error',
-        text: error?.message || 'Unable to create account. Check your connection.',
-      })
+      notifyMessage(setMessage, 'error', error?.message || t('messages.unableCreateAccount'))
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <AuthFrame title="Create account" subtitle="Join with the EFC mobile flow." onBack={onBack}>
+    <AuthFrame title={t('auth.register.title')} subtitle={t('auth.register.subtitle')} onBack={onBack}>
       <form className="form-stack" onSubmit={submit}>
-        <InputShell icon={<User size={18} />} label="Username">
+        <InputShell icon={<User size={18} />} label={t('auth.register.username')}>
           <input
             value={form.username}
             onChange={(event) => updateField('username', event.target.value.replace(/\s/g, ''))}
             autoComplete="username"
-            placeholder="johndoe"
+            placeholder={t('auth.register.usernamePlaceholder')}
             required
           />
         </InputShell>
-        <InputShell icon={<Mail size={18} />} label="Email">
+        <InputShell icon={<Mail size={18} />} label={t('auth.register.email')}>
           <input
             type="email"
             value={form.email}
             onChange={(event) => updateField('email', event.target.value)}
             autoComplete="email"
-            placeholder="you@example.com"
+            placeholder={t('auth.register.emailPlaceholder')}
             required
           />
         </InputShell>
         <div className="two-column">
           <label className="mini-field">
-            <span>Code</span>
+            <span>{t('auth.register.code')}</span>
             <select value={form.countrycode} onChange={(event) => updateField('countrycode', event.target.value)}>
               {countryCodes.map((country) => (
                 <option key={country.code} value={country.code}>
@@ -515,21 +537,21 @@ function RegisterScreen({ onBack, onLogin, onSignedIn }) {
             </select>
           </label>
           <label className="mini-field">
-            <span>Phone</span>
+            <span>{t('auth.register.phone')}</span>
             <input
               type="tel"
               value={form.phone}
               onChange={(event) => updateField('phone', event.target.value.replace(/[^\d]/g, ''))}
               autoComplete="tel"
-              placeholder="8000000000"
+              placeholder={t('auth.register.phonePlaceholder')}
               required
             />
           </label>
         </div>
-        <InputShell icon={<ShieldCheck size={18} />} label="Referral code">
+        <InputShell icon={<ShieldCheck size={18} />} label={t('auth.register.referralCode')}>
           <input value={form.referral} onChange={(event) => updateField('referral', event.target.value)} />
         </InputShell>
-        <InputShell icon={<Lock size={18} />} label="Password" action={
+        <InputShell icon={<Lock size={18} />} label={t('auth.register.password')} action={
           <button type="button" onClick={() => setShowPassword((value) => !value)}>
             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
           </button>
@@ -539,17 +561,17 @@ function RegisterScreen({ onBack, onLogin, onSignedIn }) {
             value={form.password}
             onChange={(event) => updateField('password', event.target.value)}
             autoComplete="new-password"
-            placeholder="Password"
+            placeholder={t('auth.register.password')}
             required
           />
         </InputShell>
-        <InputShell icon={<Lock size={18} />} label="Confirm password">
+        <InputShell icon={<Lock size={18} />} label={t('auth.register.confirmPassword')}>
           <input
             type={showPassword ? 'text' : 'password'}
             value={form.confirmPassword}
             onChange={(event) => updateField('confirmPassword', event.target.value)}
             autoComplete="new-password"
-            placeholder="Confirm password"
+            placeholder={t('auth.register.confirmPasswordPlaceholder')}
             required
           />
         </InputShell>
@@ -559,22 +581,23 @@ function RegisterScreen({ onBack, onLogin, onSignedIn }) {
             checked={form.accepted}
             onChange={(event) => updateField('accepted', event.target.checked)}
           />
-          <span>I am at least 18 and accept the EFC terms.</span>
+          <span>{t('auth.register.terms')}</span>
         </label>
         <Message value={message} />
         <button className="primary-button" type="submit" disabled={loading}>
-          {loading ? 'Creating account...' : 'Create account'}
+          {loading ? t('auth.register.submitting') : t('auth.register.submit')}
           <ArrowRight size={18} />
         </button>
       </form>
       <button className="link-button centered" type="button" onClick={onLogin}>
-        I already have an account
+        {t('auth.register.hasAccount')}
       </button>
     </AuthFrame>
   )
 }
 
 function ResetScreen({ onBack }) {
+  const { t } = useTranslation('common')
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
@@ -584,7 +607,7 @@ function ResetScreen({ onBack }) {
     setMessage(null)
 
     if (!hasSupabaseConfig() || !supabase) {
-      setMessage({ type: 'error', text: 'Mobile auth is missing Supabase config.' })
+      notifyMessage(setMessage, 'error', t('messages.mobileAuthMissing'))
       return
     }
 
@@ -595,30 +618,30 @@ function ResetScreen({ onBack }) {
         redirectTo: `${mobileConfig.apiBaseUrl}/login`,
       })
       if (error) throw error
-      setMessage({ type: 'success', text: 'Reset email sent. Check your inbox.' })
+      notifyMessage(setMessage, 'success', t('messages.resetEmailSent'))
     } catch (error) {
-      setMessage({ type: 'error', text: error?.message || 'Unable to send reset email.' })
+      notifyMessage(setMessage, 'error', error?.message || t('messages.unableSendReset'))
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <AuthFrame title="Reset password" subtitle="Send a reset link to your email." onBack={onBack}>
+    <AuthFrame title={t('auth.reset.title')} subtitle={t('auth.reset.subtitle')} onBack={onBack}>
       <form className="form-stack" onSubmit={submit}>
-        <InputShell icon={<Mail size={18} />} label="Email">
+        <InputShell icon={<Mail size={18} />} label={t('auth.register.email')}>
           <input
             type="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             autoComplete="email"
-            placeholder="you@example.com"
+            placeholder={t('auth.register.emailPlaceholder')}
             required
           />
         </InputShell>
         <Message value={message} />
         <button className="primary-button" type="submit" disabled={loading}>
-          {loading ? 'Sending...' : 'Send reset email'}
+          {loading ? t('auth.reset.submitting') : t('auth.reset.submit')}
           <ArrowRight size={18} />
         </button>
       </form>
@@ -640,6 +663,7 @@ function InputShell({ icon, label, action, children }) {
 }
 
 function UserApp({ route, setRoute, onLogout, online, successAmount, setSuccessAmount }) {
+  const { t } = useTranslation('common')
   const navigate = (name, params = {}) => setRoute(makeRoute(name, params))
   const backHome = () => navigate('home')
 
@@ -663,8 +687,16 @@ function UserApp({ route, setRoute, onLogout, online, successAmount, setSuccessA
     if (route.name === 'pin') return <PinScreen navigate={navigate} />
     if (route.name === 'notifications') return <NotificationsScreen navigate={navigate} />
     if (route.name === 'faq') return <FaqScreen navigate={navigate} />
-    if (route.name === 'deposit-success') return <SuccessScreen navigate={navigate} title="Deposit Submitted" text={`Your receipt${successAmount ? ` for ${successAmount} USDT` : ''} has been submitted and is awaiting admin confirmation.`} />
-    if (route.name === 'withdraw-success') return <SuccessScreen navigate={navigate} title="Withdrawal Success" text="Your withdrawal request has been sent." />
+    if (route.name === 'deposit-success') {
+      return (
+        <SuccessScreen
+          navigate={navigate}
+          title={t('mobile.deposit.successTitle')}
+          text={successAmount ? t('messages.depositSubmittedWithAmount', { amount: successAmount }) : t('messages.depositSubmitted', { amount: '' })}
+        />
+      )
+    }
+    if (route.name === 'withdraw-success') return <SuccessScreen navigate={navigate} title={t('mobile.withdraw.successTitle')} text={t('messages.withdrawalSent')} />
     return <HomeScreen online={online} navigate={navigate} onLogout={logout} />
   })()
 
@@ -678,15 +710,17 @@ function UserApp({ route, setRoute, onLogout, online, successAmount, setSuccessA
 }
 
 function TopBar({ navigate, onHome }) {
+  const { t } = useTranslation('common')
+
   return (
     <header className="app-topbar">
-      <button className="top-icon" type="button" onClick={() => navigate('profile')} aria-label="Open profile">
+      <button className="top-icon" type="button" onClick={() => navigate('profile')} aria-label={t('mobile.topBar.profile')}>
         <User size={20} />
       </button>
       <button className="top-brand" type="button" onClick={onHome}>
-        EUROPEAN FOOTBALL
+        {t('common.brandFull').toUpperCase()}
       </button>
-      <button className="top-icon" type="button" onClick={() => navigate('notifications')} aria-label="Notifications">
+      <button className="top-icon" type="button" onClick={() => navigate('notifications')} aria-label={t('mobile.topBar.notifications')}>
         <Bell size={20} />
       </button>
     </header>
@@ -694,15 +728,16 @@ function TopBar({ navigate, onHome }) {
 }
 
 function BottomNav({ active, navigate }) {
+  const { t } = useTranslation('common')
   const items = [
-    { key: 'home', label: 'Top', icon: Home },
-    { key: 'matches', label: 'Matches', icon: Trophy },
-    { key: 'bets', label: 'My Bets', icon: Ticket },
-    { key: 'profile', label: 'Profile', icon: User },
+    { key: 'home', label: t('mobile.nav.top'), icon: Home },
+    { key: 'matches', label: t('mobile.nav.matches'), icon: Trophy },
+    { key: 'bets', label: t('mobile.nav.bets'), icon: Ticket },
+    { key: 'profile', label: t('mobile.nav.profile'), icon: User },
   ]
 
   return (
-    <nav className="bottom-nav" aria-label="Main navigation">
+    <nav className="bottom-nav" aria-label={t('mobile.nav.label')}>
       {items.map((item) => {
         const Icon = item.icon
         const selected = active === item.key || (item.key === 'home' && active === 'match')
@@ -718,6 +753,7 @@ function BottomNav({ active, navigate }) {
 }
 
 function HomeScreen({ navigate, onLogout, online }) {
+  const { t } = useTranslation('common')
   const [profile, setProfile] = useState(null)
   const [matches, setMatches] = useState([])
   const [activeFilter, setActiveFilter] = useState('today')
@@ -737,9 +773,9 @@ function HomeScreen({ navigate, onLogout, online }) {
       setMatches(matchPayload.matches || [])
     } catch (error) {
       if (error?.status === 401) {
-        setMessage({ type: 'error', text: 'Your session expired. Please sign in again.' })
+        setMessage({ type: 'error', text: t('messages.sessionExpired') })
       } else {
-        setMessage({ type: 'info', text: 'Unable to refresh account data right now.' })
+        setMessage({ type: 'info', text: t('messages.unableRefreshAccount') })
       }
     } finally {
       setLoading(false)
@@ -751,35 +787,41 @@ function HomeScreen({ navigate, onLogout, online }) {
   }, [])
 
   const visibleMatches = useMemo(() => filterMatches(matches, activeFilter), [matches, activeFilter])
+  const matchFilters = [
+    { key: 'today', label: t('mobile.filters.today') },
+    { key: 'next3h', label: t('mobile.filters.next3h') },
+    { key: 'next12h', label: t('mobile.filters.next12h') },
+    { key: 'tomorrow', label: t('mobile.filters.tomorrow') },
+  ]
   const balance = Number(profile?.balance || 0).toFixed(3)
 
   return (
     <section className="page-stack">
       <header className="dashboard-header">
         <div>
-          <p className="eyebrow">Hello</p>
-          <h1>{profile?.username || 'Player'}</h1>
+          <p className="eyebrow">{t('mobile.home.hello')}</p>
+          <h1>{profile?.username || t('common.player')}</h1>
         </div>
-        <button className="icon-button" type="button" onClick={onLogout} aria-label="Sign out">
+        <button className="icon-button" type="button" onClick={onLogout} aria-label={t('common.signOut')}>
           <LogOut size={19} />
         </button>
       </header>
 
       <section className="balance-panel">
         <div>
-          <span>Current Balance</span>
+          <span>{t('common.currentBalance')}</span>
           <strong>{profile ? `${balance} USDT` : '-- USDT'}</strong>
         </div>
         <button className="mini-cta" type="button" onClick={() => navigate('deposit')}>
-          Deposit
+          {t('common.deposit')}
           <ChevronRight size={16} />
         </button>
       </section>
 
       <a className="telegram-link" href="https://t.me/+wJBTaIqLztoyYzE0" target="_blank" rel="noreferrer">
         <span>
-          <b>Telegram Channel</b>
-          <small>Join our telegram group to earn more</small>
+          <b>{t('mobile.home.telegram')}</b>
+          <small>{t('mobile.home.telegramCopy')}</small>
         </span>
         <ChevronRight size={18} />
       </a>
@@ -787,10 +829,10 @@ function HomeScreen({ navigate, onLogout, online }) {
       <ImageCarousel images={bfcImages} />
 
       <div className="section-title-row">
-        <h2>Top Football Matches</h2>
+        <h2>{t('mobile.home.topMatches')}</h2>
         <button className="refresh-button" type="button" onClick={loadHome} disabled={loading}>
           <RefreshCw size={16} className={loading ? 'spin' : ''} />
-          Refresh
+          {t('common.refresh')}
         </button>
       </div>
 
@@ -805,8 +847,8 @@ function HomeScreen({ navigate, onLogout, online }) {
         ) : (
           <EmptyState
             icon={online ? <CheckCircle2 size={24} /> : <WifiOff size={24} />}
-            title={online ? 'No upcoming matches loaded yet.' : 'Offline shell ready.'}
-            text="Live account and match data refresh when the app is online."
+            title={online ? t('emptyStates.noUpcomingMatches') : t('emptyStates.offlineShellReady')}
+            text={t('emptyStates.liveRefreshOnline')}
           />
         )}
       </section>
@@ -815,6 +857,7 @@ function HomeScreen({ navigate, onLogout, online }) {
 }
 
 function MatchesScreen({ navigate }) {
+  const { t } = useTranslation('common')
   const [matches, setMatches] = useState([])
   const [loading, setLoading] = useState(true)
   const [message, setMessage] = useState(null)
@@ -826,7 +869,7 @@ function MatchesScreen({ navigate }) {
       const payload = await apiFetch('/api/mobile/matches?limit=50')
       setMatches(payload.matches || [])
     } catch (error) {
-      setMessage({ type: 'error', text: error?.message || 'Unable to load matches.' })
+      setMessage({ type: 'error', text: error?.message || t('messages.unableLoadMatches') })
     } finally {
       setLoading(false)
     }
@@ -838,20 +881,21 @@ function MatchesScreen({ navigate }) {
 
   return (
     <section className="page-stack">
-      <PageHeader title="Matches" onBack={() => navigate('home')} />
+      <PageHeader title={t('common.matches')} onBack={() => navigate('home')} />
       <Message value={message} />
-      {loading ? <LoadingState text="Loading matches..." /> : null}
+      {loading ? <LoadingState text={t('mobile.matches.loading')} /> : null}
       <section className="match-list">
         {matches.map((match) => (
           <MatchCard key={match.match_id || match.id} match={match} onClick={() => navigate('match', { id: match.match_id })} />
         ))}
-        {!loading && !matches.length ? <EmptyState title="No matches" text="Upcoming matches will appear here." /> : null}
+        {!loading && !matches.length ? <EmptyState title={t('emptyStates.noMatches')} text={t('emptyStates.matchesComing')} /> : null}
       </section>
     </section>
   )
 }
 
 function MatchDetailScreen({ matchId, navigate }) {
+  const { t } = useTranslation('common')
   const [match, setMatch] = useState(null)
   const [profile, setProfile] = useState(null)
   const [picked, setPicked] = useState('')
@@ -875,7 +919,7 @@ function MatchDetailScreen({ matchId, navigate }) {
         setMatch(matchPayload.match)
         setProfile(me.profile)
       } catch (error) {
-        if (active) setMessage({ type: 'error', text: error?.message || 'Unable to load match.' })
+        if (active) setMessage({ type: 'error', text: error?.message || t('messages.unableLoadMatch') })
       } finally {
         if (active) setLoading(false)
       }
@@ -889,13 +933,13 @@ function MatchDetailScreen({ matchId, navigate }) {
 
   async function placeBet() {
     if (!picked) {
-      setMessage({ type: 'error', text: 'Choose a score market first.' })
+      notifyMessage(setMessage, 'error', t('messages.chooseScoreMarket'))
       return
     }
 
     const amount = Number(stake)
     if (!Number.isFinite(amount) || amount < 1) {
-      setMessage({ type: 'error', text: 'Stake must be at least 1 USDT.' })
+      notifyMessage(setMessage, 'error', t('messages.stakeMinimum'))
       return
     }
 
@@ -912,28 +956,28 @@ function MatchDetailScreen({ matchId, navigate }) {
           client_bet_id: crypto.randomUUID?.() || `${Date.now()}-${Math.random()}`,
         },
       })
-      setMessage({ type: 'success', text: 'Bet placed successfully.' })
+      notifyMessage(setMessage, 'success', t('messages.betPlaced'))
       setStake('')
       setPicked('')
     } catch (error) {
-      setMessage({ type: 'error', text: error?.message || 'Unable to place bet.' })
+      notifyMessage(setMessage, 'error', error?.message || t('messages.unablePlaceBet'))
     } finally {
       setPlacing(false)
     }
   }
 
-  const display = formatMatchStart(match)
+  const display = formatMatchStart(match, t)
   const level = Number(profile?.viplevel || profile?.vip?.viplevel || 1)
 
   return (
     <section className="page-stack">
-      <PageHeader title="Match Details" onBack={() => navigate('matches')} />
-      {loading ? <LoadingState text="Loading match..." /> : null}
+      <PageHeader title={t('mobile.match.details')} onBack={() => navigate('matches')} />
+      {loading ? <LoadingState text={t('mobile.match.loading')} /> : null}
       <Message value={message} />
       {match ? (
         <>
           <article className="detail-card match-detail-card">
-            <p className="match-league-name">{leagueName(match)}</p>
+            <p className="match-league-name">{leagueName(match, t)}</p>
             <div className="match-teams large">
               <Team name={match.home} image={match.ihome} />
               <time>
@@ -943,7 +987,7 @@ function MatchDetailScreen({ matchId, navigate }) {
               <Team name={match.away} image={match.iaway} />
             </div>
             <div className="balance-inline">
-              <span>Balance</span>
+              <span>{t('common.balance')}</span>
               <b>{Number(profile?.balance || 0).toFixed(3)} USDT</b>
             </div>
           </article>
@@ -960,15 +1004,15 @@ function MatchDetailScreen({ matchId, navigate }) {
                   onClick={() => setPicked(key)}
                   disabled={!odd}
                 >
-                  <span>{label}</span>
-                  <b>{odd ? odd.toFixed(3) : 'N/A'}</b>
+                  <span>{label.includes('.') ? t(label) : label}</span>
+                  <b>{odd ? odd.toFixed(3) : t('common.notAvailable')}</b>
                 </button>
               )
             })}
           </section>
 
           <section className="detail-card">
-            <InputShell icon={<Ticket size={18} />} label="Stake amount">
+            <InputShell icon={<Ticket size={18} />} label={t('mobile.match.stakeAmount')}>
               <input
                 inputMode="decimal"
                 value={stake}
@@ -977,7 +1021,7 @@ function MatchDetailScreen({ matchId, navigate }) {
               />
             </InputShell>
             <button className="primary-button full" type="button" onClick={placeBet} disabled={placing}>
-              {placing ? 'Placing bet...' : 'Place bet'}
+              {placing ? t('mobile.match.placingBet') : t('mobile.match.placeBet')}
               <ArrowRight size={18} />
             </button>
           </section>
@@ -988,6 +1032,7 @@ function MatchDetailScreen({ matchId, navigate }) {
 }
 
 function BetsScreen({ navigate }) {
+  const { t } = useTranslation('common')
   const [tab, setTab] = useState('unsettled')
   const [bets, setBets] = useState({ unsettled: [], settled: [] })
   const [loading, setLoading] = useState(true)
@@ -1007,7 +1052,7 @@ function BetsScreen({ navigate }) {
           settled: payload.settled || [],
         })
       } catch (error) {
-        if (active) setMessage({ type: 'error', text: error?.message || 'Unable to load bets.' })
+        if (active) setMessage({ type: 'error', text: error?.message || t('messages.unableLoadBets') })
       } finally {
         if (active) setLoading(false)
       }
@@ -1022,35 +1067,36 @@ function BetsScreen({ navigate }) {
   const list = bets[tab] || []
 
   return (
-    <section className="page-stack">
-      <PageHeader title="My Bets" onBack={() => navigate('home')} />
+    <section className="page-stack account-linked-page">
+      <PageHeader title={t('common.myBets')} onBack={() => navigate('home')} />
       <Segmented
         options={[
-          { key: 'unsettled', label: `Unsettled (${bets.unsettled.length})` },
-          { key: 'settled', label: `Settled (${bets.settled.length})` },
+          { key: 'unsettled', label: t('mobile.bets.unsettledWithCount', { count: bets.unsettled.length }) },
+          { key: 'settled', label: t('mobile.bets.settledWithCount', { count: bets.settled.length }) },
         ]}
         value={tab}
         onChange={setTab}
       />
       <Message value={message} />
-      {loading ? <LoadingState text="Loading bets..." /> : null}
+      {loading ? <LoadingState text={t('mobile.bets.loading')} /> : null}
       <section className="card-list">
         {list.map((bet) => (
           <button key={bet.betid || bet.id} className="list-card" type="button" onClick={() => navigate('bet', { id: bet.betid })}>
             <span>
-              <b>{bet.home || 'Home'} vs {bet.away || 'Away'}</b>
-              <small>{bet.picked || bet.pick || 'Score'} · {formatUsdt(bet.stake)}</small>
+              <b>{bet.home || t('common.home')} vs {bet.away || t('common.away')}</b>
+              <small>{bet.picked || bet.pick || t('common.score')} · {formatUsdt(bet.stake)}</small>
             </span>
-            <StatusPill status={betStatus(bet)} />
+            <StatusPill status={betStatus(bet, t)} />
           </button>
         ))}
-        {!loading && !list.length ? <EmptyState title="No bets" text="Your bet history will appear here." /> : null}
+        {!loading && !list.length ? <EmptyState title={t('emptyStates.noBets')} text={t('emptyStates.betsComing')} /> : null}
       </section>
     </section>
   )
 }
 
 function BetDetailScreen({ betId, navigate }) {
+  const { t } = useTranslation('common')
   const [bet, setBet] = useState(null)
   const [match, setMatch] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -1068,7 +1114,7 @@ function BetDetailScreen({ betId, navigate }) {
         setBet(payload.bet || {})
         setMatch(payload.match || {})
       } catch (error) {
-        if (active) setMessage({ type: 'error', text: error?.message || 'Unable to load bet.' })
+        if (active) setMessage({ type: 'error', text: error?.message || t('messages.unableLoadBet') })
       } finally {
         if (active) setLoading(false)
       }
@@ -1080,20 +1126,20 @@ function BetDetailScreen({ betId, navigate }) {
     }
   }, [betId])
 
-  const display = formatMatchStart({ ...match, ...bet })
+  const display = formatMatchStart({ ...match, ...bet }, t)
 
   return (
-    <section className="page-stack">
-      <PageHeader title="Bet Details" onBack={() => navigate('bets')} />
-      {loading ? <LoadingState text="Loading bet..." /> : null}
+    <section className="page-stack account-linked-page">
+      <PageHeader title={t('mobile.bets.details')} onBack={() => navigate('bets')} />
+      {loading ? <LoadingState text={t('mobile.bets.loadingOne')} /> : null}
       <Message value={message} />
       {bet ? (
         <section className="detail-card">
-          <InfoRow label="Match" value={`${bet.home || match?.home || 'Home'} vs ${bet.away || match?.away || 'Away'}`} />
-          <InfoRow label="Stake" value={formatUsdt(bet.stake)} />
-          <InfoRow label="Pick" value={bet.picked || bet.pick || 'Score'} />
-          <InfoRow label="Kickoff" value={`${display.date} ${display.time}`} />
-          <InfoRow label="Status" value={betStatus(bet).label} />
+          <InfoRow label={t('mobile.bets.match')} value={`${bet.home || match?.home || t('common.home')} vs ${bet.away || match?.away || t('common.away')}`} />
+          <InfoRow label={t('mobile.bets.stake')} value={formatUsdt(bet.stake)} />
+          <InfoRow label={t('mobile.bets.pick')} value={bet.picked || bet.pick || t('common.score')} />
+          <InfoRow label={t('mobile.bets.kickoff')} value={`${display.date} ${display.time}`} />
+          <InfoRow label={t('mobile.bets.status')} value={betStatus(bet, t).label} />
         </section>
       ) : null}
     </section>
@@ -1101,6 +1147,7 @@ function BetDetailScreen({ betId, navigate }) {
 }
 
 function ProfileScreen({ navigate, onLogout }) {
+  const { t, i18n } = useTranslation('common')
   const [profile, setProfile] = useState(null)
   const [vip, setVip] = useState(null)
   const [referralCount, setReferralCount] = useState(0)
@@ -1117,7 +1164,7 @@ function ProfileScreen({ navigate, onLogout }) {
         setVip(payload.vip)
         setReferralCount(payload.referralCount || 0)
       } catch (error) {
-        if (active) setMessage({ type: 'error', text: error?.message || 'Unable to load profile.' })
+        if (active) setMessage({ type: 'error', text: error?.message || t('messages.unableLoadProfile') })
       }
     }
 
@@ -1127,53 +1174,168 @@ function ProfileScreen({ navigate, onLogout }) {
     }
   }, [])
 
-  const actions = [
-    { label: 'Deposit', route: 'deposit', icon: Wallet },
-    { label: 'Withdraw', route: 'withdraw', icon: WalletCards },
-    { label: 'Bind Wallet', route: 'bind-wallet', icon: ShieldCheck },
-    { label: 'Transactions', route: 'transactions', icon: History },
-    { label: 'Referrals', route: 'referrals', icon: Users },
-    { label: 'VIP', route: 'vip', icon: Medal },
-    { label: 'Transaction PIN', route: 'pin', icon: Lock },
-    { label: 'FAQ', route: 'faq', icon: HelpCircle },
-  ]
+  const inviteCode = profile?.newrefer || referralCode
+  const inviteLink = `${mobileConfig.apiBaseUrl}/register/${inviteCode}`
+  const currentLanguage = languageOptions.some((language) => language.code === i18n.language) ? i18n.language : 'en'
+
+  const changeLanguage = (language) => {
+    i18n.changeLanguage(language)
+    window.localStorage.setItem(languageStorageKey, language)
+  }
 
   return (
-    <section className="page-stack">
-      <PageHeader title="Profile" onBack={() => navigate('home')} />
+    <section className="page-stack mobile-account-wrap">
+      <PageHeader title={t('common.profile')} onBack={() => navigate('home')} />
       <Message value={message} />
-      <section className="profile-card">
-        <div className="avatar-circle">
-          <User size={28} />
-        </div>
-        <div>
-          <h2>{profile?.username || 'Account'}</h2>
-          <p>VIP {vip?.viplevel || 1} · {referralCount} referrals</p>
-          <strong>{Number(profile?.balance || 0).toFixed(3)} USDT</strong>
-        </div>
-      </section>
-
-      <section className="action-grid">
-        {actions.map((action) => {
-          const Icon = action.icon
-          return (
-            <button key={action.route} type="button" onClick={() => navigate(action.route)}>
-              <Icon size={20} />
-              <span>{action.label}</span>
+      <div className="mobile-dark-glass">
+        <section className="account-profile-card">
+          <div className="account-user-row">
+            <img src="/european.ico" alt="" />
+            <div>
+              <p>
+                {t('mobile.profile.hello')}{' '}
+                <span>{profile?.username || t('common.account')}</span>
+              </p>
+              <small>VIP {vip?.viplevel || 1}</small>
+            </div>
+          </div>
+          <div className="account-balance-row">
+            <span>
+              <small>{t('mobile.profile.currentBalance')}</small>
+              <strong>{Number(profile?.balance || 0).toFixed(3)} USDT</strong>
+            </span>
+            <button className="account-deposit-button" type="button" onClick={() => navigate('deposit')}>
+              {t('common.deposit')}
+              <ChevronRight size={16} />
             </button>
-          )
-        })}
-      </section>
+          </div>
+          <AccountDivider />
+          <ExternalAccountRow label={t('mobile.profile.telegramChannel')} icon={MessageCircle} href="https://t.me/+wJBTaIqLztoyYzE0" />
+        </section>
 
-      <button className="secondary-button danger full" type="button" onClick={onLogout}>
-        Sign out
-        <LogOut size={18} />
-      </button>
+        <AccountPanel title={t('mobile.profile.referralsTitle')}>
+          <div className="account-copy-row">
+            <span>
+              <Link2 size={22} />
+              <b>register/{inviteCode}</b>
+            </span>
+            <button type="button" onClick={() => copyText(inviteLink, t('messages.inviteLinkCopied'), t('messages.unableCopy'))} aria-label={t('common.copy')}>
+              <Copy size={22} />
+            </button>
+          </div>
+          <AccountDivider />
+          <AccountRow
+            label={t('mobile.profile.allReferral')}
+            icon={Users}
+            onClick={() => navigate('referrals')}
+            tone={profile?.firstd ? 'success' : ''}
+          />
+        </AccountPanel>
+
+        <AccountPanel title={t('common.deposit')}>
+          <AccountRow label={t('mobile.profile.fundAccount')} icon={Wallet} onClick={() => navigate('deposit')} />
+          <AccountDivider />
+          <AccountRow label={t('mobile.profile.vipProgress')} icon={Medal} onClick={() => navigate('vip')} highlight />
+        </AccountPanel>
+
+        <AccountPanel title={t('mobile.profile.withdrawalTitle')}>
+          <AccountRow label={t('common.withdraw')} icon={WalletCards} onClick={() => navigate('withdraw')} />
+          <AccountDivider />
+          <AccountRow label={t('mobile.profile.history')} icon={History} onClick={() => navigate('transactions')} />
+          <AccountDivider />
+          <AccountRow label={t('mobile.profile.codeSetting')} icon={Lock} onClick={() => navigate('pin')} />
+          <AccountDivider />
+          <AccountRow label={t('mobile.profile.linkWallets')} icon={ShieldCheck} onClick={() => navigate('bind-wallet')} />
+        </AccountPanel>
+
+        <AccountPanel title={t('mobile.profile.betsTitle')}>
+          <AccountRow label={t('common.myBets')} icon={Ticket} onClick={() => navigate('bets')} />
+        </AccountPanel>
+
+        <AccountPanel title={t('mobile.profile.aboutTitle')}>
+          <AccountRow label={t('common.faq')} icon={HelpCircle} onClick={() => navigate('faq')} />
+          <AccountDivider />
+          <LanguageAccountRow label={t('mobile.profile.language')} value={currentLanguage} onChange={changeLanguage} />
+          <AccountDivider />
+          <ExternalAccountRow label={t('mobile.profile.customerService')} icon={MessageCircle} href="https://t.me/EFC_Support" />
+          <AccountDivider />
+          <ExternalAccountRow label={t('mobile.profile.telegramGroup')} icon={MessageCircle} href="https://t.me/+wJBTaIqLztoyYzE0" />
+          <AccountDivider />
+          <ExternalAccountRow label={t('mobile.profile.contact')} icon={Mail} href="https://t.me/EFC_Support" />
+        </AccountPanel>
+
+        <AccountPanel title={t('mobile.profile.closureTitle')}>
+          <AccountRow label={t('common.signOut')} icon={LogOut} onClick={onLogout} danger />
+        </AccountPanel>
+      </div>
     </section>
   )
 }
 
+function LanguageAccountRow({ label, value, onChange }) {
+  return (
+    <label className="account-row account-language-row">
+      <span>
+        <Languages size={22} />
+        <b>{label}</b>
+      </span>
+      <select value={value} onChange={(event) => onChange(event.target.value)} aria-label={label}>
+        {languageOptions.map((language) => (
+          <option key={language.code} value={language.code}>
+            {language.label}
+          </option>
+        ))}
+      </select>
+    </label>
+  )
+}
+
+function AccountPanel({ title, children }) {
+  return (
+    <section className="account-section">
+      <h2 className="account-section-title">{title}</h2>
+      <div className="account-inner">{children}</div>
+    </section>
+  )
+}
+
+function AccountRow({ label, icon: Icon, onClick, highlight = false, danger = false, tone = '' }) {
+  const className = [
+    'account-row',
+    highlight ? 'highlight' : '',
+    danger ? 'danger-row' : '',
+    tone ? `tone-${tone}` : '',
+  ].filter(Boolean).join(' ')
+
+  return (
+    <button className={className} type="button" onClick={onClick}>
+      <span>
+        <Icon size={22} />
+        <b>{label}</b>
+      </span>
+      <ChevronRight size={22} />
+    </button>
+  )
+}
+
+function ExternalAccountRow({ label, icon: Icon, href }) {
+  return (
+    <a className="account-row" href={href} target="_blank" rel="noreferrer">
+      <span>
+        <Icon size={22} />
+        <b>{label}</b>
+      </span>
+      <ChevronRight size={22} />
+    </a>
+  )
+}
+
+function AccountDivider() {
+  return <div className="account-divider" />
+}
+
 function DepositScreen({ navigate, setSuccessAmount }) {
+  const { t } = useTranslation('common')
   const [data, setData] = useState({ methods: [], destinations: [] })
   const [methodId, setMethodId] = useState('')
   const [destinationId, setDestinationId] = useState('')
@@ -1184,7 +1346,7 @@ function DepositScreen({ navigate, setSuccessAmount }) {
   const [message, setMessage] = useState(null)
 
   useEffect(() => {
-    loadPaymentData(setData, setLoading, setMessage)
+    loadPaymentData(setData, setLoading, setMessage, t('messages.unableLoadPaymentData'))
   }, [])
 
   const method = data.methods.find((item) => String(item.id ?? item.name) === String(methodId))
@@ -1195,24 +1357,24 @@ function DepositScreen({ navigate, setSuccessAmount }) {
 
   async function submitDeposit() {
     if (!method) {
-      setMessage({ type: 'error', text: 'Choose a deposit method.' })
+      notifyMessage(setMessage, 'error', t('messages.chooseDepositMethod'))
       return
     }
     if (!destination) {
-      setMessage({ type: 'error', text: 'No payment destination is available for this method.' })
+      notifyMessage(setMessage, 'error', t('messages.noPaymentDestination'))
       return
     }
     const numericAmount = Number(amount)
     if (!Number.isFinite(numericAmount) || numericAmount < minimum) {
-      setMessage({ type: 'error', text: `Minimum deposit is ${formatNumber(minimum)} ${method.currency_code || method.name}.` })
+      notifyMessage(setMessage, 'error', t('messages.minimumDeposit', { amount: formatNumber(minimum), currency: method.currency_code || method.name }))
       return
     }
     if (!file) {
-      setMessage({ type: 'error', text: 'Upload your payment receipt.' })
+      notifyMessage(setMessage, 'error', t('messages.uploadPaymentReceipt'))
       return
     }
     if (!supabase) {
-      setMessage({ type: 'error', text: 'Mobile storage is missing Supabase config.' })
+      notifyMessage(setMessage, 'error', t('messages.mobileStorageMissing'))
       return
     }
 
@@ -1238,22 +1400,23 @@ function DepositScreen({ navigate, setSuccessAmount }) {
       })
 
       setSuccessAmount(formatNumber(numericAmount))
+      toast.success(t('messages.depositSubmitted'))
       navigate('deposit-success')
     } catch (error) {
-      setMessage({ type: 'error', text: error?.message || 'Deposit submission failed.' })
+      notifyMessage(setMessage, 'error', error?.message || t('messages.depositFailed'))
     } finally {
       setSubmitting(false)
     }
   }
 
   return (
-    <section className="page-stack">
-      <PageHeader title="Deposit" onBack={() => navigate('profile')} />
-      {loading ? <LoadingState text="Loading payment methods..." /> : null}
+    <section className="page-stack account-linked-page">
+      <PageHeader title={t('mobile.deposit.title')} onBack={() => navigate('profile')} />
+      {loading ? <LoadingState text={t('mobile.deposit.loading')} /> : null}
       <Message value={message} />
       <section className="detail-card form-stack">
-        <SelectField label="Method" value={methodId} onChange={setMethodId}>
-          <option value="">Choose method</option>
+        <SelectField label={t('common.method')} value={methodId} onChange={setMethodId}>
+          <option value="">{t('forms.chooseMethod')}</option>
           {data.methods.map((item) => (
             <option key={item.id || item.name} value={item.id ?? item.name}>
               {item.name} ({item.currency_code || item.name})
@@ -1261,8 +1424,8 @@ function DepositScreen({ navigate, setSuccessAmount }) {
           ))}
         </SelectField>
         {destinations.length > 1 ? (
-          <SelectField label="Destination" value={destinationId} onChange={setDestinationId}>
-            <option value="">Auto select</option>
+          <SelectField label={t('common.destination')} value={destinationId} onChange={setDestinationId}>
+            <option value="">{t('forms.autoSelect')}</option>
             {destinations.map((item) => (
               <option key={item.id || item.address} value={item.id}>
                 {item.bank || item.name || item.address}
@@ -1272,20 +1435,20 @@ function DepositScreen({ navigate, setSuccessAmount }) {
         ) : null}
         {destination ? (
           <div className="copy-box">
-            <span>Payment destination</span>
+            <span>{t('mobile.deposit.paymentDestination')}</span>
             <b>{destination.address}</b>
-            <button type="button" onClick={() => copyText(destination.address)}>Copy</button>
+            <button type="button" onClick={() => copyText(destination.address, t('messages.addressCopied'), t('messages.unableCopy'))}>{t('common.copy')}</button>
           </div>
         ) : null}
-        <InputShell icon={<Wallet size={18} />} label={`Amount${minimum ? ` · min ${formatNumber(minimum)}` : ''}`}>
-          <input inputMode="decimal" value={amount} onChange={(event) => setAmount(event.target.value.replace(/[^\d.]/g, ''))} placeholder="Amount" />
+        <InputShell icon={<Wallet size={18} />} label={minimum ? t('mobile.deposit.amountWithMinimum', { amount: formatNumber(minimum) }) : t('common.amount')}>
+          <input inputMode="decimal" value={amount} onChange={(event) => setAmount(event.target.value.replace(/[^\d.]/g, ''))} placeholder={t('common.amount')} />
         </InputShell>
         <label className="file-field">
-          <span>{file?.name || 'Upload receipt'}</span>
+          <span>{file?.name || t('forms.uploadReceipt')}</span>
           <input type="file" accept="image/*,.pdf" onChange={(event) => setFile(event.target.files?.[0] || null)} />
         </label>
         <button className="primary-button full" type="button" onClick={submitDeposit} disabled={submitting}>
-          {submitting ? 'Submitting...' : 'Submit deposit'}
+          {submitting ? t('mobile.deposit.submitting') : t('mobile.deposit.submit')}
           <ArrowRight size={18} />
         </button>
       </section>
@@ -1294,6 +1457,7 @@ function DepositScreen({ navigate, setSuccessAmount }) {
 }
 
 function WithdrawScreen({ navigate }) {
+  const { t } = useTranslation('common')
   const [data, setData] = useState({ wallets: [], settings: {} })
   const [walletId, setWalletId] = useState('')
   const [amount, setAmount] = useState('')
@@ -1303,7 +1467,7 @@ function WithdrawScreen({ navigate }) {
   const [message, setMessage] = useState(null)
 
   useEffect(() => {
-    loadPaymentData(setData, setLoading, setMessage)
+    loadPaymentData(setData, setLoading, setMessage, t('messages.unableLoadPaymentData'))
   }, [])
 
   const wallet = data.wallets.find((item) => String(item.id ?? item.wallid) === String(walletId))
@@ -1314,15 +1478,15 @@ function WithdrawScreen({ navigate }) {
 
   async function submitWithdraw() {
     if (!wallet) {
-      setMessage({ type: 'error', text: 'Choose a wallet first.' })
+      notifyMessage(setMessage, 'error', t('messages.chooseWalletFirst'))
       return
     }
     if (!pin) {
-      setMessage({ type: 'error', text: 'Enter your transaction PIN.' })
+      notifyMessage(setMessage, 'error', t('messages.enterTransactionPin'))
       return
     }
     if (requested < Number(settings.minWithdrawalAmount || 10)) {
-      setMessage({ type: 'error', text: `Minimum withdrawal is ${settings.minWithdrawalAmount || 10} USDT.` })
+      notifyMessage(setMessage, 'error', t('messages.minimumWithdrawal', { amount: settings.minWithdrawalAmount || 10 }))
       return
     }
 
@@ -1344,22 +1508,23 @@ function WithdrawScreen({ navigate }) {
 
       const row = Array.isArray(result) ? result[0] : result
       if (String(row?.status).toLowerCase() === 'failed') throw new Error(row.message)
+      toast.success(t('messages.withdrawalSent'))
       navigate('withdraw-success')
     } catch (error) {
-      setMessage({ type: 'error', text: error?.message || 'Unable to submit withdrawal.' })
+      notifyMessage(setMessage, 'error', error?.message || t('messages.unableSubmitWithdrawal'))
     } finally {
       setSubmitting(false)
     }
   }
 
   return (
-    <section className="page-stack">
-      <PageHeader title="Withdraw" onBack={() => navigate('profile')} />
-      {loading ? <LoadingState text="Loading wallets..." /> : null}
+    <section className="page-stack account-linked-page">
+      <PageHeader title={t('mobile.withdraw.title')} onBack={() => navigate('profile')} />
+      {loading ? <LoadingState text={t('mobile.withdraw.loading')} /> : null}
       <Message value={message} />
       <section className="detail-card form-stack">
-        <SelectField label="Wallet" value={walletId} onChange={setWalletId}>
-          <option value="">Choose wallet</option>
+        <SelectField label={t('common.wallet')} value={walletId} onChange={setWalletId}>
+          <option value="">{t('forms.chooseWallet')}</option>
           {data.wallets.map((item) => (
             <option key={item.id ?? item.wallid ?? item.wallet} value={item.id ?? item.wallid}>
               {item.walletnames || item.bank || item.method} · {item.wallet}
@@ -1368,21 +1533,21 @@ function WithdrawScreen({ navigate }) {
         </SelectField>
         {!data.wallets.length && !loading ? (
           <button className="secondary-button full" type="button" onClick={() => navigate('bind-wallet')}>
-            Bind a wallet first
+            {t('mobile.withdraw.bindFirst')}
           </button>
         ) : null}
-        <InputShell icon={<Wallet size={18} />} label="Amount">
-          <input inputMode="decimal" value={amount} onChange={(event) => setAmount(event.target.value.replace(/[^\d.]/g, ''))} placeholder="Amount" />
+        <InputShell icon={<Wallet size={18} />} label={t('common.amount')}>
+          <input inputMode="decimal" value={amount} onChange={(event) => setAmount(event.target.value.replace(/[^\d.]/g, ''))} placeholder={t('common.amount')} />
         </InputShell>
-        <InputShell icon={<Lock size={18} />} label="Transaction PIN">
-          <input inputMode="numeric" value={pin} onChange={(event) => setPin(event.target.value.replace(/[^\d]/g, '').slice(0, 4))} placeholder="4-digit PIN" />
+        <InputShell icon={<Lock size={18} />} label={t('forms.transactionPin')}>
+          <input inputMode="numeric" value={pin} onChange={(event) => setPin(event.target.value.replace(/[^\d]/g, '').slice(0, 4))} placeholder={t('forms.pinPlaceholder')} />
         </InputShell>
         <div className="fee-note">
-          <span>Fee {feePercent}%</span>
-          <b>Total debit: {formatNumber(total)} USDT</b>
+          <span>{t('mobile.withdraw.fee', { percent: feePercent })}</span>
+          <b>{t('mobile.withdraw.totalDebit', { amount: formatNumber(total) })}</b>
         </div>
         <button className="primary-button full" type="button" onClick={submitWithdraw} disabled={submitting}>
-          {submitting ? 'Submitting...' : 'Submit withdrawal'}
+          {submitting ? t('mobile.deposit.submitting') : t('mobile.withdraw.submit')}
           <ArrowRight size={18} />
         </button>
       </section>
@@ -1391,6 +1556,7 @@ function WithdrawScreen({ navigate }) {
 }
 
 function BindWalletScreen({ navigate }) {
+  const { t } = useTranslation('common')
   const [data, setData] = useState({ methods: [] })
   const [methodId, setMethodId] = useState('')
   const [wallet, setWallet] = useState('')
@@ -1401,7 +1567,7 @@ function BindWalletScreen({ navigate }) {
   const [message, setMessage] = useState(null)
 
   useEffect(() => {
-    loadPaymentData(setData, setLoading, setMessage)
+    loadPaymentData(setData, setLoading, setMessage, t('messages.unableLoadPaymentData'))
   }, [])
 
   const method = data.methods.find((item) => String(item.id ?? item.name) === String(methodId))
@@ -1409,7 +1575,7 @@ function BindWalletScreen({ navigate }) {
 
   async function submitWallet() {
     if (!method || wallet.trim().length < 3 || (isLocal && (bank.trim().length < 2 || name.trim().length < 3))) {
-      setMessage({ type: 'error', text: 'Please fill all wallet details correctly.' })
+      notifyMessage(setMessage, 'error', t('messages.walletDetailsInvalid'))
       return
     }
 
@@ -1427,24 +1593,24 @@ function BindWalletScreen({ navigate }) {
           name: isLocal ? name.trim() : '',
         },
       })
-      if (payload.status !== 'success') throw new Error(payload.message || 'Unable to bind wallet.')
-      setMessage({ type: 'success', text: 'Wallet binding successful.' })
+      if (payload.status !== 'success') throw new Error(payload.message || t('messages.unableBindWallet'))
+      notifyMessage(setMessage, 'success', t('messages.walletBindSuccess'))
       setTimeout(() => navigate('profile'), 500)
     } catch (error) {
-      setMessage({ type: 'error', text: error?.message || 'Unable to bind wallet.' })
+      notifyMessage(setMessage, 'error', error?.message || t('messages.unableBindWallet'))
     } finally {
       setSubmitting(false)
     }
   }
 
   return (
-    <section className="page-stack">
-      <PageHeader title="Bind Wallet" onBack={() => navigate('profile')} />
-      {loading ? <LoadingState text="Loading methods..." /> : null}
+    <section className="page-stack account-linked-page">
+      <PageHeader title={t('mobile.wallet.bind')} onBack={() => navigate('profile')} />
+      {loading ? <LoadingState text={t('mobile.wallet.loading')} /> : null}
       <Message value={message} />
       <section className="detail-card form-stack">
-        <SelectField label="Method" value={methodId} onChange={setMethodId}>
-          <option value="">Choose method</option>
+        <SelectField label={t('common.method')} value={methodId} onChange={setMethodId}>
+          <option value="">{t('forms.chooseMethod')}</option>
           {data.methods.map((item) => (
             <option key={item.id || item.name} value={item.id ?? item.name}>
               {item.name}
@@ -1453,19 +1619,19 @@ function BindWalletScreen({ navigate }) {
         </SelectField>
         {isLocal ? (
           <>
-            <InputShell icon={<Wallet size={18} />} label="Bank">
-              <input value={bank} onChange={(event) => setBank(event.target.value)} placeholder="Bank name" />
+            <InputShell icon={<Wallet size={18} />} label={t('forms.bank')}>
+              <input value={bank} onChange={(event) => setBank(event.target.value)} placeholder={t('forms.bankName')} />
             </InputShell>
-            <InputShell icon={<User size={18} />} label="Account name">
-              <input value={name} onChange={(event) => setName(event.target.value)} placeholder="Account holder" />
+            <InputShell icon={<User size={18} />} label={t('forms.accountName')}>
+              <input value={name} onChange={(event) => setName(event.target.value)} placeholder={t('forms.accountHolder')} />
             </InputShell>
           </>
         ) : null}
-        <InputShell icon={<WalletCards size={18} />} label={isLocal ? 'Account number' : 'Wallet address'}>
-          <input value={wallet} onChange={(event) => setWallet(event.target.value)} placeholder={isLocal ? 'Account number' : 'Wallet address'} />
+        <InputShell icon={<WalletCards size={18} />} label={isLocal ? t('forms.accountNumber') : t('forms.walletAddress')}>
+          <input value={wallet} onChange={(event) => setWallet(event.target.value)} placeholder={isLocal ? t('forms.accountNumber') : t('forms.walletAddress')} />
         </InputShell>
         <button className="primary-button full" type="button" onClick={submitWallet} disabled={submitting}>
-          {submitting ? 'Saving...' : 'Bind wallet'}
+          {submitting ? t('mobile.wallet.saving') : t('mobile.wallet.submit')}
           <ArrowRight size={18} />
         </button>
       </section>
@@ -1474,6 +1640,7 @@ function BindWalletScreen({ navigate }) {
 }
 
 function TransactionsScreen({ navigate }) {
+  const { t } = useTranslation('common')
   const [transactions, setTransactions] = useState([])
   const [filter, setFilter] = useState('all')
   const [loading, setLoading] = useState(true)
@@ -1487,7 +1654,7 @@ function TransactionsScreen({ navigate }) {
         const payload = await apiFetch(`/api/my-transactions?type=${filter}`, { auth: true })
         if (active) setTransactions(payload.transactions || payload.data || [])
       } catch (error) {
-        if (active) setMessage({ type: 'error', text: error?.message || 'Unable to load transactions.' })
+        if (active) setMessage({ type: 'error', text: error?.message || t('messages.unableLoadTransactions') })
       } finally {
         if (active) setLoading(false)
       }
@@ -1499,36 +1666,37 @@ function TransactionsScreen({ navigate }) {
   }, [filter])
 
   return (
-    <section className="page-stack">
-      <PageHeader title="Transactions" onBack={() => navigate('profile')} />
+    <section className="page-stack account-linked-page">
+      <PageHeader title={t('mobile.transactions.title')} onBack={() => navigate('profile')} />
       <Segmented
         options={[
-          { key: 'all', label: 'All' },
-          { key: 'deposit', label: 'Deposits' },
-          { key: 'withdraw', label: 'Withdrawals' },
+          { key: 'all', label: t('common.all') },
+          { key: 'deposit', label: t('mobile.transactions.deposits') },
+          { key: 'withdraw', label: t('mobile.transactions.withdrawals') },
         ]}
         value={filter}
         onChange={setFilter}
       />
       <Message value={message} />
-      {loading ? <LoadingState text="Loading transactions..." /> : null}
+      {loading ? <LoadingState text={t('mobile.transactions.loading')} /> : null}
       <section className="card-list">
         {transactions.map((item) => (
           <article key={item.id} className="list-card static">
             <span>
               <b>{item.title || item.type}</b>
-              <small>{item.detail || item.methodLabel || 'Transaction'} · {formatDate(item.timestamp)}</small>
+              <small>{item.detail || item.methodLabel || t('common.transaction')} · {formatDate(item.timestamp, t)}</small>
             </span>
             <StatusPill status={{ label: item.statusLabel || item.status, tone: item.status }} />
           </article>
         ))}
-        {!loading && !transactions.length ? <EmptyState title="No transactions" text="Deposits and withdrawals will appear here." /> : null}
+        {!loading && !transactions.length ? <EmptyState title={t('emptyStates.noTransactions')} text={t('emptyStates.transactionsComing')} /> : null}
       </section>
     </section>
   )
 }
 
 function ReferralsScreen({ navigate }) {
+  const { t } = useTranslation('common')
   const [payload, setPayload] = useState({ refer: '', referrals: [] })
   const [message, setMessage] = useState(null)
 
@@ -1539,7 +1707,7 @@ function ReferralsScreen({ navigate }) {
         if (active) setPayload(result)
       })
       .catch((error) => {
-        if (active) setMessage({ type: 'error', text: error?.message || 'Unable to load referrals.' })
+        if (active) setMessage({ type: 'error', text: error?.message || t('messages.unableLoadReferrals') })
       })
     return () => {
       active = false
@@ -1549,13 +1717,13 @@ function ReferralsScreen({ navigate }) {
   const inviteLink = `${mobileConfig.apiBaseUrl}/register/${payload.refer || referralCode}`
 
   return (
-    <section className="page-stack">
-      <PageHeader title="Referrals" onBack={() => navigate('profile')} />
+    <section className="page-stack account-linked-page">
+      <PageHeader title={t('mobile.referrals.title')} onBack={() => navigate('profile')} />
       <Message value={message} />
       <section className="detail-card">
-        <InfoRow label="Invite code" value={payload.refer || referralCode} />
-        <button className="secondary-button full" type="button" onClick={() => copyText(inviteLink)}>
-          Copy invite link
+        <InfoRow label={t('mobile.referrals.inviteCode')} value={payload.refer || referralCode} />
+        <button className="secondary-button full" type="button" onClick={() => copyText(inviteLink, t('messages.inviteLinkCopied'), t('messages.unableCopy'))}>
+          {t('mobile.referrals.copyInvite')}
           <Copy size={17} />
         </button>
       </section>
@@ -1564,18 +1732,19 @@ function ReferralsScreen({ navigate }) {
           <article key={item.id || item.username} className="list-card static">
             <span>
               <b>{item.username}</b>
-              <small>{item.levelLabel || `Level ${item.level}`} · Total deposit {formatUsdt(item.totald)}</small>
+              <small>{item.levelLabel || t('mobile.referrals.level', { level: item.level })} · {t('mobile.referrals.totalDeposit', { amount: formatUsdt(item.totald) })}</small>
             </span>
-            <StatusPill status={{ label: item.firstd ? 'Active' : 'Pending', tone: item.firstd ? 'success' : 'pending' }} />
+            <StatusPill status={{ label: item.firstd ? t('status.active') : t('status.pending'), tone: item.firstd ? 'success' : 'pending' }} />
           </article>
         ))}
-        {!(payload.referrals || []).length ? <EmptyState title="No referrals yet" text="Share your invite link to build your team." /> : null}
+        {!(payload.referrals || []).length ? <EmptyState title={t('emptyStates.noReferrals')} text={t('emptyStates.referralsComing')} /> : null}
       </section>
     </section>
   )
 }
 
 function VipScreen({ navigate }) {
+  const { t } = useTranslation('common')
   const [vip, setVip] = useState(null)
   const [message, setMessage] = useState(null)
 
@@ -1586,7 +1755,7 @@ function VipScreen({ navigate }) {
         if (active) setVip(payload.vip)
       })
       .catch((error) => {
-        if (active) setMessage({ type: 'error', text: error?.message || 'Unable to load VIP progress.' })
+        if (active) setMessage({ type: 'error', text: error?.message || t('messages.unableLoadVip') })
       })
     return () => {
       active = false
@@ -1594,21 +1763,22 @@ function VipScreen({ navigate }) {
   }, [])
 
   return (
-    <section className="page-stack">
-      <PageHeader title="VIP" onBack={() => navigate('profile')} />
+    <section className="page-stack account-linked-page">
+      <PageHeader title={t('common.vip')} onBack={() => navigate('profile')} />
       <Message value={message} />
       <section className="vip-card">
         <Medal size={72} />
         <h2>VIP {vip?.viplevel || 1}</h2>
-        <ProgressBar label="Total Deposit" value={vip?.depositProgress || 0} />
-        <ProgressBar label="Referrals" value={vip?.referralProgress || 0} />
-        <ProgressBar label="Total" value={((vip?.depositProgress || 0) + (vip?.referralProgress || 0)) / 2} />
+        <ProgressBar label={t('mobile.vip.totalDeposit')} value={vip?.depositProgress || 0} />
+        <ProgressBar label={t('mobile.vip.referrals')} value={vip?.referralProgress || 0} />
+        <ProgressBar label={t('mobile.vip.total')} value={((vip?.depositProgress || 0) + (vip?.referralProgress || 0)) / 2} />
       </section>
     </section>
   )
 }
 
 function PinScreen({ navigate }) {
+  const { t } = useTranslation('common')
   const [pin, setPin] = useState('')
   const [confirm, setConfirm] = useState('')
   const [locked, setLocked] = useState(false)
@@ -1622,10 +1792,10 @@ function PinScreen({ navigate }) {
         if (!active) return
         const hasPin = Boolean(payload.profile?.codeset)
         setLocked(hasPin)
-        if (hasPin) setMessage({ type: 'info', text: 'You already have a transaction PIN. Contact admin to reset it.' })
+        if (hasPin) notifyMessage(setMessage, 'info', t('messages.pinAlreadySet'))
       })
       .catch((error) => {
-        if (active) setMessage({ type: 'error', text: error?.message || 'Unable to load PIN status.' })
+        if (active) setMessage({ type: 'error', text: error?.message || t('messages.unableLoadPin') })
       })
       .finally(() => {
         if (active) setLoading(false)
@@ -1637,37 +1807,37 @@ function PinScreen({ navigate }) {
 
   async function submitPin() {
     if (!/^\d{4}$/.test(pin)) {
-      setMessage({ type: 'error', text: 'PIN must be 4 digits.' })
+      notifyMessage(setMessage, 'error', t('messages.pinFourDigits'))
       return
     }
     if (pin !== confirm) {
-      setMessage({ type: 'error', text: 'Both PIN entries must match.' })
+      notifyMessage(setMessage, 'error', t('messages.pinEntriesMustMatch'))
       return
     }
     try {
       const payload = await apiFetch('/api/set-pin', { auth: true, method: 'POST', body: { pin } })
       setLocked(true)
-      setMessage({ type: 'success', text: payload.message || 'PIN set successfully.' })
+      notifyMessage(setMessage, 'success', payload.message || t('messages.pinSet'))
     } catch (error) {
-      setMessage({ type: 'error', text: error?.message || 'Unable to set PIN.' })
+      notifyMessage(setMessage, 'error', error?.message || t('messages.unableSetPin'))
     }
   }
 
   return (
-    <section className="page-stack">
-      <PageHeader title="Transaction PIN" onBack={() => navigate('profile')} />
-      {loading ? <LoadingState text="Checking PIN status..." /> : null}
+    <section className="page-stack account-linked-page">
+      <PageHeader title={t('mobile.profile.transactionPin')} onBack={() => navigate('profile')} />
+      {loading ? <LoadingState text={t('mobile.pin.checking')} /> : null}
       <Message value={message} />
       <section className="detail-card form-stack">
-        <p className="warning-copy">Your transaction PIN cannot be changed in the app after it is set.</p>
-        <InputShell icon={<Lock size={18} />} label="Enter PIN">
+        <p className="warning-copy">{t('mobile.pin.warning')}</p>
+        <InputShell icon={<Lock size={18} />} label={t('forms.enterPin')}>
           <input disabled={locked} inputMode="numeric" value={pin} onChange={(event) => setPin(event.target.value.replace(/[^\d]/g, '').slice(0, 4))} />
         </InputShell>
-        <InputShell icon={<Lock size={18} />} label="Confirm PIN">
+        <InputShell icon={<Lock size={18} />} label={t('forms.confirmPin')}>
           <input disabled={locked} inputMode="numeric" value={confirm} onChange={(event) => setConfirm(event.target.value.replace(/[^\d]/g, '').slice(0, 4))} />
         </InputShell>
         <button className="primary-button full" type="button" onClick={submitPin} disabled={locked || loading}>
-          Set PIN
+          {t('mobile.pin.set')}
           <ArrowRight size={18} />
         </button>
       </section>
@@ -1676,6 +1846,7 @@ function PinScreen({ navigate }) {
 }
 
 function NotificationsScreen({ navigate }) {
+  const { t } = useTranslation('common')
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [message, setMessage] = useState(null)
@@ -1687,7 +1858,7 @@ function NotificationsScreen({ navigate }) {
         if (active) setItems(Array.isArray(payload) ? payload : [])
       })
       .catch((error) => {
-        if (active) setMessage({ type: 'error', text: error?.message || 'Unable to load notifications.' })
+        if (active) setMessage({ type: 'error', text: error?.message || t('messages.unableLoadNotifications') })
       })
       .finally(() => {
         if (active) setLoading(false)
@@ -1699,30 +1870,32 @@ function NotificationsScreen({ navigate }) {
 
   return (
     <section className="page-stack">
-      <PageHeader title="Notifications" onBack={() => navigate('home')} />
+      <PageHeader title={t('mobile.notifications.title')} onBack={() => navigate('home')} />
       <Message value={message} />
-      {loading ? <LoadingState text="Loading notifications..." /> : null}
+      {loading ? <LoadingState text={t('mobile.notifications.loading')} /> : null}
       <section className="card-list">
         {items.map((item) => (
           <article key={item.id} className="list-card static notification-card">
             <Bell size={19} />
             <span>
-              <b>{item.title || 'Notification'}</b>
+              <b>{item.title || t('mobile.notifications.fallbackTitle')}</b>
               <small>{item.message || ''}</small>
             </span>
           </article>
         ))}
-        {!loading && !items.length ? <EmptyState title="No notifications" text="New account updates will appear here." /> : null}
+        {!loading && !items.length ? <EmptyState title={t('emptyStates.noNotifications')} text={t('emptyStates.notificationsComing')} /> : null}
       </section>
     </section>
   )
 }
 
 function FaqScreen({ navigate }) {
+  const { t } = useTranslation('common')
   const [open, setOpen] = useState('0')
+  const faqItems = t('mobile.faq.items', { returnObjects: true })
   return (
-    <section className="page-stack">
-      <PageHeader title="FAQ" onBack={() => navigate('profile')} />
+    <section className="page-stack account-linked-page">
+      <PageHeader title={t('common.faq')} onBack={() => navigate('profile')} />
       <section className="card-list">
         {faqItems.map((item, index) => (
           <button key={item.q} className="faq-card" type="button" onClick={() => setOpen(open === String(index) ? '' : String(index))}>
@@ -1736,13 +1909,15 @@ function FaqScreen({ navigate }) {
 }
 
 function SuccessScreen({ navigate, title, text }) {
+  const { t } = useTranslation('common')
+
   return (
     <section className="success-screen-view">
       <CheckCircle2 size={84} />
       <h1>{title}</h1>
       <p>{text}</p>
       <button className="primary-button full" type="button" onClick={() => navigate('home')}>
-        Continue
+        {t('common.continue')}
         <ArrowRight size={18} />
       </button>
     </section>
@@ -1750,6 +1925,7 @@ function SuccessScreen({ navigate, title, text }) {
 }
 
 function ImageCarousel({ images }) {
+  const { t } = useTranslation('common')
   const [index, setIndex] = useState(0)
 
   useEffect(() => {
@@ -1762,12 +1938,14 @@ function ImageCarousel({ images }) {
   return (
     <div className="promo-frame">
       <img src={images[index]} alt="" />
-      <Dots className="compact" length={images.length} index={index} onChange={setIndex} label="Promo images" />
+      <Dots className="compact" length={images.length} index={index} onChange={setIndex} label={t('mobile.onboarding.promoLabel')} />
     </div>
   )
 }
 
 function Dots({ length, index, onChange, label, className = '' }) {
+  const { t } = useTranslation('common')
+
   return (
     <div className={`slide-dots ${className}`} aria-label={label}>
       {Array.from({ length }).map((_, dotIndex) => (
@@ -1775,7 +1953,7 @@ function Dots({ length, index, onChange, label, className = '' }) {
           key={dotIndex}
           className={dotIndex === index ? 'active' : ''}
           type="button"
-          aria-label={`Open slide ${dotIndex + 1}`}
+          aria-label={t('mobile.onboarding.openSlide', { number: dotIndex + 1 })}
           onClick={() => onChange(dotIndex)}
         />
       ))}
@@ -1784,13 +1962,14 @@ function Dots({ length, index, onChange, label, className = '' }) {
 }
 
 function MatchCard({ match, onClick }) {
-  const start = formatMatchStart(match)
+  const { t } = useTranslation('common')
+  const start = formatMatchStart(match, t)
 
   return (
     <button className="match-card" type="button" onClick={onClick}>
       <div className="match-league">
-        <span>{leagueName(match)}</span>
-        {match.company ? <b>Verified</b> : null}
+        <span>{leagueName(match, t)}</span>
+        {match.company ? <b>{t('common.verified')}</b> : null}
       </div>
       <div className="match-teams">
         <Team name={match.home} image={match.ihome} />
@@ -1810,19 +1989,23 @@ function MatchCard({ match, onClick }) {
 }
 
 function Team({ name, image }) {
+  const { t } = useTranslation('common')
+
   return (
     <div className="team-block">
       <img src={image || ballImage} alt="" />
-      <span>{name || 'Team'}</span>
+      <span>{name || t('common.team')}</span>
     </div>
   )
 }
 
 function Odd({ label, value }) {
+  const { t } = useTranslation('common')
+
   return (
     <span className="odd-pill">
       <b>{label}</b>
-      <strong>{value || '-'}</strong>
+      <strong>{value || t('common.placeholderDash')}</strong>
     </span>
   )
 }
@@ -1862,10 +2045,12 @@ function SelectField({ label, value, onChange, children }) {
 }
 
 function InfoRow({ label, value }) {
+  const { t } = useTranslation('common')
+
   return (
     <div className="info-row">
       <span>{label}</span>
-      <b>{value || '-'}</b>
+      <b>{value || t('common.placeholderDash')}</b>
     </div>
   )
 }
@@ -1906,22 +2091,27 @@ function EmptyState({ icon, title, text }) {
   )
 }
 
-async function loadPaymentData(setData, setLoading, setMessage) {
+async function loadPaymentData(setData, setLoading, setMessage, fallbackMessage) {
   setLoading(true)
   setMessage(null)
   try {
     const payload = await apiFetch('/api/mobile/payment-data', { auth: true })
     setData(payload)
   } catch (error) {
-    setMessage({ type: 'error', text: error?.message || 'Unable to load payment data.' })
+    setMessage({ type: 'error', text: error?.message || fallbackMessage })
   } finally {
     setLoading(false)
   }
 }
 
-async function copyText(value) {
+async function copyText(value, successMessage, errorMessage) {
   if (!value) return
-  await navigator.clipboard?.writeText(value).catch(() => null)
+  try {
+    await navigator.clipboard.writeText(value)
+    toast.success(successMessage)
+  } catch (error) {
+    toast.error(errorMessage)
+  }
 }
 
 function filterMatches(matches, activeFilter, nowMs = Date.now()) {
@@ -1951,7 +2141,7 @@ function getMatchStartMs(match) {
   return Number.isFinite(fallback) ? fallback : 0
 }
 
-function formatMatchStart(match) {
+function formatMatchStart(match, t) {
   const startMs = getMatchStartMs(match)
   if (startMs) {
     const date = new Date(startMs)
@@ -1963,7 +2153,7 @@ function formatMatchStart(match) {
 
   return {
     time: match?.time || '--:--',
-    date: match?.date || 'Upcoming',
+    date: match?.date || t('common.upcoming'),
   }
 }
 
@@ -1975,16 +2165,16 @@ function localDateKey(date) {
   ].join('-')
 }
 
-function leagueName(match) {
-  return (match?.league === 'others' ? match?.otherl : match?.league) || 'League'
+function leagueName(match, t) {
+  return (match?.league === 'others' ? match?.otherl : match?.league) || t('common.league')
 }
 
-function betStatus(bet) {
+function betStatus(bet, t) {
   const startMs = getMatchStartMs(bet)
-  if (startMs && startMs > Date.now()) return { label: 'Not Started', tone: 'pending' }
-  if (bet.won === 'true') return { label: 'Won', tone: 'success' }
-  if (bet.won === 'false') return { label: 'Lost', tone: 'failed' }
-  return { label: 'Ongoing', tone: 'processing' }
+  if (startMs && startMs > Date.now()) return { label: t('status.notStarted'), tone: 'pending' }
+  if (bet.won === 'true') return { label: t('status.won'), tone: 'success' }
+  if (bet.won === 'false') return { label: t('status.lost'), tone: 'failed' }
+  return { label: t('status.ongoing'), tone: 'processing' }
 }
 
 function destinationMatchesMethod(destination, method) {
@@ -2010,9 +2200,9 @@ function formatNumber(value) {
   return Number.isFinite(number) ? number.toFixed(3) : '0.000'
 }
 
-function formatDate(value) {
-  if (!value) return 'Just now'
+function formatDate(value, t) {
+  if (!value) return t('common.justNow')
   const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return 'Just now'
+  if (Number.isNaN(date.getTime())) return t('common.justNow')
   return date.toLocaleDateString([], { month: 'short', day: 'numeric' })
 }

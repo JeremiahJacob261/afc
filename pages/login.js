@@ -13,8 +13,11 @@ import AppLoadingOverlay from '@/components/AppLoadingOverlay';
 import FeedbackDialog from '@/components/FeedbackDialog';
 import { waitForPaint } from '@/lib/uiFeedback';
 import { Toaster } from 'react-hot-toast';
+import { useTranslation } from 'next-i18next';
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 
 export default function Login() {
+  const { t } = useTranslation('common')
   const [loading, setLoading] = useState(false)
   const [feedback, setFeedback] = useState(null)
   const router = useRouter();
@@ -66,23 +69,23 @@ export default function Login() {
         if (result?.message === 'TypeError: fetch failed') {
           setFeedback({
             type: 'error',
-            title: 'Network error',
-            message: 'Please check your connection and try again.',
+            title: t('messages.networkError'),
+            message: t('messages.checkConnectionTryAgain'),
           })
           return
         } else if (result?.message === 'Invalid login credentials') {
           setFeedback({
             type: 'error',
-            title: 'Incorrect details',
-            message: 'The email, username, or password you entered is incorrect.',
+            title: t('messages.incorrectDetails'),
+            message: t('messages.loginDetailsIncorrect'),
           })
           return
         } else {
           if (!response.ok || result.status !== 'success') {
             setFeedback({
               type: 'error',
-              title: 'Unable to sign in',
-              message: 'An error occurred. Please try again.',
+              title: t('messages.unableSignIn'),
+              message: t('messages.anErrorOccurred'),
             })
             return
           }
@@ -99,8 +102,8 @@ export default function Login() {
         console.error(error)
         setFeedback({
           type: 'error',
-          title: 'Unable to sign in',
-          message: error.message === 'Invalid login credentials' ? 'Incorrect login details.' : error.message,
+          title: t('messages.unableSignIn'),
+          message: error.message === 'Invalid login credentials' ? t('messages.incorrectLoginDetails') : error.message,
         })
         return
       }
@@ -112,8 +115,8 @@ export default function Login() {
       console.error(error)
       setFeedback({
         type: 'error',
-        title: 'Connection problem',
-        message: 'Please check your internet connection and try again.',
+        title: t('messages.connectionProblem'),
+        message: t('messages.checkConnectionTryAgain'),
       })
     } finally {
       if (!navigating) setLoading(false)
@@ -124,13 +127,13 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-white text-gray-900 flex flex-col relative overflow-hidden">
       <Head>
-        <title>Login</title>
-        <meta name="description" content="Login to your Account to see whats up with your bets" />
+        <title>{t('common.login')}</title>
+        <meta name="description" content={t('auth.login.subtitle')} />
         <meta name="robots" content="noindex,nofollow,noarchive" />
         <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <AppLoadingOverlay open={loading} title="Signing in" message="Checking your account details." />
+      <AppLoadingOverlay open={loading} title={t('messages.signingInTitle')} message={t('messages.signingInMessage')} />
       <FeedbackDialog
         open={Boolean(feedback)}
         type={feedback?.type}
@@ -147,7 +150,7 @@ export default function Login() {
       <header className="relative z-10 px-6 py-6 sm:px-10">
         <Link href="/" className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors">
           <ArrowLeft className="w-5 h-5" />
-          <span className="font-medium">Back to Home</span>
+          <span className="font-medium">{t('common.backToHome')}</span>
         </Link>
       </header>
 
@@ -156,7 +159,7 @@ export default function Login() {
           <div className="flex justify-center mb-8">
             <Link href="/" className="flex items-center gap-2">
               <Image src={LOGO} alt="EFC Logo" width={40} height={40} className="w-10 h-10 object-contain" />
-              <span className="text-3xl font-black tracking-[-0.04em] text-gray-900">EFC</span>
+              <span className="text-3xl font-black tracking-[-0.04em] text-gray-900">{t('common.appName')}</span>
             </Link>
           </div>
 
@@ -164,20 +167,20 @@ export default function Login() {
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#2ECFC4] to-[#1BB6FF]" />
 
             <div className="mb-8 text-center">
-              <h1 className="text-2xl font-black tracking-tight mb-2">Welcome Back</h1>
-              <p className="text-gray-500 text-sm">Sign in to access your Investment Bets</p>
+              <h1 className="text-2xl font-black tracking-tight mb-2">{t('auth.login.title')}</h1>
+              <p className="text-gray-500 text-sm">{t('auth.login.subtitle')}</p>
             </div>
 
             <form className="space-y-5" onSubmit={(e) => { e.preventDefault(); login(); }}>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700 ml-1">Email or Username</label>
+                <label className="text-sm font-medium text-gray-700 ml-1">{t('auth.login.identityLabel')}</label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <User className="w-5 h-5 text-gray-400" />
                   </div>
                   <input
                     type="text"
-                    placeholder="Email or Username"
+                    placeholder={t('auth.login.identityLabel')}
                     value={email}
                     onChange={(e) => setEmail(e.target.value.replace(/\s/g, ''))}
                     autoComplete="username"
@@ -189,8 +192,8 @@ export default function Login() {
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between ml-1">
-                  <label className="text-sm font-medium text-gray-700">Password</label>
-                  <Link href="/passwordreset" className="text-xs text-[#1BB6FF] hover:text-[#2ECFC4] transition-colors">Forgot password?</Link>
+                  <label className="text-sm font-medium text-gray-700">{t('auth.login.passwordLabel')}</label>
+                  <Link href="/passwordreset" className="text-xs text-[#1BB6FF] hover:text-[#2ECFC4] transition-colors">{t('auth.login.forgotPassword')}</Link>
                 </div>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -216,15 +219,15 @@ export default function Login() {
                 disabled={loading}
                 className="w-full flex items-center justify-center gap-2 bg-[#1BB6FF] hover:bg-[#2ECFC4] text-[#06101F] font-bold rounded-xl py-3.5 transition-all hover:shadow-[0_0_20px_rgba(27,182,255,0.3)] mt-2 group"
               >
-                {loading ? 'Signing In...' : 'Sign In'}
+                {loading ? t('auth.login.submitting') : t('auth.login.submit')}
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </form>
 
             <div className="mt-6 text-center text-sm text-gray-500">
-              Don&apos;t have an account?{" "}
+              {t('auth.login.newAccount')}{" "}
               <Link href="/register/000208" className="text-gray-900 font-semibold hover:text-[#1BB6FF] transition-colors">
-     signin           Create Account
+                {t('common.createAccount')}
               </Link>
             </div>
           </div>
@@ -232,4 +235,12 @@ export default function Login() {
       </main>
     </div>
   )
+}
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await getI18nServerSideProps(locale)),
+    },
+  }
 }

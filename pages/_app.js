@@ -9,8 +9,10 @@ import Head from 'next/head'
 import Footer from './footeras';
 import { BetContext } from '@/pages/api/Context'
 import { useRouter } from 'next/router'
+import { appWithTranslation } from 'next-i18next'
 import AdminShell from '@/components/admin/AdminShell'
 import AppLoadingOverlay from '@/components/AppLoadingOverlay'
+import nextI18NextConfig from '../next-i18next.config'
 function MyApp({ Component, pageProps }) {
 
   const [cookie, setCookie] = useCookies(["user"])
@@ -98,4 +100,4 @@ function MyApp({ Component, pageProps }) {
   )
 }
 
-export default MyApp
+export default appWithTranslation(MyApp, nextI18NextConfig)

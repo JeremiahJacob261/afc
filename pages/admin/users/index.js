@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { ArrowUpRight, Search, UserCheck, Users as UsersIcon, X } from 'lucide-react'
@@ -170,6 +171,7 @@ export default function Users({ dount = 0, count = 0, datw = [] }) {
 }
 
 export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
   try {
     requireAdmin(context.req)
     const supabaseAdmin = getSupabaseAdmin()
@@ -186,6 +188,7 @@ export async function getServerSideProps(context) {
 
     return {
       props: {
+      ...i18nProps,
         dount: activeUsersResult.count || 0,
         count: usersResult.count || 0,
         datw: usersResult.data || [],
@@ -201,6 +204,7 @@ export async function getServerSideProps(context) {
       }
     }
     console.log(error)
-    return { props: { dount: 0, count: 0, datw: [] } }
+    return { props: {
+      ...i18nProps, dount: 0, count: 0, datw: [] } }
   }
 }

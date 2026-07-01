@@ -1,0 +1,758 @@
+{
+  "common": {
+    "appName": "EFC",
+    "brandFull": "European Football",
+    "brandCompany": "European Football Clubs",
+    "login": "Log in",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "register": "Register",
+    "joinNow": "Join Now",
+    "createAccount": "Create Account",
+    "continue": "Continue",
+    "back": "Back",
+    "backToHome": "Back to Home",
+    "next": "Next",
+    "copy": "Copy",
+    "refresh": "Refresh",
+    "submit": "Submit",
+    "save": "Save",
+    "close": "Close",
+    "yes": "Yes",
+    "no": "No",
+    "all": "All",
+    "verified": "Verified",
+    "language": "Language",
+    "changeLanguage": "Change language",
+    "emailAddress": "Email address",
+    "subscribe": "Subscribe",
+    "notAvailable": "N/A",
+    "placeholderDash": "-",
+    "team": "Team",
+    "league": "League",
+    "upcoming": "Upcoming",
+    "justNow": "Just now",
+    "home": "Home",
+    "away": "Away",
+    "score": "Score",
+    "player": "Player",
+    "account": "Account",
+    "transaction": "Transaction",
+    "method": "Method",
+    "destination": "Destination",
+    "amount": "Amount",
+    "wallet": "Wallet",
+    "balance": "Balance",
+    "currentBalance": "Current Balance",
+    "deposit": "Deposit",
+    "withdraw": "Withdraw",
+    "matches": "Matches",
+    "myBets": "My Bets",
+    "profile": "Profile",
+    "faq": "FAQ",
+    "vip": "VIP",
+    "usdt": "USDT"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to open your EFC account.",
+      "identityLabel": "Email or username",
+      "identityPlaceholder": "username or email",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Password",
+      "forgotPassword": "Forgot password?",
+      "submit": "Sign in",
+      "submitting": "Signing in...",
+      "newAccount": "Create a new account",
+      "adminTitle": "Sign in to admin",
+      "adminIntro": "Welcome back",
+      "adminUsername": "Username",
+      "adminUsernamePlaceholder": "Enter admin username",
+      "adminPasswordPlaceholder": "Enter password"
+    },
+    "register": {
+      "title": "Create account",
+      "subtitle": "Join with the EFC mobile flow.",
+      "username": "Username",
+      "usernamePlaceholder": "johndoe",
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "code": "Code",
+      "phone": "Phone",
+      "phonePlaceholder": "8000000000",
+      "referralCode": "Referral code",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "confirmPasswordPlaceholder": "Confirm password",
+      "terms": "I am at least 18 and accept the EFC terms.",
+      "submit": "Create account",
+      "submitting": "Creating account...",
+      "hasAccount": "I already have an account"
+    },
+    "reset": {
+      "title": "Reset password",
+      "subtitle": "Send a reset link to your email.",
+      "submit": "Send reset email",
+      "submitting": "Sending..."
+    }
+  },
+  "forms": {
+    "chooseMethod": "Choose method",
+    "chooseWallet": "Choose wallet",
+    "autoSelect": "Auto select",
+    "bank": "Bank",
+    "bankName": "Bank name",
+    "accountName": "Account name",
+    "accountHolder": "Account holder",
+    "accountNumber": "Account number",
+    "walletAddress": "Wallet address",
+    "transactionPin": "Transaction PIN",
+    "pinPlaceholder": "4-digit PIN",
+    "enterPin": "Enter PIN",
+    "confirmPin": "Confirm PIN",
+    "uploadReceipt": "Upload receipt",
+    "searchUsername": "Search username",
+    "searchMethod": "Search method, currency, bank...",
+    "newReferralCode": "New referral code",
+    "newPassword": "New password"
+  },
+  "messages": {
+    "mobileAuthMissing": "Mobile auth is missing Supabase config.",
+    "mobileStorageMissing": "Mobile storage is missing Supabase config.",
+    "unableSignIn": "Unable to sign in. Check your connection and details.",
+    "networkError": "Network error",
+    "checkConnectionTryAgain": "Please check your connection and try again.",
+    "incorrectDetails": "Incorrect details",
+    "incorrectLoginDetails": "Incorrect login details.",
+    "loginDetailsIncorrect": "The email, username, or password you entered is incorrect.",
+    "anErrorOccurred": "An error occurred. Please try again.",
+    "connectionProblem": "Connection problem",
+    "signingInTitle": "Signing in",
+    "signingInMessage": "Checking your account details.",
+    "phoneIncomplete": "Please enter a complete phone number.",
+    "phoneNineDigits": "Please input a complete phone number with at least 9 digits",
+    "passwordsMustMatch": "Passwords must match.",
+    "acceptTerms": "Please accept the terms before continuing.",
+    "usernameExists": "Username already exists.",
+    "unableValidateUsername": "Unable to validate username right now",
+    "unableCreateProfile": "Unable to create user profile",
+    "welcomeToEfc": "Welcome to EFC",
+    "accountCreated": "Your account has been created successfully.",
+    "emailExists": "Email already exists!",
+    "emailRegistered": "Email already registered",
+    "strongerPasswordTitle": "Use a stronger password",
+    "strongerPasswordMessage": "For security reasons, please choose a stronger password. It should be at least 8 characters long and include a mix of letters, numbers, and symbols.",
+    "invalidEmailTitle": "Invalid email",
+    "invalidEmailMessage": "Please enter a valid email address.",
+    "unableCreateAccount": "Unable to create account. Check your connection.",
+    "resetEmailSent": "Reset email sent. Check your inbox.",
+    "resetEmailSentTitle": "Reset email sent",
+    "resetEmailSentMessage": "A message has been sent to your email. Follow the instructions there to change your password.",
+    "unableSendEmail": "Unable to send email",
+    "pleaseTryAgain": "Please try again.",
+    "enterEmailAddress": "Please enter your email address",
+    "sendingEmailTitle": "Sending email",
+    "sendingEmailMessage": "Preparing your password reset link.",
+    "unableSendReset": "Unable to send reset email.",
+    "sessionExpired": "Your session expired. Please sign in again.",
+    "unableRefreshAccount": "Unable to refresh account data right now.",
+    "unableLoadMatches": "Unable to load matches.",
+    "unableLoadMatch": "Unable to load match.",
+    "chooseScoreMarket": "Choose a score market first.",
+    "stakeMinimum": "Stake must be at least 1 USDT.",
+    "betPlaced": "Bet placed successfully.",
+    "unablePlaceBet": "Unable to place bet.",
+    "unableLoadBets": "Unable to load bets.",
+    "unableLoadBet": "Unable to load bet.",
+    "unableLoadProfile": "Unable to load profile.",
+    "chooseDepositMethod": "Choose a deposit method.",
+    "noPaymentDestination": "No payment destination is available for this method.",
+    "minimumDeposit": "Minimum deposit is {{amount}} {{currency}}.",
+    "uploadPaymentReceipt": "Upload your payment receipt.",
+    "depositFailed": "Deposit submission failed.",
+    "chooseWalletFirst": "Choose a wallet first.",
+    "enterTransactionPin": "Enter your transaction PIN.",
+    "minimumWithdrawal": "Minimum withdrawal is {{amount}} USDT.",
+    "unableSubmitWithdrawal": "Unable to submit withdrawal.",
+    "walletDetailsInvalid": "Please fill all wallet details correctly.",
+    "walletBindSuccess": "Wallet binding successful.",
+    "unableBindWallet": "Unable to bind wallet.",
+    "unableLoadTransactions": "Unable to load transactions.",
+    "unableLoadReferrals": "Unable to load referrals.",
+    "unableLoadVip": "Unable to load VIP progress.",
+    "pinAlreadySet": "You already have a transaction PIN. Contact admin to reset it.",
+    "unableLoadPin": "Unable to load PIN status.",
+    "pinFourDigits": "PIN must be 4 digits.",
+    "pinEntriesMustMatch": "Both PIN entries must match.",
+    "pinSet": "PIN set successfully.",
+    "unableSetPin": "Unable to set PIN.",
+    "unableLoadNotifications": "Unable to load notifications.",
+    "unableLoadPaymentData": "Unable to load payment data.",
+    "depositSubmitted": "Your receipt has been submitted and is awaiting admin confirmation.",
+    "depositSubmittedWithAmount": "Your receipt for {{amount}} USDT has been submitted and is awaiting admin confirmation.",
+    "withdrawalSent": "Your withdrawal request has been sent.",
+    "copied": "copied",
+    "copiedToClipboard": "Copied to clipboard",
+    "addressCopied": "Address copied",
+    "inviteLinkCopied": "Invite link copied",
+    "unableCopy": "Unable to copy",
+    "adminCredentialsRequired": "Please enter your admin credentials",
+    "adminLoginFailed": "login failed",
+    "adminLoginSuccess": "login successful"
+  },
+  "status": {
+    "active": "Active",
+    "pending": "Pending",
+    "success": "Success",
+    "failed": "Failed",
+    "completed": "Completed",
+    "live": "Live",
+    "notStarted": "Not Started",
+    "ongoing": "On Going",
+    "won": "Won",
+    "lost": "Lost",
+    "settled": "Settled",
+    "unsettled": "Unsettled",
+    "offlineMode": "Offline mode"
+  },
+  "emptyStates": {
+    "noUpcomingMatches": "No upcoming matches loaded yet.",
+    "offlineShellReady": "Offline shell ready.",
+    "liveRefreshOnline": "Live account and match data refresh when the app is online.",
+    "noMatches": "No matches",
+    "matchesComing": "Upcoming matches will appear here.",
+    "noBets": "No bets",
+    "betsComing": "Your bet history will appear here.",
+    "noTransactions": "No transactions",
+    "transactionsComing": "Deposits and withdrawals will appear here.",
+    "noReferrals": "No referrals yet",
+    "referralsComing": "Share your invite link to build your team.",
+    "noNotifications": "No notifications",
+    "notificationsComing": "New account updates will appear here.",
+    "noData": "No Data Available",
+    "checkConnection": "Please check your internet connection."
+  },
+  "landing": {
+    "meta": {
+      "title": "EFC Football Betting | Live Odds and Football Markets",
+      "description": "Bet on football with EFC. Browse football markets, compare live odds, manage your wallet, and play responsibly."
+    },
+    "nav": {
+      "markets": "Markets",
+      "liveBetting": "Live Betting",
+      "howItWorks": "How It Works",
+      "bonuses": "Bonuses",
+      "agents": "Agents",
+      "faq": "FAQ"
+    },
+    "hero": {
+      "title": "Football Betting Made Simple",
+      "copy": "Pick football matches, compare odds, place secure bets, and follow every result from one clear EFC betting experience.",
+      "createAccount": "Create Account",
+      "imageAlt": "Football player kicking a ball",
+      "stats": {
+        "marketsLabel": "Popular markets",
+        "marketsValue": "1X2, Goals, BTTS",
+        "safetyLabel": "Account safety",
+        "safetyValue": "Secure wallet",
+        "focusLabel": "Football focus",
+        "focusValue": "Fixtures and live odds"
+      },
+      "secureDeposits": "Secure Deposits",
+      "secureDepositsCopy": "Fund your wallet and confirm football slips with confidence.",
+      "responsiblePlay": "Responsible Play",
+      "responsiblePlayCopy": "Set a budget, bet on football you understand, and stay in control."
+    },
+    "markets": {
+      "eyebrow": "Football markets",
+      "title": "Bet on the moments that decide a match",
+      "copy": "Choose simple football markets before kickoff or follow live odds while the match is running.",
+      "pickMarket": "Pick market",
+      "items": [
+        {
+          "title": "1X2 Match Result",
+          "label": "Home / Draw / Away",
+          "copy": "Pick the match winner or back the draw before kickoff.",
+          "odds": "2.18"
+        },
+        {
+          "title": "Over / Under Goals",
+          "label": "Total goals",
+          "copy": "Bet on whether the final score clears the listed goal line.",
+          "odds": "1.82"
+        },
+        {
+          "title": "Both Teams To Score",
+          "label": "BTTS",
+          "copy": "Back both sides to find the net in the same match.",
+          "odds": "1.74"
+        },
+        {
+          "title": "Correct Score",
+          "label": "Exact result",
+          "copy": "Choose the final scoreline for bigger football odds.",
+          "odds": "8.50"
+        },
+        {
+          "title": "Live Betting",
+          "label": "In play",
+          "copy": "React to goals, cards, pressure, and late momentum.",
+          "odds": "Live"
+        }
+      ]
+    },
+    "howItWorks": {
+      "eyebrow": "How it works",
+      "title": "From fixture to confirmed football bet",
+      "copy": "A simple path for users who want to register, fund, select a football market, and track the result.",
+      "matchDayFlow": "Match day flow",
+      "featureTitle": "Build a bet slip around the football you know.",
+      "featureCopy": "Review the fixture, choose the market, enter your stake, and confirm only when the bet details look right.",
+      "featureAlt": "Football betting feature preview",
+      "ballAlt": "Football icon",
+      "steps": [
+        {
+          "title": "Create your account",
+          "copy": "Register with EFC and secure your football betting profile."
+        },
+        {
+          "title": "Fund your wallet",
+          "copy": "Start from the 5USDT minimum deposit and check the active deposit bonus."
+        },
+        {
+          "title": "Choose a football match",
+          "copy": "Browse fixtures, compare markets, and select the bet you want."
+        },
+        {
+          "title": "Place and track",
+          "copy": "Confirm your slip, follow the match, and review withdrawal status from 10USDT."
+        }
+      ]
+    },
+    "operations": {
+      "eyebrow": "Platform operations",
+      "title": "EFC football platform terms at a glance",
+      "copy": "The landing page now reflects the EFC operation card: deposit bonus, minimum deposit, daily percentage, and minimum withdrawal.",
+      "imageAlt": "European Football Clubs platform operations showing deposit bonus, minimum deposit, daily percentage, and minimum withdrawal",
+      "items": [
+        { "label": "Deposit bonus", "value": "1USDT" },
+        { "label": "Minimum deposit", "value": "5USDT" },
+        { "label": "Daily percentage", "value": "3-4%" },
+        { "label": "Minimum withdrawal", "value": "10USDT" }
+      ]
+    },
+    "features": {
+      "eyebrow": "Betting features",
+      "title": "Everything focused on football betting",
+      "copy": "Clear football markets, secure wallet controls, and simple bet tracking keep users close to the next match.",
+      "walletAlt": "European Football Clubs wallet rewards showing first deposit bonus, bet unlock target, referral bonus, and withdrawal charge",
+      "items": [
+        {
+          "title": "Competitive football odds",
+          "copy": "Compare clear prices across popular match markets."
+        },
+        {
+          "title": "Live match updates",
+          "copy": "Follow in-play movement as football matches change minute by minute."
+        },
+        {
+          "title": "Secure wallet controls",
+          "copy": "Manage deposits, withdrawals, and bet history from your account."
+        },
+        {
+          "title": "Fast bet slip flow",
+          "copy": "Move from fixture to confirmed bet with fewer steps."
+        }
+      ],
+      "walletRewards": [
+        { "label": "First deposit bonus", "value": "3%" },
+        { "label": "Bet unlock target", "value": "5 bets" },
+        { "label": "Referral bonus", "value": "5%" },
+        { "label": "Withdrawal charge", "value": "7%" }
+      ]
+    },
+    "live": {
+      "eyebrow": "Live football betting",
+      "title": "Follow the match and react to the odds",
+      "copy": "Live betting lets users respond to pressure, goals, cards, and momentum while the football match is still running.",
+      "board": "In-play board",
+      "boardTitle": "Odds shift as the match changes.",
+      "shots": "Shots",
+      "corners": "Corners",
+      "cards": "Cards",
+      "startBetting": "Start Betting",
+      "odds": "Odds",
+      "matches": [
+        { "fixture": "London FC vs Madrid City", "market": "Over 2.5 Goals", "price": "1.91", "status": "62 min" },
+        { "fixture": "Milan United vs Paris Club", "market": "Both Teams To Score", "price": "1.76", "status": "Live" },
+        { "fixture": "Lisbon Athletic vs Berlin Town", "market": "Home Win", "price": "2.24", "status": "84 min" }
+      ]
+    },
+    "bonuses": {
+      "eyebrow": "Bonuses and rewards",
+      "title": "EFC bonus and invitation program",
+      "copy": "Match the EFC invitation bonus card with tiered active-member rewards, welcome bonus details, and agent rebate information.",
+      "imageAlt": "European Football Clubs invitation bonus tiers from 10 to 100 active members",
+      "inviteActive": "Invite {{members}} active members",
+      "earnReward": "Earn {{reward}}",
+      "viewOffers": "View offers",
+      "items": [
+        {
+          "title": "Welcome deposit bonus",
+          "copy": "New users can start with the 1USDT deposit bonus shown in EFC platform operations."
+        },
+        {
+          "title": "Invitation bonus",
+          "copy": "Invite active members and unlock tiered USDT rewards as your football network grows."
+        },
+        {
+          "title": "Agent rebates",
+          "copy": "Agent rebate levels run from 7% on the first level through 3% on the third level."
+        }
+      ],
+      "tiers": [
+        { "members": "10", "reward": "10USDT" },
+        { "members": "20", "reward": "30USDT" },
+        { "members": "30", "reward": "50USDT" },
+        { "members": "50", "reward": "70USDT" },
+        { "members": "80", "reward": "100USDT" },
+        { "members": "100", "reward": "150USDT" }
+      ]
+    },
+    "agents": {
+      "eyebrow": "Agent rewards",
+      "title": "15% agent rebates and salary levels",
+      "copy": "Add the EFC agent program details from the provided rebate and salary cards.",
+      "rebateAlt": "European Football Clubs agent rebate levels showing 7 percent, 5 percent, and 3 percent",
+      "salaryAlt": "European Football Clubs agent salary levels from Agent A to Agent G",
+      "agent": "Agent",
+      "teamLevel": "Team level",
+      "teamVolume": "Team volume",
+      "salary": "Salary",
+      "rebates": [
+        { "level": "1st level", "rebate": "7%" },
+        { "level": "2nd level", "rebate": "5%" },
+        { "level": "3rd level", "rebate": "3%" }
+      ],
+      "salaryLevels": [
+        { "agent": "Agent A", "teamLevel": "Level 1-3", "teamVolume": "$2500", "salary": "$100 weekly" },
+        { "agent": "Agent B", "teamLevel": "Level 1-3", "teamVolume": "$5000", "salary": "$250 weekly" },
+        { "agent": "Agent C", "teamLevel": "Level 1-3", "teamVolume": "$10000", "salary": "$500 weekly" },
+        { "agent": "Agent D", "teamLevel": "Level 1-3", "teamVolume": "$15000", "salary": "$750 weekly" },
+        { "agent": "Agent E", "teamLevel": "Level 1-3", "teamVolume": "$20000", "salary": "$1250 weekly" },
+        { "agent": "Agent F", "teamLevel": "Level 1-3", "teamVolume": "$50000", "salary": "$3000 weekly" },
+        { "agent": "Agent G", "teamLevel": "Level 1-3", "teamVolume": "$100000", "salary": "$7500 weekly" }
+      ]
+    },
+    "trust": {
+      "eyebrow": "Trust and control",
+      "title": "Bet on football with clearer guardrails",
+      "copy": "Security, account records, and responsible betting reminders help users stay in control before and after each football bet.",
+      "cardTitle": "Responsible football betting belongs on the page.",
+      "cardCopy": "Users should set limits, review bet details, and avoid chasing losses. Football betting carries risk, so stakes should remain within a personal budget.",
+      "items": [
+        "Secure account access",
+        "Protected payment flow",
+        "Clear bet history",
+        "Responsible betting reminder"
+      ],
+      "itemCopy": "Clear controls and records help users make better football betting decisions."
+    },
+    "faq": {
+      "eyebrow": "Football betting FAQ",
+      "title": "Answers before the next fixture",
+      "copy": "A quick guide for users who want to understand football markets, live betting, and safer staking.",
+      "items": [
+        {
+          "question": "Which football markets can I bet on?",
+          "answer": "EFC highlights popular match result, goals, BTTS, correct score, and live football markets."
+        },
+        {
+          "question": "How do I start betting?",
+          "answer": "Create an account, fund your wallet, choose a football fixture, select your market, and confirm your slip."
+        },
+        {
+          "question": "Can I bet during a live football match?",
+          "answer": "Yes. Live markets are presented for available fixtures so you can react while the match is running."
+        },
+        {
+          "question": "How should I manage risk?",
+          "answer": "Set a budget before you bet, avoid chasing losses, and only stake what you can afford to lose."
+        }
+      ]
+    },
+    "cta": {
+      "eyebrow": "EFC football betting",
+      "title": "Ready for your next football pick?",
+      "copy": "Create an account, choose a football fixture, and place your bet with clear markets and secure account controls."
+    },
+    "footer": {
+      "logoAlt": "EFC European Football Clubs logo",
+      "copy": "Football betting markets, live odds, secure wallet controls, and responsible staking guidance in one EFC experience.",
+      "communityLink": "Football community link",
+      "matchNews": "Football match news",
+      "emailPlaceholder": "Your e-mail",
+      "groups": [
+        {
+          "title": "Betting",
+          "links": [
+            { "label": "Markets", "href": "#markets" },
+            { "label": "Live Betting", "href": "#live" },
+            { "label": "How It Works", "href": "#how-it-works" }
+          ]
+        },
+        {
+          "title": "Account",
+          "links": [
+            { "label": "Register", "href": "/register/000208" },
+            { "label": "Log in", "href": "/login" },
+            { "label": "Bonuses", "href": "#bonuses" },
+            { "label": "Agents", "href": "#agents" }
+          ]
+        },
+        {
+          "title": "Help",
+          "links": [
+            { "label": "FAQ", "href": "#faq" },
+            { "label": "Responsible Betting", "href": "#trust" },
+            { "label": "Contact", "href": "#contact" }
+          ]
+        }
+      ]
+    }
+  },
+  "mobile": {
+    "splash": {
+      "eyebrow": "EFC Football",
+      "title": "Built for match day"
+    },
+    "onboarding": {
+      "eyebrow": "Mobile app",
+      "slidesLabel": "Onboarding slides",
+      "promoLabel": "Promo images",
+      "openSlide": "Open slide {{number}}",
+      "alreadyHaveAccount": "I already have an account",
+      "slides": [
+        {
+          "title": "Football Betting Made Simple",
+          "text": "Pick matches, compare odds, place secure bets, and follow results from one clear EFC mobile experience.",
+          "image": "/bfc1.jpg"
+        },
+        {
+          "title": "Secure wallet access",
+          "text": "Manage deposits, withdrawals, referrals, VIP progress, and account updates from the app.",
+          "image": "/bfc2.jpg"
+        },
+        {
+          "title": "Built for match day",
+          "text": "Open your account to see live football markets, exact score odds, and your active bet history.",
+          "image": "/bfc4.jpg"
+        }
+      ]
+    },
+    "countryCodes": {
+      "nigeria": "Nigeria",
+      "india": "India",
+      "pakistan": "Pakistan",
+      "indonesia": "Indonesia",
+      "unitedStates": "United States",
+      "unitedKingdom": "United Kingdom",
+      "southAfrica": "South Africa"
+    },
+    "filters": {
+      "today": "Today",
+      "next3h": "Next 3 hrs",
+      "next12h": "Next 12 hrs",
+      "tomorrow": "Tomorrow"
+    },
+    "markets": {
+      "other": "Other"
+    },
+    "topBar": {
+      "profile": "Open profile",
+      "notifications": "Notifications"
+    },
+    "nav": {
+      "label": "Main navigation",
+      "top": "Top",
+      "matches": "Matches",
+      "bets": "My Bets",
+      "profile": "Profile"
+    },
+    "home": {
+      "hello": "Hello",
+      "telegram": "Telegram Channel",
+      "telegramCopy": "Join our telegram group to earn more",
+      "topMatches": "Top Football Matches"
+    },
+    "match": {
+      "details": "Match Details",
+      "stakeAmount": "Stake amount",
+      "placeBet": "Place bet",
+      "placingBet": "Placing bet...",
+      "loading": "Loading match..."
+    },
+    "matches": {
+      "loading": "Loading matches..."
+    },
+    "bets": {
+      "details": "Bet Details",
+      "loading": "Loading bets...",
+      "loadingOne": "Loading bet...",
+      "unsettledWithCount": "Unsettled ({{count}})",
+      "settledWithCount": "Settled ({{count}})",
+      "match": "Match",
+      "stake": "Stake",
+      "pick": "Pick",
+      "kickoff": "Kickoff",
+      "status": "Status"
+    },
+    "profile": {
+      "vipReferralLine": "VIP {{level}} · {{count}} referrals",
+      "hello": "Hello,",
+      "currentBalance": "Current Balance",
+      "referralsTitle": "REFERRALS",
+      "allReferral": "All Referral",
+      "fundAccount": "Fund Account",
+      "vipProgress": "VIP Progress",
+      "withdrawalTitle": "Withdrawal",
+      "history": "History",
+      "codeSetting": "Code Setting",
+      "linkWallets": "Link Wallets",
+      "betsTitle": "Bets",
+    "aboutTitle": "About",
+    "language": "Language",
+    "telegramChannel": "Telegram Channel",
+      "customerService": "Customer Service",
+      "telegramGroup": "Telegram Group",
+      "contact": "Contact",
+      "closureTitle": "Closure",
+      "bindWallet": "Bind Wallet",
+      "transactions": "Transactions",
+      "referrals": "Referrals",
+      "transactionPin": "Transaction PIN"
+    },
+    "deposit": {
+      "title": "Deposit",
+      "loading": "Loading payment methods...",
+      "paymentDestination": "Payment destination",
+      "amountWithMinimum": "Amount · min {{amount}}",
+      "submit": "Submit deposit",
+      "submitting": "Submitting...",
+      "successTitle": "Deposit Submitted"
+    },
+    "withdraw": {
+      "title": "Withdraw",
+      "loading": "Loading wallets...",
+      "bindFirst": "Bind a wallet first",
+      "fee": "Fee {{percent}}%",
+      "totalDebit": "Total debit: {{amount}} USDT",
+      "submit": "Submit withdrawal",
+      "successTitle": "Withdrawal Success"
+    },
+    "wallet": {
+      "bind": "Bind Wallet",
+      "loading": "Loading methods...",
+      "submit": "Bind wallet",
+      "saving": "Saving..."
+    },
+    "transactions": {
+      "title": "Transactions",
+      "deposits": "Deposits",
+      "withdrawals": "Withdrawals",
+      "loading": "Loading transactions..."
+    },
+    "referrals": {
+      "title": "Referrals",
+      "inviteCode": "Invite code",
+      "copyInvite": "Copy invite link",
+      "level": "Level {{level}}",
+      "totalDeposit": "Total deposit {{amount}}"
+    },
+    "vip": {
+      "totalDeposit": "Total Deposit",
+      "referrals": "Referrals",
+      "total": "Total"
+    },
+    "pin": {
+      "checking": "Checking PIN status...",
+      "warning": "Your transaction PIN cannot be changed in the app after it is set.",
+      "set": "Set PIN"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "loading": "Loading notifications...",
+      "fallbackTitle": "Notification"
+    },
+    "faq": {
+      "items": [
+        {
+          "q": "How do I deposit?",
+          "a": "Open Deposit, choose an available method, enter the amount, pay to the shown destination, then upload your receipt."
+        },
+        {
+          "q": "How do I withdraw?",
+          "a": "Bind a wallet or bank account first, then open Withdraw, choose the account, enter your amount and transaction PIN."
+        },
+        {
+          "q": "Where can I see my bets?",
+          "a": "Use My Bets from the bottom navigation to switch between unsettled and settled bet records."
+        }
+      ]
+    }
+  },
+  "user": {
+    "pages": {
+      "account": "Account",
+      "address": "Address",
+      "bets": "Bets",
+      "deposit": "Deposit",
+      "fund": "Fund",
+      "history": "History",
+      "matches": "Matches",
+      "notification": "Notification",
+      "transaction": "Transaction",
+      "withdraw": "Withdraw"
+    }
+  },
+  "admin": {
+    "common": {
+      "overview": "Admin Overview",
+      "login": "Admin Login",
+      "dashboard": "Admin Dashboard",
+      "summary": "Summary",
+      "pendingReview": "Pending review",
+      "depositRows": "Deposit rows",
+      "withdrawalRows": "Withdrawal rows",
+      "decision": "Decision",
+      "copy": "COPY",
+      "done": "Done",
+      "pending": "PENDING",
+      "completed": "COMPLETED",
+      "viewProof": "View proof",
+      "copyAddress": "Copy address",
+      "approve": "Approve",
+      "reject": "Reject"
+    },
+    "finance": {
+      "title": "Admin Finance",
+      "queueTitle": "Finance Queue",
+      "queueCopy": "Approve deposits, settle withdrawals, and inspect payment proofs.",
+      "latestFinance": "Latest Finance",
+      "depositsWithdrawals": "Deposits and withdrawals"
+    },
+    "control": {
+      "title": "Control Center",
+      "copy": "Operational admin tools for rewards, wallets, announcements, and security.",
+      "firstDepositBonus": "First Deposit Bonus",
+      "firstDepositBonusCopy": "Applied once when an admin approves a first deposit.",
+      "withdrawalSettings": "Withdrawal Settings",
+      "withdrawalSettingsCopy": "Configure minimum, maximum, and fee for user withdrawals."
+    }
+  },
+  "errors": {
+    "generic": "Something went wrong.",
+    "unableToLoad": "Unable to load this content."
+  }
+}

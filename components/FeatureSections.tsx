@@ -10,13 +10,7 @@ import {
   Trophy,
   WalletCards,
 } from "lucide-react";
-import {
-  bettingFeatures,
-  footballMarkets,
-  howItWorks,
-  platformOperations,
-  walletRewards,
-} from "@/data/landing";
+import { useTranslation } from "next-i18next";
 import { Section } from "./Section";
 import ballPng from "@/public/soccer_ball_icon.png";
 import feature2 from "@/public/features-2.png";
@@ -29,13 +23,37 @@ const marketIcons = [Trophy, Goal, BarChart3, CircleDollarSign, Clock3];
 const featureIcons = [BarChart3, Clock3, WalletCards, ShieldCheck];
 
 export function FeatureSections() {
+  const { t } = useTranslation("common");
+  const footballMarkets = t("landing.markets.items", { returnObjects: true }) as Array<{
+    title: string;
+    label: string;
+    copy: string;
+    odds: string;
+  }>;
+  const howItWorks = t("landing.howItWorks.steps", { returnObjects: true }) as Array<{
+    title: string;
+    copy: string;
+  }>;
+  const platformOperations = t("landing.operations.items", { returnObjects: true }) as Array<{
+    label: string;
+    value: string;
+  }>;
+  const bettingFeatures = t("landing.features.items", { returnObjects: true }) as Array<{
+    title: string;
+    copy: string;
+  }>;
+  const walletRewards = t("landing.features.walletRewards", { returnObjects: true }) as Array<{
+    label: string;
+    value: string;
+  }>;
+
   return (
     <>
       <Section
         id="markets"
-        eyebrow="Football markets"
-        title="Bet on the moments that decide a match"
-        copy="Choose simple football markets before kickoff or follow live odds while the match is running."
+        eyebrow={t("landing.markets.eyebrow")}
+        title={t("landing.markets.title")}
+        copy={t("landing.markets.copy")}
       >
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
           {footballMarkets.map((market, index) => {
@@ -69,7 +87,7 @@ export function FeatureSections() {
                   href="/register/000208"
                   className="mt-6 inline-flex items-center gap-2 text-sm font-black text-[#1294D4] transition hover:text-navy-950"
                 >
-                  Pick market
+                  {t("landing.markets.pickMarket")}
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
               </div>
@@ -80,34 +98,33 @@ export function FeatureSections() {
 
       <Section
         id="how-it-works"
-        eyebrow="How it works"
-        title="From fixture to confirmed football bet"
-        copy="A simple path for users who want to register, fund, select a football market, and track the result."
+        eyebrow={t("landing.howItWorks.eyebrow")}
+        title={t("landing.howItWorks.title")}
+        copy={t("landing.howItWorks.copy")}
         className="bg-white"
       >
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="relative overflow-hidden rounded-lg bg-[#06101F] p-6 text-white sm:p-8">
             <div className="relative z-10 max-w-md">
               <p className="text-sm font-black uppercase text-[#1BB6FF]">
-                Match day flow
+                {t("landing.howItWorks.matchDayFlow")}
               </p>
               <h3 className="mt-4 text-3xl font-black leading-tight sm:text-4xl">
-                Build a bet slip around the football you know.
+                {t("landing.howItWorks.featureTitle")}
               </h3>
               <p className="mt-4 text-sm leading-6 text-white/[0.62]">
-                Review the fixture, choose the market, enter your stake, and
-                confirm only when the bet details look right.
+                {t("landing.howItWorks.featureCopy")}
               </p>
             </div>
             <div className="mt-8 grid grid-cols-2 gap-4">
               <Image
                 src={feature2}
-                alt="Football betting feature preview"
+                alt={t("landing.howItWorks.featureAlt")}
                 className="h-44 w-full rounded-lg bg-white/[0.08] object-contain p-4"
               />
               <Image
                 src={ballPng}
-                alt="Football icon"
+                alt={t("landing.howItWorks.ballAlt")}
                 className="h-44 w-full rounded-lg bg-white/[0.08] object-contain p-4"
               />
             </div>
@@ -135,15 +152,15 @@ export function FeatureSections() {
       </Section>
 
       <Section
-        eyebrow="Platform operations"
-        title="EFC football platform terms at a glance"
-        copy="The landing page now reflects the EFC operation card: deposit bonus, minimum deposit, daily percentage, and minimum withdrawal."
+        eyebrow={t("landing.operations.eyebrow")}
+        title={t("landing.operations.title")}
+        copy={t("landing.operations.copy")}
       >
         <div className="grid items-center gap-6 lg:grid-cols-[1.15fr_0.85fr]">
           <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-[0_20px_60px_rgba(6,16,31,0.12)]">
             <Image
               src={bfc1}
-              alt="European Football Clubs platform operations showing deposit bonus, minimum deposit, daily percentage, and minimum withdrawal"
+              alt={t("landing.operations.imageAlt")}
               sizes="(min-width: 1024px) 58vw, 100vw"
               className="aspect-[16/9] h-auto w-full object-cover"
             />
@@ -168,9 +185,9 @@ export function FeatureSections() {
       </Section>
 
       <Section
-        eyebrow="Betting features"
-        title="Everything focused on football betting"
-        copy="Clear football markets, secure wallet controls, and simple bet tracking keep users close to the next match."
+        eyebrow={t("landing.features.eyebrow")}
+        title={t("landing.features.title")}
+        copy={t("landing.features.copy")}
       >
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="space-y-5">
@@ -213,7 +230,7 @@ export function FeatureSections() {
           <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-[0_20px_60px_rgba(6,16,31,0.12)]">
             <Image
               src={bfc4}
-              alt="European Football Clubs wallet rewards showing first deposit bonus, bet unlock target, referral bonus, and withdrawal charge"
+              alt={t("landing.features.walletAlt")}
               sizes="(min-width: 1024px) 52vw, 100vw"
               className="aspect-[16/9] h-auto w-full object-cover"
             />
