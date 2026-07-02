@@ -1,6 +1,7 @@
 import { Typography, Stack } from "@mui/material";
 import { useState, useEffect } from "react";
 import { supabase } from '@/pages/api/supabase'
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
 import DiamondIcon from '@mui/icons-material/Diamond';
 import { useRouter } from 'next/router'
 import Cover from './cover'
@@ -10,7 +11,9 @@ import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeft
 import Logo from '@/public/logoclean.png'
 import Head from 'next/head'
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
+import { useTranslation } from 'next-i18next';
 export default function Vip() {
+  const { t } = useTranslation('common');
   const [rprogress, setRProgress] = useState(0);
   const [cprogress, setCProgress] = useState(0);
   const [refCount, setRefCount] = useState(0);
@@ -106,7 +109,7 @@ export default function Vip() {
   return (
     <Cover>
       <Head>
-        <title>VIP Progress</title>
+        <title>{t('mobile.profile.vipProgress')}</title>
         <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
@@ -123,7 +126,7 @@ export default function Vip() {
 
         <Stack justifyContent='left' alignItems='left'>
           <Stack>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Total Deposit</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{t('mobile.vip.totalDeposit')}</Typography>
             <Stack direction='row' justifyContent='left' alignItems='center' spacing={2}>
               <BorderLinearProgress variant="determinate" value={(Number(rprogress.toFixed(2)) > 100) ? 100 : Number(rprogress.toFixed(2))} sx={{ width: '230px' }} />
               <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{(Number(rprogress.toFixed(2)) > 100) ? 100 : Number(rprogress.toFixed(2))}%</Typography>
@@ -131,7 +134,7 @@ export default function Vip() {
           </Stack>
 
           <Stack>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Referrals</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{t('mobile.vip.referrals')}</Typography>
             <Stack direction='row' justifyContent='left' alignItems='center' spacing={2}>
               <BorderLinearProgress variant="determinate" value={(Number(cprogress.toFixed(2)) > 100) ? 100 : Number(cprogress.toFixed(2))} sx={{ width: '230px' }} />
               <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{(Number(cprogress.toFixed(2)) > 100) ? 100 : Number(cprogress.toFixed(2))}%</Typography>
@@ -139,7 +142,7 @@ export default function Vip() {
           </Stack>
 
           <Stack>
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Total</Typography>
+            <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{t('mobile.vip.total')}</Typography>
             <Stack direction='row' justifyContent='left' alignItems='center' spacing={2}>
               <BorderLinearProgress variant="determinate" value={(r1 + c1) / 2} sx={{ width: '230px' }} />
               <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{(r1 + c1) / 2}%</Typography>
@@ -150,4 +153,13 @@ export default function Vip() {
       </Stack>
     </Cover>
   )
+}
+
+export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
+  return {
+    props: {
+      ...i18nProps,
+    },
+  }
 }

@@ -22,6 +22,8 @@ import toast, { Toaster } from 'react-hot-toast';
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 import AppLoadingOverlay from '@/components/AppLoadingOverlay';
 import { waitForPaint } from '@/lib/uiFeedback';
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
+import { useTranslation } from 'next-i18next';
 
 
 async function processBets(name) {
@@ -38,6 +40,7 @@ async function processBets(name) {
 }
 
 export default function Account() {
+  const { t } = useTranslation('common')
   const [, setCookie] = useCookies([]);
   const hasRun = useRef(false);
   const auth = getAuth(app);
@@ -91,7 +94,7 @@ export default function Account() {
         }
       } catch (e) {
         console.log(e)
-        toast.error('Unable to load account. Please refresh.')
+        toast.error(t('messages.unableLoadProfile'))
       } finally {
         if (active) setLoadingProfile(false)
       }
@@ -102,7 +105,7 @@ export default function Account() {
     return () => {
       active = false
     }
-  }, [router]);
+  }, [router, t]);
 
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -113,7 +116,7 @@ export default function Account() {
     return (
       <Snackbar open={opened} autoHideDuration={6000} onClose={handleClosed}>
         <Alert onClose={handleClosed} severity="success" sx={{ width: '100%' }}>
-          Invite Link Copied
+          {t('messages.inviteLinkCopied')}
         </Alert>
       </Snackbar>
     )
@@ -134,19 +137,19 @@ export default function Account() {
       router.push('/login');
     } catch (error) {
       console.log(error)
-      toast.error('Unable to sign out. Please try again.')
+      toast.error(t('messages.anErrorOccurred'))
       setAccountActionLoading(false)
     }
   }
   //end of snackbar2
   return (
     <Cover style={{ width: "100%", paddingBottom: '100px' }}>
-      <AppLoadingOverlay open={accountActionLoading} title="Signing out" message="Securing your account session." />
+      <AppLoadingOverlay open={accountActionLoading} title={t('common.signOut')} message="" />
       <Toaster position="bottom-center"
         reverseOrder={false} />
       <Sncks />
       <Head>
-        <title>{username ? `${username}` : 'Loading...'}&lsquo; Account</title>
+        <title>{`${username || t('status.pending')} ${t('common.account')}`}</title>
         <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
@@ -173,7 +176,7 @@ export default function Account() {
           <KeyboardArrowLeftOutlinedIcon sx={{ color: "#E9E5DA", width: '24px', height: '24px' }} onClick={() => {
             router.push('/user')
           }} />
-          <Typography sx={{ color: "#E9E5DA", fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>Profile</Typography>
+          <Typography sx={{ color: "#E9E5DA", fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>{t('common.profile')}</Typography>
         </Stack>
         {
           //start of profile
@@ -184,21 +187,21 @@ export default function Account() {
               <Image src={profile} width={50} height={50} alt="profile" />
               <Stack direction='column' spacing={0}>
                 <Stack direction="row">
-                  <Typography sx={{ color: "#FFFFFF", fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins, sans-serif' }}>Hello ,</Typography>
-                  <p className="notranslate" style={{ color: "#FFFFFF", fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins, sans-serif' }}>{username || (loadingProfile ? 'Loading...' : 'Account')}</p>
+                  <Typography sx={{ color: "#FFFFFF", fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins, sans-serif' }}>{t('mobile.profile.hello')}</Typography>
+                  <p className="notranslate" style={{ color: "#FFFFFF", fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins, sans-serif' }}>{username || (loadingProfile ? t('status.pending') : t('common.account'))}</p>
                 </Stack>
                 <Typography sx={{ color: "#E9E5DA", fontSize: '14px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', width: '50px', textAlign: 'start' }}>VIP {viplevel}</Typography>
               </Stack>
             </Stack>
             <Stack style={{ padding: '8px', borderRadius: '10px', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
               <Stack>
-                <Typography style={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>Current Balance </Typography>
+                <Typography style={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>{t('common.currentBalance')}</Typography>
                 <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>{balance.toFixed(3)} USDT</Typography>
               </Stack>
               <Link href='/user/fund' style={{ textDecoration: "none", color: 'white' }}>
                 <Stack style={{ background: '#1BB6FF', borderRadius: '20px', padding: '8px', width: '95px', height: '32px', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#10284D', fontSize: '12px' }}>
-                    Deposit
+                    {t('common.deposit')}
                   </Typography>
                   <KeyboardArrowRightIcon sx={{ width: '16px', height: '16px', color: "#10284D" }} />
                 </Stack>
@@ -210,7 +213,7 @@ export default function Account() {
                 <Stack direction='row' spacing={1} justifyContent='start'>
                   <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
 
-                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Telegram Channel</Typography>
+                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.telegramChannel')}</Typography>
                 </Stack>
               </Stack>
             </Link>
@@ -219,7 +222,7 @@ export default function Account() {
             //deposit
           }
           <Stack direction='column' spacing={1} style={{ background: '#10284D', padding: '12px', borderRadius: "5px", border: '1px solid #1BB6FF' }}>
-            <Typography sx={{ color: "#1BB6FF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>REFERRALS</Typography>
+            <Typography sx={{ color: "#1BB6FF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.referralsTitle')}</Typography>
 
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', height: '110px', padding: '8px', background: '#06101F', borderRadius: '8px' }}>
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} alignItems="center">
@@ -230,8 +233,8 @@ export default function Account() {
                 <Icon icon="solar:copy-bold-duotone" width="24" height="24" style={{ color: '#a3a3a3' }} onClick={() => {
                   if (!info?.newrefer) return
                   navigator.clipboard.writeText("https://europeanfc01.com/register/" + info.newrefer)
-                  setMessages("Invite Link Copied")
-                  toast.success("Invite link copied")
+                  setMessages(t('messages.inviteLinkCopied'))
+                  toast.success(t('messages.inviteLinkCopied'))
                 }} />
               </Stack>
               <Divider sx={{ bgcolor: "#1BB6FF" }} />
@@ -241,7 +244,7 @@ export default function Account() {
                 }}>
                 <Stack direction='row' spacing={1} justifyContent='start'>
                   <Icon icon="carbon:diagram-reference" width="24" height="24" style={{ color: !info?.firstd ? '#a3a3a3' : 'lightgreen' }} />
-                  <Typography sx={{ color: !info?.firstd ? '#a3a3a3' : 'lightgreen', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>All Referral</Typography>
+                  <Typography sx={{ color: !info?.firstd ? '#a3a3a3' : 'lightgreen', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.allReferral')}</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
@@ -254,7 +257,7 @@ export default function Account() {
             //fun
           }
           <Stack direction='column' spacing={1} style={{ background: '#10284D', padding: '12px', borderRadius: "5px", border: '1px solid #1BB6FF' }}>
-            <Typography sx={{ color: "#1BB6FF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Deposit</Typography>
+            <Typography sx={{ color: "#1BB6FF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>{t('common.deposit')}</Typography>
             <Divider />
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', height: '110px', padding: '8px', background: '#06101F', borderRadius: '8px' }}>
 
@@ -263,7 +266,7 @@ export default function Account() {
               }}>
                 <Stack direction='row' spacing={1} justifyContent='start' alignItems={"center"} style={{ cursor: 'pointer' }}>
                   <Icon icon="streamline:money-atm-card-3-deposit-money-payment-finance-atm-withdraw" width="24" height="24" style={{ color: "#a3a3a3" }} />
-                  <Typography sx={{ color: '#E9E5DA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Fund Account</Typography>
+                  <Typography sx={{ color: '#E9E5DA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.fundAccount')}</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
@@ -275,7 +278,7 @@ export default function Account() {
               }}>
                 <Stack direction='row' spacing={1} justifyContent='start' alignItems={"center"}>
                   <Icon icon="icon-park-twotone:diamond-one" width="24" height="24" style={{ color: "#1BB6FF" }} />
-                  <Typography sx={{ color: '#E9E5DA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>VIP Progress</Typography>
+                  <Typography sx={{ color: '#E9E5DA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.vipProgress')}</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
@@ -288,7 +291,7 @@ export default function Account() {
             //withdraw
           }
           <Stack direction='column' spacing={1} style={{ background: '#10284D', padding: '12px', borderRadius: "5px", border: '1px solid #1BB6FF' }}>
-            <Typography sx={{ color: "#1BB6FF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Withdrawal</Typography>
+            <Typography sx={{ color: "#1BB6FF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.withdrawalTitle')}</Typography>
             <Divider />
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '150px', padding: '8px', background: '#06101F', borderRadius: '8px' }}>
 
@@ -297,7 +300,7 @@ export default function Account() {
               }}>
                 <Stack direction='row' spacing={1} justifyContent='start' alignItems="center">
                   <Icon icon="uil:money-withdraw" width="24" height="24" style={{ color: '#a3a3a3' }} />
-                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Withdraw</Typography>
+                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('common.withdraw')}</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
@@ -309,7 +312,7 @@ export default function Account() {
               }}>
                 <Stack direction='row' spacing={1} justifyContent='start' alignItems="center">
                   <Icon icon="ri:history-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
-                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>History</Typography>
+                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.history')}</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
@@ -321,7 +324,7 @@ export default function Account() {
               }}>
                 <Stack direction='row' spacing={1} justifyContent='start' alignItems="center">
                   <Icon icon="iconamoon:lock-light" width="24" height="24" style={{ color: '#a3a3a3' }} />
-                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Code Setting</Typography>
+                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.codeSetting')}</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
@@ -333,7 +336,7 @@ export default function Account() {
               }}>
                 <Stack direction='row' spacing={1} justifyContent='start'>
                   <Icon icon="icon-park-twotone:connect" width="24" height="24" style={{ color: '#a3a3a3' }} />
-                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Link Wallets</Typography>
+                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.linkWallets')}</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
@@ -346,7 +349,7 @@ export default function Account() {
             //fun
           }
           <Stack direction='column' spacing={1} style={{ background: '#10284D', padding: '12px', borderRadius: "5px", border: '1px solid #1BB6FF' }}>
-            <Typography sx={{ color: "#1BB6FF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Bets</Typography>
+            <Typography sx={{ color: "#1BB6FF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.betsTitle')}</Typography>
             <Divider />
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '50px', padding: '8px', background: '#06101F', borderRadius: '8px' }}>
 
@@ -355,7 +358,7 @@ export default function Account() {
               }}>
                 <Stack direction='row' spacing={1} justifyContent='start' alignItems="center">
                   <Icon icon="mdi:clipboard-text-history-outline" width="24" height="24" style={{ color: '#a3a3a3' }} />
-                  <Typography sx={{ color: '#E9E5DA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>My Bets</Typography>
+                  <Typography sx={{ color: '#E9E5DA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('common.myBets')}</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
@@ -368,7 +371,7 @@ export default function Account() {
             //About
           }
           <Stack direction='column' spacing={1} style={{ background: '#10284D', padding: '12px', borderRadius: "5px", border: '1px solid #1BB6FF' }}>
-            <Typography sx={{ color: "#1BB6FF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>About</Typography>
+            <Typography sx={{ color: "#1BB6FF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.aboutTitle')}</Typography>
             <Divider />
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '50px', padding: '8px', background: '#06101F', borderRadius: '8px' }}>
 
@@ -378,7 +381,7 @@ export default function Account() {
               }>
                 <Stack direction='row' spacing={1} justifyContent='start'>
                   <Icon icon="streamline:interface-help-question-circle-circle-faq-frame-help-info-mark-more-query-question" width="24" height="24" style={{ color: '#a3a3a3' }} />
-                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>FAQ</Typography>
+                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('common.faq')}</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
@@ -391,7 +394,7 @@ export default function Account() {
                   <Stack direction='row' spacing={1} justifyContent='start'>
                     <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
 
-                    <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Customer Service</Typography>
+                    <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.customerService')}</Typography>
                   </Stack>
                   <KeyboardArrowRightIcon width={24} height={24} />
                 </Stack>
@@ -403,7 +406,7 @@ export default function Account() {
                   <Stack direction='row' spacing={1} justifyContent='start'>
                     <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
 
-                    <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Telegram Group</Typography>
+                    <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.telegramGroup')}</Typography>
                   </Stack>
                   <KeyboardArrowRightIcon width={24} height={24} />
                 </Stack>
@@ -415,7 +418,7 @@ export default function Account() {
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                   <Stack direction='row' spacing={1} justifyContent='start'>
                     <Icon icon="mdi:support" width="24" height="24" style={{ color: '#a3a3a3' }} />
-                    <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Contact</Typography>
+                    <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.contact')}</Typography>
                   </Stack>
                   <KeyboardArrowRightIcon width={24} height={24} />
                 </Stack>
@@ -429,7 +432,7 @@ export default function Account() {
             //close
           }
           <Stack direction='column' spacing={1} style={{ background: '#10284D', padding: '12px', borderRadius: "5px", border: '1px solid #1BB6FF' }}>
-            <Typography sx={{ color: "#1BB6FF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>Closure</Typography>
+            <Typography sx={{ color: "#1BB6FF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.closureTitle')}</Typography>
             <Divider />
             <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '50px', padding: '8px', background: '#06101F', borderRadius: '8px' }}>
 
@@ -437,7 +440,7 @@ export default function Account() {
                 onClick={signOutAccount}>
                 <Stack direction='row' spacing={1} justifyContent='start' >
                   <Icon icon="hugeicons:logout-05" width="24" height="24" style={{ color: '#a3a3a3' }} />
-                  <Typography sx={{ color: '#E9E5DA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Sign out</Typography>
+                  <Typography sx={{ color: '#E9E5DA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('common.signOut')}</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
@@ -453,4 +456,13 @@ export default function Account() {
       </Box>
     </Cover>
   )
+}
+
+export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
+  return {
+    props: {
+      ...i18nProps,
+    },
+  }
 }

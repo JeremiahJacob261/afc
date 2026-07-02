@@ -1,4 +1,5 @@
 import Cover from './cover'
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Head from 'next/head'
@@ -10,6 +11,7 @@ import Loading from '@/pages/components/loading'
 import Ims from '@/public/simps/ball.png'
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth'
 import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay'
+import { useTranslation } from 'next-i18next'
 
 const colors = {
   page: '#06101F',
@@ -26,11 +28,6 @@ const colors = {
   danger: '#FF6B7A',
 }
 
-const tabs = [
-  { value: '1', label: 'Unsettled' },
-  { value: '2', label: 'Settled' },
-]
-
 const toNumber = (value) => {
   const amount = Number(value)
   return Number.isFinite(amount) ? amount : 0
@@ -38,26 +35,27 @@ const toNumber = (value) => {
 
 const formatUsdt = (value) => `${toNumber(value).toFixed(3)} USDT`
 
-const getBetStatus = (bet) => {
+const getBetStatus = (bet, t) => {
   const startTime = getMatchStartMs(bet)
   const hasFutureStart = Boolean(startTime && startTime > Date.now())
 
   if (hasFutureStart) {
-    return { label: 'Not Started', color: colors.muted, bg: '#121E2D' }
+    return { label: t('status.notStarted'), color: colors.muted, bg: '#121E2D' }
   }
 
   if (bet.won === 'true') {
-    return { label: 'Won', color: colors.success, bg: '#0F2C24' }
+    return { label: t('status.won'), color: colors.success, bg: '#0F2C24' }
   }
 
   if (bet.won === 'false') {
-    return { label: 'Lost', color: colors.danger, bg: '#321923' }
+    return { label: t('status.lost'), color: colors.danger, bg: '#321923' }
   }
 
-  return { label: 'Ongoing', color: colors.warning, bg: '#302816' }
+  return { label: t('status.ongoing'), color: colors.warning, bg: '#302816' }
 }
 
 export default function Bets() {
+  const { t } = useTranslation('common')
   const router = useRouter()
   const [openx, setOpenx] = useState(false)
   const [bets, setBets] = useState([])
@@ -108,18 +106,22 @@ export default function Bets() {
     const won = fina.filter((bet) => bet.won === 'true').length
 
     return [
-      { label: 'Open', value: bets.length },
-      { label: 'Settled', value: fina.length },
-      { label: 'Won', value: won },
-      { label: 'Stake', value: formatUsdt(totalStake) },
+      { label: t('status.unsettled'), value: bets.length },
+      { label: t('status.settled'), value: fina.length },
+      { label: t('status.won'), value: won },
+      { label: t('mobile.bets.stake'), value: formatUsdt(totalStake) },
     ]
-  }, [bets, fina])
+  }, [bets, fina, t])
+  const tabs = [
+    { value: '1', label: t('status.unsettled') },
+    { value: '2', label: t('status.settled') },
+  ]
 
   return (
     <Cover>
       <Loading open={openx} handleClose={handleClosex} />
       <Head>
-        <title>EFC - My Bets</title>
+        <title>{`EFC - ${t('common.myBets')}`}</title>
         <meta name="description" content="View your recent bet slips" />
         <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -149,14 +151,14 @@ export default function Bets() {
           </Box>
           <Box>
             <Typography sx={{ fontSize: 18, fontFamily: 'Poppins,sans-serif', fontWeight: 600 }}>
-              Bet History
+              {t('common.myBets')}
             </Typography>
           </Box>
         </Stack>
 
         <SummaryGrid items={summary} />
-        <BetTabs value={value} onChange={setValue} />
-        <BetList bets={currentBets} emptyLabel={value === '1' ? 'No unsettled bets yet' : 'No settled bets yet'} onOpen={handleOpenx} />
+        <BetTabs value={value} onChange={setValue} tabs={tabs} />
+        <BetList bets={currentBets} emptyLabel={t('emptyStates.noBets')} onOpen={handleOpenx} />
       </Box>
     </Cover>
   )
@@ -182,7 +184,7 @@ export default function Bets() {
             {emptyLabel}
           </Typography>
           <Typography sx={{ color: colors.muted, fontFamily: 'Poppins,sans-serif', fontSize: 13 }}>
-            Your bet slips will appear here after you place them.
+            {t('emptyStates.betsComing')}
           </Typography>
         </Stack>
       )
@@ -205,7 +207,7 @@ export default function Bets() {
   }
 
   function BetCard({ bet, onClick }) {
-    const status = getBetStatus(bet)
+    const status = getBetStatus(bet, t)
     const returnAmount = toNumber(bet.stake) + toNumber(bet.profit)
     const display = useClientMatchDisplay(bet)
 
@@ -238,10 +240,10 @@ export default function Bets() {
           <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ background: colors.cardAlt, borderRadius: '8px', p: 1 }}>
             <Box>
               <Typography sx={{ color: colors.muted, fontFamily: 'Poppins,sans-serif', fontSize: 11 }}>
-                Market
+                {t('landing.markets.pickMarket')}
               </Typography>
               <Typography sx={{ color: colors.text, fontFamily: 'Poppins,sans-serif', fontSize: 14, fontWeight: 600 }}>
-                {bet.market || 'Market'}
+                {bet.market || t('landing.markets.pickMarket')}
               </Typography>
             </Box>
             <StatusPill status={status} />
@@ -254,8 +256,8 @@ export default function Bets() {
               gap: 1,
             }}
           >
-            <Metric label="Odds" value={`${bet.odd || '0'}%`} />
-            <Metric label="Stake" value={formatUsdt(bet.stake)} />
+            <Metric label={t('landing.live.odds')} value={`${bet.odd || '0'}%`} />
+            <Metric label={t('mobile.bets.stake')} value={formatUsdt(bet.stake)} />
             <Metric label="Profit" value={formatUsdt(returnAmount)} />
           </Box>
         </Stack>
@@ -272,7 +274,7 @@ export default function Bets() {
           }}
         >
           <Typography sx={{ color: colors.muted, fontFamily: 'Poppins,sans-serif', fontSize: 12 }}>
-            Kickoff: {display.dateTime}
+            {t('mobile.bets.kickoff')}: {display.dateTime}
           </Typography>
           <Typography sx={{ color: colors.muted, fontFamily: 'Poppins,sans-serif', fontSize: 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             Bet ID: {bet.betid}
@@ -317,7 +319,7 @@ function SummaryGrid({ items }) {
   )
 }
 
-function BetTabs({ value, onChange }) {
+function BetTabs({ value, onChange, tabs }) {
   return (
     <Box
       sx={{
@@ -357,6 +359,15 @@ function BetTabs({ value, onChange }) {
       })}
     </Box>
   )
+}
+
+export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
+  return {
+    props: {
+      ...i18nProps,
+    },
+  }
 }
 
 function Team({ name, image, align = 'left' }) {

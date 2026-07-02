@@ -14,6 +14,8 @@ import InputBase from '@mui/material/InputBase';
 import { supabase } from "@/pages/api/supabase";
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 import { waitForPaint } from '@/lib/uiFeedback';
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
+import { useTranslation } from 'next-i18next';
 
 
 function normalize(value) {
@@ -25,6 +27,7 @@ function isLocalMethod(type) {
 }
 
 export default function Home() {
+    const { t } = useTranslation('common');
     const router = useRouter();
     const [paymentMethods, setPaymentMethods] = useState([]);
     const [loadingMethods, setLoadingMethods] = useState(true);
@@ -73,7 +76,7 @@ export default function Home() {
                 setPaymentMethods(Array.isArray(methods) ? methods : []);
             } catch (error) {
                 console.log(error);
-                toast.error('Unable to load payment methods');
+                toast.error(t('messages.unableLoadPaymentData'));
             } finally {
                 if (active) setLoadingMethods(false);
             }
@@ -84,7 +87,7 @@ export default function Home() {
         return () => {
             active = false;
         }
-    }, [router]);
+    }, [router, t]);
 
     const nextfund = async () => {
         if (open) return;
@@ -95,7 +98,7 @@ export default function Home() {
             const bankValue = normalize(bank);
 
             if (!selectedMethodId || walletValue.length < 3 || (isLocal && (accountNameValue.length < 3 || bankValue.length < 2))) {
-                toast('Please fill all details correctly',
+                toast(t('messages.walletDetailsInvalid'),
                     {
                         icon: '🤦‍♀️',
                         style: {
@@ -125,7 +128,7 @@ export default function Home() {
             });
             const data = await response.json();
             if (data.status == 'success') {
-                toast('Binding Wallet successful',
+                toast(t('messages.walletBindSuccess'),
                     {
                         icon: '🥳',
                         style: {
@@ -138,12 +141,12 @@ export default function Home() {
                 router.push('/user/account');
 
             } else {
-                toast.error(data.message || 'Unable to bind wallet')
+                toast.error(data.message || t('messages.unableBindWallet'))
                 handleClose();
             }
         } catch (e) {
             console.log(e);
-            toast.error('Unable to bind wallet');
+            toast.error(t('messages.unableBindWallet'));
             handleClose();
         }
     }
@@ -191,7 +194,7 @@ export default function Home() {
             <Toaster position="bottom-center"
                 reverseOrder={false} />
             <Head>
-                <title>BIND WALLET</title>
+                <title>{t('mobile.profile.bindWallet')}</title>
             </Head>
             <Loading open={open} handleClose={handleClose} />
             <Stack direction="column" spacing={3} justifyContent="center" alignItems="center" sx={{ minWidth: '350px', width: '100%', height: '100%' }} >
@@ -199,10 +202,10 @@ export default function Home() {
                 <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ marginTop: '20px', marginBottom: "20px", background: 'none', minWidth: "350px", paddingBottom: '30px', width: '100%', maxWidth: '450px' }}>
                     <Stack direction="column" alignItems="center" justifyContent={"center"} spacing={3} sx={{ background: '#10284D', padding: '16px', borderRadius: '8px', minWidth: "350px", maxWidth: '450px' }}>
                         <Stack direction="row" alignItems="center" justifyContent={"space-between"} sx={{ width: '100%' }}>
-                            <p style={{ color: '#D9D8D4', fontWeight: '700', fontSize: '14px' }}>BIND WALLET</p>
+                            <p style={{ color: '#D9D8D4', fontWeight: '700', fontSize: '14px' }}>{t('mobile.profile.bindWallet')}</p>
                         </Stack>
                         <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#06101F', padding: '8px', width: '100%', borderRadius: '8px' }}>
-                            <p className='normal-bold' style={{ textAlign: 'start' }}>Select Payment Method</p>
+                            <p className='normal-bold' style={{ textAlign: 'start' }}>{t('forms.chooseMethod')}</p>
                             <FormControl sx={{ m: 1, width: '100%', maxWidth: '301px' }} variant="standard">
                                 <NativeSelect
                                     id="demo-customized-select-native"
@@ -212,7 +215,7 @@ export default function Home() {
                                     disabled={loadingMethods}
                                 >
                                     <option value="" style={{ color: '#D9D8D4', background: '#212121' }}>
-                                        {loadingMethods ? 'Loading methods...' : 'Select a method'}
+                                        {loadingMethods ? t('mobile.wallet.loading') : t('forms.chooseMethod')}
                                     </option>
                                     {
                                         paymentMethods.map((w) => {
@@ -224,7 +227,7 @@ export default function Home() {
                                 </NativeSelect>
                             </FormControl>
                             {!loadingMethods && paymentMethods.length === 0 && (
-                                <p className='normal-bold' style={{ color: '#DE1A1A', textAlign: 'start' }}>No payment methods are available right now.</p>
+                                <p className='normal-bold' style={{ color: '#DE1A1A', textAlign: 'start' }}>{t('emptyStates.noData')}</p>
                             )}
                         </Stack>
 
@@ -232,8 +235,8 @@ export default function Home() {
                             isLocal ?
                                 <>
                                     <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#06101F', padding: '8px', width: '100%', borderRadius: '8px' }}>
-                                        <p className='normal-bold' style={{ textAlign: 'start' }}>Account Number</p>
-                                        <input type="text" className="amountinput" placeholder="account number" value={accountnumber} onChange={(e) => {
+                                        <p className='normal-bold' style={{ textAlign: 'start' }}>{t('forms.accountNumber')}</p>
+                                        <input type="text" className="amountinput" placeholder={t('forms.accountNumber')} value={accountnumber} onChange={(e) => {
                                             if (!isNaN(e.target.value)) {
                                                 setAccountNumber(e.target.value)
                                             }
@@ -241,8 +244,8 @@ export default function Home() {
                                     </Stack>
 
                                     <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#06101F', padding: '8px', width: '100%', borderRadius: '8px' }}>
-                                        <p className='normal-bold' style={{ textAlign: 'start' }}>Account Name</p>
-                                        <input type="text" className="amountinput" placeholder="account name" value={accountname} onChange={(e) => {
+                                        <p className='normal-bold' style={{ textAlign: 'start' }}>{t('forms.accountName')}</p>
+                                        <input type="text" className="amountinput" placeholder={t('forms.accountName')} value={accountname} onChange={(e) => {
 
                                             setAccountName(e.target.value)
                                         }} />
@@ -252,7 +255,7 @@ export default function Home() {
                                     {
                                         (curcode === 'idr') ?
                                             <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#06101F', padding: '8px', width: '100%', borderRadius: '8px' }}>
-                                                <p className='normal-bold' style={{ textAlign: 'start' }}>Select Bank</p>
+                                                <p className='normal-bold' style={{ textAlign: 'start' }}>{t('forms.bank')}</p>
                                                 <FormControl sx={{ m: 1, width: '100%', maxWidth: '301px' }} variant="standard">
                                                     <NativeSelect
                                                         id="demo-customized-select-native"
@@ -273,8 +276,8 @@ export default function Home() {
                                             </Stack>
                                             :
                                             <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#06101F', padding: '12px', width: '100%', borderRadius: '8px' }}>
-                                                <p className='normal-bold' style={{ textAlign: 'start' }}>Input your bank name</p>
-                                                <input type="text" className="amountinput" placeholder="bank name" value={bank} onChange={(e) => {
+                                                <p className='normal-bold' style={{ textAlign: 'start' }}>{t('forms.bankName')}</p>
+                                                <input type="text" className="amountinput" placeholder={t('forms.bankName')} value={bank} onChange={(e) => {
 
                                                     setBank(e.target.value)
                                                 }} />
@@ -286,8 +289,8 @@ export default function Home() {
                                 :
                                 <>
                                     <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#06101F', padding: '12px', width: '100%', borderRadius: '8px' }}>
-                                        <p className='normal-bold' style={{ textAlign: 'start' }}>Input your address</p>
-                                        <input type="text" className="amountinput" placeholder="wallet address" value={address} onChange={(e) => {
+                                        <p className='normal-bold' style={{ textAlign: 'start' }}>{t('forms.walletAddress')}</p>
+                                        <input type="text" className="amountinput" placeholder={t('forms.walletAddress')} value={address} onChange={(e) => {
 
                                             setAddress(e.target.value)
                                         }} />
@@ -300,11 +303,11 @@ export default function Home() {
 
                         <motion.div whileTap={{ scale: 0.9 }} whileHover={{ scale: 1.02 }} onClick={nextfund} style={{ width: '100%', height: '45px' }}>
                             <Stack className="powerbtn" direction="column" alignItems="center" justifyContent={"center"} sx={{}}>
-                                <p className="normal-bold" style={{ fontWeight: 'bold' }}>BIND WALLET</p>
+                                <p className="normal-bold" style={{ fontWeight: 'bold' }}>{t('mobile.profile.bindWallet')}</p>
                             </Stack>
                         </motion.div>
                     </Stack>
-                    <p onClick={() => router.back()} style={{ fontSize: '16px', fontWeight: 'bold', color: '#26A69A', textAlign: 'center', width: '100%', padding: '8px', textDecoration: 'underline', cursor: 'pointer' }}> Back</p>
+                    <p onClick={() => router.back()} style={{ fontSize: '16px', fontWeight: 'bold', color: '#26A69A', textAlign: 'center', width: '100%', padding: '8px', textDecoration: 'underline', cursor: 'pointer' }}>{t('common.back')}</p>
 
                 </Stack>
 
@@ -312,4 +315,13 @@ export default function Home() {
             </Stack>
         </Cover>
     )
+}
+
+export async function getServerSideProps(context) {
+    const i18nProps = await getI18nServerSideProps(context.locale)
+    return {
+        props: {
+            ...i18nProps,
+        },
+    }
 }

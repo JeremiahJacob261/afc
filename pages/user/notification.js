@@ -5,7 +5,9 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import Cover from './cover'
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth'
+import { useTranslation } from 'next-i18next'
 
 const categoryMeta = {
   bonus: {
@@ -64,10 +66,10 @@ function formatDate(value) {
   }).format(date)
 }
 
-function normalizeNotification(item) {
+function normalizeNotification(item, fallbackTitle) {
   return {
     id: item.id || `${item.timestamp || item.time}-${item.message}`,
-    title: item.title || 'Notification',
+    title: item.title || fallbackTitle,
     message: item.message || '',
     category: item.category || 'broadcast',
     timestamp: item.timestamp || item.time || null,
@@ -150,7 +152,7 @@ function NotificationCard({ item }) {
   )
 }
 
-function EmptyState() {
+function EmptyState({ t }) {
   return (
     <Stack
       spacing={1}
@@ -167,16 +169,17 @@ function EmptyState() {
     >
       <Icon icon="solar:bell-off-bold" width="38" height="38" style={{ color: '#8EA4C2' }} />
       <Typography sx={{ color: '#FFFFFF', fontFamily: 'Inter, Poppins, sans-serif', fontWeight: 700 }}>
-        No notifications
+        {t('emptyStates.noNotifications')}
       </Typography>
       <Typography sx={{ color: '#8EA4C2', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '13px' }}>
-        New account updates will appear here.
+        {t('emptyStates.notificationsComing')}
       </Typography>
     </Stack>
   )
 }
 
 export default function Notification() {
+  const { t } = useTranslation('common')
   const router = useRouter()
   const [notifications, setNotifications] = useState([])
   const [loading, setLoading] = useState(true)
@@ -200,15 +203,15 @@ export default function Notification() {
         }
 
         if (!response.ok) {
-          throw new Error('Unable to load notifications')
+          throw new Error(t('messages.unableLoadNotifications'))
         }
 
         const result = await response.json()
         if (!active) return
 
-        setNotifications(Array.isArray(result) ? result.map(normalizeNotification) : [])
+        setNotifications(Array.isArray(result) ? result.map((item) => normalizeNotification(item, t('mobile.notifications.fallbackTitle'))) : [])
       } catch (err) {
-        if (active) setError(err.message || 'Unable to load notifications')
+        if (active) setError(err.message || t('messages.unableLoadNotifications'))
       } finally {
         if (active) setLoading(false)
       }
@@ -219,12 +222,12 @@ export default function Notification() {
     return () => {
       active = false
     }
-  }, [router])
+  }, [router, t])
 
   return (
     <Cover>
       <Head>
-        <title>Notifications</title>
+        <title>{t('mobile.notifications.title')}</title>
         <link rel="icon" href="/european.ico" />
       </Head>
 
@@ -235,7 +238,7 @@ export default function Notification() {
             onClick={() => router.push('/user')}
           />
           <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins, sans-serif', fontWeight: 500, color: '#E9E5DA' }}>
-            Notifications
+            {t('mobile.notifications.title')}
           </Typography>
         </Stack>
 
@@ -253,10 +256,10 @@ export default function Notification() {
         >
           <Stack spacing={0.25}>
             <Typography sx={{ color: '#FFFFFF', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '18px', fontWeight: 800 }}>
-              Activity Center
+              {t('mobile.notifications.title')}
             </Typography>
             <Typography sx={{ color: '#8EA4C2', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '12px' }}>
-              {notifications.length} {notifications.length === 1 ? 'update' : 'updates'}
+              {notifications.length} {t('mobile.notifications.fallbackTitle').toLowerCase()}
             </Typography>
           </Stack>
           <Stack
@@ -278,7 +281,7 @@ export default function Notification() {
           <Stack spacing={1.5} sx={{ alignItems: 'center', justifyContent: 'center', minHeight: 360 }}>
             <CircularProgress size={28} sx={{ color: '#1BB6FF' }} />
             <Typography sx={{ color: '#8EA4C2', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '13px' }}>
-              Loading notifications
+              {t('mobile.notifications.loading')}
             </Typography>
           </Stack>
         ) : error ? (
@@ -292,7 +295,7 @@ export default function Notification() {
             }}
           >
             <Typography sx={{ color: '#FFFFFF', fontFamily: 'Inter, Poppins, sans-serif', fontWeight: 700 }}>
-              Notifications unavailable
+              {t('messages.unableLoadNotifications')}
             </Typography>
             <Typography sx={{ color: '#FFC9B8', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '13px' }}>
               {error}
@@ -305,9 +308,18 @@ export default function Notification() {
             ))}
           </Stack>
         ) : (
-          <EmptyState />
+          <EmptyState t={t} />
         )}
       </Box>
     </Cover>
   )
+}
+
+export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
+  return {
+    props: {
+      ...i18nProps,
+    },
+  }
 }

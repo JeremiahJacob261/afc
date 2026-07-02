@@ -9,6 +9,7 @@ import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay';
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 
 export default function Viewbets() {
     const [league, setLeague] = useState([]);
@@ -144,5 +145,14 @@ export default function Viewbets() {
             )
         }
 
+    }
+}
+
+export async function getServerSideProps(context) {
+    const i18nProps = await getI18nServerSideProps(context.locale)
+    return {
+        props: {
+            ...i18nProps,
+        },
     }
 }

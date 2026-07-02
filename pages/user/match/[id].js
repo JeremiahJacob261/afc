@@ -278,7 +278,7 @@ export default function Match({ matchDat }) {
                 <Draws />
                 <Sncks message={messages} />
                 <Head>
-                    <title>{homeName} VS {awayName}</title>
+                    <title>{`${homeName} VS ${awayName}`}</title>
                     <meta name="description" content="A Premium EFC  match" />
                     <link rel="icon" href="/european.ico" />
                     <meta name="viewport" content="width=device-width, initial-scale=1" />

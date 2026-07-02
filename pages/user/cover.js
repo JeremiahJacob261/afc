@@ -18,6 +18,8 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
 import { clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
+import LocaleSwitcher from '@/components/LocaleSwitcher';
+import { useTranslation } from 'next-i18next';
 export default function Cover({ children }) {
 
 
@@ -29,6 +31,7 @@ export default function Cover({ children }) {
   const auth = getAuth(app)
   const [info, setInfo] = useState({})
   const router = useRouter();
+  const { t } = useTranslation('common');
   const handleClickr = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -76,7 +79,7 @@ export default function Cover({ children }) {
                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                   <Stack direction='row' spacing={2}>
                     <SportsSoccerIcon sx={{ width: '20px', height: '20px' }} />
-                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#E9E5DA' }}>Matches</Typography>
+                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#E9E5DA' }}>{t('common.matches')}</Typography>
                   </Stack>
                   <ArrowForwardIosIcon sx={{ width: '20px', height: '20px' }} />
                 </Stack></Link>
@@ -85,7 +88,7 @@ export default function Cover({ children }) {
                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                   <Stack direction='row' spacing={2}>
                     <BiTimer sx={{ width: '20px', height: '20px' }} />
-                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#E9E5DA' }}>Bets</Typography>
+                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#E9E5DA' }}>{t('mobile.profile.betsTitle')}</Typography>
                   </Stack>
                   <ArrowForwardIosIcon sx={{ width: '20px', height: '20px' }} />
                 </Stack>
@@ -95,7 +98,7 @@ export default function Cover({ children }) {
                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                   <Stack direction='row' spacing={2}>
                     <GiPayMoney sx={{ width: '20px', height: '20px' }} />
-                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#E9E5DA' }}>Deposit</Typography>
+                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#E9E5DA' }}>{t('common.deposit')}</Typography>
                   </Stack>
                   <ArrowForwardIosIcon sx={{ width: '20px', height: '20px' }} />
                 </Stack></Link>
@@ -104,7 +107,7 @@ export default function Cover({ children }) {
                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                   <Stack direction='row' spacing={2}>
                     <GiReceiveMoney sx={{ width: '20px', height: '20px' }} />
-                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#E9E5DA' }}>Withdraw</Typography>
+                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#E9E5DA' }}>{t('common.withdraw')}</Typography>
                   </Stack>
                   <ArrowForwardIosIcon sx={{ width: '20px', height: '20px' }} />
                 </Stack></Link>
@@ -113,7 +116,7 @@ export default function Cover({ children }) {
                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                   <Stack direction='row' spacing={2}>
                     <BsFillPersonFill sx={{ width: '20px', height: '20px' }} />
-                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#E9E5DA' }}>Profile</Typography>
+                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#E9E5DA' }}>{t('common.profile')}</Typography>
                   </Stack>
                   <ArrowForwardIosIcon sx={{ width: '20px', height: '20px' }} />
                 </Stack>
@@ -123,7 +126,7 @@ export default function Cover({ children }) {
                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                   <Stack direction='row' spacing={2}>
                     <BiSolidContact sx={{ width: '20px', height: '20px' }} />
-                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#E9E5DA' }}>Customer Care</Typography>
+                    <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '14px', fontWeight: '500', color: '#E9E5DA' }}>{t('mobile.profile.customerService')}</Typography>
                   </Stack>
                   <ArrowForwardIosIcon sx={{ width: '20px', height: '20px' }} />
                 </Stack></Link>
@@ -144,8 +147,9 @@ export default function Cover({ children }) {
             setDraw(true)
           }} />
         </div>
-        <p className="font-roboto" style={{ color: '#23B5FF', fontWeight: '500' }}>EUROPEAN FOOTBALL</p>
-        <div style={{ display: 'inline-flex', alignItems: 'center' }}>
+        <p className="font-roboto" style={{ color: '#23B5FF', fontWeight: '500' }}>{t('common.brandFull').toUpperCase()}</p>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '12px' }}>
+          <LocaleSwitcher compact={true} className="text-xs" />
           <Icon icon="solar:bell-bold" width="24" height="24" style={{ color: "#1BB6FF" }}
             onClick={() => {
               router.push('/user/notification');

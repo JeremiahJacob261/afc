@@ -6,8 +6,10 @@ import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeft
 import RefreshIcon from '@mui/icons-material/Refresh'
 import { Box, Button, CircularProgress, Divider, Stack, Typography } from '@mui/material'
 import Cover from './cover'
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
 import Rd from '@/public/icon/rounds.png'
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth'
+import { useTranslation } from 'next-i18next'
 
 const FILTERS = [
   { key: 'All', label: 'All' },
@@ -40,6 +42,7 @@ function countByLevel(referrals, label) {
 }
 
 export default function Refferal() {
+  const { t } = useTranslation('common')
   const router = useRouter()
   const mountedRef = useRef(false)
   const [referCode, setReferCode] = useState('')
@@ -72,7 +75,7 @@ export default function Refferal() {
       }
 
       if (!response.ok || result.status !== 'success') {
-        throw new Error(result.message || 'Unable to load referrals.')
+        throw new Error(result.message || t('messages.unableLoadReferrals'))
       }
 
       if (!mountedRef.current) return
@@ -81,13 +84,13 @@ export default function Refferal() {
     } catch (err) {
       console.error(err)
       if (mountedRef.current) {
-        setError(err.message || 'Unable to load referrals.')
+        setError(err.message || t('messages.unableLoadReferrals'))
         setReferrals([])
       }
     } finally {
       if (mountedRef.current) setLoading(false)
     }
-  }, [router])
+  }, [router, t])
 
   useEffect(() => {
     mountedRef.current = true
@@ -123,7 +126,7 @@ export default function Refferal() {
   return (
     <Cover>
       <Head>
-        <title>Referral Details</title>
+        <title>{t('mobile.referrals.title')}</title>
         <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
@@ -137,10 +140,10 @@ export default function Refferal() {
             />
             <Box sx={{ minWidth: 0 }}>
               <Typography sx={{ fontSize: 18, fontFamily: 'Poppins,sans-serif', fontWeight: 600 }}>
-                Referrals
+                {t('mobile.referrals.title')}
               </Typography>
               <Typography sx={{ fontSize: 12, color: '#8EA4B8', fontFamily: 'Poppins,sans-serif' }}>
-                Invite code: {referCode || 'Loading...'}
+                {t('mobile.referrals.inviteCode')}: {referCode || t('status.pending')}
               </Typography>
             </Box>
           </Stack>
@@ -154,9 +157,9 @@ export default function Refferal() {
             }}
           >
             <Stack direction="row" spacing={1} sx={{ width: '100%' }}>
-              <SummaryStat label="Total" value={referrals.length} />
-              <SummaryStat label="Active" value={activeCount} />
-              <SummaryStat label="Deposits" value={`${money(totalDeposit)} USDT`} />
+              <SummaryStat label={t('mobile.vip.total')} value={referrals.length} />
+              <SummaryStat label={t('status.active')} value={activeCount} />
+              <SummaryStat label={t('mobile.transactions.deposits')} value={`${money(totalDeposit)} USDT`} />
             </Stack>
           </Box>
 
@@ -195,7 +198,7 @@ export default function Refferal() {
                     },
                   }}
                 >
-                  {item.label} ({count})
+                  {(item.key === 'All' ? t('common.all') : t('mobile.referrals.level', { level: item.key.replace('Level ', '') }))} ({count})
                 </Button>
               )
             })}
@@ -212,7 +215,7 @@ export default function Refferal() {
           >
             <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
               <Typography sx={{ fontSize: 13, color: '#8EA4B8', fontFamily: 'Poppins,sans-serif' }}>
-                Showing {visibleReferrals.length} referral{visibleReferrals.length === 1 ? '' : 's'}
+                {t('mobile.referrals.title')}: {visibleReferrals.length}
               </Typography>
               <Typography sx={{ fontSize: 13, color: '#E9E5DA', fontWeight: 600, fontFamily: 'Poppins,sans-serif' }}>
                 {money(filteredDeposit)} USDT
@@ -226,13 +229,13 @@ export default function Refferal() {
             <StatePanel>
               <CircularProgress size={28} sx={{ color: '#1BB6FF' }} />
               <Typography sx={{ mt: 1.5, fontSize: 14, color: '#B9CEE2', fontFamily: 'Poppins,sans-serif' }}>
-                Loading referrals...
+                {t('status.pending')}...
               </Typography>
             </StatePanel>
           ) : error ? (
             <StatePanel>
               <Typography sx={{ fontSize: 15, fontWeight: 600, fontFamily: 'Poppins,sans-serif' }}>
-                Referrals could not load
+                {t('messages.unableLoadReferrals')}
               </Typography>
               <Typography sx={{ mt: 0.75, fontSize: 13, color: '#8EA4B8', fontFamily: 'Poppins,sans-serif' }}>
                 {error}
@@ -250,31 +253,31 @@ export default function Refferal() {
                   '&:hover': { bgcolor: '#35C0FF' },
                 }}
               >
-                Retry
+                {t('common.refresh')}
               </Button>
             </StatePanel>
           ) : !hasReferrals ? (
             <StatePanel>
               <Typography sx={{ fontSize: 15, fontWeight: 600, fontFamily: 'Poppins,sans-serif' }}>
-                No referrals yet
+                {t('emptyStates.noReferrals')}
               </Typography>
               <Typography sx={{ mt: 0.75, fontSize: 13, color: '#8EA4B8', fontFamily: 'Poppins,sans-serif' }}>
-                Share your invite code and new referrals will appear here.
+                {t('emptyStates.referralsComing')}
               </Typography>
             </StatePanel>
           ) : visibleReferrals.length === 0 ? (
             <StatePanel>
               <Typography sx={{ fontSize: 15, fontWeight: 600, fontFamily: 'Poppins,sans-serif' }}>
-                No {filter.toLowerCase()} referrals
+                {t('emptyStates.noReferrals')}
               </Typography>
               <Typography sx={{ mt: 0.75, fontSize: 13, color: '#8EA4B8', fontFamily: 'Poppins,sans-serif' }}>
-                Try another level to view the rest of your referral network.
+                {t('emptyStates.referralsComing')}
               </Typography>
             </StatePanel>
           ) : (
             <Stack spacing={1}>
               {visibleReferrals.map((item) => (
-                <ReferralRow item={item} key={`${item.level}-${item.key || item.id || item.username}`} />
+                <ReferralRow item={item} key={`${item.level}-${item.key || item.id || item.username}`} t={t} />
               ))}
             </Stack>
           )}
@@ -327,7 +330,7 @@ function StatePanel({ children }) {
   )
 }
 
-function ReferralRow({ item }) {
+function ReferralRow({ item, t }) {
   const tone =
     item.level === 1
       ? { color: '#06101F', bg: '#9BE15D' }
@@ -377,7 +380,7 @@ function ReferralRow({ item }) {
                 fontFamily: 'Poppins,sans-serif',
               }}
             >
-              {item.levelLabel || `Level ${item.level || 1}`}
+              {item.levelLabel || t('mobile.referrals.level', { level: item.level || 1 })}
             </Box>
           </Stack>
           <Stack direction="row" alignItems="center" spacing={0.75} sx={{ mt: 0.5 }}>
@@ -392,7 +395,7 @@ function ReferralRow({ item }) {
                 fontWeight: 600,
               }}
             >
-              {item.firstd ? 'Active' : 'Pending'}
+              {item.firstd ? t('status.active') : t('status.pending')}
             </Typography>
           </Stack>
         </Box>
@@ -407,4 +410,13 @@ function ReferralRow({ item }) {
       </Stack>
     </Box>
   )
+}
+
+export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
+  return {
+    props: {
+      ...i18nProps,
+    },
+  }
 }

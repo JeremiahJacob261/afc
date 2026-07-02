@@ -14,6 +14,7 @@ import { Icon } from '@iconify/react'
 import Head from "next/head";
 import Modal from '@mui/material/Modal';
 import Cover from './cover'
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
 import toast, { Toaster} from 'react-hot-toast'
 import Loading from "@/pages/components/loading";
 import FormControl from '@mui/material/FormControl';
@@ -440,19 +441,11 @@ export default function Deposit() {
 
 }
 
-
-// export const getServerSideProps = async (context) => {
-
-//   try {
-    
-//     return {
-//       props: { wallx: wallets }
-//     }
-//   } catch (e) {
-//     return {
-//       props: { wallx: [] }
-//     }
-//   }
-
-
-// }
+export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
+  return {
+    props: {
+      ...i18nProps,
+    },
+  }
+}

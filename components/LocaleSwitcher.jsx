@@ -18,6 +18,8 @@ export default function LocaleSwitcher({ className = "", compact = false }) {
   };
 
   const currentLocale = router.locale || i18n.language || "en";
+  const selectPadding = compact ? "pr-4" : "pr-6";
+  const selectWidth = compact ? "max-w-[72px]" : "";
 
   return (
     <label
@@ -28,7 +30,7 @@ export default function LocaleSwitcher({ className = "", compact = false }) {
         aria-label={t("common.changeLanguage")}
         value={currentLocale}
         onChange={(event) => changeLanguage(event.target.value)}
-        className={`cursor-pointer appearance-none bg-transparent pr-${compact ? "4" : "6"} text-sm font-semibold text-white outline-none ${compact ? "max-w-[72px]" : ""}`}
+        className={`cursor-pointer appearance-none bg-transparent ${selectPadding} text-sm font-semibold text-white outline-none ${selectWidth}`}
       >
         {languageOptions.map((language) => (
           <option key={language.code} value={language.code} className="bg-[#06101F] text-white">

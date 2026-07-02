@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import Cover from './cover'
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth'
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
 
 const tabs = [
   { key: 'all', label: 'All', icon: 'solar:bill-list-bold' },
@@ -566,4 +567,13 @@ export default function TransactionHistory() {
       </Box>
     </Cover>
   )
+}
+
+export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
+  return {
+    props: {
+      ...i18nProps,
+    },
+  }
 }

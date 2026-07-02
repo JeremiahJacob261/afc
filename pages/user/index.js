@@ -24,13 +24,8 @@ import { getAuth, signOut } from "firebase/auth";
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 import toast, { Toaster } from 'react-hot-toast';
 import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay';
-
-const MATCH_FILTERS = [
-  { key: 'today', label: 'Today' },
-  { key: 'next3h', label: 'Next 3 hrs' },
-  { key: 'next12h', label: 'Next 12 hrs' },
-  { key: 'tomorrow', label: 'Tomorrow' },
-]
+import { useTranslation } from 'next-i18next';
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 
 const HOUR_MS = 60 * 60 * 1000
 
@@ -77,6 +72,7 @@ async function processBets(name) {
 
 
 export default function Home() {
+  const { t } = useTranslation('common');
   const [anchorEl, setAnchorEl] = useState(null);
   const [username, setUsername] = useState('');
   const hasRun = useRef(false);
@@ -105,6 +101,12 @@ export default function Home() {
   const visibleMatches = useMemo(() => (
     getFilteredMatches(footDat, activeMatchFilter)
   ), [footDat, activeMatchFilter]);
+  const matchFilters = useMemo(() => ([
+    { key: 'today', label: t('mobile.filters.today') },
+    { key: 'next3h', label: t('mobile.filters.next3h') },
+    { key: 'next12h', label: t('mobile.filters.next12h') },
+    { key: 'tomorrow', label: t('mobile.filters.tomorrow') },
+  ]), [t]);
 
 
   useEffect(() => {
@@ -174,14 +176,14 @@ export default function Home() {
         const result = await response.json();
         if (!active) return;
         if (result.status !== 'success') {
-          toast.error(result.message || 'Unable to load your account')
+          toast.error(result.message || t('messages.unableRefreshAccount'))
           return
         }
         setUsername(result.profile.username || '');
         setBalance(Number(result.profile.balance || 0));
       } catch (e) {
         console.log(e)
-        toast.error('Unable to load your account')
+        toast.error(t('messages.unableRefreshAccount'))
       }
     }
     runer();
@@ -206,7 +208,7 @@ export default function Home() {
     return () => {
       active = false;
     }
-  }, [router]);
+  }, [router, t]);
 
 
 
@@ -220,7 +222,7 @@ export default function Home() {
 
       <Cover sx={{ background: '#06101F', minWidth: '100%', minHeight: '100vh' }}>
         <Head>
-          <title>Welcome - {username ? `${username}` : 'Loading...'}</title>
+          <title>{`${t('mobile.home.hello')} - ${username || t('status.pending')}`}</title>
           <link rel="icon" href="/european.ico" />
         </Head>
         <Stack sx={{ background: "#06101F", marginTop: '10px', width: '100%', maxWidth: '450px', display: 'flex', justifyContent: 'center', alignItems: 'center' }} spacing={2} >
@@ -228,20 +230,20 @@ export default function Home() {
           <Stack direction="column" spacing={1} style={{ background: '#10284D', width: '100%', maxWidth: '450px', padding: '12px', borderRadius: '10px' }}>
 
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center', minWidth: 0 }}>
-              <Typography style={{ fontSize: '16px', fontWeight: '600', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: 'auto', textAlign: 'left', color: '#1BB6FF' }} >Hello .</Typography>
-              <p className="notranslate" style={{ fontSize: '16px', margin: 0, textAlign: 'left', fontWeight: '600', fontFamily: 'Poppins, sans-serif', minHeight: '24px', padding: '1px', width: 'auto', minWidth: 0, color: '#1BB6FF', overflowWrap: 'anywhere' }}>{username ? ` ${username}` : 'Loading...'}</p>
+              <Typography style={{ fontSize: '16px', fontWeight: '600', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: 'auto', textAlign: 'left', color: '#1BB6FF' }} >{t('mobile.home.hello')}.</Typography>
+              <p className="notranslate" style={{ fontSize: '16px', margin: 0, textAlign: 'left', fontWeight: '600', fontFamily: 'Poppins, sans-serif', minHeight: '24px', padding: '1px', width: 'auto', minWidth: 0, color: '#1BB6FF', overflowWrap: 'anywhere' }}>{username ? ` ${username}` : t('status.pending')}</p>
 
             </div>
 
             <Stack direction='row' justifyContent='space-between' alignItems='center' flexWrap='wrap' gap={1} >
               <Stack sx={{ minWidth: 0, flex: '1 1 150px' }}>
-                <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>Current Balance </Typography>
+                <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>{t('common.currentBalance')}</Typography>
                 <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', minHeight: '24px', padding: '1px', width: '100%', color: '#E9E5DA', overflowWrap: 'anywhere' }}>{balance ? ` ${balance.toFixed(3)}` : '0'} USDT</Typography>
               </Stack>
               <Link href='/user/fund' style={{ textDecoration: "none", color: 'white', flexShrink: 0 }}>
                 <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#1BB6FF', borderRadius: '20px', padding: '8px', width: '95px', height: '32px' }}>
                   <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: 'white', fontSize: '12px' }}>
-                    Deposit
+                    {t('common.deposit')}
                   </Typography>
                   <KeyboardArrowRightIcon sx={{ width: '16px', height: '16px' }} />
                 </Stack>
@@ -254,8 +256,8 @@ export default function Home() {
                   <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#1BB6FF' }} />
 
                   <Stack direction='column' spacing={0} justifyContent='start' sx={{ minWidth: 0 }}>
-                    <Typography sx={{ color: '#1BB6FF', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif', textDecoration: 'underline' }}>Telegram Channel</Typography>
-                    <Typography sx={{ color: '#1BB6FF', fontSize: '12px', fontWeight: 300, fontFamily: 'Inter,sans-serif', textDecoration: 'underline', overflowWrap: 'anywhere' }}>Join our telegram group to earn more</Typography>
+                    <Typography sx={{ color: '#1BB6FF', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif', textDecoration: 'underline' }}>{t('mobile.home.telegram')}</Typography>
+                    <Typography sx={{ color: '#1BB6FF', fontSize: '12px', fontWeight: 300, fontFamily: 'Inter,sans-serif', textDecoration: 'underline', overflowWrap: 'anywhere' }}>{t('mobile.home.telegramCopy')}</Typography>
                   </Stack>
                 </Stack>
               </Stack>
@@ -268,14 +270,14 @@ export default function Home() {
           <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ width: '100%', gap: 1 }}>
             <Stack direction='row' spacing={1}>
               <Icon icon="carbon:football-american" width="24" height="24" style={{ color: '#E9E5DA' }} />
-              <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '16px', fontWeight: '600' }}>Top Football Matches</Typography>
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '16px', fontWeight: '600' }}>{t('mobile.home.topMatches')}</Typography>
             </Stack>
             <Link href="/user/matches" style={{ textDecoration: 'none' }}>
-              <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>see all</Typography>
+              <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{t('common.all')}</Typography>
             </Link>
           </Stack>
           <Stack direction='row' spacing={1} sx={{ width: '100%', overflowX: 'auto', pb: 0.5 }}>
-            {MATCH_FILTERS.map((filter) => (
+            {matchFilters.map((filter) => (
               <MatchFilterPill
                 key={filter.key}
                 label={filter.label}
@@ -292,6 +294,7 @@ export default function Home() {
                 match={match}
                 onOpen={handleOpen}
                 onSelect={(matchId) => router.push(`/user/match/${matchId}`)}
+                t={t}
               />
             ))}
           </Stack>
@@ -329,13 +332,13 @@ function MatchFilterPill({ label, active, onClick }) {
   )
 }
 
-function DashboardMatchCard({ match, onOpen, onSelect }) {
+function DashboardMatchCard({ match, onOpen, onSelect, t }) {
   const display = useClientMatchDisplay(match)
   const startMs = display.startMs || getMatchStartMs(match)
 
   if (startMs && startMs < Date.now()) return null
 
-  const league = (match.league === 'others' ? match.otherl : match.league) || 'League'
+  const league = (match.league === 'others' ? match.otherl : match.league) || t('common.league')
 
   return (
     <Stack
@@ -365,7 +368,7 @@ function DashboardMatchCard({ match, onOpen, onSelect }) {
           <Stack direction="row" alignItems="center" justifyContent="center" spacing={0.5}>
             <Icon icon="solar:star-bold-duotone" width="24" height="24" style={{ color: '#1BB6FF', flexShrink: 0 }} />
             <Typography sx={{ color: '#E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: 12 }}>
-              Verified Company Game
+              {t('common.verified')}
             </Typography>
           </Stack>
         ) : null}
@@ -376,12 +379,12 @@ function DashboardMatchCard({ match, onOpen, onSelect }) {
       </Stack>
 
       <Box sx={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 82px minmax(0, 1fr)', alignItems: 'center', gap: 1, width: '100%' }}>
-        <DashboardTeam image={match.ihome} name={match.home} />
+        <DashboardTeam image={match.ihome} name={match.home} t={t} />
         <Box sx={{ textAlign: 'center', color: '#E9E5DA', fontFamily: 'Poppins,sans-serif' }}>
           <Typography sx={{ fontSize: 14, fontWeight: 300, lineHeight: 1.3 }}>{display.time}</Typography>
           <Typography sx={{ fontSize: 12, fontWeight: 300, lineHeight: 1.3 }}>{display.date}</Typography>
         </Box>
-        <DashboardTeam image={match.iaway} name={match.away} />
+        <DashboardTeam image={match.iaway} name={match.away} t={t} />
       </Box>
 
       <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 1, width: '100%' }}>
@@ -393,10 +396,10 @@ function DashboardMatchCard({ match, onOpen, onSelect }) {
   )
 }
 
-function DashboardTeam({ image, name }) {
+function DashboardTeam({ image, name, t }) {
   return (
     <Stack direction="column" justifyContent="center" alignItems="center" spacing={1} sx={{ minWidth: 0 }}>
-      <Image src={image || Ims} width={50} height={50} alt={name || 'team'} style={{ objectFit: 'contain' }} unoptimized />
+      <Image src={image || Ims} width={50} height={50} alt={name || t('common.team')} style={{ objectFit: 'contain' }} unoptimized />
       <Typography
         sx={{
           minHeight: 34,
@@ -413,10 +416,19 @@ function DashboardTeam({ image, name }) {
           overflowWrap: 'anywhere',
         }}
       >
-        {name || 'Team'}
+        {name || t('common.team')}
       </Typography>
     </Stack>
   )
+}
+
+export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
+  return {
+    props: {
+      ...i18nProps,
+    },
+  }
 }
 
 function DashboardOdd({ label, value }) {

@@ -32,6 +32,7 @@ import Loading from '@/pages/components/loading'
 import { supabase } from '@/pages/api/supabase'
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth'
 import { waitForPaint } from '@/lib/uiFeedback'
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
 
 const brand = {
   bg: '#06101F',
@@ -594,4 +595,13 @@ function PaymentRow({ label, value, onCopy }) {
       </IconButton>
     </Stack>
   )
+}
+
+export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
+  return {
+    props: {
+      ...i18nProps,
+    },
+  }
 }

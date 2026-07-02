@@ -8,6 +8,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useRouter } from 'next/router'
 import faq from '@/pages/api/faq.json'
 import CloseIcon from '@mui/icons-material/Close';
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
 export default function Faq() {
   const [expanded, setExpanded] = useState(false);
 
@@ -61,4 +62,13 @@ export default function Faq() {
 
     </div>
   )
+}
+
+export async function getServerSideProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale)
+  return {
+    props: {
+      ...i18nProps,
+    },
+  }
 }
