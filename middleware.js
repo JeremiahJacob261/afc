@@ -3,6 +3,9 @@ import { NextResponse } from 'next/server'
 const ADMIN_COOKIE_NAME = 'admin_session'
 const API_CORS_ALLOWED_ORIGINS = new Set([
   'capacitor://localhost',
+  'ionic://localhost',
+  'http://localhost',
+  'https://localhost',
   'http://localhost:5173',
   'http://127.0.0.1:5173',
   'http://localhost:4173',
