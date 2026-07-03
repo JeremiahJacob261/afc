@@ -207,7 +207,7 @@ export default function Funds() {
     return () => {
       active = false
     }
-  }, [router])
+  }, [router, t])
 
   const selectMethod = (method) => {
     setSelectedMethod(method)

@@ -225,7 +225,7 @@ export default function Deposit() {
     return () => {
       active = false;
     }
-  }, [router]);
+  }, [router, t]);
   //end of snackbar1
 
   const Withdrawal = async () => {

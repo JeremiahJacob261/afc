@@ -81,6 +81,16 @@ function normalizeNotification(item, fallbackTitle) {
 
 function resolveMessageValues(values, t) {
   return Object.entries(values || {}).reduce((acc, [key, value]) => {
+    if (key === 'typeKey' && typeof value === 'string') {
+      acc.typeLabel = t(value).toLowerCase()
+      return acc
+    }
+
+    if (key === 'statusKey' && typeof value === 'string') {
+      acc.status = t(value).toLowerCase()
+      return acc
+    }
+
     if (key.endsWith('Key') && typeof value === 'string') {
       acc[key.slice(0, -3)] = t(value)
       return acc
