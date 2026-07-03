@@ -22,6 +22,7 @@ import { getAuth, signOut } from "firebase/auth";
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay';
 import { waitForPaint } from '@/lib/uiFeedback';
+import { useTranslation } from 'next-i18next';
 
 
 
@@ -132,6 +133,7 @@ const liquidTransition = {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function Match({ matchDat }) {
+    const { t } = useTranslation('common')
     const router = useRouter()
     const initialMatch = Array.isArray(matchDat) && matchDat.length ? matchDat[0] : null
     const hasRun = useRef(false);
@@ -195,7 +197,7 @@ export default function Match({ matchDat }) {
                 hasRun.current = true;
             } catch (e) {
                 console.log(e)
-                toast.error('Unable to load your account')
+                toast.error(t('messages.unableRefreshAccount'))
             }
         }
 
@@ -204,7 +206,7 @@ export default function Match({ matchDat }) {
         return () => {
             active = false;
         }
-    }, [initialMatch, router]);
+    }, [initialMatch, router, t]);
 
     //the below controls the loading modal
     const [openx, setOpenx] = useState(false);
@@ -245,23 +247,23 @@ export default function Match({ matchDat }) {
     }
     const matchDisplay = useClientMatchDisplay(matches)
     const leagueName = getLeagueName(matches)
-    const homeName = getTeamName(matches.home, 'Home')
-    const awayName = getTeamName(matches.away, 'Away')
+    const homeName = getTeamName(matches.home, t('common.home'))
+    const awayName = getTeamName(matches.away, t('common.away'))
 
     if (!initialMatch) {
         return (
             <Cover>
                 <Stack style={{ width: "100%", minHeight: '100vh', background: '#06101F', padding: '24px' }} alignItems="center" justifyContent="center" spacing={2}>
                     <Head>
-                        <title>Match unavailable</title>
+                        <title>{t('messages.unableLoadMatch')}</title>
                         <link rel="icon" href="/european.ico" />
                     </Head>
-                    <Typography sx={{ color: '#E9E5DA', fontFamily: 'Poppins,sans-serif', fontWeight: '600' }}>Match unavailable</Typography>
+                    <Typography sx={{ color: '#E9E5DA', fontFamily: 'Poppins,sans-serif', fontWeight: '600' }}>{t('messages.unableLoadMatch')}</Typography>
                     <Typography sx={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '13px', textAlign: 'center' }}>
-                        This match could not be found or is no longer available.
+                        {t('errors.unableToLoad')}
                     </Typography>
                     <Button variant="contained" onClick={() => router.push('/user/matches')} sx={{ background: '#1BB6FF', color: '#06101F' }}>
-                        Back to matches
+                        {t('common.back')}
                     </Button>
                 </Stack>
             </Cover>
@@ -285,7 +287,7 @@ export default function Match({ matchDat }) {
                 </Head>
                 <Stack direction='row' alignItems='left' justifyContent='left' spacing={1} sx={{ width: '100%', margin: '5px' }} onClick={() => { router.push('/user/matches') }}>
                     <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px', color: '#E9E5DA' }} />
-                    <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontWeight: '300', width: '90%', textAlign: 'center' }}>Stake your bet</Typography>
+                    <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontWeight: '300', width: '90%', textAlign: 'center' }}>{t('mobile.match.placeBet')}</Typography>
                 </Stack>
 
 
@@ -318,7 +320,7 @@ export default function Match({ matchDat }) {
                         </Stack>
                     </Stack>
                     <Divider sx={{ background: '#E9E5DA' }} />
-                    <p>{matches?.company ? matches.company : 'NO'}</p>
+                    <p>{matches?.company ? matches.company : t('common.no')}</p>
                     {
                         marketsArray.map((m) => {
                             // ── Protection check ──────────────────────────────────────────────
@@ -397,7 +399,7 @@ export default function Match({ matchDat }) {
                                                         margin: 0,
                                                     }}
                                                 >
-                                                    {m.num}
+                                                    {m.word === 'otherscores' ? t('mobile.markets.other') : m.num}
                                                 </p>
                                                 {isProtected && (
                                                     <motion.span
@@ -417,7 +419,7 @@ export default function Match({ matchDat }) {
                                                             lineHeight: 1,
                                                         }}
                                                     >
-                                                        ● COMPANY GAME
+                                                        {t('mobile.match.companyGame')}
                                                     </motion.span>
                                                 )}
                                             </Stack>
@@ -431,7 +433,7 @@ export default function Match({ matchDat }) {
                                             <motion.div
                                                 onClick={() => {
                                                     if (getMatchOdd(matches, m.word, viplevel) <= 0) {
-                                                        toast.error('This market is not available')
+                                                        toast.error(t('mobile.match.marketUnavailable'))
                                                         return
                                                     }
                                                     setPicked(m.word)
@@ -447,7 +449,7 @@ export default function Match({ matchDat }) {
                                                     borderRadius: '5px',
                                                 }}
                                             >
-                                                choose
+                                                {t('mobile.match.choose')}
                                             </motion.div>
                                         </Stack>
                                     </motion.div>
@@ -493,7 +495,7 @@ export default function Match({ matchDat }) {
                             <KeyboardArrowLeftOutlinedIcon style={{ color: '#E9E5DA' }} onClick={() => {
                                 setBottom(false)
                             }} />
-                            <Typography sx={{ width: '100%', fontFamily: 'Poppins,sans-serif', textAlign: 'center', color: '#E9E5DA' }}>Stake your bet</Typography>
+                            <Typography sx={{ width: '100%', fontFamily: 'Poppins,sans-serif', textAlign: 'center', color: '#E9E5DA' }}>{t('mobile.match.placeBet')}</Typography>
                         </Stack>
                         <Stack direction='column' alignItems='center' justifyContent='center'>
                             <Typography style={{ color: '#E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{leagueName}</Typography>
@@ -518,27 +520,27 @@ export default function Match({ matchDat }) {
                         <Divider sx={{ background: '#E9E5DA' }} />
                         <Stack direction='column' spacing={3}>
                             <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#E9E5DA' }}>Match ID</Typography>
-                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{matches.match_id || 'Unavailable'}</Typography>
+                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#E9E5DA' }}>{t('mobile.match.matchId')}</Typography>
+                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{matches.match_id || t('common.notAvailable')}</Typography>
                             </Stack>
                             <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#E9E5DA' }}>Market</Typography>
-                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{markets[picked] || 'No market selected'}</Typography>
+                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#E9E5DA' }}>{t('mobile.match.market')}</Typography>
+                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{picked === 'otherscores' ? t('mobile.markets.other') : markets[picked] || t('mobile.match.noMarketSelected')}</Typography>
                             </Stack>
                             <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#E9E5DA' }}>Odds</Typography>
+                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#E9E5DA' }}>{t('landing.live.odds')}</Typography>
                                 <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{formatOdd(tofal)}</Typography>
                             </Stack>
                         </Stack>
                         <Divider sx={{ background: '#E9E5DA' }} />
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#E9E5DA', width: '210px' }}>Enter the amount you wish to stake</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#E9E5DA', width: '210px' }}>{t('mobile.match.stakeAmount')}</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#E9E5DA' }}>Account Balance</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#E9E5DA' }}>{t('common.currentBalance')}</Typography>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{ball.toFixed(3)} USDT</Typography>
                         </Stack>
-                        <input placeholder='stake' type='text'
+                        <input placeholder={t('mobile.match.stakeAmount')} type='text'
                             style={{ fontFamily: 'Poppins, sans-serif', padding: "10px", borderRadius: '12px', width: '100%', background: '#06101F', color: '#FFFFFF', border: '3px solid #E9E5DA' }}
                             value={stake}
                             onChange={(e) => {
@@ -548,29 +550,29 @@ export default function Match({ matchDat }) {
 
                             }} />
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#E9E5DA' }}>Profit</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#E9E5DA' }}>{t('mobile.match.profit')}</Typography>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{profit.toFixed(3)} USDT</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#E9E5DA' }}>Expected Profit</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#E9E5DA' }}>{t('mobile.match.expectedReturn')}</Typography>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#E9E5DA' }}>{expext.toFixed(3)} USDT</Typography>
                         </Stack>
                         <Button disabled={openx} sx={{ fontFamily: 'Poppins,sans-serif', margin: '8px', fontSize: '16', fontWeight: '300', color: '#06101F', background: "#1BB6FF", padding: '10px' }}
                             onClick={() => {
                                 if (openx) return
                                 if (!picked || tofal <= 0) {
-                                    toast.error('Please choose an available market')
+                                    toast.error(t('messages.chooseScoreMarket'))
                                 } else if (stakeAmount - 1 < Number(info.balance || 0)) {
                                     if (stakeAmount < 1) {
-                                        toast.error('You do not have sufficient balance for this transaction')
+                                        toast.error(t('messages.stakeMinimum'))
 
                                     }
                                     //for development purposes
                                     else if (stamx < currenv) {
-                                        toast.error('This Match has expired')
+                                        toast.error(t('mobile.match.matchExpired'))
 
                                     } else if (gcount > 2) {
-                                        toast.error('You have reached the maximum number of bets for today');
+                                        toast.error(t('mobile.match.maxBetsReached'));
 
                                     } else {
                                         handleClose();
@@ -589,28 +591,28 @@ export default function Match({ matchDat }) {
                                                 })
                                                 const result = await response.json().catch(() => ({}))
                                                 if (!response.ok || result.status !== 'success') {
-                                                    toast.error(result.message || 'Unable to place bet')
+                                                    toast.error(result.message || t('messages.unablePlaceBet'))
                                                     handleClosex()
                                                     return
                                                 }
 
-                                                setMessages(result.message || "Bet Successful")
+                                                setMessages(result.message || t('messages.betPlaced'))
                                                 handleClick();
                                                 router.push('/user/bets');
                                             } catch (error) {
                                                 console.log(error)
-                                                toast.error('Unable to place bet. Please try again.')
+                                                toast.error(t('messages.unablePlaceBet'))
                                                 handleClosex()
                                             }
                                         }
                                         deductBet();
                                     }
                                 } else {
-                                    toast.error("You do not have Enough USDT to Complete this BET");
+                                    toast.error(t('mobile.match.insufficientBalance'));
                                 }
                             }}
                         >
-                            Place Bet
+                            {openx ? t('mobile.match.placingBet') : t('mobile.match.placeBet')}
                         </Button>
                     </Stack>
                 </Cover>

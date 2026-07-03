@@ -9,6 +9,10 @@ function formatAmount(value, digits = 4) {
   return amountValue(value).toFixed(digits)
 }
 
+function amountText(value, digits = 4) {
+  return `${formatAmount(value, digits)} USDT`
+}
+
 function sourceLabel(item, profile) {
   if (item.username && item.username !== profile.username) return item.username
   return 'a downline'
@@ -36,7 +40,10 @@ function bonusNotification(item, profile) {
       id: `activa-${item.id}`,
       type: 'affbonus',
       title: 'Rebate bonus',
+      titleKey: 'mobile.notifications.titles.rebateBonus',
       message: `You received a rebate bonus of ${formatAmount(amount)} USDT from ${sourceUsername}`,
+      messageKey: 'mobile.notifications.messages.rebateBonus',
+      messageValues: { amount: amountText(amount), sourceUsername },
       amount,
       sourceUsername,
       timestamp,
@@ -50,7 +57,10 @@ function bonusNotification(item, profile) {
       id: `activa-${item.id}`,
       type: 'depbonus',
       title: 'Referral deposit bonus',
+      titleKey: 'mobile.notifications.titles.referralDepositBonus',
       message: `You received a deposit bonus of ${formatAmount(amount)} USDT from ${sourceUsername}`,
+      messageKey: 'mobile.notifications.messages.referralDepositBonus',
+      messageValues: { amount: amountText(amount), sourceUsername },
       amount,
       sourceUsername,
       timestamp,
@@ -62,7 +72,10 @@ function bonusNotification(item, profile) {
     id: `activa-${item.id}`,
     type: item.type || 'bonus',
     title: 'Bonus',
+    titleKey: 'mobile.notifications.titles.bonus',
     message: `You received a bonus of ${formatAmount(amount)} USDT`,
+    messageKey: 'mobile.notifications.messages.bonus',
+    messageValues: { amount: amountText(amount) },
     amount,
     sourceUsername: item.username || '',
     timestamp,
@@ -76,7 +89,10 @@ function firstDepositBonusNotification(item) {
     id: `activa-${item.id}`,
     type: 'firstdepositbonus',
     title: 'First deposit bonus',
+    titleKey: 'mobile.notifications.titles.firstDepositBonus',
     message: `You received a first deposit bonus of ${formatAmount(amount)} USDT`,
+    messageKey: 'mobile.notifications.messages.firstDepositBonus',
+    messageValues: { amount: amountText(amount) },
     amount,
     sourceUsername: '',
     timestamp: timestampOf(item),
@@ -90,7 +106,10 @@ function betWinNotification(item) {
     id: `activa-${item.id}`,
     type: 'bet',
     title: 'Bet won',
+    titleKey: 'mobile.notifications.titles.betWon',
     message: `You won your bet of ${formatAmount(amount, 2)} USDT`,
+    messageKey: 'mobile.notifications.messages.betWon',
+    messageValues: { amount: amountText(amount, 2) },
     amount,
     sourceUsername: '',
     timestamp: timestampOf(item),
@@ -103,6 +122,7 @@ function broadcastNotification(item) {
     id: `activa-${item.id}`,
     type: 'broadcast',
     title: 'Announcement',
+    titleKey: 'mobile.notifications.titles.announcement',
     message: item.username || 'New announcement',
     amount: 0,
     sourceUsername: 'admin',
@@ -117,12 +137,24 @@ function transactionNotification(item) {
   const typeLabel = type === 'withdrawer' ? 'withdrawal' : type
   const status = item.sent || 'pending'
   const method = item.method || 'USDT'
+  const typeKey = type === 'deposit' ? 'common.deposit' : 'common.withdraw'
+  const statusKey = status === 'success' ? 'status.success' : status === 'failed' ? 'status.failed' : status === 'processing' ? 'status.processing' : 'status.pending'
 
   return {
     id: `notification-${item.id || item.uid}`,
     type,
     title: type === 'deposit' ? 'Deposit update' : 'Withdrawal update',
+    titleKey: type === 'deposit' ? 'mobile.notifications.titles.depositUpdate' : 'mobile.notifications.titles.withdrawalUpdate',
     message: `Your ${typeLabel} of ${formatAmount(amount, 2)} ${method} is ${status}`,
+    messageKey: 'mobile.notifications.messages.transactionUpdate',
+    messageValues: {
+      typeLabel,
+      typeKey,
+      amount: formatAmount(amount, 2),
+      method,
+      status,
+      statusKey,
+    },
     amount,
     sourceUsername: '',
     timestamp: timestampOf(item),
@@ -136,7 +168,10 @@ function adminRewardNotification(item) {
     id: `notification-admin-${item.id || item.uid}`,
     type: 'admin',
     title: 'Admin reward',
+    titleKey: 'mobile.notifications.titles.adminReward',
     message: `You received ${formatAmount(amount, 2)} USDT ${item.method || 'reward'} from admin`,
+    messageKey: 'mobile.notifications.messages.adminReward',
+    messageValues: { amount: amountText(amount, 2), method: item.method || 'reward' },
     amount,
     sourceUsername: 'admin',
     timestamp: timestampOf(item),

@@ -46,6 +46,13 @@ function statusLabel(status) {
   return 'Pending'
 }
 
+function statusKey(status) {
+  if (status === 'success') return 'status.success'
+  if (status === 'failed') return 'status.failed'
+  if (status === 'processing') return 'status.processing'
+  return 'status.pending'
+}
+
 function normalizeType(type) {
   const value = normalizePaymentCode(type)
   if (value === 'withdrawer') return 'withdraw'
@@ -57,6 +64,7 @@ function amountPayload(value, currency, label, options = {}) {
     value: nullableAmount(value),
     currency: currencyLabel(currency),
     label,
+    labelKey: options.labelKey || '',
     approximate: options.approximate === true,
   }
 }
@@ -96,6 +104,36 @@ function transactionDetail(row, type) {
   ].filter(Boolean).join(' / ') || 'Withdrawal request'
 }
 
+function transactionDetailMeta(row, type) {
+  if (type === 'deposit') {
+    if (row.adminaddress) {
+      return {
+        detailKey: 'mobile.transactions.destinationDetail',
+        detailValues: { destination: row.adminaddress },
+      }
+    }
+
+    if (row.address) return { detailKey: 'mobile.transactions.receiptUploaded', detailValues: {} }
+    return { detailKey: 'mobile.transactions.depositRequest', detailValues: {} }
+  }
+
+  const detailParts = [
+    row.bank ? { labelKey: 'forms.bank', value: row.bank } : null,
+    row.accountname ? { labelKey: 'forms.accountName', value: row.accountname } : null,
+    row.address ? { labelKey: 'forms.walletAddress', value: row.address } : null,
+  ].filter(Boolean)
+
+  if (detailParts.length) {
+    return {
+      detailKey: '',
+      detailValues: {},
+      detailParts,
+    }
+  }
+
+  return { detailKey: 'mobile.transactions.withdrawalRequest', detailValues: {}, detailParts: [] }
+}
+
 function shouldHideStatusTag(row, type, status) {
   return type === 'deposit'
     && status === 'pending'
@@ -113,15 +151,17 @@ function normalizeTransaction(row, methods) {
   let secondaryAmount = null
   let accountingAmountUsdt = null
   let conversionNote = ''
+  let conversionNoteKey = ''
+  let conversionNoteValues = {}
 
   if (type === 'deposit') {
-    primaryAmount = amountPayload(amount, method.methodCurrency, 'Submitted amount')
+    primaryAmount = amountPayload(amount, method.methodCurrency, 'Submitted amount', { labelKey: 'mobile.transactions.submittedAmount' })
 
     if (isUsdt) {
       accountingAmountUsdt = amount
     } else if (method.rate) {
       accountingAmountUsdt = Number((amount / method.rate).toFixed(6))
-      secondaryAmount = amountPayload(accountingAmountUsdt, 'USDT', 'USDT equivalent', { approximate: true })
+      secondaryAmount = amountPayload(accountingAmountUsdt, 'USDT', 'USDT equivalent', { approximate: true, labelKey: 'mobile.transactions.usdtEquivalent' })
     } else {
       conversionNote = ``;
     }
@@ -129,15 +169,19 @@ function normalizeTransaction(row, methods) {
     accountingAmountUsdt = amount
 
     if (isUsdt) {
-      primaryAmount = amountPayload(amount, 'USDT', 'Payout amount')
+      primaryAmount = amountPayload(amount, 'USDT', 'Payout amount', { labelKey: 'mobile.transactions.payoutAmount' })
     } else if (method.rate) {
-      primaryAmount = amountPayload(amount * method.rate, method.methodCurrency, 'Payout amount')
-      secondaryAmount = amountPayload(amount, 'USDT', 'Payout amount')
+      primaryAmount = amountPayload(amount * method.rate, method.methodCurrency, 'Payout amount', { labelKey: 'mobile.transactions.payoutAmount' })
+      secondaryAmount = amountPayload(amount, 'USDT', 'Payout amount', { labelKey: 'mobile.transactions.payoutAmount' })
     } else {
-      primaryAmount = amountPayload(amount, 'USDT', 'Payout amount')
+      primaryAmount = amountPayload(amount, 'USDT', 'Payout amount', { labelKey: 'mobile.transactions.payoutAmount' })
       conversionNote = `${method.methodCurrency} payout unavailable because rate is missing`
+      conversionNoteKey = 'mobile.transactions.methodMissingRate'
+      conversionNoteValues = { currency: method.methodCurrency }
     }
   }
+
+  const detailMeta = transactionDetailMeta(row, type)
 
   return {
     id: String(row.id || row.uid || `${type}-${timestampOf(row)}`),
@@ -146,6 +190,7 @@ function normalizeTransaction(row, methods) {
     legacyType: row.type || type,
     status,
     statusLabel: statusLabel(status),
+    statusKey: statusKey(status),
     hideStatusTag: shouldHideStatusTag(row, type, status),
     methodCode: method.methodCode,
     methodLabel: method.methodLabel,
@@ -153,9 +198,13 @@ function normalizeTransaction(row, methods) {
     secondaryAmount,
     accountingAmountUsdt,
     conversionNote,
+    conversionNoteKey,
+    conversionNoteValues,
     timestamp: timestampOf(row),
     title: type === 'deposit' ? 'Deposit' : 'Withdrawal',
+    titleKey: type === 'deposit' ? 'mobile.transactions.titleDeposit' : 'mobile.transactions.titleWithdrawal',
     detail: transactionDetail(row, type),
+    ...detailMeta,
   }
 }
 

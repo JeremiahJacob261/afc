@@ -52,13 +52,13 @@ function metaFor(category) {
   return categoryMeta[category] || categoryMeta.broadcast
 }
 
-function formatDate(value) {
-  if (!value) return 'Just now'
+function formatDate(value, locale, t) {
+  if (!value) return t('common.justNow')
 
   const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return 'Just now'
+  if (Number.isNaN(date.getTime())) return t('common.justNow')
 
-  return new Intl.DateTimeFormat('en', {
+  return new Intl.DateTimeFormat(locale, {
     day: '2-digit',
     month: 'short',
     hour: '2-digit',
@@ -70,14 +70,32 @@ function normalizeNotification(item, fallbackTitle) {
   return {
     id: item.id || `${item.timestamp || item.time}-${item.message}`,
     title: item.title || fallbackTitle,
+    titleKey: item.titleKey || '',
     message: item.message || '',
+    messageKey: item.messageKey || '',
+    messageValues: item.messageValues || {},
     category: item.category || 'broadcast',
     timestamp: item.timestamp || item.time || null,
   }
 }
 
-function NotificationCard({ item }) {
+function resolveMessageValues(values, t) {
+  return Object.entries(values || {}).reduce((acc, [key, value]) => {
+    if (key.endsWith('Key') && typeof value === 'string') {
+      acc[key.slice(0, -3)] = t(value)
+      return acc
+    }
+
+    acc[key] = value
+    return acc
+  }, {})
+}
+
+function NotificationCard({ item, t, locale }) {
   const meta = metaFor(item.category)
+  const messageValues = resolveMessageValues(item.messageValues, t)
+  const title = item.titleKey ? t(item.titleKey) : item.title
+  const message = item.messageKey ? t(item.messageKey, messageValues) : item.message
 
   return (
     <Stack
@@ -120,7 +138,7 @@ function NotificationCard({ item }) {
               overflowWrap: 'anywhere',
             }}
           >
-            {item.title}
+            {title}
           </Typography>
           <Typography
             sx={{
@@ -132,7 +150,7 @@ function NotificationCard({ item }) {
               paddingTop: '2px',
             }}
           >
-            {formatDate(item.timestamp)}
+            {formatDate(item.timestamp, locale, t)}
           </Typography>
         </Stack>
         <Typography
@@ -145,7 +163,7 @@ function NotificationCard({ item }) {
             overflowWrap: 'anywhere',
           }}
         >
-          {item.message}
+          {message}
         </Typography>
       </Stack>
     </Stack>
@@ -181,6 +199,7 @@ function EmptyState({ t }) {
 export default function Notification() {
   const { t } = useTranslation('common')
   const router = useRouter()
+  const locale = router.locale || 'en'
   const [notifications, setNotifications] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -259,7 +278,7 @@ export default function Notification() {
               {t('mobile.notifications.title')}
             </Typography>
             <Typography sx={{ color: '#8EA4C2', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '12px' }}>
-              {notifications.length} {t('mobile.notifications.fallbackTitle').toLowerCase()}
+              {t('mobile.notifications.count', { count: notifications.length })}
             </Typography>
           </Stack>
           <Stack
@@ -304,7 +323,7 @@ export default function Notification() {
         ) : notifications.length ? (
           <Stack spacing={1.25} sx={{ paddingBottom: '20px' }}>
             {notifications.map((item) => (
-              <NotificationCard key={item.id} item={item} />
+              <NotificationCard key={item.id} item={item} t={t} locale={locale} />
             ))}
           </Stack>
         ) : (

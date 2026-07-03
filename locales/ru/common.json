@@ -719,7 +719,18 @@
     },
     "match": {
       "details": "Детали матча",
+      "matchId": "ID матча",
+      "market": "Рынок",
       "stakeAmount": "Сумма ставки",
+      "profit": "Прибыль",
+      "expectedReturn": "Ожидаемый возврат",
+      "companyGame": "Игра компании",
+      "choose": "Выбрать",
+      "noMarketSelected": "Рынок не выбран",
+      "marketUnavailable": "Этот рынок недоступен",
+      "matchExpired": "Срок этого матча истек",
+      "maxBetsReached": "Вы достигли максимального количества ставок на сегодня.",
+      "insufficientBalance": "У вас недостаточно USDT для завершения этой ставки.",
       "placeBet": "Сделать ставку",
       "placingBet": "Размещение ставки...",
       "loading": "Загрузка матча..."

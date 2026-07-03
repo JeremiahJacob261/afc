@@ -6,11 +6,12 @@ import { useEffect, useMemo, useState } from 'react'
 import Cover from './cover'
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth'
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
+import { useTranslation } from 'next-i18next'
 
 const tabs = [
-  { key: 'all', label: 'All', icon: 'solar:bill-list-bold' },
-  { key: 'deposit', label: 'Deposits', icon: 'solar:wallet-money-bold' },
-  { key: 'withdraw', label: 'Withdrawals', icon: 'solar:card-transfer-bold' },
+  { key: 'all', labelKey: 'common.all', icon: 'solar:bill-list-bold' },
+  { key: 'deposit', labelKey: 'mobile.transactions.deposits', icon: 'solar:wallet-money-bold' },
+  { key: 'withdraw', labelKey: 'mobile.transactions.withdrawals', icon: 'solar:card-transfer-bold' },
 ]
 
 const typeMeta = {
@@ -30,25 +31,25 @@ const typeMeta = {
 
 const statusMeta = {
   success: {
-    label: 'Successful',
+    labelKey: 'status.success',
     color: '#35E0A1',
     bg: 'rgba(53, 224, 161, 0.12)',
     border: 'rgba(53, 224, 161, 0.28)',
   },
   failed: {
-    label: 'Failed',
+    labelKey: 'status.failed',
     color: '#FF8CA0',
     bg: 'rgba(255, 140, 160, 0.12)',
     border: 'rgba(255, 140, 160, 0.28)',
   },
   processing: {
-    label: 'Processing',
+    labelKey: 'status.processing',
     color: '#C7A6FF',
     bg: 'rgba(199, 166, 255, 0.12)',
     border: 'rgba(199, 166, 255, 0.28)',
   },
   pending: {
-    label: 'Pending',
+    labelKey: 'status.pending',
     color: '#F8C14A',
     bg: 'rgba(248, 193, 74, 0.12)',
     border: 'rgba(248, 193, 74, 0.28)',
@@ -66,37 +67,37 @@ function toNumber(value) {
   return Number.isFinite(number) ? number : 0
 }
 
-function formatNumber(value, currency) {
+function formatNumber(value, currency, locale = 'en') {
   const numericValue = toNumber(value)
   const isUsdt = String(currency || '').toUpperCase() === 'USDT'
 
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat(locale, {
     minimumFractionDigits: isUsdt ? 3 : 0,
     maximumFractionDigits: isUsdt ? 3 : 2,
   }).format(numericValue)
 }
 
-function formatAmount(amount) {
-  if (!amount || amount.value === null || amount.value === undefined) return 'Unavailable'
+function formatAmount(amount, t, locale) {
+  if (!amount || amount.value === null || amount.value === undefined) return t('common.notAvailable')
 
   const currency = String(amount.currency || 'USDT').toUpperCase()
-  const formatted = formatNumber(amount.value, currency)
+  const formatted = formatNumber(amount.value, currency, locale)
   const label = currency === 'USDT' ? `${formatted} USDT` : `${currency} ${formatted}`
 
   return amount.approximate ? `~ ${label}` : label
 }
 
-function formatUsdt(value) {
-  return `${formatNumber(value, 'USDT')} USDT`
+function formatUsdt(value, locale) {
+  return `${formatNumber(value, 'USDT', locale)} USDT`
 }
 
-function formatDate(value) {
-  if (!value) return 'No time'
+function formatDate(value, locale, t) {
+  if (!value) return t('mobile.transactions.noTime')
 
   const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return 'No time'
+  if (Number.isNaN(date.getTime())) return t('mobile.transactions.noTime')
 
-  return new Intl.DateTimeFormat('en', {
+  return new Intl.DateTimeFormat(locale, {
     day: '2-digit',
     month: 'short',
     hour: '2-digit',
@@ -115,6 +116,33 @@ function metaForStatus(status) {
 function countFor(transactions, key) {
   if (key === 'all') return transactions.length
   return transactions.filter((item) => item.type === key).length
+}
+
+function translatedAmountLabel(amount, t) {
+  return amount?.labelKey ? t(amount.labelKey) : amount?.label || t('common.amount')
+}
+
+function translatedTransactionTitle(item, t) {
+  if (item.titleKey) return t(item.titleKey)
+  if (item.type === 'deposit') return t('mobile.transactions.titleDeposit')
+  if (item.type === 'withdraw') return t('mobile.transactions.titleWithdrawal')
+  return item.title || t('common.transaction')
+}
+
+function translatedTransactionDetail(item, t) {
+  if (Array.isArray(item.detailParts) && item.detailParts.length) {
+    return item.detailParts
+      .map((part) => `${part.labelKey ? t(part.labelKey) : part.label}: ${part.value}`)
+      .join(' / ')
+  }
+
+  if (item.detailKey) return t(item.detailKey, item.detailValues || {})
+  return item.detail || t('mobile.transactions.transactionRequest')
+}
+
+function translatedStatus(item, fallback, t) {
+  if (item.statusKey) return t(item.statusKey)
+  return item.statusLabel || t(fallback.labelKey || 'status.pending')
 }
 
 function SummaryStat({ label, value, icon, color }) {
@@ -152,10 +180,10 @@ function SummaryStat({ label, value, icon, color }) {
   )
 }
 
-function TransactionCard({ item }) {
+function TransactionCard({ item, t, locale }) {
   const type = metaForType(item.type)
   const status = metaForStatus(item.status)
-  const secondary = item.secondaryAmount ? formatAmount(item.secondaryAmount) : ''
+  const secondary = item.secondaryAmount ? formatAmount(item.secondaryAmount, t, locale) : ''
 
   return (
     <Stack
@@ -198,7 +226,7 @@ function TransactionCard({ item }) {
                   overflowWrap: 'anywhere',
                 }}
               >
-                {item.title}
+                {translatedTransactionTitle(item, t)}
               </Typography>
               <Typography
                 sx={{
@@ -208,7 +236,7 @@ function TransactionCard({ item }) {
                   overflowWrap: 'anywhere',
                 }}
               >
-                {item.methodLabel || item.methodCode?.toUpperCase() || 'Payment method'}
+                {item.methodLabel || item.methodCode?.toUpperCase() || t('mobile.transactions.paymentMethod')}
               </Typography>
             </Stack>
 
@@ -224,7 +252,7 @@ function TransactionCard({ item }) {
                 }}
               >
                 <Typography sx={{ fontFamily: 'Inter, Poppins, sans-serif', fontSize: '11px', fontWeight: 800, lineHeight: 1 }}>
-                  {item.statusLabel || status.label}
+                  {translatedStatus(item, status, t)}
                 </Typography>
               </Stack>
             )}
@@ -232,7 +260,7 @@ function TransactionCard({ item }) {
 
           <Stack spacing={0.25}>
             <Typography sx={{ color: '#8EA4C2', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '11px' }}>
-              {item.primaryAmount?.label || 'Amount'}
+              {translatedAmountLabel(item.primaryAmount, t)}
             </Typography>
             <Typography
               sx={{
@@ -244,16 +272,16 @@ function TransactionCard({ item }) {
                 overflowWrap: 'anywhere',
               }}
             >
-              {formatAmount(item.primaryAmount)}
+              {formatAmount(item.primaryAmount, t, locale)}
             </Typography>
             {secondary ? (
               <Typography sx={{ color: '#DDE7F5', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '12px', overflowWrap: 'anywhere' }}>
-                {item.secondaryAmount.label}: {secondary}
+                {translatedAmountLabel(item.secondaryAmount, t)}: {secondary}
               </Typography>
             ) : null}
             {item.conversionNote ? (
               <Typography sx={{ color: '#F8C14A', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '12px', overflowWrap: 'anywhere' }}>
-                {item.conversionNote}
+                {item.conversionNoteKey ? t(item.conversionNoteKey, item.conversionNoteValues || {}) : item.conversionNote}
               </Typography>
             ) : null}
           </Stack>
@@ -282,7 +310,7 @@ function TransactionCard({ item }) {
             whiteSpace: 'nowrap',
           }}
         >
-          {item.detail || 'Transaction request'}
+          {translatedTransactionDetail(item, t)}
         </Typography>
         <Typography
           sx={{
@@ -293,17 +321,17 @@ function TransactionCard({ item }) {
             whiteSpace: 'nowrap',
           }}
         >
-          {formatDate(item.timestamp)}
+          {formatDate(item.timestamp, locale, t)}
         </Typography>
       </Stack>
     </Stack>
   )
 }
 
-function EmptyState({ selected }) {
+function EmptyState({ selected, t }) {
   const copy = selected === 'all'
-    ? 'Payment transactions will appear here after you deposit or withdraw.'
-    : `No ${selected === 'deposit' ? 'deposit' : 'withdrawal'} transactions found.`
+    ? t('mobile.transactions.emptyAll')
+    : t('mobile.transactions.emptyFiltered', { type: selected === 'deposit' ? t('common.deposit').toLowerCase() : t('common.withdraw').toLowerCase() })
 
   return (
     <Stack
@@ -321,7 +349,7 @@ function EmptyState({ selected }) {
     >
       <Icon icon="solar:bill-list-bold" width="38" height="38" style={{ color: '#8EA4C2' }} />
       <Typography sx={{ color: '#FFFFFF', fontFamily: 'Inter, Poppins, sans-serif', fontWeight: 800 }}>
-        No transactions
+        {t('emptyStates.noTransactions')}
       </Typography>
       <Typography sx={{ color: '#8EA4C2', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '13px', lineHeight: 1.45 }}>
         {copy}
@@ -331,7 +359,9 @@ function EmptyState({ selected }) {
 }
 
 export default function TransactionHistory() {
+  const { t } = useTranslation('common')
   const router = useRouter()
+  const locale = router.locale || 'en'
   const [selected, setSelected] = useState('all')
   const [transactions, setTransactions] = useState([])
   const [summary, setSummary] = useState(emptySummary)
@@ -366,7 +396,7 @@ export default function TransactionHistory() {
         }
 
         if (!response.ok) {
-          throw new Error(result.message || 'Unable to load transactions')
+          throw new Error(result.message || t('messages.unableLoadTransactions'))
         }
 
         if (!active) return
@@ -374,7 +404,7 @@ export default function TransactionHistory() {
         setTransactions(Array.isArray(result.transactions) ? result.transactions : Array.isArray(result.data) ? result.data : [])
         setSummary(result.summary || emptySummary)
       } catch (err) {
-        if (active) setError(err.message || 'Unable to load transactions')
+        if (active) setError(err.message || t('messages.unableLoadTransactions'))
       } finally {
         if (active) setLoading(false)
       }
@@ -385,13 +415,13 @@ export default function TransactionHistory() {
     return () => {
       active = false
     }
-  }, [router, reloadKey])
+  }, [router, reloadKey, t])
 
   return (
     <Cover>
       <Head>
-        <title>History</title>
-        <meta name="description" content="European Football payment history" />
+        <title>{t('mobile.transactions.title')}</title>
+        <meta name="description" content={t('mobile.transactions.metaDescription')} />
         <link rel="icon" href="/european.ico" />
       </Head>
 
@@ -400,7 +430,7 @@ export default function TransactionHistory() {
           <Stack
             component="button"
             type="button"
-            aria-label="Go back"
+            aria-label={t('common.back')}
             onClick={() => router.back()}
             sx={{
               alignItems: 'center',
@@ -417,7 +447,7 @@ export default function TransactionHistory() {
             <Icon icon="material-symbols:arrow-back-ios-new-rounded" width="20" height="20" />
           </Stack>
           <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins, sans-serif', fontWeight: 600, color: '#E9E5DA' }}>
-            Transactions
+            {t('mobile.transactions.title')}
           </Typography>
         </Stack>
 
@@ -434,10 +464,10 @@ export default function TransactionHistory() {
           <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center', gap: 1 }}>
             <Stack spacing={0.25} sx={{ minWidth: 0 }}>
               <Typography sx={{ color: '#FFFFFF', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '18px', fontWeight: 800 }}>
-                Payment History
+                {t('mobile.transactions.paymentHistory')}
               </Typography>
               <Typography sx={{ color: '#8EA4C2', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '12px' }}>
-                {transactions.length} {transactions.length === 1 ? 'transaction' : 'transactions'}
+                {t('mobile.transactions.count', { count: transactions.length })}
               </Typography>
             </Stack>
             <Stack
@@ -458,14 +488,14 @@ export default function TransactionHistory() {
 
           <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
             <SummaryStat
-              label="Total deposits"
-              value={formatUsdt(summary.totalDepositsUsdt)}
+              label={t('mobile.transactions.totalDeposits')}
+              value={formatUsdt(summary.totalDepositsUsdt, locale)}
               icon="solar:wallet-money-bold"
               color="#32D7FF"
             />
             <SummaryStat
-              label="Total withdrawals"
-              value={formatUsdt(summary.totalWithdrawalsUsdt)}
+              label={t('mobile.transactions.totalWithdrawals')}
+              value={formatUsdt(summary.totalWithdrawalsUsdt, locale)}
               icon="solar:card-transfer-bold"
               color="#FF9E7A"
             />
@@ -498,7 +528,7 @@ export default function TransactionHistory() {
               >
                 <Icon icon={tab.icon} width="17" height="17" />
                 <Typography sx={{ fontFamily: 'Inter, Poppins, sans-serif', fontSize: '12px', fontWeight: 800, whiteSpace: 'nowrap' }}>
-                  {tab.label}
+                  {t(tab.labelKey)}
                 </Typography>
                 <Typography sx={{ fontFamily: 'Inter, Poppins, sans-serif', fontSize: '11px', fontWeight: 800, opacity: 0.72 }}>
                   {countFor(transactions, tab.key)}
@@ -512,7 +542,7 @@ export default function TransactionHistory() {
           <Stack spacing={1.5} sx={{ alignItems: 'center', justifyContent: 'center', minHeight: 360 }}>
             <CircularProgress size={28} sx={{ color: '#1BB6FF' }} />
             <Typography sx={{ color: '#8EA4C2', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '13px' }}>
-              Loading transactions
+              {t('mobile.transactions.loading')}
             </Typography>
           </Stack>
         ) : error ? (
@@ -526,7 +556,7 @@ export default function TransactionHistory() {
             }}
           >
             <Typography sx={{ color: '#FFFFFF', fontFamily: 'Inter, Poppins, sans-serif', fontWeight: 800 }}>
-              Transactions unavailable
+              {t('mobile.transactions.transactionUnavailable')}
             </Typography>
             <Typography sx={{ color: '#FFC9B8', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '13px' }}>
               {error}
@@ -551,18 +581,18 @@ export default function TransactionHistory() {
             >
               <Icon icon="solar:refresh-bold" width="16" height="16" />
               <Typography sx={{ fontFamily: 'Inter, Poppins, sans-serif', fontSize: '12px', fontWeight: 800 }}>
-                Retry
+                {t('mobile.transactions.retry')}
               </Typography>
             </Stack>
           </Stack>
         ) : filteredTransactions.length ? (
           <Stack spacing={1.25}>
             {filteredTransactions.map((item) => (
-              <TransactionCard key={item.id} item={item} />
+              <TransactionCard key={item.id} item={item} t={t} locale={locale} />
             ))}
           </Stack>
         ) : (
-          <EmptyState selected={selected} />
+          <EmptyState selected={selected} t={t} />
         )}
       </Box>
     </Cover>

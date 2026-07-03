@@ -15,6 +15,7 @@ import Head from "next/head";
 import Modal from '@mui/material/Modal';
 import Cover from './cover'
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
+import { useTranslation } from 'next-i18next'
 import toast, { Toaster} from 'react-hot-toast'
 import Loading from "@/pages/components/loading";
 import FormControl from '@mui/material/FormControl';
@@ -33,7 +34,23 @@ function isLocalMethod(type) {
   return ['local', 'local-transfer', 'bank', 'mobile-money'].includes(String(type || '').trim().toLowerCase());
 }
 
+function translateWithdrawalMessage(message, t, values = {}) {
+  const normalized = String(message || '').trim().toLowerCase()
+
+  if (!normalized) return t('messages.unableSubmitWithdrawal')
+  if (normalized === 'no transaction pin has been set') return t('mobile.withdraw.noPinSet')
+  if (normalized === 'wrong password') return t('mobile.withdraw.wrongPin')
+  if (normalized === 'insufficient funds') return t('mobile.withdraw.insufficientFunds')
+  if (normalized === 'you have not placed up to 5 bets') return t('mobile.withdraw.betRequirement')
+  if (normalized.includes('minimum')) return t('messages.minimumWithdrawal', { amount: values.min ?? values.amount })
+  if (normalized.includes('maximum')) return t('mobile.withdraw.maximumWithdrawal', { amount: values.max ?? values.amount })
+  if (normalized === 'withdrawal request as been sent') return t('messages.withdrawalSent')
+
+  return message
+}
+
 export default function Deposit() {
+  const { t } = useTranslation('common')
   const [wallx,setWallx] = useState([]);
   //86f36a9d-c8e8-41cb-a8aa-3bbe7b66d0a5
   function findObjectById(id) {
@@ -104,10 +121,9 @@ export default function Deposit() {
             return;
           }
           if (test[0].status === 'Failed') {
-            toast.error(test[0].message);
+            toast.error(translateWithdrawalMessage(test[0].message, t, { min: minWithdrawalAmount, max: maxWithdrawalAmount }));
             handleClosex();
             if (test[0].message === 'No transaction pin has been set') {
-              toast.error(test[0].message)
               router.push('/user/codesetting')
              
             }
@@ -118,6 +134,7 @@ export default function Deposit() {
           }
       } catch (e) {
         console.log(e);
+        toast.error(t('messages.unableSubmitWithdrawal'))
         handleClosex();
       }
 
@@ -130,17 +147,17 @@ export default function Deposit() {
     if (openx) return
 
     if (pin === '') {
-      toast.error('Please enter your password')
+      toast.error(t('messages.enterTransactionPin'))
     } else if (method === '' || address === '') {
-      toast.error('Please select a wallet')
+      toast.error(t('messages.chooseWalletFirst'))
     } else if (amount === '') {
-      toast.error('Please enter amount')
+      toast.error(t('mobile.withdraw.enterAmount'))
     } else if (Number(amount) < minWithdrawalAmount) {
-      toast.error(`Minimum amount to withdraw is ${minWithdrawalAmount} USDT`)
+      toast.error(t('messages.minimumWithdrawal', { amount: minWithdrawalAmount }))
     } else if (Number(amount) > maxWithdrawalAmount) {
-      toast.error(`Maximum amount to withdraw is ${maxWithdrawalAmount} USDT`)
+      toast.error(t('mobile.withdraw.maximumWithdrawal', { amount: maxWithdrawalAmount }))
     } else if (totalAmount > balance) {
-      toast.error('Insufficient funds')
+      toast.error(t('mobile.withdraw.insufficientFunds'))
 
     } else {
 
@@ -199,7 +216,7 @@ export default function Deposit() {
         }
       } catch (e) {
         console.log(e)
-        toast.error('Please Check your Internet Connection and Refresh the Website')
+        toast.error(t('mobile.withdraw.connectionError'))
       }
     }
 
@@ -252,7 +269,7 @@ export default function Deposit() {
   return (
     <Cover style={{ minHeight: '95vh', paddingBottom: '100px' }}>
       <Head>
-        <title>Withdraw</title>
+        <title>{t('mobile.withdraw.title')}</title>
         <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
@@ -261,34 +278,34 @@ export default function Deposit() {
         <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px',color:'white' }} onClick={() => {
           router.push('/user/account')
         }} />
-        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: 'white' }}>WITHDRAW</Typography>
+        <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: 'white' }}>{t('mobile.withdraw.title').toUpperCase()}</Typography>
       </Stack>
       <Stack spacing={3} sx={{ padding: '8px', marginBottom: '100px' }} >
         <Sncks message={messages} />
         <Stack sx={{ minWidth: '350px', minHeight: '110px', background: '#10284D', padding: '8px', borderRadius: '5px' }} direction='column' spacing={2} justifyContent='center'>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Current Balance</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{t('common.currentBalance')}</Typography>
             <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{(info.balance) ? info.balance.toFixed(3) : info.balance} USDT</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Withdrawal Fee</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{t('mobile.withdraw.withdrawalFee')}</Typography>
             <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{feeAmount ? feeAmount.toFixed(3) : feeAmount} USDT ({feePercent}%)</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Requested Amount</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{t('mobile.withdraw.requestedAmount')}</Typography>
             <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{requestedAmount ? requestedAmount.toFixed(3) : requestedAmount} USDT</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>You Receive</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{t('mobile.withdraw.youReceive')}</Typography>
             <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{requestedAmount ? requestedAmount.toFixed(3) : requestedAmount} USDT</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Total Deducted</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{t('mobile.withdraw.totalDeducted')}</Typography>
             <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{totalAmount ? totalAmount.toFixed(3) : totalAmount} USDT</Typography>
           </Stack>
           {showConvertedPayout && (
             <Stack direction='row' alignItems='center' justifyContent='space-between'>
-              <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>You Receive in {currencyCode}</Typography>
+              <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{t('mobile.withdraw.youReceiveIn', { currency: currencyCode })}</Typography>
               <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{parseFloat(requestedAmount * rate).toFixed(2)} {currencyCode}</Typography>
             </Stack>
           )}
@@ -307,7 +324,7 @@ export default function Deposit() {
             >
               <Icon icon="icon-park-twotone:add" width="24" height="24" style={{ color: '#a3a3a3' }} />
 
-              <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>Bind Wallet</Typography>
+              <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.withdraw.bindWallet')}</Typography>
             </Stack>
           </motion.div>
 
@@ -316,9 +333,9 @@ export default function Deposit() {
         <Stack direction="column" spacing={3}>
 
           <Stack spacing={1} >
-            <Typography sx={{ fontSize: '12px', color: '#06101F', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Choose Prefered Payment Wallet</Typography>
+            <Typography sx={{ fontSize: '12px', color: '#06101F', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{t('mobile.withdraw.chooseWallet')}</Typography>
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Select your Withdrawal Method</InputLabel>
+              <InputLabel id="demo-simple-select-label">{t('mobile.withdraw.selectWithdrawalMethod')}</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -346,7 +363,7 @@ export default function Deposit() {
                   setBank(isLocalMethod(walletid.method) ? walletid.bank : (walletid.bank || walletid.walletnames || 'usdt'));
                 }}
               >
-                <MenuItem value=''>none</MenuItem>
+                <MenuItem value=''>{t('mobile.withdraw.noWallet')}</MenuItem>
                 {
                   wallets.map((w) => {
                     const walletValue = w.wallid ?? w.id;
@@ -359,7 +376,7 @@ export default function Deposit() {
           </Stack>
 
           <Stack spacing={1}>
-            <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Enter Amount You Wish to Withdraw in USD</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{t('mobile.withdraw.amountLabel')}</Typography>
             <TextField
               sx={{ border: '1px solid #E9E5DA', input: { color: '#E9E5DA', } }}
               type="number"
@@ -370,7 +387,7 @@ export default function Deposit() {
               }} />
           </Stack>
           <Stack spacing={1}>
-            <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>Transaction Pin</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{t('forms.transactionPin')}</Typography>
             <TextField
               sx={{ border: '1px solid #E9E5DA', input: { color: '#E9E5DA', }, textAlign: 'center' }}
               type="pin"
@@ -385,7 +402,7 @@ export default function Deposit() {
 
           <motion.div whileTap={{ scale: 0.98 }}
             style={{ cursor: 'pointer', display: 'flex', flexDirection: 'row', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: "#06101F", height: '50px', background: '#1BB6FF', minWidth: '310px', padding: '12px' }}
-            onClick={transaction}>Withdraw</motion.div>
+            onClick={transaction}>{t('mobile.withdraw.submit')}</motion.div>
 
         </Stack>
       </Stack>
@@ -417,10 +434,10 @@ export default function Deposit() {
           transform: 'translate(-50%, -50%)',
           padding: '12px'
         }}>
-          <Image src={aleT ? Big : Wig} width={120} height={120} alt='widh' />
+          <Image src={aleT ? Big : Wig} width={120} height={120} alt={aleT ? t('status.success') : t('errors.generic')} />
           <Typography id="modal-modal-title" sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '20px', fontWeight: '500', color: '#E9E5DA' }}>
 
-            {aleT ? 'Success' : 'Eh Sorry!'}
+            {aleT ? t('status.success') : t('errors.generic')}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2, fontSize: '14px', fontWeight: '300', color: '#E9E5DA' }}>
             {ale}
@@ -433,7 +450,7 @@ export default function Deposit() {
             } else {
               setOpen(false)
             }
-          }}>Okay</Button>
+          }}>{t('common.continue')}</Button>
         </Stack>
 
       </Modal>)

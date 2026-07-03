@@ -719,7 +719,18 @@
     },
     "match": {
       "details": "Detalles del partido",
+      "matchId": "ID del partido",
+      "market": "Mercado",
       "stakeAmount": "Monto de la apuesta",
+      "profit": "Ganancia",
+      "expectedReturn": "Retorno esperado",
+      "companyGame": "Partido de compañía",
+      "choose": "Elegir",
+      "noMarketSelected": "No hay mercado seleccionado",
+      "marketUnavailable": "Este mercado no está disponible",
+      "matchExpired": "Este partido ha expirado",
+      "maxBetsReached": "Has alcanzado el número máximo de apuestas por hoy.",
+      "insufficientBalance": "No tienes suficiente USDT para completar esta apuesta.",
       "placeBet": "Realizar apuesta",
       "placingBet": "Realizando apuesta...",
       "loading": "Cargando partido..."

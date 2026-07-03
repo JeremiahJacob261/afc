@@ -719,7 +719,18 @@
     },
     "match": {
       "details": "Détails du match",
+      "matchId": "ID du match",
+      "market": "Marché",
       "stakeAmount": "Montant de la mise",
+      "profit": "Profit",
+      "expectedReturn": "Retour attendu",
+      "companyGame": "Match société",
+      "choose": "Choisir",
+      "noMarketSelected": "Aucun marché sélectionné",
+      "marketUnavailable": "Ce marché n'est pas disponible",
+      "matchExpired": "Ce match a expiré",
+      "maxBetsReached": "Vous avez atteint le nombre maximum de paris pour aujourd'hui.",
+      "insufficientBalance": "Vous n'avez pas assez d'USDT pour terminer ce pari.",
       "placeBet": "Placer un pari",
       "placingBet": "Placement du pari...",
       "loading": "Chargement du match..."

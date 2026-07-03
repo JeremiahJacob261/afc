@@ -588,7 +588,18 @@
     },
     "match": {
       "details": "Match Details",
+      "matchId": "Match ID",
+      "market": "Market",
       "stakeAmount": "Stake amount",
+      "profit": "Profit",
+      "expectedReturn": "Expected return",
+      "companyGame": "Company game",
+      "choose": "Choose",
+      "noMarketSelected": "No market selected",
+      "marketUnavailable": "This market is not available",
+      "matchExpired": "This match has expired",
+      "maxBetsReached": "You have reached the maximum number of bets for today.",
+      "insufficientBalance": "You do not have enough USDT to complete this bet.",
       "placeBet": "Place bet",
       "placingBet": "Placing bet...",
       "loading": "Loading match..."

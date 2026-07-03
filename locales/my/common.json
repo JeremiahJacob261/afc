@@ -719,7 +719,18 @@
     },
     "match": {
       "details": "ဂိမ်းအသေးစိတ်",
+      "matchId": "ဂိမ်း ID",
+      "market": "စျေးကွက်",
       "stakeAmount": "အရိုက်အပ်ငွေ",
+      "profit": "အမြတ်",
+      "expectedReturn": "မျှော်မှန်းရလဒ်",
+      "companyGame": "ကုမ္ပဏီဂိမ်း",
+      "choose": "ရွေးပါ",
+      "noMarketSelected": "စျေးကွက် မရွေးထားပါ",
+      "marketUnavailable": "ဤစျေးကွက်ကို မရနိုင်ပါ",
+      "matchExpired": "ဤဂိမ်းသည် သက်တမ်းကုန်သွားပါပြီ",
+      "maxBetsReached": "ယနေ့အတွက် အများဆုံးမဲအရေအတွက်ကို ရောက်ရှိပြီးပါပြီ။",
+      "insufficientBalance": "ဤမဲကို ပြီးစီးရန် USDT မလုံလောက်ပါ။",
       "placeBet": "မဲလွှင့်မည်",
       "placingBet": "မဲလွှင့်နေသည်...",
       "loading": "ဂိမ်းကိုလွှတ်နေသည်..."
