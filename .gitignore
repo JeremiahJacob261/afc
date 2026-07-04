@@ -26,6 +26,7 @@ android/keystore.properties
 android/app/keystore.properties
 android/release-signing.env
 android/app/google-services.json
+anon-cadb6-firebase-adminsdk-9vm9e-a294accb9f.json
 
 # debug
 npm-debug.log*
@@ -42,3 +43,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+anon-cadb6-c070d66a07fb.json
