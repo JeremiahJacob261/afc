@@ -217,10 +217,12 @@ CREATE TABLE IF NOT EXISTS push_tokens (
   token TEXT NOT NULL,
   platform TEXT NOT NULL DEFAULT 'android',
   device_id TEXT,
+  language TEXT NOT NULL DEFAULT 'en',
   enabled BOOLEAN NOT NULL DEFAULT TRUE,
   last_seen_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT push_tokens_language_check CHECK (language IN ('en', 'fr', 'es', 'my', 'ru', 'ar')),
   FOREIGN KEY (username) REFERENCES users(username)
 );
 
@@ -229,10 +231,21 @@ ALTER TABLE push_tokens ADD COLUMN IF NOT EXISTS username TEXT;
 ALTER TABLE push_tokens ADD COLUMN IF NOT EXISTS token TEXT;
 ALTER TABLE push_tokens ADD COLUMN IF NOT EXISTS platform TEXT DEFAULT 'android';
 ALTER TABLE push_tokens ADD COLUMN IF NOT EXISTS device_id TEXT;
+ALTER TABLE push_tokens ADD COLUMN IF NOT EXISTS language TEXT NOT NULL DEFAULT 'en';
+ALTER TABLE push_tokens ALTER COLUMN language SET DEFAULT 'en';
+UPDATE push_tokens
+SET language = 'en'
+WHERE language IS NULL
+  OR language NOT IN ('en', 'fr', 'es', 'my', 'ru', 'ar');
+ALTER TABLE push_tokens ALTER COLUMN language SET NOT NULL;
 ALTER TABLE push_tokens ADD COLUMN IF NOT EXISTS enabled BOOLEAN NOT NULL DEFAULT TRUE;
 ALTER TABLE push_tokens ADD COLUMN IF NOT EXISTS last_seen_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 ALTER TABLE push_tokens ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 ALTER TABLE push_tokens ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE push_tokens DROP CONSTRAINT IF EXISTS push_tokens_language_check;
+ALTER TABLE push_tokens
+  ADD CONSTRAINT push_tokens_language_check
+  CHECK (language IN ('en', 'fr', 'es', 'my', 'ru', 'ar'));
 
 -- Canonical app notification feed used by native push and the in-app bell.
 CREATE TABLE IF NOT EXISTS app_notifications (

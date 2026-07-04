@@ -6,9 +6,17 @@ import esCommon from '../../locales/es/common.json'
 import frCommon from '../../locales/fr/common.json'
 import myCommon from '../../locales/my/common.json'
 import ruCommon from '../../locales/ru/common.json'
+import arCommon from '../../locales/ar/common.json'
 
 const languageStorageKey = 'efc-language'
-const supportedLanguages = ['en', 'fr', 'es', 'my', 'ru']
+const supportedLanguages = ['en', 'fr', 'es', 'my', 'ru', 'ar']
+
+function applyDocumentLanguage(language) {
+  if (typeof document === 'undefined') return
+
+  document.documentElement.lang = language || 'en'
+  document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr'
+}
 
 function getInitialLanguage() {
   if (typeof window === 'undefined') return 'en'
@@ -35,6 +43,9 @@ if (!i18n.isInitialized) {
       ru: {
         common: ruCommon,
       },
+      ar: {
+        common: arCommon,
+      },
     },
     lng: getInitialLanguage(),
     fallbackLng: 'en',
@@ -47,5 +58,8 @@ if (!i18n.isInitialized) {
     },
   })
 }
+
+applyDocumentLanguage(i18n.language)
+i18n.on('languageChanged', applyDocumentLanguage)
 
 export default i18n

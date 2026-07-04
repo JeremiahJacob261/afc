@@ -4,6 +4,8 @@ import { apiFetch } from './api.js'
 
 const pushTokenStorageKey = 'efc-push-token'
 const deviceIdStorageKey = 'efc-device-id'
+const languageStorageKey = 'efc-language'
+const supportedLanguages = new Set(['en', 'fr', 'es', 'my', 'ru', 'ar'])
 
 function isNativePushAvailable() {
   return Capacitor.isNativePlatform?.() && Capacitor.getPlatform?.() === 'android'
@@ -24,6 +26,31 @@ function storePushToken(token) {
 
 export function getStoredPushToken() {
   return window.localStorage.getItem(pushTokenStorageKey) || ''
+}
+
+function currentLanguage() {
+  const language = window.localStorage.getItem(languageStorageKey) || 'en'
+  return supportedLanguages.has(language) ? language : 'en'
+}
+
+async function registerPushToken(token, language = currentLanguage()) {
+  await apiFetch('/api/push/register-token', {
+    auth: true,
+    method: 'POST',
+    body: {
+      token,
+      platform: 'android',
+      deviceId: getDeviceId(),
+      language,
+    },
+  })
+}
+
+export async function updateStoredPushTokenLanguage(language = currentLanguage()) {
+  const token = getStoredPushToken()
+  if (!token) return
+
+  await registerPushToken(token, supportedLanguages.has(language) ? language : 'en')
 }
 
 export async function unregisterPushToken() {
@@ -69,15 +96,7 @@ export async function setupPushNotifications({ onNotification, onAction, onError
       const value = token?.value || ''
       if (!value) return
 
-      await apiFetch('/api/push/register-token', {
-        auth: true,
-        method: 'POST',
-        body: {
-          token: value,
-          platform: 'android',
-          deviceId: getDeviceId(),
-        },
-      })
+      await registerPushToken(value)
       storePushToken(value)
     }))
 

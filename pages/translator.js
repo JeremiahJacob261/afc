@@ -46,6 +46,11 @@ export default function Translate() {
             "flag": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Flag_of_Iran_%28official%29.svg/125px-Flag_of_Iran_%28official%29.svg.png"
         },
         {
+            "name": "العربية",
+            "code": "ar",
+            "flag": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Arabic_Language_Flag.svg/125px-Arabic_Language_Flag.svg.png"
+        },
+        {
             "name": "langue française",
             "code": "fr",
             "flag": "https://upload.wikimedia.org/wikipedia/en/thumb/c/c3/Flag_of_France.svg/125px-Flag_of_France.svg.png"
@@ -148,6 +153,7 @@ export default function Translate() {
           <motion.p onClick={() => { changeLanguageHandler('pl') }} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.9 }} className='translate-txt'>Polski PL</motion.p>
           <motion.p onClick={() => { changeLanguageHandler('vi') }} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.9 }} className='translate-txt'>Vietnamese VI</motion.p>
           <motion.p onClick={() => { changeLanguageHandler('fa') }} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.9 }} className='translate-txt'>فارسی FA</motion.p>
+          <motion.p onClick={() => { changeLanguageHandler('ar') }} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.9 }} className='translate-txt'>العربية AR</motion.p>
           <motion.p onClick={() => { changeLanguageHandler('pt') }} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.9 }} className='translate-txt'>Português PT</motion.p>
 
         </Stack>

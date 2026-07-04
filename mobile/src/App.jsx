@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { SplashScreen } from '@capacitor/splash-screen'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import toast, { Toaster } from 'react-hot-toast'
 import {
@@ -33,7 +34,7 @@ import {
 } from 'lucide-react'
 import { apiFetch } from './lib/api.js'
 import { hasSupabaseConfig, mobileConfig } from './lib/config.js'
-import { setupPushNotifications, unregisterPushToken } from './lib/push.js'
+import { setupPushNotifications, unregisterPushToken, updateStoredPushTokenLanguage } from './lib/push.js'
 import { getStoredSession, supabase } from './lib/supabase.js'
 import { checkForBundleUpdate, markBundleReady } from './lib/updater.js'
 
@@ -48,6 +49,7 @@ const languageOptions = [
   { code: 'es', label: 'Español' },
   { code: 'my', label: 'မြန်မာ' },
   { code: 'ru', label: 'Русский' },
+  { code: 'ar', label: 'العربية' },
 ]
 
 const markets = [
@@ -80,17 +82,160 @@ const vipBonus = {
   7: 0.125,
 }
 
+const motionEase = [0.22, 1, 0.36, 1]
+const quickEase = [0.4, 0, 0.2, 1]
+const pressSpring = { type: 'spring', stiffness: 520, damping: 36, mass: 0.7 }
+const navSpring = { type: 'spring', stiffness: 420, damping: 34, mass: 0.8 }
+const topScreenDepth = {
+  splash: 0,
+  onboarding: 1,
+  login: 2,
+  register: 2,
+  reset: 3,
+  app: 4,
+}
+const routeMotionMeta = {
+  home: { depth: 0, tabIndex: 0 },
+  matches: { depth: 0, tabIndex: 1 },
+  bets: { depth: 0, tabIndex: 2 },
+  profile: { depth: 0, tabIndex: 3 },
+  match: { depth: 1, tabIndex: 1 },
+  bet: { depth: 1, tabIndex: 2 },
+  deposit: { depth: 1, tabIndex: 3 },
+  withdraw: { depth: 1, tabIndex: 3 },
+  'bind-wallet': { depth: 1, tabIndex: 3 },
+  transactions: { depth: 1, tabIndex: 3 },
+  referrals: { depth: 1, tabIndex: 3 },
+  vip: { depth: 1, tabIndex: 3 },
+  pin: { depth: 1, tabIndex: 3 },
+  notifications: { depth: 1, tabIndex: 3 },
+  faq: { depth: 1, tabIndex: 3 },
+  'deposit-success': { depth: 2, tabIndex: 3 },
+  'withdraw-success': { depth: 2, tabIndex: 3 },
+}
+
 function makeRoute(name, params = {}) {
   return { name, params }
 }
 
+function usePreviousValue(value) {
+  const ref = useRef(null)
+
+  useEffect(() => {
+    ref.current = value
+  }, [value])
+
+  return ref.current
+}
+
+function getScreenMotionDirection(screen, previousScreen) {
+  if (!previousScreen) return 'switch'
+  const currentDepth = topScreenDepth[screen] ?? 1
+  const previousDepth = topScreenDepth[previousScreen] ?? 1
+  if (currentDepth > previousDepth) return 'forward'
+  if (currentDepth < previousDepth) return 'back'
+  return 'switch'
+}
+
+function getRouteKey(route) {
+  const id = route.params?.id || route.params?.betId || route.params?.matchId || ''
+  return `${route.name}:${id}`
+}
+
+function getRouteMotionMeta(routeName) {
+  return routeMotionMeta[routeName] || { depth: 1, tabIndex: 3 }
+}
+
+function getRouteMotionDirection(routeName, previousRouteName) {
+  if (!previousRouteName) return 'tab'
+  const current = getRouteMotionMeta(routeName)
+  const previous = getRouteMotionMeta(previousRouteName)
+
+  if (current.depth > previous.depth) return 'forward'
+  if (current.depth < previous.depth) return 'back'
+  if (current.depth === 0 && previous.depth === 0) return 'tab'
+  if (current.tabIndex > previous.tabIndex) return 'forward'
+  if (current.tabIndex < previous.tabIndex) return 'back'
+  return 'switch'
+}
+
+function createScreenVariants(shouldReduceMotion) {
+  if (shouldReduceMotion) {
+    return {
+      initial: { opacity: 0 },
+      animate: { opacity: 1, transition: { duration: 0.16, ease: motionEase } },
+      exit: { opacity: 0, transition: { duration: 0.12, ease: quickEase } },
+    }
+  }
+
+  return {
+    initial: (direction) => ({
+      opacity: 0,
+      y: direction === 'back' ? -10 : 12,
+      scale: 0.995,
+    }),
+    animate: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.24, ease: motionEase },
+    },
+    exit: (direction) => ({
+      opacity: 0,
+      y: direction === 'back' ? 8 : -8,
+      scale: 0.998,
+      transition: { duration: 0.16, ease: quickEase },
+    }),
+  }
+}
+
+function createPageVariants(shouldReduceMotion) {
+  if (shouldReduceMotion) {
+    return {
+      initial: { opacity: 0 },
+      animate: { opacity: 1, transition: { duration: 0.16, ease: motionEase } },
+      exit: { opacity: 0, transition: { duration: 0.12, ease: quickEase } },
+    }
+  }
+
+  return {
+    initial: (direction) => {
+      if (direction === 'forward') return { opacity: 0, x: 30, scale: 0.992 }
+      if (direction === 'back') return { opacity: 0, x: -26, scale: 0.996 }
+      return { opacity: 0, y: 10, scale: 0.996 }
+    },
+    animate: {
+      opacity: 1,
+      x: 0,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.24, ease: motionEase },
+    },
+    exit: (direction) => {
+      if (direction === 'forward') {
+        return { opacity: 0, x: -18, scale: 0.996, transition: { duration: 0.16, ease: quickEase } }
+      }
+      if (direction === 'back') {
+        return { opacity: 0, x: 18, scale: 0.996, transition: { duration: 0.16, ease: quickEase } }
+      }
+      return { opacity: 0, y: -6, scale: 0.998, transition: { duration: 0.14, ease: quickEase } }
+    },
+  }
+}
+
 export default function App() {
-  const { t } = useTranslation('common')
+  const { t, i18n } = useTranslation('common')
+  const shouldReduceMotion = useReducedMotion()
   const [screen, setScreen] = useState('splash')
   const [route, setRoute] = useState(makeRoute('home'))
   const [booted, setBooted] = useState(false)
   const [online, setOnline] = useState(() => navigator.onLine)
   const [successAmount, setSuccessAmount] = useState('')
+  const [showLanguageDialog, setShowLanguageDialog] = useState(false)
+  const previousScreen = usePreviousValue(screen)
+  const screenDirection = getScreenMotionDirection(screen, previousScreen)
+  const screenVariants = useMemo(() => createScreenVariants(shouldReduceMotion), [shouldReduceMotion])
+  const fixedShellVariants = useMemo(() => createScreenVariants(true), [])
 
   useEffect(() => {
     const onOnline = () => setOnline(true)
@@ -115,8 +260,12 @@ export default function App() {
       await new Promise((resolve) => setTimeout(resolve, 700))
 
       const session = await getStoredSession()
+      const storedLanguage = window.localStorage.getItem(languageStorageKey)
+      const hasSeenLanguagePrompt = window.localStorage.getItem('efc-language-prompt-shown') === 'true'
+
       if (!active) return
 
+      setShowLanguageDialog(!storedLanguage && !hasSeenLanguagePrompt)
       setScreen(session ? 'app' : 'onboarding')
       setRoute(makeRoute('home'))
       setBooted(true)
@@ -129,10 +278,33 @@ export default function App() {
     }
   }, [])
 
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: shouldReduceMotion ? 'auto' : 'smooth' })
+    })
+
+    return () => window.cancelAnimationFrame(frame)
+  }, [screen, shouldReduceMotion])
+
   function openApp(nextRoute = makeRoute('home')) {
     setRoute(nextRoute)
     setScreen('app')
     setBooted(true)
+  }
+
+  function handleLanguageSelect(language) {
+    i18n.changeLanguage(language)
+    window.localStorage.setItem(languageStorageKey, language)
+    window.localStorage.setItem('efc-language-prompt-shown', 'true')
+    updateStoredPushTokenLanguage(language).catch((error) => {
+      console.warn('Unable to update push notification language:', error)
+    })
+    setShowLanguageDialog(false)
+  }
+
+  function dismissLanguageDialog() {
+    window.localStorage.setItem('efc-language-prompt-shown', 'true')
+    setShowLanguageDialog(false)
   }
 
   function logoutToOnboarding() {
@@ -140,6 +312,49 @@ export default function App() {
     setScreen('onboarding')
     setBooted(true)
   }
+
+  const activeScreen = (() => {
+    if (!booted && screen !== 'splash') return <InAppSplash />
+    if (screen === 'splash') return <InAppSplash />
+    if (screen === 'onboarding') {
+      return <Onboarding onLogin={() => setScreen('login')} onRegister={() => setScreen('register')} />
+    }
+    if (screen === 'login') {
+      return (
+        <LoginScreen
+          onBack={() => setScreen('onboarding')}
+          onReset={() => setScreen('reset')}
+          onRegister={() => setScreen('register')}
+          onSignedIn={() => openApp(makeRoute('home'))}
+        />
+      )
+    }
+    if (screen === 'register') {
+      return (
+        <RegisterScreen
+          onBack={() => setScreen('onboarding')}
+          onLogin={() => setScreen('login')}
+          onSignedIn={() => openApp(makeRoute('home'))}
+        />
+      )
+    }
+    if (screen === 'reset') return <ResetScreen onBack={() => setScreen('login')} />
+    if (screen === 'app') {
+      return (
+        <UserApp
+          online={online}
+          route={route}
+          setRoute={setRoute}
+          onLogout={logoutToOnboarding}
+          successAmount={successAmount}
+          setSuccessAmount={setSuccessAmount}
+        />
+      )
+    }
+    return <InAppSplash />
+  })()
+  const screenKey = !booted && screen !== 'splash' ? 'booting-splash' : screen
+  const isAppScreen = screenKey === 'app'
 
   return (
     <div className="app-shell">
@@ -150,38 +365,21 @@ export default function App() {
         </div>
       ) : null}
 
-      {screen === 'splash' ? <InAppSplash /> : null}
-      {screen === 'onboarding' ? (
-        <Onboarding onLogin={() => setScreen('login')} onRegister={() => setScreen('register')} />
-      ) : null}
-      {screen === 'login' ? (
-        <LoginScreen
-          onBack={() => setScreen('onboarding')}
-          onReset={() => setScreen('reset')}
-          onRegister={() => setScreen('register')}
-          onSignedIn={() => openApp(makeRoute('home'))}
-        />
-      ) : null}
-      {screen === 'register' ? (
-        <RegisterScreen
-          onBack={() => setScreen('onboarding')}
-          onLogin={() => setScreen('login')}
-          onSignedIn={() => openApp(makeRoute('home'))}
-        />
-      ) : null}
-      {screen === 'reset' ? <ResetScreen onBack={() => setScreen('login')} /> : null}
-      {screen === 'app' ? (
-        <UserApp
-          online={online}
-          route={route}
-          setRoute={setRoute}
-          onLogout={logoutToOnboarding}
-          successAmount={successAmount}
-          setSuccessAmount={setSuccessAmount}
-        />
-      ) : null}
+      <AnimatePresence initial={false} mode="wait" custom={screenDirection}>
+        <motion.div
+          key={screenKey}
+          className={`screen-motion-root${isAppScreen ? ' fixed-shell-root' : ''}`}
+          custom={screenDirection}
+          variants={isAppScreen ? fixedShellVariants : screenVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+        >
+          {activeScreen}
+        </motion.div>
+      </AnimatePresence>
 
-      {!booted && screen !== 'splash' ? <InAppSplash /> : null}
+      <FirstLaunchLanguageDialog open={showLanguageDialog} onSelect={handleLanguageSelect} onDismiss={dismissLanguageDialog} />
       <Toaster
         position="top-center"
         gutter={8}
@@ -234,6 +432,59 @@ function InAppSplash() {
         <h1>{t('mobile.splash.title')}</h1>
       </div>
     </main>
+  )
+}
+
+function FirstLaunchLanguageDialog({ open, onSelect, onDismiss }) {
+  const { t, i18n } = useTranslation('common')
+  const [selectedLanguage, setSelectedLanguage] = useState(() => {
+    return languageOptions.some((language) => language.code === i18n.language) ? i18n.language : 'en'
+  })
+
+  useEffect(() => {
+    if (!open) return
+
+    setSelectedLanguage(languageOptions.some((language) => language.code === i18n.language) ? i18n.language : 'en')
+  }, [open, i18n.language])
+
+  if (!open) return null
+
+  return (
+    <div className="language-dialog-backdrop">
+      <motion.div
+        className="language-dialog-card"
+        initial={{ opacity: 0, y: 18, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 10, scale: 0.99 }}
+        transition={{ duration: 0.2, ease: motionEase }}
+      >
+        <p className="eyebrow">{t('common.language')}</p>
+        <h2>Choose your app language</h2>
+        <p>This will set the language for your app experience and account.</p>
+
+        <div className="language-option-grid">
+          {languageOptions.map((language) => (
+            <button
+              key={language.code}
+              type="button"
+              className={`language-option${selectedLanguage === language.code ? ' active' : ''}`}
+              onClick={() => setSelectedLanguage(language.code)}
+            >
+              {language.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="language-actions">
+          <button className="secondary-button" type="button" onClick={onDismiss}>
+            Skip
+          </button>
+          <button className="primary-button" type="button" onClick={() => onSelect(selectedLanguage)}>
+            Continue
+          </button>
+        </div>
+      </motion.div>
+    </div>
   )
 }
 
@@ -666,9 +917,14 @@ function InputShell({ icon, label, action, children }) {
 
 function UserApp({ route, setRoute, onLogout, online, successAmount, setSuccessAmount }) {
   const { t } = useTranslation('common')
+  const shouldReduceMotion = useReducedMotion()
   const [unreadCount, setUnreadCount] = useState(0)
   const navigate = useCallback((name, params = {}) => setRoute(makeRoute(name, params)), [setRoute])
   const backHome = useCallback(() => navigate('home'), [navigate])
+  const routeKey = getRouteKey(route)
+  const previousRouteName = usePreviousValue(route.name)
+  const routeDirection = getRouteMotionDirection(route.name, previousRouteName)
+  const routeVariants = useMemo(() => createPageVariants(shouldReduceMotion), [shouldReduceMotion])
 
   const refreshNotificationSummary = useCallback(async () => {
     try {
@@ -729,6 +985,14 @@ function UserApp({ route, setRoute, onLogout, online, successAmount, setSuccessA
     onLogout()
   }
 
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: shouldReduceMotion ? 'auto' : 'smooth' })
+    })
+
+    return () => window.cancelAnimationFrame(frame)
+  }, [routeKey, shouldReduceMotion])
+
   const screen = (() => {
     if (route.name === 'matches') return <MatchesScreen navigate={navigate} />
     if (route.name === 'match') return <MatchDetailScreen matchId={route.params.id} navigate={navigate} />
@@ -760,7 +1024,21 @@ function UserApp({ route, setRoute, onLogout, online, successAmount, setSuccessA
   return (
     <main className="app-view">
       <TopBar navigate={navigate} onHome={backHome} unreadCount={unreadCount} />
-      <div className="view-body">{screen}</div>
+      <div className="view-body">
+        <AnimatePresence initial={false} mode="wait" custom={routeDirection}>
+          <motion.div
+            key={routeKey}
+            className="route-transition"
+            custom={routeDirection}
+            variants={routeVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            {screen}
+          </motion.div>
+        </AnimatePresence>
+      </div>
       <BottomNav active={route.name} navigate={navigate} />
     </main>
   )
@@ -771,16 +1049,43 @@ function TopBar({ navigate, onHome, unreadCount = 0 }) {
 
   return (
     <header className="app-topbar">
-      <button className="top-icon" type="button" onClick={() => navigate('profile')} aria-label={t('mobile.topBar.profile')}>
+      <motion.button
+        className="top-icon"
+        type="button"
+        onClick={() => navigate('profile')}
+        aria-label={t('mobile.topBar.profile')}
+        whileTap={{ scale: 0.94 }}
+        transition={pressSpring}
+      >
         <User size={20} />
-      </button>
-      <button className="top-brand" type="button" onClick={onHome}>
+      </motion.button>
+      <motion.button className="top-brand" type="button" onClick={onHome} whileTap={{ scale: 0.98 }} transition={pressSpring}>
         {t('common.brandFull').toUpperCase()}
-      </button>
-      <button className="top-icon" type="button" onClick={() => navigate('notifications')} aria-label={t('mobile.topBar.notifications')}>
+      </motion.button>
+      <motion.button
+        className="top-icon"
+        type="button"
+        onClick={() => navigate('notifications')}
+        aria-label={t('mobile.topBar.notifications')}
+        whileTap={{ scale: 0.94 }}
+        transition={pressSpring}
+      >
         <Bell size={20} />
-        {unreadCount > 0 ? <span className="notification-badge">{unreadCount > 9 ? '9+' : unreadCount}</span> : null}
-      </button>
+        <AnimatePresence initial={false}>
+          {unreadCount > 0 ? (
+            <motion.span
+              key="notification-badge"
+              className="notification-badge"
+              initial={{ opacity: 0, scale: 0.7, y: 3 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8, y: 2 }}
+              transition={{ duration: 0.18, ease: motionEase }}
+            >
+              {unreadCount > 9 ? '9+' : unreadCount}
+            </motion.span>
+          ) : null}
+        </AnimatePresence>
+      </motion.button>
     </header>
   )
 }
@@ -800,10 +1105,19 @@ function BottomNav({ active, navigate }) {
         const Icon = item.icon
         const selected = active === item.key || (item.key === 'home' && active === 'match')
         return (
-          <button key={item.key} className={selected ? 'active' : ''} type="button" onClick={() => navigate(item.key)}>
-            <Icon size={21} />
-            <span>{item.label}</span>
-          </button>
+          <motion.button
+            key={item.key}
+            className={selected ? 'active' : ''}
+            type="button"
+            onClick={() => navigate(item.key)}
+            aria-current={selected ? 'page' : undefined}
+            whileTap={{ scale: 0.96 }}
+            transition={pressSpring}
+          >
+            {selected ? <motion.span className="bottom-nav-active-bg" layoutId="bottom-nav-active-bg" transition={navSpring} /> : null}
+            <Icon className="bottom-nav-icon" size={21} />
+            <span className="bottom-nav-label">{item.label}</span>
+          </motion.button>
         )
       })}
     </nav>
@@ -1239,6 +1553,9 @@ function ProfileScreen({ navigate, onLogout }) {
   const changeLanguage = (language) => {
     i18n.changeLanguage(language)
     window.localStorage.setItem(languageStorageKey, language)
+    updateStoredPushTokenLanguage(language).catch((error) => {
+      console.warn('Unable to update push notification language:', error)
+    })
   }
 
   return (
@@ -1332,7 +1649,7 @@ function ProfileScreen({ navigate, onLogout }) {
 
 function LanguageAccountRow({ label, value, onChange }) {
   return (
-    <label className="account-row account-language-row">
+    <motion.label className="account-row account-language-row" whileTap={{ scale: 0.985 }} transition={pressSpring}>
       <span>
         <Languages size={22} />
         <b>{label}</b>
@@ -1344,16 +1661,21 @@ function LanguageAccountRow({ label, value, onChange }) {
           </option>
         ))}
       </select>
-    </label>
+    </motion.label>
   )
 }
 
 function AccountPanel({ title, children }) {
   return (
-    <section className="account-section">
+    <motion.section
+      className="account-section"
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.22, ease: motionEase }}
+    >
       <h2 className="account-section-title">{title}</h2>
       <div className="account-inner">{children}</div>
-    </section>
+    </motion.section>
   )
 }
 
@@ -1366,25 +1688,25 @@ function AccountRow({ label, icon: Icon, onClick, highlight = false, danger = fa
   ].filter(Boolean).join(' ')
 
   return (
-    <button className={className} type="button" onClick={onClick}>
+    <motion.button className={className} type="button" onClick={onClick} whileTap={{ scale: 0.985 }} transition={pressSpring}>
       <span>
         <Icon size={22} />
         <b>{label}</b>
       </span>
       <ChevronRight size={22} />
-    </button>
+    </motion.button>
   )
 }
 
 function ExternalAccountRow({ label, icon: Icon, href }) {
   return (
-    <a className="account-row" href={href} target="_blank" rel="noreferrer">
+    <motion.a className="account-row" href={href} target="_blank" rel="noreferrer" whileTap={{ scale: 0.985 }} transition={pressSpring}>
       <span>
         <Icon size={22} />
         <b>{label}</b>
       </span>
       <ChevronRight size={22} />
-    </a>
+    </motion.a>
   )
 }
 
@@ -2133,23 +2455,43 @@ function FaqScreen({ navigate }) {
 
 function SuccessScreen({ navigate, title, text }) {
   const { t } = useTranslation('common')
+  const shouldReduceMotion = useReducedMotion()
 
   return (
     <section className="success-screen-view">
-      <CheckCircle2 size={84} />
+      <motion.div
+        className="success-icon"
+        initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.78, y: 10 }}
+        animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1, y: 0 }}
+        transition={{ type: 'spring', stiffness: 360, damping: 24 }}
+      >
+        <CheckCircle2 size={84} />
+      </motion.div>
       <h1>{title}</h1>
       <p>{text}</p>
-      <button className="primary-button full" type="button" onClick={() => navigate('home')}>
+      <motion.button className="primary-button full" type="button" onClick={() => navigate('home')} whileTap={{ scale: 0.98 }} transition={pressSpring}>
         {t('common.continue')}
         <ArrowRight size={18} />
-      </button>
+      </motion.button>
     </section>
   )
 }
 
 function ImageCarousel({ images }) {
   const { t } = useTranslation('common')
+  const shouldReduceMotion = useReducedMotion()
   const [index, setIndex] = useState(0)
+  const imageVariants = shouldReduceMotion
+    ? {
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
+        exit: { opacity: 0 },
+      }
+    : {
+        initial: { opacity: 0, scale: 1.025 },
+        animate: { opacity: 1, scale: 1 },
+        exit: { opacity: 0, scale: 0.985 },
+      }
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -2160,7 +2502,18 @@ function ImageCarousel({ images }) {
 
   return (
     <div className="promo-frame">
-      <img src={images[index]} alt="" />
+      <AnimatePresence initial={false} mode="wait">
+        <motion.img
+          key={images[index]}
+          src={images[index]}
+          alt=""
+          variants={imageVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          transition={{ duration: 0.32, ease: motionEase }}
+        />
+      </AnimatePresence>
       <Dots className="compact" length={images.length} index={index} onChange={setIndex} label={t('mobile.onboarding.promoLabel')} />
     </div>
   )
@@ -2172,12 +2525,14 @@ function Dots({ length, index, onChange, label, className = '' }) {
   return (
     <div className={`slide-dots ${className}`} aria-label={label}>
       {Array.from({ length }).map((_, dotIndex) => (
-        <button
+        <motion.button
           key={dotIndex}
           className={dotIndex === index ? 'active' : ''}
           type="button"
           aria-label={t('mobile.onboarding.openSlide', { number: dotIndex + 1 })}
           onClick={() => onChange(dotIndex)}
+          whileTap={{ scale: 0.82 }}
+          transition={pressSpring}
         />
       ))}
     </div>
@@ -2189,7 +2544,7 @@ function MatchCard({ match, onClick }) {
   const start = formatMatchStart(match, t)
 
   return (
-    <button className="match-card" type="button" onClick={onClick}>
+    <motion.button className="match-card" type="button" onClick={onClick} whileTap={{ scale: 0.985 }} transition={pressSpring}>
       <div className="match-league">
         <span>{leagueName(match, t)}</span>
         {match.company ? <b>{t('common.verified')}</b> : null}
@@ -2207,7 +2562,7 @@ function MatchCard({ match, onClick }) {
         <Odd label="1-1" value={match.oneone} />
         <Odd label="1-2" value={match.onetwo} />
       </div>
-    </button>
+    </motion.button>
   )
 }
 
@@ -2236,9 +2591,9 @@ function Odd({ label, value }) {
 function PageHeader({ title, onBack }) {
   return (
     <header className="page-header">
-      <button className="back-button compact-back" type="button" onClick={onBack}>
+      <motion.button className="back-button compact-back" type="button" onClick={onBack} whileTap={{ scale: 0.94 }} transition={pressSpring}>
         <ArrowLeft size={18} />
-      </button>
+      </motion.button>
       <h1>{title}</h1>
     </header>
   )
@@ -2248,9 +2603,16 @@ function Segmented({ options, value, onChange }) {
   return (
     <div className="segmented">
       {options.map((option) => (
-        <button key={option.key} className={value === option.key ? 'active' : ''} type="button" onClick={() => onChange(option.key)}>
+        <motion.button
+          key={option.key}
+          className={value === option.key ? 'active' : ''}
+          type="button"
+          onClick={() => onChange(option.key)}
+          whileTap={{ scale: 0.96 }}
+          transition={pressSpring}
+        >
           {option.label}
-        </button>
+        </motion.button>
       ))}
     </div>
   )
@@ -2284,11 +2646,16 @@ function StatusPill({ status }) {
 
 function ProgressBar({ label, value }) {
   const nextValue = Math.max(0, Math.min(Number(value) || 0, 100))
+  const shouldReduceMotion = useReducedMotion()
   return (
     <div className="progress-row">
       <span>{label}</span>
       <div>
-        <i style={{ width: `${nextValue}%` }} />
+        <motion.i
+          initial={false}
+          animate={{ width: `${nextValue}%` }}
+          transition={{ duration: shouldReduceMotion ? 0 : 0.42, ease: motionEase }}
+        />
       </div>
       <b>{nextValue.toFixed(1)}%</b>
     </div>
@@ -2297,20 +2664,20 @@ function ProgressBar({ label, value }) {
 
 function LoadingState({ text }) {
   return (
-    <div className="loading-state">
+    <motion.div className="loading-state" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.18, ease: motionEase }}>
       <RefreshCw size={18} className="spin" />
       {text}
-    </div>
+    </motion.div>
   )
 }
 
 function EmptyState({ icon, title, text }) {
   return (
-    <div className="empty-state">
+    <motion.div className="empty-state" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.22, ease: motionEase }}>
       {icon || <CheckCircle2 size={24} />}
       <p>{title}</p>
       <span>{text}</span>
-    </div>
+    </motion.div>
   )
 }
 

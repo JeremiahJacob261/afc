@@ -4,6 +4,13 @@ function cleanText(value) {
   return String(value || '').trim()
 }
 
+const supportedLanguages = new Set(['en', 'fr', 'es', 'my', 'ru', 'ar'])
+
+function cleanLanguage(value) {
+  const language = cleanText(value || 'en').toLowerCase()
+  return supportedLanguages.has(language) ? language : 'en'
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ status: 'error', message: 'Method not allowed' })
@@ -13,6 +20,7 @@ export default async function handler(req, res) {
     const token = cleanText(req.body?.token)
     const platform = cleanText(req.body?.platform || 'android').toLowerCase()
     const deviceId = cleanText(req.body?.deviceId)
+    const language = cleanLanguage(req.body?.language)
 
     if (!token) {
       return res.status(400).json({ status: 'error', message: 'Missing push token' })
@@ -27,6 +35,7 @@ export default async function handler(req, res) {
         token,
         platform: platform || 'android',
         device_id: deviceId || null,
+        language,
         enabled: true,
         last_seen_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),

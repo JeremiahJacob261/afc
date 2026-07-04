@@ -7,6 +7,7 @@ const languageOptions = [
   { code: "es", label: "Español" },
   { code: "my", label: "မြန်မာ" },
   { code: "ru", label: "Русский" },
+  { code: "ar", label: "العربية" },
 ];
 
 export default function LocaleSwitcher({ className = "", compact = false }) {

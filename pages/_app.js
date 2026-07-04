@@ -24,6 +24,12 @@ function MyApp({ Component, pageProps }) {
   const shouldUseAdminShell = router.pathname.startsWith('/admin') && router.pathname !== '/admin'
 
   useEffect(() => {
+    const locale = router.locale || 'en'
+    document.documentElement.lang = locale
+    document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr'
+  }, [router.locale])
+
+  useEffect(() => {
     const handleStart = (url) => {
       if (url !== router.asPath) setRouteLoading(true)
     }

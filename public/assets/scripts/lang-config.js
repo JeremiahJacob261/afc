@@ -9,6 +9,7 @@ window.__GOOGLE_TRANSLATION_CONFIG__ = {
     { title: "Polski", name: "pl" },
     { title: "Vietnamese", name: "vi" },
     { title: "فارسی", name: "fa" },
+    { title: "العربية", name: "ar" },
     { title: "Português", name: "pt" }
   ],
   defaultLanguage: "en",

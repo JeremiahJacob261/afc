@@ -1,0 +1,1027 @@
+{
+  "common": {
+    "appName": "EFC",
+    "brandFull": "كرة القدم الأوروبية",
+    "brandCompany": "أندية كرة القدم الأوروبية",
+    "login": "تسجيل الدخول",
+    "signIn": "تسجيل الدخول",
+    "signOut": "تسجيل الخروج",
+    "register": "التسجيل",
+    "joinNow": "انضم الآن",
+    "createAccount": "إنشاء حساب",
+    "continue": "متابعة",
+    "back": "رجوع",
+    "backToHome": "العودة إلى الرئيسية",
+    "next": "التالي",
+    "copy": "نسخ",
+    "refresh": "تحديث",
+    "submit": "إرسال",
+    "save": "حفظ",
+    "close": "إغلاق",
+    "yes": "نعم",
+    "no": "لا",
+    "all": "الكل",
+    "verified": "تم التحقق",
+    "language": "اللغة",
+    "changeLanguage": "تغيير اللغة",
+    "emailAddress": "عنوان البريد الإلكتروني",
+    "subscribe": "اشترك",
+    "notAvailable": "N/A",
+    "placeholderDash": "-",
+    "team": "الفريق",
+    "league": "الدوري",
+    "upcoming": "قادم",
+    "justNow": "الآن",
+    "home": "الرئيسية",
+    "away": "خارج الأرض",
+    "score": "النتيجة",
+    "player": "اللاعب",
+    "account": "الحساب",
+    "transaction": "المعاملة",
+    "method": "الطريقة",
+    "destination": "الوجهة",
+    "amount": "المبلغ",
+    "wallet": "المحفظة",
+    "balance": "الرصيد",
+    "currentBalance": "الرصيد الحالي",
+    "deposit": "إيداع",
+    "withdraw": "سحب",
+    "matches": "المباريات",
+    "myBets": "رهاناتي",
+    "profile": "الملف الشخصي",
+    "faq": "FAQ",
+    "vip": "VIP",
+    "usdt": "USDT"
+  },
+  "auth": {
+    "login": {
+      "title": "مرحباً بعودتك",
+      "subtitle": "سجّل الدخول لفتح حسابك في EFC.",
+      "identityLabel": "البريد الإلكتروني أو اسم المستخدم",
+      "identityPlaceholder": "اسم المستخدم أو البريد الإلكتروني",
+      "passwordLabel": "كلمة المرور",
+      "passwordPlaceholder": "كلمة المرور",
+      "forgotPassword": "هل نسيت كلمة المرور؟",
+      "submit": "تسجيل الدخول",
+      "submitting": "جارٍ تسجيل الدخول...",
+      "newAccount": "إنشاء حساب جديد",
+      "adminTitle": "تسجيل دخول المشرف",
+      "adminIntro": "مرحباً بعودتك",
+      "adminUsername": "اسم المستخدم",
+      "adminUsernamePlaceholder": "أدخل اسم مستخدم المشرف",
+      "adminPasswordPlaceholder": "أدخل كلمة المرور"
+    },
+    "register": {
+      "title": "إنشاء حساب",
+      "subtitle": "انضم عبر تجربة EFC للجوال.",
+      "username": "اسم المستخدم",
+      "usernamePlaceholder": "johndoe",
+      "email": "البريد الإلكتروني",
+      "emailPlaceholder": "you@example.com",
+      "code": "الرمز",
+      "phone": "الهاتف",
+      "phonePlaceholder": "8000000000",
+      "referralCode": "رمز الإحالة",
+      "password": "كلمة المرور",
+      "confirmPassword": "تأكيد كلمة المرور",
+      "confirmPasswordPlaceholder": "تأكيد كلمة المرور",
+      "terms": "أؤكد أن عمري لا يقل عن 18 عاماً وأقبل شروط EFC.",
+      "submit": "إنشاء حساب",
+      "submitting": "جارٍ إنشاء الحساب...",
+      "hasAccount": "لدي حساب بالفعل"
+    },
+    "reset": {
+      "title": "إعادة تعيين كلمة المرور",
+      "subtitle": "أرسل رابط إعادة التعيين إلى بريدك الإلكتروني.",
+      "submit": "إرسال بريد إعادة التعيين",
+      "submitting": "جارٍ الإرسال..."
+    }
+  },
+  "forms": {
+    "chooseMethod": "اختر الطريقة",
+    "chooseWallet": "اختر المحفظة",
+    "autoSelect": "اختيار تلقائي",
+    "bank": "البنك",
+    "bankName": "اسم البنك",
+    "accountName": "اسم الحساب",
+    "accountHolder": "صاحب الحساب",
+    "accountNumber": "رقم الحساب",
+    "walletAddress": "عنوان المحفظة",
+    "transactionPin": "رمز المعاملة",
+    "pinPlaceholder": "رمز من 4 أرقام",
+    "enterPin": "أدخل الرمز",
+    "confirmPin": "تأكيد الرمز",
+    "uploadReceipt": "رفع الإيصال",
+    "searchUsername": "البحث عن اسم مستخدم",
+    "searchMethod": "ابحث عن طريقة أو عملة أو بنك...",
+    "newReferralCode": "رمز إحالة جديد",
+    "newPassword": "كلمة مرور جديدة"
+  },
+  "messages": {
+    "mobileAuthMissing": "مصادقة الجوال تفتقد إعدادات Supabase.",
+    "mobileStorageMissing": "تخزين الجوال يفتقد إعدادات Supabase.",
+    "unableSignIn": "تعذر تسجيل الدخول. تحقق من اتصالك وبياناتك.",
+    "networkError": "خطأ في الشبكة",
+    "checkConnectionTryAgain": "يرجى التحقق من اتصالك والمحاولة مرة أخرى.",
+    "incorrectDetails": "بيانات غير صحيحة",
+    "incorrectLoginDetails": "بيانات تسجيل الدخول غير صحيحة.",
+    "loginDetailsIncorrect": "البريد الإلكتروني أو اسم المستخدم أو كلمة المرور التي أدخلتها غير صحيحة.",
+    "anErrorOccurred": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+    "connectionProblem": "مشكلة في الاتصال",
+    "signingInTitle": "جارٍ تسجيل الدخول",
+    "signingInMessage": "جارٍ التحقق من بيانات حسابك.",
+    "phoneIncomplete": "يرجى إدخال رقم هاتف كامل.",
+    "phoneNineDigits": "يرجى إدخال رقم هاتف كامل مكوّن من 9 أرقام على الأقل",
+    "passwordsMustMatch": "يجب أن تتطابق كلمتا المرور.",
+    "acceptTerms": "يرجى قبول الشروط قبل المتابعة.",
+    "usernameExists": "اسم المستخدم موجود بالفعل.",
+    "unableValidateUsername": "تعذر التحقق من اسم المستخدم حالياً",
+    "unableCreateProfile": "تعذر إنشاء ملف المستخدم",
+    "welcomeToEfc": "مرحباً بك في EFC",
+    "accountCreated": "تم إنشاء حسابك بنجاح.",
+    "emailExists": "البريد الإلكتروني موجود بالفعل!",
+    "emailRegistered": "البريد الإلكتروني مسجل بالفعل",
+    "strongerPasswordTitle": "استخدم كلمة مرور أقوى",
+    "strongerPasswordMessage": "لأسباب أمنية، يرجى اختيار كلمة مرور أقوى. يجب أن تتكون من 8 أحرف على الأقل وأن تتضمن مزيجاً من الأحرف والأرقام والرموز.",
+    "invalidEmailTitle": "بريد إلكتروني غير صالح",
+    "invalidEmailMessage": "يرجى إدخال عنوان بريد إلكتروني صالح.",
+    "unableCreateAccount": "تعذر إنشاء الحساب. تحقق من اتصالك.",
+    "resetEmailSent": "تم إرسال بريد إعادة التعيين. تحقق من صندوق الوارد.",
+    "resetEmailSentTitle": "تم إرسال بريد إعادة التعيين",
+    "resetEmailSentMessage": "تم إرسال رسالة إلى بريدك الإلكتروني. اتبع التعليمات هناك لتغيير كلمة المرور.",
+    "unableSendEmail": "تعذر إرسال البريد الإلكتروني",
+    "pleaseTryAgain": "يرجى المحاولة مرة أخرى.",
+    "enterEmailAddress": "يرجى إدخال عنوان بريدك الإلكتروني",
+    "sendingEmailTitle": "جارٍ إرسال البريد الإلكتروني",
+    "sendingEmailMessage": "جارٍ تجهيز رابط إعادة تعيين كلمة المرور.",
+    "unableSendReset": "تعذر إرسال بريد إعادة التعيين.",
+    "sessionExpired": "انتهت صلاحية جلستك. يرجى تسجيل الدخول مرة أخرى.",
+    "unableRefreshAccount": "تعذر تحديث بيانات الحساب حالياً.",
+    "unableLoadMatches": "تعذر تحميل المباريات.",
+    "unableLoadMatch": "تعذر تحميل المباراة.",
+    "chooseScoreMarket": "اختر سوق النتيجة أولاً.",
+    "stakeMinimum": "يجب ألا يقل الرهان عن 1 USDT.",
+    "betPlaced": "تم وضع الرهان بنجاح.",
+    "unablePlaceBet": "تعذر وضع الرهان.",
+    "unableLoadBets": "تعذر تحميل الرهانات.",
+    "unableLoadBet": "تعذر تحميل الرهان.",
+    "unableLoadProfile": "تعذر تحميل الملف الشخصي.",
+    "chooseDepositMethod": "اختر طريقة إيداع.",
+    "noPaymentDestination": "لا توجد وجهة دفع متاحة لهذه الطريقة.",
+    "minimumDeposit": "الحد الأدنى للإيداع هو {{amount}} {{currency}}.",
+    "uploadPaymentReceipt": "ارفع إيصال الدفع الخاص بك.",
+    "depositFailed": "فشل إرسال الإيداع.",
+    "chooseWalletFirst": "اختر محفظة أولاً.",
+    "enterTransactionPin": "أدخل رمز المعاملة الخاص بك.",
+    "minimumWithdrawal": "الحد الأدنى للسحب هو {{amount}} USDT.",
+    "unableSubmitWithdrawal": "تعذر إرسال طلب السحب.",
+    "walletDetailsInvalid": "يرجى ملء جميع تفاصيل المحفظة بشكل صحيح.",
+    "walletBindSuccess": "تم ربط المحفظة بنجاح.",
+    "unableBindWallet": "تعذر ربط المحفظة.",
+    "unableLoadTransactions": "تعذر تحميل المعاملات.",
+    "unableLoadReferrals": "تعذر تحميل الإحالات.",
+    "unableLoadVip": "تعذر تحميل تقدم VIP.",
+    "pinAlreadySet": "لديك رمز معاملة بالفعل. تواصل مع المشرف لإعادة تعيينه.",
+    "unableLoadPin": "تعذر تحميل حالة الرمز.",
+    "pinFourDigits": "يجب أن يتكون الرمز من 4 أرقام.",
+    "pinEntriesMustMatch": "يجب أن يتطابق إدخالا الرمز.",
+    "pinSet": "تم تعيين الرمز بنجاح.",
+    "unableSetPin": "تعذر تعيين الرمز.",
+    "unableLoadNotifications": "تعذر تحميل الإشعارات.",
+    "unableLoadPaymentData": "تعذر تحميل بيانات الدفع.",
+    "depositSubmitted": "تم إرسال إيصالك وهو بانتظار تأكيد المشرف.",
+    "depositSubmittedWithAmount": "تم إرسال إيصالك بقيمة {{amount}} USDT وهو بانتظار تأكيد المشرف.",
+    "withdrawalSent": "تم إرسال طلب السحب الخاص بك.",
+    "copied": "تم النسخ",
+    "copiedToClipboard": "تم النسخ إلى الحافظة",
+    "addressCopied": "تم نسخ العنوان",
+    "inviteLinkCopied": "تم نسخ رابط الدعوة",
+    "unableCopy": "تعذر النسخ",
+    "adminCredentialsRequired": "يرجى إدخال بيانات المشرف",
+    "adminLoginFailed": "فشل تسجيل الدخول",
+    "adminLoginSuccess": "تم تسجيل الدخول بنجاح"
+  },
+  "status": {
+    "active": "نشط",
+    "pending": "قيد الانتظار",
+    "success": "نجاح",
+    "failed": "فشل",
+    "completed": "مكتمل",
+    "live": "مباشر",
+    "notStarted": "لم يبدأ",
+    "ongoing": "جارٍ",
+    "won": "فاز",
+    "lost": "خسر",
+    "settled": "تمت التسوية",
+    "unsettled": "غير مسوّى",
+    "offlineMode": "وضع عدم الاتصال",
+    "processing": "قيد المعالجة"
+  },
+  "emptyStates": {
+    "noUpcomingMatches": "لم يتم تحميل مباريات قادمة بعد.",
+    "offlineShellReady": "واجهة عدم الاتصال جاهزة.",
+    "liveRefreshOnline": "يتم تحديث بيانات الحساب والمباريات مباشرة عندما يكون التطبيق متصلاً.",
+    "noMatches": "لا توجد مباريات",
+    "matchesComing": "ستظهر المباريات القادمة هنا.",
+    "noBets": "لا توجد رهانات",
+    "betsComing": "سيظهر سجل رهاناتك هنا.",
+    "noTransactions": "لا توجد معاملات",
+    "transactionsComing": "ستظهر الإيداعات والسحوبات هنا.",
+    "noReferrals": "لا توجد إحالات بعد",
+    "referralsComing": "شارك رابط الدعوة لبناء فريقك.",
+    "noNotifications": "لا توجد إشعارات",
+    "notificationsComing": "ستظهر تحديثات الحساب الجديدة هنا.",
+    "noData": "لا توجد بيانات متاحة",
+    "checkConnection": "يرجى التحقق من اتصالك بالإنترنت."
+  },
+  "landing": {
+    "meta": {
+      "title": "مراهنات كرة القدم EFC | احتمالات مباشرة وأسواق كرة القدم",
+      "description": "راهن على كرة القدم مع EFC. تصفح أسواق كرة القدم، وقارن الاحتمالات المباشرة، وأدر محفظتك، والعب بمسؤولية."
+    },
+    "nav": {
+      "markets": "الأسواق",
+      "liveBetting": "المراهنة المباشرة",
+      "howItWorks": "كيف يعمل",
+      "bonuses": "المكافآت",
+      "agents": "الوكلاء",
+      "faq": "FAQ"
+    },
+    "hero": {
+      "title": "مراهنات كرة القدم ببساطة",
+      "copy": "اختر مباريات كرة القدم، وقارن الاحتمالات، وضع رهانات آمنة، وتابع كل نتيجة من تجربة مراهنة واضحة في EFC.",
+      "createAccount": "إنشاء حساب",
+      "imageAlt": "لاعب كرة قدم يركل الكرة",
+      "stats": {
+        "marketsLabel": "الأسواق الشائعة",
+        "marketsValue": "1X2, Goals, BTTS",
+        "safetyLabel": "أمان الحساب",
+        "safetyValue": "محفظة آمنة",
+        "focusLabel": "تركيز على كرة القدم",
+        "focusValue": "المباريات والاحتمالات المباشرة"
+      },
+      "secureDeposits": "إيداعات آمنة",
+      "secureDepositsCopy": "موّل محفظتك وأكد قسائم كرة القدم بثقة.",
+      "responsiblePlay": "اللعب المسؤول",
+      "responsiblePlayCopy": "حدد ميزانية، وراهن على كرة القدم التي تفهمها، وحافظ على السيطرة."
+    },
+    "markets": {
+      "eyebrow": "أسواق كرة القدم",
+      "title": "راهن على اللحظات التي تحسم المباراة",
+      "copy": "اختر أسواق كرة قدم بسيطة قبل البداية أو تابع الاحتمالات المباشرة أثناء المباراة.",
+      "pickMarket": "اختر السوق",
+      "items": [
+        {
+          "title": "نتيجة المباراة 1X2",
+          "label": "الفوز / التعادل / الخسارة",
+          "copy": "اختر فائز المباراة أو ادعم التعادل قبل البداية.",
+          "odds": "2.18"
+        },
+        {
+          "title": "أكثر / أقل من الأهداف",
+          "label": "إجمالي الأهداف",
+          "copy": "راهن على ما إذا كانت النتيجة النهائية ستتجاوز خط الأهداف المحدد.",
+          "odds": "1.82"
+        },
+        {
+          "title": "كلا الفريقين يسجلان",
+          "label": "BTTS",
+          "copy": "راهن على أن كلا الفريقين سيهزان الشباك في نفس المباراة.",
+          "odds": "1.74"
+        },
+        {
+          "title": "النتيجة الصحيحة",
+          "label": "النتيجة الدقيقة",
+          "copy": "اختر النتيجة النهائية للحصول على احتمالات أعلى.",
+          "odds": "8.50"
+        },
+        {
+          "title": "المراهنة المباشرة",
+          "label": "أثناء اللعب",
+          "copy": "تفاعل مع الأهداف والبطاقات والضغط والزخم المتأخر.",
+          "odds": "مباشر"
+        }
+      ]
+    },
+    "howItWorks": {
+      "eyebrow": "كيف يعمل",
+      "title": "من المباراة إلى رهان كرة قدم مؤكد",
+      "copy": "مسار بسيط للمستخدمين الذين يريدون التسجيل والتمويل واختيار سوق كرة قدم وتتبع النتيجة.",
+      "matchDayFlow": "مسار يوم المباراة",
+      "featureTitle": "أنشئ قسيمة رهان حول كرة القدم التي تعرفها.",
+      "featureCopy": "راجع المباراة، واختر السوق، وأدخل مبلغ الرهان، وأكد فقط عندما تبدو التفاصيل صحيحة.",
+      "featureAlt": "معاينة ميزة مراهنات كرة القدم",
+      "ballAlt": "أيقونة كرة القدم",
+      "steps": [
+        {
+          "title": "أنشئ حسابك",
+          "copy": "سجّل في EFC وأمّن ملف مراهنات كرة القدم الخاص بك."
+        },
+        {
+          "title": "موّل محفظتك",
+          "copy": "ابدأ من الحد الأدنى للإيداع 5USDT وتحقق من مكافأة الإيداع النشطة."
+        },
+        {
+          "title": "اختر مباراة كرة قدم",
+          "copy": "تصفح المباريات، وقارن الأسواق، واختر الرهان الذي تريده."
+        },
+        {
+          "title": "ضع الرهان وتابعه",
+          "copy": "أكد قسيمتك، وتابع المباراة، وراجع حالة السحب بدءاً من 10USDT."
+        }
+      ]
+    },
+    "operations": {
+      "eyebrow": "عمليات المنصة",
+      "title": "شروط منصة كرة القدم EFC في لمحة",
+      "copy": "تعكس صفحة الهبوط الآن بطاقة تشغيل EFC: مكافأة الإيداع، والحد الأدنى للإيداع، والنسبة اليومية، والحد الأدنى للسحب.",
+      "imageAlt": "عمليات منصة أندية كرة القدم الأوروبية التي تعرض مكافأة الإيداع والحد الأدنى للإيداع والنسبة اليومية والحد الأدنى للسحب",
+      "items": [
+        {
+          "label": "مكافأة الإيداع",
+          "value": "1USDT"
+        },
+        {
+          "label": "الحد الأدنى للإيداع",
+          "value": "5USDT"
+        },
+        {
+          "label": "النسبة اليومية",
+          "value": "3-4%"
+        },
+        {
+          "label": "الحد الأدنى للسحب",
+          "value": "10USDT"
+        }
+      ]
+    },
+    "features": {
+      "eyebrow": "ميزات المراهنة",
+      "title": "كل شيء يركز على مراهنات كرة القدم",
+      "copy": "أسواق كرة قدم واضحة، وتحكم آمن بالمحفظة، وتتبع بسيط للرهانات يبقي المستخدمين قريبين من المباراة التالية.",
+      "walletAlt": "مكافآت محفظة أندية كرة القدم الأوروبية التي تعرض مكافأة الإيداع الأول وهدف فتح الرهان ومكافأة الإحالة ورسوم السحب",
+      "items": [
+        {
+          "title": "احتمالات كرة قدم تنافسية",
+          "copy": "قارن أسعاراً واضحة عبر أسواق المباريات الشائعة."
+        },
+        {
+          "title": "تحديثات المباراة المباشرة",
+          "copy": "تابع حركة اللعب مع تغيّر مباريات كرة القدم دقيقة بدقيقة."
+        },
+        {
+          "title": "تحكم آمن بالمحفظة",
+          "copy": "أدر الإيداعات والسحوبات وسجل الرهانات من حسابك."
+        },
+        {
+          "title": "مسار قسيمة رهان سريع",
+          "copy": "انتقل من المباراة إلى الرهان المؤكد بخطوات أقل."
+        }
+      ],
+      "walletRewards": [
+        {
+          "label": "مكافأة الإيداع الأول",
+          "value": "3%"
+        },
+        {
+          "label": "هدف فتح الرهان",
+          "value": "5 رهانات"
+        },
+        {
+          "label": "مكافأة الإحالة",
+          "value": "5%"
+        },
+        {
+          "label": "رسوم السحب",
+          "value": "7%"
+        }
+      ]
+    },
+    "live": {
+      "eyebrow": "مراهنات كرة القدم المباشرة",
+      "title": "تابع المباراة وتفاعل مع الاحتمالات",
+      "copy": "تتيح المراهنة المباشرة للمستخدمين التفاعل مع الضغط والأهداف والبطاقات والزخم أثناء سير مباراة كرة القدم.",
+      "board": "لوحة أثناء اللعب",
+      "boardTitle": "تتغير الاحتمالات مع تغير المباراة.",
+      "shots": "التسديدات",
+      "corners": "الركنيات",
+      "cards": "البطاقات",
+      "startBetting": "ابدأ المراهنة",
+      "odds": "الاحتمالات",
+      "matches": [
+        {
+          "fixture": "لندن إف سي ضد مدريد سيتي",
+          "market": "أكثر من 2.5 هدف",
+          "price": "1.91",
+          "status": "62 دقيقة"
+        },
+        {
+          "fixture": "ميلان يونايتد ضد باريس كلوب",
+          "market": "كلا الفريقين يسجلان",
+          "price": "1.76",
+          "status": "مباشر"
+        },
+        {
+          "fixture": "لشبونة أثليتيك ضد برلين تاون",
+          "market": "فوز صاحب الأرض",
+          "price": "2.24",
+          "status": "84 دقيقة"
+        }
+      ]
+    },
+    "bonuses": {
+      "eyebrow": "المكافآت والجوائز",
+      "title": "برنامج المكافآت والدعوات من EFC",
+      "copy": "طابق بطاقة مكافأة الدعوة من EFC مع مكافآت الأعضاء النشطين المتدرجة وتفاصيل مكافأة الترحيب ومعلومات خصم الوكلاء.",
+      "imageAlt": "مستويات مكافأة الدعوة في أندية كرة القدم الأوروبية من 10 إلى 100 عضو نشط",
+      "inviteActive": "ادعُ {{members}} أعضاء نشطين",
+      "earnReward": "اربح {{reward}}",
+      "viewOffers": "عرض العروض",
+      "items": [
+        {
+          "title": "مكافأة إيداع ترحيبية",
+          "copy": "يمكن للمستخدمين الجدد البدء بمكافأة إيداع 1USDT الموضحة في عمليات منصة EFC."
+        },
+        {
+          "title": "مكافأة الدعوة",
+          "copy": "ادعُ أعضاء نشطين وافتح مكافآت USDT متدرجة مع نمو شبكة كرة القدم الخاصة بك."
+        },
+        {
+          "title": "خصومات الوكلاء",
+          "copy": "تبدأ مستويات خصم الوكلاء من 7% في المستوى الأول وصولاً إلى 3% في المستوى الثالث."
+        }
+      ],
+      "tiers": [
+        {
+          "members": "10",
+          "reward": "10USDT"
+        },
+        {
+          "members": "20",
+          "reward": "30USDT"
+        },
+        {
+          "members": "30",
+          "reward": "50USDT"
+        },
+        {
+          "members": "50",
+          "reward": "70USDT"
+        },
+        {
+          "members": "80",
+          "reward": "100USDT"
+        },
+        {
+          "members": "100",
+          "reward": "150USDT"
+        }
+      ]
+    },
+    "agents": {
+      "eyebrow": "مكافآت الوكلاء",
+      "title": "خصومات وكلاء 15% ومستويات الرواتب",
+      "copy": "أضف تفاصيل برنامج وكلاء EFC من بطاقات الخصم والراتب المقدمة.",
+      "rebateAlt": "مستويات خصم وكلاء أندية كرة القدم الأوروبية التي تعرض 7 بالمئة و5 بالمئة و3 بالمئة",
+      "salaryAlt": "مستويات رواتب وكلاء أندية كرة القدم الأوروبية من الوكيل A إلى الوكيل G",
+      "agent": "الوكيل",
+      "teamLevel": "مستوى الفريق",
+      "teamVolume": "حجم الفريق",
+      "salary": "الراتب",
+      "rebates": [
+        {
+          "level": "المستوى الأول",
+          "rebate": "7%"
+        },
+        {
+          "level": "المستوى الثاني",
+          "rebate": "5%"
+        },
+        {
+          "level": "المستوى الثالث",
+          "rebate": "3%"
+        }
+      ],
+      "salaryLevels": [
+        {
+          "agent": "الوكيل A",
+          "teamLevel": "المستويات 1-3",
+          "teamVolume": "$2500",
+          "salary": "100$ أسبوعياً"
+        },
+        {
+          "agent": "الوكيل B",
+          "teamLevel": "المستويات 1-3",
+          "teamVolume": "$5000",
+          "salary": "250$ أسبوعياً"
+        },
+        {
+          "agent": "الوكيل C",
+          "teamLevel": "المستويات 1-3",
+          "teamVolume": "$10000",
+          "salary": "500$ أسبوعياً"
+        },
+        {
+          "agent": "الوكيل D",
+          "teamLevel": "المستويات 1-3",
+          "teamVolume": "$15000",
+          "salary": "750$ أسبوعياً"
+        },
+        {
+          "agent": "الوكيل E",
+          "teamLevel": "المستويات 1-3",
+          "teamVolume": "$20000",
+          "salary": "1250$ أسبوعياً"
+        },
+        {
+          "agent": "الوكيل F",
+          "teamLevel": "المستويات 1-3",
+          "teamVolume": "$50000",
+          "salary": "3000$ أسبوعياً"
+        },
+        {
+          "agent": "الوكيل G",
+          "teamLevel": "المستويات 1-3",
+          "teamVolume": "$100000",
+          "salary": "7500$ أسبوعياً"
+        }
+      ]
+    },
+    "trust": {
+      "eyebrow": "الثقة والتحكم",
+      "title": "راهن على كرة القدم بضوابط أوضح",
+      "copy": "يساعد الأمان وسجلات الحساب وتذكيرات المراهنة المسؤولة المستخدمين على البقاء مسيطرين قبل وبعد كل رهان كرة قدم.",
+      "cardTitle": "يجب أن تكون المراهنة المسؤولة على كرة القدم حاضرة في الصفحة.",
+      "cardCopy": "ينبغي للمستخدمين تحديد حدود ومراجعة تفاصيل الرهان وتجنب ملاحقة الخسائر. تحمل مراهنات كرة القدم مخاطر، لذلك يجب أن تبقى المبالغ ضمن الميزانية الشخصية.",
+      "items": [
+        "وصول آمن للحساب",
+        "مسار دفع محمي",
+        "سجل رهانات واضح",
+        "تذكير بالمراهنة المسؤولة"
+      ],
+      "itemCopy": "تساعد عناصر التحكم والسجلات الواضحة المستخدمين على اتخاذ قرارات مراهنة أفضل."
+    },
+    "faq": {
+      "eyebrow": "أسئلة شائعة حول مراهنات كرة القدم",
+      "title": "إجابات قبل المباراة التالية",
+      "copy": "دليل سريع للمستخدمين الذين يريدون فهم أسواق كرة القدم والمراهنة المباشرة والرهان الأكثر أماناً.",
+      "items": [
+        {
+          "question": "على أي أسواق كرة قدم يمكنني المراهنة؟",
+          "answer": "تبرز EFC أسواق نتيجة المباراة والأهداف وBTTS والنتيجة الصحيحة وأسواق كرة القدم المباشرة."
+        },
+        {
+          "question": "كيف أبدأ المراهنة؟",
+          "answer": "أنشئ حساباً، وموّل محفظتك، واختر مباراة كرة قدم، وحدد السوق، ثم أكد قسيمتك."
+        },
+        {
+          "question": "هل يمكنني المراهنة أثناء مباراة كرة قدم مباشرة؟",
+          "answer": "نعم. يتم عرض الأسواق المباشرة للمباريات المتاحة حتى تتمكن من التفاعل أثناء سير المباراة."
+        },
+        {
+          "question": "كيف أدير المخاطر؟",
+          "answer": "حدد ميزانية قبل المراهنة، وتجنب ملاحقة الخسائر، ولا تراهن إلا بما يمكنك تحمل خسارته."
+        }
+      ]
+    },
+    "cta": {
+      "eyebrow": "مراهنات كرة القدم EFC",
+      "title": "هل أنت مستعد لاختيارك الكروي التالي؟",
+      "copy": "أنشئ حساباً، واختر مباراة كرة قدم، وضع رهانك بأسواق واضحة وتحكم آمن بالحساب."
+    },
+    "footer": {
+      "logoAlt": "شعار EFC أندية كرة القدم الأوروبية",
+      "copy": "أسواق مراهنات كرة القدم، واحتمالات مباشرة، وتحكم آمن بالمحفظة، وإرشادات رهان مسؤولة في تجربة EFC واحدة.",
+      "communityLink": "رابط مجتمع كرة القدم",
+      "matchNews": "أخبار مباريات كرة القدم",
+      "emailPlaceholder": "بريدك الإلكتروني",
+      "groups": [
+        {
+          "title": "المراهنة",
+          "links": [
+            {
+              "label": "الأسواق",
+              "href": "#markets"
+            },
+            {
+              "label": "المراهنة المباشرة",
+              "href": "#live"
+            },
+            {
+              "label": "كيف يعمل",
+              "href": "#how-it-works"
+            }
+          ]
+        },
+        {
+          "title": "الحساب",
+          "links": [
+            {
+              "label": "التسجيل",
+              "href": "/register/000208"
+            },
+            {
+              "label": "تسجيل الدخول",
+              "href": "/login"
+            },
+            {
+              "label": "المكافآت",
+              "href": "#bonuses"
+            },
+            {
+              "label": "الوكلاء",
+              "href": "#agents"
+            }
+          ]
+        },
+        {
+          "title": "المساعدة",
+          "links": [
+            {
+              "label": "الأسئلة الشائعة",
+              "href": "#faq"
+            },
+            {
+              "label": "المراهنة المسؤولة",
+              "href": "#trust"
+            },
+            {
+              "label": "اتصل بنا",
+              "href": "#contact"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "mobile": {
+    "splash": {
+      "eyebrow": "كرة القدم EFC",
+      "title": "مصمم ليوم المباراة"
+    },
+    "onboarding": {
+      "eyebrow": "تطبيق الجوال",
+      "slidesLabel": "شرائح التعريف",
+      "promoLabel": "صور ترويجية",
+      "openSlide": "افتح الشريحة {{number}}",
+      "alreadyHaveAccount": "لدي حساب بالفعل",
+      "slides": [
+        {
+          "title": "مراهنات كرة القدم ببساطة",
+          "text": "اختر المباريات، وقارن الاحتمالات، وضع رهانات آمنة، وتابع النتائج من تجربة EFC واضحة على الجوال.",
+          "image": "/bfc1.jpg"
+        },
+        {
+          "title": "وصول آمن للمحفظة",
+          "text": "أدر الإيداعات والسحوبات والإحالات وتقدم VIP وتحديثات الحساب من التطبيق.",
+          "image": "/bfc2.jpg"
+        },
+        {
+          "title": "مصمم ليوم المباراة",
+          "text": "افتح حسابك لرؤية أسواق كرة القدم المباشرة واحتمالات النتيجة الدقيقة وسجل رهاناتك النشطة.",
+          "image": "/bfc4.jpg"
+        }
+      ]
+    },
+    "countryCodes": {
+      "nigeria": "نيجيريا",
+      "india": "الهند",
+      "pakistan": "باكستان",
+      "indonesia": "إندونيسيا",
+      "unitedStates": "الولايات المتحدة",
+      "unitedKingdom": "المملكة المتحدة",
+      "southAfrica": "جنوب أفريقيا"
+    },
+    "filters": {
+      "today": "اليوم",
+      "next3h": "الساعات الثلاث القادمة",
+      "next12h": "الساعات الاثنتا عشرة القادمة",
+      "tomorrow": "غداً"
+    },
+    "markets": {
+      "other": "أخرى"
+    },
+    "topBar": {
+      "profile": "فتح الملف الشخصي",
+      "notifications": "الإشعارات"
+    },
+    "nav": {
+      "label": "التنقل الرئيسي",
+      "top": "الأعلى",
+      "matches": "المباريات",
+      "bets": "رهاناتي",
+      "profile": "الملف الشخصي"
+    },
+    "home": {
+      "hello": "مرحباً",
+      "telegram": "قناة تيليجرام",
+      "telegramCopy": "انضم إلى مجموعة تيليجرام الخاصة بنا لتكسب المزيد",
+      "topMatches": "أفضل مباريات كرة القدم"
+    },
+    "match": {
+      "details": "تفاصيل المباراة",
+      "matchId": "معرّف المباراة",
+      "market": "السوق",
+      "stakeAmount": "مبلغ الرهان",
+      "profit": "الربح",
+      "expectedReturn": "العائد المتوقع",
+      "companyGame": "مباراة الشركة",
+      "choose": "اختر",
+      "noMarketSelected": "لم يتم اختيار سوق",
+      "marketUnavailable": "هذا السوق غير متاح",
+      "matchExpired": "انتهت صلاحية هذه المباراة",
+      "maxBetsReached": "لقد وصلت إلى الحد الأقصى لعدد الرهانات اليوم.",
+      "insufficientBalance": "ليس لديك رصيد USDT كافٍ لإكمال هذا الرهان.",
+      "placeBet": "ضع الرهان",
+      "placingBet": "جارٍ وضع الرهان...",
+      "loading": "جارٍ تحميل المباراة..."
+    },
+    "matches": {
+      "loading": "جارٍ تحميل المباريات..."
+    },
+    "bets": {
+      "details": "تفاصيل الرهان",
+      "loading": "جارٍ تحميل الرهانات...",
+      "loadingOne": "جارٍ تحميل الرهان...",
+      "unsettledWithCount": "غير مسوّى ({{count}})",
+      "settledWithCount": "مسوّى ({{count}})",
+      "match": "المباراة",
+      "stake": "قيمة الرهان",
+      "pick": "الاختيار",
+      "kickoff": "بداية المباراة",
+      "status": "الحالة"
+    },
+    "profile": {
+      "vipReferralLine": "VIP {{level}} · {{count}} إحالات",
+      "hello": "مرحباً،",
+      "currentBalance": "الرصيد الحالي",
+      "referralsTitle": "الإحالات",
+      "allReferral": "كل الإحالات",
+      "fundAccount": "تمويل الحساب",
+      "vipProgress": "تقدم VIP",
+      "withdrawalTitle": "السحب",
+      "history": "السجل",
+      "codeSetting": "إعداد الرمز",
+      "linkWallets": "ربط المحافظ",
+      "betsTitle": "الرهانات",
+      "aboutTitle": "حول",
+      "language": "اللغة",
+      "telegramChannel": "قناة تيليجرام",
+      "customerService": "خدمة العملاء",
+      "telegramGroup": "مجموعة تيليجرام",
+      "contact": "اتصل بنا",
+      "closureTitle": "الإغلاق",
+      "bindWallet": "ربط المحفظة",
+      "transactions": "المعاملات",
+      "referrals": "الإحالات",
+      "transactionPin": "رمز المعاملة"
+    },
+    "deposit": {
+      "title": "إيداع",
+      "loading": "جارٍ تحميل طرق الدفع...",
+      "paymentDestination": "وجهة الدفع",
+      "amountWithMinimum": "المبلغ · الحد الأدنى {{amount}}",
+      "submit": "إرسال الإيداع",
+      "submitting": "جارٍ الإرسال...",
+      "successTitle": "تم إرسال الإيداع",
+      "methodFallback": "طريقة الإيداع",
+      "stepMethod": "الطريقة",
+      "stepAmount": "المبلغ",
+      "stepProof": "إثبات الدفع",
+      "subtitle": "اختر طريقة، وادفع، ثم ارفع إيصالك.",
+      "paymentMethod": "طريقة الدفع",
+      "availableOptions": "خيارات الإيداع المتاحة",
+      "noMethods": "لا توجد طرق إيداع متاحة حالياً. يرجى التواصل مع الدعم.",
+      "copiedLabel": "تم نسخ {{label}}",
+      "chooseTransferOption": "اختر خيار تحويل",
+      "minShort": "الحد الأدنى {{amount}} {{currency}}",
+      "transferOption": "خيار التحويل",
+      "minimumPlaceholder": "الحد الأدنى {{amount}} {{currency}}",
+      "chooseMethodFirst": "اختر طريقة أولاً",
+      "usdtEquivalent": "ما يعادل USDT",
+      "sendExactly": "أرسل بالضبط {{amount}} إلى تفاصيل الدفع أدناه.",
+      "sendEnteredAmount": "أرسل بالضبط المبلغ المدخل إلى تفاصيل الدفع أدناه.",
+      "chooseMethodDetails": "اختر طريقة إيداع لعرض تفاصيل الدفع.",
+      "enterValidAmount": "أدخل مبلغاً صالحاً للمتابعة.",
+      "enterValidAmountAndTransfer": "أدخل مبلغاً صالحاً واختر خيار تحويل للمتابعة.",
+      "noPaymentAddress": "لا يوجد عنوان دفع متاح لهذه الطريقة حالياً. يرجى التواصل مع الدعم.",
+      "paymentDetailsAlt": "تفاصيل الدفع",
+      "receiptUpload": "رفع الإيصال",
+      "browseReceiptImage": "استعراض صورة الإيصال",
+      "receiptHint": "PNG أو JPG أو لقطة شاشة",
+      "noFileSelected": "لم يتم اختيار ملف",
+      "uploadRequired": "الرفع مطلوب",
+      "removeReceipt": "إزالة الإيصال"
+    },
+    "withdraw": {
+      "title": "سحب",
+      "loading": "جارٍ تحميل المحافظ...",
+      "bindFirst": "اربط محفظة أولاً",
+      "fee": "الرسوم {{percent}}%",
+      "totalDebit": "إجمالي الخصم: {{amount}} USDT",
+      "submit": "سحب",
+      "successTitle": "تم السحب بنجاح",
+      "withdrawalFee": "رسوم السحب",
+      "requestedAmount": "المبلغ المطلوب",
+      "youReceive": "ستستلم",
+      "totalDeducted": "إجمالي المخصوم",
+      "youReceiveIn": "ستستلم بعملة {{currency}}",
+      "bindWallet": "ربط المحفظة",
+      "chooseWallet": "اختر محفظة الدفع المفضلة",
+      "selectWithdrawalMethod": "اختر طريقة السحب",
+      "noWallet": "لا شيء",
+      "amountLabel": "أدخل المبلغ الذي تريد سحبه بالدولار",
+      "noPinSet": "لم يتم تعيين رمز معاملة.",
+      "wrongPin": "رمز المعاملة غير صحيح.",
+      "insufficientFunds": "رصيد غير كافٍ",
+      "betRequirement": "تحتاج إلى وضع 5 رهانات على الأقل قبل السحب.",
+      "maximumWithdrawal": "الحد الأقصى للسحب هو {{amount}} USDT.",
+      "enterAmount": "يرجى إدخال المبلغ",
+      "connectionError": "يرجى التحقق من اتصالك بالإنترنت وتحديث الموقع."
+    },
+    "wallet": {
+      "bind": "ربط المحفظة",
+      "loading": "جارٍ تحميل الطرق...",
+      "submit": "ربط المحفظة",
+      "saving": "جارٍ الحفظ..."
+    },
+    "transactions": {
+      "title": "المعاملات",
+      "deposits": "الإيداعات",
+      "withdrawals": "السحوبات",
+      "loading": "جارٍ تحميل المعاملات...",
+      "metaDescription": "سجل مدفوعات كرة القدم الأوروبية",
+      "count": "{{count}} معاملة",
+      "paymentHistory": "سجل المدفوعات",
+      "totalDeposits": "إجمالي الإيداعات",
+      "totalWithdrawals": "إجمالي السحوبات",
+      "noTime": "لا يوجد وقت",
+      "paymentMethod": "طريقة الدفع",
+      "transactionRequest": "طلب معاملة",
+      "emptyAll": "ستظهر معاملات الدفع هنا بعد الإيداع أو السحب.",
+      "emptyFiltered": "لم يتم العثور على معاملات {{type}}.",
+      "transactionUnavailable": "المعاملات غير متاحة",
+      "retry": "إعادة المحاولة",
+      "submittedAmount": "المبلغ المرسل",
+      "usdtEquivalent": "ما يعادل USDT",
+      "payoutAmount": "مبلغ الدفع",
+      "destinationDetail": "الوجهة: {{destination}}",
+      "receiptUploaded": "تم رفع الإيصال",
+      "depositRequest": "طلب إيداع",
+      "withdrawalRequest": "طلب سحب",
+      "methodMissingRate": "دفع {{currency}} غير متاح لأن السعر مفقود",
+      "titleDeposit": "إيداع",
+      "titleWithdrawal": "سحب"
+    },
+    "referrals": {
+      "title": "الإحالات",
+      "inviteCode": "رمز الدعوة",
+      "copyInvite": "نسخ رابط الدعوة",
+      "level": "المستوى {{level}}",
+      "totalDeposit": "إجمالي الإيداع {{amount}}",
+      "loading": "جارٍ تحميل الإحالات",
+      "activeReferrals": "نشط",
+      "filteredReferrals": "{{count}} إحالات",
+      "joined": "انضم في {{date}}"
+    },
+    "vip": {
+      "totalDeposit": "إجمالي الإيداع",
+      "referrals": "الإحالات",
+      "total": "الإجمالي"
+    },
+    "pin": {
+      "checking": "جارٍ التحقق من حالة الرمز...",
+      "warning": "لا يمكن تغيير رمز المعاملة في التطبيق بعد تعيينه.",
+      "set": "تعيين الرمز"
+    },
+    "notifications": {
+      "title": "الإشعارات",
+      "loading": "جارٍ تحميل الإشعارات...",
+      "fallbackTitle": "إشعار",
+      "count": "{{count}} إشعارات",
+      "titles": {
+        "rebateBonus": "مكافأة الخصم",
+        "referralDepositBonus": "مكافأة إيداع الإحالة",
+        "bonus": "مكافأة",
+        "firstDepositBonus": "مكافأة الإيداع الأول",
+        "betWon": "ربح الرهان",
+        "announcement": "إعلان",
+        "depositUpdate": "تحديث الإيداع",
+        "withdrawalUpdate": "تحديث السحب",
+        "adminReward": "مكافأة المشرف"
+      },
+      "messages": {
+        "rebateBonus": "تلقيت مكافأة خصم قدرها {{amount}} من {{sourceUsername}}",
+        "referralDepositBonus": "تلقيت مكافأة إيداع قدرها {{amount}} من {{sourceUsername}}",
+        "bonus": "تلقيت مكافأة قدرها {{amount}}",
+        "firstDepositBonus": "تلقيت مكافأة الإيداع الأول قدرها {{amount}}",
+        "betWon": "ربحت رهانك بقيمة {{amount}}",
+        "transactionUpdate": "{{typeLabel}} الخاص بك بقيمة {{amount}} {{method}} حالته {{status}}",
+        "adminReward": "تلقيت {{amount}} {{method}} من المشرف"
+      },
+      "events": {
+        "deposit_approved": {
+          "title": "تمت الموافقة على الإيداع",
+          "message": "تمت الموافقة على إيداعك بقيمة {{amount}} {{method}}."
+        },
+        "deposit_declined": {
+          "title": "تم رفض الإيداع",
+          "message": "تم رفض إيداعك بقيمة {{amount}} {{method}}."
+        },
+        "withdrawal_approved": {
+          "title": "تمت الموافقة على السحب",
+          "message": "تمت الموافقة على سحبك بقيمة {{amount}} {{method}}."
+        },
+        "withdrawal_declined": {
+          "title": "تم رفض السحب",
+          "message": "تم رفض سحبك بقيمة {{amount}} {{method}}."
+        },
+        "company_match_posted": {
+          "title": "مباراة شركة جديدة",
+          "message": "{{home}} ضد {{away}} متاحة الآن."
+        },
+        "bet_settled": {
+          "title": "تمت تسوية الرهان",
+          "message": "تمت تسوية رهانك {{home}} ضد {{away}}: {{outcome}}."
+        },
+        "team_member_joined": {
+          "title": "عضو فريق جديد",
+          "message": "انضم {{username}} إلى فريقك في المستوى {{level}}."
+        },
+        "test_push": {
+          "title": "اختبار إشعارات EFC",
+          "message": "الإشعارات الفورية جاهزة على هذا الجهاز."
+        }
+      }
+    },
+    "faq": {
+      "items": [
+        {
+          "q": "كيف أودع؟",
+          "a": "افتح الإيداع، واختر طريقة متاحة، وأدخل المبلغ، وادفع إلى الوجهة المعروضة، ثم ارفع إيصالك."
+        },
+        {
+          "q": "كيف أسحب؟",
+          "a": "اربط محفظة أو حساباً بنكياً أولاً، ثم افتح السحب، واختر الحساب، وأدخل المبلغ ورمز المعاملة."
+        },
+        {
+          "q": "أين يمكنني رؤية رهاناتي؟",
+          "a": "استخدم رهاناتي من شريط التنقل السفلي للتبديل بين سجلات الرهانات غير المسواة والمسواة."
+        }
+      ]
+    }
+  },
+  "user": {
+    "pages": {
+      "account": "الحساب",
+      "address": "العنوان",
+      "bets": "الرهانات",
+      "deposit": "إيداع",
+      "fund": "تمويل",
+      "history": "السجل",
+      "matches": "المباريات",
+      "notification": "الإشعار",
+      "transaction": "المعاملة",
+      "withdraw": "السحب"
+    }
+  },
+  "admin": {
+    "common": {
+      "overview": "نظرة عامة للمشرف",
+      "login": "تسجيل دخول المشرف",
+      "dashboard": "لوحة تحكم المشرف",
+      "summary": "الملخص",
+      "pendingReview": "بانتظار المراجعة",
+      "depositRows": "صفوف الإيداع",
+      "withdrawalRows": "صفوف السحب",
+      "decision": "القرار",
+      "copy": "نسخ",
+      "done": "تم",
+      "pending": "قيد الانتظار",
+      "completed": "مكتمل",
+      "viewProof": "عرض الإثبات",
+      "copyAddress": "نسخ العنوان",
+      "approve": "الموافقة",
+      "reject": "الرفض"
+    },
+    "finance": {
+      "title": "مالية المشرف",
+      "queueTitle": "قائمة المالية",
+      "queueCopy": "وافق على الإيداعات، وسوِّ السحوبات، وافحص إثباتات الدفع.",
+      "latestFinance": "أحدث العمليات المالية",
+      "depositsWithdrawals": "الإيداعات والسحوبات"
+    },
+    "control": {
+      "title": "مركز التحكم",
+      "copy": "أدوات تشغيل المشرف للمكافآت والمحافظ والإعلانات والأمان.",
+      "firstDepositBonus": "مكافأة الإيداع الأول",
+      "firstDepositBonusCopy": "تُطبق مرة واحدة عندما يوافق المشرف على أول إيداع.",
+      "withdrawalSettings": "إعدادات السحب",
+      "withdrawalSettingsCopy": "اضبط الحد الأدنى والحد الأقصى والرسوم لسحوبات المستخدمين."
+    }
+  },
+  "errors": {
+    "generic": "حدث خطأ ما.",
+    "unableToLoad": "تعذر تحميل هذا المحتوى."
+  }
+}
