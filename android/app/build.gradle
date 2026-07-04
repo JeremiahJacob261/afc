@@ -1,14 +1,36 @@
 apply plugin: 'com.android.application'
 
+def releaseSigning = [
+    storeFile: System.getenv('EFC_RELEASE_STORE_FILE') ?: '',
+    storePassword: System.getenv('EFC_RELEASE_STORE_PASSWORD') ?: '',
+    keyAlias: System.getenv('EFC_RELEASE_KEY_ALIAS') ?: '',
+    keyPassword: System.getenv('EFC_RELEASE_KEY_PASSWORD') ?: '',
+]
+def providedReleaseSigningValues = releaseSigning.findAll { key, value -> value.trim() }
+def hasReleaseSigning = providedReleaseSigningValues.size() == releaseSigning.size()
+if (providedReleaseSigningValues && !hasReleaseSigning) {
+    throw new GradleException('Incomplete EFC release signing environment. Set EFC_RELEASE_STORE_FILE, EFC_RELEASE_STORE_PASSWORD, EFC_RELEASE_KEY_ALIAS, and EFC_RELEASE_KEY_PASSWORD.')
+}
+
 android {
     namespace "com.efcfootball.app"
     compileSdk rootProject.ext.compileSdkVersion
+    signingConfigs {
+        if (hasReleaseSigning) {
+            release {
+                storeFile file(releaseSigning.storeFile)
+                storePassword releaseSigning.storePassword
+                keyAlias releaseSigning.keyAlias
+                keyPassword releaseSigning.keyPassword
+            }
+        }
+    }
     defaultConfig {
         applicationId "com.efcfootball.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -18,6 +40,11 @@ android {
     }
     buildTypes {
         release {
+            if (hasReleaseSigning) {
+                signingConfig signingConfigs.release
+            } else {
+                logger.warn('EFC release signing env vars are not set; release APK will be unsigned.')
+            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

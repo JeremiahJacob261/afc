@@ -30,6 +30,44 @@ function sortNotifications(items) {
   })
 }
 
+function notificationSourceKey(sourceTable, sourceId) {
+  if (!sourceTable || sourceId === undefined || sourceId === null) return ''
+  return `${sourceTable}:${sourceId}`
+}
+
+function categoryForAppEvent(eventType) {
+  if (String(eventType || '').startsWith('deposit_')) return 'deposit'
+  if (String(eventType || '').startsWith('withdrawal_')) return 'withdrawal'
+  if (eventType === 'bet_settled') return 'bet'
+  if (eventType === 'company_match_posted') return 'match'
+  if (eventType === 'team_member_joined') return 'team'
+  if (eventType === 'test_push') return 'admin'
+  return 'broadcast'
+}
+
+function appNotification(item) {
+  const eventType = item.event_type || 'notification'
+  const data = item.data || {}
+
+  return {
+    id: `app-${item.id}`,
+    appNotificationId: item.id,
+    type: eventType,
+    title: item.title,
+    titleKey: `mobile.notifications.events.${eventType}.title`,
+    message: item.body,
+    messageKey: `mobile.notifications.events.${eventType}.message`,
+    messageValues: data,
+    amount: amountValue(data.amount || data.payout || data.stake || 0),
+    sourceUsername: data.username || '',
+    timestamp: item.created_at,
+    readAt: item.read_at,
+    category: categoryForAppEvent(eventType),
+    sourceTable: item.source_table || '',
+    sourceId: item.source_id || '',
+  }
+}
+
 function bonusNotification(item, profile) {
   const amount = amountValue(item.amount)
   const timestamp = timestampOf(item)
@@ -188,6 +226,38 @@ export default async function handler(req, res) {
     const { profile, supabase } = await getCurrentProfile(req, 'username,newrefer')
     const notifications = []
 
+    if (req.method === 'POST' && req.body?.action === 'mark-read') {
+      let query = supabase
+        .from('app_notifications')
+        .update({ read_at: new Date().toISOString() })
+        .eq('recipient_username', profile.username)
+        .is('read_at', null)
+
+      if (Array.isArray(req.body.ids) && req.body.ids.length) {
+        query = query.in('id', req.body.ids)
+      }
+
+      const { error } = await query
+      if (error) throw error
+
+      return res.status(200).json({ status: 'success' })
+    }
+
+    const { data: appRows, error: appError } = await supabase
+      .from('app_notifications')
+      .select('*')
+      .eq('recipient_username', profile.username)
+      .order('created_at', { ascending: false })
+
+    if (appError) throw appError
+
+    const appSourceKeys = new Set()
+    ;(appRows || []).forEach((item) => {
+      notifications.push(appNotification(item))
+      const key = notificationSourceKey(item.source_table, item.source_id)
+      if (key) appSourceKeys.add(key)
+    })
+
     if (profile.newrefer) {
       const { data: bonusRows, error: bonusError } = await supabase
         .from('activa')
@@ -248,7 +318,15 @@ export default async function handler(req, res) {
     if (transactionError) throw transactionError
 
     ;(transactionRows || []).forEach((item) => {
-      if (item.address !== 'admin') notifications.push(transactionNotification(item))
+      const sourceKeys = [
+        notificationSourceKey('notification', item.id),
+        notificationSourceKey('notification', item.uid),
+      ].filter(Boolean)
+      const hasAppNotification = sourceKeys.some((key) => appSourceKeys.has(key))
+
+      if (item.address !== 'admin' && !hasAppNotification) {
+        notifications.push(transactionNotification(item))
+      }
     })
 
     const { data: adminRewardRows, error: adminRewardError } = await supabase
@@ -263,7 +341,14 @@ export default async function handler(req, res) {
       notifications.push(adminRewardNotification(item))
     })
 
-    return res.status(200).json(sortNotifications(notifications))
+    const sorted = sortNotifications(notifications)
+    const unreadCount = (appRows || []).filter((item) => !item.read_at).length
+
+    if (req.query?.summary === '1') {
+      return res.status(200).json({ notifications: sorted, unreadCount })
+    }
+
+    return res.status(200).json(sorted)
   } catch (error) {
     return sendApiError(res, error)
   }

@@ -729,6 +729,7 @@ button {
 }
 
 .top-icon {
+  position: relative;
   width: 42px;
   height: 42px;
   display: inline-flex;
@@ -736,6 +737,23 @@ button {
   justify-content: center;
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.07);
+}
+
+.notification-badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 5px;
+  border-radius: 999px;
+  border: 2px solid #06101f;
+  background: #ff4568;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 900;
+  line-height: 13px;
+  text-align: center;
 }
 
 .top-brand {
@@ -1443,6 +1461,218 @@ button.list-card {
 .account-linked-page .primary-button,
 .account-linked-page .secondary-button {
   border-radius: 8px;
+}
+
+.referral-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.referral-stat,
+.referral-filter-total,
+.referral-state-card {
+  border-radius: 8px;
+  border: 1px solid rgba(27, 182, 255, 0.55);
+  background: #10284d;
+  box-shadow: 0 8px 30px rgba(2, 6, 23, 0.38);
+}
+
+.referral-stat {
+  min-height: 72px;
+  display: grid;
+  align-content: center;
+  gap: 5px;
+  padding: 10px;
+}
+
+.referral-stat span,
+.referral-filter-total span {
+  min-width: 0;
+  color: #8ea4b8;
+  font-size: 11px;
+  line-height: 1.25;
+}
+
+.referral-stat b {
+  min-width: 0;
+  color: #e9e5da;
+  font-size: 15px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.referral-filter-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
+
+.referral-filter-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.referral-filter-bar button {
+  flex: 0 0 auto;
+  min-width: 88px;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 8px;
+  border: 1px solid rgba(233, 229, 218, 0.1);
+  background: rgba(233, 229, 218, 0.06);
+  color: #b9cee2;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.referral-filter-bar button.active {
+  border-color: #1bb6ff;
+  background: #1bb6ff;
+  color: #06101f;
+}
+
+.referral-filter-bar button b {
+  min-width: 22px;
+  border-radius: 999px;
+  padding: 2px 6px;
+  background: rgba(6, 16, 31, 0.2);
+  font-size: 11px;
+}
+
+.referral-filter-total {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 12px;
+}
+
+.referral-filter-total b {
+  flex: 0 1 auto;
+  min-width: 0;
+  color: #e9e5da;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
+.referral-row {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) minmax(92px, auto);
+  min-height: 76px;
+}
+
+.referral-avatar {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: rgba(27, 182, 255, 0.14);
+  color: #1bb6ff;
+}
+
+.referral-row-main {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.referral-row-main b,
+.referral-row-main small {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.referral-row-main b {
+  color: #e9e5da;
+  font-size: 14px;
+}
+
+.referral-row-main small {
+  color: #8ea4b8;
+  font-size: 11px;
+}
+
+.referral-row-main .referral-active {
+  color: #9be15d;
+}
+
+.referral-row-side {
+  display: grid;
+  justify-items: end;
+  gap: 7px;
+  min-width: 0;
+  text-align: right;
+}
+
+.referral-row-side b {
+  max-width: 112px;
+  color: #e9e5da;
+  font-size: 12px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.referral-level {
+  max-width: 96px;
+  border-radius: 6px;
+  padding: 4px 7px;
+  color: #06101f;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.referral-level.level-1 {
+  background: #9be15d;
+}
+
+.referral-level.level-2 {
+  background: #87d8ff;
+}
+
+.referral-level.level-3 {
+  background: #f6c56f;
+}
+
+.referral-state-card {
+  min-height: 172px;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 10px;
+  padding: 20px;
+  color: #e9e5da;
+  text-align: center;
+}
+
+.referral-state-card p,
+.referral-state-card span {
+  margin: 0;
+}
+
+.referral-state-card p {
+  font-weight: 900;
+}
+
+.referral-state-card span {
+  color: #8ea4b8;
+  font-size: 12px;
+  line-height: 1.45;
 }
 
 .full-field {

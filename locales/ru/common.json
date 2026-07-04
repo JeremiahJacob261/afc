@@ -878,7 +878,11 @@
       "inviteCode": "Пригласительный код",
       "copyInvite": "Скопировать ссылку для приглашения",
       "level": "Уровень {{level}}",
-      "totalDeposit": "Общий депозит {{amount}}"
+      "totalDeposit": "Общий депозит {{amount}}",
+      "loading": "Загрузка рефералов",
+      "activeReferrals": "Активные",
+      "filteredReferrals": "{{count}} рефералов",
+      "joined": "Дата регистрации: {{date}}"
     },
     "vip": {
       "totalDeposit": "Общий депозит",
@@ -914,6 +918,40 @@
         "betWon": "Вы выиграли ставку на {{amount}}",
         "transactionUpdate": "Ваш {{typeLabel}} на {{amount}} {{method}}: {{status}}",
         "adminReward": "Вы получили {{amount}} {{method}} от администратора"
+      },
+      "events": {
+        "deposit_approved": {
+          "title": "Deposit approved",
+          "message": "Your deposit of {{amount}} {{method}} was approved."
+        },
+        "deposit_declined": {
+          "title": "Deposit declined",
+          "message": "Your deposit of {{amount}} {{method}} was declined."
+        },
+        "withdrawal_approved": {
+          "title": "Withdrawal approved",
+          "message": "Your withdrawal of {{amount}} {{method}} was approved."
+        },
+        "withdrawal_declined": {
+          "title": "Withdrawal declined",
+          "message": "Your withdrawal of {{amount}} {{method}} was declined."
+        },
+        "company_match_posted": {
+          "title": "New company match",
+          "message": "{{home}} vs {{away}} is now available."
+        },
+        "bet_settled": {
+          "title": "Bet settled",
+          "message": "Your {{home}} vs {{away}} bet was settled: {{outcome}}."
+        },
+        "team_member_joined": {
+          "title": "New team member",
+          "message": "{{username}} joined your level {{level}} team."
+        },
+        "test_push": {
+          "title": "EFC notification test",
+          "message": "Push notifications are ready on this device."
+        }
       }
     },
     "faq": {

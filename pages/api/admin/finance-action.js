@@ -6,6 +6,7 @@ import {
   getPaymentRate,
   normalizePaymentCode,
 } from '@/lib/paymentMethods'
+import { notifyFinanceAction } from '@/lib/pushNotifications'
 
 async function getNotificationRate(supabase, notification) {
   const method = normalizePaymentCode(notification.method || 'usdt')
@@ -134,9 +135,23 @@ export default async function handler(req, res) {
 
     if (rpcErr) throw rpcErr
 
+    const finalSent = result?.sent || (action === 'reject' ? 'failed' : 'success')
+    if (!result?.alreadyProcessed) {
+      try {
+        await notifyFinanceAction(supabase, {
+          transaction: notification,
+          action,
+          sent: finalSent,
+          amount: approvedAmount || notification.amount,
+        })
+      } catch (pushError) {
+        console.warn('Finance push notification failed:', pushError)
+      }
+    }
+
     return res.status(200).json({
       status: 'success',
-      sent: result?.sent || (action === 'reject' ? 'failed' : 'success'),
+      sent: finalSent,
       alreadyProcessed: Boolean(result?.alreadyProcessed),
     })
   } catch (error) {

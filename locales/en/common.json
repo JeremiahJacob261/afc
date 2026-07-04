@@ -337,10 +337,22 @@
       "copy": "The landing page now reflects the EFC operation card: deposit bonus, minimum deposit, daily percentage, and minimum withdrawal.",
       "imageAlt": "European Football Clubs platform operations showing deposit bonus, minimum deposit, daily percentage, and minimum withdrawal",
       "items": [
-        { "label": "Deposit bonus", "value": "1USDT" },
-        { "label": "Minimum deposit", "value": "5USDT" },
-        { "label": "Daily percentage", "value": "3-4%" },
-        { "label": "Minimum withdrawal", "value": "10USDT" }
+        {
+          "label": "Deposit bonus",
+          "value": "1USDT"
+        },
+        {
+          "label": "Minimum deposit",
+          "value": "5USDT"
+        },
+        {
+          "label": "Daily percentage",
+          "value": "3-4%"
+        },
+        {
+          "label": "Minimum withdrawal",
+          "value": "10USDT"
+        }
       ]
     },
     "features": {
@@ -367,10 +379,22 @@
         }
       ],
       "walletRewards": [
-        { "label": "First deposit bonus", "value": "3%" },
-        { "label": "Bet unlock target", "value": "5 bets" },
-        { "label": "Referral bonus", "value": "5%" },
-        { "label": "Withdrawal charge", "value": "7%" }
+        {
+          "label": "First deposit bonus",
+          "value": "3%"
+        },
+        {
+          "label": "Bet unlock target",
+          "value": "5 bets"
+        },
+        {
+          "label": "Referral bonus",
+          "value": "5%"
+        },
+        {
+          "label": "Withdrawal charge",
+          "value": "7%"
+        }
       ]
     },
     "live": {
@@ -385,9 +409,24 @@
       "startBetting": "Start Betting",
       "odds": "Odds",
       "matches": [
-        { "fixture": "London FC vs Madrid City", "market": "Over 2.5 Goals", "price": "1.91", "status": "62 min" },
-        { "fixture": "Milan United vs Paris Club", "market": "Both Teams To Score", "price": "1.76", "status": "Live" },
-        { "fixture": "Lisbon Athletic vs Berlin Town", "market": "Home Win", "price": "2.24", "status": "84 min" }
+        {
+          "fixture": "London FC vs Madrid City",
+          "market": "Over 2.5 Goals",
+          "price": "1.91",
+          "status": "62 min"
+        },
+        {
+          "fixture": "Milan United vs Paris Club",
+          "market": "Both Teams To Score",
+          "price": "1.76",
+          "status": "Live"
+        },
+        {
+          "fixture": "Lisbon Athletic vs Berlin Town",
+          "market": "Home Win",
+          "price": "2.24",
+          "status": "84 min"
+        }
       ]
     },
     "bonuses": {
@@ -413,12 +452,30 @@
         }
       ],
       "tiers": [
-        { "members": "10", "reward": "10USDT" },
-        { "members": "20", "reward": "30USDT" },
-        { "members": "30", "reward": "50USDT" },
-        { "members": "50", "reward": "70USDT" },
-        { "members": "80", "reward": "100USDT" },
-        { "members": "100", "reward": "150USDT" }
+        {
+          "members": "10",
+          "reward": "10USDT"
+        },
+        {
+          "members": "20",
+          "reward": "30USDT"
+        },
+        {
+          "members": "30",
+          "reward": "50USDT"
+        },
+        {
+          "members": "50",
+          "reward": "70USDT"
+        },
+        {
+          "members": "80",
+          "reward": "100USDT"
+        },
+        {
+          "members": "100",
+          "reward": "150USDT"
+        }
       ]
     },
     "agents": {
@@ -432,18 +489,62 @@
       "teamVolume": "Team volume",
       "salary": "Salary",
       "rebates": [
-        { "level": "1st level", "rebate": "7%" },
-        { "level": "2nd level", "rebate": "5%" },
-        { "level": "3rd level", "rebate": "3%" }
+        {
+          "level": "1st level",
+          "rebate": "7%"
+        },
+        {
+          "level": "2nd level",
+          "rebate": "5%"
+        },
+        {
+          "level": "3rd level",
+          "rebate": "3%"
+        }
       ],
       "salaryLevels": [
-        { "agent": "Agent A", "teamLevel": "Level 1-3", "teamVolume": "$2500", "salary": "$100 weekly" },
-        { "agent": "Agent B", "teamLevel": "Level 1-3", "teamVolume": "$5000", "salary": "$250 weekly" },
-        { "agent": "Agent C", "teamLevel": "Level 1-3", "teamVolume": "$10000", "salary": "$500 weekly" },
-        { "agent": "Agent D", "teamLevel": "Level 1-3", "teamVolume": "$15000", "salary": "$750 weekly" },
-        { "agent": "Agent E", "teamLevel": "Level 1-3", "teamVolume": "$20000", "salary": "$1250 weekly" },
-        { "agent": "Agent F", "teamLevel": "Level 1-3", "teamVolume": "$50000", "salary": "$3000 weekly" },
-        { "agent": "Agent G", "teamLevel": "Level 1-3", "teamVolume": "$100000", "salary": "$7500 weekly" }
+        {
+          "agent": "Agent A",
+          "teamLevel": "Level 1-3",
+          "teamVolume": "$2500",
+          "salary": "$100 weekly"
+        },
+        {
+          "agent": "Agent B",
+          "teamLevel": "Level 1-3",
+          "teamVolume": "$5000",
+          "salary": "$250 weekly"
+        },
+        {
+          "agent": "Agent C",
+          "teamLevel": "Level 1-3",
+          "teamVolume": "$10000",
+          "salary": "$500 weekly"
+        },
+        {
+          "agent": "Agent D",
+          "teamLevel": "Level 1-3",
+          "teamVolume": "$15000",
+          "salary": "$750 weekly"
+        },
+        {
+          "agent": "Agent E",
+          "teamLevel": "Level 1-3",
+          "teamVolume": "$20000",
+          "salary": "$1250 weekly"
+        },
+        {
+          "agent": "Agent F",
+          "teamLevel": "Level 1-3",
+          "teamVolume": "$50000",
+          "salary": "$3000 weekly"
+        },
+        {
+          "agent": "Agent G",
+          "teamLevel": "Level 1-3",
+          "teamVolume": "$100000",
+          "salary": "$7500 weekly"
+        }
       ]
     },
     "trust": {
@@ -498,26 +599,56 @@
         {
           "title": "Betting",
           "links": [
-            { "label": "Markets", "href": "#markets" },
-            { "label": "Live Betting", "href": "#live" },
-            { "label": "How It Works", "href": "#how-it-works" }
+            {
+              "label": "Markets",
+              "href": "#markets"
+            },
+            {
+              "label": "Live Betting",
+              "href": "#live"
+            },
+            {
+              "label": "How It Works",
+              "href": "#how-it-works"
+            }
           ]
         },
         {
           "title": "Account",
           "links": [
-            { "label": "Register", "href": "/register/000208" },
-            { "label": "Log in", "href": "/login" },
-            { "label": "Bonuses", "href": "#bonuses" },
-            { "label": "Agents", "href": "#agents" }
+            {
+              "label": "Register",
+              "href": "/register/000208"
+            },
+            {
+              "label": "Log in",
+              "href": "/login"
+            },
+            {
+              "label": "Bonuses",
+              "href": "#bonuses"
+            },
+            {
+              "label": "Agents",
+              "href": "#agents"
+            }
           ]
         },
         {
           "title": "Help",
           "links": [
-            { "label": "FAQ", "href": "#faq" },
-            { "label": "Responsible Betting", "href": "#trust" },
-            { "label": "Contact", "href": "#contact" }
+            {
+              "label": "FAQ",
+              "href": "#faq"
+            },
+            {
+              "label": "Responsible Betting",
+              "href": "#trust"
+            },
+            {
+              "label": "Contact",
+              "href": "#contact"
+            }
           ]
         }
       ]
@@ -633,9 +764,9 @@
       "codeSetting": "Code Setting",
       "linkWallets": "Link Wallets",
       "betsTitle": "Bets",
-    "aboutTitle": "About",
-    "language": "Language",
-    "telegramChannel": "Telegram Channel",
+      "aboutTitle": "About",
+      "language": "Language",
+      "telegramChannel": "Telegram Channel",
       "customerService": "Customer Service",
       "telegramGroup": "Telegram Group",
       "contact": "Contact",
@@ -747,7 +878,11 @@
       "inviteCode": "Invite code",
       "copyInvite": "Copy invite link",
       "level": "Level {{level}}",
-      "totalDeposit": "Total deposit {{amount}}"
+      "totalDeposit": "Total deposit {{amount}}",
+      "loading": "Loading referrals",
+      "activeReferrals": "Active",
+      "filteredReferrals": "{{count}} referrals",
+      "joined": "Joined {{date}}"
     },
     "vip": {
       "totalDeposit": "Total Deposit",
@@ -783,6 +918,40 @@
         "betWon": "You won your bet of {{amount}}",
         "transactionUpdate": "Your {{typeLabel}} of {{amount}} {{method}} is {{status}}",
         "adminReward": "You received {{amount}} {{method}} from admin"
+      },
+      "events": {
+        "deposit_approved": {
+          "title": "Deposit approved",
+          "message": "Your deposit of {{amount}} {{method}} was approved."
+        },
+        "deposit_declined": {
+          "title": "Deposit declined",
+          "message": "Your deposit of {{amount}} {{method}} was declined."
+        },
+        "withdrawal_approved": {
+          "title": "Withdrawal approved",
+          "message": "Your withdrawal of {{amount}} {{method}} was approved."
+        },
+        "withdrawal_declined": {
+          "title": "Withdrawal declined",
+          "message": "Your withdrawal of {{amount}} {{method}} was declined."
+        },
+        "company_match_posted": {
+          "title": "New company match",
+          "message": "{{home}} vs {{away}} is now available."
+        },
+        "bet_settled": {
+          "title": "Bet settled",
+          "message": "Your {{home}} vs {{away}} bet was settled: {{outcome}}."
+        },
+        "team_member_joined": {
+          "title": "New team member",
+          "message": "{{username}} joined your level {{level}} team."
+        },
+        "test_push": {
+          "title": "EFC notification test",
+          "message": "Push notifications are ready on this device."
+        }
       }
     },
     "faq": {

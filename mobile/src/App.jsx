@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { SplashScreen } from '@capacitor/splash-screen'
 import { useTranslation } from 'react-i18next'
 import toast, { Toaster } from 'react-hot-toast'
@@ -33,10 +33,12 @@ import {
 } from 'lucide-react'
 import { apiFetch } from './lib/api.js'
 import { hasSupabaseConfig, mobileConfig } from './lib/config.js'
+import { setupPushNotifications, unregisterPushToken } from './lib/push.js'
 import { getStoredSession, supabase } from './lib/supabase.js'
 import { checkForBundleUpdate, markBundleReady } from './lib/updater.js'
 
 const referralCode = '000208'
+const referralFilters = ['all', 1, 2, 3]
 const bfcImages = ['/bfc1.jpg', '/bfc2.jpg', '/bfc3.jpg', '/bfc4.jpg', '/bfc5.jpg']
 const ballImage = '/simps/ball.png'
 const languageStorageKey = 'efc-language'
@@ -664,10 +666,65 @@ function InputShell({ icon, label, action, children }) {
 
 function UserApp({ route, setRoute, onLogout, online, successAmount, setSuccessAmount }) {
   const { t } = useTranslation('common')
-  const navigate = (name, params = {}) => setRoute(makeRoute(name, params))
-  const backHome = () => navigate('home')
+  const [unreadCount, setUnreadCount] = useState(0)
+  const navigate = useCallback((name, params = {}) => setRoute(makeRoute(name, params)), [setRoute])
+  const backHome = useCallback(() => navigate('home'), [navigate])
+
+  const refreshNotificationSummary = useCallback(async () => {
+    try {
+      const payload = await apiFetch('/api/notify?summary=1', { auth: true })
+      setUnreadCount(Number(payload?.unreadCount || 0))
+    } catch (error) {
+      setUnreadCount(0)
+    }
+  }, [])
+
+  useEffect(() => {
+    refreshNotificationSummary()
+  }, [refreshNotificationSummary])
+
+  useEffect(() => {
+    let cleanup = () => {}
+    let active = true
+
+    setupPushNotifications({
+      onNotification(notification) {
+        const title = notification?.title || t('mobile.notifications.fallbackTitle')
+        const body = notification?.body || ''
+        toast(body ? `${title}: ${body}` : title)
+        refreshNotificationSummary()
+      },
+      onAction(action) {
+        const data = action?.notification?.data || {}
+        const routeName = data.route || 'notifications'
+
+        if (routeName === 'match' && data.matchId) {
+          navigate('match', { id: data.matchId })
+        } else if (routeName === 'bet' && data.betId) {
+          navigate('bet', { id: data.betId })
+        } else if (routeName === 'referrals') {
+          navigate('referrals')
+        } else {
+          navigate('notifications')
+        }
+        refreshNotificationSummary()
+      },
+      onError(error) {
+        console.warn('Push notification setup failed:', error)
+      },
+    }).then((dispose) => {
+      if (active) cleanup = dispose
+      else dispose?.()
+    })
+
+    return () => {
+      active = false
+      cleanup?.()
+    }
+  }, [navigate, refreshNotificationSummary, t])
 
   async function logout() {
+    await unregisterPushToken().catch(() => null)
     await supabase?.auth.signOut()
     onLogout()
   }
@@ -685,7 +742,7 @@ function UserApp({ route, setRoute, onLogout, online, successAmount, setSuccessA
     if (route.name === 'referrals') return <ReferralsScreen navigate={navigate} />
     if (route.name === 'vip') return <VipScreen navigate={navigate} />
     if (route.name === 'pin') return <PinScreen navigate={navigate} />
-    if (route.name === 'notifications') return <NotificationsScreen navigate={navigate} />
+    if (route.name === 'notifications') return <NotificationsScreen navigate={navigate} onRead={refreshNotificationSummary} />
     if (route.name === 'faq') return <FaqScreen navigate={navigate} />
     if (route.name === 'deposit-success') {
       return (
@@ -702,14 +759,14 @@ function UserApp({ route, setRoute, onLogout, online, successAmount, setSuccessA
 
   return (
     <main className="app-view">
-      <TopBar navigate={navigate} onHome={backHome} />
+      <TopBar navigate={navigate} onHome={backHome} unreadCount={unreadCount} />
       <div className="view-body">{screen}</div>
       <BottomNav active={route.name} navigate={navigate} />
     </main>
   )
 }
 
-function TopBar({ navigate, onHome }) {
+function TopBar({ navigate, onHome, unreadCount = 0 }) {
   const { t } = useTranslation('common')
 
   return (
@@ -722,6 +779,7 @@ function TopBar({ navigate, onHome }) {
       </button>
       <button className="top-icon" type="button" onClick={() => navigate('notifications')} aria-label={t('mobile.topBar.notifications')}>
         <Bell size={20} />
+        {unreadCount > 0 ? <span className="notification-badge">{unreadCount > 9 ? '9+' : unreadCount}</span> : null}
       </button>
     </header>
   )
@@ -1698,23 +1756,58 @@ function TransactionsScreen({ navigate }) {
 function ReferralsScreen({ navigate }) {
   const { t } = useTranslation('common')
   const [payload, setPayload] = useState({ refer: '', referrals: [] })
+  const [filter, setFilter] = useState('all')
+  const [loading, setLoading] = useState(true)
   const [message, setMessage] = useState(null)
+
+  const loadReferrals = useCallback(async (isActive = () => true) => {
+    setLoading(true)
+    setMessage(null)
+
+    try {
+      const result = await apiFetch('/api/my-referrals', { auth: true })
+      if (isActive()) setPayload(result)
+    } catch (error) {
+      if (isActive()) {
+        setPayload({ refer: '', referrals: [] })
+        setMessage({ type: 'error', text: error?.message || t('messages.unableLoadReferrals') })
+      }
+    } finally {
+      if (isActive()) setLoading(false)
+    }
+  }, [t])
 
   useEffect(() => {
     let active = true
-    apiFetch('/api/my-referrals', { auth: true })
-      .then((result) => {
-        if (active) setPayload(result)
-      })
-      .catch((error) => {
-        if (active) setMessage({ type: 'error', text: error?.message || t('messages.unableLoadReferrals') })
-      })
+    loadReferrals(() => active)
     return () => {
       active = false
     }
-  }, [])
+  }, [loadReferrals])
+
+  const referrals = useMemo(
+    () => (Array.isArray(payload.referrals) ? payload.referrals : []),
+    [payload.referrals]
+  )
+  const visibleReferrals = useMemo(
+    () => referrals.filter((item) => filter === 'all' || Number(item.level || 1) === filter),
+    [filter, referrals]
+  )
+  const totalDeposit = useMemo(
+    () => referrals.reduce((sum, item) => sum + Number(item.totald || 0), 0),
+    [referrals]
+  )
+  const filteredDeposit = useMemo(
+    () => visibleReferrals.reduce((sum, item) => sum + Number(item.totald || 0), 0),
+    [visibleReferrals]
+  )
+  const activeCount = useMemo(
+    () => referrals.filter((item) => Boolean(item.firstd)).length,
+    [referrals]
+  )
 
   const inviteLink = `${mobileConfig.apiBaseUrl}/register/${payload.refer || referralCode}`
+  const hasError = message?.type === 'error'
 
   return (
     <section className="page-stack account-linked-page">
@@ -1727,19 +1820,83 @@ function ReferralsScreen({ navigate }) {
           <Copy size={17} />
         </button>
       </section>
+
+      <section className="referral-summary-grid">
+        <ReferralStat label={t('mobile.vip.total')} value={referrals.length} />
+        <ReferralStat label={t('mobile.referrals.activeReferrals')} value={activeCount} />
+        <ReferralStat label={t('mobile.vip.totalDeposit')} value={formatUsdt(totalDeposit)} />
+      </section>
+
+      <section className="referral-filter-bar" aria-label={t('mobile.referrals.title')}>
+        {referralFilters.map((item) => {
+          const selected = filter === item
+          const count = item === 'all'
+            ? referrals.length
+            : referrals.filter((referral) => Number(referral.level || 1) === item).length
+
+          return (
+            <button
+              key={item}
+              className={selected ? 'active' : ''}
+              type="button"
+              onClick={() => setFilter(item)}
+            >
+              <span>{item === 'all' ? t('common.all') : t('mobile.referrals.level', { level: item })}</span>
+              <b>{count}</b>
+            </button>
+          )
+        })}
+      </section>
+
+      <section className="referral-filter-total">
+        <span>{t('mobile.referrals.filteredReferrals', { count: visibleReferrals.length })}</span>
+        <b>{formatUsdt(filteredDeposit)}</b>
+      </section>
+
+      {loading ? <LoadingState text={t('mobile.referrals.loading')} /> : null}
+      {!loading && hasError ? (
+        <section className="referral-state-card">
+          <HelpCircle size={24} />
+          <p>{t('messages.unableLoadReferrals')}</p>
+          <span>{message.text}</span>
+          <button className="secondary-button" type="button" onClick={() => loadReferrals()}>
+            {t('common.refresh')}
+            <RefreshCw size={17} />
+          </button>
+        </section>
+      ) : null}
       <section className="card-list">
-        {(payload.referrals || []).map((item) => (
-          <article key={item.id || item.username} className="list-card static">
-            <span>
-              <b>{item.username}</b>
-              <small>{item.levelLabel || t('mobile.referrals.level', { level: item.level })} · {t('mobile.referrals.totalDeposit', { amount: formatUsdt(item.totald) })}</small>
+        {!loading && !hasError && visibleReferrals.map((item) => (
+          <article key={`${item.level || 1}-${item.key || item.id || item.username}`} className="referral-row list-card static">
+            <span className="referral-avatar">
+              <Users size={18} />
             </span>
-            <StatusPill status={{ label: item.firstd ? t('status.active') : t('status.pending'), tone: item.firstd ? 'success' : 'pending' }} />
+            <span className="referral-row-main">
+              <b>{item.username || 'Unknown user'}</b>
+              <small>{t('mobile.referrals.joined', { date: formatDate(item.joinedAt || item.created_at || item.crdate, t) })}</small>
+              <small className={item.firstd ? 'referral-active' : ''}>{item.firstd ? t('status.active') : t('status.pending')}</small>
+            </span>
+            <span className="referral-row-side">
+              <em className={`referral-level level-${item.level || 1}`}>
+                {item.levelLabel || t('mobile.referrals.level', { level: item.level || 1 })}
+              </em>
+              <b>{formatUsdt(item.totald)}</b>
+            </span>
           </article>
         ))}
-        {!(payload.referrals || []).length ? <EmptyState title={t('emptyStates.noReferrals')} text={t('emptyStates.referralsComing')} /> : null}
+        {!loading && !hasError && !referrals.length ? <EmptyState title={t('emptyStates.noReferrals')} text={t('emptyStates.referralsComing')} /> : null}
+        {!loading && !hasError && referrals.length > 0 && !visibleReferrals.length ? <EmptyState title={t('emptyStates.noReferrals')} text={t('emptyStates.referralsComing')} /> : null}
       </section>
     </section>
+  )
+}
+
+function ReferralStat({ label, value }) {
+  return (
+    <article className="referral-stat">
+      <span>{label}</span>
+      <b>{value}</b>
+    </article>
   )
 }
 
@@ -1845,7 +2002,57 @@ function PinScreen({ navigate }) {
   )
 }
 
-function NotificationsScreen({ navigate }) {
+function formatNotificationValue(key, value) {
+  if (['amount', 'payout', 'stake'].includes(key) && value !== '' && value !== null && value !== undefined) {
+    const number = Number(value)
+    if (Number.isFinite(number)) return number.toFixed(2)
+  }
+  return value
+}
+
+function resolveNotificationValues(values = {}, t) {
+  return Object.entries(values || {}).reduce((acc, [key, value]) => {
+    if (key === 'typeKey' && typeof value === 'string') {
+      acc.typeLabel = t(value).toLowerCase()
+      return acc
+    }
+
+    if (key === 'statusKey' && typeof value === 'string') {
+      acc.status = t(value).toLowerCase()
+      return acc
+    }
+
+    if (key.endsWith('Key') && typeof value === 'string') {
+      acc[key.slice(0, -3)] = t(value)
+      return acc
+    }
+
+    acc[key] = formatNotificationValue(key, value)
+    return acc
+  }, {})
+}
+
+function notificationTitle(item, t) {
+  if (item.titleKey) {
+    return t(item.titleKey, {
+      defaultValue: item.title || t('mobile.notifications.fallbackTitle'),
+      ...resolveNotificationValues(item.messageValues, t),
+    })
+  }
+  return item.title || t('mobile.notifications.fallbackTitle')
+}
+
+function notificationBody(item, t) {
+  if (item.messageKey) {
+    return t(item.messageKey, {
+      defaultValue: item.message || '',
+      ...resolveNotificationValues(item.messageValues, t),
+    })
+  }
+  return item.message || ''
+}
+
+function NotificationsScreen({ navigate, onRead }) {
   const { t } = useTranslation('common')
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
@@ -1853,9 +2060,25 @@ function NotificationsScreen({ navigate }) {
 
   useEffect(() => {
     let active = true
-    apiFetch('/api/notify', { auth: true })
+    apiFetch('/api/notify?summary=1', { auth: true })
       .then((payload) => {
-        if (active) setItems(Array.isArray(payload) ? payload : [])
+        const nextItems = Array.isArray(payload) ? payload : payload?.notifications || []
+        if (!active) return
+        setItems(nextItems)
+
+        const unreadIds = nextItems
+          .filter((item) => item.appNotificationId && !item.readAt)
+          .map((item) => item.appNotificationId)
+
+        if (unreadIds.length) {
+          apiFetch('/api/notify', {
+            auth: true,
+            method: 'POST',
+            body: { action: 'mark-read', ids: unreadIds },
+          }).then(() => onRead?.()).catch(() => null)
+        } else {
+          onRead?.()
+        }
       })
       .catch((error) => {
         if (active) setMessage({ type: 'error', text: error?.message || t('messages.unableLoadNotifications') })
@@ -1866,7 +2089,7 @@ function NotificationsScreen({ navigate }) {
     return () => {
       active = false
     }
-  }, [])
+  }, [onRead, t])
 
   return (
     <section className="page-stack">
@@ -1878,8 +2101,8 @@ function NotificationsScreen({ navigate }) {
           <article key={item.id} className="list-card static notification-card">
             <Bell size={19} />
             <span>
-              <b>{item.title || t('mobile.notifications.fallbackTitle')}</b>
-              <small>{item.message || ''}</small>
+              <b>{notificationTitle(item, t)}</b>
+              <small>{notificationBody(item, t)}</small>
             </span>
           </article>
         ))}

@@ -878,7 +878,11 @@
       "inviteCode": "ဖိတ်ကြားကုဒ်",
       "copyInvite": "ဖိတ်ကြားလင့်ခ်ကို ကူးယူပါ",
       "level": "အဆင့် {{level}}",
-      "totalDeposit": "စုစုပေါင်းငွေသွင်းမှု {{amount}}"
+      "totalDeposit": "စုစုပေါင်းငွေသွင်းမှု {{amount}}",
+      "loading": "ဖိတ်ကြားမှုများ ဖွင့်နေသည်",
+      "activeReferrals": "စွမ်းဆောင်နေသည်",
+      "filteredReferrals": "ဖိတ်ကြားမှု {{count}} ခု",
+      "joined": "{{date}} တွင် ဝင်ရောက်ခဲ့သည်"
     },
     "vip": {
       "totalDeposit": "စုစုပေါင်းငွေသွင်းမှု",
@@ -914,6 +918,40 @@
         "betWon": "{{amount}} လောင်းကြေးကို အနိုင်ရပါသည်",
         "transactionUpdate": "သင့် {{typeLabel}} {{amount}} {{method}} သည် {{status}} ဖြစ်နေသည်",
         "adminReward": "admin မှ {{amount}} {{method}} ရရှိပါသည်"
+      },
+      "events": {
+        "deposit_approved": {
+          "title": "Deposit approved",
+          "message": "Your deposit of {{amount}} {{method}} was approved."
+        },
+        "deposit_declined": {
+          "title": "Deposit declined",
+          "message": "Your deposit of {{amount}} {{method}} was declined."
+        },
+        "withdrawal_approved": {
+          "title": "Withdrawal approved",
+          "message": "Your withdrawal of {{amount}} {{method}} was approved."
+        },
+        "withdrawal_declined": {
+          "title": "Withdrawal declined",
+          "message": "Your withdrawal of {{amount}} {{method}} was declined."
+        },
+        "company_match_posted": {
+          "title": "New company match",
+          "message": "{{home}} vs {{away}} is now available."
+        },
+        "bet_settled": {
+          "title": "Bet settled",
+          "message": "Your {{home}} vs {{away}} bet was settled: {{outcome}}."
+        },
+        "team_member_joined": {
+          "title": "New team member",
+          "message": "{{username}} joined your level {{level}} team."
+        },
+        "test_push": {
+          "title": "EFC notification test",
+          "message": "Push notifications are ready on this device."
+        }
       }
     },
     "faq": {

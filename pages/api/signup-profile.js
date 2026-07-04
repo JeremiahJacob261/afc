@@ -1,5 +1,6 @@
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 import { sendApiError } from '@/lib/apiAuth'
+import { notifyTeamMemberJoined } from '@/lib/pushNotifications'
 
 function generateUid() {
   return `uid_${Math.random().toString(36).slice(2, 12)}`
@@ -106,6 +107,19 @@ export default async function handler(req, res) {
     await supabase
       .from('referral')
       .insert({ refer: newrefer, count: 0 })
+
+    try {
+      await notifyTeamMemberJoined(supabase, {
+        userid,
+        username,
+        refer: referCode || null,
+        lvla: lvla || null,
+        lvlb: lvlb || null,
+        newrefer,
+      })
+    } catch (pushError) {
+      console.warn('Team join push notification failed:', pushError)
+    }
 
     return res.status(200).json({
       status: 'success',

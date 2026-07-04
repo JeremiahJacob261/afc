@@ -18,6 +18,22 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
 
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
+## Android Push Notifications
+
+Native Android notifications use Capacitor Push Notifications and Firebase Cloud Messaging.
+
+Required local/deployment setup:
+
+```bash
+FIREBASE_PROJECT_ID=your-firebase-project-id
+FIREBASE_CLIENT_EMAIL=your-service-account@your-project.iam.gserviceaccount.com
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+```
+
+Place the Firebase Android config at `android/app/google-services.json` for package `com.efcfootball.app`. The file is ignored by git.
+
+Apply the `push_tokens` and `app_notifications` additions from `supabase_schema.sql` before testing push registration or delivery.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

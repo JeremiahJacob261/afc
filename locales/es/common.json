@@ -878,7 +878,11 @@
       "inviteCode": "Código de invitación",
       "copyInvite": "Copiar enlace de invitación",
       "level": "Nivel {{level}}",
-      "totalDeposit": "Depósito total {{amount}}"
+      "totalDeposit": "Depósito total {{amount}}",
+      "loading": "Cargando referidos",
+      "activeReferrals": "Activos",
+      "filteredReferrals": "{{count}} referidos",
+      "joined": "Se unió {{date}}"
     },
     "vip": {
       "totalDeposit": "Depósito total",
@@ -914,6 +918,40 @@
         "betWon": "Ganaste tu apuesta de {{amount}}",
         "transactionUpdate": "Tu {{typeLabel}} de {{amount}} {{method}} está {{status}}",
         "adminReward": "Recibiste {{amount}} {{method}} del admin"
+      },
+      "events": {
+        "deposit_approved": {
+          "title": "Deposit approved",
+          "message": "Your deposit of {{amount}} {{method}} was approved."
+        },
+        "deposit_declined": {
+          "title": "Deposit declined",
+          "message": "Your deposit of {{amount}} {{method}} was declined."
+        },
+        "withdrawal_approved": {
+          "title": "Withdrawal approved",
+          "message": "Your withdrawal of {{amount}} {{method}} was approved."
+        },
+        "withdrawal_declined": {
+          "title": "Withdrawal declined",
+          "message": "Your withdrawal of {{amount}} {{method}} was declined."
+        },
+        "company_match_posted": {
+          "title": "New company match",
+          "message": "{{home}} vs {{away}} is now available."
+        },
+        "bet_settled": {
+          "title": "Bet settled",
+          "message": "Your {{home}} vs {{away}} bet was settled: {{outcome}}."
+        },
+        "team_member_joined": {
+          "title": "New team member",
+          "message": "{{username}} joined your level {{level}} team."
+        },
+        "test_push": {
+          "title": "EFC notification test",
+          "message": "Push notifications are ready on this device."
+        }
       }
     },
     "faq": {

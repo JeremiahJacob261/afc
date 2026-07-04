@@ -17,6 +17,9 @@ const config: CapacitorConfig = {
       autoUpdate: false,
       keepUrlPathAfterReload: true,
     },
+    PushNotifications: {
+      presentationOptions: ['badge', 'sound', 'alert'],
+    },
   },
 }
 

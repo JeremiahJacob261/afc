@@ -208,6 +208,57 @@ ALTER TABLE notification ADD COLUMN IF NOT EXISTS processed_at TIMESTAMP;
 ALTER TABLE notification ADD COLUMN IF NOT EXISTS processing_started_at TIMESTAMP;
 ALTER TABLE notification ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
+-- Native/mobile push tokens. Server APIs use service_role; RLS below also
+-- protects direct Data API access if enabled for authenticated clients.
+CREATE TABLE IF NOT EXISTS push_tokens (
+  id BIGSERIAL PRIMARY KEY,
+  user_id TEXT NOT NULL,
+  username TEXT NOT NULL,
+  token TEXT NOT NULL,
+  platform TEXT NOT NULL DEFAULT 'android',
+  device_id TEXT,
+  enabled BOOLEAN NOT NULL DEFAULT TRUE,
+  last_seen_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (username) REFERENCES users(username)
+);
+
+ALTER TABLE push_tokens ADD COLUMN IF NOT EXISTS user_id TEXT;
+ALTER TABLE push_tokens ADD COLUMN IF NOT EXISTS username TEXT;
+ALTER TABLE push_tokens ADD COLUMN IF NOT EXISTS token TEXT;
+ALTER TABLE push_tokens ADD COLUMN IF NOT EXISTS platform TEXT DEFAULT 'android';
+ALTER TABLE push_tokens ADD COLUMN IF NOT EXISTS device_id TEXT;
+ALTER TABLE push_tokens ADD COLUMN IF NOT EXISTS enabled BOOLEAN NOT NULL DEFAULT TRUE;
+ALTER TABLE push_tokens ADD COLUMN IF NOT EXISTS last_seen_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE push_tokens ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE push_tokens ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+-- Canonical app notification feed used by native push and the in-app bell.
+CREATE TABLE IF NOT EXISTS app_notifications (
+  id BIGSERIAL PRIMARY KEY,
+  recipient_username TEXT NOT NULL,
+  event_type TEXT NOT NULL,
+  title TEXT NOT NULL,
+  body TEXT NOT NULL,
+  data JSONB NOT NULL DEFAULT '{}'::jsonb,
+  source_table TEXT,
+  source_id TEXT,
+  read_at TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (recipient_username) REFERENCES users(username)
+);
+
+ALTER TABLE app_notifications ADD COLUMN IF NOT EXISTS recipient_username TEXT;
+ALTER TABLE app_notifications ADD COLUMN IF NOT EXISTS event_type TEXT;
+ALTER TABLE app_notifications ADD COLUMN IF NOT EXISTS title TEXT;
+ALTER TABLE app_notifications ADD COLUMN IF NOT EXISTS body TEXT;
+ALTER TABLE app_notifications ADD COLUMN IF NOT EXISTS data JSONB NOT NULL DEFAULT '{}'::jsonb;
+ALTER TABLE app_notifications ADD COLUMN IF NOT EXISTS source_table TEXT;
+ALTER TABLE app_notifications ADD COLUMN IF NOT EXISTS source_id TEXT;
+ALTER TABLE app_notifications ADD COLUMN IF NOT EXISTS read_at TIMESTAMP;
+ALTER TABLE app_notifications ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
 -- Activity log (bonuses, affiliate commissions, etc.)
 CREATE TABLE IF NOT EXISTS activa (
   id BIGSERIAL PRIMARY KEY,
@@ -347,6 +398,19 @@ CREATE INDEX IF NOT EXISTS idx_notification_sent ON notification(sent);
 CREATE INDEX IF NOT EXISTS idx_notification_created_at ON notification(created_at);
 CREATE INDEX IF NOT EXISTS idx_notification_uid ON notification(uid);
 CREATE INDEX IF NOT EXISTS idx_notification_processed_at ON notification(processed_at);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_push_tokens_token ON push_tokens(token);
+CREATE INDEX IF NOT EXISTS idx_push_tokens_user_id ON push_tokens(user_id);
+CREATE INDEX IF NOT EXISTS idx_push_tokens_username ON push_tokens(username);
+CREATE INDEX IF NOT EXISTS idx_push_tokens_enabled ON push_tokens(enabled);
+
+CREATE INDEX IF NOT EXISTS idx_app_notifications_recipient ON app_notifications(recipient_username);
+CREATE INDEX IF NOT EXISTS idx_app_notifications_event_type ON app_notifications(event_type);
+CREATE INDEX IF NOT EXISTS idx_app_notifications_created_at ON app_notifications(created_at);
+CREATE INDEX IF NOT EXISTS idx_app_notifications_read_at ON app_notifications(read_at);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_app_notifications_source_once
+  ON app_notifications(recipient_username, event_type, source_table, source_id)
+  WHERE source_table IS NOT NULL AND source_id IS NOT NULL;
 
 -- Activa indexes
 CREATE INDEX IF NOT EXISTS idx_activa_code ON activa(code);
@@ -1203,6 +1267,8 @@ ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE placed ENABLE ROW LEVEL SECURITY;
 ALTER TABLE notification ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_wallets ENABLE ROW LEVEL SECURITY;
+ALTER TABLE push_tokens ENABLE ROW LEVEL SECURITY;
+ALTER TABLE app_notifications ENABLE ROW LEVEL SECURITY;
 ALTER TABLE admin_impersonation_audit ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Users can read own profile" ON users;
@@ -1234,6 +1300,38 @@ CREATE POLICY "Users can read own notifications" ON notification
     )
   );
 
+DROP POLICY IF EXISTS "Users can manage own push tokens" ON push_tokens;
+CREATE POLICY "Users can manage own push tokens" ON push_tokens
+  FOR ALL
+  TO authenticated
+  USING (user_id = (select auth.uid())::text)
+  WITH CHECK (user_id = (select auth.uid())::text);
+
+DROP POLICY IF EXISTS "Users can read own app notifications" ON app_notifications;
+CREATE POLICY "Users can read own app notifications" ON app_notifications
+  FOR SELECT
+  TO authenticated
+  USING (
+    recipient_username IN (
+      SELECT username FROM users WHERE userid = (select auth.uid())::text
+    )
+  );
+
+DROP POLICY IF EXISTS "Users can update own app notifications" ON app_notifications;
+CREATE POLICY "Users can update own app notifications" ON app_notifications
+  FOR UPDATE
+  TO authenticated
+  USING (
+    recipient_username IN (
+      SELECT username FROM users WHERE userid = (select auth.uid())::text
+    )
+  )
+  WITH CHECK (
+    recipient_username IN (
+      SELECT username FROM users WHERE userid = (select auth.uid())::text
+    )
+  );
+
 DROP POLICY IF EXISTS "Users can read own wallets" ON user_wallets;
 CREATE POLICY "Users can read own wallets" ON user_wallets
   FOR SELECT
@@ -1242,6 +1340,13 @@ CREATE POLICY "Users can read own wallets" ON user_wallets
       SELECT userid FROM users WHERE userid = auth.uid()::text
     )
   );
+
+GRANT ALL ON TABLE public.push_tokens TO service_role;
+GRANT ALL ON TABLE public.app_notifications TO service_role;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.push_tokens TO authenticated;
+GRANT SELECT, UPDATE ON TABLE public.app_notifications TO authenticated;
+GRANT USAGE, SELECT ON SEQUENCE public.push_tokens_id_seq TO service_role, authenticated;
+GRANT USAGE, SELECT ON SEQUENCE public.app_notifications_id_seq TO service_role, authenticated;
 
 DROP POLICY IF EXISTS "Users can insert own wallets" ON user_wallets;
 CREATE POLICY "Users can insert own wallets" ON user_wallets

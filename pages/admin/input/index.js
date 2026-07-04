@@ -1,4 +1,3 @@
-import { supabase } from "@/pages/api/supabase";
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -27,7 +26,6 @@ export default function Input({ datas }) {
     const [checked, setCheck] = useState(false);
     const [company, setCompany] = useState('');
     const router = useRouter();
-    const [remi, setRemi] = useState({});
     // Date-time string
     function formatDate(inputDate) {
         const [year, month, day] = inputDate.split('-').map(Number);
@@ -83,48 +81,40 @@ export default function Input({ datas }) {
             "comarket": company,
             "tsgmt": fixtureStartMs
         }
+        const fixturePayload = {
+            'match_id': f.id,
+            'league': f.league,
+            'time': f.hour + ':' + f.minute,
+            'date': formatDate(f.date) + ' ' + f.hour + ':' + f.minute + ':00',
+            'home': f.home_name,
+            'away': f.away_name,
+            'ihome': f.home_logo,
+            'iaway': f.away_logo
+        }
         let fData = {
             ...data,
-            ...remi,
+            ...fixturePayload,
             ...comms,
         }
         console.log(fData)
         const upbet = async () => {
-            const { data, error } = await supabase
-                .from('bets')
-                .select('*')
-                .eq('match_id', fData.match_id)
-            if (data.length > 0 && data) {
-                alert("bet already uploaded, please check your bets to edit")
-            } else {
-                const sendData = async () => {
-                    console.log(fData.date);
-
-                    
-                    try {
-                        const { error } = await supabase
-                                .from('bets')
-                                .insert({...fData })
-                       alert("bet uploaded")
-                       console.log(error)
-                    } catch (e) {
-                        console.log(e);
-                    }
-                }
-                sendData().then(()=>{
-                    setDrop(false)
+            try {
+                const response = await fetch('/api/admin/create-match', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(fData)
                 })
-                // const { error } = await supabase
-                //     .from('bets')
-                //     .insert(fData)
-                // console.log(error)
-                // if (error === null) {
-                //     alert("bet uploaded")
-                //     setRemi({})
-                //     // router.push("/")
-                // }
+                const result = await response.json().catch(() => ({}))
+                if (!response.ok) {
+                    throw new Error(result.message || 'Unable to upload bet')
+                }
+                alert("bet uploaded")
+            } catch (e) {
+                console.log(e);
+                alert(e.message || 'Unable to upload bet')
+            } finally {
+                setDrop(false)
             }
-
         }
         upbet();
     }
@@ -298,18 +288,7 @@ export default function Input({ datas }) {
                     }
                 </Stack>
                 <Stack direction='row' justifyContent='center' alignItems='center' spacing={2} sx={{ margin: '8px' }}>
-                    <Button variant='contained' type='submit' sx={{ width: '300px', height: '40px', color: '#E6E8F3', background: 'black', borderRadius: '5px' }} onClick={() => {
-                        setRemi({
-                            'match_id': f.id,
-                            'league': f.league,
-                            'time': f.hour + ':' + f.minute,
-                            'date': formatDate(f.date) + ' ' + f.hour + ':' + f.minute + ':00',
-                            'home': f.home_name,
-                            'away': f.away_name,
-                            'ihome': f.home_logo,
-                            'iaway': f.away_logo
-                        })
-                    }}>Submit</Button>
+                    <Button variant='contained' type='submit' sx={{ width: '300px', height: '40px', color: '#E6E8F3', background: 'black', borderRadius: '5px' }}>Submit</Button>
                 </Stack>
             </form>
         </Stack>

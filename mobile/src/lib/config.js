@@ -7,7 +7,7 @@ export const mobileConfig = {
   updateManifestUrl:
     injectedEnv.updateManifestUrl ||
     'https://www.europeanfc01.com/mobile-updates/android/latest.json',
-  nativeVersion: injectedEnv.nativeVersion || '1.0.0',
+  nativeVersion: injectedEnv.nativeVersion || '1.0.1',
 }
 
 export function hasSupabaseConfig() {
