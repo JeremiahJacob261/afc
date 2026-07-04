@@ -15,14 +15,29 @@ export default async function handler(req, res) {
       return res.status(400).json([{ status: 'Failed', message: 'Invalid amount' }])
     }
 
+    // Parallelize initial data fetching
     const { profile, supabase } = await getCurrentProfile(
       req,
-      'userid,username,codeset,pin,newrefer'
+      'userid,username,codeset,pin,newrefer,balance'
     )
 
-    const withdrawalSettings = await getWithdrawalSettings(supabase, {
-      allowDefaultOnMissingTable: true,
-    })
+    // Fetch withdrawal settings and count bets in parallel
+    const [withdrawalSettings, { data: bets, error: betError }] = await Promise.all([
+      getWithdrawalSettings(supabase, {
+        allowDefaultOnMissingTable: true,
+      }),
+      supabase
+        .from('placed')
+        .select('id')
+        .eq('username', profile.username)
+        .count('exact'),
+    ])
+
+    if (betError) throw betError
+
+    if ((bets?.count || 0) <= 4) {
+      return res.status(200).json([{ status: 'Failed', message: 'You have not placed up to 5 bets' }])
+    }
 
     if (amount < withdrawalSettings.minWithdrawalAmount) {
       return res.status(200).json([{ status: 'Failed', message: `Minimum amount to withdraw is ${withdrawalSettings.minWithdrawalAmount} USDT` }])
@@ -30,17 +45,6 @@ export default async function handler(req, res) {
 
     if (amount > withdrawalSettings.maxWithdrawalAmount) {
       return res.status(200).json([{ status: 'Failed', message: `Maximum amount to withdraw is ${withdrawalSettings.maxWithdrawalAmount} USDT` }])
-    }
-
-    const { data: bets, error: betError } = await supabase
-      .from('placed')
-      .select('id')
-      .eq('username', profile.username)
-
-    if (betError) throw betError
-
-    if ((bets || []).length <= 4) {
-      return res.status(200).json([{ status: 'Failed', message: 'You have not placed up to 5 bets' }])
     }
 
     if (!profile.codeset) {
