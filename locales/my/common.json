@@ -213,6 +213,7 @@
     "won": "အနိုင်ရ",
     "lost": "အရှုံးရ",
     "settled": "ဆပ်ဆိုင်းပြီး",
+    "refunded": "ပြန်အမ်းပြီး",
     "unsettled": "ဆပ်ဆိုင်းမရသေး",
     "offlineMode": "အော့ဖ်လိုင်းမုဒ်",
     "processing": "လုပ်ဆောင်နေသည်"
@@ -921,36 +922,36 @@
       },
       "events": {
         "deposit_approved": {
-          "title": "Deposit approved",
-          "message": "Your deposit of {{amount}} {{method}} was approved."
+          "title": "ငွေသွင်းမှု အတည်ပြုပြီး",
+          "message": "သင့်ငွေသွင်းမှု {{amount}} {{method}} ကို အတည်ပြုပြီးပါပြီ။"
         },
         "deposit_declined": {
-          "title": "Deposit declined",
-          "message": "Your deposit of {{amount}} {{method}} was declined."
+          "title": "ငွေသွင်းမှု ငြင်းပယ်ပြီး",
+          "message": "သင့်ငွေသွင်းမှု {{amount}} {{method}} ကို ငြင်းပယ်ပြီးပါပြီ။"
         },
         "withdrawal_approved": {
-          "title": "Withdrawal approved",
-          "message": "Your withdrawal of {{amount}} {{method}} was approved."
+          "title": "ငွေထုတ်မှု အတည်ပြုပြီး",
+          "message": "သင့်ငွေထုတ်မှု {{amount}} {{method}} ကို အတည်ပြုပြီးပါပြီ။"
         },
         "withdrawal_declined": {
-          "title": "Withdrawal declined",
-          "message": "Your withdrawal of {{amount}} {{method}} was declined."
+          "title": "ငွေထုတ်မှု ငြင်းပယ်ပြီး",
+          "message": "သင့်ငွေထုတ်မှု {{amount}} {{method}} ကို ငြင်းပယ်ပြီးပါပြီ။"
         },
         "company_match_posted": {
-          "title": "New company match",
-          "message": "{{home}} vs {{away}} is now available."
+          "title": "ကုမ္ပဏီပွဲစဉ်အသစ်",
+          "message": "{{home}} နှင့် {{away}} ကို ယခုရရှိနိုင်ပါပြီ။"
         },
         "bet_settled": {
-          "title": "Bet settled",
-          "message": "Your {{home}} vs {{away}} bet was settled: {{outcome}}."
+          "title": "လောင်းကြေး ဆုံးဖြတ်ပြီး",
+          "message": "သင့် {{home}} နှင့် {{away}} လောင်းကြေးကို ဆုံးဖြတ်ပြီးပါပြီ: {{outcome}}။"
         },
         "team_member_joined": {
-          "title": "New team member",
-          "message": "{{username}} joined your level {{level}} team."
+          "title": "အဖွဲ့ဝင်အသစ်",
+          "message": "{{username}} သည် သင့်အဆင့် {{level}} အဖွဲ့သို့ ဝင်ရောက်ခဲ့ပါသည်။"
         },
         "test_push": {
-          "title": "EFC notification test",
-          "message": "Push notifications are ready on this device."
+          "title": "EFC အသိပေးချက် စမ်းသပ်မှု",
+          "message": "ဤစက်တွင် push အသိပေးချက်များ အသင့်ဖြစ်ပါပြီ။"
         }
       }
     },

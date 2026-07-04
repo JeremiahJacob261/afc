@@ -213,6 +213,7 @@
     "won": "فاز",
     "lost": "خسر",
     "settled": "تمت التسوية",
+    "refunded": "تم رد المبلغ",
     "unsettled": "غير مسوّى",
     "offlineMode": "وضع عدم الاتصال",
     "processing": "قيد المعالجة"

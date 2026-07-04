@@ -263,6 +263,12 @@ export default function App() {
       const storedLanguage = window.localStorage.getItem(languageStorageKey)
       const hasSeenLanguagePrompt = window.localStorage.getItem('efc-language-prompt-shown') === 'true'
 
+      if (session) {
+        updateStoredPushTokenLanguage(storedLanguage || 'en').catch((error) => {
+          console.warn('Unable to sync push notification language:', error)
+        })
+      }
+
       if (!active) return
 
       setShowLanguageDialog(!storedLanguage && !hasSeenLanguagePrompt)
@@ -2341,6 +2347,11 @@ function resolveNotificationValues(values = {}, t) {
 
     if (key === 'statusKey' && typeof value === 'string') {
       acc.status = t(value).toLowerCase()
+      return acc
+    }
+
+    if (key === 'outcomeKey' && typeof value === 'string') {
+      acc.outcome = t(value).toLowerCase()
       return acc
     }
 

@@ -213,6 +213,7 @@
     "won": "Won",
     "lost": "Lost",
     "settled": "Settled",
+    "refunded": "Refunded",
     "unsettled": "Unsettled",
     "offlineMode": "Offline mode",
     "processing": "Processing"

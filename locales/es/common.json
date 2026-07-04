@@ -213,6 +213,7 @@
     "won": "Ganado",
     "lost": "Perdido",
     "settled": "Liquidado",
+    "refunded": "Reembolsado",
     "unsettled": "No liquidado",
     "offlineMode": "Modo sin conexión",
     "processing": "Procesando"
@@ -921,36 +922,36 @@
       },
       "events": {
         "deposit_approved": {
-          "title": "Deposit approved",
-          "message": "Your deposit of {{amount}} {{method}} was approved."
+          "title": "Depósito aprobado",
+          "message": "Tu depósito de {{amount}} {{method}} fue aprobado."
         },
         "deposit_declined": {
-          "title": "Deposit declined",
-          "message": "Your deposit of {{amount}} {{method}} was declined."
+          "title": "Depósito rechazado",
+          "message": "Tu depósito de {{amount}} {{method}} fue rechazado."
         },
         "withdrawal_approved": {
-          "title": "Withdrawal approved",
-          "message": "Your withdrawal of {{amount}} {{method}} was approved."
+          "title": "Retiro aprobado",
+          "message": "Tu retiro de {{amount}} {{method}} fue aprobado."
         },
         "withdrawal_declined": {
-          "title": "Withdrawal declined",
-          "message": "Your withdrawal of {{amount}} {{method}} was declined."
+          "title": "Retiro rechazado",
+          "message": "Tu retiro de {{amount}} {{method}} fue rechazado."
         },
         "company_match_posted": {
-          "title": "New company match",
-          "message": "{{home}} vs {{away}} is now available."
+          "title": "Nuevo partido de la compañía",
+          "message": "{{home}} vs {{away}} ya está disponible."
         },
         "bet_settled": {
-          "title": "Bet settled",
-          "message": "Your {{home}} vs {{away}} bet was settled: {{outcome}}."
+          "title": "Apuesta liquidada",
+          "message": "Tu apuesta {{home}} vs {{away}} fue liquidada: {{outcome}}."
         },
         "team_member_joined": {
-          "title": "New team member",
-          "message": "{{username}} joined your level {{level}} team."
+          "title": "Nuevo miembro del equipo",
+          "message": "{{username}} se unió a tu equipo de nivel {{level}}."
         },
         "test_push": {
-          "title": "EFC notification test",
-          "message": "Push notifications are ready on this device."
+          "title": "Prueba de notificación EFC",
+          "message": "Las notificaciones push están listas en este dispositivo."
         }
       }
     },

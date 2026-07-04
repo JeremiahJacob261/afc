@@ -13,7 +13,7 @@
     "cap:sync": "bun run mobile:build && cap sync android",
     "android:open": "cap open android",
     "android:run": "bun run mobile:build && cap run android",
-    "android:apk": "bun run mobile:build && cap sync android && cd android && ./gradlew assembleRelease"
+    "android:apk": "bun run mobile:build && cap sync android && cd android && ./gradlew assembleRelease -Pandroid.injected.signing.store.file=/home/jerry/project/afc/android/keystores/efc-release.jks -Pandroid.injected.signing.store.password=zYZYvdyppvvf9WYqZXkqb8XKQolybe0VcqQvmBm2OpY= -Pandroid.injected.signing.key.alias=efc-release -Pandroid.injected.signing.key.password=zYZYvdyppvvf9WYqZXkqb8XKQolybe0VcqQvmBm2OpY=   "
   },
   "dependencies": {
     "@capacitor/android": "6.2.1",

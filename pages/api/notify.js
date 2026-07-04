@@ -48,6 +48,9 @@ function categoryForAppEvent(eventType) {
 function appNotification(item) {
   const eventType = item.event_type || 'notification'
   const data = item.data || {}
+  const messageValues = data.outcome && !data.outcomeKey
+    ? { ...data, outcomeKey: `status.${data.outcome}` }
+    : data
 
   return {
     id: `app-${item.id}`,
@@ -57,7 +60,7 @@ function appNotification(item) {
     titleKey: `mobile.notifications.events.${eventType}.title`,
     message: item.body,
     messageKey: `mobile.notifications.events.${eventType}.message`,
-    messageValues: data,
+    messageValues,
     amount: amountValue(data.amount || data.payout || data.stake || 0),
     sourceUsername: data.username || '',
     timestamp: item.created_at,
