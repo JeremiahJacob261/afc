@@ -22,20 +22,19 @@ export default async function handler(req, res) {
     )
 
     // Fetch withdrawal settings and count bets in parallel
-    const [withdrawalSettings, { data: bets, error: betError }] = await Promise.all([
+    const [withdrawalSettings, { count: betCount, error: betError }] = await Promise.all([
       getWithdrawalSettings(supabase, {
         allowDefaultOnMissingTable: true,
       }),
       supabase
         .from('placed')
-        .select('id')
-        .eq('username', profile.username)
-        .count('exact'),
+        .select('*', { count: 'exact', head: true })
+        .eq('username', profile.username),
     ])
 
     if (betError) throw betError
 
-    if ((bets?.count || 0) <= 4) {
+    if ((betCount || 0) <= 4) {
       return res.status(200).json([{ status: 'Failed', message: 'You have not placed up to 5 bets' }])
     }
 
