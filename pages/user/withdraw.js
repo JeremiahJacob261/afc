@@ -1,6 +1,5 @@
 import { Button, Stack, TextField, Typography, MenuItem, Divider } from "@mui/material";
 import React, { useState, useContext, useEffect } from "react";
-import { supabase } from '@/pages/api/supabase'
 import { AppContext } from '@/pages/api/Context'
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
@@ -66,7 +65,7 @@ export default function Deposit() {
   //withdrawal settings
   const [minWithdrawalAmount, setMinWithdrawalAmount] = useState(10);
   const [maxWithdrawalAmount, setMaxWithdrawalAmount] = useState(100000);
-  const [withdrawalFeePercent, setWithdrawalFeePercent] = useState(5);
+  const [withdrawalFeePercent, setWithdrawalFeePercent] = useState(7);
   //the below controls the loading modal
   const [openx, setOpenx] = useState(false);
   const handleOpenx = () => setOpenx(true);
@@ -176,43 +175,27 @@ export default function Deposit() {
       clearLegacyAuthStorage();
 
       try {
-        const response = await authFetch('/api/me');
+        const response = await authFetch('/api/withdrawal-data');
         if (response.status === 401 || response.status === 404) {
           router.push('/login');
           return;
         }
 
         const result = await response.json();
-        if (!active || result.status !== 'success') return;
+        if (!active) return;
+        if (!response.ok || result.status !== 'success') {
+          throw new Error(result.message || 'Unable to load withdrawal data');
+        }
 
-        const [{ data: wall, error: wrr }, { data: methods, error: methodError }, settingsResponse] = await Promise.all([
-          supabase
-          .from('user_wallets')
-          .select()
-          .eq('uid', result.profile.uid || result.profile.userid),
-          supabase
-            .from('walle')
-            .select('*')
-            .eq('available', true),
-          authFetch('/api/admin/settings').catch(() => null),
-        ])
-
-        if (wrr) throw wrr;
-        if (methodError) throw methodError;
-
-        setWallet(wall ?? []);
-        setWallx(methods ?? []);
+        setWallet(result.wallets ?? []);
+        setWallx(result.methods ?? []);
         setInfo(result.profile);
         setBalance(Number(result.profile.balance || 0));
 
-        // Load withdrawal settings
-        if (settingsResponse?.ok) {
-          const settingsData = await settingsResponse.json();
-          if (settingsData.settings) {
-            setMinWithdrawalAmount(settingsData.settings.minWithdrawalAmount ?? 10);
-            setMaxWithdrawalAmount(settingsData.settings.maxWithdrawalAmount ?? 100000);
-            setWithdrawalFeePercent(settingsData.settings.withdrawalFeePercent ?? 5);
-          }
+        if (result.settings) {
+          setMinWithdrawalAmount(result.settings.minWithdrawalAmount ?? 10);
+          setMaxWithdrawalAmount(result.settings.maxWithdrawalAmount ?? 100000);
+          setWithdrawalFeePercent(result.settings.withdrawalFeePercent ?? 7);
         }
       } catch (e) {
         console.log(e)
@@ -458,8 +441,8 @@ export default function Deposit() {
 
 }
 
-export async function getServerSideProps(context) {
-  const i18nProps = await getI18nServerSideProps(context.locale)
+export async function getStaticProps({ locale }) {
+  const i18nProps = await getI18nServerSideProps(locale)
   return {
     props: {
       ...i18nProps,
