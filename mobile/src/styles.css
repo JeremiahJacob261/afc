@@ -682,9 +682,48 @@ a {
   padding: 14px;
 }
 
+.match-card.company-match-card {
+  border-color: rgba(255, 180, 0, 0.7);
+  background:
+    linear-gradient(180deg, rgba(255, 180, 0, 0.14), rgba(16, 40, 77, 0) 45%),
+    #10284d;
+  box-shadow:
+    0 18px 55px rgba(0, 0, 0, 0.22),
+    0 0 0 1px rgba(255, 180, 0, 0.16);
+}
+
+.company-match-sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 24px;
+  max-width: 100%;
+  margin-bottom: 10px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: #ffb400;
+  color: #06101f;
+  font-size: 10px;
+  font-weight: 950;
+  line-height: 1;
+  text-transform: uppercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-shadow: 0 8px 18px rgba(255, 180, 0, 0.25);
+}
+
+.company-match-sticker svg {
+  flex: 0 0 auto;
+}
+
 .match-card:active {
   transform: scale(0.985);
   border-color: rgba(27, 182, 255, 0.34);
+}
+
+.match-card.company-match-card:active {
+  border-color: rgba(255, 180, 0, 0.92);
 }
 
 .match-league {
@@ -763,6 +802,7 @@ a {
 
 .odd-pill {
   min-height: 40px;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -776,6 +816,39 @@ a {
     transform var(--mobile-motion-fast) var(--mobile-motion-ease),
     border-color var(--mobile-motion-fast) var(--mobile-motion-ease),
     background var(--mobile-motion-fast) var(--mobile-motion-ease);
+}
+
+.odd-pill.verified {
+  min-height: 52px;
+  align-items: flex-start;
+  padding: 7px 8px 20px;
+  border-color: #ffb400;
+  background: #fff2c2;
+}
+
+.odd-company-badge {
+  position: absolute;
+  right: 5px;
+  bottom: 4px;
+  left: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-width: 0;
+  min-height: 14px;
+  padding: 1px 4px;
+  border-radius: 999px;
+  background: rgba(138, 90, 0, 0.14);
+  color: #8a5a00;
+  font-size: 8px;
+  font-style: normal;
+  font-weight: 950;
+  line-height: 1;
+  text-transform: uppercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .odd-pill b,
@@ -1181,6 +1254,54 @@ a {
   padding-top: 12px;
 }
 
+.match-detail-card.company-match-detail-card {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(255, 180, 0, 0.78);
+  background:
+    linear-gradient(180deg, rgba(255, 180, 0, 0.18), rgba(16, 40, 77, 0) 52%),
+    #10284d;
+  box-shadow:
+    0 18px 55px rgba(0, 0, 0, 0.18),
+    0 0 0 1px rgba(255, 180, 0, 0.2),
+    0 0 28px rgba(255, 180, 0, 0.18);
+}
+
+.company-detail-banner {
+  justify-self: center;
+  max-width: 100%;
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #ffb400;
+  color: #06101f;
+  font-size: 10px;
+  font-weight: 950;
+  line-height: 1;
+  text-transform: uppercase;
+  box-shadow: 0 10px 22px rgba(255, 180, 0, 0.28);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.company-detail-banner b {
+  min-width: 0;
+  padding-left: 6px;
+  border-left: 1px solid rgba(6, 16, 31, 0.24);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.company-detail-banner svg {
+  flex: 0 0 auto;
+}
+
 .match-league-name {
   margin: 0;
   color: #cbd5e1;
@@ -1223,6 +1344,25 @@ a {
   text-align: right;
 }
 
+.bet-detail-score-value {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.bet-cancel-note {
+  margin: 0;
+  padding: 11px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  background: rgba(239, 68, 68, 0.12);
+  color: #fecaca;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
 .market-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1254,9 +1394,98 @@ a {
   background: #1bb6ff;
 }
 
+.market-pill.company-odd-pill {
+  position: relative;
+  min-height: 92px;
+  padding: 27px 6px 10px;
+  border-color: #ffb400;
+  background:
+    linear-gradient(180deg, rgba(255, 180, 0, 0.3), rgba(255, 247, 214, 0.94) 70%),
+    #fff7d6;
+  box-shadow:
+    0 0 0 1px rgba(255, 180, 0, 0.28),
+    0 0 24px rgba(255, 180, 0, 0.24),
+    0 12px 24px rgba(138, 90, 0, 0.2);
+}
+
+.market-pill.company-odd-pill.active {
+  border-color: #ffdc73;
+  background:
+    linear-gradient(180deg, #ffca35, #ffb400);
+}
+
+.company-odd-marker {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  right: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-width: 0;
+  min-height: 17px;
+  padding: 2px 5px;
+  border-radius: 999px;
+  background: #06101f;
+  color: #ffdc73;
+  font-size: 8px;
+  font-style: normal;
+  font-weight: 950;
+  line-height: 1;
+  text-transform: uppercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.company-score-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-height: 16px;
+  max-width: calc(100% - 8px);
+  padding: 2px 5px;
+  border-radius: 999px;
+  background: rgba(6, 16, 31, 0.12);
+  color: #06101f;
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .market-pill span,
 .market-pill b {
   font-size: 12px;
+}
+
+.market-pill .market-odd-value {
+  min-width: 44px;
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  border-radius: 999px;
+  line-height: 1;
+}
+
+.market-pill .company-odd-value {
+  min-width: 48px;
+  min-height: 34px;
+  border: 3px solid #ffb400;
+  background: #06101f;
+  color: #ffdc73;
+  box-shadow:
+    0 0 0 3px rgba(255, 244, 204, 0.9),
+    0 0 18px rgba(255, 180, 0, 0.65),
+    0 7px 16px rgba(138, 90, 0, 0.34);
+  font-weight: 950;
 }
 
 .full {

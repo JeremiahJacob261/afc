@@ -697,6 +697,7 @@
       "today": "ယနေ့",
       "next3h": "နောက် ၃ နာရီ",
       "next12h": "နောက် ၁၂ နာရီ",
+      "next24h": "နောက် ၂၄ နာရီ",
       "tomorrow": "မနက်ဖြန်"
     },
     "markets": {
@@ -747,10 +748,18 @@
       "unsettledWithCount": "မဖြေရှင်းသေးသော ({{count}})",
       "settledWithCount": "ဖြေရှင်းပြီး ({{count}})",
       "match": "ဂိမ်း",
+      "league": "လိဂ်",
+      "matchId": "ဂိမ်း ID",
+      "score": "ရလဒ်",
+      "odds": "အော့ဒ်",
       "stake": "အရိုက်",
       "pick": "ရွေးချယ်မှု",
+      "potentialWinnings": "ရနိုင်သောအနိုင်ငွေ",
       "kickoff": "ကစ်အော့ဖ်",
-      "status": "အခြေအနေ"
+      "result": "ရလဒ်",
+      "status": "အခြေအနေ",
+      "betId": "မဲ ID",
+      "cancelNote": "ဤမဲကိုပယ်ဖျက်ရန် - ဤမဲကိုဖယ်ရှားရန် admin ကိုဆက်သွယ်ပါ"
     },
     "profile": {
       "vipReferralLine": "VIP {{level}} · {{count}} ရည်ညွှန်းချက်များ",

@@ -697,6 +697,7 @@
       "today": "Hoy",
       "next3h": "Próximas 3 horas",
       "next12h": "Próximas 12 horas",
+      "next24h": "Próximas 24 horas",
       "tomorrow": "Mañana"
     },
     "markets": {
@@ -747,10 +748,18 @@
       "unsettledWithCount": "No saldado ({{count}})",
       "settledWithCount": "Saldado ({{count}})",
       "match": "Partido",
+      "league": "Liga",
+      "matchId": "ID del partido",
+      "score": "Marcador",
+      "odds": "Cuotas",
       "stake": "Apuesta",
       "pick": "Elección",
+      "potentialWinnings": "Ganancias potenciales",
       "kickoff": "Inicio",
-      "status": "Estado"
+      "result": "Resultado",
+      "status": "Estado",
+      "betId": "ID de apuesta",
+      "cancelNote": "Cancelar esta apuesta - Contacta al administrador para eliminar esta apuesta"
     },
     "profile": {
       "vipReferralLine": "VIP {{level}} · referencias {{count}}",

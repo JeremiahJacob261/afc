@@ -1,6 +1,7 @@
 import { Capacitor } from '@capacitor/core'
 import { CapacitorUpdater } from '@capgo/capacitor-updater'
 import { mobileConfig } from './config.js'
+import { getLocalStorageItem, setLocalStorageItem } from './storage.js'
 
 const CURRENT_VERSION_KEY = 'efc-mobile-bundle-version'
 
@@ -49,7 +50,7 @@ export async function checkForBundleUpdate() {
     }
 
     const currentVersion =
-      window.localStorage.getItem(CURRENT_VERSION_KEY) || mobileConfig.nativeVersion
+      getLocalStorageItem(CURRENT_VERSION_KEY, mobileConfig.nativeVersion)
 
     if (compareVersions(manifest.version, currentVersion) <= 0) {
       return { skipped: true, reason: 'already-current' }
@@ -62,7 +63,7 @@ export async function checkForBundleUpdate() {
     })
 
     await CapacitorUpdater.next({ id: bundle.id })
-    window.localStorage.setItem(CURRENT_VERSION_KEY, manifest.version)
+    setLocalStorageItem(CURRENT_VERSION_KEY, manifest.version)
 
     return { updated: true, version: manifest.version }
   } catch (error) {

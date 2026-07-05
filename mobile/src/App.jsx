@@ -36,9 +36,13 @@ import { apiFetch } from './lib/api.js'
 import { hasSupabaseConfig, mobileConfig } from './lib/config.js'
 import { setupPushNotifications, unregisterPushToken, updateStoredPushTokenLanguage } from './lib/push.js'
 import { getStoredSession, supabase } from './lib/supabase.js'
+import { getLocalStorageItem, setLocalStorageItem } from './lib/storage.js'
 import { checkForBundleUpdate, markBundleReady } from './lib/updater.js'
 
 const referralCode = '000208'
+const appReadyWaitMs = 1500
+const bootSplashDelayMs = 700
+const sessionBootTimeoutMs = 5000
 const referralFilters = ['all', 1, 2, 3]
 const bfcImages = ['/bfc1.jpg', '/bfc2.jpg', '/bfc3.jpg', '/bfc4.jpg', '/bfc5.jpg']
 const ballImage = '/simps/ball.png'
@@ -159,6 +163,31 @@ function getRouteMotionDirection(routeName, previousRouteName) {
   return 'switch'
 }
 
+function delay(ms) {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, ms)
+  })
+}
+
+async function waitForStartupTask(promise, timeoutMs, label) {
+  let timeoutId
+  const timeout = Symbol('startup-timeout')
+  const timeoutPromise = new Promise((resolve) => {
+    timeoutId = window.setTimeout(() => resolve(timeout), timeoutMs)
+  })
+
+  try {
+    const result = await Promise.race([promise, timeoutPromise])
+    if (result === timeout) {
+      console.warn(`${label} timed out during mobile boot.`)
+    }
+  } catch (error) {
+    console.warn(`${label} failed during mobile boot.`, error)
+  } finally {
+    window.clearTimeout(timeoutId)
+  }
+}
+
 function createScreenVariants(shouldReduceMotion) {
   if (shouldReduceMotion) {
     return {
@@ -254,27 +283,37 @@ export default function App() {
     let active = true
 
     async function boot() {
-      await markBundleReady()
-      checkForBundleUpdate()
-      await SplashScreen.hide().catch(() => null)
-      await new Promise((resolve) => setTimeout(resolve, 700))
+      let session = null
+      let storedLanguage = ''
+      let hasSeenLanguagePrompt = false
 
-      const session = await getStoredSession()
-      const storedLanguage = window.localStorage.getItem(languageStorageKey)
-      const hasSeenLanguagePrompt = window.localStorage.getItem('efc-language-prompt-shown') === 'true'
-
-      if (session) {
-        updateStoredPushTokenLanguage(storedLanguage || 'en').catch((error) => {
-          console.warn('Unable to sync push notification language:', error)
+      try {
+        await waitForStartupTask(markBundleReady(), appReadyWaitMs, 'Marking bundle ready')
+        checkForBundleUpdate().catch((error) => {
+          console.warn('Mobile update check failed:', error)
         })
+        await waitForStartupTask(SplashScreen.hide(), appReadyWaitMs, 'Hiding splash screen')
+        await delay(bootSplashDelayMs)
+
+        session = await getStoredSession({ timeoutMs: sessionBootTimeoutMs })
+        storedLanguage = getLocalStorageItem(languageStorageKey, '')
+        hasSeenLanguagePrompt = getLocalStorageItem('efc-language-prompt-shown', '') === 'true'
+
+        if (session) {
+          updateStoredPushTokenLanguage(storedLanguage || 'en').catch((error) => {
+            console.warn('Unable to sync push notification language:', error)
+          })
+        }
+      } catch (error) {
+        console.warn('Mobile boot failed; continuing without stored session.', error)
+      } finally {
+        if (!active) return
+
+        setShowLanguageDialog(!storedLanguage && !hasSeenLanguagePrompt)
+        setScreen(session ? 'app' : 'onboarding')
+        setRoute(makeRoute('home'))
+        setBooted(true)
       }
-
-      if (!active) return
-
-      setShowLanguageDialog(!storedLanguage && !hasSeenLanguagePrompt)
-      setScreen(session ? 'app' : 'onboarding')
-      setRoute(makeRoute('home'))
-      setBooted(true)
     }
 
     boot()
@@ -300,8 +339,8 @@ export default function App() {
 
   function handleLanguageSelect(language) {
     i18n.changeLanguage(language)
-    window.localStorage.setItem(languageStorageKey, language)
-    window.localStorage.setItem('efc-language-prompt-shown', 'true')
+    setLocalStorageItem(languageStorageKey, language)
+    setLocalStorageItem('efc-language-prompt-shown', 'true')
     updateStoredPushTokenLanguage(language).catch((error) => {
       console.warn('Unable to update push notification language:', error)
     })
@@ -309,7 +348,7 @@ export default function App() {
   }
 
   function dismissLanguageDialog() {
-    window.localStorage.setItem('efc-language-prompt-shown', 'true')
+    setLocalStorageItem('efc-language-prompt-shown', 'true')
     setShowLanguageDialog(false)
   }
 
@@ -1168,7 +1207,7 @@ function HomeScreen({ navigate, onLogout, online }) {
   const matchFilters = [
     { key: 'today', label: t('mobile.filters.today') },
     { key: 'next3h', label: t('mobile.filters.next3h') },
-    { key: 'next12h', label: t('mobile.filters.next12h') },
+    { key: 'next24h', label: t('mobile.filters.next24h') },
     { key: 'tomorrow', label: t('mobile.filters.tomorrow') },
   ]
   const balance = Number(profile?.balance || 0).toFixed(3)
@@ -1294,7 +1333,9 @@ function MatchDetailScreen({ matchId, navigate }) {
           apiFetch('/api/me', { auth: true }),
         ])
         if (!active) return
-        setMatch(matchPayload.match)
+        const nextMatch = await hydrateCompanyMarket(matchPayload.match)
+        if (!active) return
+        setMatch(nextMatch)
         setProfile(me.profile)
       } catch (error) {
         if (active) setMessage({ type: 'error', text: error?.message || t('messages.unableLoadMatch') })
@@ -1324,19 +1365,25 @@ function MatchDetailScreen({ matchId, navigate }) {
     setPlacing(true)
     setMessage(null)
     try {
-      await apiFetch('/api/place-bet', {
+      const clientBetId = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : null
+      const payload = await apiFetch('/api/place-bet', {
         auth: true,
         method: 'POST',
         body: {
           match_id: match.match_id,
           picked,
           stake: amount,
-          client_bet_id: crypto.randomUUID?.() || `${Date.now()}-${Math.random()}`,
+          client_bet_id: clientBetId,
         },
       })
+      const nextBetId = payload?.betid || clientBetId
+      if (!nextBetId) {
+        throw new Error(t('messages.unableLoadBet'))
+      }
       notifyMessage(setMessage, 'success', t('messages.betPlaced'))
       setStake('')
       setPicked('')
+      navigate('bet', { id: nextBetId })
     } catch (error) {
       notifyMessage(setMessage, 'error', error?.message || t('messages.unablePlaceBet'))
     } finally {
@@ -1346,6 +1393,9 @@ function MatchDetailScreen({ matchId, navigate }) {
 
   const display = formatMatchStart(match, t)
   const level = Number(profile?.viplevel || profile?.vip?.viplevel || 1)
+  const companyMatch = isCompanyGame(match)
+  const companyMarketKey = getCompanyMarketKey(match)
+  const companyMarketLabel = companyMarketKey ? formatMarketName(companyMarketKey, t) : ''
 
   return (
     <section className="page-stack">
@@ -1354,7 +1404,14 @@ function MatchDetailScreen({ matchId, navigate }) {
       <Message value={message} />
       {match ? (
         <>
-          <article className="detail-card match-detail-card">
+          <article className={companyMatch ? 'detail-card match-detail-card company-match-detail-card' : 'detail-card match-detail-card'}>
+            {companyMatch ? (
+              <div className="company-detail-banner">
+                <ShieldCheck size={13} />
+                <span>{t('mobile.match.companyGame')}</span>
+                {companyMarketLabel ? <b>{companyMarketLabel}</b> : null}
+              </div>
+            ) : null}
             <p className="match-league-name">{leagueName(match, t)}</p>
             <div className="match-teams large">
               <Team name={match.home} image={match.ihome} />
@@ -1374,16 +1431,31 @@ function MatchDetailScreen({ matchId, navigate }) {
             {markets.map(([key, label]) => {
               const baseOdd = Number(match[key] || 0)
               const odd = baseOdd ? baseOdd + Number(vipBonus[level] || 0) : 0
+              const companyOdd = companyMarketKey === key
+              const marketLabel = label.includes('.') ? t(label) : label
+              const marketClassName = [
+                'market-pill',
+                picked === key ? 'active' : '',
+                companyOdd ? 'company-odd-pill' : '',
+              ].filter(Boolean).join(' ')
               return (
                 <button
                   key={key}
                   type="button"
-                  className={picked === key ? 'market-pill active' : 'market-pill'}
+                  className={marketClassName}
                   onClick={() => setPicked(key)}
                   disabled={!odd}
                 >
-                  <span>{label.includes('.') ? t(label) : label}</span>
-                  <b>{odd ? odd.toFixed(3) : t('common.notAvailable')}</b>
+                  {companyOdd ? (
+                    <em className="company-odd-marker">
+                      <ShieldCheck size={12} />
+                      {t('mobile.match.companyGame')}
+                    </em>
+                  ) : null}
+                  <span>{marketLabel}</span>
+                  <b className={companyOdd ? 'market-odd-value company-odd-value' : 'market-odd-value'}>
+                    {odd ? odd.toFixed(3) : t('common.notAvailable')}
+                  </b>
                 </button>
               )
             })}
@@ -1458,15 +1530,18 @@ function BetsScreen({ navigate }) {
       <Message value={message} />
       {loading ? <LoadingState text={t('mobile.bets.loading')} /> : null}
       <section className="card-list">
-        {list.map((bet) => (
-          <button key={bet.betid || bet.id} className="list-card" type="button" onClick={() => navigate('bet', { id: bet.betid })}>
-            <span>
-              <b>{bet.home || t('common.home')} vs {bet.away || t('common.away')}</b>
-              <small>{bet.picked || bet.pick || t('common.score')} · {formatUsdt(bet.stake)}</small>
-            </span>
-            <StatusPill status={betStatus(bet, t)} />
-          </button>
-        ))}
+        {list.map((bet) => {
+          const detailId = bet.betid || bet.id
+          return (
+            <button key={detailId} className="list-card" type="button" onClick={() => navigate('bet', { id: detailId })} disabled={!detailId}>
+              <span>
+                <b>{bet.home || t('common.home')} vs {bet.away || t('common.away')}</b>
+                <small>{bet.picked || bet.pick || t('common.score')} · {formatUsdt(bet.stake)}</small>
+              </span>
+              <StatusPill status={betStatus(bet, t)} />
+            </button>
+          )
+        })}
         {!loading && !list.length ? <EmptyState title={t('emptyStates.noBets')} text={t('emptyStates.betsComing')} /> : null}
       </section>
     </section>
@@ -1505,6 +1580,15 @@ function BetDetailScreen({ betId, navigate }) {
   }, [betId])
 
   const display = formatMatchStart({ ...match, ...bet }, t)
+  const status = betStatus(bet, t)
+  const selectedMarketValue = bet?.market || bet?.picked || bet?.pick
+  const selectedMarket = formatMarketName(selectedMarketValue, t)
+  const selectedMarketKey = getMarketKey(selectedMarketValue)
+  const isCompanyScore = selectedMarketKey && isProtectedMarket(match, selectedMarketKey)
+  const odd = Number(bet?.odd)
+  const winnings = bet?.aim ?? bet?.profit
+  const result = match?.results || status.label
+  const matchName = `${bet?.home || match?.home || t('common.home')} vs ${bet?.away || match?.away || t('common.away')}`
 
   return (
     <section className="page-stack account-linked-page">
@@ -1513,11 +1597,34 @@ function BetDetailScreen({ betId, navigate }) {
       <Message value={message} />
       {bet ? (
         <section className="detail-card">
-          <InfoRow label={t('mobile.bets.match')} value={`${bet.home || match?.home || t('common.home')} vs ${bet.away || match?.away || t('common.away')}`} />
+          <InfoRow label={t('mobile.bets.match')} value={matchName} />
+          <InfoRow label={t('mobile.bets.league')} value={leagueName({ ...match, league: match?.league || bet.league, otherl: match?.otherl || bet.otherl }, t)} />
+          <InfoRow
+            label={t('mobile.bets.matchId')}
+            value={bet.match_id || match?.match_id || t('common.placeholderDash')}
+          />
+          <InfoRow
+            label={t('mobile.bets.score')}
+            value={(
+              <span className="bet-detail-score-value">
+                {selectedMarket || t('common.score')}
+                {isCompanyScore ? (
+                  <em className="company-score-badge">
+                    <ShieldCheck size={11} />
+                    {t('common.verified')}
+                  </em>
+                ) : null}
+              </span>
+            )}
+          />
+          <InfoRow label={t('mobile.bets.odds')} value={Number.isFinite(odd) ? `${odd.toFixed(3)}%` : t('common.placeholderDash')} />
           <InfoRow label={t('mobile.bets.stake')} value={formatUsdt(bet.stake)} />
-          <InfoRow label={t('mobile.bets.pick')} value={bet.picked || bet.pick || t('common.score')} />
+          <InfoRow label={t('mobile.bets.potentialWinnings')} value={formatUsdt(winnings)} />
           <InfoRow label={t('mobile.bets.kickoff')} value={`${display.date} ${display.time}`} />
-          <InfoRow label={t('mobile.bets.status')} value={betStatus(bet, t).label} />
+          <InfoRow label={t('mobile.bets.result')} value={result} />
+          <InfoRow label={t('mobile.bets.status')} value={status.label} />
+          <InfoRow label={t('mobile.bets.betId')} value={bet.betid || betId} />
+          {status.tone === 'pending' ? <p className="bet-cancel-note">{t('mobile.bets.cancelNote')}</p> : null}
         </section>
       ) : null}
     </section>
@@ -1558,7 +1665,7 @@ function ProfileScreen({ navigate, onLogout }) {
 
   const changeLanguage = (language) => {
     i18n.changeLanguage(language)
-    window.localStorage.setItem(languageStorageKey, language)
+    setLocalStorageItem(languageStorageKey, language)
     updateStoredPushTokenLanguage(language).catch((error) => {
       console.warn('Unable to update push notification language:', error)
     })
@@ -2553,9 +2660,16 @@ function Dots({ length, index, onChange, label, className = '' }) {
 function MatchCard({ match, onClick }) {
   const { t } = useTranslation('common')
   const start = formatMatchStart(match, t)
+  const isCompanyMatch = Boolean(match.company)
 
   return (
-    <motion.button className="match-card" type="button" onClick={onClick} whileTap={{ scale: 0.985 }} transition={pressSpring}>
+    <motion.button className={isCompanyMatch ? 'match-card company-match-card' : 'match-card'} type="button" onClick={onClick} whileTap={{ scale: 0.985 }} transition={pressSpring}>
+      {isCompanyMatch ? (
+        <span className="company-match-sticker">
+          <ShieldCheck size={12} />
+          {t('mobile.match.companyGame')}
+        </span>
+      ) : null}
       <div className="match-league">
         <span>{leagueName(match, t)}</span>
         {match.company ? <b>{t('common.verified')}</b> : null}
@@ -2569,9 +2683,9 @@ function MatchCard({ match, onClick }) {
         <Team name={match.away} image={match.iaway} />
       </div>
       <div className="odds-row">
-        <Odd label="1-0" value={match.onenil} />
-        <Odd label="1-1" value={match.oneone} />
-        <Odd label="1-2" value={match.onetwo} />
+        <Odd label="1-0" value={match.onenil} verified={isProtectedMarket(match, 'onenil')} />
+        <Odd label="1-1" value={match.oneone} verified={isProtectedMarket(match, 'oneone')} />
+        <Odd label="1-2" value={match.onetwo} verified={isProtectedMarket(match, 'onetwo')} />
       </div>
     </motion.button>
   )
@@ -2588,13 +2702,19 @@ function Team({ name, image }) {
   )
 }
 
-function Odd({ label, value }) {
+function Odd({ label, value, verified = false }) {
   const { t } = useTranslation('common')
 
   return (
-    <span className="odd-pill">
+    <span className={verified ? 'odd-pill verified' : 'odd-pill'}>
       <b>{label}</b>
       <strong>{value || t('common.placeholderDash')}</strong>
+      {verified ? (
+        <em className="odd-company-badge">
+          <ShieldCheck size={10} />
+          {t('mobile.match.companyGame')}
+        </em>
+      ) : null}
     </span>
   )
 }
@@ -2646,7 +2766,7 @@ function InfoRow({ label, value }) {
   return (
     <div className="info-row">
       <span>{label}</span>
-      <b>{value || t('common.placeholderDash')}</b>
+      <b>{value ?? t('common.placeholderDash')}</b>
     </div>
   )
 }
@@ -2728,7 +2848,7 @@ function filterMatches(matches, activeFilter, nowMs = Date.now()) {
     .sort((a, b) => a.startMs - b.startMs)
     .filter(({ startMs }) => {
       if (activeFilter === 'next3h') return startMs <= nowMs + (3 * hourMs)
-      if (activeFilter === 'next12h') return startMs <= nowMs + (12 * hourMs)
+      if (activeFilter === 'next24h') return startMs <= nowMs + (24 * hourMs)
       if (activeFilter === 'tomorrow') return localDateKey(new Date(startMs)) === tomorrowKey
       return localDateKey(new Date(startMs)) === todayKey
     })
@@ -2737,7 +2857,9 @@ function filterMatches(matches, activeFilter, nowMs = Date.now()) {
 
 function getMatchStartMs(match) {
   const timestamp = Number(match?.tsgmt)
-  if (Number.isFinite(timestamp) && timestamp > 0) return timestamp
+  if (Number.isFinite(timestamp) && timestamp > 0) {
+    return timestamp < 1000000000000 ? timestamp * 1000 : timestamp
+  }
   const fallback = new Date(`${match?.date || ''} ${match?.time || ''}`).getTime()
   return Number.isFinite(fallback) ? fallback : 0
 }
@@ -2747,7 +2869,7 @@ function formatMatchStart(match, t) {
   if (startMs) {
     const date = new Date(startMs)
     return {
-      time: date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      time: new Intl.DateTimeFormat([], { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(date),
       date: date.toLocaleDateString([], { month: 'short', day: 'numeric' }),
     }
   }
@@ -2770,11 +2892,85 @@ function leagueName(match, t) {
   return (match?.league === 'others' ? match?.otherl : match?.league) || t('common.league')
 }
 
+async function hydrateCompanyMarket(match) {
+  if (!match?.match_id || getCompanyMarketKey(match) || !hasSupabaseConfig() || !supabase) {
+    return match
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('bets')
+      .select('company, comarket')
+      .eq('match_id', match.match_id)
+      .maybeSingle()
+
+    if (error || !data?.comarket) return match
+
+    return {
+      ...match,
+      company: typeof match.company === 'undefined' || match.company === null ? data.company : match.company,
+      comarket: match.comarket || data.comarket,
+      protectedMarket: match.protectedMarket || data.comarket,
+    }
+  } catch (error) {
+    return match
+  }
+}
+
+function isCompanyGame(match) {
+  const value = match?.company
+  if (typeof value === 'boolean') return value
+  if (typeof value === 'number') return value === 1
+
+  const normalized = String(value || '').trim().toLowerCase()
+  return ['1', 'true', 't', 'yes', 'y', 'company', 'verified'].includes(normalized)
+}
+
+function getCompanyMarketKey(match) {
+  if (!isCompanyGame(match)) return ''
+  return getMarketKey(match?.comarket || match?.protectedMarket || match?.protected_market)
+}
+
+function isProtectedMarket(match, marketKey) {
+  return getCompanyMarketKey(match) === marketKey
+}
+
+function getMarketKey(value) {
+  const marketKey = String(value || '').trim()
+  if (!marketKey) return ''
+
+  const normalized = marketKey.toLowerCase()
+  const compact = normalizeMarketToken(normalized)
+  const market = markets.find(([key, label]) => (
+    key.toLowerCase() === normalized
+    || normalizeMarketToken(key) === compact
+    || String(label).toLowerCase() === normalized
+    || normalizeMarketToken(label) === compact
+  ))
+
+  if (market) return market[0]
+  if (normalized === 'other' || compact === 'otherscore' || compact === 'otherscores') return 'otherscores'
+  return ''
+}
+
+function normalizeMarketToken(value) {
+  return String(value || '').toLowerCase().replace(/:/g, '-').replace(/\s+/g, '')
+}
+
+function formatMarketName(value, t) {
+  const marketKey = getMarketKey(value)
+  const market = markets.find(([key]) => key === marketKey)
+  if (!market) return String(value || '').trim()
+
+  const label = market[1]
+  return label.includes('.') ? t(label) : label
+}
+
 function betStatus(bet, t) {
   const startMs = getMatchStartMs(bet)
   if (startMs && startMs > Date.now()) return { label: t('status.notStarted'), tone: 'pending' }
-  if (bet.won === 'true') return { label: t('status.won'), tone: 'success' }
-  if (bet.won === 'false') return { label: t('status.lost'), tone: 'failed' }
+  if (bet?.won === 'true') return { label: t('status.won'), tone: 'success' }
+  if (bet?.won === 'false') return { label: t('status.lost'), tone: 'failed' }
   return { label: t('status.ongoing'), tone: 'processing' }
 }
 

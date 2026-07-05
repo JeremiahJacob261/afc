@@ -697,6 +697,7 @@
       "today": "Сегодня",
       "next3h": "Следующие 3 часа",
       "next12h": "Следующие 12 часов",
+      "next24h": "Следующие 24 часа",
       "tomorrow": "Завтра"
     },
     "markets": {
@@ -747,10 +748,18 @@
       "unsettledWithCount": "Несостоявшиеся ({{count}})",
       "settledWithCount": "Состоявшиеся ({{count}})",
       "match": "Матч",
+      "league": "Лига",
+      "matchId": "ID матча",
+      "score": "Счет",
+      "odds": "Коэффициенты",
       "stake": "Ставка",
       "pick": "Выбор",
+      "potentialWinnings": "Потенциальный выигрыш",
       "kickoff": "Начало игры",
-      "status": "Статус"
+      "result": "Результат",
+      "status": "Статус",
+      "betId": "ID ставки",
+      "cancelNote": "Отменить эту ставку - Свяжитесь с администратором, чтобы удалить эту ставку"
     },
     "profile": {
       "vipReferralLine": "VIP {{level}} · {{count}} рефералы",

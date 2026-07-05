@@ -697,6 +697,7 @@
       "today": "Today",
       "next3h": "Next 3 hrs",
       "next12h": "Next 12 hrs",
+      "next24h": "Next 24 hrs",
       "tomorrow": "Tomorrow"
     },
     "markets": {
@@ -747,10 +748,18 @@
       "unsettledWithCount": "Unsettled ({{count}})",
       "settledWithCount": "Settled ({{count}})",
       "match": "Match",
+      "league": "League",
+      "matchId": "Match ID",
+      "score": "Score",
+      "odds": "Odds",
       "stake": "Stake",
       "pick": "Pick",
+      "potentialWinnings": "Potential Winnings",
       "kickoff": "Kickoff",
-      "status": "Status"
+      "result": "Result",
+      "status": "Status",
+      "betId": "Bet ID",
+      "cancelNote": "Cancel this bet - Please contact admin to remove this bet"
     },
     "profile": {
       "vipReferralLine": "VIP {{level}} · {{count}} referrals",

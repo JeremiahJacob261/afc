@@ -697,6 +697,7 @@
       "today": "Aujourd'hui",
       "next3h": "Prochaines 3 heures",
       "next12h": "Prochaines 12 heures",
+      "next24h": "Prochaines 24 heures",
       "tomorrow": "Demain"
     },
     "markets": {
@@ -747,10 +748,18 @@
       "unsettledWithCount": "Non réglé ({{count}})",
       "settledWithCount": "Réglé ({{count}})",
       "match": "Match",
+      "league": "Ligue",
+      "matchId": "ID du match",
+      "score": "Score",
+      "odds": "Cotes",
       "stake": "Mise",
       "pick": "Choix",
+      "potentialWinnings": "Gains potentiels",
       "kickoff": "Coup d'envoi",
-      "status": "Statut"
+      "result": "Résultat",
+      "status": "Statut",
+      "betId": "ID du pari",
+      "cancelNote": "Annuler ce pari - Veuillez contacter l'admin pour supprimer ce pari"
     },
     "profile": {
       "vipReferralLine": "VIP {{level}} · recommandations {{count}}",

@@ -1,6 +1,7 @@
 import { Capacitor } from '@capacitor/core'
 import { PushNotifications } from '@capacitor/push-notifications'
 import { apiFetch } from './api.js'
+import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from './storage.js'
 
 const pushTokenStorageKey = 'efc-push-token'
 const deviceIdStorageKey = 'efc-device-id'
@@ -12,24 +13,24 @@ function isNativePushAvailable() {
 }
 
 function getDeviceId() {
-  let deviceId = window.localStorage.getItem(deviceIdStorageKey)
+  let deviceId = getLocalStorageItem(deviceIdStorageKey, '')
   if (!deviceId) {
     deviceId = crypto.randomUUID?.() || `${Date.now()}-${Math.random()}`
-    window.localStorage.setItem(deviceIdStorageKey, deviceId)
+    setLocalStorageItem(deviceIdStorageKey, deviceId)
   }
   return deviceId
 }
 
 function storePushToken(token) {
-  window.localStorage.setItem(pushTokenStorageKey, token)
+  setLocalStorageItem(pushTokenStorageKey, token)
 }
 
 export function getStoredPushToken() {
-  return window.localStorage.getItem(pushTokenStorageKey) || ''
+  return getLocalStorageItem(pushTokenStorageKey, '')
 }
 
 function currentLanguage() {
-  const language = window.localStorage.getItem(languageStorageKey) || 'en'
+  const language = getLocalStorageItem(languageStorageKey, 'en')
   return supportedLanguages.has(language) ? language : 'en'
 }
 
@@ -64,7 +65,7 @@ export async function unregisterPushToken() {
       body: { token },
     })
   } finally {
-    window.localStorage.removeItem(pushTokenStorageKey)
+    removeLocalStorageItem(pushTokenStorageKey)
   }
 }
 

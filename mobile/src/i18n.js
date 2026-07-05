@@ -7,6 +7,7 @@ import frCommon from '../../locales/fr/common.json'
 import myCommon from '../../locales/my/common.json'
 import ruCommon from '../../locales/ru/common.json'
 import arCommon from '../../locales/ar/common.json'
+import { getLocalStorageItem } from './lib/storage.js'
 
 const languageStorageKey = 'efc-language'
 const supportedLanguages = ['en', 'fr', 'es', 'my', 'ru', 'ar']
@@ -21,7 +22,7 @@ function applyDocumentLanguage(language) {
 function getInitialLanguage() {
   if (typeof window === 'undefined') return 'en'
 
-  const storedLanguage = window.localStorage.getItem(languageStorageKey)
+  const storedLanguage = getLocalStorageItem(languageStorageKey, 'en')
   return supportedLanguages.includes(storedLanguage) ? storedLanguage : 'en'
 }
 

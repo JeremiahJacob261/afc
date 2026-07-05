@@ -13,11 +13,20 @@ const MATCH_COLUMNS = [
   'time',
   'tsgmt',
   'company',
+  'comarket',
   'onenil',
   'oneone',
   'onetwo',
   'verified',
 ].join(',')
+
+function exposeCompanyMarket(match) {
+  if (!match) return match
+  return {
+    ...match,
+    protectedMarket: match.comarket || null,
+  }
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -41,7 +50,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       status: 'success',
-      matches: data || [],
+      matches: (data || []).map(exposeCompanyMarket),
     })
   } catch (error) {
     console.error('Unable to load mobile matches:', error)
