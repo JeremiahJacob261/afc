@@ -4,6 +4,30 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import toast, { Toaster } from 'react-hot-toast'
 import {
+  Alert,
+  Box,
+  Button,
+  Chip,
+  CircularProgress,
+  Divider,
+  IconButton,
+  LinearProgress,
+  Paper,
+  Stack,
+  Step,
+  StepLabel,
+  Stepper,
+  Typography,
+} from '@mui/material'
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded'
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded'
+import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded'
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded'
+import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded'
+import PaymentsRoundedIcon from '@mui/icons-material/PaymentsRounded'
+import PriorityHighRoundedIcon from '@mui/icons-material/PriorityHighRounded'
+import UploadFileRoundedIcon from '@mui/icons-material/UploadFileRounded'
+import {
   ArrowLeft,
   ArrowRight,
   Bell,
@@ -55,6 +79,31 @@ const languageOptions = [
   { code: 'ru', label: 'Русский' },
   { code: 'ar', label: 'العربية' },
 ]
+
+const transferOptions = {
+  fcfa: [
+    { key: 'wave', label: 'Wave', bank: 'Wave' },
+    { key: 'mtn', label: 'MTN Money', bank: 'MTN Money' },
+  ],
+  mmk: [
+    { key: 'wave', label: 'Wave', bank: 'Wave' },
+    { key: 'kpay', label: 'KPay', bank: 'kpay' },
+  ],
+  idr: [
+    { key: 'DANA', label: 'DANA', bank: 'DANA' },
+  ],
+}
+
+const depositBrand = {
+  bg: '#06101F',
+  surface: '#10284D',
+  surfaceSoft: '#0B1D3A',
+  primary: '#1BB6FF',
+  text: '#E9E5DA',
+  muted: 'rgba(233, 229, 218, 0.68)',
+  danger: '#FFB4AB',
+  line: 'rgba(233, 229, 218, 0.14)',
+}
 
 const markets = [
   ['nilnil', '0 - 0'],
@@ -1829,9 +1878,10 @@ function AccountDivider() {
 
 function DepositScreen({ navigate, setSuccessAmount }) {
   const { t } = useTranslation('common')
+  const fileInputRef = useRef(null)
   const [data, setData] = useState({ methods: [], destinations: [] })
-  const [methodId, setMethodId] = useState('')
-  const [destinationId, setDestinationId] = useState('')
+  const [selectedMethod, setSelectedMethod] = useState(null)
+  const [transferKey, setTransferKey] = useState('')
   const [amount, setAmount] = useState('')
   const [file, setFile] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -1842,24 +1892,55 @@ function DepositScreen({ navigate, setSuccessAmount }) {
     loadPaymentData(setData, setLoading, setMessage, t('messages.unableLoadPaymentData'))
   }, [])
 
-  const method = data.methods.find((item) => String(item.id ?? item.name) === String(methodId))
-  const destinations = method ? data.destinations.filter((item) => destinationMatchesMethod(item, method)) : []
-  const destination = data.destinations.find((item) => String(item.id) === String(destinationId)) || destinations[0]
-  const rate = getRate(method)
-  const minimum = method ? rate * 5 : 0
+  const code = normalizeCode(selectedMethod)
+  const selectedMethodIdentity = paymentMethodIdentity(selectedMethod)
+  const requiresTransfer = Boolean(transferOptions[code]) && !hasNamedDestination(data.destinations, selectedMethod)
+  const rate = getRate(selectedMethod)
+  const minimum = selectedMethod ? getMinimum(selectedMethod) : 0
+  const numericAmount = Number(amount)
+  const amountIsValid = Boolean(selectedMethod && Number.isFinite(numericAmount) && numericAmount >= minimum)
+  const activeStep = !selectedMethod ? 0 : !amountIsValid ? 1 : 2
+  const steps = [t('mobile.deposit.stepMethod'), t('mobile.deposit.stepAmount'), t('mobile.deposit.stepProof')]
+  const destination = useMemo(
+    () => findDestination(data.destinations, selectedMethod, transferKey),
+    [data.destinations, selectedMethod, transferKey]
+  )
+  const canSubmit = Boolean(selectedMethod && amountIsValid && destination && file && !submitting)
+  const progressValue = amountIsValid ? 100 : Math.min(((numericAmount || 0) / minimum) * 100, 100)
+
+  function copyDepositText(value, label) {
+    copyText(value, t('mobile.deposit.copiedLabel', { label }), t('messages.unableCopy'))
+  }
+
+  function selectMethod(method) {
+    setSelectedMethod(method)
+    setTransferKey('')
+    setAmount('')
+    setFile(null)
+    setMessage(null)
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
+
+  function clearReceipt() {
+    setFile(null)
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
 
   async function submitDeposit() {
-    if (!method) {
+    if (!selectedMethod) {
       notifyMessage(setMessage, 'error', t('messages.chooseDepositMethod'))
+      return
+    }
+    if (requiresTransfer && !transferKey) {
+      notifyMessage(setMessage, 'error', t('mobile.deposit.chooseTransferOption'))
+      return
+    }
+    if (!amountIsValid) {
+      notifyMessage(setMessage, 'error', t('messages.minimumDeposit', { amount: formatMoney(minimum), currency: code.toUpperCase() }))
       return
     }
     if (!destination) {
       notifyMessage(setMessage, 'error', t('messages.noPaymentDestination'))
-      return
-    }
-    const numericAmount = Number(amount)
-    if (!Number.isFinite(numericAmount) || numericAmount < minimum) {
-      notifyMessage(setMessage, 'error', t('messages.minimumDeposit', { amount: formatNumber(minimum), currency: method.currency_code || method.name }))
       return
     }
     if (!file) {
@@ -1885,8 +1966,8 @@ function DepositScreen({ navigate, setSuccessAmount }) {
         method: 'POST',
         body: {
           amount: numericAmount,
-          method: method.currency_code || method.name,
-          methodName: method.name,
+          method: selectedMethod.currency_code || selectedMethod.name,
+          methodName: selectedMethod.name,
           address: publicFile?.publicUrl,
           adminaddress: destination.address,
         },
@@ -1903,49 +1984,308 @@ function DepositScreen({ navigate, setSuccessAmount }) {
   }
 
   return (
-    <section className="page-stack account-linked-page">
-      <PageHeader title={t('mobile.deposit.title')} onBack={() => navigate('profile')} />
-      {loading ? <LoadingState text={t('mobile.deposit.loading')} /> : null}
-      <Message value={message} />
-      <section className="detail-card form-stack">
-        <SelectField label={t('common.method')} value={methodId} onChange={setMethodId}>
-          <option value="">{t('forms.chooseMethod')}</option>
-          {data.methods.map((item) => (
-            <option key={item.id || item.name} value={item.id ?? item.name}>
-              {item.name} ({item.currency_code || item.name})
-            </option>
-          ))}
-        </SelectField>
-        {destinations.length > 1 ? (
-          <SelectField label={t('common.destination')} value={destinationId} onChange={setDestinationId}>
-            <option value="">{t('forms.autoSelect')}</option>
-            {destinations.map((item) => (
-              <option key={item.id || item.address} value={item.id}>
-                {item.bank || item.name || item.address}
-              </option>
+    <section className="mobile-deposit-web-flow">
+      <Stack sx={{ width: '100%', maxWidth: 440, minHeight: '90vh', px: 1.5, pb: '110px', color: depositBrand.text }} spacing={2}>
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <IconButton
+            aria-label={t('common.back')}
+            onClick={() => navigate('profile')}
+            sx={{ color: depositBrand.text, bgcolor: 'rgba(233,229,218,0.08)' }}
+          >
+            <ArrowBackRoundedIcon />
+          </IconButton>
+          <Box>
+            <Typography sx={{ fontSize: 20, fontWeight: 700, letterSpacing: 0 }}>{t('mobile.deposit.title')}</Typography>
+            <Typography sx={{ fontSize: 13, color: depositBrand.muted }}>{t('mobile.deposit.subtitle')}</Typography>
+          </Box>
+        </Stack>
+
+        {loading ? <LoadingState text={t('mobile.deposit.loading')} /> : null}
+        <Message value={message} />
+
+        <Paper elevation={0} sx={{ bgcolor: depositBrand.surfaceSoft, color: depositBrand.text, borderRadius: 2, p: 1.5, border: `1px solid ${depositBrand.line}` }}>
+          <Stepper activeStep={activeStep} alternativeLabel sx={{
+            '& .MuiStepLabel-label': { color: `${depositBrand.muted} !important`, fontSize: 11 },
+            '& .Mui-active .MuiStepLabel-label, & .Mui-completed .MuiStepLabel-label': { color: `${depositBrand.text} !important` },
+            '& .MuiStepIcon-root': { color: 'rgba(233,229,218,0.22)' },
+            '& .MuiStepIcon-root.Mui-active, & .MuiStepIcon-root.Mui-completed': { color: depositBrand.primary },
+          }}>
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
             ))}
-          </SelectField>
-        ) : null}
-        {destination ? (
-          <div className="copy-box">
-            <span>{t('mobile.deposit.paymentDestination')}</span>
-            <b>{destination.address}</b>
-            <button type="button" onClick={() => copyText(destination.address, t('messages.addressCopied'), t('messages.unableCopy'))}>{t('common.copy')}</button>
-          </div>
-        ) : null}
-        <InputShell icon={<Wallet size={18} />} label={minimum ? t('mobile.deposit.amountWithMinimum', { amount: formatNumber(minimum) }) : t('common.amount')}>
-          <input inputMode="decimal" value={amount} onChange={(event) => setAmount(event.target.value.replace(/[^\d.]/g, ''))} placeholder={t('common.amount')} />
-        </InputShell>
-        <label className="file-field">
-          <span>{file?.name || t('forms.uploadReceipt')}</span>
-          <input type="file" accept="image/*,.pdf" onChange={(event) => setFile(event.target.files?.[0] || null)} />
-        </label>
-        <button className="primary-button full" type="button" onClick={submitDeposit} disabled={submitting}>
-          {submitting ? t('mobile.deposit.submitting') : t('mobile.deposit.submit')}
-          <ArrowRight size={18} />
-        </button>
-      </section>
+          </Stepper>
+        </Paper>
+
+        <Paper elevation={0} sx={{ bgcolor: depositBrand.surface, color: depositBrand.text, borderRadius: 2, p: 2, border: `1px solid ${depositBrand.line}` }}>
+          <Stack spacing={1.5}>
+            <Stack direction="row" alignItems="center" justifyContent="space-between">
+              <Box>
+                <Typography sx={{ fontSize: 16, fontWeight: 700 }}>{t('mobile.deposit.paymentMethod')}</Typography>
+                <Typography sx={{ fontSize: 12, color: depositBrand.muted }}>{t('mobile.deposit.availableOptions')}</Typography>
+              </Box>
+              <PaymentsRoundedIcon sx={{ color: depositBrand.primary }} />
+            </Stack>
+
+            {!loading && data.methods.length === 0 && (
+              <Alert severity="warning" sx={{ bgcolor: '#332A12', color: depositBrand.text }}>
+                {t('mobile.deposit.noMethods')}
+              </Alert>
+            )}
+
+            <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 1 }}>
+              {data.methods.map((method) => {
+                const methodCode = normalizeCode(method)
+                const methodIdentity = paymentMethodIdentity(method)
+                const selected = Boolean(selectedMethodIdentity && methodIdentity === selectedMethodIdentity)
+                return (
+                  <Button
+                    key={methodIdentity}
+                    onClick={() => selectMethod(method)}
+                    sx={{
+                      alignItems: 'stretch',
+                      justifyContent: 'flex-start',
+                      minHeight: 116,
+                      p: 1.25,
+                      borderRadius: 2,
+                      border: `1px solid ${selected ? depositBrand.primary : depositBrand.line}`,
+                      bgcolor: selected ? 'rgba(27,182,255,0.14)' : 'rgba(6,16,31,0.38)',
+                      color: depositBrand.text,
+                      textAlign: 'left',
+                      textTransform: 'none',
+                    }}
+                  >
+                    <Stack spacing={1} sx={{ width: '100%' }}>
+                      <Stack direction="row" justifyContent="space-between" alignItems="center">
+                        {method.image ? (
+                          <Box
+                            component="img"
+                            src={method.image}
+                            alt={methodLabel(method, t)}
+                            sx={{ width: 40, height: 40, borderRadius: 1.5, objectFit: 'cover', bgcolor: depositBrand.bg }}
+                          />
+                        ) : (
+                          <Box sx={{ width: 40, height: 40, borderRadius: 1.5, bgcolor: depositBrand.bg, display: 'grid', placeItems: 'center' }}>
+                            <PaymentsRoundedIcon sx={{ color: depositBrand.primary }} />
+                          </Box>
+                        )}
+                        {selected && <CheckCircleRoundedIcon sx={{ color: depositBrand.primary, fontSize: 20 }} />}
+                      </Stack>
+                      <Box>
+                        <Typography sx={{ fontSize: 13, fontWeight: 700, lineHeight: 1.25 }}>{methodLabel(method, t)}</Typography>
+                        <Typography sx={{ fontSize: 11, color: depositBrand.muted }}>
+                          {t('mobile.deposit.minShort', { amount: formatMoney(getMinimum(method)), currency: methodCode.toUpperCase() })}
+                        </Typography>
+                      </Box>
+                    </Stack>
+                  </Button>
+                )
+              })}
+            </Box>
+
+            {requiresTransfer && (
+              <Stack spacing={1}>
+                <Typography sx={{ fontSize: 13, fontWeight: 700 }}>{t('mobile.deposit.transferOption')}</Typography>
+                <Stack direction="row" flexWrap="wrap" gap={1}>
+                  {transferOptions[code].map((option) => (
+                    <Chip
+                      key={option.key}
+                      label={option.label}
+                      clickable
+                      onClick={() => setTransferKey(option.key)}
+                      sx={{
+                        bgcolor: transferKey === option.key ? depositBrand.primary : 'rgba(233,229,218,0.08)',
+                        color: transferKey === option.key ? depositBrand.bg : depositBrand.text,
+                        fontWeight: 700,
+                      }}
+                    />
+                  ))}
+                </Stack>
+              </Stack>
+            )}
+          </Stack>
+        </Paper>
+
+        <Paper elevation={0} sx={{ bgcolor: depositBrand.surface, color: depositBrand.text, borderRadius: 2, p: 2, border: `1px solid ${depositBrand.line}` }}>
+          <Stack spacing={1.5}>
+            <Typography sx={{ fontSize: 16, fontWeight: 700 }}>{t('common.amount')}</Typography>
+            <Box
+              component="input"
+              type="number"
+              inputMode="decimal"
+              placeholder={selectedMethod ? t('mobile.deposit.minimumPlaceholder', { amount: formatMoney(minimum), currency: code.toUpperCase() }) : t('mobile.deposit.chooseMethodFirst')}
+              value={amount}
+              disabled={!selectedMethod}
+              onChange={(event) => setAmount(event.target.value)}
+              sx={{
+                width: '100%',
+                height: 56,
+                border: `1px solid ${amount && !amountIsValid ? depositBrand.danger : depositBrand.line}`,
+                borderRadius: 2,
+                bgcolor: 'rgba(6,16,31,0.44)',
+                color: depositBrand.text,
+                px: 1.5,
+                fontSize: 16,
+                outline: 'none',
+                '&::placeholder': { color: depositBrand.muted },
+              }}
+            />
+            {selectedMethod && (
+              <Stack spacing={0.8}>
+                <Stack direction="row" justifyContent="space-between">
+                  <Typography sx={{ fontSize: 12, color: depositBrand.muted }}>{t('mobile.deposit.usdtEquivalent')}</Typography>
+                  <Typography sx={{ fontSize: 13, fontWeight: 700 }}>
+                    {formatMoney(numericAmount / rate)} USDT
+                  </Typography>
+                </Stack>
+                <LinearProgress
+                  variant="determinate"
+                  value={progressValue}
+                  sx={{
+                    height: 7,
+                    borderRadius: 999,
+                    bgcolor: 'rgba(233,229,218,0.12)',
+                    '& .MuiLinearProgress-bar': { bgcolor: amountIsValid ? depositBrand.primary : depositBrand.danger },
+                  }}
+                />
+              </Stack>
+            )}
+          </Stack>
+        </Paper>
+
+        <Paper elevation={0} sx={{ bgcolor: depositBrand.surface, color: depositBrand.text, borderRadius: 2, p: 2, border: `1px solid ${depositBrand.line}` }}>
+          <Stack spacing={1.5}>
+            <Stack direction="row" spacing={1.2} alignItems="center">
+              <PriorityHighRoundedIcon sx={{ color: depositBrand.bg, bgcolor: depositBrand.primary, borderRadius: '50%', p: 0.2 }} />
+              <Typography sx={{ fontSize: 13, color: depositBrand.muted }}>
+                {amountIsValid
+                  ? t('mobile.deposit.sendExactly', { amount: `${formatMoney(numericAmount)} ${code.toUpperCase()}` })
+                  : t('mobile.deposit.sendEnteredAmount')}
+              </Typography>
+            </Stack>
+
+            {!selectedMethod && (
+              <Alert severity="info" sx={{ bgcolor: 'rgba(27,182,255,0.12)', color: depositBrand.text }}>
+                {t('mobile.deposit.chooseMethodDetails')}
+              </Alert>
+            )}
+
+            {selectedMethod && (!amountIsValid || (requiresTransfer && !transferKey)) && (
+              <Alert severity="warning" sx={{ bgcolor: '#332A12', color: depositBrand.text }}>
+                {requiresTransfer ? t('mobile.deposit.enterValidAmountAndTransfer') : t('mobile.deposit.enterValidAmount')}
+              </Alert>
+            )}
+
+            {selectedMethod && amountIsValid && !destination && (
+              <Alert severity="error" sx={{ bgcolor: '#3A1717', color: depositBrand.text }}>
+                {t('mobile.deposit.noPaymentAddress')}
+              </Alert>
+            )}
+
+            {destination && amountIsValid && (
+              <Stack spacing={1} sx={{ bgcolor: 'rgba(6,16,31,0.38)', borderRadius: 2, p: 1.5 }}>
+                <DepositPaymentRow label={isLocalDestination(destination) ? t('forms.accountNumber') : t('forms.walletAddress')} copyLabel={t('common.copy')} value={destination.address} onCopy={copyDepositText} />
+                {isLocalDestination(destination) && (
+                  <>
+                    <DepositPaymentRow label={t('forms.accountName')} copyLabel={t('common.copy')} value={destination.accountname} onCopy={copyDepositText} />
+                    <DepositPaymentRow label={t('forms.bank')} copyLabel={t('common.copy')} value={destination.bank} onCopy={copyDepositText} />
+                  </>
+                )}
+                {destination.image && (
+                  <Box sx={{ borderRadius: 2, overflow: 'hidden', mt: 1, bgcolor: depositBrand.bg }}>
+                    <Box component="img" src={destination.image} alt={t('mobile.deposit.paymentDetailsAlt')} sx={{ width: '100%', height: 'auto', display: 'block' }} />
+                  </Box>
+                )}
+              </Stack>
+            )}
+          </Stack>
+        </Paper>
+
+        <Paper elevation={0} sx={{ bgcolor: depositBrand.surface, color: depositBrand.text, borderRadius: 2, p: 2, border: `1px solid ${depositBrand.line}` }}>
+          <Stack spacing={1.5}>
+            <Typography sx={{ fontSize: 16, fontWeight: 700 }}>{t('mobile.deposit.receiptUpload')}</Typography>
+            <Button
+              onClick={() => fileInputRef.current?.click()}
+              sx={{
+                height: 92,
+                borderRadius: 2,
+                border: `1.5px dashed ${depositBrand.primary}`,
+                color: depositBrand.text,
+                bgcolor: 'rgba(27,182,255,0.08)',
+                textTransform: 'none',
+              }}
+            >
+              <Stack alignItems="center" spacing={0.5}>
+                <UploadFileRoundedIcon sx={{ color: depositBrand.primary }} />
+                <Typography sx={{ fontSize: 13, fontWeight: 700 }}>{t('mobile.deposit.browseReceiptImage')}</Typography>
+                <Typography sx={{ fontSize: 11, color: depositBrand.muted }}>{t('mobile.deposit.receiptHint')}</Typography>
+              </Stack>
+            </Button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={(event) => setFile(event.target.files?.[0] || null)}
+            />
+            <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ bgcolor: 'rgba(6,16,31,0.38)', borderRadius: 2, p: 1.2, minHeight: 58 }}>
+              <Stack direction="row" alignItems="center" spacing={1} sx={{ minWidth: 0 }}>
+                <InsertDriveFileRoundedIcon sx={{ color: depositBrand.primary }} />
+                <Box sx={{ minWidth: 0 }}>
+                  <Typography sx={{ fontSize: 13, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {file?.name || t('mobile.deposit.noFileSelected')}
+                  </Typography>
+                  <Typography sx={{ fontSize: 11, color: depositBrand.muted }}>
+                    {file?.size ? `${(file.size / 1024 / 1024).toFixed(2)} MB` : t('mobile.deposit.uploadRequired')}
+                  </Typography>
+                </Box>
+              </Stack>
+              {file && (
+                <IconButton aria-label={t('mobile.deposit.removeReceipt')} onClick={clearReceipt} sx={{ color: depositBrand.text }}>
+                  <DeleteRoundedIcon />
+                </IconButton>
+              )}
+            </Stack>
+          </Stack>
+        </Paper>
+
+        <Divider sx={{ borderColor: depositBrand.line }} />
+
+        <Button
+          disabled={!canSubmit}
+          onClick={submitDeposit}
+          sx={{
+            minHeight: 54,
+            borderRadius: 999,
+            bgcolor: depositBrand.primary,
+            color: depositBrand.bg,
+            fontWeight: 800,
+            textTransform: 'none',
+            '&:hover': { bgcolor: '#23B5FF' },
+            '&.Mui-disabled': { bgcolor: 'rgba(233,229,218,0.12)', color: depositBrand.muted },
+          }}
+        >
+          {submitting ? <CircularProgress size={22} sx={{ color: depositBrand.bg }} /> : t('mobile.deposit.submit')}
+        </Button>
+      </Stack>
     </section>
+  )
+}
+
+function DepositPaymentRow({ label, copyLabel, value, onCopy }) {
+  if (!value) return null
+
+  return (
+    <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
+      <Box sx={{ minWidth: 0 }}>
+        <Typography sx={{ fontSize: 11, color: depositBrand.muted }}>{label}</Typography>
+        <Typography sx={{ fontSize: 13, color: depositBrand.text, fontWeight: 700, overflowWrap: 'anywhere' }}>{value}</Typography>
+      </Box>
+      <IconButton aria-label={`${copyLabel} ${label}`} onClick={() => onCopy(value, label)} sx={{ color: depositBrand.primary, flexShrink: 0 }}>
+        <ContentCopyRoundedIcon fontSize="small" />
+      </IconButton>
+    </Stack>
   )
 }
 
@@ -2974,18 +3314,88 @@ function betStatus(bet, t) {
   return { label: t('status.ongoing'), tone: 'processing' }
 }
 
-function destinationMatchesMethod(destination, method) {
-  const code = String(method?.currency_code || method?.name || '').toLowerCase()
-  const methodName = String(method?.name || '').toLowerCase()
-  return [destination?.currency_code, destination?.name].some((value) => {
-    const normalized = String(value || '').toLowerCase()
-    return normalized === code || normalized === methodName
-  })
+function normalizeCode(method) {
+  return String(method?.currency_code || method?.name || '').toLowerCase()
+}
+
+function normalizeName(value) {
+  return String(value || '').trim().toLowerCase()
+}
+
+function paymentMethodIdentity(method) {
+  if (!method) return ''
+
+  const id = String(method.id ?? '').trim()
+  if (id) return `id:${id}`
+
+  const name = normalizeName(method.name)
+  if (name) return `name:${name}`
+
+  const code = normalizeCode(method)
+  return code ? `code:${code}` : ''
+}
+
+function isLocalDestination(destination) {
+  const type = normalizeName(destination?.type)
+  return type === 'local'
+    || type === 'local-transfer'
+    || type === 'bank'
+    || type === 'mobile-money'
 }
 
 function getRate(method) {
   const rate = Number(method?.rates)
   return Number.isFinite(rate) && rate > 0 ? rate : 1
+}
+
+function getMinimum(method) {
+  return getRate(method) * 5
+}
+
+function methodLabel(method, t) {
+  return method?.name || method?.currency_code?.toUpperCase() || t('mobile.deposit.methodFallback')
+}
+
+function formatMoney(value) {
+  const number = Number(value)
+  if (!Number.isFinite(number)) return '0'
+  return number.toLocaleString(undefined, { maximumFractionDigits: 3 })
+}
+
+function findDestination(destinations, method, transferKey) {
+  const code = normalizeCode(method)
+  if (!code) return null
+
+  const selectedName = normalizeName(method?.name)
+  const exactMethodDestination = destinations.find((destination) => (
+    selectedName && normalizeName(destination?.name) === selectedName
+  ))
+
+  if (exactMethodDestination) return exactMethodDestination
+
+  const matches = destinations.filter((destination) => (
+    String(destination?.currency_code || '').toLowerCase() === code
+  ))
+
+  if (transferOptions[code]) {
+    const option = transferOptions[code].find((item) => item.key === transferKey)
+    if (!option) return null
+    return matches.find((destination) => (
+      String(destination?.bank || '').toLowerCase() === option.bank.toLowerCase()
+    )) || null
+  }
+
+  if (!matches.length) return null
+  return matches[Math.floor(Math.random() * matches.length)]
+}
+
+function hasNamedDestination(destinations, method) {
+  const selectedName = normalizeName(method?.name)
+  if (!selectedName) return false
+
+  return destinations.some((destination) => (
+    normalizeName(destination?.name) === selectedName
+  ))
 }
 
 function formatUsdt(value) {
