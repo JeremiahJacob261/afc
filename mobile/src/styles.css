@@ -2267,6 +2267,461 @@ button.list-card {
   line-height: 1.5;
 }
 
+.mobile-deposit-page {
+  width: 100%;
+  max-width: 440px;
+  min-height: 90vh;
+  gap: 16px;
+  padding: 0 6px calc(env(safe-area-inset-bottom) + 110px);
+  color: #e9e5da;
+}
+
+.deposit-web-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.deposit-web-header button {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(233, 229, 218, 0.08);
+  color: #e9e5da;
+}
+
+.deposit-web-header span {
+  min-width: 0;
+}
+
+.deposit-web-header h1,
+.deposit-web-header p,
+.deposit-web-title-row h2,
+.deposit-web-title-row p,
+.deposit-web-section-heading {
+  margin: 0;
+}
+
+.deposit-web-header h1 {
+  color: #e9e5da;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.deposit-web-header p,
+.deposit-web-title-row p {
+  color: rgba(233, 229, 218, 0.68);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.deposit-web-stepper,
+.deposit-web-paper {
+  border-radius: 8px;
+  border: 1px solid rgba(233, 229, 218, 0.14);
+  color: #e9e5da;
+}
+
+.deposit-web-stepper {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding: 12px;
+  background: #0b1d3a;
+}
+
+.deposit-web-stepper span {
+  min-width: 0;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  color: rgba(233, 229, 218, 0.68);
+  text-align: center;
+}
+
+.deposit-web-stepper i {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(233, 229, 218, 0.22);
+  color: #0b1d3a;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.deposit-web-stepper b {
+  min-width: 0;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.deposit-web-stepper span.active,
+.deposit-web-stepper span.complete {
+  color: #e9e5da;
+}
+
+.deposit-web-stepper span.active i,
+.deposit-web-stepper span.complete i {
+  background: #1bb6ff;
+  color: #06101f;
+}
+
+.deposit-web-paper {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  background: #10284d;
+}
+
+.deposit-web-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.deposit-web-title-row h2,
+.deposit-web-section-heading {
+  color: #e9e5da;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.deposit-web-title-row svg {
+  flex: 0 0 auto;
+  color: #1bb6ff;
+}
+
+.deposit-web-method-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.deposit-web-method {
+  min-width: 0;
+  min-height: 116px;
+  display: grid;
+  align-content: space-between;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(233, 229, 218, 0.14);
+  background: rgba(6, 16, 31, 0.38);
+  color: #e9e5da;
+  text-align: left;
+  text-transform: none;
+}
+
+.deposit-web-method.active {
+  border-color: #1bb6ff;
+  background: rgba(27, 182, 255, 0.14);
+}
+
+.deposit-web-method-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.deposit-web-method-top img,
+.deposit-web-method-top i {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  border-radius: 6px;
+  background: #06101f;
+}
+
+.deposit-web-method-top img {
+  object-fit: cover;
+}
+
+.deposit-web-method-top i {
+  display: grid;
+  place-items: center;
+  color: #1bb6ff;
+  font-style: normal;
+}
+
+.deposit-web-method > span:last-child,
+.deposit-web-file span,
+.deposit-web-payment-row span {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.deposit-web-method b,
+.deposit-web-file b,
+.deposit-web-payment-row b {
+  min-width: 0;
+  color: #e9e5da;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.deposit-web-method small,
+.deposit-web-file small,
+.deposit-web-payment-row small,
+.deposit-web-progress small {
+  color: rgba(233, 229, 218, 0.68);
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.deposit-web-transfer {
+  display: grid;
+  gap: 8px;
+}
+
+.deposit-web-transfer > b {
+  color: #e9e5da;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.deposit-web-transfer span {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.deposit-web-transfer button {
+  min-height: 32px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 12px;
+  background: rgba(233, 229, 218, 0.08);
+  color: #e9e5da;
+  font-weight: 700;
+}
+
+.deposit-web-transfer button.active {
+  background: #1bb6ff;
+  color: #06101f;
+}
+
+.deposit-web-amount {
+  width: 100%;
+  height: 56px;
+  border: 1px solid rgba(233, 229, 218, 0.14);
+  border-radius: 8px;
+  outline: 0;
+  background: rgba(6, 16, 31, 0.44);
+  color: #e9e5da;
+  padding: 0 12px;
+  font-size: 16px;
+}
+
+.deposit-web-amount.invalid {
+  border-color: #ffb4ab;
+}
+
+.deposit-web-amount:disabled {
+  opacity: 0.75;
+}
+
+.deposit-web-amount::placeholder {
+  color: rgba(233, 229, 218, 0.68);
+}
+
+.deposit-web-progress {
+  display: grid;
+  gap: 7px;
+}
+
+.deposit-web-progress span {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.deposit-web-progress b {
+  color: #e9e5da;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.deposit-web-progress i {
+  height: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(233, 229, 218, 0.12);
+}
+
+.deposit-web-progress em {
+  height: 100%;
+  display: block;
+  border-radius: inherit;
+  background: #ffb4ab;
+}
+
+.deposit-web-progress em.valid {
+  background: #1bb6ff;
+}
+
+.deposit-web-instruction {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(233, 229, 218, 0.68);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.deposit-web-instruction i {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #1bb6ff;
+  color: #06101f;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.deposit-web-notice {
+  padding: 11px 12px;
+  border-radius: 8px;
+  color: #e9e5da;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.deposit-web-notice.info {
+  background: rgba(27, 182, 255, 0.12);
+}
+
+.deposit-web-notice.warning {
+  background: #332a12;
+}
+
+.deposit-web-notice.error {
+  background: #3a1717;
+}
+
+.deposit-web-details {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(6, 16, 31, 0.38);
+}
+
+.deposit-web-payment-row {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.deposit-web-payment-row button,
+.deposit-web-file button {
+  flex: 0 0 auto;
+  display: inline-flex;
+  border: 0;
+  background: transparent;
+  color: #1bb6ff;
+  padding: 5px;
+}
+
+.deposit-web-details-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-top: 4px;
+  border-radius: 8px;
+  background: #06101f;
+}
+
+.deposit-web-upload {
+  min-height: 92px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 5px;
+  border-radius: 8px;
+  border: 1.5px dashed #1bb6ff;
+  background: rgba(27, 182, 255, 0.08);
+  color: #e9e5da;
+  text-align: center;
+}
+
+.deposit-web-upload svg {
+  color: #1bb6ff;
+}
+
+.deposit-web-upload b {
+  font-size: 13px;
+}
+
+.deposit-web-upload small {
+  color: rgba(233, 229, 218, 0.68);
+  font-size: 11px;
+}
+
+.deposit-web-file {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(6, 16, 31, 0.38);
+}
+
+.deposit-web-file > svg {
+  flex: 0 0 auto;
+  color: #1bb6ff;
+}
+
+.deposit-web-file span {
+  flex: 1 1 auto;
+}
+
+.deposit-web-file b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.deposit-web-divider {
+  height: 1px;
+  background: rgba(233, 229, 218, 0.14);
+}
+
+.deposit-web-submit {
+  min-height: 54px;
+  border: 0;
+  border-radius: 999px;
+  background: #1bb6ff;
+  color: #06101f;
+  font-weight: 800;
+}
+
+.deposit-web-submit:disabled {
+  background: rgba(233, 229, 218, 0.12);
+  color: rgba(233, 229, 218, 0.68);
+}
+
 .success-screen-view {
   min-height: calc(100dvh - 180px);
   display: grid;

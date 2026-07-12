@@ -250,7 +250,7 @@ export default function Home() {
               </Link>
             </Stack>
             <Divider sx={{ bgcolor: "secondary.light" }} />
-            < Link href='https://t.me/+wJBTaIqLztoyYzE0' target="_blank" style={{ textDecoration: 'none' }}>
+            < Link href='https://t.me/+e1nirNMro8A4NWVk' target="_blank" style={{ textDecoration: 'none' }}>
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px', minWidth: 0 }} >
                 <Stack direction='row' spacing={1} justifyContent='start' sx={{ minWidth: 0 }}>
                   <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#1BB6FF' }} />

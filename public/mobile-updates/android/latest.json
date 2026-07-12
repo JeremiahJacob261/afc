@@ -1,7 +1,7 @@
 {
-  "version": "0.1.0",
+  "version": "1.0.1",
   "minNativeVersion": "1.0.0",
-  "bundleUrl": "https://europeanfc01.com/mobile-updates/android/0.1.0.zip",
-  "sha256": "744965550b22efb3e89284699c4caffd51cdb65fed169d119327518c9f102758",
+  "bundleUrl": "https://europeanfc01.com/mobile-updates/android/1.0.1.zip",
+  "sha256": "d583187f19ee18708b7e873e03be26efcd58a12151528168a97987e10c5c7c0d",
   "mandatory": false
 }
