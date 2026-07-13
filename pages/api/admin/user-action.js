@@ -78,7 +78,7 @@ export default async function handler(req, res) {
 
       const { data: referrer, error: referrerError } = await supabase
         .from('users')
-        .select('refer,lvla')
+        .select('newrefer,refer,lvla')
         .eq('newrefer', newRefer)
         .maybeSingle()
 
@@ -87,12 +87,53 @@ export default async function handler(req, res) {
         return res.status(404).json({ status: 'error', message: 'New referrer not found' })
       }
 
-      const { error } = await supabase
+      const { data: allUsers, error: usersError } = await supabase
         .from('users')
-        .update({ refer: newRefer, lvla: referrer.refer ?? 0, lvlb: referrer.lvla ?? 0 })
-        .eq('newrefer', currentRefer)
+        .select('newrefer,refer,lvla,lvlb')
 
-      if (error) throw error
+      if (usersError) throw usersError
+
+      const usersByCode = new Map((allUsers || []).map((user) => [user.newrefer, user]))
+      const queue = [{
+        code: currentRefer,
+        parentCode: referrer.newrefer ?? newRefer,
+        parentRefer: referrer.refer ?? 0,
+        parentLvla: referrer.lvla ?? 0,
+      }]
+      const visited = new Set()
+
+      while (queue.length > 0) {
+        const item = queue.shift()
+        if (!item || visited.has(item.code)) continue
+        visited.add(item.code)
+
+        const user = usersByCode.get(item.code)
+        if (!user) continue
+
+        const values = {
+          refer: item.parentCode,
+          lvla: item.parentRefer,
+          lvlb: item.parentLvla,
+        }
+
+        const { error: updateError } = await supabase
+          .from('users')
+          .update(values)
+          .eq('newrefer', item.code)
+
+        if (updateError) throw updateError
+
+        const children = (allUsers || []).filter((candidate) => candidate.refer === user.newrefer)
+        for (const child of children) {
+          queue.push({
+            code: child.newrefer,
+            parentCode: user.newrefer,
+            parentRefer: values.refer,
+            parentLvla: values.lvla,
+          })
+        }
+      }
+
       return res.status(200).json({ status: 'success' })
     }
 
