@@ -2,6 +2,21 @@ import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
 import { getWithdrawalSettings } from '@/lib/adminSettings'
 import { calculateWithdrawalAmounts } from '@/lib/withdrawalFee'
 
+const WITHDRAWAL_LIMIT_EXEMPT_USERNAMES = new Set([
+  'zawnaingoo',
+  'zambiabanking',
+  'cfabanking',
+  'mmkbanking',
+  'zambiabanking',
+  'algefcbank',
+])
+
+function isWithdrawalLimitExempt(username) {
+  if (!username) return false
+
+  return WITHDRAWAL_LIMIT_EXEMPT_USERNAMES.has(String(username).trim().toLowerCase())
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json([{ status: 'Failed', message: 'Method not allowed' }])
@@ -21,6 +36,8 @@ export default async function handler(req, res) {
       'userid,username,codeset,pin,newrefer,balance'
     )
 
+    const isWithdrawalLimitExemptUser = isWithdrawalLimitExempt(profile?.username)
+
     // Fetch only enough bet rows to satisfy the withdrawal requirement.
     const [withdrawalSettings, { data: qualifyingBets, error: betError }] = await Promise.all([
       getWithdrawalSettings(supabase, {
@@ -35,15 +52,15 @@ export default async function handler(req, res) {
 
     if (betError) throw betError
 
-    if ((qualifyingBets?.length || 0) <= 4) {
+    if (!isWithdrawalLimitExemptUser && (qualifyingBets?.length || 0) <= 4) {
       return res.status(200).json([{ status: 'Failed', message: 'You have not placed up to 5 bets' }])
     }
 
-    if (amount < withdrawalSettings.minWithdrawalAmount) {
+    if (!isWithdrawalLimitExemptUser && amount < withdrawalSettings.minWithdrawalAmount) {
       return res.status(200).json([{ status: 'Failed', message: `Minimum amount to withdraw is ${withdrawalSettings.minWithdrawalAmount} USDT` }])
     }
 
-    if (amount > withdrawalSettings.maxWithdrawalAmount) {
+    if (!isWithdrawalLimitExemptUser && amount > withdrawalSettings.maxWithdrawalAmount) {
       return res.status(200).json([{ status: 'Failed', message: `Maximum amount to withdraw is ${withdrawalSettings.maxWithdrawalAmount} USDT` }])
     }
 
