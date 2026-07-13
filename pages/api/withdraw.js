@@ -10,6 +10,7 @@ const WITHDRAWAL_LIMIT_EXEMPT_USERNAMES = new Set([
   'zambiabanking',
   'algefcbank',
 ])
+const WITHDRAWAL_HARD_LIMIT_AMOUNT = 100
 
 function isWithdrawalLimitExempt(username) {
   if (!username) return false
@@ -58,6 +59,10 @@ export default async function handler(req, res) {
 
     if (!isWithdrawalLimitExemptUser && amount < withdrawalSettings.minWithdrawalAmount) {
       return res.status(200).json([{ status: 'Failed', message: `Minimum amount to withdraw is ${withdrawalSettings.minWithdrawalAmount} USDT` }])
+    }
+
+    if (isWithdrawalLimitExemptUser && amount > WITHDRAWAL_HARD_LIMIT_AMOUNT) {
+      return res.status(200).json([{ status: 'Failed', message: `Maximum amount to withdraw is ${WITHDRAWAL_HARD_LIMIT_AMOUNT} USDT` }])
     }
 
     if (!isWithdrawalLimitExemptUser && amount > withdrawalSettings.maxWithdrawalAmount) {
