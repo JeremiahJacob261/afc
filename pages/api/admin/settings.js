@@ -44,7 +44,9 @@ export default async function handler(req, res) {
       )
       const nextWithdrawalSettings = await saveWithdrawalSettings(supabase, {
         minWithdrawalAmount: payload.minWithdrawalAmount ?? currentWithdrawalSettings.minWithdrawalAmount,
-        maxWithdrawalAmount: payload.maxWithdrawalAmount ?? currentWithdrawalSettings.maxWithdrawalAmount,
+        annualWithdrawalLimit: payload.annualWithdrawalLimit ?? payload.maxWithdrawalAmount ?? currentWithdrawalSettings.annualWithdrawalLimit,
+        dailyWithdrawalLimit: payload.dailyWithdrawalLimit ?? currentWithdrawalSettings.dailyWithdrawalLimit,
+        withdrawalLimitExemptUsernames: payload.withdrawalLimitExemptUsernames ?? currentWithdrawalSettings.withdrawalLimitExemptUsernames,
         withdrawalFeePercent: payload.withdrawalFeePercent ?? currentWithdrawalSettings.withdrawalFeePercent,
       })
 

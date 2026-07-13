@@ -310,6 +310,10 @@ CREATE TABLE IF NOT EXISTS admin_settings (
   max_withdrawal_amount DECIMAL(15, 3) NOT NULL DEFAULT 100000.000 CHECK (
     max_withdrawal_amount >= 0
   ),
+  daily_withdrawal_limit DECIMAL(15, 3) NOT NULL DEFAULT 100.000 CHECK (
+    daily_withdrawal_limit >= 0
+  ),
+  withdrawal_limit_exempt_usernames TEXT[] NOT NULL DEFAULT '{}',
   withdrawal_fee_percent DECIMAL(6, 3) NOT NULL DEFAULT 7.000 CHECK (
     withdrawal_fee_percent >= 0
     AND withdrawal_fee_percent <= 100
@@ -317,9 +321,12 @@ CREATE TABLE IF NOT EXISTS admin_settings (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO admin_settings (id, first_deposit_bonus_percent, min_withdrawal_amount, max_withdrawal_amount, withdrawal_fee_percent)
-VALUES (1, 3.000, 10.000, 100000.000, 7.000)
+INSERT INTO admin_settings (id, first_deposit_bonus_percent, min_withdrawal_amount, max_withdrawal_amount, daily_withdrawal_limit, withdrawal_limit_exempt_usernames, withdrawal_fee_percent)
+VALUES (1, 3.000, 10.000, 100000.000, 100.000, '{}', 7.000)
 ON CONFLICT (id) DO NOTHING;
+
+ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS daily_withdrawal_limit DECIMAL(15, 3) NOT NULL DEFAULT 100.000 CHECK (daily_withdrawal_limit >= 0);
+ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS withdrawal_limit_exempt_usernames TEXT[] NOT NULL DEFAULT '{}';
 
 CREATE TABLE IF NOT EXISTS reading (
   id BIGINT PRIMARY KEY,
@@ -408,6 +415,7 @@ CREATE INDEX IF NOT EXISTS idx_user_wallets_walletnames ON user_wallets(walletna
 CREATE INDEX IF NOT EXISTS idx_notification_username ON notification(username);
 CREATE INDEX IF NOT EXISTS idx_notification_type ON notification(type);
 CREATE INDEX IF NOT EXISTS idx_notification_sent ON notification(sent);
+CREATE INDEX IF NOT EXISTS idx_notification_withdrawal_limit ON notification(username, created_at) WHERE lower(COALESCE(type, '')) IN ('withdraw', 'withdrawer');
 CREATE INDEX IF NOT EXISTS idx_notification_created_at ON notification(created_at);
 CREATE INDEX IF NOT EXISTS idx_notification_uid ON notification(uid);
 CREATE INDEX IF NOT EXISTS idx_notification_processed_at ON notification(processed_at);
@@ -1155,8 +1163,14 @@ SET search_path = public
 AS $$
 DECLARE
   user_row users%ROWTYPE;
+  settings_row admin_settings%ROWTYPE;
   next_balance NUMERIC;
   inserted_id BIGINT;
+  daily_total NUMERIC;
+  annual_total NUMERIC;
+  is_limit_exempt BOOLEAN;
+  utc_day_start TIMESTAMP;
+  utc_year_start TIMESTAMP;
 BEGIN
   IF p_userid IS NULL OR btrim(p_userid) = '' THEN
     RAISE EXCEPTION 'Authentication required';
@@ -1174,6 +1188,50 @@ BEGIN
 
   IF NOT FOUND THEN
     RAISE EXCEPTION 'Profile not found';
+  END IF;
+
+  -- The immutable $100 cap applies to everyone, including exempt users.
+  IF p_payout_amount > 100 THEN
+    RAISE EXCEPTION 'Maximum amount to withdraw is 100 USDT';
+  END IF;
+
+  SELECT * INTO settings_row FROM admin_settings WHERE id = 1;
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'Withdrawal settings are not configured';
+  END IF;
+
+  is_limit_exempt := EXISTS (
+    SELECT 1
+    FROM unnest(COALESCE(settings_row.withdrawal_limit_exempt_usernames, ARRAY[]::TEXT[])) AS exempt_username
+    WHERE lower(btrim(exempt_username)) = lower(btrim(user_row.username))
+  );
+
+  IF NOT is_limit_exempt THEN
+    -- Boundaries are calculated in UTC, so limits reset automatically at 00:00 UTC.
+    utc_day_start := date_trunc('day', timezone('UTC', now()));
+    utc_year_start := date_trunc('year', timezone('UTC', now()));
+
+    SELECT COALESCE(SUM(amount), 0) INTO daily_total
+    FROM notification
+    WHERE username = user_row.username
+      AND lower(COALESCE(type, '')) IN ('withdraw', 'withdrawer')
+      AND lower(COALESCE(sent::TEXT, 'pending')) NOT IN ('failed', 'false', 'rejected')
+      AND created_at >= utc_day_start;
+
+    IF daily_total + p_payout_amount > settings_row.daily_withdrawal_limit THEN
+      RAISE EXCEPTION 'Daily withdrawal limit of % USDT reached', settings_row.daily_withdrawal_limit;
+    END IF;
+
+    SELECT COALESCE(SUM(amount), 0) INTO annual_total
+    FROM notification
+    WHERE username = user_row.username
+      AND lower(COALESCE(type, '')) IN ('withdraw', 'withdrawer')
+      AND lower(COALESCE(sent::TEXT, 'pending')) NOT IN ('failed', 'false', 'rejected')
+      AND created_at >= utc_year_start;
+
+    IF annual_total + p_payout_amount > settings_row.max_withdrawal_amount THEN
+      RAISE EXCEPTION 'Annual withdrawal limit of % USDT reached', settings_row.max_withdrawal_amount;
+    END IF;
   END IF;
 
   IF COALESCE(user_row.balance, 0) < p_amount THEN

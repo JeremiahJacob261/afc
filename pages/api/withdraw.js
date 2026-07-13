@@ -1,22 +1,6 @@
 import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
-import { getWithdrawalSettings } from '@/lib/adminSettings'
+import { getWithdrawalSettings, WITHDRAWAL_HARD_LIMIT_AMOUNT } from '@/lib/adminSettings'
 import { calculateWithdrawalAmounts } from '@/lib/withdrawalFee'
-
-const WITHDRAWAL_LIMIT_EXEMPT_USERNAMES = new Set([
-  'zawnaingoo',
-  'zambiabanking',
-  'cfabanking',
-  'mmkbanking',
-  'zambiabanking',
-  'algefcbank',
-])
-const WITHDRAWAL_HARD_LIMIT_AMOUNT = 100
-
-function isWithdrawalLimitExempt(username) {
-  if (!username) return false
-
-  return WITHDRAWAL_LIMIT_EXEMPT_USERNAMES.has(String(username).trim().toLowerCase())
-}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -37,8 +21,6 @@ export default async function handler(req, res) {
       'userid,username,codeset,pin,newrefer,balance'
     )
 
-    const isWithdrawalLimitExemptUser = isWithdrawalLimitExempt(profile?.username)
-
     // Fetch only enough bet rows to satisfy the withdrawal requirement.
     const [withdrawalSettings, { data: qualifyingBets, error: betError }] = await Promise.all([
       getWithdrawalSettings(supabase, {
@@ -53,20 +35,16 @@ export default async function handler(req, res) {
 
     if (betError) throw betError
 
-    if (!isWithdrawalLimitExemptUser && (qualifyingBets?.length || 0) <= 4) {
+    if ((qualifyingBets?.length || 0) <= 4) {
       return res.status(200).json([{ status: 'Failed', message: 'You have not placed up to 5 bets' }])
     }
 
-    if (!isWithdrawalLimitExemptUser && amount < withdrawalSettings.minWithdrawalAmount) {
+    if (amount < withdrawalSettings.minWithdrawalAmount) {
       return res.status(200).json([{ status: 'Failed', message: `Minimum amount to withdraw is ${withdrawalSettings.minWithdrawalAmount} USDT` }])
     }
 
-    if (isWithdrawalLimitExemptUser && amount > WITHDRAWAL_HARD_LIMIT_AMOUNT) {
+    if (amount > WITHDRAWAL_HARD_LIMIT_AMOUNT) {
       return res.status(200).json([{ status: 'Failed', message: `Maximum amount to withdraw is ${WITHDRAWAL_HARD_LIMIT_AMOUNT} USDT` }])
-    }
-
-    if (!isWithdrawalLimitExemptUser && amount > withdrawalSettings.maxWithdrawalAmount) {
-      return res.status(200).json([{ status: 'Failed', message: `Maximum amount to withdraw is ${withdrawalSettings.maxWithdrawalAmount} USDT` }])
     }
 
     if (!profile.codeset) {
@@ -93,8 +71,12 @@ export default async function handler(req, res) {
     })
 
     if (withdrawError) {
-      if (/Insufficient funds/i.test(withdrawError.message || '')) {
+      const message = withdrawError.message || ''
+      if (/Insufficient funds/i.test(message)) {
         return res.status(200).json([{ status: 'Failed', message: 'Insufficient funds' }])
+      }
+      if (/Daily withdrawal limit|Annual withdrawal limit|Maximum amount to withdraw/i.test(message)) {
+        return res.status(200).json([{ status: 'Failed', message }])
       }
       throw withdrawError
     }

@@ -39,7 +39,9 @@ export default function Controls() {
   const router = useRouter()
   const [bonusPercent, setBonusPercent] = useState('3')
   const [minWithdrawalAmount, setMinWithdrawalAmount] = useState('10')
-  const [maxWithdrawalAmount, setMaxWithdrawalAmount] = useState('100000')
+  const [dailyWithdrawalLimit, setDailyWithdrawalLimit] = useState('100')
+  const [annualWithdrawalLimit, setAnnualWithdrawalLimit] = useState('100000')
+  const [withdrawalLimitExemptUsernames, setWithdrawalLimitExemptUsernames] = useState('')
   const [withdrawalFeePercent, setWithdrawalFeePercent] = useState('7')
   const [loadingSettings, setLoadingSettings] = useState(true)
   const [savingSettings, setSavingSettings] = useState(false)
@@ -60,7 +62,9 @@ export default function Controls() {
         if (active) {
           setBonusPercent(String(result.settings?.firstDepositBonusPercent ?? 3))
           setMinWithdrawalAmount(String(result.settings?.minWithdrawalAmount ?? 10))
-          setMaxWithdrawalAmount(String(result.settings?.maxWithdrawalAmount ?? 100000))
+          setDailyWithdrawalLimit(String(result.settings?.dailyWithdrawalLimit ?? 100))
+          setAnnualWithdrawalLimit(String(result.settings?.annualWithdrawalLimit ?? 100000))
+          setWithdrawalLimitExemptUsernames((result.settings?.withdrawalLimitExemptUsernames || []).join('\n'))
           setWithdrawalFeePercent(String(result.settings?.withdrawalFeePercent ?? 7))
         }
       } catch (error) {
@@ -80,7 +84,8 @@ export default function Controls() {
   const saveSettings = async () => {
     const firstDepositBonusPercent = Number(bonusPercent)
     const minAmount = Number(minWithdrawalAmount)
-    const maxAmount = Number(maxWithdrawalAmount)
+    const dailyLimit = Number(dailyWithdrawalLimit)
+    const annualLimit = Number(annualWithdrawalLimit)
     const feePercent = Number(withdrawalFeePercent)
 
     if (!Number.isFinite(firstDepositBonusPercent) || firstDepositBonusPercent < 0 || firstDepositBonusPercent > 100) {
@@ -93,13 +98,13 @@ export default function Controls() {
       return
     }
 
-    if (!Number.isFinite(maxAmount) || maxAmount < 0) {
-      toast.error('Maximum withdrawal amount must be zero or greater')
+    if (minAmount > 100) {
+      toast.error('Minimum withdrawal amount cannot exceed the 100 USDT hard limit')
       return
     }
 
-    if (maxAmount < minAmount) {
-      toast.error('Maximum withdrawal amount cannot be lower than minimum')
+    if (!Number.isFinite(dailyLimit) || dailyLimit < minAmount || !Number.isFinite(annualLimit) || annualLimit < minAmount) {
+      toast.error('Daily and annual limits must be at least the minimum withdrawal amount')
       return
     }
 
@@ -116,7 +121,9 @@ export default function Controls() {
         body: JSON.stringify({ 
           firstDepositBonusPercent,
           minWithdrawalAmount: minAmount,
-          maxWithdrawalAmount: maxAmount,
+          dailyWithdrawalLimit: dailyLimit,
+          annualWithdrawalLimit: annualLimit,
+          withdrawalLimitExemptUsernames: withdrawalLimitExemptUsernames.split(/[\n,]/).map((value) => value.trim()).filter(Boolean),
           withdrawalFeePercent: feePercent,
         }),
       })
@@ -129,7 +136,9 @@ export default function Controls() {
 
       setBonusPercent(String(result.settings?.firstDepositBonusPercent ?? firstDepositBonusPercent))
       setMinWithdrawalAmount(String(result.settings?.minWithdrawalAmount ?? minAmount))
-      setMaxWithdrawalAmount(String(result.settings?.maxWithdrawalAmount ?? maxAmount))
+      setDailyWithdrawalLimit(String(result.settings?.dailyWithdrawalLimit ?? dailyLimit))
+      setAnnualWithdrawalLimit(String(result.settings?.annualWithdrawalLimit ?? annualLimit))
+      setWithdrawalLimitExemptUsernames((result.settings?.withdrawalLimitExemptUsernames || []).join('\n'))
       setWithdrawalFeePercent(String(result.settings?.withdrawalFeePercent ?? feePercent))
       toast.success('Settings saved successfully')
     } catch (error) {
@@ -211,7 +220,7 @@ export default function Controls() {
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-white">Withdrawal Settings</h3>
-                <p className="text-sm text-zinc-500">Configure minimum, maximum, and fee for user withdrawals.</p>
+                <p className="text-sm text-zinc-500">Each request is capped at 100 USDT. Set daily and annual totals below.</p>
               </div>
             </div>
 
@@ -233,19 +242,32 @@ export default function Controls() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold text-white">Maximum Withdrawal Amount (USDT)</label>
+                <label className="text-sm font-semibold text-white">Daily Withdrawal Limit (USDT)</label>
                 <label className="flex h-12 items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4">
                   <input
                     type="number"
                     inputMode="decimal"
                     min="0"
                     step="0.001"
-                    value={maxWithdrawalAmount}
+                    value={dailyWithdrawalLimit}
                     disabled={loadingSettings || savingSettings}
-                    onChange={(event) => setMaxWithdrawalAmount(event.target.value)}
+                    onChange={(event) => setDailyWithdrawalLimit(event.target.value)}
                     className="min-w-0 flex-1 bg-transparent text-lg font-semibold text-white outline-none disabled:text-zinc-500"
                   />
                 </label>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-semibold text-white">Annual Withdrawal Limit (USDT)</label>
+                <label className="flex h-12 items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4">
+                  <input type="number" inputMode="decimal" min="0" step="0.001" value={annualWithdrawalLimit} disabled={loadingSettings || savingSettings} onChange={(event) => setAnnualWithdrawalLimit(event.target.value)} className="min-w-0 flex-1 bg-transparent text-lg font-semibold text-white outline-none disabled:text-zinc-500" />
+                </label>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-semibold text-white">Daily & Annual Limit Exemptions</label>
+                <textarea value={withdrawalLimitExemptUsernames} disabled={loadingSettings || savingSettings} onChange={(event) => setWithdrawalLimitExemptUsernames(event.target.value)} placeholder="One username per line" className="min-h-[96px] rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm text-white outline-none disabled:text-zinc-500" />
+                <p className="text-xs text-zinc-500">Enter one username per line. Exemptions do not bypass the 100 USDT limit per request.</p>
               </div>
 
               <div className="flex flex-col gap-2">
