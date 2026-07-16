@@ -3,6 +3,9 @@
 
 CREATE EXTENSION IF NOT EXISTS pg_cron WITH SCHEMA pg_catalog;
 
+CREATE INDEX IF NOT EXISTS idx_users_refer_firstd
+  ON public.users(refer, firstd);
+
 CREATE TABLE IF NOT EXISTS public.vip_daily_rewards (
   id BIGSERIAL PRIMARY KEY,
   username TEXT NOT NULL REFERENCES public.users(username),

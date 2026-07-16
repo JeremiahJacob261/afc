@@ -12,11 +12,9 @@ export default async function handler(req, res) {
     const { profile, supabase } = await getCurrentProfile(req, PROFILE_COLUMNS)
     const { count, error } = await supabase
       .from('users')
-      .select('*', { count: 'exact', head: true })
-      .match({
-        refer: profile.newrefer,
-        firstd: true,
-      })
+      .select('userid', { count: 'exact', head: true })
+      .eq('refer', profile.newrefer)
+      .eq('firstd', true)
 
     if (error) {
       throw error
