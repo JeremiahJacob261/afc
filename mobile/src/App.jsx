@@ -95,12 +95,12 @@ const markets = [
 
 const vipBonus = {
   1: 0,
-  2: 0.015,
-  3: 0.03,
-  4: 0.05,
-  5: 0.07,
-  6: 0.095,
-  7: 0.125,
+  2: 0.10,
+  3: 0.20,
+  4: 0.33,
+  5: 0.47,
+  6: 0.63,
+  7: 0.83,
 }
 
 const motionEase = [0.22, 1, 0.36, 1]
@@ -1447,7 +1447,7 @@ function MatchDetailScreen({ matchId, navigate }) {
           <section className="market-grid">
             {markets.map(([key, label]) => {
               const baseOdd = Number(match[key] || 0)
-              const odd = baseOdd ? baseOdd + Number(vipBonus[level] || 0) : 0
+              const odd = baseOdd ? baseOdd * (1 + Number(vipBonus[level] || 0)) : 0
               const companyOdd = companyMarketKey === key
               const marketLabel = label.includes('.') ? t(label) : label
               const marketClassName = [

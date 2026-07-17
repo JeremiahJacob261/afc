@@ -69,18 +69,18 @@ const marketsArray = [
 
 const vip = {
     '1': 0,
-    '2': 0.015,
-    '3': 0.030,
-    '4': 0.050,
-    '5': 0.070,
-    '6': 0.095,
-    '7': 0.125
+    '2': 0.10,
+    '3': 0.20,
+    '4': 0.33,
+    '5': 0.47,
+    '6': 0.63,
+    '7': 0.83
 }
 
 function getMatchOdd(match, market, level) {
     const baseOdd = Number(match?.[market] || 0)
-    const vipBonus = Number(vip[level] || 0)
-    const value = baseOdd + vipBonus
+    const vipIncrease = Number(vip[level] || 0)
+    const value = baseOdd * (1 + vipIncrease)
     return Number.isFinite(value) ? value : 0
 }
 

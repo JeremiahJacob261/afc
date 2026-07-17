@@ -590,12 +590,12 @@ LANGUAGE sql
 IMMUTABLE
 AS $$
   SELECT CASE vip_level
-    WHEN 2 THEN 0.015
-    WHEN 3 THEN 0.030
-    WHEN 4 THEN 0.050
-    WHEN 5 THEN 0.070
-    WHEN 6 THEN 0.095
-    WHEN 7 THEN 0.125
+    WHEN 2 THEN 0.10
+    WHEN 3 THEN 0.20
+    WHEN 4 THEN 0.33
+    WHEN 5 THEN 0.47
+    WHEN 6 THEN 0.63
+    WHEN 7 THEN 0.83
     ELSE 0
   END::NUMERIC;
 $$;
@@ -825,7 +825,7 @@ BEGIN
     AND firstd IS TRUE;
 
   vip_level := public.vip_level_for_user(user_row.totald, referral_count);
-  final_odd := base_odd + public.vip_bonus_for_level(vip_level);
+  final_odd := base_odd * (1 + public.vip_bonus_for_level(vip_level));
   profit_amount := round((final_odd * p_stake) / 100, 2);
 
   IF p_client_bet_id IS NULL THEN
