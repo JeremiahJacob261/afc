@@ -2,12 +2,21 @@ import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
 import { getWithdrawalSettings, WITHDRAWAL_HARD_LIMIT_AMOUNT } from '@/lib/adminSettings'
 import { calculateWithdrawalAmounts } from '@/lib/withdrawalFee'
 
+const WITHDRAWALS_ENABLED = false
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json([{ status: 'Failed', message: 'Method not allowed' }])
   }
 
   try {
+    if (!WITHDRAWALS_ENABLED) {
+      return res.status(403).json([{
+        status: 'Failed',
+        message: 'Withdrawal is unavailable till Monday 8pm UTC',
+      }])
+    }
+
     const body = req.body || {}
     const amount = Number(body.amount)
 

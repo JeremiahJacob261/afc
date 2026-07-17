@@ -80,6 +80,7 @@ export default function Deposit() {
   const [warnab, setWarnab] = useState("");
   const [method, setMethod] = useState('');
   const [open, setOpen] = useState(false)
+  const [withdrawalUnavailableOpen, setWithdrawalUnavailableOpen] = useState(false)
   const auth = getAuth(app);
   const router = useRouter();
   const [ale, setAle] = useState('')
@@ -384,12 +385,41 @@ export default function Deposit() {
 
 
           <motion.div whileTap={{ scale: 0.98 }}
-            style={{ cursor: 'pointer', display: 'flex', flexDirection: 'row', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: "#06101F", height: '50px', background: '#1BB6FF', minWidth: '310px', padding: '12px' }}
-            onClick={transaction}>{t('mobile.withdraw.submit')}</motion.div>
+            role="button"
+            tabIndex={0}
+            aria-disabled="true"
+            style={{ cursor: 'pointer', display: 'flex', flexDirection: 'row', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: '#8B96A8', height: '50px', background: '#24354D', minWidth: '310px', padding: '12px', border: '1px solid #41536D' }}
+            onClick={() => setWithdrawalUnavailableOpen(true)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') setWithdrawalUnavailableOpen(true)
+            }}
+          >{t('mobile.withdraw.submit')}</motion.div>
 
         </Stack>
       </Stack>
       <Loading open={openx} handleClose={handleClosex} />
+      <Modal
+        open={withdrawalUnavailableOpen}
+        onClose={() => setWithdrawalUnavailableOpen(false)}
+        aria-labelledby="withdrawal-unavailable-title"
+        aria-describedby="withdrawal-unavailable-description"
+      >
+        <Stack alignItems="center" justifyContent="space-between" sx={{
+          background: '#06101F', width: 'min(390px, calc(100% - 32px))', minHeight: '210px',
+          borderRadius: '20px', position: 'absolute', top: '50%', left: '50%',
+          transform: 'translate(-50%, -50%)', padding: '28px 24px', boxSizing: 'border-box',
+        }}>
+          <Typography id="withdrawal-unavailable-title" sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '20px', fontWeight: '500', color: '#E9E5DA', textAlign: 'center' }}>
+            {t('mobile.withdraw.title')}
+          </Typography>
+          <Typography id="withdrawal-unavailable-description" sx={{ mt: 2, fontSize: '14px', fontWeight: '300', color: '#E9E5DA', textAlign: 'center' }}>
+            Withdrawal is unavailable till Monday 8pm UTC
+          </Typography>
+          <Button variant="contained" sx={{ mt: 3, fontFamily: 'Poppins,sans-serif', color: '#06101F', background: '#1BB6FF', padding: '8px', width: '100%' }} onClick={() => setWithdrawalUnavailableOpen(false)}>
+            {t('common.continue')}
+          </Button>
+        </Stack>
+      </Modal>
       <Toaster position="bottom-center"
         reverseOrder={false} />
     </Cover>
