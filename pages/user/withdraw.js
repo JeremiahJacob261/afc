@@ -413,7 +413,7 @@ export default function Deposit() {
             {t('mobile.withdraw.title')}
           </Typography>
           <Typography id="withdrawal-unavailable-description" sx={{ mt: 2, fontSize: '14px', fontWeight: '300', color: '#E9E5DA', textAlign: 'center' }}>
-            Withdrawal is unavailable till Monday 8pm UTC
+            <>🔔 Withdrawal Update<br />Due to the high volume of Bonus Day transactions, withdrawals are unavailable today.<br />This helps ensure smooth operations and fair distribution of the 10% Deposit Bonus.<br />Withdrawals will resume on Monday</>
           </Typography>
           <Button variant="contained" sx={{ mt: 3, fontFamily: 'Poppins,sans-serif', color: '#06101F', background: '#1BB6FF', padding: '8px', width: '100%' }} onClick={() => setWithdrawalUnavailableOpen(false)}>
             {t('common.continue')}

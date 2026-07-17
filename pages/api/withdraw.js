@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     if (!WITHDRAWALS_ENABLED) {
       return res.status(403).json([{
         status: 'Failed',
-        message: 'Withdrawal is unavailable till Monday 8pm UTC',
+        message: '🔔 Withdrawal Update\nDue to the high volume of Bonus Day transactions, withdrawals are unavailable today.\nThis helps ensure smooth operations and fair distribution of the 10% Deposit Bonus.\nWithdrawals will resume on Monday',
       }])
     }
 
