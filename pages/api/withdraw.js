@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     if (!WITHDRAWALS_ENABLED) {
       return res.status(403).json([{
         status: 'Failed',
-        message: '🔔 Withdrawal Update\nDue to the high volume of Bonus Day transactions, withdrawals are unavailable today.\nThis helps ensure smooth operations and fair distribution of the 10% Deposit Bonus.\nWithdrawals will resume on Monday',
+        message: 'Important Announcement\nFollowing the successful conclusion of the FIFA World Cup, European FC is now fully focused on the upcoming English Premier League (EPL) season.\nWe are pleased to inform all members that withdrawals will resume at 12:01 AM on July 21, 2026.\nThank you for your continued support, and we wish you a successful EPL season with European FC!\nEFC MANAGEMENT',
       }])
     }
 
