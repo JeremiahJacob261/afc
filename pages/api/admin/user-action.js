@@ -1,6 +1,33 @@
 import { requireAdmin } from '@/lib/adminAuth'
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 
+const REFERRAL_PAGE_SIZE = 1000
+
+function referralCode(value) {
+  const code = String(value ?? '').trim()
+  return code || null
+}
+
+async function getAllReferralUsers(supabase) {
+  const users = []
+
+  for (let from = 0; ; from += REFERRAL_PAGE_SIZE) {
+    const { data, error } = await supabase
+      .from('users')
+      .select('id,uid,username,newrefer,refer,lvla,lvlb')
+      .order('id', { ascending: true })
+      .range(from, from + REFERRAL_PAGE_SIZE - 1)
+
+    if (error) throw error
+
+    const page = data || []
+    users.push(...page)
+    if (page.length < REFERRAL_PAGE_SIZE) break
+  }
+
+  return users
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ status: 'error', message: 'Method not allowed' })
@@ -72,69 +99,162 @@ export default async function handler(req, res) {
     }
 
     if (action === 'switch-referral') {
-      if (!currentRefer || !newRefer) {
+      const requestedUid = String(uid || '').trim()
+      const requestedUsername = String(username || '').trim()
+      const requestedCurrentRefer = referralCode(currentRefer)
+      const requestedNewRefer = referralCode(newRefer)
+
+      if ((!requestedUid && !requestedUsername && !requestedCurrentRefer) || !requestedNewRefer) {
         return res.status(400).json({ status: 'error', message: 'Missing referral details' })
       }
 
-      const { data: referrer, error: referrerError } = await supabase
-        .from('users')
-        .select('newrefer,refer,lvla')
-        .eq('newrefer', newRefer)
-        .maybeSingle()
+      // Supabase/PostgREST commonly caps a response at 1,000 rows. Paginate so
+      // users beyond that limit cannot be silently skipped.
+      const allUsers = await getAllReferralUsers(supabase)
+      const usersByCode = new Map(
+        allUsers
+          .map((user) => [referralCode(user.newrefer), user])
+          .filter(([code]) => code)
+      )
 
-      if (referrerError) throw referrerError
+      const target = requestedUid
+        ? allUsers.find((user) => String(user.uid || '') === requestedUid)
+        : requestedUsername
+          ? allUsers.find((user) => String(user.username || '') === requestedUsername)
+          : usersByCode.get(requestedCurrentRefer)
+
+      if (!target) {
+        return res.status(404).json({ status: 'error', message: 'User to move was not found' })
+      }
+
+      if (requestedCurrentRefer && referralCode(target.newrefer) !== requestedCurrentRefer) {
+        return res.status(409).json({
+          status: 'error',
+          message: 'The user referral details changed. Refresh the page and try again.',
+        })
+      }
+
+      const referrer = usersByCode.get(requestedNewRefer)
       if (!referrer) {
         return res.status(404).json({ status: 'error', message: 'New referrer not found' })
       }
 
-      const { data: allUsers, error: usersError } = await supabase
-        .from('users')
-        .select('newrefer,refer,lvla,lvlb')
+      const targetCode = referralCode(target.newrefer)
+      if (!targetCode) {
+        return res.status(409).json({ status: 'error', message: 'The user has no referral code' })
+      }
 
-      if (usersError) throw usersError
+      if (targetCode === requestedNewRefer) {
+        return res.status(400).json({ status: 'error', message: 'A user cannot refer themselves' })
+      }
 
-      const usersByCode = new Map((allUsers || []).map((user) => [user.newrefer, user]))
+      if (referralCode(target.refer) === requestedNewRefer) {
+        return res.status(409).json({
+          status: 'error',
+          message: `${target.username} is already a direct downline of ${requestedNewRefer}`,
+        })
+      }
+
+      // Walking upward from the proposed referrer catches attempts to move a
+      // user beneath one of their own downlines before any records are changed.
+      const ancestorCodes = new Set()
+      let ancestor = referrer
+      while (ancestor) {
+        const code = referralCode(ancestor.newrefer)
+        if (!code) break
+        if (code === targetCode) {
+          return res.status(409).json({
+            status: 'error',
+            message: 'Cannot move a user beneath one of their own downlines',
+          })
+        }
+        if (ancestorCodes.has(code)) {
+          return res.status(409).json({ status: 'error', message: 'The new referrer has a circular referral chain' })
+        }
+        ancestorCodes.add(code)
+        ancestor = usersByCode.get(referralCode(ancestor.refer))
+      }
+
+      const childrenByParent = new Map()
+      for (const user of allUsers) {
+        const parentCode = referralCode(user.refer)
+        if (!parentCode) continue
+        const children = childrenByParent.get(parentCode) || []
+        children.push(user)
+        childrenByParent.set(parentCode, children)
+      }
+
       const queue = [{
-        code: currentRefer,
-        parentCode: referrer.newrefer ?? newRefer,
-        parentRefer: referrer.refer ?? 0,
-        parentLvla: referrer.lvla ?? 0,
+        user: target,
+        parentCode: referralCode(referrer.newrefer),
+        parentRefer: referralCode(referrer.refer),
+        parentLvla: referralCode(referrer.lvla),
       }]
       const visited = new Set()
+      const updates = []
 
       while (queue.length > 0) {
         const item = queue.shift()
-        if (!item || visited.has(item.code)) continue
-        visited.add(item.code)
+        if (!item?.user) continue
 
-        const user = usersByCode.get(item.code)
-        if (!user) continue
+        const user = item.user
+        const code = referralCode(user.newrefer)
+        if (!code || visited.has(code)) {
+          return res.status(409).json({ status: 'error', message: 'The user has a circular referral subtree' })
+        }
+        visited.add(code)
 
         const values = {
           refer: item.parentCode,
           lvla: item.parentRefer,
           lvlb: item.parentLvla,
         }
+        const changed = ['refer', 'lvla', 'lvlb']
+          .some((field) => referralCode(user[field]) !== values[field])
+        if (changed) updates.push({ user, values })
 
-        const { error: updateError } = await supabase
-          .from('users')
-          .update(values)
-          .eq('newrefer', item.code)
-
-        if (updateError) throw updateError
-
-        const children = (allUsers || []).filter((candidate) => candidate.refer === user.newrefer)
+        const children = childrenByParent.get(code) || []
         for (const child of children) {
           queue.push({
-            code: child.newrefer,
-            parentCode: user.newrefer,
+            user: child,
+            parentCode: code,
             parentRefer: values.refer,
             parentLvla: values.lvla,
           })
         }
       }
 
-      return res.status(200).json({ status: 'success' })
+      let updatedTarget = null
+      for (const update of updates) {
+        const { data: savedUser, error: updateError } = await supabase
+          .from('users')
+          .update(update.values)
+          .eq('id', update.user.id)
+          .select('id,uid,username,newrefer,refer,lvla,lvlb')
+          .maybeSingle()
+
+        if (updateError) throw updateError
+        if (!savedUser) {
+          const error = new Error(`Referral update did not save for ${update.user.username}`)
+          error.statusCode = 409
+          throw error
+        }
+        if (update.user.id === target.id) updatedTarget = savedUser
+      }
+
+      if (!updatedTarget || referralCode(updatedTarget.refer) !== requestedNewRefer) {
+        const error = new Error('Referral update could not be verified')
+        error.statusCode = 409
+        throw error
+      }
+
+      return res.status(200).json({
+        status: 'success',
+        user: updatedTarget,
+        updatedCount: updates.length,
+        referrerUsername: referrer.username,
+        message: `${target.username} is now a direct downline of ${requestedNewRefer}`,
+      })
     }
 
     return res.status(400).json({ status: 'error', message: 'Unsupported admin action' })

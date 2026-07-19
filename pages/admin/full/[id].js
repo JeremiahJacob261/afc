@@ -119,6 +119,7 @@ export default function UserDetailModal() {
   const [editbal, setEditbal] = useState(false)
   const [switchOpen, setSwitchOpen] = useState(false)
   const [newRefer, setNewRefer] = useState('')
+  const [switchingReferral, setSwitchingReferral] = useState(false)
   const [impersonating, setImpersonating] = useState(false)
   const [credentialOpen, setCredentialOpen] = useState(false)
   const [newPassword, setNewPassword] = useState('')
@@ -218,25 +219,34 @@ export default function UserDetailModal() {
   }
 
   const switchReferral = async () => {
+    const requestedReferral = newRefer.trim()
+    if (!requestedReferral || switchingReferral) return
+
+    setSwitchingReferral(true)
     try {
       const response = await fetch('/api/admin/user-action', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'switch-referral',
+          uid: datas?.uid,
+          username: datas?.username,
           currentRefer: datas?.newrefer,
-          newRefer,
+          newRefer: requestedReferral,
         }),
       })
       const result = await response.json().catch(() => ({}))
       if (!response.ok) throw new Error(result.message || 'Referral switch failed')
-      setDatas((current) => ({ ...current, refer: newRefer }))
+      setDatas((current) => ({ ...current, ...(result.user || {}) }))
+      setReferredby(result.referrerUsername || requestedReferral)
       setSwitchOpen(false)
       setNewRefer('')
-      toast.success('Referral switched successfully')
+      toast.success(result.message || 'Referral switched successfully')
     } catch (error) {
       console.log(error)
       toast.error(error.message || 'Error occurred')
+    } finally {
+      setSwitchingReferral(false)
     }
   }
 
@@ -626,9 +636,10 @@ export default function UserDetailModal() {
             <button
               type="button"
               onClick={switchReferral}
-              className="mt-4 w-full rounded-full bg-white px-5 py-3 text-sm font-semibold text-black transition hover:bg-[#1BB6FF]"
+              disabled={!newRefer.trim() || switchingReferral}
+              className="mt-4 w-full rounded-full bg-white px-5 py-3 text-sm font-semibold text-black transition hover:bg-[#1BB6FF] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Switch referral
+              {switchingReferral ? 'Switching referral…' : 'Switch referral'}
             </button>
           </div>
         </div>
