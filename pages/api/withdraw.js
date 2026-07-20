@@ -2,7 +2,7 @@ import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
 import { getWithdrawalSettings, WITHDRAWAL_HARD_LIMIT_AMOUNT } from '@/lib/adminSettings'
 import { calculateWithdrawalAmounts } from '@/lib/withdrawalFee'
 
-const WITHDRAWALS_ENABLED = false
+const WITHDRAWALS_ENABLED = true;
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
