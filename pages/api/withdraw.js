@@ -2,21 +2,12 @@ import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
 import { getWithdrawalSettings, WITHDRAWAL_HARD_LIMIT_AMOUNT } from '@/lib/adminSettings'
 import { calculateWithdrawalAmounts } from '@/lib/withdrawalFee'
 
-const WITHDRAWALS_ENABLED = true;
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json([{ status: 'Failed', message: 'Method not allowed' }])
   }
 
   try {
-    if (!WITHDRAWALS_ENABLED) {
-      return res.status(403).json([{
-        status: 'Failed',
-        message: 'Important Announcement\nFollowing the successful conclusion of the FIFA World Cup, European FC is now fully focused on the upcoming English Premier League (EPL) season.\nWe are pleased to inform all members that withdrawals will resume at 12:01 AM on July 21, 2026.\nThank you for your continued support, and we wish you a successful EPL season with European FC!\nEFC MANAGEMENT',
-      }])
-    }
-
     const body = req.body || {}
     const amount = Number(body.amount)
 
