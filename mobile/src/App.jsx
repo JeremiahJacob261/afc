@@ -2173,6 +2173,7 @@ function WithdrawScreen({ navigate }) {
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [message, setMessage] = useState(null)
+  const [withdrawalDisabledDialogOpen, setWithdrawalDisabledDialogOpen] = useState(false)
 
   useEffect(() => {
     loadPaymentData(setData, setLoading, setMessage, t('messages.unableLoadPaymentData'))
@@ -2180,11 +2181,21 @@ function WithdrawScreen({ navigate }) {
 
   const wallet = data.wallets.find((item) => String(item.id ?? item.wallid) === String(walletId))
   const settings = data.settings || {}
+  const withdrawalsEnabled = settings.withdrawalsEnabled ?? true
+  const withdrawalDisabledMessage = settings.withdrawalDisabledMessage || 'Withdrawals are temporarily unavailable. Please try again later.'
   const feePercent = Number(settings.withdrawalFeePercent ?? 7)
   const requested = Number(amount) || 0
   const total = requested + (requested * feePercent / 100)
 
+  useEffect(() => {
+    if (!loading && !withdrawalsEnabled) setWithdrawalDisabledDialogOpen(true)
+  }, [loading, withdrawalsEnabled])
+
   async function submitWithdraw() {
+    if (!withdrawalsEnabled) {
+      setWithdrawalDisabledDialogOpen(true)
+      return
+    }
     if (!wallet) {
       notifyMessage(setMessage, 'error', t('messages.chooseWalletFirst'))
       return
@@ -2228,10 +2239,20 @@ function WithdrawScreen({ navigate }) {
   return (
     <section className="page-stack account-linked-page">
       <PageHeader title={t('mobile.withdraw.title')} onBack={() => navigate('profile')} />
+      {withdrawalDisabledDialogOpen ? (
+        <div className="language-dialog-backdrop" role="dialog" aria-modal="true" aria-labelledby="withdrawals-disabled-title">
+          <div className="language-dialog-card">
+            <p className="eyebrow">{t('mobile.withdraw.title')}</p>
+            <h2 id="withdrawals-disabled-title">Withdrawals unavailable</h2>
+            <p>{withdrawalDisabledMessage}</p>
+            <button className="primary-button full" type="button" onClick={() => setWithdrawalDisabledDialogOpen(false)}>OK</button>
+          </div>
+        </div>
+      ) : null}
       {loading ? <LoadingState text={t('mobile.withdraw.loading')} /> : null}
       <Message value={message} />
       <section className="detail-card form-stack">
-        <SelectField label={t('common.wallet')} value={walletId} onChange={setWalletId}>
+        <SelectField label={t('common.wallet')} value={walletId} onChange={setWalletId} disabled={!withdrawalsEnabled}>
           <option value="">{t('forms.chooseWallet')}</option>
           {data.wallets.map((item) => (
             <option key={item.id ?? item.wallid ?? item.wallet} value={item.id ?? item.wallid}>
@@ -2245,16 +2266,16 @@ function WithdrawScreen({ navigate }) {
           </button>
         ) : null}
         <InputShell icon={<Wallet size={18} />} label={t('common.amount')}>
-          <input inputMode="decimal" value={amount} onChange={(event) => setAmount(event.target.value.replace(/[^\d.]/g, ''))} placeholder={t('common.amount')} />
+          <input disabled={!withdrawalsEnabled} inputMode="decimal" value={amount} onChange={(event) => setAmount(event.target.value.replace(/[^\d.]/g, ''))} placeholder={t('common.amount')} />
         </InputShell>
         <InputShell icon={<Lock size={18} />} label={t('forms.transactionPin')}>
-          <input inputMode="numeric" value={pin} onChange={(event) => setPin(event.target.value.replace(/[^\d]/g, '').slice(0, 4))} placeholder={t('forms.pinPlaceholder')} />
+          <input disabled={!withdrawalsEnabled} inputMode="numeric" value={pin} onChange={(event) => setPin(event.target.value.replace(/[^\d]/g, '').slice(0, 4))} placeholder={t('forms.pinPlaceholder')} />
         </InputShell>
         <div className="fee-note">
           <span>{t('mobile.withdraw.fee', { percent: feePercent })}</span>
           <b>{t('mobile.withdraw.totalDebit', { amount: formatNumber(total) })}</b>
         </div>
-        <button className="primary-button full" type="button" onClick={submitWithdraw} disabled={submitting}>
+        <button className="primary-button full" type="button" onClick={submitWithdraw} disabled={submitting || !withdrawalsEnabled}>
           {submitting ? t('mobile.deposit.submitting') : t('mobile.withdraw.submit')}
           <ArrowRight size={18} />
         </button>
@@ -2964,11 +2985,11 @@ function Segmented({ options, value, onChange }) {
   )
 }
 
-function SelectField({ label, value, onChange, children }) {
+function SelectField({ label, value, onChange, disabled = false, children }) {
   return (
     <label className="mini-field full-field">
       <span>{label}</span>
-      <select value={value} onChange={(event) => onChange(event.target.value)}>
+      <select value={value} disabled={disabled} onChange={(event) => onChange(event.target.value)}>
         {children}
       </select>
     </label>

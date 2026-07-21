@@ -48,6 +48,8 @@ export default async function handler(req, res) {
         dailyWithdrawalLimit: payload.dailyWithdrawalLimit ?? currentWithdrawalSettings.dailyWithdrawalLimit,
         withdrawalLimitExemptUsernames: payload.withdrawalLimitExemptUsernames ?? currentWithdrawalSettings.withdrawalLimitExemptUsernames,
         withdrawalFeePercent: payload.withdrawalFeePercent ?? currentWithdrawalSettings.withdrawalFeePercent,
+        withdrawalsEnabled: payload.withdrawalsEnabled ?? currentWithdrawalSettings.withdrawalsEnabled,
+        withdrawalDisabledMessage: payload.withdrawalDisabledMessage ?? currentWithdrawalSettings.withdrawalDisabledMessage,
       })
 
       return res.status(200).json({

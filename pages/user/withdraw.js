@@ -66,6 +66,9 @@ export default function Deposit() {
   const [minWithdrawalAmount, setMinWithdrawalAmount] = useState(10);
   const [maxWithdrawalAmount, setMaxWithdrawalAmount] = useState(100000);
   const [withdrawalFeePercent, setWithdrawalFeePercent] = useState(7);
+  const [withdrawalsEnabled, setWithdrawalsEnabled] = useState(true);
+  const [withdrawalDisabledMessage, setWithdrawalDisabledMessage] = useState('Withdrawals are temporarily unavailable. Please try again later.');
+  const [withdrawalDisabledDialogOpen, setWithdrawalDisabledDialogOpen] = useState(false);
   //the below controls the loading modal
   const [openx, setOpenx] = useState(false);
   const handleOpenx = () => setOpenx(true);
@@ -145,6 +148,11 @@ export default function Deposit() {
   const transaction = async () => {
     if (openx) return
 
+    if (!withdrawalsEnabled) {
+      setWithdrawalDisabledDialogOpen(true)
+      return
+    }
+
     if (pin === '') {
       toast.error(t('messages.enterTransactionPin'))
     } else if (method === '' || address === '') {
@@ -196,6 +204,10 @@ export default function Deposit() {
           setMinWithdrawalAmount(result.settings.minWithdrawalAmount ?? 10);
           setMaxWithdrawalAmount(result.settings.maxWithdrawalAmount ?? 100000);
           setWithdrawalFeePercent(result.settings.withdrawalFeePercent ?? 7);
+          const enabled = result.settings.withdrawalsEnabled ?? true;
+          setWithdrawalsEnabled(enabled);
+          setWithdrawalDisabledMessage(result.settings.withdrawalDisabledMessage ?? 'Withdrawals are temporarily unavailable. Please try again later.');
+          setWithdrawalDisabledDialogOpen(!enabled);
         }
       } catch (e) {
         console.log(e)
@@ -323,6 +335,7 @@ export default function Deposit() {
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={method}
+                disabled={!withdrawalsEnabled}
                 style={{ background: "#06101F", color: '#E9E5DA', border: '1px solid #E9E5DA' }}
                 onChange={(e) => {
                   setMethod(e.target.value);
@@ -364,6 +377,7 @@ export default function Deposit() {
               sx={{ border: '1px solid #E9E5DA', input: { color: '#E9E5DA', } }}
               type="number"
               value={amount}
+              disabled={!withdrawalsEnabled}
               onChange={(a) => {
                 setAmount(a.target.value)
 
@@ -375,6 +389,7 @@ export default function Deposit() {
               sx={{ border: '1px solid #E9E5DA', input: { color: '#E9E5DA', }, textAlign: 'center' }}
               type="pin"
               value={pin}
+              disabled={!withdrawalsEnabled}
               onChange={(a) => {
                 if (!isNaN(a.target.value)) {
                   setPin(a.target.value)
@@ -386,7 +401,7 @@ export default function Deposit() {
           <motion.div whileTap={{ scale: 0.98 }}
             role="button"
             tabIndex={0}
-            style={{ cursor: 'pointer', display: 'flex', flexDirection: 'row', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: '#E9E5DA', height: '50px', background: '#1BB6FF', minWidth: '310px', padding: '12px', border: '1px solid #1BB6FF' }}
+            style={{ cursor: withdrawalsEnabled ? 'pointer' : 'not-allowed', display: 'flex', flexDirection: 'row', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: '#E9E5DA', height: '50px', background: withdrawalsEnabled ? '#1BB6FF' : '#526170', minWidth: '310px', padding: '12px', border: '1px solid #1BB6FF' }}
             onClick={transaction}
             onKeyDown={(event) => {
               if (event.key === 'Enter' || event.key === ' ') transaction()
@@ -396,6 +411,13 @@ export default function Deposit() {
         </Stack>
       </Stack>
       <Loading open={openx} handleClose={handleClosex} />
+      <Modal open={withdrawalDisabledDialogOpen} onClose={() => setWithdrawalDisabledDialogOpen(false)} aria-labelledby="withdrawals-disabled-title">
+        <Stack alignItems='center' justifyContent='space-evenly' sx={{ background: '#06101F', width: '290px', minHeight: '250px', borderRadius: '20px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '20px' }}>
+          <Typography id="withdrawals-disabled-title" sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '20px', fontWeight: '500', color: '#E9E5DA' }}>Withdrawals unavailable</Typography>
+          <Typography sx={{ mt: 2, textAlign: 'center', fontSize: '14px', fontWeight: '300', color: '#E9E5DA' }}>{withdrawalDisabledMessage}</Typography>
+          <Button variant='contained' sx={{ mt: 3, fontFamily: 'Poppins,sans-serif', color: '#06101F', background: '#1BB6FF', padding: '8px', width: '100%' }} onClick={() => setWithdrawalDisabledDialogOpen(false)}>{t('common.continue')}</Button>
+        </Stack>
+      </Modal>
       <Toaster position="bottom-center"
         reverseOrder={false} />
     </Cover>

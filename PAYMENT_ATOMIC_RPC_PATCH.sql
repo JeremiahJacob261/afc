@@ -10,10 +10,14 @@ CREATE TABLE IF NOT EXISTS admin_settings (
   min_withdrawal_amount DECIMAL(15, 3) NOT NULL DEFAULT 10.000,
   max_withdrawal_amount DECIMAL(15, 3) NOT NULL DEFAULT 100000.000,
   withdrawal_fee_percent DECIMAL(6, 3) NOT NULL DEFAULT 7.000,
+  withdrawals_enabled BOOLEAN NOT NULL DEFAULT TRUE,
+  withdrawal_disabled_message TEXT NOT NULL DEFAULT 'Withdrawals are temporarily unavailable. Please try again later.',
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS daily_withdrawal_limit DECIMAL(15, 3) NOT NULL DEFAULT 100.000 CHECK (daily_withdrawal_limit >= 0);
 ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS withdrawal_limit_exempt_usernames TEXT[] NOT NULL DEFAULT '{}';
+ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS withdrawals_enabled BOOLEAN NOT NULL DEFAULT TRUE;
+ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS withdrawal_disabled_message TEXT NOT NULL DEFAULT 'Withdrawals are temporarily unavailable. Please try again later.';
 INSERT INTO admin_settings (id, daily_withdrawal_limit, withdrawal_limit_exempt_usernames)
 VALUES (1, 100.000, '{}') ON CONFLICT (id) DO NOTHING;
 
@@ -263,6 +267,10 @@ BEGIN
   SELECT * INTO settings_row FROM admin_settings WHERE id = 1;
   IF NOT FOUND THEN
     RAISE EXCEPTION 'Withdrawal settings are not configured';
+  END IF;
+
+  IF NOT COALESCE(settings_row.withdrawals_enabled, TRUE) THEN
+    RAISE EXCEPTION '%', COALESCE(NULLIF(btrim(settings_row.withdrawal_disabled_message), ''), 'Withdrawals are temporarily unavailable. Please try again later.');
   END IF;
 
   is_limit_exempt := EXISTS (

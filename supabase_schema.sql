@@ -349,15 +349,19 @@ CREATE TABLE IF NOT EXISTS admin_settings (
     withdrawal_fee_percent >= 0
     AND withdrawal_fee_percent <= 100
   ),
+  withdrawals_enabled BOOLEAN NOT NULL DEFAULT TRUE,
+  withdrawal_disabled_message TEXT NOT NULL DEFAULT 'Withdrawals are temporarily unavailable. Please try again later.',
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO admin_settings (id, first_deposit_bonus_percent, min_withdrawal_amount, max_withdrawal_amount, daily_withdrawal_limit, withdrawal_limit_exempt_usernames, withdrawal_fee_percent)
-VALUES (1, 3.000, 10.000, 100000.000, 100.000, '{}', 7.000)
+INSERT INTO admin_settings (id, first_deposit_bonus_percent, min_withdrawal_amount, max_withdrawal_amount, daily_withdrawal_limit, withdrawal_limit_exempt_usernames, withdrawal_fee_percent, withdrawals_enabled, withdrawal_disabled_message)
+VALUES (1, 3.000, 10.000, 100000.000, 100.000, '{}', 7.000, TRUE, 'Withdrawals are temporarily unavailable. Please try again later.')
 ON CONFLICT (id) DO NOTHING;
 
 ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS daily_withdrawal_limit DECIMAL(15, 3) NOT NULL DEFAULT 100.000 CHECK (daily_withdrawal_limit >= 0);
 ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS withdrawal_limit_exempt_usernames TEXT[] NOT NULL DEFAULT '{}';
+ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS withdrawals_enabled BOOLEAN NOT NULL DEFAULT TRUE;
+ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS withdrawal_disabled_message TEXT NOT NULL DEFAULT 'Withdrawals are temporarily unavailable. Please try again later.';
 
 CREATE TABLE IF NOT EXISTS reading (
   id BIGINT PRIMARY KEY,
@@ -1342,6 +1346,10 @@ BEGIN
   SELECT * INTO settings_row FROM admin_settings WHERE id = 1;
   IF NOT FOUND THEN
     RAISE EXCEPTION 'Withdrawal settings are not configured';
+  END IF;
+
+  IF NOT COALESCE(settings_row.withdrawals_enabled, TRUE) THEN
+    RAISE EXCEPTION '%', COALESCE(NULLIF(btrim(settings_row.withdrawal_disabled_message), ''), 'Withdrawals are temporarily unavailable. Please try again later.');
   END IF;
 
   is_limit_exempt := EXISTS (

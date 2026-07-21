@@ -43,6 +43,8 @@ export default function Controls() {
   const [annualWithdrawalLimit, setAnnualWithdrawalLimit] = useState('100000')
   const [withdrawalLimitExemptUsernames, setWithdrawalLimitExemptUsernames] = useState('')
   const [withdrawalFeePercent, setWithdrawalFeePercent] = useState('7')
+  const [withdrawalsEnabled, setWithdrawalsEnabled] = useState(true)
+  const [withdrawalDisabledMessage, setWithdrawalDisabledMessage] = useState('Withdrawals are temporarily unavailable. Please try again later.')
   const [loadingSettings, setLoadingSettings] = useState(true)
   const [savingSettings, setSavingSettings] = useState(false)
 
@@ -66,6 +68,8 @@ export default function Controls() {
           setAnnualWithdrawalLimit(String(result.settings?.annualWithdrawalLimit ?? 100000))
           setWithdrawalLimitExemptUsernames((result.settings?.withdrawalLimitExemptUsernames || []).join('\n'))
           setWithdrawalFeePercent(String(result.settings?.withdrawalFeePercent ?? 7))
+          setWithdrawalsEnabled(result.settings?.withdrawalsEnabled ?? true)
+          setWithdrawalDisabledMessage(result.settings?.withdrawalDisabledMessage ?? 'Withdrawals are temporarily unavailable. Please try again later.')
         }
       } catch (error) {
         console.log(error)
@@ -113,6 +117,11 @@ export default function Controls() {
       return
     }
 
+    if (!withdrawalsEnabled && !withdrawalDisabledMessage.trim()) {
+      toast.error('Add a message to show while withdrawals are disabled')
+      return
+    }
+
     setSavingSettings(true)
     try {
       const response = await fetch('/api/admin/settings', {
@@ -125,6 +134,8 @@ export default function Controls() {
           annualWithdrawalLimit: annualLimit,
           withdrawalLimitExemptUsernames: withdrawalLimitExemptUsernames.split(/[\n,]/).map((value) => value.trim()).filter(Boolean),
           withdrawalFeePercent: feePercent,
+          withdrawalsEnabled,
+          withdrawalDisabledMessage: withdrawalDisabledMessage.trim(),
         }),
       })
       const result = await response.json()
@@ -140,6 +151,8 @@ export default function Controls() {
       setAnnualWithdrawalLimit(String(result.settings?.annualWithdrawalLimit ?? annualLimit))
       setWithdrawalLimitExemptUsernames((result.settings?.withdrawalLimitExemptUsernames || []).join('\n'))
       setWithdrawalFeePercent(String(result.settings?.withdrawalFeePercent ?? feePercent))
+      setWithdrawalsEnabled(result.settings?.withdrawalsEnabled ?? withdrawalsEnabled)
+      setWithdrawalDisabledMessage(result.settings?.withdrawalDisabledMessage ?? withdrawalDisabledMessage)
       toast.success('Settings saved successfully')
     } catch (error) {
       console.log(error)
@@ -225,6 +238,42 @@ export default function Controls() {
             </div>
 
             <div className="space-y-4">
+              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <label htmlFor="withdrawals-enabled" className="text-sm font-semibold text-white">Enable Withdrawals</label>
+                    <p className="mt-1 text-xs text-zinc-500">Turn this off to stop all new withdrawal requests.</p>
+                  </div>
+                  <button
+                    id="withdrawals-enabled"
+                    type="button"
+                    role="switch"
+                    aria-checked={withdrawalsEnabled}
+                    disabled={loadingSettings || savingSettings}
+                    onClick={() => setWithdrawalsEnabled((enabled) => !enabled)}
+                    className={`relative h-7 w-12 rounded-full transition ${withdrawalsEnabled ? 'bg-[#1BB6FF]' : 'bg-zinc-700'} disabled:cursor-not-allowed disabled:opacity-60`}
+                  >
+                    <span className={`absolute top-1 h-5 w-5 rounded-full bg-white transition ${withdrawalsEnabled ? 'left-6' : 'left-1'}`} />
+                  </button>
+                </div>
+
+                {!withdrawalsEnabled ? (
+                  <div className="mt-4 flex flex-col gap-2">
+                    <label htmlFor="withdrawal-disabled-message" className="text-sm font-semibold text-white">Message shown to users</label>
+                    <textarea
+                      id="withdrawal-disabled-message"
+                      value={withdrawalDisabledMessage}
+                      maxLength={1000}
+                      disabled={loadingSettings || savingSettings}
+                      onChange={(event) => setWithdrawalDisabledMessage(event.target.value)}
+                      placeholder="Explain why withdrawals are unavailable."
+                      className="min-h-[96px] rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm text-white outline-none disabled:text-zinc-500"
+                    />
+                    <p className="text-xs text-zinc-500">This appears in a dialog when a user opens the withdrawal page.</p>
+                  </div>
+                ) : null}
+              </div>
+
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-semibold text-white">Minimum Withdrawal Amount (USDT)</label>
                 <label className="flex h-12 items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4">

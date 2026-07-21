@@ -35,6 +35,10 @@ export default async function handler(req, res) {
 
     if (betError) throw betError
 
+    if (!withdrawalSettings.withdrawalsEnabled) {
+      return res.status(200).json([{ status: 'Failed', message: withdrawalSettings.withdrawalDisabledMessage }])
+    }
+
     if ((qualifyingBets?.length || 0) <= 4) {
       return res.status(200).json([{ status: 'Failed', message: 'You have not placed up to 5 bets' }])
     }
