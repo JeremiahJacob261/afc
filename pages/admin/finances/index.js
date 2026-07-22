@@ -18,13 +18,14 @@ import logoUsdt from '@/public/tether.png'
 import BCA from '@/public/bca.jpg'
 
 const rates = {
-  mmk: 5000,
-  usdt: 1,
-  idr: 16500,
-  ngn: 1500,
-  fcfa: 600,
-  pkr: 280,
-  kes: 130,
+  mmk: 8.3333,
+  usdt: 0.0016667,
+  idr: 27.5,
+  ngn: 2.5,
+  fcfa: 1,
+  xof: 1,
+  pkr: 0.4667,
+  kes: 0.2167,
 }
 
 function getStatus(sent) {
@@ -65,12 +66,11 @@ function methodLogo(method) {
 }
 
 function convertedAmount(data) {
-  const method = data.method || 'usdt'
+  const method = data.method || 'fcfa'
   const rate = rates[method] || 1
   const amount = Number(data.amount || 0)
   if (data.type !== 'deposit') return `${formatAmount(amount * rate)} ${method.toUpperCase()}`
-  if (method === 'usdt') return `${formatAmount(amount)} USDT`
-  return `${formatAmount(amount / rate)} USDT`
+  return `${formatAmount(amount / rate)} FCFA`
 }
 
 export default function Finances() {
@@ -249,7 +249,7 @@ export default function Finances() {
                     </div>
                     <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-zinc-400">
                       <Image src={methodLogo(data.method)} width={24} height={20} alt={data.method || 'method'} className="rounded bg-white p-0.5" />
-                      <span>{formatAmount(data.amount)} {isDeposit ? String(data.method || 'USDT').toUpperCase() : 'USDT'}</span>
+                      <span>{formatAmount(data.amount)} {isDeposit ? String(data.method || 'FCFA').toUpperCase() : 'FCFA'}</span>
                       <span className="text-zinc-600">/</span>
                       <span>{convertedAmount(data)}</span>
                       <span className="text-zinc-600">/</span>

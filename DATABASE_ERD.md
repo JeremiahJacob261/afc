@@ -18,7 +18,7 @@
 │     password                             │
 │     phone                                │
 │     countrycode                          │
-│     balance          [USDT]              │
+│     balance          [FCFA]              │
 │     totald           [Total Deposited]   │
 │ FK  refer            ──────┐             │
 │ UQ  newrefer              │             │
@@ -103,7 +103,7 @@
 │ FK  match_id ─────────────────┐        │             │
 │     home [denormalized]       │        │             │
 │     away [denormalized]       │        │             │
-│     stake [bet amount USDT]   │        │             │
+│     stake [bet amount FCFA]   │        │             │
 │     aim [potential winnings]  │        │             │
 │     profit [calculated]       │        │             │
 │     market [bet type]         │        │             │
@@ -124,7 +124,7 @@
 ├──────────────────────────────────────────────────┤
 │ PK  id                                           │
 │ FK  username ────────────────────────────┐       │
-│     amount [transaction amount USDT]     │       │
+│     amount [transaction amount FCFA]     │       │
 │     type [deposit/withdraw]              │       │
 │     method [TRC20, Bank, etc]            │       │
 │     bank [bank name or crypto name]      │       │
@@ -146,7 +146,7 @@
 │ PK  id                                           │
 │     code [depbonus/affbonus/broadcast/bet]       │
 │ FK  username ────────────────────────────┐       │
-│     amount [bonus amount USDT]           │       │
+│     amount [bonus amount FCFA]           │       │
 │     type [bonus type]                    │       │
 │     created_at                           │       │
 └──────────────────┬───────────────────────┘       │

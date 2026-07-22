@@ -76,7 +76,7 @@ This schema is designed for a sports betting platform with the following key fea
 | password | TEXT | - | Encrypted password (optional if using Firebase) |
 | phone | TEXT | - | Phone number with country code |
 | countrycode | TEXT | DEFAULT '+1' | Country dialing code |
-| balance | DECIMAL(15,4) | DEFAULT 0.00 | Current account balance in USDT |
+| balance | DECIMAL(15,4) | DEFAULT 0.00 | Current account balance in FCFA |
 | totald | DECIMAL(15,4) | DEFAULT 0.00 | Total deposited amount |
 | refer | TEXT | FK → users.newrefer | Direct referrer's newrefer code |
 | newrefer | TEXT | UNIQUE, NOT NULL | Unique referral code for this user |
@@ -129,7 +129,7 @@ This schema is designed for a sports betting platform with the following key fea
 | match_id | TEXT | NOT NULL, FK | Reference to bets table |
 | home | TEXT | - | Home team name (denormalized) |
 | away | TEXT | - | Away team name (denormalized) |
-| stake | DECIMAL(15,4) | NOT NULL | Bet amount in USDT |
+| stake | DECIMAL(15,4) | NOT NULL | Bet amount in FCFA |
 | aim | DECIMAL(15,4) | NOT NULL | Potential winnings |
 | profit | DECIMAL(15,4) | DEFAULT 0.00 | Calculated profit/commission |
 | market | TEXT | - | Betting market chosen (e.g., 'home_win') |
@@ -193,7 +193,7 @@ This schema is designed for a sports betting platform with the following key fea
 | id | BIGSERIAL | PRIMARY KEY | - |
 | code | TEXT | - | Bonus type: 'depbonus', 'affbonus', 'broadcast', 'bet' |
 | username | TEXT | FK | Username receiving bonus |
-| amount | DECIMAL(15,4) | - | Bonus amount in USDT |
+| amount | DECIMAL(15,4) | - | Bonus amount in FCFA |
 | type | TEXT | - | Type of activity triggering bonus |
 | created_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP | - |
 
@@ -376,7 +376,7 @@ Users can set a transaction PIN (`users.pin`):
 
 ### 💰 Withdrawal Limits
 
-Withdrawals currently require a minimum amount of 10 USDT. There is no maximum withdrawal amount or VIP-based daily withdrawal cap enforced by the app.
+Withdrawals currently require a minimum amount of 10 FCFA. There is no maximum withdrawal amount or VIP-based daily withdrawal cap enforced by the app.
 
 ### 📱 Supported Payment Methods
 

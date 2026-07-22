@@ -28,8 +28,8 @@ export default async function handler(req, res) {
     }
 
     const rate = getPaymentRate(savedMethod)
-    if (!rate || numericAmount / rate < 5) {
-      return res.status(400).json({ status: 'error', message: 'Minimum deposit is 5 USDT equivalent' })
+    if (!rate || numericAmount / rate < 3000) {
+      return res.status(400).json({ status: 'error', message: 'Minimum deposit is 3,000 FCFA equivalent' })
     }
 
     const notificationMethod = methodCodeFromRow(savedMethod) || requestedCode

@@ -82,7 +82,7 @@ ORDER BY indexname;
 ├─────────────────────────────────────────┤
 │  - 300+ users can be stored              │
 │  - Referral chain support (3 levels)     │
-│  - Balance tracking in USDT              │
+│  - Balance tracking in FCFA              │
 └─────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────┐
@@ -258,7 +258,7 @@ USING (auth.uid()::text = userid);
 
 Your `walle` table comes with these methods (can disable/add more):
 
-1. **TRC20** - Tether on Tron (USDT)
+1. **TRC20** - Tether on Tron (FCFA)
 2. **Bitcoin** - BTC
 3. **Ethereum** - ETH
 4. **Bank Transfer** - Traditional banking

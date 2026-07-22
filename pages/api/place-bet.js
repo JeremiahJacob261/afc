@@ -1,4 +1,5 @@
 import { getCurrentProfile } from '@/lib/apiAuth'
+import { formatFcfa, getCurrencySettings, parseFcfa } from '@/lib/currency'
 
 const markets = {
   nilnil: '0 - 0',
@@ -27,7 +28,7 @@ function getRpcStatus(error) {
   if (message.includes('already settled')) return 409
   if (
     message.includes('Invalid bet details')
-    || message.includes('Enough USDT')
+    || message.includes('Enough FCFA')
     || message.includes('maximum number of bets')
     || message.includes('expired')
     || message.includes('market is not available')
@@ -52,13 +53,15 @@ export default async function handler(req, res) {
 
   try {
     const { match_id, picked, stake, client_bet_id } = req.body || {}
-    const amount = Number(stake)
+    const { user, supabase } = await getCurrentProfile(req, 'userid')
+    const currencySettings = await getCurrencySettings(supabase)
+    const amount = parseFcfa(stake)
 
-    if (!match_id || !markets[picked] || !Number.isFinite(amount) || amount < 1) {
-      return res.status(400).json({ status: 'error', message: 'Invalid bet details' })
+    if (!match_id || !markets[picked] || !Number.isFinite(amount) || amount < 600) {
+      const message = `Minimum stake is ${formatFcfa(600, currencySettings)}`
+      return res.status(400).json({ status: 'error', message })
     }
 
-    const { user, supabase } = await getCurrentProfile(req, 'userid')
     const { data, error } = await supabase.rpc('place_bet_atomic', {
       p_userid: user.id,
       p_match_id: match_id,

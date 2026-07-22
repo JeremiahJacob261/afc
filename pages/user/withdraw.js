@@ -59,12 +59,12 @@ export default function Deposit() {
   const [wallets, setWallet] = useState([]);
   const [info, setInfo] = useState({});
   const [rate,setRate] = useState(1);
-  const [currency,setCurrency] = useState('USDT');
+  const [currency,setCurrency] = useState('FCFA');
   const [swallet,setSWallet] = useState({});
   const [bank,setBank] = useState('');
   //withdrawal settings
-  const [minWithdrawalAmount, setMinWithdrawalAmount] = useState(10);
-  const [maxWithdrawalAmount, setMaxWithdrawalAmount] = useState(100000);
+  const [minWithdrawalAmount, setMinWithdrawalAmount] = useState(6000);
+  const [maxWithdrawalAmount, setMaxWithdrawalAmount] = useState(60000);
   const [withdrawalFeePercent, setWithdrawalFeePercent] = useState(7);
   const [withdrawalsEnabled, setWithdrawalsEnabled] = useState(true);
   const [withdrawalDisabledMessage, setWithdrawalDisabledMessage] = useState('Withdrawals are temporarily unavailable. Please try again later.');
@@ -110,7 +110,7 @@ export default function Deposit() {
             body: JSON.stringify({
               pass: pin,
               wallet: address,
-              amount: parseFloat(amount).toFixed(3),
+              amount: parseFloat(amount),
               method: currency,
               bank,
               accountname: swallet,
@@ -201,8 +201,8 @@ export default function Deposit() {
         setBalance(Number(result.profile.balance || 0));
 
         if (result.settings) {
-          setMinWithdrawalAmount(result.settings.minWithdrawalAmount ?? 10);
-          setMaxWithdrawalAmount(result.settings.maxWithdrawalAmount ?? 100000);
+          setMinWithdrawalAmount(result.settings.minWithdrawalAmount ?? 6000);
+          setMaxWithdrawalAmount(result.settings.maxWithdrawalAmount ?? 60000);
           setWithdrawalFeePercent(result.settings.withdrawalFeePercent ?? 7);
           const enabled = result.settings.withdrawalsEnabled ?? true;
           setWithdrawalsEnabled(enabled);
@@ -257,9 +257,10 @@ export default function Deposit() {
     setOpen(true)
   }
   //end of snackbar2
-  const { requestedAmount, feeAmount, totalAmount } = calculateWithdrawalAmounts(amount, withdrawalFeePercent);
-  const currencyCode = String(currency || "USDT").toUpperCase();
-  const showConvertedPayout = currencyCode !== 'USDT';
+  const { requestedAmount, feeAmount, totalAmount } = calculateWithdrawalAmounts(Number(amount || 0), withdrawalFeePercent);
+  const fcfa = (value) => `${Math.round(Number(value || 0)).toLocaleString()} FCFA`;
+  const currencyCode = String(currency || "FCFA").toUpperCase();
+  const showConvertedPayout = currencyCode !== 'FCFA';
   const feePercent = Number(withdrawalFeePercent.toFixed(2));
   return (
     <Cover style={{ minHeight: '95vh', paddingBottom: '100px' }}>
@@ -280,23 +281,23 @@ export default function Deposit() {
         <Stack sx={{ minWidth: '350px', minHeight: '110px', background: '#10284D', padding: '8px', borderRadius: '5px' }} direction='column' spacing={2} justifyContent='center'>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
             <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{t('common.currentBalance')}</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{(info.balance) ? info.balance.toFixed(3) : info.balance} USDT</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{fcfa(info.balance)}</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
             <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{t('mobile.withdraw.withdrawalFee')}</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{feeAmount ? feeAmount.toFixed(3) : feeAmount} USDT ({feePercent}%)</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{fcfa(feeAmount)} ({feePercent}%)</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
             <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{t('mobile.withdraw.requestedAmount')}</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{requestedAmount ? requestedAmount.toFixed(3) : requestedAmount} USDT</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{fcfa(requestedAmount)}</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
             <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{t('mobile.withdraw.youReceive')}</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{requestedAmount ? requestedAmount.toFixed(3) : requestedAmount} USDT</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{fcfa(requestedAmount)}</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
             <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{t('mobile.withdraw.totalDeducted')}</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{totalAmount ? totalAmount.toFixed(3) : totalAmount} USDT</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA' }}>{fcfa(totalAmount)}</Typography>
           </Stack>
           {showConvertedPayout && (
             <Stack direction='row' alignItems='center' justifyContent='space-between'>
@@ -346,7 +347,7 @@ export default function Deposit() {
                     setSWallet('');
                     setBank('');
                     setRate(1);
-                    setCurrency('USDT');
+                    setCurrency('FCFA');
                     return;
                   }
 
@@ -355,7 +356,7 @@ export default function Deposit() {
                   setAddress(walletid.wallet || '');
                   setSWallet(walletid.names || '');
                   setRate(Number.isFinite(currentRate) && currentRate > 0 ? currentRate : 1);
-                  setCurrency(current?.currency_code || walletid.walletnames || 'USDT');
+                  setCurrency(current?.currency_code || walletid.walletnames || 'FCFA');
                   setBank(isLocalMethod(walletid.method) ? walletid.bank : (walletid.bank || walletid.walletnames || 'usdt'));
                 }}
               >

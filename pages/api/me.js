@@ -1,5 +1,6 @@
 import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
 import { calculateVipProgress } from '@/lib/vip'
+import { getCurrencySettings } from '@/lib/currency'
 
 const PROFILE_COLUMNS = 'userid,uid,username,email,phone,countrycode,balance,totald,totalw,newrefer,refer,lvla,lvlb,firstd,dailywl,codeset'
 
@@ -10,11 +11,14 @@ export default async function handler(req, res) {
 
   try {
     const { profile, supabase } = await getCurrentProfile(req, PROFILE_COLUMNS)
-    const { count, error } = await supabase
+    const [{ count, error }, currency] = await Promise.all([
+      supabase
       .from('users')
       .select('userid', { count: 'exact', head: true })
       .eq('refer', profile.newrefer)
-      .eq('firstd', true)
+      .eq('firstd', true),
+      getCurrencySettings(supabase),
+    ])
 
     if (error) {
       throw error
@@ -28,6 +32,7 @@ export default async function handler(req, res) {
       profile,
       referralCount,
       vip,
+      currency,
     })
   } catch (error) {
       console.error('Error fetching referral count:', error)

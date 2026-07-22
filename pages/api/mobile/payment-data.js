@@ -1,5 +1,6 @@
 import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
 import { getWithdrawalSettings } from '@/lib/adminSettings'
+import { getCurrencySettings } from '@/lib/currency'
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -10,7 +11,7 @@ export default async function handler(req, res) {
     const { profile, supabase } = await getCurrentProfile(req, 'userid,uid')
     const walletOwnerId = String(profile.uid || profile.userid || '').trim()
 
-    const [methodsResult, destinationsResult, walletsResult, settings] = await Promise.all([
+    const [methodsResult, destinationsResult, walletsResult, settings, currency] = await Promise.all([
       supabase
         .from('walle')
         .select('*')
@@ -25,6 +26,7 @@ export default async function handler(req, res) {
             .eq('uid', walletOwnerId)
         : Promise.resolve({ data: [], error: null }),
       getWithdrawalSettings(supabase, { allowDefaultOnMissingTable: true }),
+      getCurrencySettings(supabase),
     ])
 
     if (methodsResult.error) throw methodsResult.error
@@ -37,6 +39,7 @@ export default async function handler(req, res) {
       destinations: destinationsResult.data || [],
       wallets: walletsResult.data || [],
       settings,
+      currency,
     })
   } catch (error) {
     return sendApiError(res, error)

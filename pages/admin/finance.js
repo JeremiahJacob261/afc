@@ -198,7 +198,7 @@ export default function Noti({ notiS }) {
     console.log(error);
   }
   const SEL = async (damount, dusername) => {
-    const { data, error } = await callAdminRpc('self', { amount: (damount < 20) ? 0 : damount * 0.1, name: dusername })
+    const { data, error } = await callAdminRpc('self', { amount: (damount < 12000) ? 0 : damount * 0.1, name: dusername })
     console.log(error);
   }
   const uploadTotal = async (dname, damount) => {
@@ -386,7 +386,7 @@ export default function Noti({ notiS }) {
                         onClick={() => {
                           if (d.type === 'withdraw') {
                             navigator.clipboard.writeText(d.address)
-                            setMessages("USDT Address Copied Successfully!")
+                            setMessages("FCFA Address Copied Successfully!")
                             handleClick()
                           } else {
                             setDrop(true);
@@ -462,7 +462,7 @@ export default function Noti({ notiS }) {
                         onClick={() => {
                           if (d.type === 'withdraw') {
                             navigator.clipboard.writeText(d.address)
-                            setMessages("USDT Address Copied Successfully!")
+                            setMessages("FCFA Address Copied Successfully!")
                             handleClick()
                           } else {
                             setDrop(true);

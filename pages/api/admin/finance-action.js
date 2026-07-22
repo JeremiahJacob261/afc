@@ -9,9 +9,9 @@ import {
 import { notifyFinanceAction } from '@/lib/pushNotifications'
 
 async function getNotificationRate(supabase, notification) {
-  const method = normalizePaymentCode(notification.method || 'usdt')
+  const method = normalizePaymentCode(notification.method || 'fcfa')
   const savedMethod = await getPaymentMethod(supabase, method)
-  const fallback = method === 'usdt' ? 1 : 0
+  const fallback = ['fcfa', 'xof', 'cfa'].includes(method) ? 1 : 0
   const rate = getPaymentRate(savedMethod, fallback)
 
   if (!rate) {
@@ -23,7 +23,7 @@ async function getNotificationRate(supabase, notification) {
   return { method, rate }
 }
 
-async function getUsdtAmount(supabase, notification) {
+async function getLedgerAmount(supabase, notification) {
   const { method, rate } = await getNotificationRate(supabase, notification)
   const amount = Number(notification.amount)
 
@@ -33,7 +33,7 @@ async function getUsdtAmount(supabase, notification) {
     throw error
   }
 
-  return method === 'usdt' ? amount : amount / rate
+  return amount / rate
 }
 
 async function getLocalWithdrawAmount(supabase, notification) {
@@ -46,7 +46,7 @@ async function getLocalWithdrawAmount(supabase, notification) {
     throw error
   }
 
-  return method === 'usdt' ? amount : amount * rate
+  return amount * rate
 }
 
 function normalizedSent(sent) {
@@ -117,7 +117,7 @@ export default async function handler(req, res) {
     let firstDepositBonusPercent = null
     if (action === 'approve' && !isLockedStatus(notification.sent)) {
       approvedAmount = isDeposit
-        ? Number((await getUsdtAmount(supabase, notification)).toFixed(3))
+        ? Number((await getLedgerAmount(supabase, notification)).toFixed(3))
         : Number((await getLocalWithdrawAmount(supabase, notification)).toFixed(3))
 
       if (isDeposit) {

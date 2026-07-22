@@ -51,7 +51,7 @@
     "profile": "Profil",
     "faq": "FAQ",
     "vip": "VIP",
-    "usdt": "USDT"
+    "usdt": "FCFA"
   },
   "auth": {
     "login": {
@@ -160,7 +160,7 @@
     "unableLoadMatches": "Impossible de charger les matchs.",
     "unableLoadMatch": "Impossible de charger le match.",
     "chooseScoreMarket": "Choisissez d'abord un marché de score.",
-    "stakeMinimum": "La mise doit être d'au moins 1 USDT.",
+    "stakeMinimum": "La mise doit être d'au moins 600 FCFA.",
     "betPlaced": "Pari placé avec succès.",
     "unablePlaceBet": "Impossible de placer le pari.",
     "unableLoadBets": "Impossible de charger les paris.",
@@ -173,7 +173,7 @@
     "depositFailed": "La soumission du dépôt a échoué.",
     "chooseWalletFirst": "Choisissez d'abord un portefeuille.",
     "enterTransactionPin": "Entrez votre code PIN de transaction.",
-    "minimumWithdrawal": "Le retrait minimum est {{amount}} USDT.",
+    "minimumWithdrawal": "Le retrait minimum est {{amount}} FCFA.",
     "unableSubmitWithdrawal": "Impossible de soumettre le retrait.",
     "walletDetailsInvalid": "Veuillez remplir correctement tous les détails du portefeuille.",
     "walletBindSuccess": "L'association du portefeuille a réussi.",
@@ -190,7 +190,7 @@
     "unableLoadNotifications": "Impossible de charger les notifications.",
     "unableLoadPaymentData": "Impossible de charger les données de paiement.",
     "depositSubmitted": "Votre reçu a été soumis et est en attente de confirmation par l'administrateur.",
-    "depositSubmittedWithAmount": "Votre reçu pour {{amount}} USDT a été soumis et est en attente de confirmation de l'administrateur.",
+    "depositSubmittedWithAmount": "Votre reçu pour {{amount}} FCFA a été soumis et est en attente de confirmation de l'administrateur.",
     "withdrawalSent": "Votre demande de retrait a été envoyée.",
     "copied": "copié",
     "copiedToClipboard": "Copié dans le presse-papiers",
@@ -320,7 +320,7 @@
         },
         {
           "title": "Approvisionnez votre portefeuille",
-          "copy": "Commencez avec le dépôt minimum de 5 USDT et vérifiez le bonus de dépôt actif."
+          "copy": "Commencez avec le dépôt minimum de 3,000 FCFA et vérifiez le bonus de dépôt actif."
         },
         {
           "title": "Choisissez un match de football",
@@ -328,7 +328,7 @@
         },
         {
           "title": "Placez et suivez",
-          "copy": "Confirmez votre ticket, suivez le match, et consultez le statut des retraits à partir de 10 USDT."
+          "copy": "Confirmez votre ticket, suivez le match, et consultez le statut des retraits à partir de 6,000 FCFA."
         }
       ]
     },
@@ -340,11 +340,11 @@
       "items": [
         {
           "label": "Bonus de dépôt",
-          "value": "1USDT"
+          "value": "600 FCFA"
         },
         {
           "label": "Dépôt minimum",
-          "value": "5USDT"
+          "value": "3,000 FCFA"
         },
         {
           "label": "Pourcentage quotidien",
@@ -352,7 +352,7 @@
         },
         {
           "label": "Retrait minimum",
-          "value": "10USDT"
+          "value": "6,000 FCFA"
         }
       ]
     },
@@ -441,11 +441,11 @@
       "items": [
         {
           "title": "Bonus de dépôt de bienvenue",
-          "copy": "Les nouveaux utilisateurs peuvent commencer avec le bonus de dépôt de 1USDT indiqué dans les opérations de la plateforme EFC."
+          "copy": "Les nouveaux utilisateurs peuvent commencer avec le bonus de dépôt de 600 FCFA indiqué dans les opérations de la plateforme EFC."
         },
         {
           "title": "Bonus d'invitation",
-          "copy": "Invitez des membres actifs et débloquez des récompenses échelonnées USDT au fur et à mesure de la croissance de votre réseau footballistique."
+          "copy": "Invitez des membres actifs et débloquez des récompenses échelonnées FCFA au fur et à mesure de la croissance de votre réseau footballistique."
         },
         {
           "title": "Remboursements pour agents",
@@ -455,27 +455,27 @@
       "tiers": [
         {
           "members": "10",
-          "reward": "10USDT"
+          "reward": "6,000 FCFA"
         },
         {
           "members": "20",
-          "reward": "30USDT"
+          "reward": "18,000 FCFA"
         },
         {
           "members": "30",
-          "reward": "50USDT"
+          "reward": "30,000 FCFA"
         },
         {
           "members": "50",
-          "reward": "70USDT"
+          "reward": "42,000 FCFA"
         },
         {
           "members": "80",
-          "reward": "100USDT"
+          "reward": "60,000 FCFA"
         },
         {
           "members": "100",
-          "reward": "150USDT"
+          "reward": "90,000 FCFA"
         }
       ]
     },
@@ -733,7 +733,7 @@
       "marketUnavailable": "Ce marché n'est pas disponible",
       "matchExpired": "Ce match a expiré",
       "maxBetsReached": "Vous avez atteint le nombre maximum de paris pour aujourd'hui.",
-      "insufficientBalance": "Vous n'avez pas assez d'USDT pour terminer ce pari.",
+      "insufficientBalance": "Vous n'avez pas assez d'FCFA pour terminer ce pari.",
       "placeBet": "Placer un pari",
       "placingBet": "Placement du pari...",
       "loading": "Chargement du match..."
@@ -808,7 +808,7 @@
       "transferOption": "Option de transfert",
       "minimumPlaceholder": "Minimum {{amount}} {{currency}}",
       "chooseMethodFirst": "Choisissez d’abord une méthode",
-      "usdtEquivalent": "Équivalent USDT",
+      "usdtEquivalent": "Équivalent FCFA",
       "sendExactly": "Envoyez exactement {{amount}} aux coordonnées de paiement ci-dessous.",
       "sendEnteredAmount": "Envoyez exactement le montant saisi aux coordonnées de paiement ci-dessous.",
       "chooseMethodDetails": "Choisissez une méthode de dépôt pour voir les coordonnées de paiement.",
@@ -828,7 +828,7 @@
       "loading": "Chargement des portefeuilles...",
       "bindFirst": "Liez un portefeuille d'abord",
       "fee": "Frais {{percent}}%",
-      "totalDebit": "Débit total : {{amount}} USDT",
+      "totalDebit": "Débit total : {{amount}} FCFA",
       "submit": "Retirer",
       "successTitle": "Retrait réussi",
       "withdrawalFee": "Frais de retrait",
@@ -840,12 +840,12 @@
       "chooseWallet": "Choisissez le portefeuille de paiement préféré",
       "selectWithdrawalMethod": "Sélectionnez votre méthode de retrait",
       "noWallet": "Aucun",
-      "amountLabel": "Entrez le montant à retirer en USD",
+      "amountLabel": "Entrez le montant à retirer en FCFA",
       "noPinSet": "Aucun PIN de transaction n’a été défini.",
       "wrongPin": "PIN de transaction incorrect.",
       "insufficientFunds": "Solde insuffisant",
       "betRequirement": "Vous devez placer au moins 5 paris avant de retirer.",
-      "maximumWithdrawal": "Le retrait maximum est de {{amount}} USDT.",
+      "maximumWithdrawal": "Le retrait maximum est de {{amount}} FCFA.",
       "enterAmount": "Veuillez entrer un montant",
       "connectionError": "Veuillez vérifier votre connexion Internet et actualiser le site."
     },
@@ -873,7 +873,7 @@
       "transactionUnavailable": "Transactions indisponibles",
       "retry": "Réessayer",
       "submittedAmount": "Montant envoyé",
-      "usdtEquivalent": "Équivalent USDT",
+      "usdtEquivalent": "Équivalent FCFA",
       "payoutAmount": "Montant payé",
       "destinationDetail": "Destination : {{destination}}",
       "receiptUploaded": "Reçu téléversé",

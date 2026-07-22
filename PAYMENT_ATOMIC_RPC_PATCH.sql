@@ -7,19 +7,19 @@ ALTER TABLE users ADD COLUMN IF NOT EXISTS totalw DECIMAL(15, 4) DEFAULT 0.00;
 CREATE TABLE IF NOT EXISTS admin_settings (
   id INTEGER PRIMARY KEY DEFAULT 1 CHECK (id = 1),
   first_deposit_bonus_percent DECIMAL(6, 3) NOT NULL DEFAULT 3.000,
-  min_withdrawal_amount DECIMAL(15, 3) NOT NULL DEFAULT 10.000,
-  max_withdrawal_amount DECIMAL(15, 3) NOT NULL DEFAULT 100000.000,
+  min_withdrawal_amount DECIMAL(15, 3) NOT NULL DEFAULT 6000.000,
+  max_withdrawal_amount DECIMAL(15, 3) NOT NULL DEFAULT 60000000.000,
   withdrawal_fee_percent DECIMAL(6, 3) NOT NULL DEFAULT 7.000,
   withdrawals_enabled BOOLEAN NOT NULL DEFAULT TRUE,
   withdrawal_disabled_message TEXT NOT NULL DEFAULT 'Withdrawals are temporarily unavailable. Please try again later.',
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS daily_withdrawal_limit DECIMAL(15, 3) NOT NULL DEFAULT 100.000 CHECK (daily_withdrawal_limit >= 0);
+ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS daily_withdrawal_limit DECIMAL(15, 3) NOT NULL DEFAULT 60000.000 CHECK (daily_withdrawal_limit >= 0);
 ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS withdrawal_limit_exempt_usernames TEXT[] NOT NULL DEFAULT '{}';
 ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS withdrawals_enabled BOOLEAN NOT NULL DEFAULT TRUE;
 ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS withdrawal_disabled_message TEXT NOT NULL DEFAULT 'Withdrawals are temporarily unavailable. Please try again later.';
 INSERT INTO admin_settings (id, daily_withdrawal_limit, withdrawal_limit_exempt_usernames)
-VALUES (1, 100.000, '{}') ON CONFLICT (id) DO NOTHING;
+VALUES (1, 60000.000, '{}') ON CONFLICT (id) DO NOTHING;
 
 ALTER TABLE notification ADD COLUMN IF NOT EXISTS uid TEXT;
 ALTER TABLE notification ADD COLUMN IF NOT EXISTS processed_action TEXT;
@@ -259,9 +259,9 @@ BEGIN
     RAISE EXCEPTION 'Profile not found';
   END IF;
 
-  -- The immutable $100 cap applies to everyone, including exempt users.
-  IF p_payout_amount > 100 THEN
-    RAISE EXCEPTION 'Maximum amount to withdraw is 100 USDT';
+  -- The immutable 60,000 FCFA cap applies to everyone, including exempt users.
+  IF p_payout_amount > 60000 THEN
+    RAISE EXCEPTION 'Maximum amount to withdraw is 60,000 FCFA';
   END IF;
 
   SELECT * INTO settings_row FROM admin_settings WHERE id = 1;
@@ -292,7 +292,7 @@ BEGIN
       AND created_at >= utc_day_start;
 
     IF daily_total + p_payout_amount > settings_row.daily_withdrawal_limit THEN
-      RAISE EXCEPTION 'Daily withdrawal limit of % USDT reached', settings_row.daily_withdrawal_limit;
+      RAISE EXCEPTION 'Daily withdrawal limit of % FCFA reached', settings_row.daily_withdrawal_limit;
     END IF;
 
     SELECT COALESCE(SUM(amount), 0) INTO annual_total
@@ -303,7 +303,7 @@ BEGIN
       AND created_at >= utc_year_start;
 
     IF annual_total + p_payout_amount > settings_row.max_withdrawal_amount THEN
-      RAISE EXCEPTION 'Annual withdrawal limit of % USDT reached', settings_row.max_withdrawal_amount;
+      RAISE EXCEPTION 'Annual withdrawal limit of % FCFA reached', settings_row.max_withdrawal_amount;
     END IF;
   END IF;
 

@@ -335,13 +335,13 @@ CREATE TABLE IF NOT EXISTS admin_settings (
     first_deposit_bonus_percent >= 0
     AND first_deposit_bonus_percent <= 100
   ),
-  min_withdrawal_amount DECIMAL(15, 3) NOT NULL DEFAULT 10.000 CHECK (
+  min_withdrawal_amount DECIMAL(15, 3) NOT NULL DEFAULT 6000.000 CHECK (
     min_withdrawal_amount >= 0
   ),
-  max_withdrawal_amount DECIMAL(15, 3) NOT NULL DEFAULT 100000.000 CHECK (
+  max_withdrawal_amount DECIMAL(15, 3) NOT NULL DEFAULT 60000000.000 CHECK (
     max_withdrawal_amount >= 0
   ),
-  daily_withdrawal_limit DECIMAL(15, 3) NOT NULL DEFAULT 100.000 CHECK (
+  daily_withdrawal_limit DECIMAL(15, 3) NOT NULL DEFAULT 60000.000 CHECK (
     daily_withdrawal_limit >= 0
   ),
   withdrawal_limit_exempt_usernames TEXT[] NOT NULL DEFAULT '{}',
@@ -355,10 +355,10 @@ CREATE TABLE IF NOT EXISTS admin_settings (
 );
 
 INSERT INTO admin_settings (id, first_deposit_bonus_percent, min_withdrawal_amount, max_withdrawal_amount, daily_withdrawal_limit, withdrawal_limit_exempt_usernames, withdrawal_fee_percent, withdrawals_enabled, withdrawal_disabled_message)
-VALUES (1, 3.000, 10.000, 100000.000, 100.000, '{}', 7.000, TRUE, 'Withdrawals are temporarily unavailable. Please try again later.')
+VALUES (1, 3.000, 6000.000, 60000000.000, 60000.000, '{}', 7.000, TRUE, 'Withdrawals are temporarily unavailable. Please try again later.')
 ON CONFLICT (id) DO NOTHING;
 
-ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS daily_withdrawal_limit DECIMAL(15, 3) NOT NULL DEFAULT 100.000 CHECK (daily_withdrawal_limit >= 0);
+ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS daily_withdrawal_limit DECIMAL(15, 3) NOT NULL DEFAULT 60000.000 CHECK (daily_withdrawal_limit >= 0);
 ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS withdrawal_limit_exempt_usernames TEXT[] NOT NULL DEFAULT '{}';
 ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS withdrawals_enabled BOOLEAN NOT NULL DEFAULT TRUE;
 ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS withdrawal_disabled_message TEXT NOT NULL DEFAULT 'Withdrawals are temporarily unavailable. Please try again later.';
@@ -610,12 +610,12 @@ LANGUAGE sql
 IMMUTABLE
 AS $$
   SELECT CASE
-    WHEN COALESCE(total_deposit, 0) >= 500 AND COALESCE(referral_count, 0) >= 20 THEN 7
-    WHEN COALESCE(total_deposit, 0) >= 300 AND COALESCE(referral_count, 0) >= 15 THEN 6
-    WHEN COALESCE(total_deposit, 0) >= 200 AND COALESCE(referral_count, 0) >= 12 THEN 5
-    WHEN COALESCE(total_deposit, 0) >= 100 AND COALESCE(referral_count, 0) >= 8 THEN 4
-    WHEN COALESCE(total_deposit, 0) >= 50 AND COALESCE(referral_count, 0) >= 5 THEN 3
-    WHEN COALESCE(total_deposit, 0) >= 20 AND COALESCE(referral_count, 0) >= 3 THEN 2
+    WHEN COALESCE(total_deposit, 0) >= 300000 AND COALESCE(referral_count, 0) >= 20 THEN 7
+    WHEN COALESCE(total_deposit, 0) >= 180000 AND COALESCE(referral_count, 0) >= 15 THEN 6
+    WHEN COALESCE(total_deposit, 0) >= 120000 AND COALESCE(referral_count, 0) >= 12 THEN 5
+    WHEN COALESCE(total_deposit, 0) >= 60000 AND COALESCE(referral_count, 0) >= 8 THEN 4
+    WHEN COALESCE(total_deposit, 0) >= 30000 AND COALESCE(referral_count, 0) >= 5 THEN 3
+    WHEN COALESCE(total_deposit, 0) >= 12000 AND COALESCE(referral_count, 0) >= 3 THEN 2
     ELSE 1
   END;
 $$;
@@ -765,7 +765,7 @@ BEGIN
     RAISE EXCEPTION 'Match not found';
   END IF;
 
-  IF p_stake IS NULL OR p_stake < 1 THEN
+  IF p_stake IS NULL OR p_stake < 600 THEN
     RAISE EXCEPTION 'Invalid bet details';
   END IF;
 
@@ -786,7 +786,7 @@ BEGIN
   END IF;
 
   IF COALESCE(user_row.balance, 0) < p_stake THEN
-    RAISE EXCEPTION 'You do not have Enough USDT to Complete this BET';
+    RAISE EXCEPTION 'You do not have Enough FCFA to Complete this BET';
   END IF;
 
   IF COALESCE(user_row.gcount, 0) > 2 THEN
@@ -1338,9 +1338,9 @@ BEGIN
     RAISE EXCEPTION 'Profile not found';
   END IF;
 
-  -- The immutable $100 cap applies to everyone, including exempt users.
-  IF p_payout_amount > 100 THEN
-    RAISE EXCEPTION 'Maximum amount to withdraw is 100 USDT';
+  -- The immutable 60,000 FCFA cap applies to everyone, including exempt users.
+  IF p_payout_amount > 60000 THEN
+    RAISE EXCEPTION 'Maximum amount to withdraw is 60,000 FCFA';
   END IF;
 
   SELECT * INTO settings_row FROM admin_settings WHERE id = 1;
@@ -1371,7 +1371,7 @@ BEGIN
       AND created_at >= utc_day_start;
 
     IF daily_total + p_payout_amount > settings_row.daily_withdrawal_limit THEN
-      RAISE EXCEPTION 'Daily withdrawal limit of % USDT reached', settings_row.daily_withdrawal_limit;
+      RAISE EXCEPTION 'Daily withdrawal limit of % FCFA reached', settings_row.daily_withdrawal_limit;
     END IF;
 
     SELECT COALESCE(SUM(amount), 0) INTO annual_total
@@ -1382,7 +1382,7 @@ BEGIN
       AND created_at >= utc_year_start;
 
     IF annual_total + p_payout_amount > settings_row.max_withdrawal_amount THEN
-      RAISE EXCEPTION 'Annual withdrawal limit of % USDT reached', settings_row.max_withdrawal_amount;
+      RAISE EXCEPTION 'Annual withdrawal limit of % FCFA reached', settings_row.max_withdrawal_amount;
     END IF;
   END IF;
 

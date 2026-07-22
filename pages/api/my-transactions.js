@@ -21,13 +21,13 @@ function nullableAmount(value) {
   return Number.isFinite(amount) ? amount : null
 }
 
-function isUsdtCode(value) {
+function isFcfaCode(value) {
   const code = normalizePaymentCode(value)
-  return code === 'usdt' || code.includes('usdt')
+  return ['fcfa', 'xof', 'cfa'].includes(code)
 }
 
 function currencyLabel(value) {
-  return isUsdtCode(value) ? 'USDT' : displayPaymentCode(value || 'USDT')
+  return isFcfaCode(value) ? 'FCFA' : displayPaymentCode(value || 'FCFA')
 }
 
 function normalizeStatus(sent) {
@@ -74,13 +74,13 @@ function timestampOf(row) {
 }
 
 function getMethodDetails(row, methods) {
-  const rawMethod = normalizePaymentCode(row.method || 'usdt')
+  const rawMethod = normalizePaymentCode(row.method || 'fcfa')
   const savedMethod = findPaymentMethod(methods, rawMethod)
   const savedCode = savedMethod ? methodCodeFromRow(savedMethod) : ''
-  const methodCode = savedCode || rawMethod || 'usdt'
+  const methodCode = savedCode || rawMethod || 'fcfa'
   const methodCurrency = currencyLabel(methodCode)
   const methodLabel = savedMethod?.name || displayPaymentCode(row.method || methodCode)
-  const rate = getPaymentRate(savedMethod, isUsdtCode(methodCode) ? 1 : 0)
+  const rate = getPaymentRate(savedMethod, isFcfaCode(methodCode) ? 1 : 0)
 
   return {
     methodCode,
@@ -145,11 +145,11 @@ function normalizeTransaction(row, methods) {
   const amount = amountValue(row.amount)
   const status = normalizeStatus(row.sent)
   const method = getMethodDetails(row, methods)
-  const isUsdt = isUsdtCode(method.methodCode)
+  const isFcfa = isFcfaCode(method.methodCode)
 
   let primaryAmount
   let secondaryAmount = null
-  let accountingAmountUsdt = null
+  let accountingAmountFcfa = null
   let conversionNote = ''
   let conversionNoteKey = ''
   let conversionNoteValues = {}
@@ -157,24 +157,24 @@ function normalizeTransaction(row, methods) {
   if (type === 'deposit') {
     primaryAmount = amountPayload(amount, method.methodCurrency, 'Submitted amount', { labelKey: 'mobile.transactions.submittedAmount' })
 
-    if (isUsdt) {
-      accountingAmountUsdt = amount
+    if (isFcfa) {
+      accountingAmountFcfa = amount
     } else if (method.rate) {
-      accountingAmountUsdt = Number((amount / method.rate).toFixed(6))
-      secondaryAmount = amountPayload(accountingAmountUsdt, 'USDT', 'USDT equivalent', { approximate: true, labelKey: 'mobile.transactions.usdtEquivalent' })
+      accountingAmountFcfa = Number((amount / method.rate).toFixed(2))
+      secondaryAmount = amountPayload(accountingAmountFcfa, 'FCFA', 'FCFA equivalent', { approximate: true })
     } else {
       conversionNote = ``;
     }
   } else {
-    accountingAmountUsdt = amount
+    accountingAmountFcfa = amount
 
-    if (isUsdt) {
-      primaryAmount = amountPayload(amount, 'USDT', 'Payout amount', { labelKey: 'mobile.transactions.payoutAmount' })
+    if (isFcfa) {
+      primaryAmount = amountPayload(amount, 'FCFA', 'Payout amount', { labelKey: 'mobile.transactions.payoutAmount' })
     } else if (method.rate) {
       primaryAmount = amountPayload(amount * method.rate, method.methodCurrency, 'Payout amount', { labelKey: 'mobile.transactions.payoutAmount' })
-      secondaryAmount = amountPayload(amount, 'USDT', 'Payout amount', { labelKey: 'mobile.transactions.payoutAmount' })
+      secondaryAmount = amountPayload(amount, 'FCFA', 'FCFA amount')
     } else {
-      primaryAmount = amountPayload(amount, 'USDT', 'Payout amount', { labelKey: 'mobile.transactions.payoutAmount' })
+      primaryAmount = amountPayload(amount, 'FCFA', 'Payout amount', { labelKey: 'mobile.transactions.payoutAmount' })
       conversionNote = `${method.methodCurrency} payout unavailable because rate is missing`
       conversionNoteKey = 'mobile.transactions.methodMissingRate'
       conversionNoteValues = { currency: method.methodCurrency }
@@ -196,7 +196,7 @@ function normalizeTransaction(row, methods) {
     methodLabel: method.methodLabel,
     primaryAmount,
     secondaryAmount,
-    accountingAmountUsdt,
+    accountingAmountFcfa,
     conversionNote,
     conversionNoteKey,
     conversionNoteValues,

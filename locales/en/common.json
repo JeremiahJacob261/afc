@@ -51,7 +51,7 @@
     "profile": "Profile",
     "faq": "FAQ",
     "vip": "VIP",
-    "usdt": "USDT"
+    "usdt": "FCFA"
   },
   "auth": {
     "login": {
@@ -160,7 +160,7 @@
     "unableLoadMatches": "Unable to load matches.",
     "unableLoadMatch": "Unable to load match.",
     "chooseScoreMarket": "Choose a score market first.",
-    "stakeMinimum": "Stake must be at least 1 USDT.",
+    "stakeMinimum": "Stake must be at least 600 FCFA.",
     "betPlaced": "Bet placed successfully.",
     "unablePlaceBet": "Unable to place bet.",
     "unableLoadBets": "Unable to load bets.",
@@ -173,7 +173,7 @@
     "depositFailed": "Deposit submission failed.",
     "chooseWalletFirst": "Choose a wallet first.",
     "enterTransactionPin": "Enter your transaction PIN.",
-    "minimumWithdrawal": "Minimum withdrawal is {{amount}} USDT.",
+    "minimumWithdrawal": "Minimum withdrawal is {{amount}} FCFA.",
     "unableSubmitWithdrawal": "Unable to submit withdrawal.",
     "walletDetailsInvalid": "Please fill all wallet details correctly.",
     "walletBindSuccess": "Wallet binding successful.",
@@ -190,7 +190,7 @@
     "unableLoadNotifications": "Unable to load notifications.",
     "unableLoadPaymentData": "Unable to load payment data.",
     "depositSubmitted": "Your receipt has been submitted and is awaiting admin confirmation.",
-    "depositSubmittedWithAmount": "Your receipt for {{amount}} USDT has been submitted and is awaiting admin confirmation.",
+    "depositSubmittedWithAmount": "Your receipt for {{amount}} FCFA has been submitted and is awaiting admin confirmation.",
     "withdrawalSent": "Your withdrawal request has been sent.",
     "copied": "copied",
     "copiedToClipboard": "Copied to clipboard",
@@ -320,7 +320,7 @@
         },
         {
           "title": "Fund your wallet",
-          "copy": "Start from the 5USDT minimum deposit and check the active deposit bonus."
+          "copy": "Start from the 3,000 FCFA minimum deposit and check the active deposit bonus."
         },
         {
           "title": "Choose a football match",
@@ -328,7 +328,7 @@
         },
         {
           "title": "Place and track",
-          "copy": "Confirm your slip, follow the match, and review withdrawal status from 10USDT."
+          "copy": "Confirm your slip, follow the match, and review withdrawal status from 6,000 FCFA."
         }
       ]
     },
@@ -340,11 +340,11 @@
       "items": [
         {
           "label": "Deposit bonus",
-          "value": "1USDT"
+          "value": "600 FCFA"
         },
         {
           "label": "Minimum deposit",
-          "value": "5USDT"
+          "value": "3,000 FCFA"
         },
         {
           "label": "Daily percentage",
@@ -352,7 +352,7 @@
         },
         {
           "label": "Minimum withdrawal",
-          "value": "10USDT"
+          "value": "6,000 FCFA"
         }
       ]
     },
@@ -441,11 +441,11 @@
       "items": [
         {
           "title": "Welcome deposit bonus",
-          "copy": "New users can start with the 1USDT deposit bonus shown in EFC platform operations."
+          "copy": "New users can start with the 600 FCFA deposit bonus shown in EFC platform operations."
         },
         {
           "title": "Invitation bonus",
-          "copy": "Invite active members and unlock tiered USDT rewards as your football network grows."
+          "copy": "Invite active members and unlock tiered FCFA rewards as your football network grows."
         },
         {
           "title": "Agent rebates",
@@ -455,27 +455,27 @@
       "tiers": [
         {
           "members": "10",
-          "reward": "10USDT"
+          "reward": "6,000 FCFA"
         },
         {
           "members": "20",
-          "reward": "30USDT"
+          "reward": "18,000 FCFA"
         },
         {
           "members": "30",
-          "reward": "50USDT"
+          "reward": "30,000 FCFA"
         },
         {
           "members": "50",
-          "reward": "70USDT"
+          "reward": "42,000 FCFA"
         },
         {
           "members": "80",
-          "reward": "100USDT"
+          "reward": "60,000 FCFA"
         },
         {
           "members": "100",
-          "reward": "150USDT"
+          "reward": "90,000 FCFA"
         }
       ]
     },
@@ -733,7 +733,7 @@
       "marketUnavailable": "This market is not available",
       "matchExpired": "This match has expired",
       "maxBetsReached": "You have reached the maximum number of bets for today.",
-      "insufficientBalance": "You do not have enough USDT to complete this bet.",
+      "insufficientBalance": "You do not have enough FCFA to complete this bet.",
       "placeBet": "Place bet",
       "placingBet": "Placing bet...",
       "loading": "Loading match..."
@@ -808,7 +808,7 @@
       "transferOption": "Transfer option",
       "minimumPlaceholder": "Minimum {{amount}} {{currency}}",
       "chooseMethodFirst": "Choose a method first",
-      "usdtEquivalent": "USDT equivalent",
+      "usdtEquivalent": "FCFA equivalent",
       "sendExactly": "Send exactly {{amount}} to the payment details below.",
       "sendEnteredAmount": "Send exactly the entered amount to the payment details below.",
       "chooseMethodDetails": "Choose a deposit method to see payment details.",
@@ -828,7 +828,7 @@
       "loading": "Loading wallets...",
       "bindFirst": "Bind a wallet first",
       "fee": "Fee {{percent}}%",
-      "totalDebit": "Total debit: {{amount}} USDT",
+      "totalDebit": "Total debit: {{amount}} FCFA",
       "submit": "Withdraw",
       "successTitle": "Withdrawal Success",
       "withdrawalFee": "Withdrawal Fee",
@@ -840,12 +840,12 @@
       "chooseWallet": "Choose Preferred Payment Wallet",
       "selectWithdrawalMethod": "Select your Withdrawal Method",
       "noWallet": "None",
-      "amountLabel": "Enter Amount You Wish to Withdraw in USD",
+      "amountLabel": "Enter Amount You Wish to Withdraw in FCFA",
       "noPinSet": "No transaction PIN has been set.",
       "wrongPin": "Wrong transaction PIN.",
       "insufficientFunds": "Insufficient funds",
       "betRequirement": "You need to place at least 5 bets before withdrawing.",
-      "maximumWithdrawal": "Maximum withdrawal is {{amount}} USDT.",
+      "maximumWithdrawal": "Maximum withdrawal is {{amount}} FCFA.",
       "enterAmount": "Please enter amount",
       "connectionError": "Please check your internet connection and refresh the website."
     },
@@ -873,7 +873,7 @@
       "transactionUnavailable": "Transactions unavailable",
       "retry": "Retry",
       "submittedAmount": "Submitted amount",
-      "usdtEquivalent": "USDT equivalent",
+      "usdtEquivalent": "FCFA equivalent",
       "payoutAmount": "Payout amount",
       "destinationDetail": "Destination: {{destination}}",
       "receiptUploaded": "Receipt uploaded",

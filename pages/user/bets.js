@@ -33,7 +33,7 @@ const toNumber = (value) => {
   return Number.isFinite(amount) ? amount : 0
 }
 
-const formatUsdt = (value) => `${toNumber(value).toFixed(3)} USDT`
+const formatUsdt = (value) => `${Math.round(toNumber(value)).toLocaleString()} FCFA`
 
 const getBetStatus = (bet, t) => {
   const startTime = getMatchStartMs(bet)

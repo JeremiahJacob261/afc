@@ -27,7 +27,7 @@ const filters = [
 
 function formatAmount(value) {
   const number = Number(value || 0)
-  return `${Number.isFinite(number) ? number.toFixed(3) : '0.000'} USDT`
+  return `${Number.isFinite(number) ? number.toFixed(3) : '0.000'} FCFA`
 }
 
 function formatDate(value) {

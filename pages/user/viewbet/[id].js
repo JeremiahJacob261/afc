@@ -88,13 +88,13 @@ export default function Viewbets() {
                 <Typography style={{ color: '#EE8F00', fontFamily: 'Poppins,sans-serif', width: '100%', textAlign: 'center', fontSize: '20px' }}>Bet Details</Typography>
                 <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif' }}>Match Name : {bet.home} vs {bet.away}</Typography>
                 <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif' }}>{bet.home} vs {bet.away}</Typography>
-                <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif' }}>Stake : {bet.stake} USDT</Typography>
+                <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif' }}>Stake: {Number(bet.stake || 0).toLocaleString()} FCFA</Typography>
                 <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif' }}>Kickoff : {matchDisplay.dateTime}</Typography>
                 <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif' }}>%odds : {bet.odd}%</Typography>
                 <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif' }}>League Name:{(league.league === 'other') ? league.league : league.otherl}</Typography>
 
                 <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif' }}>Market Chosen : {bet.market}</Typography>
-                <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif' }}>Potential Winnings : {bet.aim} USDT</Typography>
+                <Typography style={{ color: '#CACACA', fontFamily: 'Poppins, sans-serif' }}>Potential Winnings: {Number(bet.aim || 0).toLocaleString()} FCFA</Typography>
                 <Stack direction="row" justifyContent="space-between">
                     <Typography direction="column" style={{ color: 'yellow', fontFamily: 'Poppins, sans-serif' }}>Results</Typography>
 

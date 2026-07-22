@@ -135,7 +135,7 @@ export default function Reward({ id = '', uid = '' }) {
                       <p className="text-sm text-zinc-500">Reward amount</p>
                       <Wallet className="h-4 w-4 text-[#B96CFF]" />
                     </div>
-                    <p className="mt-3 text-2xl font-semibold text-white">{formatAmount(amount)} USDT</p>
+                    <p className="mt-3 text-2xl font-semibold text-white">{formatAmount(amount)} FCFA</p>
                   </article>
                   <article className="rounded-[22px] border border-white/10 bg-white/[0.05] p-4">
                     <div className="flex items-center justify-between gap-3">
@@ -170,7 +170,7 @@ export default function Reward({ id = '', uid = '' }) {
                         placeholder="0.00"
                         className="min-w-0 flex-1 bg-transparent text-lg font-semibold text-white outline-none placeholder:text-zinc-700"
                       />
-                      <span className="shrink-0 text-sm font-semibold text-zinc-500">USDT</span>
+                      <span className="shrink-0 text-sm font-semibold text-zinc-500">FCFA</span>
                     </div>
                   </label>
 

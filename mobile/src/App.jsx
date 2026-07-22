@@ -1227,8 +1227,6 @@ function HomeScreen({ navigate, onLogout, online }) {
     { key: 'next24h', label: t('mobile.filters.next24h') },
     { key: 'tomorrow', label: t('mobile.filters.tomorrow') },
   ]
-  const balance = Number(profile?.balance || 0).toFixed(3)
-
   return (
     <section className="page-stack">
       <header className="dashboard-header">
@@ -1244,7 +1242,7 @@ function HomeScreen({ navigate, onLogout, online }) {
       <section className="balance-panel">
         <div>
           <span>{t('common.currentBalance')}</span>
-          <strong>{profile ? `${balance} USDT` : '-- USDT'}</strong>
+          <strong>{profile ? formatFcfa(profile.balance) : '-- FCFA'}</strong>
         </div>
         <button className="mini-cta" type="button" onClick={() => navigate('deposit')}>
           {t('common.deposit')}
@@ -1374,7 +1372,7 @@ function MatchDetailScreen({ matchId, navigate }) {
     }
 
     const amount = Number(stake)
-    if (!Number.isFinite(amount) || amount < 1) {
+    if (!Number.isFinite(amount) || amount < 600) {
       notifyMessage(setMessage, 'error', t('messages.stakeMinimum'))
       return
     }
@@ -1440,7 +1438,7 @@ function MatchDetailScreen({ matchId, navigate }) {
             </div>
             <div className="balance-inline">
               <span>{t('common.balance')}</span>
-              <b>{Number(profile?.balance || 0).toFixed(3)} USDT</b>
+              <b>{formatFcfa(profile?.balance)}</b>
             </div>
           </article>
 
@@ -1707,7 +1705,7 @@ function ProfileScreen({ navigate, onLogout }) {
           <div className="account-balance-row">
             <span>
               <small>{t('mobile.profile.currentBalance')}</small>
-              <strong>{Number(profile?.balance || 0).toFixed(3)} USDT</strong>
+              <strong>{formatFcfa(profile?.balance)}</strong>
             </span>
             <button className="account-deposit-button" type="button" onClick={() => navigate('deposit')}>
               {t('common.deposit')}
@@ -2044,7 +2042,7 @@ function DepositScreen({ navigate, setSuccessAmount }) {
           <div className="deposit-web-progress">
             <span>
               <small>{t('mobile.deposit.usdtEquivalent')}</small>
-              <b>{formatMoney(numericAmount / rate)} USDT</b>
+              <b>{formatMoney(numericAmount / rate)} FCFA</b>
             </span>
             <i><em className={amountIsValid ? 'valid' : ''} style={{ width: `${progressValue}%` }} /></i>
           </div>
@@ -2204,8 +2202,8 @@ function WithdrawScreen({ navigate }) {
       notifyMessage(setMessage, 'error', t('messages.enterTransactionPin'))
       return
     }
-    if (requested < Number(settings.minWithdrawalAmount || 10)) {
-      notifyMessage(setMessage, 'error', t('messages.minimumWithdrawal', { amount: settings.minWithdrawalAmount || 10 }))
+    if (requested < Number(settings.minWithdrawalAmount || 6000)) {
+      notifyMessage(setMessage, 'error', t('messages.minimumWithdrawal', { amount: settings.minWithdrawalAmount || 6000 }))
       return
     }
 
@@ -2218,7 +2216,7 @@ function WithdrawScreen({ navigate }) {
         body: {
           pass: pin,
           wallet: wallet.wallet,
-          amount: requested.toFixed(3),
+          amount: requested,
           method: wallet.walletnames || wallet.method,
           bank: wallet.bank || '',
           accountname: wallet.names || '',
@@ -2273,7 +2271,7 @@ function WithdrawScreen({ navigate }) {
         </InputShell>
         <div className="fee-note">
           <span>{t('mobile.withdraw.fee', { percent: feePercent })}</span>
-          <b>{t('mobile.withdraw.totalDebit', { amount: formatNumber(total) })}</b>
+          <b>{t('mobile.withdraw.totalDebit', { amount: `${formatMoney(total)} FCFA` })}</b>
         </div>
         <button className="primary-button full" type="button" onClick={submitWithdraw} disabled={submitting || !withdrawalsEnabled}>
           {submitting ? t('mobile.deposit.submitting') : t('mobile.withdraw.submit')}
@@ -3245,7 +3243,7 @@ function getRate(method) {
 }
 
 function getMinimum(method) {
-  return getRate(method) * 5
+  return getRate(method) * 3000
 }
 
 function methodLabel(method, t) {
@@ -3256,6 +3254,11 @@ function formatMoney(value) {
   const number = Number(value)
   if (!Number.isFinite(number)) return '0'
   return number.toLocaleString(undefined, { maximumFractionDigits: 3 })
+}
+
+function formatFcfa(value) {
+  const amount = Math.round(Number(value || 0))
+  return `${amount.toLocaleString()} FCFA`
 }
 
 function findDestination(destinations, method, transferKey) {
@@ -3295,7 +3298,7 @@ function hasNamedDestination(destinations, method) {
 }
 
 function formatUsdt(value) {
-  return `${formatNumber(value)} USDT`
+  return `${Math.round(Number(value || 0)).toLocaleString()} FCFA`
 }
 
 function formatNumber(value) {

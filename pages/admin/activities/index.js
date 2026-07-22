@@ -67,7 +67,7 @@ export default function Home({ notification,newrefer }) {
                                 username:item.username,
                                 description:'Bet was cancelled. Contact support if you did not request for this',
                                 status:'Success',
-                                payment:'USDT(TRC20)'
+                                payment:'FCFA(TRC20)'
                             }
                             return(
                                 <Stack className='bottomnav' direction='row' key={item.id} justifyContent='space-between' alignItems='center' sx={{ border: '1px solid #981FC0', maxWidth: '90%', minWidth: '80%', borderRadius: '5px' }}>
@@ -82,7 +82,7 @@ export default function Home({ notification,newrefer }) {
                                 <Stack className='bottomnav' direction='row' key={item.id} justifyContent='space-between' alignItems='center' sx={{ border: '1px solid #981FC0', maxWidth: '90%', minWidth: '80%', borderRadius: '5px' }}>
                         <Stack>
                             <p style={{ fontWeight:'bold',color:'greenyellow'}}>You just recieved a {item.type}</p>
-                            <p>{item.amount} USDT</p>
+                            <p>{item.amount} FCFA</p>
                             <p style={{ color: 'white' }}>{fullDay}</p>
                         </Stack>
                        
@@ -96,12 +96,12 @@ export default function Home({ notification,newrefer }) {
                                 username:item.username,
                                 description:'Deposit',
                                 status:'Success',
-                                payment:'USDT(TRC20)'
+                                payment:'FCFA(TRC20)'
                             }
                             return(
                                 <Stack className='bottomnav' direction='row' key={item.id} justifyContent='space-between' alignItems='center' sx={{ border: '1px solid #981FC0', maxWidth: '90%', minWidth: '80%', borderRadius: '5px' }}>
                                 <Stack>
-                                    <p style={{ fontWeight:'bold',color:'greenyellow'}}>Your USDT Deposit of {item.amount} was Successful on {fullDay}</p>
+                                    <p style={{ fontWeight:'bold',color:'greenyellow'}}>Your FCFA Deposit of {item.amount} was Successful on {fullDay}</p>
                                  </Stack>
                             </Stack>
                             )
@@ -113,12 +113,12 @@ export default function Home({ notification,newrefer }) {
                                 username:item.username,
                                 description:`Bet Placed Successfully. Match Info: ${item.type}`,
                                 status:'Success',
-                                payment:'USDT(TRC20)'
+                                payment:'FCFA(TRC20)'
                             }
                             return(
                                 <Stack className='bottomnav' direction='row' key={item.id} justifyContent='space-between' alignItems='center' sx={{ border: '1px solid #981FC0', maxWidth: '90%', minWidth: '80%', borderRadius: '5px' }}>
                                 <Stack>
-                                    <p style={{ fontWeight:'bold',color:'greenyellow'}}>Your Trade was Successfully for {item.type}, {item.amount} USDT, {fullDay}</p>
+                                    <p style={{ fontWeight:'bold',color:'greenyellow'}}>Your Trade was Successfully for {item.type}, {item.amount} FCFA, {fullDay}</p>
                                   </Stack>
                             </Stack>
                             )
@@ -129,14 +129,14 @@ export default function Home({ notification,newrefer }) {
                                 amount:item.amount,
                                 time:fullDay,
                                 username:item.username,
-                                description:'USDT Deposit Failed. Contact Customer Care for any Complaints',
+                                description:'FCFA Deposit Failed. Contact Customer Care for any Complaints',
                                 status:'Failed',
-                                payment:'USDT(TRC20)'
+                                payment:'FCFA(TRC20)'
                             }
                             return(
                                 <Stack className='bottomnav' direction='row' key={item.id} justifyContent='space-between' alignItems='center' sx={{ border: '1px solid #981FC0', maxWidth: '90%', minWidth: '80%', borderRadius: '5px' }}>
                                 <Stack>
-                                    <p style={{ fontWeight:'bold',color:'greenyellow'}}>Your USDT Deposit of {item.amount} USDT Failed on {fullDay}</p>
+                                    <p style={{ fontWeight:'bold',color:'greenyellow'}}>Your FCFA Deposit of {item.amount} FCFA Failed on {fullDay}</p>
                                  </Stack>
                             </Stack>
                             )
@@ -154,7 +154,7 @@ export default function Home({ notification,newrefer }) {
                             return(
                                 <Stack className='bottomnav' direction='row' key={item.id} justifyContent='space-between' alignItems='center' sx={{ border: '1px solid #981FC0', maxWidth: '90%', minWidth: '80%', borderRadius: '5px' }}>
                                 <Stack>
-                                    <p style={{ fontWeight:'bold',color:'greenyellow'}}>You recieved first deposit bonus of {item.amount} USDT from {item.username}</p>
+                                    <p style={{ fontWeight:'bold',color:'greenyellow'}}>You recieved first deposit bonus of {item.amount} FCFA from {item.username}</p>
                                     <p style={{ color: 'white' }}>{fullDay}</p>
                                 </Stack>
                             </Stack>
@@ -164,7 +164,7 @@ export default function Home({ notification,newrefer }) {
                                 return(
                                     <Stack className='bottomnav' direction='row' key={item.id} justifyContent='space-between' alignItems='center' sx={{ border: '1px solid #981FC0', maxWidth: '90%', minWidth: '80%', borderRadius: '5px' }}>
                                     <Stack>
-                                        <p style={{ fontWeight:'bold',color:'greenyellow'}}>You have recieved rebate bonus of {item.amount} USDT from {item.username}</p>
+                                        <p style={{ fontWeight:'bold',color:'greenyellow'}}>You have recieved rebate bonus of {item.amount} FCFA from {item.username}</p>
                                         <p style={{ color: 'white' }}>{fullDay}</p>
                                     </Stack>
                                 </Stack>
@@ -174,7 +174,7 @@ export default function Home({ notification,newrefer }) {
                                     return(
                                         <Stack className='bottomnav' direction='row' key={item.id} justifyContent='space-between' alignItems='center' sx={{ border: '1px solid #981FC0', maxWidth: '90%', minWidth: '80%', borderRadius: '5px' }}>
                                         <Stack>
-                                            <p style={{ fontWeight:'bold',color:'greenyellow'}}>You have sent funds of {item.amount} USDT to {item.type}</p>
+                                            <p style={{ fontWeight:'bold',color:'greenyellow'}}>You have sent funds of {item.amount} FCFA to {item.type}</p>
                                             <p style={{ color: 'white',fontSize:'11px' }}>If you did not make this E-Transfer, please contact Customer Care as soon as possible.</p>
                                             <p style={{ color: 'white' }}>{fullDay}</p>
                                         </Stack>
@@ -184,7 +184,7 @@ export default function Home({ notification,newrefer }) {
                                     return(
                                         <Stack className='bottomnav' direction='row' key={item.id} justifyContent='space-between' alignItems='center' sx={{ border: '1px solid #981FC0', maxWidth: '90%', minWidth: '80%', borderRadius: '5px' }}>
                                         <Stack>
-                                            <p style={{ fontWeight:'bold',color:'greenyellow'}}>You have recieved funds of {item.amount} USDT from {item.type}</p>
+                                            <p style={{ fontWeight:'bold',color:'greenyellow'}}>You have recieved funds of {item.amount} FCFA from {item.type}</p>
                                             <p style={{ color: 'white' }}>{fullDay}</p>
                                         </Stack>
                                     </Stack>

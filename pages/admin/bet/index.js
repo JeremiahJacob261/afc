@@ -132,8 +132,8 @@ export default function Home({ notification }) {
                                     <p style={{ fontSize: '13px', fontFamily: 'Poppins,sans-serif', fontWeight: '500', color: 'lavenderblush' }}>Username: {e.username}</p>
                                     <GetLeagues />
                                     <p style={{ fontSize: '15px', fontFamily: 'Poppins,sans-serif', fontWeight: '400' }}>Date: <BetKickoff bet={e} /></p>
-                                    <p style={{ fontSize: '15px', fontFamily: 'Poppins,sans-serif', fontWeight: '400' }}>Stake: {e.stake} USDT</p>
-                                    <p style={{ fontSize: '15px', fontFamily: 'Poppins,sans-serif', fontWeight: '400' }}>Total: {parseFloat(e.stake) + parseFloat(e.aim)} USDT</p>
+                                    <p style={{ fontSize: '15px', fontFamily: 'Poppins,sans-serif', fontWeight: '400' }}>Stake: {e.stake} FCFA</p>
+                                    <p style={{ fontSize: '15px', fontFamily: 'Poppins,sans-serif', fontWeight: '400' }}>Total: {parseFloat(e.stake) + parseFloat(e.aim)} FCFA</p>
                                     <p style={{ fontSize: '15px', fontFamily: 'Poppins,sans-serif', fontWeight: '400' }}>Odd: {e.odd}</p>
                                     <p style={{ fontSize: '15px', fontFamily: 'Poppins,sans-serif', fontWeight: '400' }}>Status: {(e.won === "true") ? 'Won' : (e.won === "false") ? 'Lost' : (startMs && startMs + 5400000 < curren) ? 'Processing' : isStarted ? 'Ongoing' : 'Not Started'}</p>
 

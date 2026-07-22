@@ -196,7 +196,7 @@ export default function Account() {
             <Stack style={{ padding: '8px', borderRadius: '10px', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
               <Stack>
                 <Typography style={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>{t('common.currentBalance')}</Typography>
-                <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>{balance.toFixed(3)} USDT</Typography>
+                <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>{Math.round(balance || 0).toLocaleString()} FCFA</Typography>
               </Stack>
               <Link href='/user/fund' style={{ textDecoration: "none", color: 'white' }}>
                 <Stack style={{ background: '#1BB6FF', borderRadius: '20px', padding: '8px', width: '95px', height: '32px', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>

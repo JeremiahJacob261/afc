@@ -238,7 +238,7 @@ export default function Home() {
             <Stack direction='row' justifyContent='space-between' alignItems='center' flexWrap='wrap' gap={1} >
               <Stack sx={{ minWidth: 0, flex: '1 1 150px' }}>
                 <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>{t('common.currentBalance')}</Typography>
-                <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', minHeight: '24px', padding: '1px', width: '100%', color: '#E9E5DA', overflowWrap: 'anywhere' }}>{balance ? ` ${balance.toFixed(3)}` : '0'} USDT</Typography>
+                <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', minHeight: '24px', padding: '1px', width: '100%', color: '#E9E5DA', overflowWrap: 'anywhere' }}>{Math.round(balance || 0).toLocaleString()} FCFA</Typography>
               </Stack>
               <Link href='/user/fund' style={{ textDecoration: "none", color: 'white', flexShrink: 0 }}>
                 <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#1BB6FF', borderRadius: '20px', padding: '8px', width: '95px', height: '32px' }}>

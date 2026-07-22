@@ -47,7 +47,7 @@ export const howItWorks = [
   },
   {
     title: "Fund your wallet",
-    copy: "Start from the 5USDT minimum deposit and check the active deposit bonus.",
+    copy: "Start from the 3,000 FCFA minimum deposit and check the active deposit bonus.",
   },
   {
     title: "Choose a football match",
@@ -55,15 +55,15 @@ export const howItWorks = [
   },
   {
     title: "Place and track",
-    copy: "Confirm your slip, follow the match, and review withdrawal status from 10USDT.",
+    copy: "Confirm your slip, follow the match, and review withdrawal status from 6,000 FCFA.",
   },
 ];
 
 export const platformOperations = [
-  { label: "Deposit bonus", value: "1USDT" },
-  { label: "Minimum deposit", value: "5USDT" },
+  { label: "Deposit bonus", value: "600 FCFA" },
+  { label: "Minimum deposit", value: "3,000 FCFA" },
   { label: "Daily percentage", value: "3-4%" },
-  { label: "Minimum withdrawal", value: "10USDT" },
+  { label: "Minimum withdrawal", value: "6,000 FCFA" },
 ];
 
 export const walletRewards = [
@@ -116,11 +116,11 @@ export const liveMatches = [
 export const bonuses = [
   {
     title: "Welcome deposit bonus",
-    copy: "New users can start with the 1USDT deposit bonus shown in EFC platform operations.",
+    copy: "New users can start with the 600 FCFA deposit bonus shown in EFC platform operations.",
   },
   {
     title: "Invitation bonus",
-    copy: "Invite active members and unlock tiered USDT rewards as your football network grows.",
+    copy: "Invite active members and unlock tiered FCFA rewards as your football network grows.",
   },
   {
     title: "Agent rebates",
@@ -129,12 +129,12 @@ export const bonuses = [
 ];
 
 export const invitationTiers = [
-  { members: "10", reward: "10USDT" },
-  { members: "20", reward: "30USDT" },
-  { members: "30", reward: "50USDT" },
-  { members: "50", reward: "70USDT" },
-  { members: "80", reward: "100USDT" },
-  { members: "100", reward: "150USDT" },
+  { members: "10", reward: "6,000 FCFA" },
+  { members: "20", reward: "18,000 FCFA" },
+  { members: "30", reward: "30,000 FCFA" },
+  { members: "50", reward: "42,000 FCFA" },
+  { members: "80", reward: "60,000 FCFA" },
+  { members: "100", reward: "90,000 FCFA" },
 ];
 
 export const agentRebates = [

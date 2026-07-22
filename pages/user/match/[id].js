@@ -467,7 +467,8 @@ export default function Match({ matchDat }) {
     function Draws() {
         const [stake, setStake] = useState('');
         const tofal = Number(getMatchOdd(matches, picked, viplevel).toFixed(3));
-        const stakeAmount = Number(stake || 0);
+        const stakeFcfa = Number(stake || 0);
+        const stakeAmount = stakeFcfa;
         const profit = Number(((stakeAmount * tofal) / 100).toFixed(3));
         const expext = Number((stakeAmount + profit).toFixed(3));
         let gcount = info.gcount ?? 0;
@@ -538,7 +539,7 @@ export default function Match({ matchDat }) {
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#E9E5DA' }}>{t('common.currentBalance')}</Typography>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{ball.toFixed(3)} USDT</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{Math.round(ball).toLocaleString()} FCFA</Typography>
                         </Stack>
                         <input placeholder={t('mobile.match.stakeAmount')} type='text'
                             style={{ fontFamily: 'Poppins, sans-serif', padding: "10px", borderRadius: '12px', width: '100%', background: '#06101F', color: '#FFFFFF', border: '3px solid #E9E5DA' }}
@@ -551,19 +552,19 @@ export default function Match({ matchDat }) {
                             }} />
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#E9E5DA' }}>{t('mobile.match.profit')}</Typography>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{profit.toFixed(3)} USDT</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{Math.round(profit).toLocaleString()} FCFA</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#E9E5DA' }}>{t('mobile.match.expectedReturn')}</Typography>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#E9E5DA' }}>{expext.toFixed(3)} USDT</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#E9E5DA' }}>{Math.round(expext).toLocaleString()} FCFA</Typography>
                         </Stack>
                         <Button disabled={openx} sx={{ fontFamily: 'Poppins,sans-serif', margin: '8px', fontSize: '16', fontWeight: '300', color: '#06101F', background: "#1BB6FF", padding: '10px' }}
                             onClick={() => {
                                 if (openx) return
                                 if (!picked || tofal <= 0) {
                                     toast.error(t('messages.chooseScoreMarket'))
-                                } else if (stakeAmount - 1 < Number(info.balance || 0)) {
-                                    if (stakeAmount < 1) {
+                                } else if (stakeAmount <= Number(info.balance || 0)) {
+                                    if (stakeAmount < 600) {
                                         toast.error(t('messages.stakeMinimum'))
 
                                     }
@@ -586,7 +587,7 @@ export default function Match({ matchDat }) {
                                                     body: JSON.stringify({
                                                         match_id: matches.match_id,
                                                         picked,
-                                                        stake: stakeAmount,
+                                                        stake: stakeFcfa,
                                                     }),
                                                 })
                                                 const result = await response.json().catch(() => ({}))

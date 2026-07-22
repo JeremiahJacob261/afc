@@ -1,6 +1,7 @@
 import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
 import { getWithdrawalSettings, WITHDRAWAL_HARD_LIMIT_AMOUNT } from '@/lib/adminSettings'
 import { calculateWithdrawalAmounts } from '@/lib/withdrawalFee'
+import { formatFcfa, getCurrencySettings, parseFcfa } from '@/lib/currency'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -9,7 +10,9 @@ export default async function handler(req, res) {
 
   try {
     const body = req.body || {}
-    const amount = Number(body.amount)
+    const { supabase: currencySupabase } = await getCurrentProfile(req, 'userid')
+    const currencySettings = await getCurrencySettings(currencySupabase)
+    const amount = parseFcfa(body.amount)
 
     if (!Number.isFinite(amount) || amount <= 0) {
       return res.status(400).json([{ status: 'Failed', message: 'Invalid amount' }])
@@ -44,11 +47,11 @@ export default async function handler(req, res) {
     }
 
     if (amount < withdrawalSettings.minWithdrawalAmount) {
-      return res.status(200).json([{ status: 'Failed', message: `Minimum amount to withdraw is ${withdrawalSettings.minWithdrawalAmount} USDT` }])
+      return res.status(200).json([{ status: 'Failed', message: `Minimum amount to withdraw is ${formatFcfa(withdrawalSettings.minWithdrawalAmount, currencySettings)}` }])
     }
 
     if (amount > WITHDRAWAL_HARD_LIMIT_AMOUNT) {
-      return res.status(200).json([{ status: 'Failed', message: `Maximum amount to withdraw is ${WITHDRAWAL_HARD_LIMIT_AMOUNT} USDT` }])
+      return res.status(200).json([{ status: 'Failed', message: `Maximum amount to withdraw is ${formatFcfa(WITHDRAWAL_HARD_LIMIT_AMOUNT, currencySettings)}` }])
     }
 
     if (!profile.codeset) {

@@ -510,7 +510,7 @@ export default function PaymentMethodManager() {
               <div className="mt-6 grid gap-4 md:grid-cols-2">
                 <Field label="Method name" value={form.name} onChange={(value) => updateForm('name', value)} placeholder="e.g. GPay Ghana" icon={WalletCards} />
                 <Field label="Currency code" value={form.currencyCode} onChange={(value) => updateForm('currencyCode', value.toUpperCase())} placeholder="e.g. GHS" icon={BadgeDollarSign} />
-                <Field label="Rate to USDT" value={form.rate} onChange={(value) => updateForm('rate', value)} placeholder="e.g. 12.5" icon={Banknote} type="number" />
+                <Field label="Payment-currency units per 1 FCFA" value={form.rate} onChange={(value) => updateForm('rate', value)} placeholder="e.g. 1" icon={Banknote} type="number" />
                 <label className="block">
                   <span className="mb-2 flex items-center gap-2 text-sm font-semibold text-zinc-300">
                     <Smartphone className="h-4 w-4 text-[#1BB6FF]" />
@@ -681,7 +681,7 @@ function PreviewCard({ method, draft, editing }) {
           <div className="min-w-0 flex-1">
             <p className="truncate text-lg font-semibold text-white">{preview.name || 'Payment method'}</p>
             <p className="mt-1 text-sm text-zinc-500">
-              Min 5 USDT equivalent · {preview.currencyCode || 'CODE'}
+              Min 3,000 FCFA equivalent · {preview.currencyCode || 'CODE'}
             </p>
             <div className="mt-4 grid gap-2 sm:grid-cols-3">
               <div className="rounded-2xl bg-white/[0.06] p-3">

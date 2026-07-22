@@ -51,7 +51,7 @@
     "profile": "الملف الشخصي",
     "faq": "FAQ",
     "vip": "VIP",
-    "usdt": "USDT"
+    "usdt": "FCFA"
   },
   "auth": {
     "login": {
@@ -160,7 +160,7 @@
     "unableLoadMatches": "تعذر تحميل المباريات.",
     "unableLoadMatch": "تعذر تحميل المباراة.",
     "chooseScoreMarket": "اختر سوق النتيجة أولاً.",
-    "stakeMinimum": "يجب ألا يقل الرهان عن 1 USDT.",
+    "stakeMinimum": "يجب ألا يقل الرهان عن 600 FCFA.",
     "betPlaced": "تم وضع الرهان بنجاح.",
     "unablePlaceBet": "تعذر وضع الرهان.",
     "unableLoadBets": "تعذر تحميل الرهانات.",
@@ -173,7 +173,7 @@
     "depositFailed": "فشل إرسال الإيداع.",
     "chooseWalletFirst": "اختر محفظة أولاً.",
     "enterTransactionPin": "أدخل رمز المعاملة الخاص بك.",
-    "minimumWithdrawal": "الحد الأدنى للسحب هو {{amount}} USDT.",
+    "minimumWithdrawal": "الحد الأدنى للسحب هو {{amount}} FCFA.",
     "unableSubmitWithdrawal": "تعذر إرسال طلب السحب.",
     "walletDetailsInvalid": "يرجى ملء جميع تفاصيل المحفظة بشكل صحيح.",
     "walletBindSuccess": "تم ربط المحفظة بنجاح.",
@@ -190,7 +190,7 @@
     "unableLoadNotifications": "تعذر تحميل الإشعارات.",
     "unableLoadPaymentData": "تعذر تحميل بيانات الدفع.",
     "depositSubmitted": "تم إرسال إيصالك وهو بانتظار تأكيد المشرف.",
-    "depositSubmittedWithAmount": "تم إرسال إيصالك بقيمة {{amount}} USDT وهو بانتظار تأكيد المشرف.",
+    "depositSubmittedWithAmount": "تم إرسال إيصالك بقيمة {{amount}} FCFA وهو بانتظار تأكيد المشرف.",
     "withdrawalSent": "تم إرسال طلب السحب الخاص بك.",
     "copied": "تم النسخ",
     "copiedToClipboard": "تم النسخ إلى الحافظة",
@@ -320,7 +320,7 @@
         },
         {
           "title": "موّل محفظتك",
-          "copy": "ابدأ من الحد الأدنى للإيداع 5USDT وتحقق من مكافأة الإيداع النشطة."
+          "copy": "ابدأ من الحد الأدنى للإيداع 3,000 FCFA وتحقق من مكافأة الإيداع النشطة."
         },
         {
           "title": "اختر مباراة كرة قدم",
@@ -328,7 +328,7 @@
         },
         {
           "title": "ضع الرهان وتابعه",
-          "copy": "أكد قسيمتك، وتابع المباراة، وراجع حالة السحب بدءاً من 10USDT."
+          "copy": "أكد قسيمتك، وتابع المباراة، وراجع حالة السحب بدءاً من 6,000 FCFA."
         }
       ]
     },
@@ -340,11 +340,11 @@
       "items": [
         {
           "label": "مكافأة الإيداع",
-          "value": "1USDT"
+          "value": "600 FCFA"
         },
         {
           "label": "الحد الأدنى للإيداع",
-          "value": "5USDT"
+          "value": "3,000 FCFA"
         },
         {
           "label": "النسبة اليومية",
@@ -352,7 +352,7 @@
         },
         {
           "label": "الحد الأدنى للسحب",
-          "value": "10USDT"
+          "value": "6,000 FCFA"
         }
       ]
     },
@@ -441,11 +441,11 @@
       "items": [
         {
           "title": "مكافأة إيداع ترحيبية",
-          "copy": "يمكن للمستخدمين الجدد البدء بمكافأة إيداع 1USDT الموضحة في عمليات منصة EFC."
+          "copy": "يمكن للمستخدمين الجدد البدء بمكافأة إيداع 600 FCFA الموضحة في عمليات منصة EFC."
         },
         {
           "title": "مكافأة الدعوة",
-          "copy": "ادعُ أعضاء نشطين وافتح مكافآت USDT متدرجة مع نمو شبكة كرة القدم الخاصة بك."
+          "copy": "ادعُ أعضاء نشطين وافتح مكافآت FCFA متدرجة مع نمو شبكة كرة القدم الخاصة بك."
         },
         {
           "title": "خصومات الوكلاء",
@@ -455,27 +455,27 @@
       "tiers": [
         {
           "members": "10",
-          "reward": "10USDT"
+          "reward": "6,000 FCFA"
         },
         {
           "members": "20",
-          "reward": "30USDT"
+          "reward": "18,000 FCFA"
         },
         {
           "members": "30",
-          "reward": "50USDT"
+          "reward": "30,000 FCFA"
         },
         {
           "members": "50",
-          "reward": "70USDT"
+          "reward": "42,000 FCFA"
         },
         {
           "members": "80",
-          "reward": "100USDT"
+          "reward": "60,000 FCFA"
         },
         {
           "members": "100",
-          "reward": "150USDT"
+          "reward": "90,000 FCFA"
         }
       ]
     },
@@ -733,7 +733,7 @@
       "marketUnavailable": "هذا السوق غير متاح",
       "matchExpired": "انتهت صلاحية هذه المباراة",
       "maxBetsReached": "لقد وصلت إلى الحد الأقصى لعدد الرهانات اليوم.",
-      "insufficientBalance": "ليس لديك رصيد USDT كافٍ لإكمال هذا الرهان.",
+      "insufficientBalance": "ليس لديك رصيد FCFA كافٍ لإكمال هذا الرهان.",
       "placeBet": "ضع الرهان",
       "placingBet": "جارٍ وضع الرهان...",
       "loading": "جارٍ تحميل المباراة..."
@@ -808,7 +808,7 @@
       "transferOption": "خيار التحويل",
       "minimumPlaceholder": "الحد الأدنى {{amount}} {{currency}}",
       "chooseMethodFirst": "اختر طريقة أولاً",
-      "usdtEquivalent": "ما يعادل USDT",
+      "usdtEquivalent": "ما يعادل FCFA",
       "sendExactly": "أرسل بالضبط {{amount}} إلى تفاصيل الدفع أدناه.",
       "sendEnteredAmount": "أرسل بالضبط المبلغ المدخل إلى تفاصيل الدفع أدناه.",
       "chooseMethodDetails": "اختر طريقة إيداع لعرض تفاصيل الدفع.",
@@ -828,7 +828,7 @@
       "loading": "جارٍ تحميل المحافظ...",
       "bindFirst": "اربط محفظة أولاً",
       "fee": "الرسوم {{percent}}%",
-      "totalDebit": "إجمالي الخصم: {{amount}} USDT",
+      "totalDebit": "إجمالي الخصم: {{amount}} FCFA",
       "submit": "سحب",
       "successTitle": "تم السحب بنجاح",
       "withdrawalFee": "رسوم السحب",
@@ -845,7 +845,7 @@
       "wrongPin": "رمز المعاملة غير صحيح.",
       "insufficientFunds": "رصيد غير كافٍ",
       "betRequirement": "تحتاج إلى وضع 5 رهانات على الأقل قبل السحب.",
-      "maximumWithdrawal": "الحد الأقصى للسحب هو {{amount}} USDT.",
+      "maximumWithdrawal": "الحد الأقصى للسحب هو {{amount}} FCFA.",
       "enterAmount": "يرجى إدخال المبلغ",
       "connectionError": "يرجى التحقق من اتصالك بالإنترنت وتحديث الموقع."
     },
@@ -873,7 +873,7 @@
       "transactionUnavailable": "المعاملات غير متاحة",
       "retry": "إعادة المحاولة",
       "submittedAmount": "المبلغ المرسل",
-      "usdtEquivalent": "ما يعادل USDT",
+      "usdtEquivalent": "ما يعادل FCFA",
       "payoutAmount": "مبلغ الدفع",
       "destinationDetail": "الوجهة: {{destination}}",
       "receiptUploaded": "تم رفع الإيصال",

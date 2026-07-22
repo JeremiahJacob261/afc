@@ -445,7 +445,7 @@ export default function Users({ refs }) {
                     <Stack direction='row' key={l.username} justifyContent='space-between' sx={{ height: '35px', width: '100%', backgroundColor: '#1A1B72', padding: '8px', border: l.firstd ? '3px solid green' : 'none' }}>
                       <Typography sx={{ color: 'white', fontFamily: 'POpppins,sans-serif', fontSize: '15px' }}>{l.username}</Typography>
                       <Typography sx={{ color: 'white', fontFamily: 'POpppins,sans-serif', fontSize: '15px' }}>{l.email}</Typography>
-                      <Typography sx={{ color: 'white', fontFamily: 'POpppins,sans-serif', fontSize: '15px' }}>{l.totald} USDT</Typography>
+                      <Typography sx={{ color: 'white', fontFamily: 'POpppins,sans-serif', fontSize: '15px' }}>{l.totald} FCFA</Typography>
                     </Stack>
                   );
                 })
@@ -472,7 +472,7 @@ export default function Users({ refs }) {
                     <Stack direction='row' key={l.username} justifyContent='space-between' sx={{ height: '35px', width: '100%', backgroundColor: '#1A1B72', padding: '8px', border: l.firstd ? '3px solid green' : 'none' }}>
                       <Typography sx={{ color: 'white', fontFamily: 'POpppins,sans-serif', fontSize: '15px' }}>{l.username}</Typography>
                       <Typography sx={{ color: 'white', fontFamily: 'POpppins,sans-serif', fontSize: '15px' }}>{l.email}</Typography>
-                      <Typography sx={{ color: 'white', fontFamily: 'POpppins,sans-serif', fontSize: '15px' }}>{l.totald} USDT</Typography>
+                      <Typography sx={{ color: 'white', fontFamily: 'POpppins,sans-serif', fontSize: '15px' }}>{l.totald} FCFA</Typography>
                     </Stack>
                   )
                 })
@@ -499,7 +499,7 @@ export default function Users({ refs }) {
                     <Stack direction='row' key={l.username} justifyContent='space-between' sx={{ height: '35px', width: '100%', backgroundColor: '#1A1B72', padding: '8px', border: l.firstd ? '3px solid green' : 'none' }}>
                       <Typography sx={{ color: 'white', fontFamily: 'Popppins,sans-serif', fontSize: '15px' }}>{l.username}</Typography>
                       <Typography sx={{ color: 'white', fontFamily: 'Popppins,sans-serif', fontSize: '15px' }}>{l.email}</Typography>
-                      <Typography sx={{ color: 'white', fontFamily: 'Popppins,sans-serif', fontSize: '15px' }}>{l.totald} USDT</Typography>
+                      <Typography sx={{ color: 'white', fontFamily: 'Popppins,sans-serif', fontSize: '15px' }}>{l.totald} FCFA</Typography>
                     </Stack>
                   )
                 })
@@ -581,7 +581,7 @@ export default function Users({ refs }) {
               return (
                 <Stack sx={{ border: "1px solid #90E0EF", padding: "8px", width: '100%' }} key={b.betid}>
                   <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#90E0EF', fontSize: '12px' }}>Match Name: {b.home} vs {b.away}</Typography>
-                  <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#CAF0F8', fontSize: '12px' }}>Stake : {b.stake} USDT</Typography>
+                  <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#CAF0F8', fontSize: '12px' }}>Stake : {b.stake} FCFA</Typography>
                   <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#CAF0F8', fontSize: '12px' }}>ODD : {b.odd}</Typography>
                   <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#CAF0F8', fontSize: '12px' }}>Market : {b.market}</Typography>
                   <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#CAF0F8', fontSize: '12px' }}>Status : {isFutureMatch ? 'Not Started' : (b.won === 'null') ? 'Processing' : (b.won === 'true') ? 'Won' : 'Lost'} </Typography>
@@ -689,7 +689,7 @@ export default function Users({ refs }) {
                       return (
                         <Stack sx={{ border: "1px solid #F1A208", padding: "8px", width: '100%' }} key={a.uid}>
                           <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '12px' }}>Transaction Type: {a.type}</Typography>
-                          <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#F1A208', fontSize: '12px' }}>Amount : {a.amount} USDT</Typography>
+                          <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#F1A208', fontSize: '12px' }}>Amount : {a.amount} FCFA</Typography>
                           <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#F1A208', fontSize: '12px' }}>Method : {a.method} </Typography>
 
                           <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#F1A208', fontSize: '12px' }}>Status : {a.sent} </Typography>
@@ -833,14 +833,14 @@ export default function Users({ refs }) {
                 <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '15px' }}>Username: {display.title}</Typography>
                 <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '15px' }}>Email: {display.email}</Typography>
                 <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '15px' }}>Phone: {display.phone}</Typography>
-                <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '15px' }}>Balance: {Number(display.balance).toFixed(2)} USDT</Typography>
+                <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '15px' }}>Balance: {Number(display.balance).toFixed(2)} FCFA</Typography>
                 <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '15px' }}>User Status: {(display.firstd) ? 'Active' : 'InActive'}</Typography>
-                <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '15px' }}>Total Deposit: {display.totald} USDT</Typography>
+                <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '15px' }}>Total Deposit: {display.totald} FCFA</Typography>
                 <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '15px' }}>Date Opened: {new Date(display.cr).getDate() + '-' + parseInt(new Date(display.cr).getMonth() + 1) + '-' + new Date(display.cr).getFullYear()}</Typography>
                 <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '15px' }}>Country: {codes[display.countrycode]} ({display.countrycode})</Typography>
                 <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '15px' }}>Invite Code : {display.refer}</Typography>
                 <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '15px' }}>Invited {count}</Typography>
-                <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '15px' }}>USDT Address {display.address}</Typography>
+                <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '15px' }}>FCFA Address {display.address}</Typography>
                 <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#F1A208' }}> {display.password}</Typography>
               </Stack>
             </Stack>

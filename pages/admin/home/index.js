@@ -243,7 +243,7 @@ export default function AdminHome({ dashboard }) {
                 <div key={row.uid || row.id} className="grid gap-3 rounded-2xl bg-white/[0.04] p-3 text-sm sm:grid-cols-[1fr_auto_auto] sm:items-center">
                   <div>
                     <p className="font-semibold text-white">{row.username || 'Unknown user'}</p>
-                    <p className="text-xs text-zinc-500">{row.type || 'transaction'} · {row.method || 'USDT'}</p>
+                    <p className="text-xs text-zinc-500">{row.type || 'transaction'} · {row.method || 'FCFA'}</p>
                   </div>
                   <p className="font-semibold text-white">{formatNumber(row.amount, { decimals: 2 })}</p>
                   <span className={`w-fit rounded-full border px-3 py-1 text-xs capitalize ${statusClass(row.normalizedStatus)}`}>
@@ -297,7 +297,7 @@ export default function AdminHome({ dashboard }) {
                     <p className="text-sm font-semibold text-white">{user.username}</p>
                     <p className="text-xs text-zinc-500">{user.uid}</p>
                   </div>
-                  <p className="text-sm text-zinc-300">{formatNumber(user.balance, { decimals: 2 })} USDT</p>
+                  <p className="text-sm text-zinc-300">{formatNumber(user.balance, { decimals: 2 })} FCFA</p>
                 </div>
               )) : (
                 <p className="rounded-2xl bg-white/[0.04] p-4 text-sm text-zinc-500">No users found.</p>

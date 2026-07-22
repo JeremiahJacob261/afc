@@ -61,7 +61,7 @@ export default function Footer() {
                             console.log('...')
                             // const newAccount = await tronWeb.createAccount();
                             // console.log(newAccount);
-                            // const trc20ContractAddress = 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t'; // USDT contract address
+                            // const trc20ContractAddress = 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t'; // FCFA contract address
                             // tronWeb.setAddress('TDZdEAxYkD2z91TBsCpA6wrnjRAg24jJya');
                             // let contract = await tronWeb.contract().at(trc20ContractAddress);
                             // let result = await contract.balanceOf("TDZdEAxYkD2z91TBsCpA6wrnjRAg24jJya").call();

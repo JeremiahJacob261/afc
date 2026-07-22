@@ -51,7 +51,7 @@
     "profile": "Perfil",
     "faq": "FAQ",
     "vip": "VIP",
-    "usdt": "USDT"
+    "usdt": "FCFA"
   },
   "auth": {
     "login": {
@@ -160,7 +160,7 @@
     "unableLoadMatches": "No se pueden cargar los partidos.",
     "unableLoadMatch": "No se puede cargar el partido.",
     "chooseScoreMarket": "Elija primero un mercado de puntuación.",
-    "stakeMinimum": "La apuesta debe ser al menos de 1 USDT.",
+    "stakeMinimum": "La apuesta debe ser al menos de 600 FCFA.",
     "betPlaced": "Apuesta realizada con éxito.",
     "unablePlaceBet": "No se puede realizar la apuesta.",
     "unableLoadBets": "No se pueden cargar las apuestas.",
@@ -173,7 +173,7 @@
     "depositFailed": "La presentación del depósito falló.",
     "chooseWalletFirst": "Elija primero una billetera.",
     "enterTransactionPin": "Ingrese su PIN de transacción.",
-    "minimumWithdrawal": "El retiro mínimo es {{amount}} USDT.",
+    "minimumWithdrawal": "El retiro mínimo es {{amount}} FCFA.",
     "unableSubmitWithdrawal": "No se puede enviar el retiro.",
     "walletDetailsInvalid": "Por favor, complete todos los datos de la billetera correctamente.",
     "walletBindSuccess": "Vinculación de billetera exitosa.",
@@ -190,7 +190,7 @@
     "unableLoadNotifications": "No se pueden cargar las notificaciones.",
     "unableLoadPaymentData": "No se pueden cargar los datos de pago.",
     "depositSubmitted": "Tu recibo ha sido enviado y está a la espera de la confirmación del administrador.",
-    "depositSubmittedWithAmount": "Su recibo para {{amount}} USDT ha sido enviado y está esperando la confirmación del administrador.",
+    "depositSubmittedWithAmount": "Su recibo para {{amount}} FCFA ha sido enviado y está esperando la confirmación del administrador.",
     "withdrawalSent": "Su solicitud de retiro ha sido enviada.",
     "copied": "copiado",
     "copiedToClipboard": "Copiado al portapapeles",
@@ -320,7 +320,7 @@
         },
         {
           "title": "Financia tu billetera",
-          "copy": "Comienza desde el depósito mínimo de 5 USDT y verifica el bono de depósito activo."
+          "copy": "Comienza desde el depósito mínimo de 3,000 FCFA y verifica el bono de depósito activo."
         },
         {
           "title": "Elige un partido de fútbol",
@@ -328,7 +328,7 @@
         },
         {
           "title": "Realiza y sigue",
-          "copy": "Confirma tu boleto, sigue el partido y revisa el estado de retiro desde 10 USDT."
+          "copy": "Confirma tu boleto, sigue el partido y revisa el estado de retiro desde 6,000 FCFA."
         }
       ]
     },
@@ -340,11 +340,11 @@
       "items": [
         {
           "label": "Bono de depósito",
-          "value": "1USDT"
+          "value": "600 FCFA"
         },
         {
           "label": "Depósito mínimo",
-          "value": "5USDT"
+          "value": "3,000 FCFA"
         },
         {
           "label": "Porcentaje diario",
@@ -352,7 +352,7 @@
         },
         {
           "label": "Retiro mínimo",
-          "value": "10USDT"
+          "value": "6,000 FCFA"
         }
       ]
     },
@@ -441,11 +441,11 @@
       "items": [
         {
           "title": "Bono de depósito de bienvenida",
-          "copy": "Los nuevos usuarios pueden comenzar con el bono de depósito de 1 USDT mostrado en las operaciones de la plataforma EFC."
+          "copy": "Los nuevos usuarios pueden comenzar con el bono de depósito de 600 FCFA mostrado en las operaciones de la plataforma EFC."
         },
         {
           "title": "Bono por invitación",
-          "copy": "Invita miembros activos y desbloquea recompensas escalonadas de USDT a medida que tu red de fútbol crece."
+          "copy": "Invita miembros activos y desbloquea recompensas escalonadas de FCFA a medida que tu red de fútbol crece."
         },
         {
           "title": "Reembolsos para agentes",
@@ -455,27 +455,27 @@
       "tiers": [
         {
           "members": "10",
-          "reward": "10USDT"
+          "reward": "6,000 FCFA"
         },
         {
           "members": "20",
-          "reward": "30USDT"
+          "reward": "18,000 FCFA"
         },
         {
           "members": "30",
-          "reward": "50USDT"
+          "reward": "30,000 FCFA"
         },
         {
           "members": "50",
-          "reward": "70USDT"
+          "reward": "42,000 FCFA"
         },
         {
           "members": "80",
-          "reward": "100USDT"
+          "reward": "60,000 FCFA"
         },
         {
           "members": "100",
-          "reward": "150USDT"
+          "reward": "90,000 FCFA"
         }
       ]
     },
@@ -733,7 +733,7 @@
       "marketUnavailable": "Este mercado no está disponible",
       "matchExpired": "Este partido ha expirado",
       "maxBetsReached": "Has alcanzado el número máximo de apuestas por hoy.",
-      "insufficientBalance": "No tienes suficiente USDT para completar esta apuesta.",
+      "insufficientBalance": "No tienes suficiente FCFA para completar esta apuesta.",
       "placeBet": "Realizar apuesta",
       "placingBet": "Realizando apuesta...",
       "loading": "Cargando partido..."
@@ -808,7 +808,7 @@
       "transferOption": "Opción de transferencia",
       "minimumPlaceholder": "Mínimo {{amount}} {{currency}}",
       "chooseMethodFirst": "Elige un método primero",
-      "usdtEquivalent": "Equivalente en USDT",
+      "usdtEquivalent": "Equivalente en FCFA",
       "sendExactly": "Envía exactamente {{amount}} a los datos de pago siguientes.",
       "sendEnteredAmount": "Envía exactamente el monto ingresado a los datos de pago siguientes.",
       "chooseMethodDetails": "Elige un método de depósito para ver los datos de pago.",
@@ -828,7 +828,7 @@
       "loading": "Cargando billeteras...",
       "bindFirst": "Vincula una billetera primero",
       "fee": "Tarifa {{percent}}%",
-      "totalDebit": "Débito total: {{amount}} USDT",
+      "totalDebit": "Débito total: {{amount}} FCFA",
       "submit": "Retirar",
       "successTitle": "Retiro exitoso",
       "withdrawalFee": "Comisión de retiro",
@@ -840,12 +840,12 @@
       "chooseWallet": "Elige billetera de pago preferida",
       "selectWithdrawalMethod": "Selecciona tu método de retiro",
       "noWallet": "Ninguno",
-      "amountLabel": "Ingresa el monto que deseas retirar en USD",
+      "amountLabel": "Ingresa el monto que deseas retirar en FCFA",
       "noPinSet": "No se ha configurado un PIN de transacción.",
       "wrongPin": "PIN de transacción incorrecto.",
       "insufficientFunds": "Fondos insuficientes",
       "betRequirement": "Debes realizar al menos 5 apuestas antes de retirar.",
-      "maximumWithdrawal": "El retiro máximo es {{amount}} USDT.",
+      "maximumWithdrawal": "El retiro máximo es {{amount}} FCFA.",
       "enterAmount": "Ingresa un monto",
       "connectionError": "Comprueba tu conexión a Internet y actualiza el sitio."
     },
@@ -873,7 +873,7 @@
       "transactionUnavailable": "Transacciones no disponibles",
       "retry": "Reintentar",
       "submittedAmount": "Monto enviado",
-      "usdtEquivalent": "Equivalente en USDT",
+      "usdtEquivalent": "Equivalente en FCFA",
       "payoutAmount": "Monto de pago",
       "destinationDetail": "Destino: {{destination}}",
       "receiptUploaded": "Recibo subido",

@@ -69,26 +69,26 @@ function toNumber(value) {
 
 function formatNumber(value, currency, locale = 'en') {
   const numericValue = toNumber(value)
-  const isUsdt = String(currency || '').toUpperCase() === 'USDT'
+  const isFcfa = String(currency || '').toUpperCase() === 'FCFA'
 
   return new Intl.NumberFormat(locale, {
-    minimumFractionDigits: isUsdt ? 3 : 0,
-    maximumFractionDigits: isUsdt ? 3 : 2,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: isFcfa ? 0 : 2,
   }).format(numericValue)
 }
 
 function formatAmount(amount, t, locale) {
   if (!amount || amount.value === null || amount.value === undefined) return t('common.notAvailable')
 
-  const currency = String(amount.currency || 'USDT').toUpperCase()
+  const currency = String(amount.currency || 'FCFA').toUpperCase()
   const formatted = formatNumber(amount.value, currency, locale)
-  const label = currency === 'USDT' ? `${formatted} USDT` : `${currency} ${formatted}`
+  const label = currency === 'FCFA' ? `${formatted} FCFA` : `${currency} ${formatted}`
 
   return amount.approximate ? `~ ${label}` : label
 }
 
 function formatUsdt(value, locale) {
-  return `${formatNumber(value, 'USDT', locale)} USDT`
+  return `${formatNumber(value, 'FCFA', locale)} FCFA`
 }
 
 function formatDate(value, locale, t) {

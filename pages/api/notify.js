@@ -10,7 +10,7 @@ function formatAmount(value, digits = 4) {
 }
 
 function amountText(value, digits = 4) {
-  return `${formatAmount(value, digits)} USDT`
+  return `${formatAmount(value, digits)} FCFA`
 }
 
 function sourceLabel(item, profile) {
@@ -82,7 +82,7 @@ function bonusNotification(item, profile) {
       type: 'affbonus',
       title: 'Rebate bonus',
       titleKey: 'mobile.notifications.titles.rebateBonus',
-      message: `You received a rebate bonus of ${formatAmount(amount)} USDT from ${sourceUsername}`,
+      message: `You received a rebate bonus of ${formatAmount(amount)} FCFA from ${sourceUsername}`,
       messageKey: 'mobile.notifications.messages.rebateBonus',
       messageValues: { amount: amountText(amount), sourceUsername },
       amount,
@@ -99,7 +99,7 @@ function bonusNotification(item, profile) {
       type: 'depbonus',
       title: 'Referral deposit bonus',
       titleKey: 'mobile.notifications.titles.referralDepositBonus',
-      message: `You received a deposit bonus of ${formatAmount(amount)} USDT from ${sourceUsername}`,
+      message: `You received a deposit bonus of ${formatAmount(amount)} FCFA from ${sourceUsername}`,
       messageKey: 'mobile.notifications.messages.referralDepositBonus',
       messageValues: { amount: amountText(amount), sourceUsername },
       amount,
@@ -114,7 +114,7 @@ function bonusNotification(item, profile) {
     type: item.type || 'bonus',
     title: 'Bonus',
     titleKey: 'mobile.notifications.titles.bonus',
-    message: `You received a bonus of ${formatAmount(amount)} USDT`,
+    message: `You received a bonus of ${formatAmount(amount)} FCFA`,
     messageKey: 'mobile.notifications.messages.bonus',
     messageValues: { amount: amountText(amount) },
     amount,
@@ -131,7 +131,7 @@ function firstDepositBonusNotification(item) {
     type: 'firstdepositbonus',
     title: 'First deposit bonus',
     titleKey: 'mobile.notifications.titles.firstDepositBonus',
-    message: `You received a first deposit bonus of ${formatAmount(amount)} USDT`,
+    message: `You received a first deposit bonus of ${formatAmount(amount)} FCFA`,
     messageKey: 'mobile.notifications.messages.firstDepositBonus',
     messageValues: { amount: amountText(amount) },
     amount,
@@ -148,7 +148,7 @@ function betWinNotification(item) {
     type: 'bet',
     title: 'Bet won',
     titleKey: 'mobile.notifications.titles.betWon',
-    message: `You won your bet of ${formatAmount(amount, 2)} USDT`,
+    message: `You won your bet of ${formatAmount(amount, 2)} FCFA`,
     messageKey: 'mobile.notifications.messages.betWon',
     messageValues: { amount: amountText(amount, 2) },
     amount,
@@ -177,7 +177,7 @@ function transactionNotification(item) {
   const type = item.type || 'transaction'
   const typeLabel = type === 'withdrawer' ? 'withdrawal' : type
   const status = item.sent || 'pending'
-  const method = item.method || 'USDT'
+  const method = item.method || 'FCFA'
   const typeKey = type === 'deposit' ? 'common.deposit' : 'common.withdraw'
   const statusKey = status === 'success' ? 'status.success' : status === 'failed' ? 'status.failed' : status === 'processing' ? 'status.processing' : 'status.pending'
 
@@ -210,7 +210,7 @@ function adminRewardNotification(item) {
     type: 'admin',
     title: 'Admin reward',
     titleKey: 'mobile.notifications.titles.adminReward',
-    message: `You received ${formatAmount(amount, 2)} USDT ${item.method || 'reward'} from admin`,
+    message: `You received ${formatAmount(amount, 2)} FCFA ${item.method || 'reward'} from admin`,
     messageKey: 'mobile.notifications.messages.adminReward',
     messageValues: { amount: amountText(amount, 2), method: item.method || 'reward' },
     amount,
