@@ -47,6 +47,7 @@ export default function Controls() {
   const [withdrawalDisabledMessage, setWithdrawalDisabledMessage] = useState('Withdrawals are temporarily unavailable. Please try again later.')
   const [loadingSettings, setLoadingSettings] = useState(true)
   const [savingSettings, setSavingSettings] = useState(false)
+  const [savingAvailability, setSavingAvailability] = useState(false)
 
   useEffect(() => {
     let active = true
@@ -84,6 +85,51 @@ export default function Controls() {
       active = false
     }
   }, [router])
+
+  const saveWithdrawalAvailability = async ({ enabled, message = withdrawalDisabledMessage }) => {
+    const normalizedMessage = message.trim()
+
+    if (!enabled && !normalizedMessage) {
+      toast.error('Add a message before disabling withdrawals')
+      return false
+    }
+
+    setSavingAvailability(true)
+    try {
+      const response = await fetch('/api/admin/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          withdrawalsEnabled: enabled,
+          withdrawalDisabledMessage: normalizedMessage,
+        }),
+      })
+      const result = await response.json()
+
+      if (!response.ok) {
+        if (response.status === 401) router.push('/admin')
+        throw new Error(result.message || 'Unable to update withdrawal availability')
+      }
+
+      setWithdrawalsEnabled(result.settings?.withdrawalsEnabled ?? enabled)
+      setWithdrawalDisabledMessage(result.settings?.withdrawalDisabledMessage ?? normalizedMessage)
+      toast.success(enabled ? 'Withdrawals enabled' : 'Withdrawals disabled')
+      return true
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message || 'Unable to update withdrawal availability')
+      return false
+    } finally {
+      setSavingAvailability(false)
+    }
+  }
+
+  const toggleWithdrawalAvailability = async (enabled) => {
+    const previousValue = withdrawalsEnabled
+    setWithdrawalsEnabled(enabled)
+    const saved = await saveWithdrawalAvailability({ enabled })
+    if (!saved) setWithdrawalsEnabled(previousValue)
+  }
 
   const saveSettings = async () => {
     const firstDepositBonusPercent = Number(bonusPercent)
@@ -244,17 +290,24 @@ export default function Controls() {
                     <label htmlFor="withdrawals-enabled" className="text-sm font-semibold text-white">Enable Withdrawals</label>
                     <p className="mt-1 text-xs text-zinc-500">Turn this off to stop all new withdrawal requests.</p>
                   </div>
-                  <button
-                    id="withdrawals-enabled"
-                    type="button"
-                    role="switch"
-                    aria-checked={withdrawalsEnabled}
-                    disabled={loadingSettings || savingSettings}
-                    onClick={() => setWithdrawalsEnabled((enabled) => !enabled)}
-                    className={`relative h-7 w-12 rounded-full transition ${withdrawalsEnabled ? 'bg-[#1BB6FF]' : 'bg-zinc-700'} disabled:cursor-not-allowed disabled:opacity-60`}
-                  >
-                    <span className={`absolute top-1 h-5 w-5 rounded-full bg-white transition ${withdrawalsEnabled ? 'left-6' : 'left-1'}`} />
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <span className={`text-xs font-semibold ${withdrawalsEnabled ? 'text-emerald-400' : 'text-rose-400'}`}>
+                      {savingAvailability ? 'Saving…' : withdrawalsEnabled ? 'Enabled' : 'Disabled'}
+                    </span>
+                    <label className={`relative inline-flex h-8 w-14 items-center ${loadingSettings || savingSettings || savingAvailability ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}>
+                      <input
+                        id="withdrawals-enabled"
+                        type="checkbox"
+                        role="switch"
+                        checked={withdrawalsEnabled}
+                        disabled={loadingSettings || savingSettings || savingAvailability}
+                        onChange={(event) => toggleWithdrawalAvailability(event.target.checked)}
+                        className="peer sr-only"
+                      />
+                      <span className="absolute inset-0 rounded-full border border-white/10 bg-zinc-700 transition-colors peer-checked:bg-emerald-500 peer-focus-visible:ring-2 peer-focus-visible:ring-[#8EE5FF] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[#151515]" />
+                      <span className="absolute left-1 h-6 w-6 rounded-full bg-white shadow-md transition-transform peer-checked:translate-x-6" />
+                    </label>
+                  </div>
                 </div>
 
                 {!withdrawalsEnabled ? (
@@ -269,7 +322,17 @@ export default function Controls() {
                       placeholder="Explain why withdrawals are unavailable."
                       className="min-h-[96px] rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm text-white outline-none disabled:text-zinc-500"
                     />
-                    <p className="text-xs text-zinc-500">This appears in a dialog when a user opens the withdrawal page.</p>
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <p className="text-xs text-zinc-500">This appears in a dialog when a user opens the withdrawal page.</p>
+                      <button
+                        type="button"
+                        disabled={loadingSettings || savingSettings || savingAvailability}
+                        onClick={() => saveWithdrawalAvailability({ enabled: false })}
+                        className="h-10 rounded-full bg-white px-4 text-sm font-semibold text-black transition hover:bg-[#8EE5FF] disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-zinc-400"
+                      >
+                        {savingAvailability ? 'Saving…' : 'Save message'}
+                      </button>
+                    </div>
                   </div>
                 ) : null}
               </div>
