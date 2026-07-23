@@ -718,6 +718,8 @@
       "hello": "Hello",
       "telegram": "Telegram Channel",
       "telegramCopy": "Join our telegram group to earn more",
+      "whatsapp": "WhatsApp Group",
+      "whatsappCopy": "Join our WhatsApp group",
       "topMatches": "Top Football Matches"
     },
     "match": {
@@ -777,6 +779,7 @@
       "aboutTitle": "About",
       "language": "Language",
       "telegramChannel": "Telegram Channel",
+      "whatsappGroup": "WhatsApp Group",
       "customerService": "Customer Service",
       "telegramGroup": "Telegram Group",
       "contact": "Contact",

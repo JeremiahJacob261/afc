@@ -23,6 +23,9 @@ import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientA
 import AppLoadingOverlay from '@/components/AppLoadingOverlay';
 import { waitForPaint } from '@/lib/uiFeedback';
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
+
+const telegramGroupUrl = 'https://t.me/+Giav1o1JVGNkYzNk'
+const whatsappGroupUrl = 'https://chat.whatsapp.com/I1D6NNWndu6HDrbzB5BkPX?s=hd&p=i&mlu=0&ilr=0'
 import { useTranslation } from 'next-i18next';
 
 
@@ -208,13 +211,23 @@ export default function Account() {
               </Link>
             </Stack>
             <Divider sx={{ bgcolor: "#1BB6FF" }} />
-            < Link href='https://t.me/+e1nirNMro8A4NWVk' style={{ textDecoration: 'none' }}>
+            < Link href={telegramGroupUrl} style={{ textDecoration: 'none' }}>
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                 <Stack direction='row' spacing={1} justifyContent='start'>
                   <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
 
                   <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.telegramChannel')}</Typography>
                 </Stack>
+              </Stack>
+            </Link>
+            <Divider sx={{ bgcolor: "#1BB6FF" }} />
+            < Link href={whatsappGroupUrl} style={{ textDecoration: 'none' }}>
+              <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }}>
+                <Stack direction='row' spacing={1} justifyContent='start'>
+                  <Icon icon="mingcute:chat-2-line" width="24" height="24" style={{ color: '#25D366' }} />
+                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.whatsappGroup')}</Typography>
+                </Stack>
+                <KeyboardArrowRightIcon width={24} height={24} sx={{ color: '#25D366' }} />
               </Stack>
             </Link>
           </Stack>
@@ -401,7 +414,7 @@ export default function Account() {
               </Link>
 
               <Divider sx={{ bgcolor: "#1BB6FF" }} />
-              < Link href='https://t.me/+e1nirNMro8A4NWVk' style={{ textDecoration: 'none' }}>
+              < Link href={telegramGroupUrl} style={{ textDecoration: 'none' }}>
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                   <Stack direction='row' spacing={1} justifyContent='start'>
                     <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
@@ -409,6 +422,18 @@ export default function Account() {
                     <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.telegramGroup')}</Typography>
                   </Stack>
                   <KeyboardArrowRightIcon width={24} height={24} />
+                </Stack>
+              </Link>
+
+              <Divider sx={{ bgcolor: "#1BB6FF" }} />
+
+              < Link href={whatsappGroupUrl} style={{ textDecoration: 'none' }}>
+                <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }}>
+                  <Stack direction='row' spacing={1} justifyContent='start'>
+                    <Icon icon="mingcute:chat-2-line" width="24" height="24" style={{ color: '#25D366' }} />
+                    <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.whatsappGroup')}</Typography>
+                  </Stack>
+                  <KeyboardArrowRightIcon width={24} height={24} sx={{ color: '#25D366' }} />
                 </Stack>
               </Link>
 

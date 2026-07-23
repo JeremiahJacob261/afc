@@ -1171,6 +1171,42 @@ a {
   text-decoration: none;
 }
 
+.community-links {
+  display: grid;
+  gap: 10px;
+}
+
+.whatsapp-link {
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 15px;
+  border-radius: 18px;
+  color: #b9ffd0;
+  background: #123d2b;
+  border: 1px solid rgba(37, 211, 102, 0.28);
+  text-decoration: none;
+}
+
+.whatsapp-link span {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.whatsapp-link b,
+.whatsapp-link small {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.whatsapp-link small {
+  color: #a6e8b9;
+  font-size: 12px;
+}
+
 .telegram-link span {
   min-width: 0;
   display: grid;

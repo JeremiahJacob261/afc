@@ -27,6 +27,8 @@ import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay';
 import { useTranslation } from 'next-i18next';
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 
+const telegramGroupUrl = 'https://t.me/+Giav1o1JVGNkYzNk'
+const whatsappGroupUrl = 'https://chat.whatsapp.com/I1D6NNWndu6HDrbzB5BkPX?s=hd&p=i&mlu=0&ilr=0'
 const HOUR_MS = 60 * 60 * 1000
 
 function getLocalDateKey(date) {
@@ -250,18 +252,8 @@ export default function Home() {
               </Link>
             </Stack>
             <Divider sx={{ bgcolor: "secondary.light" }} />
-            < Link href='https://t.me/+e1nirNMro8A4NWVk' target="_blank" style={{ textDecoration: 'none' }}>
-              <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px', minWidth: 0 }} >
-                <Stack direction='row' spacing={1} justifyContent='start' sx={{ minWidth: 0 }}>
-                  <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#1BB6FF' }} />
-
-                  <Stack direction='column' spacing={0} justifyContent='start' sx={{ minWidth: 0 }}>
-                    <Typography sx={{ color: '#1BB6FF', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif', textDecoration: 'underline' }}>{t('mobile.home.telegram')}</Typography>
-                    <Typography sx={{ color: '#1BB6FF', fontSize: '12px', fontWeight: 300, fontFamily: 'Inter,sans-serif', textDecoration: 'underline', overflowWrap: 'anywhere' }}>{t('mobile.home.telegramCopy')}</Typography>
-                  </Stack>
-                </Stack>
-              </Stack>
-            </Link>
+            <CommunityLink href={telegramGroupUrl} icon="mingcute:telegram-line" title={t('mobile.home.telegram')} copy={t('mobile.home.telegramCopy')} color="#1BB6FF" />
+            <CommunityLink href={whatsappGroupUrl} icon="mingcute:chat-2-line" title={t('mobile.home.whatsapp')} copy={t('mobile.home.whatsappCopy')} color="#25D366" />
           </Stack>
           <Divider sx={{ background: '#E9E5DA' }} />
 
@@ -305,6 +297,23 @@ export default function Home() {
         </Stack>
       </Cover>
     </Stack>
+  )
+}
+
+function CommunityLink({ href, icon, title, copy, color }) {
+  return (
+    <Link href={href} target="_blank" style={{ textDecoration: 'none' }}>
+      <Stack direction="row" justifyContent="space-between" sx={{ padding: '8px', minWidth: 0 }}>
+        <Stack direction="row" spacing={1} justifyContent="start" sx={{ minWidth: 0 }}>
+          <Icon icon={icon} width="24" height="24" style={{ color }} />
+          <Stack direction="column" spacing={0} justifyContent="start" sx={{ minWidth: 0 }}>
+            <Typography sx={{ color, fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif', textDecoration: 'underline' }}>{title}</Typography>
+            <Typography sx={{ color, fontSize: '12px', fontWeight: 300, fontFamily: 'Inter,sans-serif', textDecoration: 'underline', overflowWrap: 'anywhere' }}>{copy}</Typography>
+          </Stack>
+        </Stack>
+        <KeyboardArrowRightIcon sx={{ color }} />
+      </Stack>
+    </Link>
   )
 }
 

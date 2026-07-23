@@ -43,6 +43,8 @@ import { getLocalStorageItem, setLocalStorageItem } from './lib/storage.js'
 import { checkForBundleUpdate, markBundleReady } from './lib/updater.js'
 
 const referralCode = '000208'
+const telegramGroupUrl = 'https://t.me/+Giav1o1JVGNkYzNk'
+const whatsappGroupUrl = 'https://chat.whatsapp.com/I1D6NNWndu6HDrbzB5BkPX?s=hd&p=i&mlu=0&ilr=0'
 const appReadyWaitMs = 1500
 const bootSplashDelayMs = 700
 const sessionBootTimeoutMs = 5000
@@ -1250,13 +1252,22 @@ function HomeScreen({ navigate, onLogout, online }) {
         </button>
       </section>
 
-      <a className="telegram-link" href="https://t.me/+e1nirNMro8A4NWVk" target="_blank" rel="noreferrer">
-        <span>
-          <b>{t('mobile.home.telegram')}</b>
-          <small>{t('mobile.home.telegramCopy')}</small>
-        </span>
-        <ChevronRight size={18} />
-      </a>
+      <div className="community-links">
+        <a className="telegram-link" href={telegramGroupUrl} target="_blank" rel="noreferrer">
+          <span>
+            <b>{t('mobile.home.telegram')}</b>
+            <small>{t('mobile.home.telegramCopy')}</small>
+          </span>
+          <ChevronRight size={18} />
+        </a>
+        <a className="whatsapp-link" href={whatsappGroupUrl} target="_blank" rel="noreferrer">
+          <span>
+            <b>{t('mobile.home.whatsapp')}</b>
+            <small>{t('mobile.home.whatsappCopy')}</small>
+          </span>
+          <ChevronRight size={18} />
+        </a>
+      </div>
 
       <ImageCarousel images={bfcImages} />
 
@@ -1713,7 +1724,9 @@ function ProfileScreen({ navigate, onLogout }) {
             </button>
           </div>
           <AccountDivider />
-          <ExternalAccountRow label={t('mobile.profile.telegramChannel')} icon={MessageCircle} href="https://t.me/+e1nirNMro8A4NWVk" />
+          <ExternalAccountRow label={t('mobile.profile.telegramChannel')} icon={MessageCircle} href={telegramGroupUrl} />
+          <AccountDivider />
+          <ExternalAccountRow label={t('mobile.profile.whatsappGroup')} icon={MessageCircle} href={whatsappGroupUrl} />
         </section>
 
         <AccountPanel title={t('mobile.profile.referralsTitle')}>
@@ -1762,7 +1775,7 @@ function ProfileScreen({ navigate, onLogout }) {
           <AccountDivider />
           <ExternalAccountRow label={t('mobile.profile.customerService')} icon={MessageCircle} href="https://t.me/EFC_Support" />
           <AccountDivider />
-          <ExternalAccountRow label={t('mobile.profile.telegramGroup')} icon={MessageCircle} href="https://t.me/+e1nirNMro8A4NWVk" />
+          <ExternalAccountRow label={t('mobile.profile.telegramGroup')} icon={MessageCircle} href={telegramGroupUrl} />
           <AccountDivider />
           <ExternalAccountRow label={t('mobile.profile.contact')} icon={Mail} href="https://t.me/EFC_Support" />
         </AccountPanel>
