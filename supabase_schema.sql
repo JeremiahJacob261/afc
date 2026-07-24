@@ -790,7 +790,7 @@ BEGIN
   END IF;
 
   IF COALESCE(user_row.balance, 0) < p_stake THEN
-    RAISE EXCEPTION 'You do not have Enough FCFA to Complete this BET';
+    RAISE EXCEPTION 'You do not have enough FCFA to complete this bet';
   END IF;
 
   IF COALESCE(user_row.gcount, 0) > 2 THEN

@@ -472,9 +472,9 @@ export default function Match({ matchDat }) {
         const profit = Number(((stakeAmount * tofal) / 100).toFixed(3));
         const expext = Number((stakeAmount + profit).toFixed(3));
         let gcount = info.gcount ?? 0;
-        let ball = Number(balance || 0);
-        const availableBalance = Math.max(0, Number(balance || info?.balance || 0));
-        const useAllBalance = () => setStake(String(Math.floor(availableBalance * 1000) / 1000));
+        const availableBalance = Math.max(0, Number(balance || 0));
+        const availableStake = Math.floor(availableBalance);
+        const useAllBalance = () => setStake(String(availableStake));
 
         let stamx = getMatchStartSeconds(matches);
         let d1 = new Date();
@@ -541,7 +541,7 @@ export default function Match({ matchDat }) {
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#E9E5DA' }}>{t('common.currentBalance')}</Typography>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{Math.round(ball).toLocaleString()} FCFA</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{availableStake.toLocaleString()} FCFA</Typography>
                         </Stack>
                         <input placeholder={t('mobile.match.stakeAmount')} type='text'
                             style={{ fontFamily: 'Poppins, sans-serif', padding: "10px", borderRadius: '12px', width: '100%', background: '#06101F', color: '#FFFFFF', border: '3px solid #E9E5DA' }}
@@ -555,7 +555,7 @@ export default function Match({ matchDat }) {
                         <Button
                             type="button"
                             variant="outlined"
-                            disabled={availableBalance <= 0}
+                            disabled={availableStake <= 0}
                             onClick={useAllBalance}
                             sx={{ alignSelf: 'flex-start', borderColor: '#1BB6FF', color: '#1BB6FF', fontFamily: 'Poppins,sans-serif', fontWeight: 600 }}
                         >
@@ -574,7 +574,7 @@ export default function Match({ matchDat }) {
                                 if (openx) return
                                 if (!picked || tofal <= 0) {
                                     toast.error(t('messages.chooseScoreMarket'))
-                                } else if (stakeAmount <= Number(info.balance || 0)) {
+                                } else if (stakeAmount <= availableStake) {
                                     if (stakeAmount < 600) {
                                         toast.error(t('messages.stakeMinimum'))
 
@@ -603,7 +603,8 @@ export default function Match({ matchDat }) {
                                                 })
                                                 const result = await response.json().catch(() => ({}))
                                                 if (!response.ok || result.status !== 'success') {
-                                                    toast.error(result.message || t('messages.unablePlaceBet'))
+                                                    const isInsufficientBalance = /insufficient|not enough|enough\s+(?:USDT|FCFA)/i.test(String(result.message || ''))
+                                                    toast.error(isInsufficientBalance ? t('mobile.match.insufficientBalance') : (result.message || t('messages.unablePlaceBet')))
                                                     handleClosex()
                                                     return
                                                 }

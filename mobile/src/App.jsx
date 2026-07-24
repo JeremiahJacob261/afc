@@ -1382,7 +1382,7 @@ function MatchDetailScreen({ matchId, navigate }) {
       return
     }
 
-    const amount = Number(stake)
+    const amount = Math.floor(Number(stake))
     if (!Number.isFinite(amount) || amount < 600) {
       notifyMessage(setMessage, 'error', t('messages.stakeMinimum'))
       return
@@ -1411,7 +1411,9 @@ function MatchDetailScreen({ matchId, navigate }) {
       setPicked('')
       navigate('bet', { id: nextBetId })
     } catch (error) {
-      notifyMessage(setMessage, 'error', error?.message || t('messages.unablePlaceBet'))
+      const errorMessage = String(error?.message || '')
+      const isInsufficientBalance = /insufficient|not enough|enough\s+(?:USDT|FCFA)/i.test(errorMessage)
+      notifyMessage(setMessage, 'error', isInsufficientBalance ? t('mobile.match.insufficientBalance') : (errorMessage || t('messages.unablePlaceBet')))
     } finally {
       setPlacing(false)
     }
@@ -1420,7 +1422,7 @@ function MatchDetailScreen({ matchId, navigate }) {
   function useAllBalance() {
     const balance = Number(profile?.balance)
     if (!Number.isFinite(balance) || balance <= 0) return
-    setStake(String(Math.floor(balance * 1000) / 1000))
+    setStake(String(Math.floor(balance)))
   }
 
   const display = formatMatchStart(match, t)
@@ -1498,7 +1500,7 @@ function MatchDetailScreen({ matchId, navigate }) {
               icon={<Ticket size={18} />}
               label={t('mobile.match.stakeAmount')}
               action={(
-                <button className="input-max-button" type="button" onClick={useAllBalance} disabled={Number(profile?.balance) <= 0}>
+                <button className="input-max-button" type="button" onClick={useAllBalance} disabled={Math.floor(Number(profile?.balance) || 0) <= 0}>
                   {t('mobile.match.useAllBalance')}
                 </button>
               )}
@@ -3284,7 +3286,7 @@ function formatMoney(value) {
 }
 
 function formatFcfa(value) {
-  const amount = Math.round(Number(value || 0))
+  const amount = Math.floor(Number(value || 0))
   return `${amount.toLocaleString()} FCFA`
 }
 
