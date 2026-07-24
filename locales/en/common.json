@@ -51,7 +51,7 @@
     "profile": "Profile",
     "faq": "FAQ",
     "vip": "VIP",
-    "usdt": "FCFA"
+    "usdt": "USDT"
   },
   "auth": {
     "login": {
@@ -727,6 +727,7 @@
       "matchId": "Match ID",
       "market": "Market",
       "stakeAmount": "Stake amount",
+      "useAllBalance": "Use all balance",
       "profit": "Profit",
       "expectedReturn": "Expected return",
       "companyGame": "Company game",
@@ -811,7 +812,7 @@
       "transferOption": "Transfer option",
       "minimumPlaceholder": "Minimum {{amount}} {{currency}}",
       "chooseMethodFirst": "Choose a method first",
-      "usdtEquivalent": "FCFA equivalent",
+      "fcfaEquivalent": "FCFA equivalent",
       "sendExactly": "Send exactly {{amount}} to the payment details below.",
       "sendEnteredAmount": "Send exactly the entered amount to the payment details below.",
       "chooseMethodDetails": "Choose a deposit method to see payment details.",
@@ -876,7 +877,7 @@
       "transactionUnavailable": "Transactions unavailable",
       "retry": "Retry",
       "submittedAmount": "Submitted amount",
-      "usdtEquivalent": "FCFA equivalent",
+      "fcfaEquivalent": "FCFA equivalent",
       "payoutAmount": "Payout amount",
       "destinationDetail": "Destination: {{destination}}",
       "receiptUploaded": "Receipt uploaded",

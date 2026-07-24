@@ -51,7 +51,7 @@
     "profile": "Профиль",
     "faq": "FAQ",
     "vip": "VIP",
-    "usdt": "FCFA"
+    "usdt": "USDT"
   },
   "auth": {
     "login": {
@@ -725,6 +725,7 @@
       "matchId": "ID матча",
       "market": "Рынок",
       "stakeAmount": "Сумма ставки",
+      "useAllBalance": "Использовать весь баланс",
       "profit": "Прибыль",
       "expectedReturn": "Ожидаемый возврат",
       "companyGame": "Игра компании",
@@ -808,7 +809,7 @@
       "transferOption": "Вариант перевода",
       "minimumPlaceholder": "Минимум {{amount}} {{currency}}",
       "chooseMethodFirst": "Сначала выберите метод",
-      "usdtEquivalent": "Эквивалент FCFA",
+      "fcfaEquivalent": "Эквивалент FCFA",
       "sendExactly": "Отправьте ровно {{amount}} на платежные реквизиты ниже.",
       "sendEnteredAmount": "Отправьте ровно введенную сумму на платежные реквизиты ниже.",
       "chooseMethodDetails": "Выберите метод депозита, чтобы увидеть платежные реквизиты.",
@@ -873,7 +874,7 @@
       "transactionUnavailable": "Транзакции недоступны",
       "retry": "Повторить",
       "submittedAmount": "Отправленная сумма",
-      "usdtEquivalent": "Эквивалент FCFA",
+      "fcfaEquivalent": "Эквивалент FCFA",
       "payoutAmount": "Сумма выплаты",
       "destinationDetail": "Назначение: {{destination}}",
       "receiptUploaded": "Квитанция загружена",

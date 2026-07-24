@@ -445,7 +445,7 @@ export default function Funds() {
             {selectedMethod && (
               <Stack spacing={0.8}>
                 <Stack direction="row" justifyContent="space-between">
-                  <Typography sx={{ fontSize: 12, color: brand.muted }}>{t('mobile.deposit.usdtEquivalent')}</Typography>
+                  <Typography sx={{ fontSize: 12, color: brand.muted }}>{t('mobile.deposit.fcfaEquivalent')}</Typography>
                   <Typography sx={{ fontSize: 13, fontWeight: 700 }}>
                     {formatMoney(numericAmount / rate)} FCFA
                   </Typography>

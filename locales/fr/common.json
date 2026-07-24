@@ -51,7 +51,7 @@
     "profile": "Profil",
     "faq": "FAQ",
     "vip": "VIP",
-    "usdt": "FCFA"
+    "usdt": "USDT"
   },
   "auth": {
     "login": {
@@ -725,6 +725,7 @@
       "matchId": "ID du match",
       "market": "Marché",
       "stakeAmount": "Montant de la mise",
+      "useAllBalance": "Utiliser tout le solde",
       "profit": "Profit",
       "expectedReturn": "Retour attendu",
       "companyGame": "Match société",
@@ -808,7 +809,7 @@
       "transferOption": "Option de transfert",
       "minimumPlaceholder": "Minimum {{amount}} {{currency}}",
       "chooseMethodFirst": "Choisissez d’abord une méthode",
-      "usdtEquivalent": "Équivalent FCFA",
+      "fcfaEquivalent": "Équivalent FCFA",
       "sendExactly": "Envoyez exactement {{amount}} aux coordonnées de paiement ci-dessous.",
       "sendEnteredAmount": "Envoyez exactement le montant saisi aux coordonnées de paiement ci-dessous.",
       "chooseMethodDetails": "Choisissez une méthode de dépôt pour voir les coordonnées de paiement.",
@@ -873,7 +874,7 @@
       "transactionUnavailable": "Transactions indisponibles",
       "retry": "Réessayer",
       "submittedAmount": "Montant envoyé",
-      "usdtEquivalent": "Équivalent FCFA",
+      "fcfaEquivalent": "Équivalent FCFA",
       "payoutAmount": "Montant payé",
       "destinationDetail": "Destination : {{destination}}",
       "receiptUploaded": "Reçu téléversé",

@@ -51,7 +51,7 @@
     "profile": "الملف الشخصي",
     "faq": "FAQ",
     "vip": "VIP",
-    "usdt": "FCFA"
+    "usdt": "USDT"
   },
   "auth": {
     "login": {
@@ -725,6 +725,7 @@
       "matchId": "معرّف المباراة",
       "market": "السوق",
       "stakeAmount": "مبلغ الرهان",
+      "useAllBalance": "استخدام كامل الرصيد",
       "profit": "الربح",
       "expectedReturn": "العائد المتوقع",
       "companyGame": "مباراة الشركة",
@@ -808,7 +809,7 @@
       "transferOption": "خيار التحويل",
       "minimumPlaceholder": "الحد الأدنى {{amount}} {{currency}}",
       "chooseMethodFirst": "اختر طريقة أولاً",
-      "usdtEquivalent": "ما يعادل FCFA",
+      "fcfaEquivalent": "ما يعادل FCFA",
       "sendExactly": "أرسل بالضبط {{amount}} إلى تفاصيل الدفع أدناه.",
       "sendEnteredAmount": "أرسل بالضبط المبلغ المدخل إلى تفاصيل الدفع أدناه.",
       "chooseMethodDetails": "اختر طريقة إيداع لعرض تفاصيل الدفع.",
@@ -873,7 +874,7 @@
       "transactionUnavailable": "المعاملات غير متاحة",
       "retry": "إعادة المحاولة",
       "submittedAmount": "المبلغ المرسل",
-      "usdtEquivalent": "ما يعادل FCFA",
+      "fcfaEquivalent": "ما يعادل FCFA",
       "payoutAmount": "مبلغ الدفع",
       "destinationDetail": "الوجهة: {{destination}}",
       "receiptUploaded": "تم رفع الإيصال",

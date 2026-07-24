@@ -33,7 +33,7 @@ const toNumber = (value) => {
   return Number.isFinite(amount) ? amount : 0
 }
 
-const formatUsdt = (value) => `${Math.round(toNumber(value)).toLocaleString()} FCFA`
+const formatFcfa = (value) => `${Math.round(toNumber(value)).toLocaleString()} FCFA`
 
 const getBetStatus = (bet, t) => {
   const startTime = getMatchStartMs(bet)
@@ -109,7 +109,7 @@ export default function Bets() {
       { label: t('status.unsettled'), value: bets.length },
       { label: t('status.settled'), value: fina.length },
       { label: t('status.won'), value: won },
-      { label: t('mobile.bets.stake'), value: formatUsdt(totalStake) },
+      { label: t('mobile.bets.stake'), value: formatFcfa(totalStake) },
     ]
   }, [bets, fina, t])
   const tabs = [
@@ -257,8 +257,8 @@ export default function Bets() {
             }}
           >
             <Metric label={t('landing.live.odds')} value={`${bet.odd || '0'}%`} />
-            <Metric label={t('mobile.bets.stake')} value={formatUsdt(bet.stake)} />
-            <Metric label="Profit" value={formatUsdt(returnAmount)} />
+            <Metric label={t('mobile.bets.stake')} value={formatFcfa(bet.stake)} />
+            <Metric label="Profit" value={formatFcfa(returnAmount)} />
           </Box>
         </Stack>
 

@@ -1,5 +1,14 @@
 import { requireAdmin } from '@/lib/adminAuth'
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
+import {
+  displayPaymentCurrency,
+  fetchPaymentMethods,
+  findPaymentMethod,
+  getPaymentRate,
+  isFcfaPaymentCode,
+  methodCodeFromRow,
+  normalizePaymentCode,
+} from '@/lib/paymentMethods'
 
 export default async function handler(req, res) {
   if (!['GET', 'POST'].includes(req.method)) {
@@ -22,10 +31,33 @@ export default async function handler(req, res) {
       query = query.ilike('username', `%${find}%`)
     }
 
-    const { data, error } = await query
+    const [{ data, error }, methods] = await Promise.all([
+      query,
+      fetchPaymentMethods(supabase),
+    ])
     if (error) throw error
 
-    return res.status(200).json(data || [])
+    const notifications = (data || []).map((notification) => {
+      const rawMethod = normalizePaymentCode(notification.method_currency || notification.method || 'fcfa')
+      const savedMethod = findPaymentMethod(methods, rawMethod)
+      const methodCode = normalizePaymentCode(notification.method_currency) || (savedMethod ? methodCodeFromRow(savedMethod) : rawMethod)
+      const isFcfa = isFcfaPaymentCode(methodCode)
+      const snapshotRate = Number(notification.method_rate)
+      const methodRate = Number.isFinite(snapshotRate) && snapshotRate > 0
+        ? snapshotRate
+        : getPaymentRate(savedMethod, isFcfa ? 1 : 0)
+
+      return {
+        ...notification,
+        methodCode,
+        methodCurrency: displayPaymentCurrency(methodCode),
+        methodRate,
+        requiresRateReview: !methodRate,
+        isFcfaMethod: isFcfa,
+      }
+    })
+
+    return res.status(200).json(notifications)
   } catch (error) {
     const status = error.statusCode || 500
     const message = status === 500 ? 'Server error' : error.message

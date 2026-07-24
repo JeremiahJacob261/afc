@@ -1,7 +1,9 @@
 import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
 import {
+  displayPaymentCurrency,
   getPaymentMethod,
   getPaymentRate,
+  isFcfaPaymentCode,
   methodCodeFromRow,
   normalizePaymentCode,
 } from '@/lib/paymentMethods'
@@ -27,12 +29,12 @@ export default async function handler(req, res) {
       return res.status(400).json({ status: 'error', message: 'Unknown or unavailable deposit method' })
     }
 
-    const rate = getPaymentRate(savedMethod)
+    const notificationMethod = methodCodeFromRow(savedMethod) || requestedCode
+    const rate = getPaymentRate(savedMethod, isFcfaPaymentCode(notificationMethod) ? 1 : 0)
     if (!rate || numericAmount / rate < 3000) {
       return res.status(400).json({ status: 'error', message: 'Minimum deposit is 3,000 FCFA equivalent' })
     }
 
-    const notificationMethod = methodCodeFromRow(savedMethod) || requestedCode
     const { error } = await supabase
       .from('notification')
       .insert({
@@ -41,6 +43,8 @@ export default async function handler(req, res) {
         type: 'deposit',
         sent: 'pending',
         method: notificationMethod,
+        method_currency: displayPaymentCurrency(notificationMethod),
+        method_rate: rate,
         address,
         adminaddress,
       })

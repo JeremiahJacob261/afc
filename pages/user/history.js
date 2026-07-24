@@ -57,8 +57,8 @@ const statusMeta = {
 }
 
 const emptySummary = {
-  totalDepositsUsdt: 0,
-  totalWithdrawalsUsdt: 0,
+  totalDepositsFcfa: 0,
+  totalWithdrawalsFcfa: 0,
   count: 0,
 }
 
@@ -87,7 +87,7 @@ function formatAmount(amount, t, locale) {
   return amount.approximate ? `~ ${label}` : label
 }
 
-function formatUsdt(value, locale) {
+function formatFcfa(value, locale) {
   return `${formatNumber(value, 'FCFA', locale)} FCFA`
 }
 
@@ -489,13 +489,13 @@ export default function TransactionHistory() {
           <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
             <SummaryStat
               label={t('mobile.transactions.totalDeposits')}
-              value={formatUsdt(summary.totalDepositsUsdt, locale)}
+              value={formatFcfa(summary.totalDepositsFcfa, locale)}
               icon="solar:wallet-money-bold"
               color="#32D7FF"
             />
             <SummaryStat
               label={t('mobile.transactions.totalWithdrawals')}
-              value={formatUsdt(summary.totalWithdrawalsUsdt, locale)}
+              value={formatFcfa(summary.totalWithdrawalsFcfa, locale)}
               icon="solar:card-transfer-bold"
               color="#FF9E7A"
             />

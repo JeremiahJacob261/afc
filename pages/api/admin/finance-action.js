@@ -2,20 +2,29 @@ import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 import { requireAdmin } from '@/lib/adminAuth'
 import { getFirstDepositBonusPercent } from '@/lib/adminSettings'
 import {
+  displayPaymentCurrency,
+  fromFcfaLedgerAmount,
   getPaymentMethod,
   getPaymentRate,
+  isFcfaPaymentCode,
   normalizePaymentCode,
+  toFcfaLedgerAmount,
 } from '@/lib/paymentMethods'
 import { notifyFinanceAction } from '@/lib/pushNotifications'
 
 async function getNotificationRate(supabase, notification) {
-  const method = normalizePaymentCode(notification.method || 'fcfa')
+  const method = normalizePaymentCode(notification.method_currency || notification.method || 'fcfa')
+  const snapshotRate = Number(notification.method_rate)
+  if (Number.isFinite(snapshotRate) && snapshotRate > 0) {
+    return { method, rate: snapshotRate }
+  }
+
   const savedMethod = await getPaymentMethod(supabase, method)
-  const fallback = ['fcfa', 'xof', 'cfa'].includes(method) ? 1 : 0
+  const fallback = isFcfaPaymentCode(method) ? 1 : 0
   const rate = getPaymentRate(savedMethod, fallback)
 
   if (!rate) {
-    const error = new Error(`No saved rate found for ${method.toUpperCase()}`)
+    const error = new Error(`No saved rate found for ${displayPaymentCurrency(method)}. Set a rate snapshot before approving this legacy transaction.`)
     error.statusCode = 400
     throw error
   }
@@ -33,7 +42,7 @@ async function getLedgerAmount(supabase, notification) {
     throw error
   }
 
-  return amount / rate
+  return toFcfaLedgerAmount(amount, rate)
 }
 
 async function getLocalWithdrawAmount(supabase, notification) {
@@ -46,7 +55,7 @@ async function getLocalWithdrawAmount(supabase, notification) {
     throw error
   }
 
-  return amount * rate
+  return fromFcfaLedgerAmount(amount, rate)
 }
 
 function normalizedSent(sent) {

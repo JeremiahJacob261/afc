@@ -346,6 +346,23 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
+.input-shell b .input-max-button {
+  border: 0;
+  border-radius: 9px;
+  background: rgba(27, 182, 255, 0.14);
+  color: #70d7ff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 900;
+  padding: 6px 8px;
+}
+
+.input-shell b .input-max-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 .language-dialog-backdrop {
   position: fixed;
   inset: 0;

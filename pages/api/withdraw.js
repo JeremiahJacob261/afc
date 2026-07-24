@@ -2,6 +2,14 @@ import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
 import { getWithdrawalSettings, WITHDRAWAL_HARD_LIMIT_AMOUNT } from '@/lib/adminSettings'
 import { calculateWithdrawalAmounts } from '@/lib/withdrawalFee'
 import { formatFcfa, getCurrencySettings, parseFcfa } from '@/lib/currency'
+import {
+  displayPaymentCurrency,
+  getPaymentMethod,
+  getPaymentRate,
+  isFcfaPaymentCode,
+  methodCodeFromRow,
+  normalizePaymentCode,
+} from '@/lib/paymentMethods'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -25,7 +33,8 @@ export default async function handler(req, res) {
     )
 
     // Fetch only enough bet rows to satisfy the withdrawal requirement.
-    const [withdrawalSettings, { data: qualifyingBets, error: betError }] = await Promise.all([
+    const requestedMethod = normalizePaymentCode(body.method || 'fcfa')
+    const [withdrawalSettings, { data: qualifyingBets, error: betError }, savedMethod] = await Promise.all([
       getWithdrawalSettings(supabase, {
         allowDefaultOnMissingTable: true,
       }),
@@ -34,9 +43,16 @@ export default async function handler(req, res) {
         .select('id')
         .eq('username', profile.username)
         .limit(5),
+      getPaymentMethod(supabase, requestedMethod),
     ])
 
     if (betError) throw betError
+
+    const methodCode = methodCodeFromRow(savedMethod) || requestedMethod
+    const methodRate = getPaymentRate(savedMethod, isFcfaPaymentCode(methodCode) ? 1 : 0)
+    if (!methodRate) {
+      return res.status(400).json([{ status: 'Failed', message: 'Withdrawal method rate is unavailable. Please select another wallet.' }])
+    }
 
     if (!withdrawalSettings.withdrawalsEnabled) {
       return res.status(200).json([{ status: 'Failed', message: withdrawalSettings.withdrawalDisabledMessage }])
@@ -67,12 +83,14 @@ export default async function handler(req, res) {
       withdrawalSettings.withdrawalFeePercent
     )
 
-    const { error: withdrawError } = await supabase.rpc('create_withdrawal_request_atomic', {
+    const { error: withdrawError } = await supabase.rpc('create_withdrawal_request_with_rate_snapshot_atomic', {
       p_userid: profile.userid,
       p_amount: totalAmount,
       p_payout_amount: requestedAmount,
       p_wallet: body.wallet || null,
-      p_method: body.method || null,
+      p_method: methodCode,
+      p_method_currency: displayPaymentCurrency(methodCode),
+      p_method_rate: methodRate,
       p_bank: body.bank || null,
       p_accountname: body.accountname || null,
     })

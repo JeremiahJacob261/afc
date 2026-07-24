@@ -1417,6 +1417,12 @@ function MatchDetailScreen({ matchId, navigate }) {
     }
   }
 
+  function useAllBalance() {
+    const balance = Number(profile?.balance)
+    if (!Number.isFinite(balance) || balance <= 0) return
+    setStake(String(Math.floor(balance * 1000) / 1000))
+  }
+
   const display = formatMatchStart(match, t)
   const level = Number(profile?.viplevel || profile?.vip?.viplevel || 1)
   const companyMatch = isCompanyGame(match)
@@ -1488,7 +1494,15 @@ function MatchDetailScreen({ matchId, navigate }) {
           </section>
 
           <section className="detail-card">
-            <InputShell icon={<Ticket size={18} />} label={t('mobile.match.stakeAmount')}>
+            <InputShell
+              icon={<Ticket size={18} />}
+              label={t('mobile.match.stakeAmount')}
+              action={(
+                <button className="input-max-button" type="button" onClick={useAllBalance} disabled={Number(profile?.balance) <= 0}>
+                  {t('mobile.match.useAllBalance')}
+                </button>
+              )}
+            >
               <input
                 inputMode="decimal"
                 value={stake}
@@ -1562,7 +1576,7 @@ function BetsScreen({ navigate }) {
             <button key={detailId} className="list-card" type="button" onClick={() => navigate('bet', { id: detailId })} disabled={!detailId}>
               <span>
                 <b>{bet.home || t('common.home')} vs {bet.away || t('common.away')}</b>
-                <small>{bet.picked || bet.pick || t('common.score')} · {formatUsdt(bet.stake)}</small>
+                <small>{bet.picked || bet.pick || t('common.score')} · {formatFcfaLedger(bet.stake)}</small>
               </span>
               <StatusPill status={betStatus(bet, t)} />
             </button>
@@ -1644,8 +1658,8 @@ function BetDetailScreen({ betId, navigate }) {
             )}
           />
           <InfoRow label={t('mobile.bets.odds')} value={Number.isFinite(odd) ? `${odd.toFixed(3)}%` : t('common.placeholderDash')} />
-          <InfoRow label={t('mobile.bets.stake')} value={formatUsdt(bet.stake)} />
-          <InfoRow label={t('mobile.bets.potentialWinnings')} value={formatUsdt(winnings)} />
+          <InfoRow label={t('mobile.bets.stake')} value={formatFcfaLedger(bet.stake)} />
+          <InfoRow label={t('mobile.bets.potentialWinnings')} value={formatFcfaLedger(winnings)} />
           <InfoRow label={t('mobile.bets.kickoff')} value={`${display.date} ${display.time}`} />
           <InfoRow label={t('mobile.bets.result')} value={result} />
           <InfoRow label={t('mobile.bets.status')} value={status.label} />
@@ -2054,7 +2068,7 @@ function DepositScreen({ navigate, setSuccessAmount }) {
         {selectedMethod ? (
           <div className="deposit-web-progress">
             <span>
-              <small>{t('mobile.deposit.usdtEquivalent')}</small>
+              <small>{t('mobile.deposit.fcfaEquivalent')}</small>
               <b>{formatMoney(numericAmount / rate)} FCFA</b>
             </span>
             <i><em className={amountIsValid ? 'valid' : ''} style={{ width: `${progressValue}%` }} /></i>
@@ -2506,7 +2520,7 @@ function ReferralsScreen({ navigate }) {
       <section className="referral-summary-grid">
         <ReferralStat label={t('mobile.vip.total')} value={referrals.length} />
         <ReferralStat label={t('mobile.referrals.activeReferrals')} value={activeCount} />
-        <ReferralStat label={t('mobile.vip.totalDeposit')} value={formatUsdt(totalDeposit)} />
+        <ReferralStat label={t('mobile.vip.totalDeposit')} value={formatFcfaLedger(totalDeposit)} />
       </section>
 
       <section className="referral-filter-bar" aria-label={t('mobile.referrals.title')}>
@@ -2532,7 +2546,7 @@ function ReferralsScreen({ navigate }) {
 
       <section className="referral-filter-total">
         <span>{t('mobile.referrals.filteredReferrals', { count: visibleReferrals.length })}</span>
-        <b>{formatUsdt(filteredDeposit)}</b>
+        <b>{formatFcfaLedger(filteredDeposit)}</b>
       </section>
 
       {loading ? <LoadingState text={t('mobile.referrals.loading')} /> : null}
@@ -2562,7 +2576,7 @@ function ReferralsScreen({ navigate }) {
               <em className={`referral-level level-${item.level || 1}`}>
                 {item.levelLabel || t('mobile.referrals.level', { level: item.level || 1 })}
               </em>
-              <b>{formatUsdt(item.totald)}</b>
+              <b>{formatFcfaLedger(item.totald)}</b>
             </span>
           </article>
         ))}
@@ -3310,7 +3324,7 @@ function hasNamedDestination(destinations, method) {
   ))
 }
 
-function formatUsdt(value) {
+function formatFcfaLedger(value) {
   return `${Math.round(Number(value || 0)).toLocaleString()} FCFA`
 }
 

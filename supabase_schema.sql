@@ -202,6 +202,8 @@ CREATE TABLE IF NOT EXISTS notification (
   amount DECIMAL(15, 4) NOT NULL,
   type TEXT,
   method TEXT,
+  method_currency TEXT,
+  method_rate DECIMAL(20, 8),
   bank TEXT,
   address TEXT,
   accountname TEXT,
@@ -217,6 +219,8 @@ CREATE TABLE IF NOT EXISTS notification (
 );
 
 ALTER TABLE notification ADD COLUMN IF NOT EXISTS uid TEXT;
+ALTER TABLE notification ADD COLUMN IF NOT EXISTS method_currency TEXT;
+ALTER TABLE notification ADD COLUMN IF NOT EXISTS method_rate DECIMAL(20, 8);
 ALTER TABLE notification ADD COLUMN IF NOT EXISTS processed_action TEXT;
 ALTER TABLE notification ADD COLUMN IF NOT EXISTS processed_at TIMESTAMP;
 ALTER TABLE notification ADD COLUMN IF NOT EXISTS processing_started_at TIMESTAMP;
@@ -1296,14 +1300,16 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION public.create_withdrawal_request_atomic(
+CREATE OR REPLACE FUNCTION public.create_withdrawal_request_with_rate_snapshot_atomic(
   p_userid TEXT,
   p_amount NUMERIC,
   p_payout_amount NUMERIC,
   p_wallet TEXT DEFAULT NULL,
   p_method TEXT DEFAULT NULL,
   p_bank TEXT DEFAULT NULL,
-  p_accountname TEXT DEFAULT NULL
+  p_accountname TEXT DEFAULT NULL,
+  p_method_currency TEXT DEFAULT NULL,
+  p_method_rate NUMERIC DEFAULT NULL
 )
 RETURNS JSONB
 LANGUAGE plpgsql
@@ -1326,6 +1332,10 @@ BEGIN
 
   IF p_amount IS NULL OR p_amount <= 0 OR p_payout_amount IS NULL OR p_payout_amount <= 0 THEN
     RAISE EXCEPTION 'Invalid amount';
+  END IF;
+
+  IF p_method_currency IS NULL OR btrim(p_method_currency) = '' OR p_method_rate IS NULL OR p_method_rate <= 0 THEN
+    RAISE EXCEPTION 'Invalid payment method rate';
   END IF;
 
   SELECT *
@@ -1397,6 +1407,8 @@ BEGIN
     sent,
     type,
     method,
+    method_currency,
+    method_rate,
     bank,
     accountname
   )
@@ -1407,6 +1419,8 @@ BEGIN
     'pending',
     'withdraw',
     p_method,
+    p_method_currency,
+    p_method_rate,
     p_bank,
     p_accountname
   )
@@ -1428,15 +1442,15 @@ $$;
 REVOKE ALL ON FUNCTION public.place_bet_atomic(TEXT, TEXT, TEXT, NUMERIC, UUID) FROM PUBLIC;
 REVOKE ALL ON FUNCTION public.settle_reverse_match_atomic(TEXT, INTEGER, INTEGER) FROM PUBLIC;
 REVOKE ALL ON FUNCTION public.process_finance_action_atomic(TEXT, BIGINT, TEXT, NUMERIC, NUMERIC) FROM PUBLIC;
-REVOKE ALL ON FUNCTION public.create_withdrawal_request_atomic(TEXT, NUMERIC, NUMERIC, TEXT, TEXT, TEXT, TEXT) FROM PUBLIC;
+REVOKE ALL ON FUNCTION public.create_withdrawal_request_with_rate_snapshot_atomic(TEXT, NUMERIC, NUMERIC, TEXT, TEXT, TEXT, TEXT, TEXT, NUMERIC) FROM PUBLIC;
 REVOKE ALL ON FUNCTION public.process_finance_action_atomic(TEXT, BIGINT, TEXT, NUMERIC, NUMERIC) FROM anon;
 REVOKE ALL ON FUNCTION public.process_finance_action_atomic(TEXT, BIGINT, TEXT, NUMERIC, NUMERIC) FROM authenticated;
-REVOKE ALL ON FUNCTION public.create_withdrawal_request_atomic(TEXT, NUMERIC, NUMERIC, TEXT, TEXT, TEXT, TEXT) FROM anon;
-REVOKE ALL ON FUNCTION public.create_withdrawal_request_atomic(TEXT, NUMERIC, NUMERIC, TEXT, TEXT, TEXT, TEXT) FROM authenticated;
+REVOKE ALL ON FUNCTION public.create_withdrawal_request_with_rate_snapshot_atomic(TEXT, NUMERIC, NUMERIC, TEXT, TEXT, TEXT, TEXT, TEXT, NUMERIC) FROM anon;
+REVOKE ALL ON FUNCTION public.create_withdrawal_request_with_rate_snapshot_atomic(TEXT, NUMERIC, NUMERIC, TEXT, TEXT, TEXT, TEXT, TEXT, NUMERIC) FROM authenticated;
 GRANT EXECUTE ON FUNCTION public.place_bet_atomic(TEXT, TEXT, TEXT, NUMERIC, UUID) TO service_role;
 GRANT EXECUTE ON FUNCTION public.settle_reverse_match_atomic(TEXT, INTEGER, INTEGER) TO service_role;
 GRANT EXECUTE ON FUNCTION public.process_finance_action_atomic(TEXT, BIGINT, TEXT, NUMERIC, NUMERIC) TO service_role;
-GRANT EXECUTE ON FUNCTION public.create_withdrawal_request_atomic(TEXT, NUMERIC, NUMERIC, TEXT, TEXT, TEXT, TEXT) TO service_role;
+GRANT EXECUTE ON FUNCTION public.create_withdrawal_request_with_rate_snapshot_atomic(TEXT, NUMERIC, NUMERIC, TEXT, TEXT, TEXT, TEXT, TEXT, NUMERIC) TO service_role;
 
 -- ============================================================================
 -- VIEWS (Optional - for common queries)

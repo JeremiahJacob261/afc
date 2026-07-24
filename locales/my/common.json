@@ -51,7 +51,7 @@
     "profile": "ကိုယ်ရေးအချက်အလက်",
     "faq": "FAQ",
     "vip": "VIP",
-    "usdt": "FCFA"
+    "usdt": "USDT"
   },
   "auth": {
     "login": {
@@ -725,6 +725,7 @@
       "matchId": "ဂိမ်း ID",
       "market": "စျေးကွက်",
       "stakeAmount": "အရိုက်အပ်ငွေ",
+      "useAllBalance": "လက်ကျန်အားလုံး အသုံးပြုရန်",
       "profit": "အမြတ်",
       "expectedReturn": "မျှော်မှန်းရလဒ်",
       "companyGame": "ကုမ္ပဏီဂိမ်း",
@@ -808,7 +809,7 @@
       "transferOption": "လွှဲပြောင်းရွေးချယ်မှု",
       "minimumPlaceholder": "အနည်းဆုံး {{amount}} {{currency}}",
       "chooseMethodFirst": "နည်းလမ်းကို အရင်ရွေးပါ",
-      "usdtEquivalent": "FCFA တန်ဖိုး",
+      "fcfaEquivalent": "FCFA တန်ဖိုး",
       "sendExactly": "အောက်ပါငွေပေးချေအချက်အလက်များသို့ {{amount}} အတိအကျပို့ပါ။",
       "sendEnteredAmount": "အောက်ပါငွေပေးချေအချက်အလက်များသို့ ထည့်ထားသောပမာဏအတိအကျပို့ပါ။",
       "chooseMethodDetails": "ငွေပေးချေအချက်အလက်များကိုကြည့်ရန် ငွေသွင်းနည်းလမ်းရွေးပါ။",
@@ -873,7 +874,7 @@
       "transactionUnavailable": "ငွေစာရင်းများမရနိုင်ပါ",
       "retry": "ထပ်ကြိုးစားရန်",
       "submittedAmount": "တင်ထားသောပမာဏ",
-      "usdtEquivalent": "FCFA တန်ဖိုး",
+      "fcfaEquivalent": "FCFA တန်ဖိုး",
       "payoutAmount": "ပေးချေမည့်ပမာဏ",
       "destinationDetail": "လက်ခံရာ: {{destination}}",
       "receiptUploaded": "Receipt တင်ပြီးပါပြီ",
