@@ -8,13 +8,13 @@ import Image from "next/image";
 import Link from 'next/link';
 import { Typography, Divider } from "@mui/material";
 import { supabase } from '@/pages/api/supabase'
-import Agent from '@/public/bfc1.jpg'
-import Agent1 from '@/public/bfc2.jpg'
-import Agent2 from '@/public/bfc3.jpg'
+import Agent from '@/assets/fcfa/IMG-20260723-WA0042.jpg'
+import Agent1 from '@/assets/fcfa/IMG-20260723-WA0043.jpg'
+import Agent2 from '@/assets/fcfa/IMG-20260723-WA0044.jpg'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Icon } from '@iconify/react'
-import Agent3 from '@/public/bfc4.jpg'
-import Agent4 from '@/public/bfc5.jpg'
+import Agent3 from '@/assets/fcfa/IMG-20260723-WA0045.jpg'
+import Agent4 from '@/assets/fcfa/IMG-20260723-WA0046.jpg'
 import AnimatedCarousel from '../../components/AnimatedCarousel'
 import Loading from "../components/loading";
 import Ims from '@/public/simps/ball.png'
