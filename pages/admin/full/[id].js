@@ -117,6 +117,9 @@ export default function UserDetailModal() {
   const [loading, setLoading] = useState(true)
   const [balance, setBalance] = useState('')
   const [editbal, setEditbal] = useState(false)
+  const [totalDeposits, setTotalDeposits] = useState('')
+  const [editingTotalDeposits, setEditingTotalDeposits] = useState(false)
+  const [savingTotalDeposits, setSavingTotalDeposits] = useState(false)
   const [switchOpen, setSwitchOpen] = useState(false)
   const [newRefer, setNewRefer] = useState('')
   const [switchingReferral, setSwitchingReferral] = useState(false)
@@ -156,6 +159,7 @@ export default function UserDetailModal() {
         setLostbet(result.lostbet || [])
         setReferredby(result.referredby)
         setBalance(result.user?.balance ?? '')
+        setTotalDeposits(result.user?.totald ?? '')
       } catch (error) {
         console.log(error)
         toast.error(error.message || 'Unable to load user')
@@ -199,6 +203,39 @@ export default function UserDetailModal() {
     } catch (error) {
       console.log(error)
       toast.error(error.message || 'An error occurred')
+    }
+  }
+
+  const updateTotalDeposits = async () => {
+    const amount = Number(totalDeposits)
+    if (!Number.isFinite(amount) || amount < 0) {
+      toast.error('Total deposits must be zero or greater')
+      return
+    }
+
+    setSavingTotalDeposits(true)
+    try {
+      const response = await fetch('/api/admin/user-action', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'update-total-deposit',
+          uid: datas?.uid,
+          newTotalDeposit: amount,
+        }),
+      })
+      const result = await response.json().catch(() => ({}))
+      if (!response.ok) throw new Error(result.message || 'Total deposit update failed')
+      const savedAmount = Number(result.totald)
+      setDatas((current) => ({ ...current, totald: savedAmount }))
+      setTotalDeposits(String(savedAmount))
+      setEditingTotalDeposits(false)
+      toast.success('Total deposits updated')
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message || 'An error occurred')
+    } finally {
+      setSavingTotalDeposits(false)
     }
   }
 
@@ -509,11 +546,52 @@ export default function UserDetailModal() {
                     </div>
                   </div>
 
+                  <div className="mt-5 rounded-3xl border border-white/10 bg-white/[0.06] p-4">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <p className="text-xs font-medium uppercase tracking-[0.14em] text-zinc-500">Total Deposits</p>
+                        {editingTotalDeposits ? (
+                          <input
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            value={totalDeposits}
+                            onChange={(event) => setTotalDeposits(event.target.value)}
+                            disabled={savingTotalDeposits}
+                            className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-lg font-semibold text-white outline-none focus:border-[#B96CFF] disabled:opacity-60 sm:w-44"
+                          />
+                        ) : (
+                          <p className="mt-2 text-2xl font-semibold text-[#B96CFF]">{formatNumber(datas.totald)} FCFA</p>
+                        )}
+                      </div>
+                      <div className="flex gap-2">
+                        {editingTotalDeposits && (
+                          <button
+                            type="button"
+                            onClick={updateTotalDeposits}
+                            disabled={savingTotalDeposits}
+                            className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-black transition hover:bg-[#B96CFF] disabled:cursor-not-allowed disabled:opacity-60"
+                          >
+                            {savingTotalDeposits ? 'Saving...' : 'Save'}
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => setEditingTotalDeposits((value) => !value)}
+                          disabled={savingTotalDeposits}
+                          className="flex h-11 w-11 items-center justify-center rounded-full bg-white/[0.08] text-zinc-300 transition hover:bg-white hover:text-black disabled:cursor-not-allowed disabled:opacity-60"
+                          aria-label="Edit total deposits"
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="mt-5 grid gap-3 sm:grid-cols-2">
                     <StatCard label="Bets Placed" value={bets.length || 0} icon={Trophy} />
                     <StatCard label="Bets Won" value={wonbet.length || 0} icon={BadgeDollarSign} tone="text-emerald-300" />
                     <StatCard label="Bets Lost" value={lostbet.length || 0} icon={Shield} tone="text-[#ff8ca0]" />
-                    <StatCard label="Total Deposits" value={`$${formatNumber(datas.totald)}`} icon={Wallet} tone="text-[#B96CFF]" />
                   </div>
 
                   <div className="mt-5 rounded-3xl border border-white/10 bg-white/[0.06] p-4">

@@ -30,8 +30,17 @@ export default function Cover({ children }) {
   const [drop, setDrop] = useState(false);
   const auth = getAuth(app)
   const [info, setInfo] = useState({})
+  const [customerSupportUrl, setCustomerSupportUrl] = useState('https://t.me/EFC_Support')
   const router = useRouter();
   const { t } = useTranslation('common');
+  useEffect(() => {
+    fetch('/api/platform-settings')
+      .then((response) => response.ok ? response.json() : null)
+      .then((result) => {
+        if (result?.links?.customerSupportUrl) setCustomerSupportUrl(result.links.customerSupportUrl)
+      })
+      .catch(() => {})
+  }, [])
   const handleClickr = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -122,7 +131,7 @@ export default function Cover({ children }) {
                 </Stack>
               </Link>
 
-              <Link href='https://t.me/EFC_Support' style={{ textDecoration: "none", color: '#E9E5DA', cursor: 'pointer' }}>
+              <Link href={customerSupportUrl} style={{ textDecoration: "none", color: '#E9E5DA', cursor: 'pointer' }}>
                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ width: '224px', height: '41px' }}>
                   <Stack direction='row' spacing={2}>
                     <BiSolidContact sx={{ width: '20px', height: '20px' }} />

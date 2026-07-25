@@ -35,7 +35,7 @@ export default async function handler(req, res) {
 
   try {
     requireAdmin(req)
-    const { action, username, uid, newBalance, currentRefer, newRefer } = req.body || {}
+    const { action, username, uid, newBalance, newTotalDeposit, currentRefer, newRefer } = req.body || {}
     const supabase = getSupabaseAdmin()
 
     if (action === 'update-balance') {
@@ -51,6 +51,28 @@ export default async function handler(req, res) {
 
       if (error) throw error
       return res.status(200).json({ status: 'success' })
+    }
+
+    if (action === 'update-total-deposit') {
+      const requestedUid = String(uid || '').trim()
+      const amount = Number(newTotalDeposit)
+      if (!requestedUid || !Number.isFinite(amount) || amount < 0) {
+        return res.status(400).json({ status: 'error', message: 'Total deposit must be a number greater than or equal to zero' })
+      }
+
+      const { data: user, error } = await supabase
+        .from('users')
+        .update({ totald: amount })
+        .eq('uid', requestedUid)
+        .select('uid,totald')
+        .maybeSingle()
+
+      if (error) throw error
+      if (!user) {
+        return res.status(404).json({ status: 'error', message: 'User not found' })
+      }
+
+      return res.status(200).json({ status: 'success', totald: user.totald })
     }
 
     if (action === 'delete-wallet') {

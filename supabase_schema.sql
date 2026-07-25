@@ -355,6 +355,9 @@ CREATE TABLE IF NOT EXISTS admin_settings (
   ),
   withdrawals_enabled BOOLEAN NOT NULL DEFAULT TRUE,
   withdrawal_disabled_message TEXT NOT NULL DEFAULT 'Withdrawals are temporarily unavailable. Please try again later.',
+  telegram_group_url TEXT NOT NULL DEFAULT 'https://t.me/+Giav1o1JVGNkYzNk',
+  whatsapp_group_url TEXT NOT NULL DEFAULT 'https://chat.whatsapp.com/I1D6NNWndu6HDrbzB5BkPX?s=hd&p=i&mlu=0&ilr=0',
+  customer_support_url TEXT NOT NULL DEFAULT 'https://t.me/EFC_Support',
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -366,6 +369,9 @@ ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS daily_withdrawal_limit DECIM
 ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS withdrawal_limit_exempt_usernames TEXT[] NOT NULL DEFAULT '{}';
 ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS withdrawals_enabled BOOLEAN NOT NULL DEFAULT TRUE;
 ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS withdrawal_disabled_message TEXT NOT NULL DEFAULT 'Withdrawals are temporarily unavailable. Please try again later.';
+ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS telegram_group_url TEXT NOT NULL DEFAULT 'https://t.me/+Giav1o1JVGNkYzNk';
+ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS whatsapp_group_url TEXT NOT NULL DEFAULT 'https://chat.whatsapp.com/I1D6NNWndu6HDrbzB5BkPX?s=hd&p=i&mlu=0&ilr=0';
+ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS customer_support_url TEXT NOT NULL DEFAULT 'https://t.me/EFC_Support';
 
 CREATE TABLE IF NOT EXISTS reading (
   id BIGINT PRIMARY KEY,

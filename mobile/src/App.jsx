@@ -43,8 +43,9 @@ import { getLocalStorageItem, setLocalStorageItem } from './lib/storage.js'
 import { checkForBundleUpdate, markBundleReady } from './lib/updater.js'
 
 const referralCode = '000208'
-const telegramGroupUrl = 'https://t.me/+Giav1o1JVGNkYzNk'
-const whatsappGroupUrl = 'https://chat.whatsapp.com/I1D6NNWndu6HDrbzB5BkPX?s=hd&p=i&mlu=0&ilr=0'
+const defaultTelegramGroupUrl = 'https://t.me/+Giav1o1JVGNkYzNk'
+const defaultWhatsappGroupUrl = 'https://chat.whatsapp.com/I1D6NNWndu6HDrbzB5BkPX?s=hd&p=i&mlu=0&ilr=0'
+const defaultCustomerSupportUrl = 'https://t.me/EFC_Support'
 const appReadyWaitMs = 1500
 const bootSplashDelayMs = 700
 const sessionBootTimeoutMs = 5000
@@ -989,6 +990,9 @@ function UserApp({ route, setRoute, onLogout, online, successAmount, setSuccessA
   const { t } = useTranslation('common')
   const shouldReduceMotion = useReducedMotion()
   const [unreadCount, setUnreadCount] = useState(0)
+  const [telegramGroupUrl, setTelegramGroupUrl] = useState(defaultTelegramGroupUrl)
+  const [whatsappGroupUrl, setWhatsappGroupUrl] = useState(defaultWhatsappGroupUrl)
+  const [customerSupportUrl, setCustomerSupportUrl] = useState(defaultCustomerSupportUrl)
   const navigate = useCallback((name, params = {}) => setRoute(makeRoute(name, params)), [setRoute])
   const backHome = useCallback(() => navigate('home'), [navigate])
   const routeKey = getRouteKey(route)
@@ -1008,6 +1012,16 @@ function UserApp({ route, setRoute, onLogout, online, successAmount, setSuccessA
   useEffect(() => {
     refreshNotificationSummary()
   }, [refreshNotificationSummary])
+
+  useEffect(() => {
+    apiFetch('/api/platform-settings')
+      .then((result) => {
+        if (result?.links?.telegramGroupUrl) setTelegramGroupUrl(result.links.telegramGroupUrl)
+        if (result?.links?.whatsappGroupUrl) setWhatsappGroupUrl(result.links.whatsappGroupUrl)
+        if (result?.links?.customerSupportUrl) setCustomerSupportUrl(result.links.customerSupportUrl)
+      })
+      .catch(() => {})
+  }, [])
 
   useEffect(() => {
     let cleanup = () => {}
@@ -1795,11 +1809,11 @@ function ProfileScreen({ navigate, onLogout }) {
           <AccountDivider />
           <LanguageAccountRow label={t('mobile.profile.language')} value={currentLanguage} onChange={changeLanguage} />
           <AccountDivider />
-          <ExternalAccountRow label={t('mobile.profile.customerService')} icon={MessageCircle} href="https://t.me/EFC_Support" />
+          <ExternalAccountRow label={t('mobile.profile.customerService')} icon={MessageCircle} href={customerSupportUrl} />
           <AccountDivider />
           <ExternalAccountRow label={t('mobile.profile.telegramGroup')} icon={MessageCircle} href={telegramGroupUrl} />
           <AccountDivider />
-          <ExternalAccountRow label={t('mobile.profile.contact')} icon={Mail} href="https://t.me/EFC_Support" />
+          <ExternalAccountRow label={t('mobile.profile.contact')} icon={Mail} href={customerSupportUrl} />
         </AccountPanel>
 
         <AccountPanel title={t('mobile.profile.closureTitle')}>

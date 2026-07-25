@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
-import { ArrowUpRight, Bell, KeyRound, Lock, Percent, Save, ShieldCheck, WalletCards } from 'lucide-react'
+import { ArrowUpRight, Bell, KeyRound, Link2, Lock, Percent, Save, ShieldCheck, WalletCards } from 'lucide-react'
 
 const tools = [
   {
@@ -45,6 +45,9 @@ export default function Controls() {
   const [withdrawalFeePercent, setWithdrawalFeePercent] = useState('7')
   const [withdrawalsEnabled, setWithdrawalsEnabled] = useState(true)
   const [withdrawalDisabledMessage, setWithdrawalDisabledMessage] = useState('Withdrawals are temporarily unavailable. Please try again later.')
+  const [telegramGroupUrl, setTelegramGroupUrl] = useState('https://t.me/+Giav1o1JVGNkYzNk')
+  const [whatsappGroupUrl, setWhatsappGroupUrl] = useState('https://chat.whatsapp.com/I1D6NNWndu6HDrbzB5BkPX?s=hd&p=i&mlu=0&ilr=0')
+  const [customerSupportUrl, setCustomerSupportUrl] = useState('https://t.me/EFC_Support')
   const [loadingSettings, setLoadingSettings] = useState(true)
   const [savingSettings, setSavingSettings] = useState(false)
   const [savingAvailability, setSavingAvailability] = useState(false)
@@ -71,6 +74,9 @@ export default function Controls() {
           setWithdrawalFeePercent(String(result.settings?.withdrawalFeePercent ?? 7))
           setWithdrawalsEnabled(result.settings?.withdrawalsEnabled ?? true)
           setWithdrawalDisabledMessage(result.settings?.withdrawalDisabledMessage ?? 'Withdrawals are temporarily unavailable. Please try again later.')
+          setTelegramGroupUrl(result.settings?.telegramGroupUrl ?? 'https://t.me/+Giav1o1JVGNkYzNk')
+          setWhatsappGroupUrl(result.settings?.whatsappGroupUrl ?? 'https://chat.whatsapp.com/I1D6NNWndu6HDrbzB5BkPX?s=hd&p=i&mlu=0&ilr=0')
+          setCustomerSupportUrl(result.settings?.customerSupportUrl ?? 'https://t.me/EFC_Support')
         }
       } catch (error) {
         console.log(error)
@@ -168,6 +174,16 @@ export default function Controls() {
       return
     }
 
+    for (const [label, url] of [['Telegram group URL', telegramGroupUrl], ['WhatsApp group URL', whatsappGroupUrl], ['Customer support URL', customerSupportUrl]]) {
+      try {
+        const parsed = new URL(url)
+        if (!['http:', 'https:'].includes(parsed.protocol)) throw new Error()
+      } catch {
+        toast.error(`${label} must be a valid http or https URL`)
+        return
+      }
+    }
+
     setSavingSettings(true)
     try {
       const response = await fetch('/api/admin/settings', {
@@ -182,6 +198,9 @@ export default function Controls() {
           withdrawalFeePercent: feePercent,
           withdrawalsEnabled,
           withdrawalDisabledMessage: withdrawalDisabledMessage.trim(),
+          telegramGroupUrl: telegramGroupUrl.trim(),
+          whatsappGroupUrl: whatsappGroupUrl.trim(),
+          customerSupportUrl: customerSupportUrl.trim(),
         }),
       })
       const result = await response.json()
@@ -199,6 +218,9 @@ export default function Controls() {
       setWithdrawalFeePercent(String(result.settings?.withdrawalFeePercent ?? feePercent))
       setWithdrawalsEnabled(result.settings?.withdrawalsEnabled ?? withdrawalsEnabled)
       setWithdrawalDisabledMessage(result.settings?.withdrawalDisabledMessage ?? withdrawalDisabledMessage)
+      setTelegramGroupUrl(result.settings?.telegramGroupUrl ?? telegramGroupUrl)
+      setWhatsappGroupUrl(result.settings?.whatsappGroupUrl ?? whatsappGroupUrl)
+      setCustomerSupportUrl(result.settings?.customerSupportUrl ?? customerSupportUrl)
       toast.success('Settings saved successfully')
     } catch (error) {
       console.log(error)
@@ -226,6 +248,30 @@ export default function Controls() {
               <ShieldCheck className="h-4 w-4" />
               Admin tools
             </div>
+          </div>
+        </section>
+
+        <section className="rounded-[24px] border border-white/10 bg-[#151515] p-5">
+          <div className="flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#B96CFF]/10 text-[#D4A6FF]">
+              <Link2 className="h-5 w-5" />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-white">Community & Support Links</h3>
+              <p className="text-sm text-zinc-500">Used everywhere in the website and mobile app.</p>
+            </div>
+          </div>
+          <div className="mt-5 space-y-4">
+            {[
+              ['Telegram group URL', telegramGroupUrl, setTelegramGroupUrl],
+              ['WhatsApp group URL', whatsappGroupUrl, setWhatsappGroupUrl],
+              ['Customer support URL', customerSupportUrl, setCustomerSupportUrl],
+            ].map(([label, value, setValue]) => (
+              <div key={label} className="flex flex-col gap-2">
+                <label className="text-sm font-semibold text-white">{label}</label>
+                <input type="url" inputMode="url" value={value} disabled={loadingSettings || savingSettings} onChange={(event) => setValue(event.target.value)} className="h-12 rounded-full border border-white/10 bg-white/[0.06] px-4 text-sm text-white outline-none disabled:text-zinc-500" />
+              </div>
+            ))}
           </div>
         </section>
 

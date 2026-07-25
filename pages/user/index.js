@@ -27,8 +27,8 @@ import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay';
 import { useTranslation } from 'next-i18next';
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 
-const telegramGroupUrl = 'https://t.me/+Giav1o1JVGNkYzNk'
-const whatsappGroupUrl = 'https://chat.whatsapp.com/I1D6NNWndu6HDrbzB5BkPX?s=hd&p=i&mlu=0&ilr=0'
+const defaultTelegramGroupUrl = 'https://t.me/+Giav1o1JVGNkYzNk'
+const defaultWhatsappGroupUrl = 'https://chat.whatsapp.com/I1D6NNWndu6HDrbzB5BkPX?s=hd&p=i&mlu=0&ilr=0'
 const HOUR_MS = 60 * 60 * 1000
 
 function getLocalDateKey(date) {
@@ -87,6 +87,8 @@ export default function Home() {
   };
   const [footDat, setFootDat] = useState([]);
   const [activeMatchFilter, setActiveMatchFilter] = useState('today');
+  const [telegramGroupUrl, setTelegramGroupUrl] = useState(defaultTelegramGroupUrl)
+  const [whatsappGroupUrl, setWhatsappGroupUrl] = useState(defaultWhatsappGroupUrl)
 
   //the below controls the loading modal
   const [open, setOpen] = useState(false);
@@ -110,6 +112,16 @@ export default function Home() {
     { key: 'tomorrow', label: t('mobile.filters.tomorrow') },
   ]), [t]);
 
+
+  useEffect(() => {
+    fetch('/api/platform-settings')
+      .then((response) => response.ok ? response.json() : null)
+      .then((result) => {
+        if (result?.links?.telegramGroupUrl) setTelegramGroupUrl(result.links.telegramGroupUrl)
+        if (result?.links?.whatsappGroupUrl) setWhatsappGroupUrl(result.links.whatsappGroupUrl)
+      })
+      .catch(() => {})
+  }, [])
 
   useEffect(() => {
 

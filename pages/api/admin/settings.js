@@ -2,8 +2,10 @@ import { requireAdmin } from '@/lib/adminAuth'
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 import {
   getFirstDepositBonusPercent,
+  getPlatformLinks,
   getWithdrawalSettings,
   saveFirstDepositBonusPercent,
+  savePlatformLinks,
   saveWithdrawalSettings,
 } from '@/lib/adminSettings'
 
@@ -13,13 +15,14 @@ export default async function handler(req, res) {
     const supabase = getSupabaseAdmin()
 
     if (req.method === 'GET') {
-      const [firstDepositBonusPercent, withdrawalSettings] = await Promise.all([
+      const [firstDepositBonusPercent, withdrawalSettings, platformLinks] = await Promise.all([
         getFirstDepositBonusPercent(supabase, {
           allowDefaultOnMissingTable: true,
         }),
         getWithdrawalSettings(supabase, {
           allowDefaultOnMissingTable: true,
         }),
+        getPlatformLinks(supabase, { allowDefaultOnMissingTable: true }),
       ])
 
       return res.status(200).json({
@@ -27,15 +30,17 @@ export default async function handler(req, res) {
         settings: {
           firstDepositBonusPercent,
           ...withdrawalSettings,
+          ...platformLinks,
         },
       })
     }
 
     if (req.method === 'PUT') {
       const payload = req.body || {}
-      const [firstDepositBonusPercent, currentWithdrawalSettings] = await Promise.all([
+      const [firstDepositBonusPercent, currentWithdrawalSettings, currentPlatformLinks] = await Promise.all([
         getFirstDepositBonusPercent(supabase, { allowDefaultOnMissingTable: true }),
         getWithdrawalSettings(supabase, { allowDefaultOnMissingTable: true }),
+        getPlatformLinks(supabase, { allowDefaultOnMissingTable: true }),
       ])
 
       const nextBonusPercent = await saveFirstDepositBonusPercent(
@@ -51,12 +56,18 @@ export default async function handler(req, res) {
         withdrawalsEnabled: payload.withdrawalsEnabled ?? currentWithdrawalSettings.withdrawalsEnabled,
         withdrawalDisabledMessage: payload.withdrawalDisabledMessage ?? currentWithdrawalSettings.withdrawalDisabledMessage,
       })
+      const nextPlatformLinks = await savePlatformLinks(supabase, {
+        telegramGroupUrl: payload.telegramGroupUrl ?? currentPlatformLinks.telegramGroupUrl,
+        whatsappGroupUrl: payload.whatsappGroupUrl ?? currentPlatformLinks.whatsappGroupUrl,
+        customerSupportUrl: payload.customerSupportUrl ?? currentPlatformLinks.customerSupportUrl,
+      })
 
       return res.status(200).json({
         status: 'success',
         settings: {
           firstDepositBonusPercent: nextBonusPercent,
           ...nextWithdrawalSettings,
+          ...nextPlatformLinks,
         },
       })
     }

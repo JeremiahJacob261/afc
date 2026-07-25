@@ -24,8 +24,9 @@ import AppLoadingOverlay from '@/components/AppLoadingOverlay';
 import { waitForPaint } from '@/lib/uiFeedback';
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 
-const telegramGroupUrl = 'https://t.me/+Giav1o1JVGNkYzNk'
-const whatsappGroupUrl = 'https://chat.whatsapp.com/I1D6NNWndu6HDrbzB5BkPX?s=hd&p=i&mlu=0&ilr=0'
+const defaultTelegramGroupUrl = 'https://t.me/+Giav1o1JVGNkYzNk'
+const defaultWhatsappGroupUrl = 'https://chat.whatsapp.com/I1D6NNWndu6HDrbzB5BkPX?s=hd&p=i&mlu=0&ilr=0'
+const defaultCustomerSupportUrl = 'https://t.me/EFC_Support'
 import { useTranslation } from 'next-i18next';
 
 
@@ -65,7 +66,21 @@ export default function Account() {
   let loads = 0;
   const [loadingProfile, setLoadingProfile] = useState(true)
   const [accountActionLoading, setAccountActionLoading] = useState(false)
+  const [telegramGroupUrl, setTelegramGroupUrl] = useState(defaultTelegramGroupUrl)
+  const [whatsappGroupUrl, setWhatsappGroupUrl] = useState(defaultWhatsappGroupUrl)
+  const [customerSupportUrl, setCustomerSupportUrl] = useState(defaultCustomerSupportUrl)
   //end of snackbar1
+  useEffect(() => {
+    fetch('/api/platform-settings')
+      .then((response) => response.ok ? response.json() : null)
+      .then((result) => {
+        if (result?.links?.telegramGroupUrl) setTelegramGroupUrl(result.links.telegramGroupUrl)
+        if (result?.links?.whatsappGroupUrl) setWhatsappGroupUrl(result.links.whatsappGroupUrl)
+        if (result?.links?.customerSupportUrl) setCustomerSupportUrl(result.links.customerSupportUrl)
+      })
+      .catch(() => {})
+  }, [])
+
   useEffect(() => {
     let active = true
 
@@ -402,7 +417,7 @@ export default function Account() {
 
 
               <Divider sx={{ bgcolor: "#1BB6FF" }} />
-              < Link href='https://t.me/EFC_Support' style={{ textDecoration: 'none' }}>
+              < Link href={customerSupportUrl} style={{ textDecoration: 'none' }}>
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                   <Stack direction='row' spacing={1} justifyContent='start'>
                     <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
@@ -439,7 +454,7 @@ export default function Account() {
 
               <Divider sx={{ bgcolor: "#1BB6FF" }} />
 
-              < Link href='https://t.me/EFC_Support' style={{ textDecoration: 'none' }}>
+              < Link href={customerSupportUrl} style={{ textDecoration: 'none' }}>
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                   <Stack direction='row' spacing={1} justifyContent='start'>
                     <Icon icon="mdi:support" width="24" height="24" style={{ color: '#a3a3a3' }} />
