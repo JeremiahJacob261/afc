@@ -11,6 +11,9 @@ import {
   normalizePaymentCode,
 } from '@/lib/paymentMethods'
 
+const BETS_REQUIRED_PER_DEPOSIT = 5
+const SUCCESSFUL_DEPOSIT_STATUSES = ['success', 'true', 'completed']
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json([{ status: 'Failed', message: 'Method not allowed' }])
@@ -32,21 +35,27 @@ export default async function handler(req, res) {
       'userid,username,codeset,pin,newrefer,balance'
     )
 
-    // Fetch only enough bet rows to satisfy the withdrawal requirement.
+    // Every approved deposit, including historical ones, requires five placed bets.
     const requestedMethod = normalizePaymentCode(body.method || 'fcfa')
-    const [withdrawalSettings, { data: qualifyingBets, error: betError }, savedMethod] = await Promise.all([
+    const [withdrawalSettings, { count: placedBetCount, error: betError }, { count: successfulDepositCount, error: depositError }, savedMethod] = await Promise.all([
       getWithdrawalSettings(supabase, {
         allowDefaultOnMissingTable: true,
       }),
       supabase
         .from('placed')
-        .select('id')
+        .select('id', { count: 'exact', head: true })
+        .eq('username', profile.username),
+      supabase
+        .from('notification')
+        .select('id', { count: 'exact', head: true })
         .eq('username', profile.username)
-        .limit(5),
+        .eq('type', 'deposit')
+        .in('sent', SUCCESSFUL_DEPOSIT_STATUSES),
       getPaymentMethod(supabase, requestedMethod),
     ])
 
     if (betError) throw betError
+    if (depositError) throw depositError
 
     const methodCode = methodCodeFromRow(savedMethod) || requestedMethod
     const methodRate = getPaymentRate(savedMethod, isFcfaPaymentCode(methodCode) ? 1 : 0)
@@ -58,8 +67,12 @@ export default async function handler(req, res) {
       return res.status(200).json([{ status: 'Failed', message: withdrawalSettings.withdrawalDisabledMessage }])
     }
 
-    if ((qualifyingBets?.length || 0) <= 4) {
-      return res.status(200).json([{ status: 'Failed', message: 'You have not placed up to 5 bets' }])
+    const requiredBetCount = (successfulDepositCount || 0) * BETS_REQUIRED_PER_DEPOSIT
+    if ((placedBetCount || 0) < requiredBetCount) {
+      return res.status(200).json([{
+        status: 'Failed',
+        message: `You need to place ${requiredBetCount} bets before withdrawing. You have placed ${placedBetCount || 0}.`,
+      }])
     }
 
     if (amount < withdrawalSettings.minWithdrawalAmount) {
