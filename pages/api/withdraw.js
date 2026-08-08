@@ -113,7 +113,7 @@ export default async function handler(req, res) {
       if (/Insufficient funds/i.test(message)) {
         return res.status(200).json([{ status: 'Failed', message: 'Insufficient funds' }])
       }
-      if (/Daily withdrawal limit|Annual withdrawal limit|Maximum amount to withdraw/i.test(message)) {
+      if (/Only one withdrawal is allowed per day|Daily withdrawal limit|Annual withdrawal limit|Maximum amount to withdraw/i.test(message)) {
         return res.status(200).json([{ status: 'Failed', message }])
       }
       throw withdrawError

@@ -1326,6 +1326,7 @@ DECLARE
   settings_row admin_settings%ROWTYPE;
   next_balance NUMERIC;
   inserted_id BIGINT;
+  daily_withdrawal_count INTEGER;
   daily_total NUMERIC;
   annual_total NUMERIC;
   is_limit_exempt BOOLEAN;
@@ -1374,9 +1375,21 @@ BEGIN
     WHERE lower(btrim(exempt_username)) = lower(btrim(user_row.username))
   );
 
+  -- Every user may submit only one withdrawal request per UTC day.
+  utc_day_start := date_trunc('day', timezone('UTC', now()));
+
+  SELECT COUNT(*) INTO daily_withdrawal_count
+  FROM notification
+  WHERE username = user_row.username
+    AND lower(COALESCE(type, '')) IN ('withdraw', 'withdrawer')
+    AND created_at >= utc_day_start;
+
+  IF daily_withdrawal_count >= 1 THEN
+    RAISE EXCEPTION 'Only one withdrawal is allowed per day';
+  END IF;
+
   IF NOT is_limit_exempt THEN
     -- Boundaries are calculated in UTC, so limits reset automatically at 00:00 UTC.
-    utc_day_start := date_trunc('day', timezone('UTC', now()));
     utc_year_start := date_trunc('year', timezone('UTC', now()));
 
     SELECT COALESCE(SUM(amount), 0) INTO daily_total
@@ -1457,6 +1470,21 @@ GRANT EXECUTE ON FUNCTION public.place_bet_atomic(TEXT, TEXT, TEXT, NUMERIC, UUI
 GRANT EXECUTE ON FUNCTION public.settle_reverse_match_atomic(TEXT, INTEGER, INTEGER) TO service_role;
 GRANT EXECUTE ON FUNCTION public.process_finance_action_atomic(TEXT, BIGINT, TEXT, NUMERIC, NUMERIC) TO service_role;
 GRANT EXECUTE ON FUNCTION public.create_withdrawal_request_with_rate_snapshot_atomic(TEXT, NUMERIC, NUMERIC, TEXT, TEXT, TEXT, TEXT, TEXT, NUMERIC) TO service_role;
+
+-- Prevent legacy balance-deduction functions from bypassing withdrawal limits.
+DO $$
+BEGIN
+  IF to_regprocedure('public.withdraw(numeric,text)') IS NOT NULL THEN
+    EXECUTE 'REVOKE ALL ON FUNCTION public.withdraw(numeric, text) FROM PUBLIC, anon, authenticated';
+    EXECUTE 'GRANT EXECUTE ON FUNCTION public.withdraw(numeric, text) TO service_role';
+  END IF;
+
+  IF to_regprocedure('public.withdrawer(text,numeric)') IS NOT NULL THEN
+    EXECUTE 'REVOKE ALL ON FUNCTION public.withdrawer(text, numeric) FROM PUBLIC, anon, authenticated';
+    EXECUTE 'GRANT EXECUTE ON FUNCTION public.withdrawer(text, numeric) TO service_role';
+  END IF;
+END;
+$$;
 
 -- ============================================================================
 -- VIEWS (Optional - for common queries)

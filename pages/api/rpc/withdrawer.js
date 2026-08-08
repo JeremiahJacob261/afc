@@ -1,4 +1,4 @@
-import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
+import { requireInternalSecret, sendApiError } from '@/lib/apiAuth'
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 
 /**
@@ -11,20 +11,10 @@ export default async function handler(req, res) {
   }
 
   try {
-    const internalSecret = process.env.INTERNAL_API_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY
-    const isInternalRequest = internalSecret && req.headers['x-internal-secret'] === internalSecret
+    requireInternalSecret(req)
+    const supabase = getSupabaseAdmin()
     const { amount } = req.body
-    let supabase
-    let names
-
-    if (isInternalRequest) {
-      supabase = getSupabaseAdmin()
-      names = req.body.names
-    } else {
-      const current = await getCurrentProfile(req, 'username,balance')
-      supabase = current.supabase
-      names = current.profile.username
-    }
+    const names = req.body.names
 
     if (!names || amount === undefined) {
       return res.status(400).json({ error: 'Missing required parameters: names, amount' })

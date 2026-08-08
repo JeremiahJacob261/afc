@@ -376,7 +376,7 @@ Users can set a transaction PIN (`users.pin`):
 
 ### 💰 Withdrawal Limits
 
-Withdrawals currently require a minimum amount of 10 FCFA. There is no maximum withdrawal amount or VIP-based daily withdrawal cap enforced by the app.
+Withdrawals use the configured minimum amount (6,000 FCFA by default), and the database allows each user one withdrawal request per UTC calendar day. A configurable daily and annual amount limit also applies to non-exempt users. Apply `WITHDRAWAL_FREQUENCY_MIGRATION.sql` when updating an existing database.
 
 ### 📱 Supported Payment Methods
 

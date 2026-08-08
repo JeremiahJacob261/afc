@@ -364,6 +364,7 @@
 - User must have at least 5 placed bets
 - User PIN must be set (`codeset=true`)
 - Balance sufficient for requested amount plus 7% fee
+- No other withdrawal request exists for the user on the current UTC day
 - Daily withdrawal limit not exceeded
 
 ### VIP Level Calculation

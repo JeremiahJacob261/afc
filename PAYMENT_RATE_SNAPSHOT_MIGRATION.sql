@@ -34,6 +34,7 @@ DECLARE
   user_row users%ROWTYPE;
   settings_row admin_settings%ROWTYPE;
   inserted_id BIGINT;
+  daily_withdrawal_count INTEGER;
   next_balance NUMERIC;
   daily_total NUMERIC;
   annual_total NUMERIC;
@@ -59,8 +60,17 @@ BEGIN
     SELECT 1 FROM unnest(COALESCE(settings_row.withdrawal_limit_exempt_usernames, ARRAY[]::TEXT[])) AS exempt_username
     WHERE lower(btrim(exempt_username)) = lower(btrim(user_row.username))
   );
+
+  -- Every user may submit only one withdrawal request per UTC day.
+  utc_day_start := date_trunc('day', timezone('UTC', now()));
+  SELECT COUNT(*) INTO daily_withdrawal_count FROM notification
+  WHERE username = user_row.username AND lower(COALESCE(type, '')) IN ('withdraw', 'withdrawer')
+    AND created_at >= utc_day_start;
+  IF daily_withdrawal_count >= 1 THEN
+    RAISE EXCEPTION 'Only one withdrawal is allowed per day';
+  END IF;
+
   IF NOT is_limit_exempt THEN
-    utc_day_start := date_trunc('day', timezone('UTC', now()));
     utc_year_start := date_trunc('year', timezone('UTC', now()));
     SELECT COALESCE(SUM(amount), 0) INTO daily_total FROM notification
     WHERE username = user_row.username AND lower(COALESCE(type, '')) IN ('withdraw', 'withdrawer')
