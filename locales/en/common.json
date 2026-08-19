@@ -848,7 +848,7 @@
       "noPinSet": "No transaction PIN has been set.",
       "wrongPin": "Wrong transaction PIN.",
       "insufficientFunds": "Insufficient funds",
-      "betRequirement": "You need to place at least 5 bets before withdrawing.",
+      "betRequirement": "You need to place 5 bets after your latest successful deposit before withdrawing.",
       "maximumWithdrawal": "Maximum withdrawal is {{amount}} FCFA.",
       "enterAmount": "Please enter amount",
       "connectionError": "Please check your internet connection and refresh the website."

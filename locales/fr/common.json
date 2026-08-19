@@ -845,7 +845,7 @@
       "noPinSet": "Aucun PIN de transaction n’a été défini.",
       "wrongPin": "PIN de transaction incorrect.",
       "insufficientFunds": "Solde insuffisant",
-      "betRequirement": "Vous devez placer au moins 5 paris avant de retirer.",
+      "betRequirement": "Vous devez placer 5 paris après votre dernier dépôt réussi avant de retirer.",
       "maximumWithdrawal": "Le retrait maximum est de {{amount}} FCFA.",
       "enterAmount": "Veuillez entrer un montant",
       "connectionError": "Veuillez vérifier votre connexion Internet et actualiser le site."

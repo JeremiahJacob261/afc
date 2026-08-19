@@ -361,7 +361,7 @@
 - Selected wallet must be in `walle` table and `available=true`
 
 ### Withdrawal Requirements
-- User must have at least 5 placed bets
+- User must have at least 5 placed bets since the latest successful deposit
 - User PIN must be set (`codeset=true`)
 - Balance sufficient for requested amount plus 7% fee
 - No other withdrawal request exists for the user on the current UTC day

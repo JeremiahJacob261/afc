@@ -40,7 +40,7 @@ function translateWithdrawalMessage(message, t, values = {}) {
   if (normalized === 'no transaction pin has been set') return t('mobile.withdraw.noPinSet')
   if (normalized === 'wrong password') return t('mobile.withdraw.wrongPin')
   if (normalized === 'insufficient funds') return t('mobile.withdraw.insufficientFunds')
-  if (normalized === 'you have not placed up to 5 bets') return t('mobile.withdraw.betRequirement')
+  if (normalized.includes('after your latest successful deposit')) return t('mobile.withdraw.betRequirement')
   if (normalized.includes('minimum')) return t('messages.minimumWithdrawal', { amount: values.min ?? values.amount })
   if (normalized.includes('maximum')) return t('mobile.withdraw.maximumWithdrawal', { amount: values.max ?? values.amount })
   if (normalized === 'withdrawal request as been sent') return t('messages.withdrawalSent')

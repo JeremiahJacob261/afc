@@ -29,33 +29,41 @@ export default async function handler(req, res) {
       return res.status(400).json([{ status: 'Failed', message: 'Invalid amount' }])
     }
 
-    // Parallelize initial data fetching
     const { profile, supabase } = await getCurrentProfile(
       req,
       'userid,username,codeset,pin,newrefer,balance'
     )
 
-    // Every approved deposit, including historical ones, requires five placed bets.
     const requestedMethod = normalizePaymentCode(body.method || 'fcfa')
-    const [withdrawalSettings, { count: placedBetCount, error: betError }, { count: successfulDepositCount, error: depositError }, savedMethod] = await Promise.all([
+    const [withdrawalSettings, { data: latestDeposit, error: depositError }, savedMethod] = await Promise.all([
       getWithdrawalSettings(supabase, {
         allowDefaultOnMissingTable: true,
       }),
       supabase
-        .from('placed')
-        .select('id', { count: 'exact', head: true })
-        .eq('username', profile.username),
-      supabase
         .from('notification')
-        .select('id', { count: 'exact', head: true })
+        .select('id,created_at')
         .eq('username', profile.username)
         .eq('type', 'deposit')
-        .in('sent', SUCCESSFUL_DEPOSIT_STATUSES),
+        .in('sent', SUCCESSFUL_DEPOSIT_STATUSES)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle(),
       getPaymentMethod(supabase, requestedMethod),
     ])
 
-    if (betError) throw betError
     if (depositError) throw depositError
+
+    let placedBetCount = 0
+    if (latestDeposit?.created_at) {
+      const { count, error: betError } = await supabase
+        .from('placed')
+        .select('id', { count: 'exact', head: true })
+        .eq('username', profile.username)
+        .gte('created_at', latestDeposit.created_at)
+
+      if (betError) throw betError
+      placedBetCount = count || 0
+    }
 
     const methodCode = methodCodeFromRow(savedMethod) || requestedMethod
     const methodRate = getPaymentRate(savedMethod, isFcfaPaymentCode(methodCode) ? 1 : 0)
@@ -67,11 +75,10 @@ export default async function handler(req, res) {
       return res.status(200).json([{ status: 'Failed', message: withdrawalSettings.withdrawalDisabledMessage }])
     }
 
-    const requiredBetCount = (successfulDepositCount || 0) * BETS_REQUIRED_PER_DEPOSIT
-    if ((placedBetCount || 0) < requiredBetCount) {
+    if (latestDeposit && placedBetCount < BETS_REQUIRED_PER_DEPOSIT) {
       return res.status(200).json([{
         status: 'Failed',
-        message: `You need to place ${requiredBetCount} bets before withdrawing. You have placed ${placedBetCount || 0}.`,
+        message: `You need to place ${BETS_REQUIRED_PER_DEPOSIT} bets after your latest successful deposit before withdrawing. You have placed ${placedBetCount}.`,
       }])
     }
 
