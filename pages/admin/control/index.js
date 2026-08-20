@@ -38,6 +38,7 @@ const tools = [
 export default function Controls() {
   const router = useRouter()
   const [bonusPercent, setBonusPercent] = useState('3')
+  const [membershipBalanceThreshold, setMembershipBalanceThreshold] = useState('1000')
   const [minWithdrawalAmount, setMinWithdrawalAmount] = useState('6000')
   const [dailyWithdrawalLimit, setDailyWithdrawalLimit] = useState('60000')
   const [annualWithdrawalLimit, setAnnualWithdrawalLimit] = useState('60000000')
@@ -67,6 +68,7 @@ export default function Controls() {
 
         if (active) {
           setBonusPercent(String(result.settings?.firstDepositBonusPercent ?? 3))
+          setMembershipBalanceThreshold(String(result.settings?.membershipBalanceThreshold ?? 1000))
           setMinWithdrawalAmount(String(result.settings?.minWithdrawalAmount ?? 6000))
           setDailyWithdrawalLimit(String(result.settings?.dailyWithdrawalLimit ?? 60000))
           setAnnualWithdrawalLimit(String(result.settings?.annualWithdrawalLimit ?? 60000000))
@@ -139,6 +141,7 @@ export default function Controls() {
 
   const saveSettings = async () => {
     const firstDepositBonusPercent = Number(bonusPercent)
+    const activeMemberThreshold = Number(membershipBalanceThreshold)
     const minAmount = Number(minWithdrawalAmount)
     const dailyLimit = Number(dailyWithdrawalLimit)
     const annualLimit = Number(annualWithdrawalLimit)
@@ -146,6 +149,11 @@ export default function Controls() {
 
     if (!Number.isFinite(firstDepositBonusPercent) || firstDepositBonusPercent < 0 || firstDepositBonusPercent > 100) {
       toast.error('Bonus percent must be between 0 and 100')
+      return
+    }
+
+    if (!Number.isFinite(activeMemberThreshold) || activeMemberThreshold < 0) {
+      toast.error('Active-member balance threshold must be zero or greater')
       return
     }
 
@@ -191,6 +199,7 @@ export default function Controls() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           firstDepositBonusPercent,
+          membershipBalanceThreshold: activeMemberThreshold,
           minWithdrawalAmount: minAmount,
           dailyWithdrawalLimit: dailyLimit,
           annualWithdrawalLimit: annualLimit,
@@ -211,6 +220,7 @@ export default function Controls() {
       }
 
       setBonusPercent(String(result.settings?.firstDepositBonusPercent ?? firstDepositBonusPercent))
+      setMembershipBalanceThreshold(String(result.settings?.membershipBalanceThreshold ?? activeMemberThreshold))
       setMinWithdrawalAmount(String(result.settings?.minWithdrawalAmount ?? minAmount))
       setDailyWithdrawalLimit(String(result.settings?.dailyWithdrawalLimit ?? dailyLimit))
       setAnnualWithdrawalLimit(String(result.settings?.annualWithdrawalLimit ?? annualLimit))
@@ -247,6 +257,47 @@ export default function Controls() {
             <div className="flex items-center gap-2 rounded-full bg-[#1BB6FF]/10 px-4 py-2 text-sm font-semibold text-[#8EE5FF]">
               <ShieldCheck className="h-4 w-4" />
               Admin tools
+            </div>
+          </div>
+        </section>
+
+        <section className="rounded-[24px] border border-white/10 bg-[#151515] p-5">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div className="min-w-0">
+              <div className="flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-400/10 text-emerald-300">
+                  <WalletCards className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-white">Active Member Balance</h3>
+                  <p className="text-sm text-zinc-500">Users with at least this FCFA balance count as active members.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <label className="flex h-12 min-w-[220px] items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4">
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  min="0"
+                  step="0.001"
+                  value={membershipBalanceThreshold}
+                  disabled={loadingSettings || savingSettings}
+                  onChange={(event) => setMembershipBalanceThreshold(event.target.value)}
+                  className="min-w-0 flex-1 bg-transparent text-right text-lg font-semibold text-white outline-none disabled:text-zinc-500"
+                />
+                <span className="text-sm font-semibold text-zinc-400">FCFA</span>
+              </label>
+              <button
+                type="button"
+                onClick={saveSettings}
+                disabled={loadingSettings || savingSettings}
+                className="flex h-12 items-center justify-center gap-2 rounded-full bg-white px-5 text-sm font-semibold text-black transition hover:bg-[#8EE5FF] disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-zinc-400"
+              >
+                <Save className="h-4 w-4" />
+                {savingSettings ? 'Saving' : 'Save'}
+              </button>
             </div>
           </div>
         </section>

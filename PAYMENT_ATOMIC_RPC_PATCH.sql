@@ -7,6 +7,7 @@ ALTER TABLE users ADD COLUMN IF NOT EXISTS totalw DECIMAL(15, 4) DEFAULT 0.00;
 CREATE TABLE IF NOT EXISTS admin_settings (
   id INTEGER PRIMARY KEY DEFAULT 1 CHECK (id = 1),
   first_deposit_bonus_percent DECIMAL(6, 3) NOT NULL DEFAULT 3.000,
+  membership_balance_threshold DECIMAL(15, 3) NOT NULL DEFAULT 1000.000 CHECK (membership_balance_threshold >= 0),
   min_withdrawal_amount DECIMAL(15, 3) NOT NULL DEFAULT 6000.000,
   max_withdrawal_amount DECIMAL(15, 3) NOT NULL DEFAULT 60000000.000,
   withdrawal_fee_percent DECIMAL(6, 3) NOT NULL DEFAULT 7.000,
@@ -14,6 +15,7 @@ CREATE TABLE IF NOT EXISTS admin_settings (
   withdrawal_disabled_message TEXT NOT NULL DEFAULT 'Withdrawals are temporarily unavailable. Please try again later.',
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS membership_balance_threshold DECIMAL(15, 3) NOT NULL DEFAULT 1000.000 CHECK (membership_balance_threshold >= 0);
 ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS daily_withdrawal_limit DECIMAL(15, 3) NOT NULL DEFAULT 60000.000 CHECK (daily_withdrawal_limit >= 0);
 ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS withdrawal_limit_exempt_usernames TEXT[] NOT NULL DEFAULT '{}';
 ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS withdrawals_enabled BOOLEAN NOT NULL DEFAULT TRUE;

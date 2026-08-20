@@ -208,13 +208,14 @@ This schema is designed for a sports betting platform with the following key fea
 |--------|------|-------------|-------------|
 | id | INTEGER | PRIMARY KEY, CHECK id = 1 | Singleton settings row |
 | first_deposit_bonus_percent | DECIMAL(6,3) | DEFAULT 3.000, CHECK 0-100 | Bonus percentage applied to first approved deposit |
+| membership_balance_threshold | DECIMAL(15,3) | DEFAULT 1000.000, CHECK >= 0 | Minimum current balance in FCFA required for active-member status |
 | updated_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP | Last settings update time |
 
 **Seed row:**
 
 ```sql
-INSERT INTO admin_settings (id, first_deposit_bonus_percent)
-VALUES (1, 3.000)
+INSERT INTO admin_settings (id, first_deposit_bonus_percent, membership_balance_threshold)
+VALUES (1, 3.000, 1000.000)
 ON CONFLICT (id) DO NOTHING;
 ```
 
@@ -363,7 +364,7 @@ If migrating from Firebase Realtime DB:
 
 The VIP level is calculated based on:
 - **Total Deposited Amount** (`users.totald`)
-- **Number of First-time Deposit Referrals** (users with `refer=your_code` AND `firstd=true`)
+- **Number of Active Direct Downlines** (users with `refer=your_code` AND `balance >= membership_balance_threshold`)
 
 Update the calculation logic in `pages/api/vipcalculate.js` if thresholds change.
 

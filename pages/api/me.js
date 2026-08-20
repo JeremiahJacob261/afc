@@ -1,6 +1,8 @@
 import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
 import { calculateVipProgress } from '@/lib/vip'
 import { getCurrencySettings } from '@/lib/currency'
+import { getMembershipBalanceThreshold } from '@/lib/adminSettings'
+import { isActiveMember } from '@/lib/membership'
 
 const PROFILE_COLUMNS = 'userid,uid,username,email,phone,countrycode,balance,totald,totalw,newrefer,refer,lvla,lvlb,firstd,dailywl,codeset'
 
@@ -11,12 +13,13 @@ export default async function handler(req, res) {
 
   try {
     const { profile, supabase } = await getCurrentProfile(req, PROFILE_COLUMNS)
+    const membershipBalanceThreshold = await getMembershipBalanceThreshold(supabase)
     const [{ count, error }, currency] = await Promise.all([
       supabase
       .from('users')
       .select('userid', { count: 'exact', head: true })
       .eq('refer', profile.newrefer)
-      .eq('firstd', true),
+      .gte('balance', membershipBalanceThreshold),
       getCurrencySettings(supabase),
     ])
 
@@ -26,13 +29,15 @@ export default async function handler(req, res) {
 
     const referralCount = count || 0
     const vip = calculateVipProgress(profile.totald || 0, referralCount)
+    const isActive = isActiveMember(profile.balance, membershipBalanceThreshold)
 
     return res.status(200).json({
       status: 'success',
-      profile,
+      profile: { ...profile, isActive },
       referralCount,
       vip,
       currency,
+      membershipBalanceThreshold,
     })
   } catch (error) {
       console.error('Error fetching referral count:', error)

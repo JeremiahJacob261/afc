@@ -339,6 +339,9 @@ CREATE TABLE IF NOT EXISTS admin_settings (
     first_deposit_bonus_percent >= 0
     AND first_deposit_bonus_percent <= 100
   ),
+  membership_balance_threshold DECIMAL(15, 3) NOT NULL DEFAULT 1000.000 CHECK (
+    membership_balance_threshold >= 0
+  ),
   min_withdrawal_amount DECIMAL(15, 3) NOT NULL DEFAULT 6000.000 CHECK (
     min_withdrawal_amount >= 0
   ),
@@ -361,8 +364,10 @@ CREATE TABLE IF NOT EXISTS admin_settings (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO admin_settings (id, first_deposit_bonus_percent, min_withdrawal_amount, max_withdrawal_amount, daily_withdrawal_limit, withdrawal_limit_exempt_usernames, withdrawal_fee_percent, withdrawals_enabled, withdrawal_disabled_message)
-VALUES (1, 3.000, 6000.000, 60000000.000, 60000.000, '{}', 7.000, TRUE, 'Withdrawals are temporarily unavailable. Please try again later.')
+ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS membership_balance_threshold DECIMAL(15, 3) NOT NULL DEFAULT 1000.000 CHECK (membership_balance_threshold >= 0);
+
+INSERT INTO admin_settings (id, first_deposit_bonus_percent, membership_balance_threshold, min_withdrawal_amount, max_withdrawal_amount, daily_withdrawal_limit, withdrawal_limit_exempt_usernames, withdrawal_fee_percent, withdrawals_enabled, withdrawal_disabled_message)
+VALUES (1, 3.000, 1000.000, 6000.000, 60000000.000, 60000.000, '{}', 7.000, TRUE, 'Withdrawals are temporarily unavailable. Please try again later.')
 ON CONFLICT (id) DO NOTHING;
 
 ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS daily_withdrawal_limit DECIMAL(15, 3) NOT NULL DEFAULT 60000.000 CHECK (daily_withdrawal_limit >= 0);
@@ -489,6 +494,34 @@ CREATE INDEX IF NOT EXISTS idx_useractivity_match_id ON useractivity(match_id);
 
 -- Admin settings index
 CREATE INDEX IF NOT EXISTS idx_admin_settings_updated_at ON admin_settings(updated_at);
+
+CREATE INDEX IF NOT EXISTS idx_users_refer_balance ON users(refer, balance);
+CREATE INDEX IF NOT EXISTS idx_users_lvla_balance ON users(lvla, balance);
+CREATE INDEX IF NOT EXISTS idx_users_lvlb_balance ON users(lvlb, balance);
+
+CREATE OR REPLACE FUNCTION public.active_member_balance_threshold()
+RETURNS NUMERIC
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT COALESCE(
+    (SELECT membership_balance_threshold FROM public.admin_settings WHERE id = 1),
+    1000
+  )::NUMERIC;
+$$;
+
+CREATE OR REPLACE FUNCTION public.is_active_member(p_balance NUMERIC)
+RETURNS BOOLEAN
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT COALESCE(p_balance, 0)::NUMERIC >= public.active_member_balance_threshold();
+$$;
+
 CREATE INDEX IF NOT EXISTS idx_admin_impersonation_audit_created_at ON admin_impersonation_audit(created_at);
 CREATE INDEX IF NOT EXISTS idx_admin_impersonation_audit_target_uid ON admin_impersonation_audit(target_uid);
 
@@ -674,7 +707,7 @@ BEGIN
         SELECT COUNT(*)::INTEGER
         FROM users downline
         WHERE downline.refer = u.newrefer
-          AND downline.firstd IS TRUE
+          AND public.is_active_member(downline.balance)
       ) AS active_downlines
     FROM users u
     FOR UPDATE OF u
@@ -836,7 +869,7 @@ BEGIN
   INTO referral_count
   FROM users
   WHERE refer = user_row.newrefer
-    AND firstd IS TRUE;
+    AND public.is_active_member(balance);
 
   vip_level := public.vip_level_for_user(user_row.totald, referral_count);
   final_odd := base_odd * (1 + public.vip_bonus_for_level(vip_level));

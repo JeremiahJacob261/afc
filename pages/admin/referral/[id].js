@@ -6,7 +6,10 @@ import { useRouter } from 'next/router'
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-export default function Home({ referd, lvlad, lvlbd,getup1,refid }) {
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
+import { getMembershipBalanceThreshold } from '@/lib/adminSettings';
+import { isActiveMember } from '@/lib/membership';
+export default function Home({ referd, lvlad, lvlbd,getup1,refid, membershipBalanceThreshold = 1000 }) {
     const router = useRouter();
     let colors = ['#009B72', '#800E13', '#264653'];
     return (
@@ -54,7 +57,7 @@ export default function Home({ referd, lvlad, lvlbd,getup1,refid }) {
                                 <Stack>
                                     <p style={{ color: '#F2EDEB', margin: 0, fontFamily: 'Poppins,sans-serif' }}>{m.username}</p>
                                     <p style={{ color: 'whitesmoke', fontWeight: '300', fontSize: '13px', fontFamily: 'Poppins,sans-serif' }}>{m.uid}</p>
-                                    <p style={{ color: 'whitesmoke', fontWeight: '300', fontSize: '13px', fontFamily: 'Poppins,sans-serif' }}>{m.firstd ? 'active' : 'not active'}</p>
+                                    <p style={{ color: 'whitesmoke', fontWeight: '300', fontSize: '13px', fontFamily: 'Poppins,sans-serif' }}>{isActiveMember(m.balance, membershipBalanceThreshold) ? 'active' : 'not active'}</p>
                                </Stack>
                                 <Stack>
                                     <p style={{ color: '#F2EDEB', fontFamily: 'Poppins,sans-serif', margin: 0 }}>{m.balance} FCFA</p>
@@ -102,7 +105,7 @@ export default function Home({ referd, lvlad, lvlbd,getup1,refid }) {
                                     <Stack>
                                         <p style={{ color: '#F2EDEB', margin: 0, fontFamily: 'Poppins,sans-serif' }}>{m.username}</p>
                                         <p style={{ color: 'whitesmoke', fontWeight: '300', fontSize: '13px', fontFamily: 'Poppins,sans-serif' }}>{m.uid}</p>
-                                        <p style={{ color: m.firstd ? 'black' : 'white', fontWeight: '300', fontSize: '13px', fontFamily: 'Poppins,sans-serif' }}>{m.firstd ? 'active' : 'not active'}</p>
+                                        <p style={{ color: isActiveMember(m.balance, membershipBalanceThreshold) ? 'black' : 'white', fontWeight: '300', fontSize: '13px', fontFamily: 'Poppins,sans-serif' }}>{isActiveMember(m.balance, membershipBalanceThreshold) ? 'active' : 'not active'}</p>
                                </Stack>
                                     <Stack>
                                         <p style={{ color: '#F2EDEB', fontFamily: 'Poppins,sans-serif', margin: 0 }}>{m.balance} FCFA</p>
@@ -144,7 +147,7 @@ export default function Home({ referd, lvlad, lvlbd,getup1,refid }) {
                                 <Stack>
                                     <p style={{ color: '#F2EDEB', margin: 0, fontFamily: 'Poppins,sans-serif' }}>{m.username}</p>
                                     <p style={{ color: 'whitesmoke', fontWeight: '300', fontSize: '13px', fontFamily: 'Poppins,sans-serif' }}>{m.uid}</p>
-                                    <p style={{ color: m.firstd ? 'black' : 'white', fontWeight: '300', fontSize: '13px', fontFamily: 'Poppins,sans-serif' }}>{m.firstd ? 'active' : 'not active'}</p>
+                                    <p style={{ color: isActiveMember(m.balance, membershipBalanceThreshold) ? 'black' : 'white', fontWeight: '300', fontSize: '13px', fontFamily: 'Poppins,sans-serif' }}>{isActiveMember(m.balance, membershipBalanceThreshold) ? 'active' : 'not active'}</p>
                               
                                 </Stack>
                                 <Stack>
@@ -186,7 +189,7 @@ export default function Home({ referd, lvlad, lvlbd,getup1,refid }) {
                                 <Stack>
                                     <p style={{ color: '#F2EDEB', margin: 0, fontFamily: 'Poppins,sans-serif' }}>{m.username}</p>
                                     <p style={{ color: 'whitesmoke', fontWeight: '300', fontSize: '13px', fontFamily: 'Poppins,sans-serif' }}>{m.uid}</p>
-                                    <p style={{ color: m.firstd ? 'black' : 'white', fontWeight: '300', fontSize: '13px', fontFamily: 'Poppins,sans-serif' }}>{m.firstd ? 'active' : 'not active'}</p>
+                                    <p style={{ color: isActiveMember(m.balance, membershipBalanceThreshold) ? 'black' : 'white', fontWeight: '300', fontSize: '13px', fontFamily: 'Poppins,sans-serif' }}>{isActiveMember(m.balance, membershipBalanceThreshold) ? 'active' : 'not active'}</p>
                               
                                 </Stack>
                                 <Stack>
@@ -207,6 +210,8 @@ export default function Home({ referd, lvlad, lvlbd,getup1,refid }) {
 export async function getServerSideProps(context) {
   const i18nProps = await getI18nServerSideProps(context.locale)
     const id = context.query.id;
+    const supabaseAdmin = getSupabaseAdmin();
+    const membershipBalanceThreshold = await getMembershipBalanceThreshold(supabaseAdmin);
     try {
         const { data: depe, error: derror } = await supabase
             .from('users')
@@ -233,6 +238,7 @@ export async function getServerSideProps(context) {
                 lvlad: lvlad,
                 lvlbd: lvlbd,
                 getup1:getup1,
+                membershipBalanceThreshold,
             },
         }
     } catch (e) {

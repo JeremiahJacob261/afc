@@ -26,9 +26,11 @@ import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import SoupKitchenIcon from '@mui/icons-material/SoupKitchen';
 import TimesOneMobiledataIcon from '@mui/icons-material/TimesOneMobiledata';
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
+import { getMembershipBalanceThreshold } from '@/lib/adminSettings';
+import { isActiveMember } from '@/lib/membership';
 import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay';
 const codes = Object.fromEntries((codesData.countries || []).map((country) => [country.code, country.name]))
-export default function Users({ refs }) {
+export default function Users({ refs, membershipBalanceThreshold = 1000 }) {
   const [searchR, setSearchR] = useState([])
   const [open, setOpen] = useState(false);
   const [display, setDisplay] = useState({})
@@ -94,12 +96,12 @@ export default function Users({ refs }) {
       const { data, count } = await supabase
         .from('users')
         .select('*', { count: 'exact', head: true })
-        .eq('firstd', true);
+        .gte('balance', membershipBalanceThreshold);
       console.log(count)
       setReadingD(count);
     }
     getDeposited();
-  }, [trans]);
+  }, [trans, membershipBalanceThreshold]);
 
   const ChangeGcount = async (username) => {
     try {
@@ -344,8 +346,8 @@ export default function Users({ refs }) {
             .select('*', { count: 'exact', head: true })
             .match({
               'refer': rdis.newrefer,
-              'firstd': true
-            });
+            })
+            .gte('balance', membershipBalanceThreshold);
           setAlvl1(count);
           console.log(data)
         } catch (e) {
@@ -361,8 +363,8 @@ export default function Users({ refs }) {
             .select('*', { count: 'exact', head: true })
             .match({
               'lvla': rdis.newrefer,
-              'firstd': true
-            });
+            })
+            .gte('balance', membershipBalanceThreshold);
           setAlvl2(count);
         } catch (error) {
           console.log('...error')
@@ -376,8 +378,8 @@ export default function Users({ refs }) {
             .select('*', { count: 'exact', head: true })
             .match({
               'lvlb': rdis.newrefer,
-              'firstd': true
-            });
+            })
+            .gte('balance', membershipBalanceThreshold);
           setAlvl3(count);
         } catch (e) {
           console.log(e)
@@ -442,7 +444,7 @@ export default function Users({ refs }) {
                 lvl1d.map((l) => {
 
                   return (
-                    <Stack direction='row' key={l.username} justifyContent='space-between' sx={{ height: '35px', width: '100%', backgroundColor: '#1A1B72', padding: '8px', border: l.firstd ? '3px solid green' : 'none' }}>
+                    <Stack direction='row' key={l.username} justifyContent='space-between' sx={{ height: '35px', width: '100%', backgroundColor: '#1A1B72', padding: '8px', border: isActiveMember(l.balance, membershipBalanceThreshold) ? '3px solid green' : 'none' }}>
                       <Typography sx={{ color: 'white', fontFamily: 'POpppins,sans-serif', fontSize: '15px' }}>{l.username}</Typography>
                       <Typography sx={{ color: 'white', fontFamily: 'POpppins,sans-serif', fontSize: '15px' }}>{l.email}</Typography>
                       <Typography sx={{ color: 'white', fontFamily: 'POpppins,sans-serif', fontSize: '15px' }}>{l.totald} FCFA</Typography>
@@ -469,7 +471,7 @@ export default function Users({ refs }) {
                 lvl2d.map((l) => {
 
                   return (
-                    <Stack direction='row' key={l.username} justifyContent='space-between' sx={{ height: '35px', width: '100%', backgroundColor: '#1A1B72', padding: '8px', border: l.firstd ? '3px solid green' : 'none' }}>
+                    <Stack direction='row' key={l.username} justifyContent='space-between' sx={{ height: '35px', width: '100%', backgroundColor: '#1A1B72', padding: '8px', border: isActiveMember(l.balance, membershipBalanceThreshold) ? '3px solid green' : 'none' }}>
                       <Typography sx={{ color: 'white', fontFamily: 'POpppins,sans-serif', fontSize: '15px' }}>{l.username}</Typography>
                       <Typography sx={{ color: 'white', fontFamily: 'POpppins,sans-serif', fontSize: '15px' }}>{l.email}</Typography>
                       <Typography sx={{ color: 'white', fontFamily: 'POpppins,sans-serif', fontSize: '15px' }}>{l.totald} FCFA</Typography>
@@ -496,7 +498,7 @@ export default function Users({ refs }) {
                 lvl3d.map((l) => {
 
                   return (
-                    <Stack direction='row' key={l.username} justifyContent='space-between' sx={{ height: '35px', width: '100%', backgroundColor: '#1A1B72', padding: '8px', border: l.firstd ? '3px solid green' : 'none' }}>
+                    <Stack direction='row' key={l.username} justifyContent='space-between' sx={{ height: '35px', width: '100%', backgroundColor: '#1A1B72', padding: '8px', border: isActiveMember(l.balance, membershipBalanceThreshold) ? '3px solid green' : 'none' }}>
                       <Typography sx={{ color: 'white', fontFamily: 'Popppins,sans-serif', fontSize: '15px' }}>{l.username}</Typography>
                       <Typography sx={{ color: 'white', fontFamily: 'Popppins,sans-serif', fontSize: '15px' }}>{l.email}</Typography>
                       <Typography sx={{ color: 'white', fontFamily: 'Popppins,sans-serif', fontSize: '15px' }}>{l.totald} FCFA</Typography>
@@ -760,7 +762,7 @@ export default function Users({ refs }) {
                             , lvl1: d.refer
                             , lvl2: d.lvla
                             , lvl3: d.lvlb
-                            , firstd: d.firstd
+                            , isActive: isActiveMember(d.balance, membershipBalanceThreshold)
                             , cr: d.created_at || d.crdate
                             , totald: d.totald
                           })
@@ -809,7 +811,7 @@ export default function Users({ refs }) {
                               , lvl1: d.refer
                               , lvl2: d.lvla
                               , lvl3: d.lvlb
-                              , firstd: d.firstd
+                              , isActive: isActiveMember(d.balance, membershipBalanceThreshold)
                               , cr: d.created_at || d.crdate
                               , totald: d.totald
                             })
@@ -834,7 +836,7 @@ export default function Users({ refs }) {
                 <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '15px' }}>Email: {display.email}</Typography>
                 <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '15px' }}>Phone: {display.phone}</Typography>
                 <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '15px' }}>Balance: {Number(display.balance).toFixed(2)} FCFA</Typography>
-                <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '15px' }}>User Status: {(display.firstd) ? 'Active' : 'InActive'}</Typography>
+                <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '15px' }}>User Status: {(display.isActive) ? 'Active' : 'InActive'}</Typography>
                 <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '15px' }}>Total Deposit: {display.totald} FCFA</Typography>
                 <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '15px' }}>Date Opened: {new Date(display.cr).getDate() + '-' + parseInt(new Date(display.cr).getMonth() + 1) + '-' + new Date(display.cr).getFullYear()}</Typography>
                 <Typography sx={{ fontFamily: "Source Sans Pro,sans-serif", color: '#AC915FD2', fontSize: '15px' }}>Country: {codes[display.countrycode]} ({display.countrycode})</Typography>
@@ -907,6 +909,7 @@ function BetKickoff({ bet }) {
 export async function getServerSideProps(context) {
   const i18nProps = await getI18nServerSideProps(context.locale)
   const supabaseAdmin = getSupabaseAdmin()
+  const membershipBalanceThreshold = await getMembershipBalanceThreshold(supabaseAdmin)
   const { data, error } = await supabaseAdmin
     .from('users')
     .select()
@@ -915,6 +918,6 @@ export async function getServerSideProps(context) {
   const refs = data;
   return {
     props: {
-      ...i18nProps, refs }, // will be passed to the page component as props
+      ...i18nProps, refs, membershipBalanceThreshold }, // will be passed to the page component as props
   }
 }

@@ -6,6 +6,36 @@ CREATE EXTENSION IF NOT EXISTS pg_cron WITH SCHEMA pg_catalog;
 CREATE INDEX IF NOT EXISTS idx_users_refer_firstd
   ON public.users(refer, firstd);
 
+ALTER TABLE public.admin_settings
+  ADD COLUMN IF NOT EXISTS membership_balance_threshold DECIMAL(15, 3) NOT NULL DEFAULT 1000.000
+  CHECK (membership_balance_threshold >= 0);
+
+CREATE INDEX IF NOT EXISTS idx_users_refer_balance
+  ON public.users(refer, balance);
+
+CREATE OR REPLACE FUNCTION public.active_member_balance_threshold()
+RETURNS NUMERIC
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT COALESCE(
+    (SELECT membership_balance_threshold FROM public.admin_settings WHERE id = 1),
+    1000
+  )::NUMERIC;
+$$;
+
+CREATE OR REPLACE FUNCTION public.is_active_member(p_balance NUMERIC)
+RETURNS BOOLEAN
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT COALESCE(p_balance, 0)::NUMERIC >= public.active_member_balance_threshold();
+$$;
+
 CREATE TABLE IF NOT EXISTS public.vip_daily_rewards (
   id BIGSERIAL PRIMARY KEY,
   username TEXT NOT NULL REFERENCES public.users(username),
@@ -82,7 +112,7 @@ BEGIN
         SELECT COUNT(*)::INTEGER
         FROM public.users downline
         WHERE downline.refer = u.newrefer
-          AND downline.firstd IS TRUE
+          AND public.is_active_member(downline.balance)
       ) AS active_downlines
     FROM public.users u
     FOR UPDATE OF u

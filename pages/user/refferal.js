@@ -112,7 +112,7 @@ export default function Refferal() {
   )
 
   const activeCount = useMemo(
-    () => referrals.filter((item) => Boolean(item.firstd)).length,
+    () => referrals.filter((item) => Boolean(item.isActive)).length,
     [referrals]
   )
 
@@ -389,13 +389,13 @@ function ReferralRow({ item, t }) {
             </Typography>
             <Typography
               sx={{
-                color: item.firstd ? '#9BE15D' : '#8EA4B8',
+                color: item.isActive ? '#9BE15D' : '#8EA4B8',
                 fontFamily: 'Poppins,sans-serif',
                 fontSize: 12,
                 fontWeight: 600,
               }}
             >
-              {item.firstd ? t('status.active') : t('status.pending')}
+              {item.isActive ? t('status.active') : t('status.pending')}
             </Typography>
           </Stack>
         </Box>

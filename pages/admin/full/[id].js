@@ -21,6 +21,7 @@ import {
 import codes from '@/pages/api/codes.json'
 import { supabase } from '@/pages/api/supabase'
 import { clearLegacyAuthStorage } from '@/lib/clientAuth'
+import { isActiveMember } from '@/lib/membership'
 
 function SkeletonLine({ className = '' }) {
   return <div className={`animate-pulse rounded-full bg-white/[0.08] ${className}`} />
@@ -197,7 +198,11 @@ export default function UserDetailModal() {
       })
       const result = await response.json().catch(() => ({}))
       if (!response.ok) throw new Error(result.message || 'Balance update failed')
-      setDatas((current) => ({ ...current, balance: parseFloat(balance) }))
+      setDatas((current) => ({
+        ...current,
+        balance: parseFloat(balance),
+        isActive: isActiveMember(parseFloat(balance), current?.membershipBalanceThreshold),
+      }))
       setEditbal(false)
       toast.success('Balance updated')
     } catch (error) {
@@ -481,7 +486,7 @@ export default function UserDetailModal() {
                       </div>
                     </div>
                     <div className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-sm font-semibold text-emerald-300">
-                      {datas.firstd ? 'Active' : 'Not active'}
+                      {datas.isActive ? 'Active' : 'Not active'}
                     </div>
                   </div>
 

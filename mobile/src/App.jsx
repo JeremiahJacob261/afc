@@ -1780,7 +1780,7 @@ function ProfileScreen({ navigate, onLogout }) {
             label={t('mobile.profile.allReferral')}
             icon={Users}
             onClick={() => navigate('referrals')}
-            tone={profile?.firstd ? 'success' : ''}
+            tone={profile?.isActive ? 'success' : ''}
           />
         </AccountPanel>
 
@@ -2520,7 +2520,7 @@ function ReferralsScreen({ navigate }) {
     [visibleReferrals]
   )
   const activeCount = useMemo(
-    () => referrals.filter((item) => Boolean(item.firstd)).length,
+    () => referrals.filter((item) => Boolean(item.isActive)).length,
     [referrals]
   )
 
@@ -2592,7 +2592,7 @@ function ReferralsScreen({ navigate }) {
             <span className="referral-row-main">
               <b>{item.username || 'Unknown user'}</b>
               <small>{t('mobile.referrals.joined', { date: formatDate(item.joinedAt || item.created_at || item.crdate, t) })}</small>
-              <small className={item.firstd ? 'referral-active' : ''}>{item.firstd ? t('status.active') : t('status.pending')}</small>
+              <small className={item.isActive ? 'referral-active' : ''}>{item.isActive ? t('status.active') : t('status.pending')}</small>
             </span>
             <span className="referral-row-side">
               <em className={`referral-level level-${item.level || 1}`}>

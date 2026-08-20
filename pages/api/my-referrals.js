@@ -1,4 +1,6 @@
 import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
+import { getMembershipBalanceThreshold } from '@/lib/adminSettings'
+import { isActiveMember } from '@/lib/membership'
 
 const MODERN_COLUMNS = 'id,username,totald,balance,firstd,refer,lvla,lvlb,created_at'
 const LEGACY_COLUMNS = 'id,keyf,username,totald,balance,firstd,refer,lvla,lvlb,crdate,date_cr'
@@ -15,7 +17,7 @@ function isMissingColumnError(error) {
   return error.code === '42703' || text.includes('column') || text.includes('schema cache')
 }
 
-function normalizeReferral(row, level) {
+function normalizeReferral(row, level, membershipBalanceThreshold) {
   const joinedAt = row.created_at || row.crdate || row.date_cr || null
   const id = row.id ?? row.keyf ?? `${level.level}-${row.username || 'referral'}`
 
@@ -27,13 +29,14 @@ function normalizeReferral(row, level) {
     totald: Number(row.totald || 0),
     balance: Number(row.balance || 0),
     firstd: Boolean(row.firstd),
+    isActive: isActiveMember(row.balance, membershipBalanceThreshold),
     joinedAt,
     level: level.level,
     levelLabel: level.label,
   }
 }
 
-async function fetchReferralRows(supabase, referCode, columns) {
+async function fetchReferralRows(supabase, referCode, columns, membershipBalanceThreshold) {
   const results = await Promise.all(
     REFERRAL_LEVELS.map(async (level) => {
       const { data, error } = await supabase
@@ -51,7 +54,7 @@ async function fetchReferralRows(supabase, referCode, columns) {
   const seen = new Set()
   const data = results.flatMap((result) =>
     result.data
-      .map((row) => normalizeReferral(row, result))
+      .map((row) => normalizeReferral(row, result, membershipBalanceThreshold))
       .filter((row) => {
         const key = String(row.id ?? row.key ?? `${row.level}-${row.username}`)
         if (seen.has(key)) return false
@@ -77,18 +80,20 @@ export default async function handler(req, res) {
 
   try {
     const { profile, supabase } = await getCurrentProfile(req, 'newrefer')
+    const membershipBalanceThreshold = await getMembershipBalanceThreshold(supabase)
 
     if (!profile.newrefer) {
       return res.status(200).json({
         status: 'success',
         refer: '',
         referrals: [],
+        membershipBalanceThreshold,
       })
     }
 
-    let result = await fetchReferralRows(supabase, profile.newrefer, MODERN_COLUMNS)
+    let result = await fetchReferralRows(supabase, profile.newrefer, MODERN_COLUMNS, membershipBalanceThreshold)
     if (result.error && isMissingColumnError(result.error)) {
-      result = await fetchReferralRows(supabase, profile.newrefer, LEGACY_COLUMNS)
+      result = await fetchReferralRows(supabase, profile.newrefer, LEGACY_COLUMNS, membershipBalanceThreshold)
     }
 
     if (result.error) throw result.error
@@ -97,6 +102,7 @@ export default async function handler(req, res) {
       status: 'success',
       refer: profile.newrefer,
       referrals: result.data || [],
+      membershipBalanceThreshold,
     })
   } catch (error) {
     console.error('My referrals error:', error)

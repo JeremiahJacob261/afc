@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { ArrowUpRight, Search, UserCheck, Users as UsersIcon, X } from 'lucide-react'
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 import { requireAdmin } from '@/lib/adminAuth'
+import { getMembershipBalanceThreshold } from '@/lib/adminSettings'
 
 function formatDate(value) {
   if (!value) return 'No date'
@@ -175,11 +176,12 @@ export async function getServerSideProps(context) {
   try {
     requireAdmin(context.req)
     const supabaseAdmin = getSupabaseAdmin()
+    const membershipBalanceThreshold = await getMembershipBalanceThreshold(supabaseAdmin)
     const [activeUsersResult, usersResult] = await Promise.all([
       supabaseAdmin
         .from('users')
         .select('*', { count: 'exact', head: true })
-        .eq('firstd', true),
+        .gte('balance', membershipBalanceThreshold),
       readUsersPageRows(supabaseAdmin),
     ])
 
@@ -190,6 +192,7 @@ export async function getServerSideProps(context) {
       props: {
       ...i18nProps,
         dount: activeUsersResult.count || 0,
+        membershipBalanceThreshold,
         count: usersResult.count || 0,
         datw: usersResult.data || [],
       },

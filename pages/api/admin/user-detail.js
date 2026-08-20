@@ -1,5 +1,7 @@
 import { requireAdmin } from '@/lib/adminAuth'
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
+import { getMembershipBalanceThreshold } from '@/lib/adminSettings'
+import { isActiveMember } from '@/lib/membership'
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -14,6 +16,7 @@ export default async function handler(req, res) {
     }
 
     const supabase = getSupabaseAdmin()
+    const membershipBalanceThreshold = await getMembershipBalanceThreshold(supabase)
     const { data: users, error: userError } = await supabase
       .from('users')
       .select('userid,newrefer,username,email,uid,phone,countrycode,refer,lvla,lvlb,password,pin,codeset,balance,totald')
@@ -46,7 +49,11 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       status: 'success',
-      user,
+      user: {
+        ...user,
+        isActive: isActiveMember(user.balance, membershipBalanceThreshold),
+        membershipBalanceThreshold,
+      },
       referusers: referrals?.length || 0,
       bets: bets || [],
       wonbet: (bets || []).filter((bet) => bet.won === 'true'),

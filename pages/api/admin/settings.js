@@ -2,9 +2,11 @@ import { requireAdmin } from '@/lib/adminAuth'
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 import {
   getFirstDepositBonusPercent,
+  getMembershipBalanceThreshold,
   getPlatformLinks,
   getWithdrawalSettings,
   saveFirstDepositBonusPercent,
+  saveMembershipBalanceThreshold,
   savePlatformLinks,
   saveWithdrawalSettings,
 } from '@/lib/adminSettings'
@@ -15,8 +17,11 @@ export default async function handler(req, res) {
     const supabase = getSupabaseAdmin()
 
     if (req.method === 'GET') {
-      const [firstDepositBonusPercent, withdrawalSettings, platformLinks] = await Promise.all([
+      const [firstDepositBonusPercent, membershipBalanceThreshold, withdrawalSettings, platformLinks] = await Promise.all([
         getFirstDepositBonusPercent(supabase, {
+          allowDefaultOnMissingTable: true,
+        }),
+        getMembershipBalanceThreshold(supabase, {
           allowDefaultOnMissingTable: true,
         }),
         getWithdrawalSettings(supabase, {
@@ -29,6 +34,7 @@ export default async function handler(req, res) {
         status: 'success',
         settings: {
           firstDepositBonusPercent,
+          membershipBalanceThreshold,
           ...withdrawalSettings,
           ...platformLinks,
         },
@@ -37,8 +43,9 @@ export default async function handler(req, res) {
 
     if (req.method === 'PUT') {
       const payload = req.body || {}
-      const [firstDepositBonusPercent, currentWithdrawalSettings, currentPlatformLinks] = await Promise.all([
+      const [firstDepositBonusPercent, membershipBalanceThreshold, currentWithdrawalSettings, currentPlatformLinks] = await Promise.all([
         getFirstDepositBonusPercent(supabase, { allowDefaultOnMissingTable: true }),
+        getMembershipBalanceThreshold(supabase, { allowDefaultOnMissingTable: true }),
         getWithdrawalSettings(supabase, { allowDefaultOnMissingTable: true }),
         getPlatformLinks(supabase, { allowDefaultOnMissingTable: true }),
       ])
@@ -46,6 +53,10 @@ export default async function handler(req, res) {
       const nextBonusPercent = await saveFirstDepositBonusPercent(
         supabase,
         payload.firstDepositBonusPercent ?? firstDepositBonusPercent
+      )
+      const nextMembershipBalanceThreshold = await saveMembershipBalanceThreshold(
+        supabase,
+        payload.membershipBalanceThreshold ?? membershipBalanceThreshold
       )
       const nextWithdrawalSettings = await saveWithdrawalSettings(supabase, {
         minWithdrawalAmount: payload.minWithdrawalAmount ?? currentWithdrawalSettings.minWithdrawalAmount,
@@ -66,6 +77,7 @@ export default async function handler(req, res) {
         status: 'success',
         settings: {
           firstDepositBonusPercent: nextBonusPercent,
+          membershipBalanceThreshold: nextMembershipBalanceThreshold,
           ...nextWithdrawalSettings,
           ...nextPlatformLinks,
         },

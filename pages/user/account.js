@@ -271,8 +271,8 @@ export default function Account() {
                   router.push('/user/refferal');
                 }}>
                 <Stack direction='row' spacing={1} justifyContent='start'>
-                  <Icon icon="carbon:diagram-reference" width="24" height="24" style={{ color: !info?.firstd ? '#a3a3a3' : 'lightgreen' }} />
-                  <Typography sx={{ color: !info?.firstd ? '#a3a3a3' : 'lightgreen', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.allReferral')}</Typography>
+                  <Icon icon="carbon:diagram-reference" width="24" height="24" style={{ color: !info?.isActive ? '#a3a3a3' : 'lightgreen' }} />
+                  <Typography sx={{ color: !info?.isActive ? '#a3a3a3' : 'lightgreen', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.allReferral')}</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
