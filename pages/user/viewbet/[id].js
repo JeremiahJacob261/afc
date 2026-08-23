@@ -34,6 +34,7 @@ const toNumber = (value) => {
 }
 
 const formatFcfa = (value) => `${Math.round(toNumber(value)).toLocaleString()} FCFA`
+const formatOdd = (value) => toNumber(value).toFixed(3)
 
 function getStatus(bet, t) {
   const future = Boolean(getMatchStartMs(bet) && getMatchStartMs(bet) > Date.now())
@@ -137,7 +138,7 @@ export default function ViewBet() {
               <Typography sx={{ ...valueSx, mt: 0.4 }}>{bet.market || '—'}</Typography>
             </Box>
             <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 1 }}>
-              <Metric label={t('mobile.bets.odds')} value={`${bet.odd || '0'}%`} />
+              <Metric label={t('mobile.bets.odds')} value={`${formatOdd(bet.odd)}%`} />
               <Metric label={t('mobile.bets.stake')} value={formatFcfa(bet.stake)} />
               <Metric label={t('mobile.bets.potentialWinnings')} value={formatFcfa(returnAmount)} />
             </Box>

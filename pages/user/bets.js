@@ -34,6 +34,7 @@ const toNumber = (value) => {
 }
 
 const formatFcfa = (value) => `${Math.round(toNumber(value)).toLocaleString()} FCFA`
+const formatOdd = (value) => toNumber(value).toFixed(3)
 
 const getBetStatus = (bet, t) => {
   const startTime = getMatchStartMs(bet)
@@ -256,7 +257,7 @@ export default function Bets() {
               gap: 1,
             }}
           >
-            <Metric label={t('landing.live.odds')} value={`${bet.odd || '0'}%`} />
+            <Metric label={t('landing.live.odds')} value={`${formatOdd(bet.odd)}%`} />
             <Metric label={t('mobile.bets.stake')} value={formatFcfa(bet.stake)} />
             <Metric label="Profit" value={formatFcfa(returnAmount)} />
           </Box>

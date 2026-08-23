@@ -599,6 +599,7 @@ export default function Match({ matchDat }) {
                                                         match_id: matches.match_id,
                                                         picked,
                                                         stake: stakeFcfa,
+                                                        expected_odd: tofal,
                                                     }),
                                                 })
                                                 const result = await response.json().catch(() => ({}))
@@ -606,6 +607,9 @@ export default function Match({ matchDat }) {
                                                     const isInsufficientBalance = /insufficient|not enough|enough\s+(?:USDT|FCFA)/i.test(String(result.message || ''))
                                                     toast.error(isInsufficientBalance ? t('mobile.match.insufficientBalance') : (result.message || t('messages.unablePlaceBet')))
                                                     handleClosex()
+                                                    if (/odds changed/i.test(String(result.message || ''))) {
+                                                        router.replace(router.asPath)
+                                                    }
                                                     return
                                                 }
 

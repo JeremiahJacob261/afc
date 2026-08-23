@@ -1382,7 +1382,7 @@ function MatchDetailScreen({ matchId, navigate }) {
         const nextMatch = await hydrateCompanyMarket(matchPayload.match)
         if (!active) return
         setMatch(nextMatch)
-        setProfile(me.profile)
+        setProfile({ ...me.profile, vip: me.vip })
       } catch (error) {
         if (active) setMessage({ type: 'error', text: error?.message || t('messages.unableLoadMatch') })
       } finally {
@@ -1420,6 +1420,7 @@ function MatchDetailScreen({ matchId, navigate }) {
           picked,
           stake: amount,
           client_bet_id: clientBetId,
+          expected_odd: Number((Number(match?.[picked] || 0) * (1 + Number(vipBonus[level] || 0))).toFixed(3)),
         },
       })
       const nextBetId = payload?.betid || clientBetId
@@ -1434,6 +1435,19 @@ function MatchDetailScreen({ matchId, navigate }) {
       const errorMessage = String(error?.message || '')
       const isInsufficientBalance = /insufficient|not enough|enough\s+(?:USDT|FCFA)/i.test(errorMessage)
       notifyMessage(setMessage, 'error', isInsufficientBalance ? t('mobile.match.insufficientBalance') : (errorMessage || t('messages.unablePlaceBet')))
+      if (/odds changed/i.test(errorMessage)) {
+        try {
+          const [matchPayload, me] = await Promise.all([
+            apiFetch(`/api/mobile/match?id=${encodeURIComponent(matchId)}`),
+            apiFetch('/api/me', { auth: true }),
+          ])
+          setMatch(await hydrateCompanyMarket(matchPayload.match))
+          setProfile({ ...me.profile, vip: me.vip })
+          setPicked('')
+        } catch (refreshError) {
+          console.error('Unable to refresh changed odds', refreshError)
+        }
+      }
     } finally {
       setPlacing(false)
     }

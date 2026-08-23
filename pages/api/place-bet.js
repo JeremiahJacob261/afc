@@ -25,7 +25,7 @@ function getRpcStatus(error) {
   const message = String(error?.message || '')
 
   if (message.includes('Profile not found') || message.includes('Match not found')) return 404
-  if (message.includes('already settled')) return 409
+  if (message.includes('already settled') || message.includes('Odds changed')) return 409
   if (
     message.includes('Invalid bet details')
     || message.includes('Enough FCFA')
@@ -52,22 +52,31 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { match_id, picked, stake, client_bet_id } = req.body || {}
+    const { match_id, picked, stake, client_bet_id, expected_odd } = req.body || {}
     const { user, supabase } = await getCurrentProfile(req, 'userid')
     const currencySettings = await getCurrencySettings(supabase)
     const amount = parseFcfa(stake)
+    const expectedOdd = Number(expected_odd)
 
-    if (!match_id || !markets[picked] || !Number.isFinite(amount) || amount < 600) {
+    if (
+      !match_id
+      || !markets[picked]
+      || !Number.isFinite(amount)
+      || amount < 600
+      || !Number.isFinite(expectedOdd)
+      || expectedOdd <= 0
+    ) {
       const message = `Minimum stake is ${formatFcfa(600, currencySettings)}`
       return res.status(400).json({ status: 'error', message })
     }
 
-    const { data, error } = await supabase.rpc('place_bet_atomic', {
+    const { data, error } = await supabase.rpc('place_bet_with_expected_odd_atomic', {
       p_userid: user.id,
       p_match_id: match_id,
       p_picked: picked,
       p_stake: amount,
       p_client_bet_id: client_bet_id || null,
+      p_expected_odd: Number(expectedOdd.toFixed(3)),
     })
 
     if (error) throw error
