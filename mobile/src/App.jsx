@@ -41,6 +41,7 @@ import { setupPushNotifications, unregisterPushToken, updateStoredPushTokenLangu
 import { getStoredSession, supabase } from './lib/supabase.js'
 import { getLocalStorageItem, setLocalStorageItem } from './lib/storage.js'
 import { checkForBundleUpdate, markBundleReady } from './lib/updater.js'
+import countryData from '../../pages/api/codeswithflag.json'
 
 const referralCode = '000208'
 const defaultTelegramGroupUrl = 'https://t.me/+Giav1o1JVGNkYzNk'
@@ -732,15 +733,7 @@ function LoginScreen({ onBack, onReset, onRegister, onSignedIn }) {
 
 function RegisterScreen({ onBack, onLogin, onSignedIn }) {
   const { t } = useTranslation('common')
-  const countryCodes = [
-    { code: '+234', name: t('mobile.countryCodes.nigeria') },
-    { code: '+91', name: t('mobile.countryCodes.india') },
-    { code: '+92', name: t('mobile.countryCodes.pakistan') },
-    { code: '+62', name: t('mobile.countryCodes.indonesia') },
-    { code: '+1', name: t('mobile.countryCodes.unitedStates') },
-    { code: '+44', name: t('mobile.countryCodes.unitedKingdom') },
-    { code: '+27', name: t('mobile.countryCodes.southAfrica') },
-  ]
+  const countryCodes = countryData.countries
   const [form, setForm] = useState({
     username: '',
     email: '',
@@ -754,6 +747,7 @@ function RegisterScreen({ onBack, onLogin, onSignedIn }) {
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
+  const [selectedCountry, setSelectedCountry] = useState('NG')
 
   function updateField(name, value) {
     setForm((current) => ({ ...current, [name]: value }))
@@ -851,10 +845,17 @@ function RegisterScreen({ onBack, onLogin, onSignedIn }) {
         <div className="two-column">
           <label className="mini-field">
             <span>{t('auth.register.code')}</span>
-            <select value={form.countrycode} onChange={(event) => updateField('countrycode', event.target.value)}>
+            <select
+              value={selectedCountry}
+              onChange={(event) => {
+                const country = countryCodes.find((item) => item.countryCode === event.target.value)
+                setSelectedCountry(event.target.value)
+                updateField('countrycode', country?.code || event.target.value)
+              }}
+            >
               {countryCodes.map((country) => (
-                <option key={country.code} value={country.code}>
-                  {country.code} {country.name}
+                <option key={country.countryCode || country.name} value={country.countryCode || country.code}>
+                  {country.flag} {country.code} {country.name}
                 </option>
               ))}
             </select>

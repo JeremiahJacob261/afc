@@ -86,6 +86,9 @@
       "confirmPassword": "Confirm password",
       "confirmPasswordPlaceholder": "Confirm password",
       "terms": "I am at least 18 and accept the EFC terms.",
+      "termsLink": "Terms",
+      "and": "and",
+      "privacyLink": "Privacy Policy",
       "submit": "Create account",
       "submitting": "Creating account...",
       "hasAccount": "I already have an account"
@@ -769,7 +772,7 @@
     },
     "profile": {
       "vipReferralLine": "VIP {{level}} · {{count}} referrals",
-      "hello": "Hello,",
+      "hello": "Hello, ",
       "currentBalance": "Current Balance",
       "referralsTitle": "REFERRALS",
       "allReferral": "All Referral",
@@ -1037,6 +1040,26 @@
       "firstDepositBonusCopy": "Applied once when an admin approves a first deposit.",
       "withdrawalSettings": "Withdrawal Settings",
       "withdrawalSettingsCopy": "Configure minimum, maximum, and fee for user withdrawals."
+    }
+  },
+  "legal": {
+    "common": {
+      "backToEfc": "Back to EFC",
+      "lastUpdated": "Last updated: June 25, 2026"
+    },
+    "terms": {
+      "title": "Terms",
+      "description": "Terms for using EFC.",
+      "intro": "EFC accounts are for adults who are legally allowed to use football market and wallet services in their location. Do not create an account if you are under 18 or if this service is restricted where you live.",
+      "account": "You are responsible for keeping your login details private, using accurate account information, and understanding the risks before adding funds or placing any market entry. EFC does not ask for your password outside this website.",
+      "restrictions": "Promotions, bonuses, withdrawals, and account access may be limited by verification, fraud prevention, local law, and platform rules. If you believe a page, message, or link is suspicious, stop and contact support through the official in-app support channel."
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "description": "Privacy information for EFC accounts.",
+      "collection": "EFC collects account information such as username, email address, phone number, country code, referral code, wallet activity, and authentication data so the service can create accounts, process account actions, and protect users from fraud or unauthorized access.",
+      "storage": "Account data is stored with service providers used by the application, including Supabase for authentication and database services. Access to administrative tools should be limited to authorized staff only.",
+      "contact": "Do not submit someone else’s personal information. If you need account help or want your data reviewed, contact support through the official in-app support channel."
     }
   },
   "errors": {

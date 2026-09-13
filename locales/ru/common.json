@@ -86,6 +86,9 @@
       "confirmPassword": "Подтвердите пароль",
       "confirmPasswordPlaceholder": "Подтвердите пароль",
       "terms": "Мне исполнилось 18 лет и я принимаю условия EFC.",
+      "termsLink": "Условия",
+      "and": "и",
+      "privacyLink": "Политика конфиденциальности",
       "submit": "Создать аккаунт",
       "submitting": "Создание аккаунта...",
       "hasAccount": "У меня уже есть аккаунт"
@@ -767,7 +770,7 @@
     },
     "profile": {
       "vipReferralLine": "VIP {{level}} · {{count}} рефералы",
-      "hello": "Здравствуйте,",
+      "hello": "Здравствуйте, ",
       "currentBalance": "Текущий баланс",
       "referralsTitle": "РЕФЕРАЛЫ",
       "allReferral": "Все рефералы",

@@ -1,384 +1,1504 @@
 {
   "countries": [
     {
+      "name": "Afghanistan",
+      "code": "+93",
+      "countryCode": "AF",
+      "flag": "🇦🇫"
+    },
+    {
+      "name": "Åland Islands",
+      "code": "+358",
+      "countryCode": "AX",
+      "flag": "🇦🇽"
+    },
+    {
+      "name": "Albania",
+      "code": "+355",
+      "countryCode": "AL",
+      "flag": "🇦🇱"
+    },
+    {
       "name": "Algeria",
       "code": "+213",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/7/77/Flag_of_Algeria.svg"
+      "countryCode": "DZ",
+      "flag": "🇩🇿"
+    },
+    {
+      "name": "American Samoa",
+      "code": "+1",
+      "countryCode": "AS",
+      "flag": "🇦🇸"
+    },
+    {
+      "name": "Andorra",
+      "code": "+376",
+      "countryCode": "AD",
+      "flag": "🇦🇩"
+    },
+    {
+      "name": "Angola",
+      "code": "+244",
+      "countryCode": "AO",
+      "flag": "🇦🇴"
+    },
+    {
+      "name": "Anguilla",
+      "code": "+1",
+      "countryCode": "AI",
+      "flag": "🇦🇮"
+    },
+    {
+      "name": "Antarctica",
+      "code": "+672",
+      "countryCode": "AQ",
+      "flag": "🇦🇶"
+    },
+    {
+      "name": "Antigua and Barbuda",
+      "code": "+1",
+      "countryCode": "AG",
+      "flag": "🇦🇬"
     },
     {
       "name": "Argentina",
       "code": "+54",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/1/1a/Flag_of_Argentina.svg"
+      "countryCode": "AR",
+      "flag": "🇦🇷"
+    },
+    {
+      "name": "Armenia",
+      "code": "+374",
+      "countryCode": "AM",
+      "flag": "🇦🇲"
+    },
+    {
+      "name": "Aruba",
+      "code": "+297",
+      "countryCode": "AW",
+      "flag": "🇦🇼"
     },
     {
       "name": "Australia",
       "code": "+61",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/8/88/Flag_of_Australia_%28converted%29.svg"
+      "countryCode": "AU",
+      "flag": "🇦🇺"
     },
     {
       "name": "Austria",
       "code": "+43",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_Austria.svg"
+      "countryCode": "AT",
+      "flag": "🇦🇹"
+    },
+    {
+      "name": "Azerbaijan",
+      "code": "+994",
+      "countryCode": "AZ",
+      "flag": "🇦🇿"
+    },
+    {
+      "name": "Bahrain",
+      "code": "+973",
+      "countryCode": "BH",
+      "flag": "🇧🇭"
     },
     {
       "name": "Bangladesh",
       "code": "+880",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/f/f9/Flag_of_Bangladesh.svg"
+      "countryCode": "BD",
+      "flag": "🇧🇩"
+    },
+    {
+      "name": "Barbados",
+      "code": "+1",
+      "countryCode": "BB",
+      "flag": "🇧🇧"
+    },
+    {
+      "name": "Belarus",
+      "code": "+375",
+      "countryCode": "BY",
+      "flag": "🇧🇾"
     },
     {
       "name": "Belgium",
       "code": "+32",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/9/92/Flag_of_Belgium_%28civil%29.svg"
+      "countryCode": "BE",
+      "flag": "🇧🇪"
     },
     {
       "name": "Belize",
       "code": "+501",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/e/e7/Flag_of_Belize.svg"
+      "countryCode": "BZ",
+      "flag": "🇧🇿"
     },
     {
-      "name": "Benin Republic",
+      "name": "Benin",
       "code": "+229",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Flag_of_Benin.svg"
+      "countryCode": "BJ",
+      "flag": "🇧🇯"
+    },
+    {
+      "name": "Bermuda",
+      "code": "+1",
+      "countryCode": "BM",
+      "flag": "🇧🇲"
+    },
+    {
+      "name": "Bhutan",
+      "code": "+975",
+      "countryCode": "BT",
+      "flag": "🇧🇹"
+    },
+    {
+      "name": "Bolivia (Plurinational State of)",
+      "code": "+591",
+      "countryCode": "BO",
+      "flag": "🇧🇴"
+    },
+    {
+      "name": "Bonaire, Sint Eustatius and Saba",
+      "code": "+599",
+      "countryCode": "BQ",
+      "flag": "🇧🇶"
+    },
+    {
+      "name": "Bosnia and Herzegovina",
+      "code": "+387",
+      "countryCode": "BA",
+      "flag": "🇧🇦"
+    },
+    {
+      "name": "Botswana",
+      "code": "+267",
+      "countryCode": "BW",
+      "flag": "🇧🇼"
+    },
+    {
+      "name": "Bouvet Island",
+      "code": "+47",
+      "countryCode": "BV",
+      "flag": "🇧🇻"
     },
     {
       "name": "Brazil",
       "code": "+55",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/0/05/Flag_of_Brazil.svg"
+      "countryCode": "BR",
+      "flag": "🇧🇷"
+    },
+    {
+      "name": "British Indian Ocean Territory",
+      "code": "+246",
+      "countryCode": "IO",
+      "flag": "🇮🇴"
+    },
+    {
+      "name": "Brunei Darussalam",
+      "code": "+673",
+      "countryCode": "BN",
+      "flag": "🇧🇳"
     },
     {
       "name": "Bulgaria",
       "code": "+359",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Bulgaria.svg"
+      "countryCode": "BG",
+      "flag": "🇧🇬"
     },
     {
       "name": "Burkina Faso",
       "code": "+226",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/3/31/Flag_of_Burkina_Faso.svg"
+      "countryCode": "BF",
+      "flag": "🇧🇫"
+    },
+    {
+      "name": "Burundi",
+      "code": "+257",
+      "countryCode": "BI",
+      "flag": "🇧🇮"
+    },
+    {
+      "name": "Cabo Verde",
+      "code": "+238",
+      "countryCode": "CV",
+      "flag": "🇨🇻"
+    },
+    {
+      "name": "Cambodia",
+      "code": "+855",
+      "countryCode": "KH",
+      "flag": "🇰🇭"
     },
     {
       "name": "Cameroon",
       "code": "+237",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/4/4f/Flag_of_Cameroon.svg"
+      "countryCode": "CM",
+      "flag": "🇨🇲"
     },
     {
       "name": "Canada",
       "code": "+1",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Canada.svg"
+      "countryCode": "CA",
+      "flag": "🇨🇦"
+    },
+    {
+      "name": "Cayman Islands",
+      "code": "+1",
+      "countryCode": "KY",
+      "flag": "🇰🇾"
+    },
+    {
+      "name": "Central African Republic",
+      "code": "+236",
+      "countryCode": "CF",
+      "flag": "🇨🇫"
+    },
+    {
+      "name": "Chad",
+      "code": "+235",
+      "countryCode": "TD",
+      "flag": "🇹🇩"
+    },
+    {
+      "name": "Chile",
+      "code": "+56",
+      "countryCode": "CL",
+      "flag": "🇨🇱"
+    },
+    {
+      "name": "China",
+      "code": "+86",
+      "countryCode": "CN",
+      "flag": "🇨🇳"
+    },
+    {
+      "name": "Christmas Island",
+      "code": "+61",
+      "countryCode": "CX",
+      "flag": "🇨🇽"
+    },
+    {
+      "name": "Cocos (Keeling) Islands",
+      "code": "+61",
+      "countryCode": "CC",
+      "flag": "🇨🇨"
+    },
+    {
+      "name": "Colombia",
+      "code": "+57",
+      "countryCode": "CO",
+      "flag": "🇨🇴"
+    },
+    {
+      "name": "Commonwealth of The Bahamas",
+      "code": "+1",
+      "countryCode": "BS",
+      "flag": "🇧🇸"
+    },
+    {
+      "name": "Commonwealth of the Northern Mariana Islands",
+      "code": "+1",
+      "countryCode": "MP",
+      "flag": "🇲🇵"
     },
     {
       "name": "Comoros",
       "code": "+269",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/9/94/Flag_of_the_Comoros.svg"
+      "countryCode": "KM",
+      "flag": "🇰🇲"
+    },
+    {
+      "name": "Cook Islands",
+      "code": "+682",
+      "countryCode": "CK",
+      "flag": "🇨🇰"
+    },
+    {
+      "name": "Costa Rica",
+      "code": "+506",
+      "countryCode": "CR",
+      "flag": "🇨🇷"
+    },
+    {
+      "name": "Côte d'Ivoire",
+      "code": "+225",
+      "countryCode": "CI",
+      "flag": "🇨🇮"
     },
     {
       "name": "Croatia",
       "code": "+385",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/1/1b/Flag_of_Croatia.svg"
+      "countryCode": "HR",
+      "flag": "🇭🇷"
     },
     {
-      "name": "Denmark",
-      "code": "+45",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/9/9c/Flag_of_Denmark.svg"
+      "name": "Cuba",
+      "code": "+53",
+      "countryCode": "CU",
+      "flag": "🇨🇺"
     },
     {
-      "name": "Egypt",
-      "code": "+20",
-      "flag_image_link": "https://restcountries.eu/data/egy.svg"
+      "name": "Curaçao",
+      "code": "+599",
+      "countryCode": "CW",
+      "flag": "🇨🇼"
     },
     {
-      "name": "Estonia",
-      "code": "+372",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/8/8f/Flag_of_Estonia.svg"
+      "name": "Cyprus",
+      "code": "+357",
+      "countryCode": "CY",
+      "flag": "🇨🇾"
     },
     {
-      "name": "Ethiopia",
-      "code": "+251",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/7/71/Flag_of_Ethiopia.svg"
-    },
-    {
-      "name": "Fiji",
-      "code": "+679",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Fiji.svg"
-    },
-    {
-      "name": "France",
-      "code": "+33",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg"
-    },
-    {
-      "name": "Gabon",
-      "code": "+241",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/0/04/Flag_of_Gabon.svg"
-    },
-    {
-      "name": "Republic of the Congo",
-      "code": "+242",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/9/92/Flag_of_the_Republic_of_the_Congo.svg"
+      "name": "Czechia",
+      "code": "+420",
+      "countryCode": "CZ",
+      "flag": "🇨🇿"
     },
     {
       "name": "Democratic Republic of the Congo",
       "code": "+243",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/6/6f/Flag_of_the_Democratic_Republic_of_the_Congo.svg"
+      "countryCode": "CD",
+      "flag": "🇨🇩"
+    },
+    {
+      "name": "Denmark",
+      "code": "+45",
+      "countryCode": "DK",
+      "flag": "🇩🇰"
+    },
+    {
+      "name": "Djibouti",
+      "code": "+253",
+      "countryCode": "DJ",
+      "flag": "🇩🇯"
+    },
+    {
+      "name": "Dominica",
+      "code": "+1",
+      "countryCode": "DM",
+      "flag": "🇩🇲"
+    },
+    {
+      "name": "Dominican Republic",
+      "code": "+1",
+      "countryCode": "DO",
+      "flag": "🇩🇴"
+    },
+    {
+      "name": "Ecuador",
+      "code": "+593",
+      "countryCode": "EC",
+      "flag": "🇪🇨"
+    },
+    {
+      "name": "Egypt",
+      "code": "+20",
+      "countryCode": "EG",
+      "flag": "🇪🇬"
+    },
+    {
+      "name": "El Salvador",
+      "code": "+503",
+      "countryCode": "SV",
+      "flag": "🇸🇻"
+    },
+    {
+      "name": "Equatorial Guinea",
+      "code": "+240",
+      "countryCode": "GQ",
+      "flag": "🇬🇶"
+    },
+    {
+      "name": "Eritrea",
+      "code": "+291",
+      "countryCode": "ER",
+      "flag": "🇪🇷"
+    },
+    {
+      "name": "Estonia",
+      "code": "+372",
+      "countryCode": "EE",
+      "flag": "🇪🇪"
+    },
+    {
+      "name": "Eswatini",
+      "code": "+268",
+      "countryCode": "SZ",
+      "flag": "🇸🇿"
+    },
+    {
+      "name": "Ethiopia",
+      "code": "+251",
+      "countryCode": "ET",
+      "flag": "🇪🇹"
+    },
+    {
+      "name": "Falkland Islands",
+      "code": "+500",
+      "countryCode": "FK",
+      "flag": "🇫🇰"
+    },
+    {
+      "name": "Faroe Islands",
+      "code": "+298",
+      "countryCode": "FO",
+      "flag": "🇫🇴"
+    },
+    {
+      "name": "Fiji",
+      "code": "+679",
+      "countryCode": "FJ",
+      "flag": "🇫🇯"
+    },
+    {
+      "name": "Finland",
+      "code": "+358",
+      "countryCode": "FI",
+      "flag": "🇫🇮"
+    },
+    {
+      "name": "France",
+      "code": "+33",
+      "countryCode": "FR",
+      "flag": "🇫🇷"
+    },
+    {
+      "name": "French Guiana",
+      "code": "+594",
+      "countryCode": "GF",
+      "flag": "🇬🇫"
+    },
+    {
+      "name": "French Polynesia",
+      "code": "+689",
+      "countryCode": "PF",
+      "flag": "🇵🇫"
+    },
+    {
+      "name": "French Southern and Antarctic Lands",
+      "code": "+672",
+      "countryCode": "TF",
+      "flag": "🇹🇫"
+    },
+    {
+      "name": "Gabon",
+      "code": "+241",
+      "countryCode": "GA",
+      "flag": "🇬🇦"
     },
     {
       "name": "Gambia",
       "code": "+220",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/7/77/Flag_of_The_Gambia.svg"
+      "countryCode": "GM",
+      "flag": "🇬🇲"
+    },
+    {
+      "name": "Georgia",
+      "code": "+995",
+      "countryCode": "GE",
+      "flag": "🇬🇪"
     },
     {
       "name": "Germany",
       "code": "+49",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg"
+      "countryCode": "DE",
+      "flag": "🇩🇪"
     },
     {
       "name": "Ghana",
       "code": "+233",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/1/19/Flag_of_Ghana.svg"
+      "countryCode": "GH",
+      "flag": "🇬🇭"
+    },
+    {
+      "name": "Gibraltar",
+      "code": "+350",
+      "countryCode": "GI",
+      "flag": "🇬🇮"
     },
     {
       "name": "Greece",
       "code": "+30",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_Greece.svg"
+      "countryCode": "GR",
+      "flag": "🇬🇷"
+    },
+    {
+      "name": "Greenland",
+      "code": "+299",
+      "countryCode": "GL",
+      "flag": "🇬🇱"
+    },
+    {
+      "name": "Grenada",
+      "code": "+1",
+      "countryCode": "GD",
+      "flag": "🇬🇩"
+    },
+    {
+      "name": "Guadeloupe",
+      "code": "+590",
+      "countryCode": "GP",
+      "flag": "🇬🇵"
+    },
+    {
+      "name": "Guam",
+      "code": "+1",
+      "countryCode": "GU",
+      "flag": "🇬🇺"
+    },
+    {
+      "name": "Guatemala",
+      "code": "+502",
+      "countryCode": "GT",
+      "flag": "🇬🇹"
+    },
+    {
+      "name": "Guernsey",
+      "code": "+44",
+      "countryCode": "GG",
+      "flag": "🇬🇬"
     },
     {
       "name": "Guinea",
       "code": "+224",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/e/ed/Flag_of_Guinea.svg"
+      "countryCode": "GN",
+      "flag": "🇬🇳"
+    },
+    {
+      "name": "Guinea-Bissau",
+      "code": "+245",
+      "countryCode": "GW",
+      "flag": "🇬🇼"
     },
     {
       "name": "Guyana",
       "code": "+592",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/9/99/Flag_of_Guyana.svg"
+      "countryCode": "GY",
+      "flag": "🇬🇾"
     },
     {
       "name": "Haiti",
       "code": "+509",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/5/56/Flag_of_Haiti.svg"
+      "countryCode": "HT",
+      "flag": "🇭🇹"
+    },
+    {
+      "name": "Holy See",
+      "code": "+39",
+      "countryCode": "VA",
+      "flag": "🇻🇦"
+    },
+    {
+      "name": "Honduras",
+      "code": "+504",
+      "countryCode": "HN",
+      "flag": "🇭🇳"
+    },
+    {
+      "name": "Hong Kong",
+      "code": "+852",
+      "countryCode": "HK",
+      "flag": "🇭🇰"
+    },
+    {
+      "name": "Hungary",
+      "code": "+36",
+      "countryCode": "HU",
+      "flag": "🇭🇺"
+    },
+    {
+      "name": "Iceland",
+      "code": "+354",
+      "countryCode": "IS",
+      "flag": "🇮🇸"
     },
     {
       "name": "India",
       "code": "+91",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_India.svg"
+      "countryCode": "IN",
+      "flag": "🇮🇳"
     },
     {
       "name": "Indonesia",
       "code": "+62",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_Indonesia.svg"
+      "countryCode": "ID",
+      "flag": "🇮🇩"
     },
     {
-      "name": "Iran",
+      "name": "Iran (Islamic Republic of)",
       "code": "+98",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/c/ca/Flag_of_Iran.svg"
+      "countryCode": "IR",
+      "flag": "🇮🇷"
     },
     {
       "name": "Iraq",
       "code": "+964",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/f/f6/Flag_of_Iraq.svg"
+      "countryCode": "IQ",
+      "flag": "🇮🇶"
     },
     {
       "name": "Ireland",
       "code": "+353",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/4/45/Flag_of_Ireland.svg"
+      "countryCode": "IE",
+      "flag": "🇮🇪"
+    },
+    {
+      "name": "Isle of Man",
+      "code": "+44",
+      "countryCode": "IM",
+      "flag": "🇮🇲"
+    },
+    {
+      "name": "Israel",
+      "code": "+972",
+      "countryCode": "IL",
+      "flag": "🇮🇱"
     },
     {
       "name": "Italy",
       "code": "+39",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/0/03/Flag_of_Italy.svg"
+      "countryCode": "IT",
+      "flag": "🇮🇹"
     },
     {
-      "name": "Ivory Coast",
-      "code": "+225",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/f/fe/Flag_of_C%C3%B4te_d%27Ivoire.svg"
+      "name": "Jamaica",
+      "code": "+1",
+      "countryCode": "JM",
+      "flag": "🇯🇲"
+    },
+    {
+      "name": "Japan",
+      "code": "+81",
+      "countryCode": "JP",
+      "flag": "🇯🇵"
+    },
+    {
+      "name": "Jersey",
+      "code": "+44",
+      "countryCode": "JE",
+      "flag": "🇯🇪"
+    },
+    {
+      "name": "Jordan",
+      "code": "+962",
+      "countryCode": "JO",
+      "flag": "🇯🇴"
+    },
+    {
+      "name": "Kazakhstan",
+      "code": "+7",
+      "countryCode": "KZ",
+      "flag": "🇰🇿"
     },
     {
       "name": "Kenya",
       "code": "+254",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/4/49/Flag_of_Kenya.svg"
+      "countryCode": "KE",
+      "flag": "🇰🇪"
+    },
+    {
+      "name": "Kiribati",
+      "code": "+686",
+      "countryCode": "KI",
+      "flag": "🇰🇮"
+    },
+    {
+      "name": "Kuwait",
+      "code": "+965",
+      "countryCode": "KW",
+      "flag": "🇰🇼"
+    },
+    {
+      "name": "Kyrgyzstan",
+      "code": "+996",
+      "countryCode": "KG",
+      "flag": "🇰🇬"
+    },
+    {
+      "name": "Lao People's Democratic Republic",
+      "code": "+856",
+      "countryCode": "LA",
+      "flag": "🇱🇦"
+    },
+    {
+      "name": "Latvia",
+      "code": "+371",
+      "countryCode": "LV",
+      "flag": "🇱🇻"
+    },
+    {
+      "name": "Lebanon",
+      "code": "+961",
+      "countryCode": "LB",
+      "flag": "🇱🇧"
+    },
+    {
+      "name": "Lesotho",
+      "code": "+266",
+      "countryCode": "LS",
+      "flag": "🇱🇸"
     },
     {
       "name": "Liberia",
       "code": "+231",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Flag_of_Liberia.svg"
+      "countryCode": "LR",
+      "flag": "🇱🇷"
     },
     {
-      "name": "Mali",
-      "code": "+223",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/9/92/Flag_of_Mali.svg"
+      "name": "Libya",
+      "code": "+218",
+      "countryCode": "LY",
+      "flag": "🇱🇾"
+    },
+    {
+      "name": "Liechtenstein",
+      "code": "+423",
+      "countryCode": "LI",
+      "flag": "🇱🇮"
+    },
+    {
+      "name": "Lithuania",
+      "code": "+370",
+      "countryCode": "LT",
+      "flag": "🇱🇹"
+    },
+    {
+      "name": "Luxembourg",
+      "code": "+352",
+      "countryCode": "LU",
+      "flag": "🇱🇺"
+    },
+    {
+      "name": "Macao",
+      "code": "+853",
+      "countryCode": "MO",
+      "flag": "🇲🇴"
+    },
+    {
+      "name": "Madagascar",
+      "code": "+261",
+      "countryCode": "MG",
+      "flag": "🇲🇬"
+    },
+    {
+      "name": "Malawi",
+      "code": "+265",
+      "countryCode": "MW",
+      "flag": "🇲🇼"
     },
     {
       "name": "Malaysia",
       "code": "+60",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/6/66/Flag_of_Malaysia.svg"
+      "countryCode": "MY",
+      "flag": "🇲🇾"
+    },
+    {
+      "name": "Maldives",
+      "code": "+960",
+      "countryCode": "MV",
+      "flag": "🇲🇻"
+    },
+    {
+      "name": "Mali",
+      "code": "+223",
+      "countryCode": "ML",
+      "flag": "🇲🇱"
     },
     {
       "name": "Malta",
       "code": "+356",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/7/73/Flag_of_Malta.svg"
+      "countryCode": "MT",
+      "flag": "🇲🇹"
+    },
+    {
+      "name": "Martinique",
+      "code": "+596",
+      "countryCode": "MQ",
+      "flag": "🇲🇶"
+    },
+    {
+      "name": "Mauritania",
+      "code": "+222",
+      "countryCode": "MR",
+      "flag": "🇲🇷"
+    },
+    {
+      "name": "Mauritius",
+      "code": "+230",
+      "countryCode": "MU",
+      "flag": "🇲🇺"
+    },
+    {
+      "name": "Mayotte",
+      "code": "+262",
+      "countryCode": "YT",
+      "flag": "🇾🇹"
     },
     {
       "name": "Mexico",
       "code": "+52",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/f/fc/Flag_of_Mexico.svg"
+      "countryCode": "MX",
+      "flag": "🇲🇽"
+    },
+    {
+      "name": "Micronesia (Federated States of)",
+      "code": "+691",
+      "countryCode": "FM",
+      "flag": "🇫🇲"
+    },
+    {
+      "name": "Monaco",
+      "code": "+377",
+      "countryCode": "MC",
+      "flag": "🇲🇨"
+    },
+    {
+      "name": "Mongolia",
+      "code": "+976",
+      "countryCode": "MN",
+      "flag": "🇲🇳"
+    },
+    {
+      "name": "Montenegro",
+      "code": "+382",
+      "countryCode": "ME",
+      "flag": "🇲🇪"
+    },
+    {
+      "name": "Montserrat",
+      "code": "+1",
+      "countryCode": "MS",
+      "flag": "🇲🇸"
+    },
+    {
+      "name": "Morocco",
+      "code": "+212",
+      "countryCode": "MA",
+      "flag": "🇲🇦"
+    },
+    {
+      "name": "Mozambique",
+      "code": "+258",
+      "countryCode": "MZ",
+      "flag": "🇲🇿"
     },
     {
       "name": "Myanmar",
       "code": "+95",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Flag_of_Myanmar.svg"
+      "countryCode": "MM",
+      "flag": "🇲🇲"
+    },
+    {
+      "name": "Namibia",
+      "code": "+264",
+      "countryCode": "NA",
+      "flag": "🇳🇦"
+    },
+    {
+      "name": "Nauru",
+      "code": "+674",
+      "countryCode": "NR",
+      "flag": "🇳🇷"
     },
     {
       "name": "Nepal",
       "code": "+977",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/9/9b/Flag_of_Nepal.svg"
+      "countryCode": "NP",
+      "flag": "🇳🇵"
     },
     {
       "name": "Netherlands",
       "code": "+31",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/2/20/Flag_of_the_Netherlands.svg"
+      "countryCode": "NL",
+      "flag": "🇳🇱"
+    },
+    {
+      "name": "New Caledonia",
+      "code": "+687",
+      "countryCode": "NC",
+      "flag": "🇳🇨"
     },
     {
       "name": "New Zealand",
       "code": "+64",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Flag_of_New_Zealand.svg"
+      "countryCode": "NZ",
+      "flag": "🇳🇿"
+    },
+    {
+      "name": "Nicaragua",
+      "code": "+505",
+      "countryCode": "NI",
+      "flag": "🇳🇮"
     },
     {
       "name": "Niger",
       "code": "+227",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/f/f4/Flag_of_Niger.svg"
+      "countryCode": "NE",
+      "flag": "🇳🇪"
     },
     {
       "name": "Nigeria",
       "code": "+234",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/7/79/Flag_of_Nigeria.svg"
+      "countryCode": "NG",
+      "flag": "🇳🇬"
+    },
+    {
+      "name": "Niue",
+      "code": "+683",
+      "countryCode": "NU",
+      "flag": "🇳🇺"
+    },
+    {
+      "name": "Norfolk Island",
+      "code": "+672",
+      "countryCode": "NF",
+      "flag": "🇳🇫"
+    },
+    {
+      "name": "North Korea",
+      "code": "+850",
+      "countryCode": "KP",
+      "flag": "🇰🇵"
+    },
+    {
+      "name": "North Macedonia",
+      "code": "+389",
+      "countryCode": "MK",
+      "flag": "🇲🇰"
     },
     {
       "name": "Norway",
       "code": "+47",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/d/d9/Flag_of_Norway.svg"
+      "countryCode": "NO",
+      "flag": "🇳🇴"
+    },
+    {
+      "name": "Oman",
+      "code": "+968",
+      "countryCode": "OM",
+      "flag": "🇴🇲"
     },
     {
       "name": "Pakistan",
       "code": "+92",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/3/32/Flag_of_Pakistan.svg"
+      "countryCode": "PK",
+      "flag": "🇵🇰"
+    },
+    {
+      "name": "Palau",
+      "code": "+680",
+      "countryCode": "PW",
+      "flag": "🇵🇼"
+    },
+    {
+      "name": "Palestine, State of",
+      "code": "+970",
+      "countryCode": "PS",
+      "flag": "🇵🇸"
+    },
+    {
+      "name": "Panama",
+      "code": "+507",
+      "countryCode": "PA",
+      "flag": "🇵🇦"
     },
     {
       "name": "Papua New Guinea",
       "code": "+675",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Flag_of_Papua_New_Guinea.svg"
+      "countryCode": "PG",
+      "flag": "🇵🇬"
+    },
+    {
+      "name": "Paraguay",
+      "code": "+595",
+      "countryCode": "PY",
+      "flag": "🇵🇾"
+    },
+    {
+      "name": "Peru",
+      "code": "+51",
+      "countryCode": "PE",
+      "flag": "🇵🇪"
     },
     {
       "name": "Philippines",
       "code": "+63",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/9/99/Flag_of_the_Philippines.svg"
+      "countryCode": "PH",
+      "flag": "🇵🇭"
+    },
+    {
+      "name": "Pitcairn",
+      "code": "+64",
+      "countryCode": "PN",
+      "flag": "🇵🇳"
     },
     {
       "name": "Poland",
       "code": "+48",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/1/12/Flag_of_Poland.svg"
+      "countryCode": "PL",
+      "flag": "🇵🇱"
     },
     {
       "name": "Portugal",
       "code": "+351",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_Portugal.svg"
+      "countryCode": "PT",
+      "flag": "🇵🇹"
+    },
+    {
+      "name": "Puerto Rico",
+      "code": "+1",
+      "countryCode": "PR",
+      "flag": "🇵🇷"
+    },
+    {
+      "name": "Qatar",
+      "code": "+974",
+      "countryCode": "QA",
+      "flag": "🇶🇦"
+    },
+    {
+      "name": "Republic of Kosovo",
+      "code": "+383",
+      "countryCode": "XK",
+      "flag": "🇽🇰"
+    },
+    {
+      "name": "Republic of Moldova",
+      "code": "+373",
+      "countryCode": "MD",
+      "flag": "🇲🇩"
+    },
+    {
+      "name": "Republic of San Marino",
+      "code": "+378",
+      "countryCode": "SM",
+      "flag": "🇸🇲"
+    },
+    {
+      "name": "Republic of the Congo",
+      "code": "+242",
+      "countryCode": "CG",
+      "flag": "🇨🇬"
+    },
+    {
+      "name": "Republic of the Marshall Islands",
+      "code": "+692",
+      "countryCode": "MH",
+      "flag": "🇲🇭"
+    },
+    {
+      "name": "Réunion",
+      "code": "+262",
+      "countryCode": "RE",
+      "flag": "🇷🇪"
+    },
+    {
+      "name": "Romania",
+      "code": "+40",
+      "countryCode": "RO",
+      "flag": "🇷🇴"
+    },
+    {
+      "name": "Russia",
+      "code": "+7",
+      "countryCode": "RU",
+      "flag": "🇷🇺"
     },
     {
       "name": "Rwanda",
       "code": "+250",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/1/17/Flag_of_Rwanda.svg"
+      "countryCode": "RW",
+      "flag": "🇷🇼"
+    },
+    {
+      "name": "Saint Barthélemy",
+      "code": "+590",
+      "countryCode": "BL",
+      "flag": "🇧🇱"
+    },
+    {
+      "name": "Saint Helena, Ascension and Tristan da Cunha",
+      "code": "+290",
+      "countryCode": "SH",
+      "flag": "🇸🇭"
+    },
+    {
+      "name": "Saint Kitts and Nevis",
+      "code": "+1",
+      "countryCode": "KN",
+      "flag": "🇰🇳"
+    },
+    {
+      "name": "Saint Lucia",
+      "code": "+1",
+      "countryCode": "LC",
+      "flag": "🇱🇨"
+    },
+    {
+      "name": "Saint Martin (French part)",
+      "code": "+590",
+      "countryCode": "MF",
+      "flag": "🇲🇫"
+    },
+    {
+      "name": "Saint Pierre and Miquelon",
+      "code": "+508",
+      "countryCode": "PM",
+      "flag": "🇵🇲"
+    },
+    {
+      "name": "Saint Vincent and the Grenadines",
+      "code": "+1",
+      "countryCode": "VC",
+      "flag": "🇻🇨"
     },
     {
       "name": "Samoa",
       "code": "+685",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/3/31/Flag_of_Samoa.svg"
+      "countryCode": "WS",
+      "flag": "🇼🇸"
+    },
+    {
+      "name": "Sao Tome and Principe",
+      "code": "+239",
+      "countryCode": "ST",
+      "flag": "🇸🇹"
     },
     {
       "name": "Saudi Arabia",
       "code": "+966",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/0/0d/Flag_of_Saudi_Arabia.svg"
+      "countryCode": "SA",
+      "flag": "🇸🇦"
     },
     {
       "name": "Senegal",
       "code": "+221",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Flag_of_Senegal.svg"
+      "countryCode": "SN",
+      "flag": "🇸🇳"
+    },
+    {
+      "name": "Serbia",
+      "code": "+381",
+      "countryCode": "RS",
+      "flag": "🇷🇸"
+    },
+    {
+      "name": "Seychelles",
+      "code": "+248",
+      "countryCode": "SC",
+      "flag": "🇸🇨"
+    },
+    {
+      "name": "Sierra Leone",
+      "code": "+232",
+      "countryCode": "SL",
+      "flag": "🇸🇱"
     },
     {
       "name": "Singapore",
       "code": "+65",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/4/48/Flag_of_Singapore.svg"
+      "countryCode": "SG",
+      "flag": "🇸🇬"
+    },
+    {
+      "name": "Sint Maarten (Dutch part)",
+      "code": "+1",
+      "countryCode": "SX",
+      "flag": "🇸🇽"
+    },
+    {
+      "name": "Slovakia",
+      "code": "+421",
+      "countryCode": "SK",
+      "flag": "🇸🇰"
+    },
+    {
+      "name": "Slovenia",
+      "code": "+386",
+      "countryCode": "SI",
+      "flag": "🇸🇮"
+    },
+    {
+      "name": "Solomon Islands",
+      "code": "+677",
+      "countryCode": "SB",
+      "flag": "🇸🇧"
+    },
+    {
+      "name": "Somalia",
+      "code": "+252",
+      "countryCode": "SO",
+      "flag": "🇸🇴"
     },
     {
       "name": "South Africa",
       "code": "+27",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/a/af/Flag_of_South_Africa.svg"
+      "countryCode": "ZA",
+      "flag": "🇿🇦"
+    },
+    {
+      "name": "South Georgia and the South Sandwich Islands",
+      "code": "+500",
+      "countryCode": "GS",
+      "flag": "🇬🇸"
     },
     {
       "name": "South Korea",
       "code": "+82",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/0/09/Flag_of_South_Korea.svg"
+      "countryCode": "KR",
+      "flag": "🇰🇷"
+    },
+    {
+      "name": "South Sudan",
+      "code": "+211",
+      "countryCode": "SS",
+      "flag": "🇸🇸"
+    },
+    {
+      "name": "Spain",
+      "code": "+34",
+      "countryCode": "ES",
+      "flag": "🇪🇸"
     },
     {
       "name": "Sri Lanka",
       "code": "+94",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/1/11/Flag_of_Sri_Lanka.svg"
+      "countryCode": "LK",
+      "flag": "🇱🇰"
+    },
+    {
+      "name": "Sudan",
+      "code": "+249",
+      "countryCode": "SD",
+      "flag": "🇸🇩"
+    },
+    {
+      "name": "Suriname",
+      "code": "+597",
+      "countryCode": "SR",
+      "flag": "🇸🇷"
+    },
+    {
+      "name": "Svalbard and Jan Mayen",
+      "code": "+47",
+      "countryCode": "SJ",
+      "flag": "🇸🇯"
     },
     {
       "name": "Sweden",
       "code": "+46",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Flag_of_Sweden.svg"
+      "countryCode": "SE",
+      "flag": "🇸🇪"
     },
     {
       "name": "Switzerland",
       "code": "+41",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Flag_of_Switzerland.svg"
+      "countryCode": "CH",
+      "flag": "🇨🇭"
+    },
+    {
+      "name": "Syrian Arab Republic",
+      "code": "+963",
+      "countryCode": "SY",
+      "flag": "🇸🇾"
+    },
+    {
+      "name": "Taiwan, Province of China",
+      "code": "+886",
+      "countryCode": "TW",
+      "flag": "🇹🇼"
+    },
+    {
+      "name": "Tajikistan",
+      "code": "+992",
+      "countryCode": "TJ",
+      "flag": "🇹🇯"
+    },
+    {
+      "name": "Territory of Heard Island and McDonald Islands",
+      "code": "+672",
+      "countryCode": "HM",
+      "flag": "🇭🇲"
     },
     {
       "name": "Thailand",
       "code": "+66",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Flag_of_Thailand.svg"
+      "countryCode": "TH",
+      "flag": "🇹🇭"
+    },
+    {
+      "name": "Timor-Leste",
+      "code": "+670",
+      "countryCode": "TL",
+      "flag": "🇹🇱"
     },
     {
       "name": "Togo",
       "code": "+228",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/6/68/Flag_of_Togo.svg"
+      "countryCode": "TG",
+      "flag": "🇹🇬"
+    },
+    {
+      "name": "Tokelau",
+      "code": "+690",
+      "countryCode": "TK",
+      "flag": "🇹🇰"
     },
     {
       "name": "Tonga",
       "code": "+676",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Tonga.svg"
+      "countryCode": "TO",
+      "flag": "🇹🇴"
+    },
+    {
+      "name": "Trinidad and Tobago",
+      "code": "+1",
+      "countryCode": "TT",
+      "flag": "🇹🇹"
+    },
+    {
+      "name": "Tunisia",
+      "code": "+216",
+      "countryCode": "TN",
+      "flag": "🇹🇳"
+    },
+    {
+      "name": "Turkey",
+      "code": "+90",
+      "countryCode": "TR",
+      "flag": "🇹🇷"
+    },
+    {
+      "name": "Turkmenistan",
+      "code": "+993",
+      "countryCode": "TM",
+      "flag": "🇹🇲"
+    },
+    {
+      "name": "Turks and Caicos Islands",
+      "code": "+1",
+      "countryCode": "TC",
+      "flag": "🇹🇨"
+    },
+    {
+      "name": "Tuvalu",
+      "code": "+688",
+      "countryCode": "TV",
+      "flag": "🇹🇻"
     },
     {
       "name": "Uganda",
       "code": "+256",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Flag_of_Uganda.svg"
+      "countryCode": "UG",
+      "flag": "🇺🇬"
+    },
+    {
+      "name": "Ukraine",
+      "code": "+380",
+      "countryCode": "UA",
+      "flag": "🇺🇦"
+    },
+    {
+      "name": "United Arab Emirates",
+      "code": "+971",
+      "countryCode": "AE",
+      "flag": "🇦🇪"
     },
     {
       "name": "United Kingdom",
       "code": "+44",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/a/ae/Flag_of_the_United_Kingdom.svg"
+      "countryCode": "GB",
+      "flag": "🇬🇧"
     },
     {
-      "name": "United States",
+      "name": "United Republic of Tanzania",
+      "code": "+255",
+      "countryCode": "TZ",
+      "flag": "🇹🇿"
+    },
+    {
+      "name": "United States Minor Outlying Islands",
       "code": "+1",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/a/a4/Flag_of_the_United_States.svg"
+      "countryCode": "UM",
+      "flag": "🇺🇲"
+    },
+    {
+      "name": "United States of America",
+      "code": "+1",
+      "countryCode": "US",
+      "flag": "🇺🇸"
     },
     {
       "name": "Uruguay",
       "code": "+598",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/f/fe/Flag_of_Uruguay.svg"
+      "countryCode": "UY",
+      "flag": "🇺🇾"
+    },
+    {
+      "name": "Uzbekistan",
+      "code": "+998",
+      "countryCode": "UZ",
+      "flag": "🇺🇿"
+    },
+    {
+      "name": "Vanuatu",
+      "code": "+678",
+      "countryCode": "VU",
+      "flag": "🇻🇺"
+    },
+    {
+      "name": "Venezuela (Bolivarian Republic of)",
+      "code": "+58",
+      "countryCode": "VE",
+      "flag": "🇻🇪"
     },
     {
       "name": "Vietnam",
       "code": "+84",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg"
+      "countryCode": "VN",
+      "flag": "🇻🇳"
+    },
+    {
+      "name": "Virgin Islands (British)",
+      "code": "+1",
+      "countryCode": "VG",
+      "flag": "🇻🇬"
+    },
+    {
+      "name": "Virgin Islands (U.S.)",
+      "code": "+1",
+      "countryCode": "VI",
+      "flag": "🇻🇮"
+    },
+    {
+      "name": "Wallis and Futuna",
+      "code": "+681",
+      "countryCode": "WF",
+      "flag": "🇼🇫"
+    },
+    {
+      "name": "Western Sahara",
+      "code": "+212",
+      "countryCode": "EH",
+      "flag": "🇪🇭"
     },
     {
       "name": "Yemen",
       "code": "+967",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/8/89/Flag_of_Yemen.svg"
+      "countryCode": "YE",
+      "flag": "🇾🇪"
     },
     {
       "name": "Zambia",
       "code": "+260",
-      "flag_image_link": "https://upload.wikimedia.org/wikipedia/commons/0/06/Flag_of_Zambia.svg"
+      "countryCode": "ZM",
+      "flag": "🇿🇲"
+    },
+    {
+      "name": "Zimbabwe",
+      "code": "+263",
+      "countryCode": "ZW",
+      "flag": "🇿🇼"
     }
   ]
 }

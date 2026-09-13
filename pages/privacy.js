@@ -1,31 +1,29 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
 
 export default function Privacy() {
+  const { t } = useTranslation('common')
+
   return (
     <main className="min-h-screen bg-white text-gray-900 px-6 py-10">
       <Head>
-        <title>EFC Privacy Policy</title>
-        <meta name="description" content="Privacy information for EFC accounts." />
+        <title>{t('legal.privacy.title')}</title>
+        <meta name="description" content={t('legal.privacy.description')} />
       </Head>
       <div className="mx-auto max-w-3xl space-y-6">
-        <Link href="/" className="text-sm font-semibold text-[#1BB6FF]">Back to EFC</Link>
-        <h1 className="text-3xl font-black">Privacy Policy</h1>
-        <p>
-          EFC collects account information such as username, email address, phone number, country code, referral code,
-          wallet activity, and authentication data so the service can create accounts, process account actions, and protect
-          users from fraud or unauthorized access.
-        </p>
-        <p>
-          Account data is stored with service providers used by the application, including Supabase for authentication and
-          database services. Access to administrative tools should be limited to authorized staff only.
-        </p>
-        <p>
-          Do not submit someone else&apos;s personal information. If you need account help or want your data reviewed,
-          contact support through the official in-app support channel.
-        </p>
-        <p className="text-sm text-gray-500">Last updated: June 25, 2026</p>
+        <Link href="/" className="text-sm font-semibold text-[#1BB6FF]">{t('legal.common.backToEfc')}</Link>
+        <h1 className="text-3xl font-black">{t('legal.privacy.title')}</h1>
+        <p>{t('legal.privacy.collection')}</p>
+        <p>{t('legal.privacy.storage')}</p>
+        <p>{t('legal.privacy.contact')}</p>
+        <p className="text-sm text-gray-500">{t('legal.common.lastUpdated')}</p>
       </div>
     </main>
   )
+}
+
+export async function getServerSideProps(context) {
+  return { props: await getI18nServerSideProps(context.locale) }
 }

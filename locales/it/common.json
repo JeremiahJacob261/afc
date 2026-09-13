@@ -86,6 +86,9 @@
       "confirmPassword": "Conferma password",
       "confirmPasswordPlaceholder": "Conferma password",
       "terms": "Ho almeno 18 anni e accetto i termini dell'EFC.",
+      "termsLink": "Termini",
+      "and": "e",
+      "privacyLink": "Informativa sulla privacy",
       "submit": "Creare un account",
       "submitting": "Creazione dell'account...",
       "hasAccount": "Ho già un account"
@@ -769,7 +772,7 @@
     },
     "profile": {
       "vipReferralLine": "Riferimenti VIP {{level}} · {{count}}",
-      "hello": "Ciao,",
+      "hello": "Ciao, ",
       "currentBalance": "Saldo attuale",
       "referralsTitle": "RIFERIMENTI",
       "allReferral": "Tutti i rinvii",
@@ -1037,6 +1040,26 @@
       "firstDepositBonusCopy": "Applicato una volta quando un amministratore approva un primo deposito.",
       "withdrawalSettings": "Impostazioni di prelievo",
       "withdrawalSettingsCopy": "Configura il minimo, il massimo e la commissione per i prelievi degli utenti."
+    }
+  },
+  "legal": {
+    "common": {
+      "backToEfc": "Torna a EFC",
+      "lastUpdated": "Ultimo aggiornamento: 25 giugno 2026"
+    },
+    "terms": {
+      "title": "Termini e condizioni",
+      "description": "Termini per l'utilizzo di EFC.",
+      "intro": "Gli account EFC sono destinati agli adulti autorizzati per legge a utilizzare i servizi di mercato calcistico e portafoglio nella propria località. Non creare un account se hai meno di 18 anni o se questo servizio è soggetto a restrizioni nella tua zona.",
+      "account": "Sei responsabile della riservatezza dei tuoi dati di accesso, dell'utilizzo di informazioni accurate e della comprensione dei rischi prima di aggiungere fondi o piazzare una scommessa. EFC non chiederà la tua password al di fuori di questo sito web.",
+      "restrictions": "Promozioni, bonus, prelievi e accesso all'account possono essere limitati da verifiche, prevenzione delle frodi, leggi locali e regole della piattaforma. Se ritieni sospetta una pagina, un messaggio o un link, interrompi l'operazione e contatta l'assistenza tramite il canale ufficiale nell'app."
+    },
+    "privacy": {
+      "title": "Informativa sulla privacy",
+      "description": "Informazioni sulla privacy degli account EFC.",
+      "collection": "EFC raccoglie informazioni sull'account, come nome utente, indirizzo e-mail, numero di telefono, prefisso internazionale, codice di riferimento, attività del portafoglio e dati di autenticazione, per creare account, elaborare le operazioni e proteggere gli utenti da frodi o accessi non autorizzati.",
+      "storage": "I dati dell'account sono archiviati presso i fornitori di servizi utilizzati dall'applicazione, tra cui Supabase per l'autenticazione e i servizi di database. L'accesso agli strumenti amministrativi deve essere limitato esclusivamente al personale autorizzato.",
+      "contact": "Non inviare dati personali di altre persone. Se hai bisogno di assistenza per l'account o vuoi che i tuoi dati vengano esaminati, contatta l'assistenza tramite il canale ufficiale nell'app."
     }
   },
   "errors": {

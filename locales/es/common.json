@@ -86,6 +86,9 @@
       "confirmPassword": "Confirmar contraseña",
       "confirmPasswordPlaceholder": "Confirmar contraseña",
       "terms": "Tengo al menos 18 años y acepto los términos de EFC.",
+      "termsLink": "Términos",
+      "and": "y",
+      "privacyLink": "Política de privacidad",
       "submit": "Crear cuenta",
       "submitting": "Creando cuenta...",
       "hasAccount": "Ya tengo una cuenta"
@@ -767,7 +770,7 @@
     },
     "profile": {
       "vipReferralLine": "VIP {{level}} · referencias {{count}}",
-      "hello": "Hola,",
+      "hello": "Hola, ",
       "currentBalance": "Saldo Actual",
       "referralsTitle": "REFERENCIAS",
       "allReferral": "Todas las Referencias",

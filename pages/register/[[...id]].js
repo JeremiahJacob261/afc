@@ -25,7 +25,7 @@ export default function Register({ refer }) {
   const route = useRouter();
   const [phone, setPhone] = useState("")
   const [username, setUsername] = useState("")
-  const [age, setAge] = useState("+91");
+  const [country, setCountry] = useState("IN");
 
   const [loading, setLoading] = useState(false);
   const [idR, setidR] = useState(refer);
@@ -125,7 +125,7 @@ export default function Register({ refer }) {
           username,
           email,
           phone,
-          countrycode: age,
+          countrycode: codes.countries.find((item) => item.countryCode === country)?.code || country,
           refer: idR,
         }),
       })
@@ -265,12 +265,12 @@ export default function Register({ refer }) {
                     <select
                       className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all text-sm appearance-none"
                       required
-                      value={age}
-                      onChange={(e) => setAge(e.target.value)}
+                      value={country}
+                      onChange={(e) => setCountry(e.target.value)}
                     >
                       {codes.countries.map((c) => (
-                        <option value={c.code} key={c.name} className="text-gray-900">
-                          {c.code} {c.name}
+                        <option value={c.countryCode || c.code} key={c.countryCode || c.name} className="text-gray-900">
+                          {c.flag} {c.code} {c.name}
                         </option>
                       ))}
                     </select>
@@ -363,9 +363,9 @@ export default function Register({ refer }) {
                   />
                   <span className="text-sm text-gray-600">
                     {t('auth.register.terms')}{' '}
-                    <Link href="/terms" className="text-gray-900 font-semibold hover:text-[#1BB6FF]">Terms</Link>
-                    {' '}and{' '}
-                    <Link href="/privacy" className="text-gray-900 font-semibold hover:text-[#1BB6FF]">Privacy Policy</Link>
+                    <Link href="/terms" className="text-gray-900 font-semibold hover:text-[#1BB6FF]">{t('auth.register.termsLink')}</Link>
+                    {' '}{t('auth.register.and')}{' '}
+                    <Link href="/privacy" className="text-gray-900 font-semibold hover:text-[#1BB6FF]">{t('auth.register.privacyLink')}</Link>
                   </span>
                 </label>
               </div>
