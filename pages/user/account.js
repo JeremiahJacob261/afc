@@ -206,7 +206,7 @@ export default function Account() {
               <Stack direction='column' spacing={0}>
                 <Stack direction="row">
                   <Typography sx={{ color: "#FFFFFF", fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins, sans-serif' }}>{t('mobile.profile.hello')}</Typography>
-                  <p className="notranslate" style={{ color: "#FFFFFF", fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins, sans-serif' }}>{username || (loadingProfile ? t('status.pending') : t('common.account'))}</p>
+                  <p className="notranslate" style={{ color: "#FFFFFF", fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins, sans-serif' }}>. {username || (loadingProfile ? t('status.pending') : t('common.account'))}</p>
                 </Stack>
                 <Typography sx={{ color: "#E9E5DA", fontSize: '14px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', width: '50px', textAlign: 'start' }}>VIP {viplevel}</Typography>
               </Stack>
