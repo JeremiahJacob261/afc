@@ -1,6 +1,7 @@
 import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
 import { getWithdrawalSettings, WITHDRAWAL_HARD_LIMIT_AMOUNT } from '@/lib/adminSettings'
 import { calculateWithdrawalAmounts } from '@/lib/withdrawalFee'
+import { getWithdrawalEligibility, isWithdrawalLimitExempt } from '@/lib/withdrawalEligibility'
 import { formatFcfa, getCurrencySettings, parseFcfa } from '@/lib/currency'
 import {
   displayPaymentCurrency,
@@ -120,7 +121,33 @@ export default async function handler(req, res) {
       if (/Insufficient funds/i.test(message)) {
         return res.status(200).json([{ status: 'Failed', message: 'Insufficient funds' }])
       }
-      if (/Only one withdrawal is allowed per day|Daily withdrawal limit|Annual withdrawal limit|Maximum amount to withdraw/i.test(message)) {
+      if (/pending|processing withdrawal request/i.test(message)) {
+        const eligibility = await getWithdrawalEligibility(
+          supabase,
+          profile.username,
+          { exempt: isWithdrawalLimitExempt(profile.username, withdrawalSettings) }
+        )
+        return res.status(200).json([{
+          status: 'Failed',
+          code: 'WITHDRAWAL_PENDING',
+          message: 'Your previous withdrawal request is still pending.',
+          retryAt: eligibility.retryAt,
+        }])
+      }
+      if (/successful withdrawal.*24 hours|24 hours.*successful withdrawal/i.test(message)) {
+        const eligibility = await getWithdrawalEligibility(
+          supabase,
+          profile.username,
+          { exempt: isWithdrawalLimitExempt(profile.username, withdrawalSettings) }
+        )
+        return res.status(200).json([{
+          status: 'Failed',
+          code: 'WITHDRAWAL_COOLDOWN',
+          message: 'You must wait 24 hours after your previous successful withdrawal.',
+          retryAt: eligibility.retryAt,
+        }])
+      }
+      if (/Daily withdrawal limit|Annual withdrawal limit|Maximum amount to withdraw/i.test(message)) {
         return res.status(200).json([{ status: 'Failed', message }])
       }
       throw withdrawError

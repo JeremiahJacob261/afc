@@ -10,9 +10,8 @@ const languageOptions = [
   { code: "en", label: "English" },
   { code: "fr", label: "Français" },
   { code: "es", label: "Español" },
-  { code: "my", label: "မြန်မာ" },
+  { code: "it", label: "Italiano" },
   { code: "ru", label: "Русский" },
-  { code: "ar", label: "العربية" },
 ];
 
 export function Navbar() {

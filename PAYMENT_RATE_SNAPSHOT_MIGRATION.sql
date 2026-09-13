@@ -5,6 +5,9 @@
 ALTER TABLE public.notification
   ADD COLUMN IF NOT EXISTS method_currency TEXT,
   ADD COLUMN IF NOT EXISTS method_rate DECIMAL(20, 8);
+ALTER TABLE public.notification
+  ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  ADD COLUMN IF NOT EXISTS processed_at TIMESTAMP;
 
 -- FCFA aliases have a stable 1:1 rate and can be safely backfilled. Other
 -- legacy rows intentionally remain NULL so they require an explicit review.
@@ -14,6 +17,15 @@ SET method_currency = 'FCFA',
 WHERE method_rate IS NULL
   AND lower(regexp_replace(COALESCE(method, ''), '[()_-]+', ' ', 'g'))
     ~ '(^| )(fcfa|xof|cfa)( |$)';
+
+CREATE INDEX IF NOT EXISTS idx_notification_withdrawal_pending
+  ON public.notification (username, created_at)
+  WHERE lower(COALESCE(type, '')) IN ('withdraw', 'withdrawer')
+    AND lower(COALESCE(sent, 'pending')) IN ('pending', 'processing');
+CREATE INDEX IF NOT EXISTS idx_notification_withdrawal_success
+  ON public.notification (username, processed_at, created_at)
+  WHERE lower(COALESCE(type, '')) IN ('withdraw', 'withdrawer')
+    AND lower(COALESCE(sent, '')) IN ('success', 'true', 'completed');
 
 CREATE OR REPLACE FUNCTION public.create_withdrawal_request_with_rate_snapshot_atomic(
   p_userid TEXT,
@@ -34,7 +46,6 @@ DECLARE
   user_row users%ROWTYPE;
   settings_row admin_settings%ROWTYPE;
   inserted_id BIGINT;
-  daily_withdrawal_count INTEGER;
   next_balance NUMERIC;
   daily_total NUMERIC;
   annual_total NUMERIC;
@@ -61,16 +72,27 @@ BEGIN
     WHERE lower(btrim(exempt_username)) = lower(btrim(user_row.username))
   );
 
-  -- Every user may submit only one withdrawal request per UTC day.
-  utc_day_start := date_trunc('day', timezone('UTC', now()));
-  SELECT COUNT(*) INTO daily_withdrawal_count FROM notification
-  WHERE username = user_row.username AND lower(COALESCE(type, '')) IN ('withdraw', 'withdrawer')
-    AND created_at >= utc_day_start;
-  IF daily_withdrawal_count >= 1 THEN
-    RAISE EXCEPTION 'Only one withdrawal is allowed per day';
-  END IF;
-
   IF NOT is_limit_exempt THEN
+    IF EXISTS (
+      SELECT 1 FROM notification
+      WHERE username = user_row.username
+        AND lower(COALESCE(type, '')) IN ('withdraw', 'withdrawer')
+        AND lower(COALESCE(sent, 'pending')) IN ('pending', 'processing')
+    ) THEN
+      RAISE EXCEPTION 'A pending withdrawal request already exists';
+    END IF;
+
+    IF EXISTS (
+      SELECT 1 FROM notification
+      WHERE username = user_row.username
+        AND lower(COALESCE(type, '')) IN ('withdraw', 'withdrawer')
+        AND lower(COALESCE(sent, '')) IN ('success', 'true', 'completed')
+        AND COALESCE(processed_at, created_at) >= (timezone('UTC', now()) - INTERVAL '24 hours')
+    ) THEN
+      RAISE EXCEPTION 'A successful withdrawal was completed within the last 24 hours';
+    END IF;
+
+    utc_day_start := date_trunc('day', timezone('UTC', now()));
     utc_year_start := date_trunc('year', timezone('UTC', now()));
     SELECT COALESCE(SUM(amount), 0) INTO daily_total FROM notification
     WHERE username = user_row.username AND lower(COALESCE(type, '')) IN ('withdraw', 'withdrawer')

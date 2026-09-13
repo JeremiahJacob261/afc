@@ -1,6 +1,7 @@
 import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
 import { getWithdrawalSettings } from '@/lib/adminSettings'
 import { getCurrencySettings } from '@/lib/currency'
+import { getWithdrawalEligibility, isWithdrawalLimitExempt } from '@/lib/withdrawalEligibility'
 
 const PROFILE_COLUMNS = 'userid,uid,username,balance'
 
@@ -31,6 +32,12 @@ export default async function handler(req, res) {
     if (walletsResult.error) throw walletsResult.error
     if (methodsResult.error) throw methodsResult.error
 
+    const withdrawalEligibility = await getWithdrawalEligibility(
+      supabase,
+      profile.username,
+      { exempt: isWithdrawalLimitExempt(profile.username, settings) }
+    )
+
     return res.status(200).json({
       status: 'success',
       profile,
@@ -38,6 +45,7 @@ export default async function handler(req, res) {
       methods: methodsResult.data || [],
       settings,
       currency,
+      withdrawalEligibility,
     })
   } catch (error) {
     return sendApiError(res, error)

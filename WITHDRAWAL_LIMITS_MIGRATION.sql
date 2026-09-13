@@ -22,10 +22,20 @@ ON CONFLICT (id) DO NOTHING;
 -- Needed to calculate limits for older installations that do not yet have it.
 ALTER TABLE public.notification
   ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE public.notification
+  ADD COLUMN IF NOT EXISTS processed_at TIMESTAMP;
 
 CREATE INDEX IF NOT EXISTS idx_notification_withdrawal_limit
   ON public.notification (username, created_at)
   WHERE lower(COALESCE(type, '')) IN ('withdraw', 'withdrawer');
+CREATE INDEX IF NOT EXISTS idx_notification_withdrawal_pending
+  ON public.notification (username, created_at)
+  WHERE lower(COALESCE(type, '')) IN ('withdraw', 'withdrawer')
+    AND lower(COALESCE(sent, 'pending')) IN ('pending', 'processing');
+CREATE INDEX IF NOT EXISTS idx_notification_withdrawal_success
+  ON public.notification (username, processed_at, created_at)
+  WHERE lower(COALESCE(type, '')) IN ('withdraw', 'withdrawer')
+    AND lower(COALESCE(sent, '')) IN ('success', 'true', 'completed');
 
 CREATE OR REPLACE FUNCTION public.create_withdrawal_request_atomic(
   p_userid TEXT,
@@ -45,7 +55,6 @@ DECLARE
   settings_row admin_settings%ROWTYPE;
   next_balance NUMERIC;
   inserted_id BIGINT;
-  daily_withdrawal_count INTEGER;
   daily_total NUMERIC;
   annual_total NUMERIC;
   is_limit_exempt BOOLEAN;
@@ -89,20 +98,27 @@ BEGIN
     WHERE lower(btrim(exempt_username)) = lower(btrim(user_row.username))
   );
 
-  -- Every user may submit only one withdrawal request per UTC day.
-  utc_day_start := date_trunc('day', timezone('UTC', now()));
-
-  SELECT COUNT(*) INTO daily_withdrawal_count
-  FROM notification
-  WHERE username = user_row.username
-    AND lower(COALESCE(type, '')) IN ('withdraw', 'withdrawer')
-    AND created_at >= utc_day_start;
-
-  IF daily_withdrawal_count >= 1 THEN
-    RAISE EXCEPTION 'Only one withdrawal is allowed per day';
-  END IF;
-
   IF NOT is_limit_exempt THEN
+    IF EXISTS (
+      SELECT 1 FROM notification
+      WHERE username = user_row.username
+        AND lower(COALESCE(type, '')) IN ('withdraw', 'withdrawer')
+        AND lower(COALESCE(sent, 'pending')) IN ('pending', 'processing')
+    ) THEN
+      RAISE EXCEPTION 'A pending withdrawal request already exists';
+    END IF;
+
+    IF EXISTS (
+      SELECT 1 FROM notification
+      WHERE username = user_row.username
+        AND lower(COALESCE(type, '')) IN ('withdraw', 'withdrawer')
+        AND lower(COALESCE(sent, '')) IN ('success', 'true', 'completed')
+        AND COALESCE(processed_at, created_at) >= (timezone('UTC', now()) - INTERVAL '24 hours')
+    ) THEN
+      RAISE EXCEPTION 'A successful withdrawal was completed within the last 24 hours';
+    END IF;
+
+    utc_day_start := date_trunc('day', timezone('UTC', now()));
     -- UTC boundaries make the daily allowance reset automatically at 00:00 UTC.
     utc_year_start := date_trunc('year', timezone('UTC', now()));
 

@@ -10,6 +10,10 @@ export default async function handler(req, res) {
     requireInternalSecret(req)
 
     const { functionName } = req.query
+    const blockedFunctions = new Set(['withdraw', 'withdrawer'])
+    if (blockedFunctions.has(String(functionName || '').toLowerCase())) {
+      return res.status(410).json({ error: 'This legacy withdrawal operation is no longer available' })
+    }
     const supabase = getSupabaseAdmin()
     const { data, error } = await supabase.rpc(functionName, req.body || {})
 

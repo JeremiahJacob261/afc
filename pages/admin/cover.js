@@ -1,9 +1,7 @@
 import React from "react";
-import { callAdminRpc } from '@/lib/adminRpcClient';
 import Image from "next/image";
 
 import Logo from '@/public/favicon.ico'
-import { supabase } from '@/pages/api/supabase'
 import { motion } from "framer-motion";
 import { Stack, Box, Typography, Divider, Button } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
@@ -11,66 +9,6 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import Link from 'next/link'
 import Head from 'next/head'
 export default function Cover({ children }) {
-    const wih = async (damount, dusername) => {
-        const { data, error } = await callAdminRpc('withdrawer', { amount: damount, names: dusername });
-        console.log(error)
-    }
-    const rem = async (betd) => {
-
-        const { error } = await supabase
-            .from('placed')
-            .delete()
-            .eq('betid', betd);
-    }
-    const Depositing = async (damount, dusername) => {
-        const { data, error } = await callAdminRpc('depositor', { amount: damount, names: dusername })
-        console.log(error);
-    }
-    async function deduct() {
-        const { data, error } = await supabase
-            .from('placed')
-            .select('*')
-            .eq('match_id', '1057162')
-        const userinf = data;
-        userinf.map((m) => {
-            async function delbet(m) {
-                const { data, error } = await supabase
-                    .from('placed')
-                    .select('*')
-                    .match({
-                        'username': m.username,
-                        'won': null
-                    })
-                data.map((m) => {
-                    rem(m.betid);
-                    Depositing(m.stake, m.username);
-                })
-            }
-            delbet(m);
-            async function update(m) {
-                const { data, error } = await supabase
-                    .from('users')
-                    .select('*')
-                    .eq('username', m.username);
-                const userbal = data[0].balance;
-                console.log(m.username)
-                let mer = parseFloat(m.stake) * 1.5;
-                let mar = parseFloat(m.stake + m.aim);
-                if (userbal >= mer) {
-                    wih(mar, m.username);
-                } else {
-                    console.log(userbal)
-                    console.log(mer)
-                }
-                console.log(error)
-            }
-            setInterval(() => {
-                console.log('started')
-                update(m);
-            }, 500);
-        })
-
-    }
     return (
         <Stack direction="column"
             justifyContent="flex-start"

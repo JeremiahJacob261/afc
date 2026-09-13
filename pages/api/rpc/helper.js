@@ -37,7 +37,6 @@ export async function callRpc(functionName, params = {}) {
 // Convenience functions for common operations
 export const rpc = {
   depositor: (names, amount) => callRpc('depositor', { names, amount }),
-  withdrawer: (names, amount) => callRpc('withdrawer', { names, amount }),
   dailywl: (names, amount) => callRpc('dailywl', { names, amount }),
   gatherd: (names, amount) => callRpc('gatherd', { names, amount }),
   gatherw: (names, amount) => callRpc('gatherw', { names, amount }),

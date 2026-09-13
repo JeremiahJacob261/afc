@@ -63,9 +63,8 @@ const languageOptions = [
   { code: 'en', label: 'English' },
   { code: 'fr', label: 'Français' },
   { code: 'es', label: 'Español' },
-  { code: 'my', label: 'မြန်မာ' },
+  { code: 'it', label: 'Italiano' },
   { code: 'ru', label: 'Русский' },
-  { code: 'ar', label: 'العربية' },
 ]
 
 const transferOptions = {
@@ -2243,6 +2242,8 @@ function WithdrawScreen({ navigate }) {
   const wallet = data.wallets.find((item) => String(item.id ?? item.wallid) === String(walletId))
   const settings = data.settings || {}
   const withdrawalsEnabled = settings.withdrawalsEnabled ?? true
+  const withdrawalEligibility = data.withdrawalEligibility || { canWithdraw: true, reason: null, retryAt: null }
+  const canWithdraw = withdrawalsEnabled && withdrawalEligibility.canWithdraw
   const withdrawalDisabledMessage = settings.withdrawalDisabledMessage || 'Withdrawals are temporarily unavailable. Please try again later.'
   const feePercent = Number(settings.withdrawalFeePercent ?? 7)
   const requested = Number(amount) || 0
@@ -2255,6 +2256,10 @@ function WithdrawScreen({ navigate }) {
   async function submitWithdraw() {
     if (!withdrawalsEnabled) {
       setWithdrawalDisabledDialogOpen(true)
+      return
+    }
+    if (!withdrawalEligibility.canWithdraw) {
+      notifyMessage(setMessage, 'error', withdrawalEligibility.reason === 'cooldown' ? t('messages.withdrawalCooldown') : t('messages.withdrawalPending'))
       return
     }
     if (!wallet) {
@@ -2287,7 +2292,15 @@ function WithdrawScreen({ navigate }) {
       })
 
       const row = Array.isArray(result) ? result[0] : result
-      if (String(row?.status).toLowerCase() === 'failed') throw new Error(row.message)
+      if (String(row?.status).toLowerCase() === 'failed') {
+        const message = row.code === 'WITHDRAWAL_PENDING'
+          ? t('messages.withdrawalPending')
+          : row.code === 'WITHDRAWAL_COOLDOWN'
+            ? t('messages.withdrawalCooldown')
+            : row.message
+        const retryAt = row.retryAt ? ` ${t('messages.withdrawalAvailableAt', { time: new Date(row.retryAt).toLocaleString() })}` : ''
+        throw new Error(`${message}${retryAt}`)
+      }
       toast.success(t('messages.withdrawalSent'))
       navigate('withdraw-success')
     } catch (error) {
@@ -2313,7 +2326,13 @@ function WithdrawScreen({ navigate }) {
       {loading ? <LoadingState text={t('mobile.withdraw.loading')} /> : null}
       <Message value={message} />
       <section className="detail-card form-stack">
-        <SelectField label={t('common.wallet')} value={walletId} onChange={setWalletId} disabled={!withdrawalsEnabled}>
+        {!withdrawalEligibility.canWithdraw ? (
+          <DepositNotice tone="error">
+            {withdrawalEligibility.reason === 'cooldown' ? t('messages.withdrawalCooldown') : t('messages.withdrawalPending')}
+            {withdrawalEligibility.retryAt ? ` ${t('messages.withdrawalAvailableAt', { time: new Date(withdrawalEligibility.retryAt).toLocaleString() })}` : ''}
+          </DepositNotice>
+        ) : null}
+        <SelectField label={t('common.wallet')} value={walletId} onChange={setWalletId} disabled={!canWithdraw}>
           <option value="">{t('forms.chooseWallet')}</option>
           {data.wallets.map((item) => (
             <option key={item.id ?? item.wallid ?? item.wallet} value={item.id ?? item.wallid}>
@@ -2327,16 +2346,16 @@ function WithdrawScreen({ navigate }) {
           </button>
         ) : null}
         <InputShell icon={<Wallet size={18} />} label={t('common.amount')}>
-          <input disabled={!withdrawalsEnabled} inputMode="decimal" value={amount} onChange={(event) => setAmount(event.target.value.replace(/[^\d.]/g, ''))} placeholder={t('common.amount')} />
+          <input disabled={!canWithdraw} inputMode="decimal" value={amount} onChange={(event) => setAmount(event.target.value.replace(/[^\d.]/g, ''))} placeholder={t('common.amount')} />
         </InputShell>
         <InputShell icon={<Lock size={18} />} label={t('forms.transactionPin')}>
-          <input disabled={!withdrawalsEnabled} inputMode="numeric" value={pin} onChange={(event) => setPin(event.target.value.replace(/[^\d]/g, '').slice(0, 4))} placeholder={t('forms.pinPlaceholder')} />
+          <input disabled={!canWithdraw} inputMode="numeric" value={pin} onChange={(event) => setPin(event.target.value.replace(/[^\d]/g, '').slice(0, 4))} placeholder={t('forms.pinPlaceholder')} />
         </InputShell>
         <div className="fee-note">
           <span>{t('mobile.withdraw.fee', { percent: feePercent })}</span>
           <b>{t('mobile.withdraw.totalDebit', { amount: `${formatMoney(total)} FCFA` })}</b>
         </div>
-        <button className="primary-button full" type="button" onClick={submitWithdraw} disabled={submitting || !withdrawalsEnabled}>
+        <button className="primary-button full" type="button" onClick={submitWithdraw} disabled={submitting || !canWithdraw}>
           {submitting ? t('mobile.deposit.submitting') : t('mobile.withdraw.submit')}
           <ArrowRight size={18} />
         </button>

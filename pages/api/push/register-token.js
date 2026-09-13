@@ -4,7 +4,7 @@ function cleanText(value) {
   return String(value || '').trim()
 }
 
-const supportedLanguages = new Set(['en', 'fr', 'es', 'my', 'ru', 'ar'])
+const supportedLanguages = new Set(['en', 'fr', 'es', 'it', 'ru'])
 
 function cleanLanguage(value) {
   const language = cleanText(value || 'en').toLowerCase()

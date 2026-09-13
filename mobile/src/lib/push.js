@@ -6,7 +6,7 @@ import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from
 const pushTokenStorageKey = 'efc-push-token'
 const deviceIdStorageKey = 'efc-device-id'
 const languageStorageKey = 'efc-language'
-const supportedLanguages = new Set(['en', 'fr', 'es', 'my', 'ru', 'ar'])
+const supportedLanguages = new Set(['en', 'fr', 'es', 'it', 'ru'])
 
 function isNativePushAvailable() {
   return Capacitor.isNativePlatform?.() && Capacitor.getPlatform?.() === 'android'

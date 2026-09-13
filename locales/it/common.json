@@ -1,0 +1,1044 @@
+{
+  "common": {
+    "appName": "EFC",
+    "brandFull": "Calcio europeo",
+    "brandCompany": "Club di calcio europei",
+    "login": "Login",
+    "signIn": "Registrazione",
+    "signOut": "disconnessione",
+    "register": "Registro",
+    "joinNow": "Iscriviti ora",
+    "createAccount": "Creare un account",
+    "continue": "Continuare",
+    "back": "Indietro",
+    "backToHome": "Ritorno a casa",
+    "next": "Prossimo",
+    "copy": "Copia",
+    "refresh": "Aggiorna",
+    "submit": "Invia",
+    "save": "Salva",
+    "close": "Vicino",
+    "yes": "SÌ",
+    "no": "NO",
+    "all": "Tutto",
+    "verified": "Verificato",
+    "language": "Lingua",
+    "changeLanguage": "Cambia lingua",
+    "emailAddress": "Indirizzo e-mail",
+    "subscribe": "Iscriviti",
+    "notAvailable": "N/A",
+    "placeholderDash": "-",
+    "team": "Squadra",
+    "league": "Lega",
+    "upcoming": "Prossimamente",
+    "justNow": "Proprio adesso",
+    "home": "Casa",
+    "away": "Lontano",
+    "score": "Punto",
+    "player": "Giocatore",
+    "account": "Account",
+    "transaction": "Transazione",
+    "method": "Metodo",
+    "destination": "Destinazione",
+    "amount": "Quantità",
+    "wallet": "Portafoglio",
+    "balance": "Bilancia",
+    "currentBalance": "Saldo attuale",
+    "deposit": "Depositare",
+    "withdraw": "Ritirare",
+    "matches": "Partite",
+    "myBets": "Le mie scommesse",
+    "profile": "Profilo",
+    "faq": "Domande frequenti",
+    "vip": "VIP",
+    "usdt": "USDT"
+  },
+  "auth": {
+    "login": {
+      "title": "Bentornato",
+      "subtitle": "Accedi per aprire il tuo account EFC.",
+      "identityLabel": "E-mail o nome utente",
+      "identityPlaceholder": "nome utente o e-mail",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Password",
+      "forgotPassword": "Ha dimenticato la password?",
+      "submit": "Registrazione",
+      "submitting": "Accesso...",
+      "newAccount": "Crea un nuovo account",
+      "adminTitle": "Accedi all'amministratore",
+      "adminIntro": "Bentornato",
+      "adminUsername": "Nome utente",
+      "adminUsernamePlaceholder": "Inserisci il nome utente dell'amministratore",
+      "adminPasswordPlaceholder": "Inserisci la password"
+    },
+    "register": {
+      "title": "Creare un account",
+      "subtitle": "Unisciti al flusso mobile EFC.",
+      "username": "Nome utente",
+      "usernamePlaceholder": "johndoe",
+      "email": "E-mail",
+      "emailPlaceholder": "tu@esempio.com",
+      "code": "Codice",
+      "phone": "Telefono",
+      "phonePlaceholder": "8000000000",
+      "referralCode": "Codice di riferimento",
+      "password": "Password",
+      "confirmPassword": "Conferma password",
+      "confirmPasswordPlaceholder": "Conferma password",
+      "terms": "Ho almeno 18 anni e accetto i termini dell'EFC.",
+      "submit": "Creare un account",
+      "submitting": "Creazione dell'account...",
+      "hasAccount": "Ho già un account"
+    },
+    "reset": {
+      "title": "Reimposta la password",
+      "subtitle": "Invia un collegamento di reimpostazione alla tua email.",
+      "submit": "Invia e-mail di reimpostazione",
+      "submitting": "Invio..."
+    }
+  },
+  "forms": {
+    "chooseMethod": "Scegli il metodo",
+    "chooseWallet": "Scegli il portafoglio",
+    "autoSelect": "Selezione automatica",
+    "bank": "Banca",
+    "bankName": "Nome della banca",
+    "accountName": "Nome utente",
+    "accountHolder": "Titolare del conto",
+    "accountNumber": "Numero di conto",
+    "walletAddress": "Indirizzo del portafoglio",
+    "transactionPin": "PIN della transazione",
+    "pinPlaceholder": "PIN di 4 cifre",
+    "enterPin": "Inserisci il PIN",
+    "confirmPin": "Conferma il PIN",
+    "uploadReceipt": "Carica ricevuta",
+    "searchUsername": "Cerca nome utente",
+    "searchMethod": "Metodo di ricerca, valuta, banca...",
+    "newReferralCode": "Nuovo codice di riferimento",
+    "newPassword": "Nuova password"
+  },
+  "messages": {
+    "mobileAuthMissing": "Nell'autenticazione mobile manca la configurazione Supabase.",
+    "mobileStorageMissing": "Nell'archiviazione mobile manca la configurazione Supabase.",
+    "unableSignIn": "Impossibile accedere. Controlla la connessione e i dettagli.",
+    "networkError": "Errore di rete",
+    "checkConnectionTryAgain": "Controlla la connessione e riprova.",
+    "incorrectDetails": "Dettagli errati",
+    "incorrectLoginDetails": "Dettagli di accesso errati.",
+    "loginDetailsIncorrect": "L'e-mail, il nome utente o la password che hai inserito non sono corretti.",
+    "anErrorOccurred": "Si è verificato un errore. Per favore riprova.",
+    "connectionProblem": "Problema di connessione",
+    "signingInTitle": "Accesso",
+    "signingInMessage": "Controllo dei dettagli del tuo account.",
+    "phoneIncomplete": "Inserisci un numero di telefono completo.",
+    "phoneNineDigits": "Inserisci un numero di telefono completo di almeno 9 cifre",
+    "passwordsMustMatch": "Le password devono essere identiche.",
+    "acceptTerms": "Si prega di accettare i termini prima di continuare.",
+    "usernameExists": "Il nome utente esiste già.",
+    "unableValidateUsername": "Impossibile convalidare il nome utente in questo momento",
+    "unableCreateProfile": "Impossibile creare il profilo utente",
+    "welcomeToEfc": "Benvenuti all'EFC",
+    "accountCreated": "Il tuo account è stato creato con successo.",
+    "emailExists": "L'e-mail esiste già!",
+    "emailRegistered": "E-mail già registrata",
+    "strongerPasswordTitle": "Utilizza una password più forte",
+    "strongerPasswordMessage": "Per motivi di sicurezza, scegli una password più forte. Dovrebbe contenere almeno 8 caratteri e includere un mix di lettere, numeri e simboli.",
+    "invalidEmailTitle": "E-mail non valida",
+    "invalidEmailMessage": "Si prega di inserire un indirizzo email valido.",
+    "unableCreateAccount": "Impossibile creare un account. Controlla la tua connessione.",
+    "resetEmailSent": "Reimposta l'e-mail inviata. Controlla la tua casella di posta.",
+    "resetEmailSentTitle": "Reimposta l'e-mail inviata",
+    "resetEmailSentMessage": "Un messaggio è stato inviato alla tua email. Segui le istruzioni lì per modificare la password.",
+    "unableSendEmail": "Impossibile inviare e-mail",
+    "pleaseTryAgain": "Per favore riprova.",
+    "enterEmailAddress": "Inserisci il tuo indirizzo email",
+    "sendingEmailTitle": "Invio di posta elettronica",
+    "sendingEmailMessage": "Preparazione del collegamento per la reimpostazione della password.",
+    "unableSendReset": "Impossibile inviare e-mail di reimpostazione.",
+    "sessionExpired": "La tua sessione è scaduta. Per favore accedi di nuovo.",
+    "unableRefreshAccount": "Impossibile aggiornare i dati dell'account in questo momento.",
+    "unableLoadMatches": "Impossibile caricare le corrispondenze.",
+    "unableLoadMatch": "Impossibile caricare la corrispondenza.",
+    "chooseScoreMarket": "Scegli prima un mercato di punteggio.",
+    "stakeMinimum": "La puntata deve essere di almeno 600 FCFA.",
+    "betPlaced": "Scommessa piazzata con successo.",
+    "unablePlaceBet": "Impossibile piazzare la scommessa.",
+    "unableLoadBets": "Impossibile caricare le scommesse.",
+    "unableLoadBet": "Impossibile caricare la scommessa.",
+    "unableLoadProfile": "Impossibile caricare il profilo.",
+    "chooseDepositMethod": "Scegli un metodo di deposito.",
+    "noPaymentDestination": "Per questo metodo non è disponibile alcuna destinazione di pagamento.",
+    "minimumDeposit": "Il deposito minimo è {{amount}} {{currency}}.",
+    "uploadPaymentReceipt": "Carica la ricevuta di pagamento.",
+    "depositFailed": "Invio del deposito non riuscito.",
+    "chooseWalletFirst": "Scegli prima un portafoglio.",
+    "enterTransactionPin": "Inserisci il PIN della transazione.",
+    "minimumWithdrawal": "Il prelievo minimo è {{amount}} FCFA.",
+    "unableSubmitWithdrawal": "Impossibile inviare il ritiro.",
+    "walletDetailsInvalid": "Si prega di compilare correttamente tutti i dettagli del portafoglio.",
+    "walletBindSuccess": "Associazione del portafoglio riuscita.",
+    "unableBindWallet": "Impossibile vincolare il portafoglio.",
+    "unableLoadTransactions": "Impossibile caricare le transazioni.",
+    "unableLoadReferrals": "Impossibile caricare i referral.",
+    "unableLoadVip": "Impossibile caricare i progressi VIP.",
+    "pinAlreadySet": "Hai già un PIN per la transazione. Contatta l'amministratore per reimpostarlo.",
+    "unableLoadPin": "Impossibile caricare lo stato del PIN.",
+    "pinFourDigits": "Il PIN deve essere composto da 4 cifre.",
+    "pinEntriesMustMatch": "Entrambe le voci del PIN devono corrispondere.",
+    "pinSet": "PIN impostato correttamente.",
+    "unableSetPin": "Impossibile impostare il PIN.",
+    "unableLoadNotifications": "Impossibile caricare le notifiche.",
+    "unableLoadPaymentData": "Impossibile caricare i dati di pagamento.",
+    "depositSubmitted": "La tua ricevuta è stata inviata ed è in attesa di conferma da parte dell'amministratore.",
+    "depositSubmittedWithAmount": "La tua ricevuta per {{amount}} FCFA è stata inviata ed è in attesa di conferma da parte dell'amministratore.",
+    "withdrawalSent": "La tua richiesta di prelievo è stata inviata.",
+    "withdrawalPending": "La tua precedente richiesta di prelievo è ancora in sospeso. Attendi che venga completata o rifiutata.",
+    "withdrawalCooldown": "Devi attendere 24 ore dopo il tuo ultimo prelievo completato con successo.",
+    "withdrawalAvailableAt": "I prelievi saranno disponibili dopo {{time}}.",
+    "copied": "copiato",
+    "copiedToClipboard": "Copiato negli appunti",
+    "addressCopied": "Indirizzo copiato",
+    "inviteLinkCopied": "Link di invito copiato",
+    "unableCopy": "Impossibile copiare",
+    "adminCredentialsRequired": "Inserisci le tue credenziali di amministratore",
+    "adminLoginFailed": "Accesso non riuscito",
+    "adminLoginSuccess": "accesso riuscito"
+  },
+  "status": {
+    "active": "Attivo",
+    "pending": "In attesa di",
+    "success": "Successo",
+    "failed": "Fallito",
+    "completed": "Completato",
+    "live": "Vivere",
+    "notStarted": "Non iniziato",
+    "ongoing": "In corso",
+    "won": "Vinto",
+    "lost": "Perduto",
+    "settled": "Sistemato",
+    "refunded": "Rimborsato",
+    "unsettled": "Instabile",
+    "offlineMode": "Modalità offline",
+    "processing": "Elaborazione"
+  },
+  "emptyStates": {
+    "noUpcomingMatches": "Nessuna partita imminente caricata ancora.",
+    "offlineShellReady": "Shell offline pronta.",
+    "liveRefreshOnline": "L'account live e i dati delle partite si aggiornano quando l'app è online.",
+    "noMatches": "Nessuna corrispondenza",
+    "matchesComing": "Le prossime partite appariranno qui.",
+    "noBets": "Nessuna scommessa",
+    "betsComing": "La cronologia delle tue scommesse verrà visualizzata qui.",
+    "noTransactions": "Nessuna transazione",
+    "transactionsComing": "Depositi e prelievi appariranno qui.",
+    "noReferrals": "Nessun riferimento ancora",
+    "referralsComing": "Condividi il tuo link di invito per creare il tuo team.",
+    "noNotifications": "Nessuna notifica",
+    "notificationsComing": "I nuovi aggiornamenti dell'account verranno visualizzati qui.",
+    "noData": "Nessun dato disponibile",
+    "checkConnection": "Controlla la tua connessione Internet."
+  },
+  "landing": {
+    "meta": {
+      "title": "Scommesse sul calcio EFC | Quote in tempo reale e mercati di calcio",
+      "description": "Scommetti sul calcio con EFC. Sfoglia i mercati del calcio, confronta le quote in tempo reale, gestisci il tuo portafoglio e gioca in modo responsabile."
+    },
+    "nav": {
+      "markets": "Mercati",
+      "liveBetting": "Scommesse dal vivo",
+      "howItWorks": "Come funziona",
+      "bonuses": "Bonus",
+      "agents": "Agenti",
+      "faq": "Domande frequenti"
+    },
+    "hero": {
+      "title": "Le scommesse sul calcio sono diventate semplici",
+      "copy": "Scegli partite di calcio, confronta le quote, piazza scommesse sicure e segui ogni risultato da un'esperienza di scommesse EFC chiara.",
+      "createAccount": "Creare un account",
+      "imageAlt": "Giocatore di football che calcia un pallone",
+      "stats": {
+        "marketsLabel": "Mercati popolari",
+        "marketsValue": "1X2, Gol, BTTS",
+        "safetyLabel": "Sicurezza del conto",
+        "safetyValue": "Portafoglio sicuro",
+        "focusLabel": "Focus sul calcio",
+        "focusValue": "Calendario e quote in tempo reale"
+      },
+      "secureDeposits": "Depositi sicuri",
+      "secureDepositsCopy": "Finanzia il tuo portafoglio e conferma le ricevute di calcio in tutta sicurezza.",
+      "responsiblePlay": "Gioco responsabile",
+      "responsiblePlayCopy": "Stabilisci un budget, scommetti sul calcio che capisci e mantieni il controllo."
+    },
+    "markets": {
+      "eyebrow": "Mercati di calcio",
+      "title": "Scommetti sui momenti che decidono una partita",
+      "copy": "Scegli semplici mercati di calcio prima del calcio d'inizio o segui le quote in tempo reale mentre la partita è in corso.",
+      "pickMarket": "Scegli il mercato",
+      "items": [
+        {
+          "title": "Risultato della partita 1X2",
+          "label": "Casa / Pareggio / Trasferta",
+          "copy": "Scegli il vincitore della partita o sostieni il sorteggio prima del calcio d'inizio.",
+          "odds": "2.18"
+        },
+        {
+          "title": "Gol sopra/sotto",
+          "label": "Obiettivi totali",
+          "copy": "Scommetti se il punteggio finale supera la linea di porta indicata.",
+          "odds": "1.82"
+        },
+        {
+          "title": "Entrambe le squadre segnano",
+          "label": "BTTS",
+          "copy": "Sostieni entrambe le squadre per trovare la rete nella stessa partita.",
+          "odds": "1.74"
+        },
+        {
+          "title": "Punteggio corretto",
+          "label": "Risultato esatto",
+          "copy": "Scegli il punteggio finale per quote di calcio più grandi.",
+          "odds": "8.50"
+        },
+        {
+          "title": "Scommesse dal vivo",
+          "label": "In gioco",
+          "copy": "Reagisci agli obiettivi, alle carte, alla pressione e allo slancio finale.",
+          "odds": "Vivere"
+        }
+      ]
+    },
+    "howItWorks": {
+      "eyebrow": "Come funziona",
+      "title": "Dall'incontro alla scommessa calcistica confermata",
+      "copy": "Un percorso semplice per gli utenti che vogliono registrarsi, finanziare, selezionare un mercato di calcio e monitorare il risultato.",
+      "matchDayFlow": "Flusso della giornata della partita",
+      "featureTitle": "Costruisci una schedina sul calcio che conosci.",
+      "featureCopy": "Controlla l'incontro, scegli il mercato, inserisci la tua puntata e conferma solo quando i dettagli della scommessa sembrano corretti.",
+      "featureAlt": "Anteprima della funzione scommesse sul calcio",
+      "ballAlt": "Icona del calcio",
+      "steps": [
+        {
+          "title": "Crea il tuo account",
+          "copy": "Registrati con EFC e proteggi il tuo profilo scommesse sul calcio."
+        },
+        {
+          "title": "Finanzia il tuo portafoglio",
+          "copy": "Inizia dal deposito minimo di 3.000 FCFA e controlla il bonus sul deposito attivo."
+        },
+        {
+          "title": "Scegli una partita di calcio",
+          "copy": "Sfoglia le partite, confronta i mercati e seleziona la scommessa che desideri."
+        },
+        {
+          "title": "Posiziona e traccia",
+          "copy": "Conferma la tua ricevuta, segui la partita e controlla lo stato del prelievo da 6.000 FCFA."
+        }
+      ]
+    },
+    "operations": {
+      "eyebrow": "Operazioni della piattaforma",
+      "title": "Panoramica dei termini della piattaforma di calcio EFC",
+      "copy": "La pagina di destinazione ora riflette la carta operativa EFC: bonus di deposito, deposito minimo, percentuale giornaliera e prelievo minimo.",
+      "imageAlt": "Operazioni della piattaforma dei club calcistici europei che mostrano bonus di deposito, deposito minimo, percentuale giornaliera e prelievo minimo",
+      "items": [
+        {
+          "label": "Bonus sul deposito",
+          "value": "600 FCFA"
+        },
+        {
+          "label": "Deposito minimo",
+          "value": "3.000 FCFA"
+        },
+        {
+          "label": "Percentuale giornaliera",
+          "value": "3-4%"
+        },
+        {
+          "label": "Prelievo minimo",
+          "value": "6.000 FCFA"
+        }
+      ]
+    },
+    "features": {
+      "eyebrow": "Funzionalità di scommessa",
+      "title": "Tutto incentrato sulle scommesse sul calcio",
+      "copy": "Mercati calcistici chiari, controlli sicuri del portafoglio e un semplice monitoraggio delle scommesse mantengono gli utenti vicini alla partita successiva.",
+      "walletAlt": "I premi del portafoglio dei club calcistici europei mostrano il bonus sul primo deposito, l'obiettivo di sblocco della scommessa, il bonus di riferimento e le spese di prelievo",
+      "items": [
+        {
+          "title": "Quote di calcio competitive",
+          "copy": "Confronta prezzi chiari nei mercati di corrispondenza più popolari."
+        },
+        {
+          "title": "Aggiornamenti delle partite in tempo reale",
+          "copy": "Segui i movimenti in-game mentre le partite di calcio cambiano minuto dopo minuto."
+        },
+        {
+          "title": "Controlli sicuri del portafoglio",
+          "copy": "Gestisci depositi, prelievi e cronologia delle scommesse dal tuo account."
+        },
+        {
+          "title": "Flusso veloce delle schedine",
+          "copy": "Passa dall'incontro alla scommessa confermata con meno passaggi."
+        }
+      ],
+      "walletRewards": [
+        {
+          "label": "Bonus sul primo deposito",
+          "value": "3%"
+        },
+        {
+          "label": "Obiettivo di sblocco della scommessa",
+          "value": "5 scommesse"
+        },
+        {
+          "label": "Bonus di riferimento",
+          "value": "5%"
+        },
+        {
+          "label": "Commissione di ritiro",
+          "value": "7%"
+        }
+      ]
+    },
+    "live": {
+      "eyebrow": "Scommesse sul calcio in diretta",
+      "title": "Segui la partita e reagisci alle probabilità",
+      "copy": "Le scommesse live consentono agli utenti di rispondere alla pressione, ai gol, ai cartellini e allo slancio mentre la partita di calcio è ancora in corso.",
+      "board": "Tabellone in gioco",
+      "boardTitle": "Le probabilità cambiano man mano che cambia la partita.",
+      "shots": "Scatti",
+      "corners": "Angoli",
+      "cards": "Carte",
+      "startBetting": "Inizia a scommettere",
+      "odds": "Probabilità",
+      "matches": [
+        {
+          "fixture": "Londra FC-Madrid City",
+          "market": "Oltre 2,5 gol",
+          "price": "1.91",
+          "status": "62 minuti"
+        },
+        {
+          "fixture": "Milan United-Paris Club",
+          "market": "Entrambe le squadre segnano",
+          "price": "1.76",
+          "status": "Vivere"
+        },
+        {
+          "fixture": "Atletico Lisbona-Berlin Town",
+          "market": "Vittoria in casa",
+          "price": "2.24",
+          "status": "84 minuti"
+        }
+      ]
+    },
+    "bonuses": {
+      "eyebrow": "Bonus e premi",
+      "title": "Bonus EFC e programma di invito",
+      "copy": "Abbina la carta bonus di invito EFC ai premi per i membri attivi a più livelli, ai dettagli del bonus di benvenuto e alle informazioni sugli sconti degli agenti.",
+      "imageAlt": "Livelli bonus di invito dei club calcistici europei da 10 a 100 membri attivi",
+      "inviteActive": "Invita membri attivi {{members}}",
+      "earnReward": "Guadagna {{reward}}",
+      "viewOffers": "Visualizza le offerte",
+      "items": [
+        {
+          "title": "Bonus sul deposito di benvenuto",
+          "copy": "I nuovi utenti possono iniziare con il bonus di deposito di 600 FCFA mostrato nelle operazioni della piattaforma EFC."
+        },
+        {
+          "title": "Bonus invito",
+          "copy": "Invita membri attivi e sblocca premi FCFA a livelli man mano che la tua rete calcistica cresce."
+        },
+        {
+          "title": "Sconti dell'agente",
+          "copy": "I livelli di sconto per gli agenti vanno dal 7% al primo livello al 3% al terzo livello."
+        }
+      ],
+      "tiers": [
+        {
+          "members": "10",
+          "reward": "6.000 FCFA"
+        },
+        {
+          "members": "20",
+          "reward": "18.000 FCFA"
+        },
+        {
+          "members": "30",
+          "reward": "30.000 FCFA"
+        },
+        {
+          "members": "50",
+          "reward": "42.000 FCFA"
+        },
+        {
+          "members": "80",
+          "reward": "60.000 FCFA"
+        },
+        {
+          "members": "100",
+          "reward": "90.000 FCFA"
+        }
+      ]
+    },
+    "agents": {
+      "eyebrow": "Premi dell'agente",
+      "title": "Sconti per agenti e livelli salariali del 15%.",
+      "copy": "Aggiungi i dettagli del programma agente EFC dalle schede sconti e stipendi fornite.",
+      "rebateAlt": "I livelli di sconto per gli agenti dei club calcistici europei mostrano il 7%, 5% e 3%.",
+      "salaryAlt": "Livelli salariali degli agenti dei club calcistici europei dall'agente A all'agente G",
+      "agent": "Agente",
+      "teamLevel": "Livello di squadra",
+      "teamVolume": "Volume della squadra",
+      "salary": "Stipendio",
+      "rebates": [
+        {
+          "level": "1° livello",
+          "rebate": "7%"
+        },
+        {
+          "level": "2° livello",
+          "rebate": "5%"
+        },
+        {
+          "level": "3° livello",
+          "rebate": "3%"
+        }
+      ],
+      "salaryLevels": [
+        {
+          "agent": "Agente A",
+          "teamLevel": "Livello 1-3",
+          "teamVolume": "$2500",
+          "salary": "$ 100 settimanali"
+        },
+        {
+          "agent": "Agente B",
+          "teamLevel": "Livello 1-3",
+          "teamVolume": "$5000",
+          "salary": "$ 250 settimanali"
+        },
+        {
+          "agent": "Agente C",
+          "teamLevel": "Livello 1-3",
+          "teamVolume": "$10000",
+          "salary": "$ 500 settimanali"
+        },
+        {
+          "agent": "Agente D",
+          "teamLevel": "Livello 1-3",
+          "teamVolume": "$15000",
+          "salary": "$ 750 settimanali"
+        },
+        {
+          "agent": "Agente E",
+          "teamLevel": "Livello 1-3",
+          "teamVolume": "$20000",
+          "salary": "$ 1250 settimanali"
+        },
+        {
+          "agent": "Agente F",
+          "teamLevel": "Livello 1-3",
+          "teamVolume": "$50000",
+          "salary": "$ 3000 settimanali"
+        },
+        {
+          "agent": "Agente G",
+          "teamLevel": "Livello 1-3",
+          "teamVolume": "$100000",
+          "salary": "$ 7500 settimanali"
+        }
+      ]
+    },
+    "trust": {
+      "eyebrow": "Fiducia e controllo",
+      "title": "Scommetti sul calcio con guardrail più chiari",
+      "copy": "Sicurezza, record dell'account e promemoria sulle scommesse responsabili aiutano gli utenti a mantenere il controllo prima e dopo ogni scommessa sul calcio.",
+      "cardTitle": "Le scommesse sul calcio responsabile appartengono alla pagina.",
+      "cardCopy": "Gli utenti dovrebbero impostare limiti, rivedere i dettagli delle scommesse ed evitare di inseguire perdite. Le scommesse sul calcio comportano dei rischi, quindi la posta in gioco dovrebbe rimanere entro un budget personale.",
+      "items": [
+        "Accesso sicuro all'account",
+        "Flusso di pagamento protetto",
+        "Cancella la cronologia delle scommesse",
+        "Promemoria scommesse responsabili"
+      ],
+      "itemCopy": "Controlli e registrazioni chiari aiutano gli utenti a prendere decisioni migliori sulle scommesse sul calcio."
+    },
+    "faq": {
+      "eyebrow": "Domande frequenti sulle scommesse sul calcio",
+      "title": "Le risposte prima della prossima partita",
+      "copy": "Una guida rapida per gli utenti che desiderano comprendere i mercati del calcio, le scommesse live e lo staking più sicuro.",
+      "items": [
+        {
+          "question": "Su quali mercati del calcio posso scommettere?",
+          "answer": "EFC evidenzia i risultati delle partite più popolari, i goal, i BTTS, il punteggio corretto e i mercati di calcio in diretta."
+        },
+        {
+          "question": "Come inizio a scommettere?",
+          "answer": "Crea un account, finanzia il tuo portafoglio, scegli un incontro di calcio, seleziona il tuo mercato e conferma la tua ricevuta."
+        },
+        {
+          "question": "Posso scommettere durante una partita di calcio in diretta?",
+          "answer": "SÌ. Vengono presentati i mercati in tempo reale per gli incontri disponibili in modo da poter reagire mentre la partita è in corso."
+        },
+        {
+          "question": "Come dovrei gestire il rischio?",
+          "answer": "Stabilisci un budget prima di scommettere, evita di inseguire perdite e scommetti solo ciò che puoi permetterti di perdere."
+        }
+      ]
+    },
+    "cta": {
+      "eyebrow": "Scommesse sul calcio EFC",
+      "title": "Pronto per la tua prossima scelta calcistica?",
+      "copy": "Crea un account, scegli un incontro di calcio e piazza la tua scommessa con mercati chiari e controlli sicuri dell'account."
+    },
+    "footer": {
+      "logoAlt": "Logo dei club europei di calcio EFC",
+      "copy": "Mercati delle scommesse sul calcio, quote in tempo reale, controlli sicuri del portafoglio e guida allo stake responsabile in un'unica esperienza EFC.",
+      "communityLink": "Collegamento alla comunità calcistica",
+      "matchNews": "Notizie sulle partite di calcio",
+      "emailPlaceholder": "La tua email",
+      "groups": [
+        {
+          "title": "Scommesse",
+          "links": [
+            {
+              "label": "Mercati",
+              "href": "#mercati"
+            },
+            {
+              "label": "Scommesse dal vivo",
+              "href": "#vivere"
+            },
+            {
+              "label": "Come funziona",
+              "href": "#come-funziona"
+            }
+          ]
+        },
+        {
+          "title": "Account",
+          "links": [
+            {
+              "label": "Registro",
+              "href": "/register/000208"
+            },
+            {
+              "label": "Login",
+              "href": "/login"
+            },
+            {
+              "label": "Bonus",
+              "href": "#bonus"
+            },
+            {
+              "label": "Agenti",
+              "href": "#agenti"
+            }
+          ]
+        },
+        {
+          "title": "Aiuto",
+          "links": [
+            {
+              "label": "Domande frequenti",
+              "href": "#faq"
+            },
+            {
+              "label": "Scommesse responsabili",
+              "href": "#Fiducia"
+            },
+            {
+              "label": "Contatto",
+              "href": "#contatto"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "mobile": {
+    "splash": {
+      "eyebrow": "Calcio EFC",
+      "title": "Costruito per il giorno della partita"
+    },
+    "onboarding": {
+      "eyebrow": "Applicazione mobile",
+      "slidesLabel": "Diapositive di onboarding",
+      "promoLabel": "Immagini promozionali",
+      "openSlide": "Apri la diapositiva {{number}}",
+      "alreadyHaveAccount": "Ho già un account",
+      "slides": [
+        {
+          "title": "Le scommesse sul calcio sono diventate semplici",
+          "text": "Scegli le partite, confronta le quote, piazza scommesse sicure e segui i risultati da un'unica chiara esperienza mobile EFC.",
+          "image": "/bfc1.jpg"
+        },
+        {
+          "title": "Accesso sicuro al portafoglio",
+          "text": "Gestisci depositi, prelievi, segnalazioni, progressi VIP e aggiornamenti dell'account dall'app.",
+          "image": "/bfc2.jpg"
+        },
+        {
+          "title": "Costruito per il giorno della partita",
+          "text": "Apri il tuo conto per vedere i mercati di calcio in diretta, le quote sui risultati esatti e la cronologia delle scommesse attive.",
+          "image": "/bfc4.jpg"
+        }
+      ]
+    },
+    "countryCodes": {
+      "nigeria": "Nigeria",
+      "india": "India",
+      "pakistan": "Pakistan",
+      "indonesia": "Indonesia",
+      "unitedStates": "Stati Uniti",
+      "unitedKingdom": "Regno Unito",
+      "southAfrica": "Sudafrica"
+    },
+    "filters": {
+      "today": "Oggi",
+      "next3h": "Prossime 3 ore",
+      "next12h": "Le prossime 12 ore",
+      "next24h": "Le prossime 24 ore",
+      "tomorrow": "Domani"
+    },
+    "markets": {
+      "other": "Altro"
+    },
+    "topBar": {
+      "profile": "Apri profilo",
+      "notifications": "Notifiche"
+    },
+    "nav": {
+      "label": "Navigazione principale",
+      "top": "Superiore",
+      "matches": "Partite",
+      "bets": "Le mie scommesse",
+      "profile": "Profilo"
+    },
+    "home": {
+      "hello": "Ciao",
+      "telegram": "Canale Telegram",
+      "telegramCopy": "Unisciti al nostro gruppo Telegram per guadagnare di più",
+      "whatsapp": "Gruppo WhatsApp",
+      "whatsappCopy": "Unisciti al nostro gruppo WhatsApp",
+      "topMatches": "Le migliori partite di calcio"
+    },
+    "match": {
+      "details": "Dettagli della partita",
+      "matchId": "Identificativo della corrispondenza",
+      "market": "Mercato",
+      "stakeAmount": "Importo della puntata",
+      "useAllBalance": "Usa tutto l'equilibrio",
+      "profit": "Profitto",
+      "expectedReturn": "Ritorno previsto",
+      "companyGame": "Gioco aziendale",
+      "choose": "Scegliere",
+      "noMarketSelected": "Nessun mercato selezionato",
+      "marketUnavailable": "Questo mercato non è disponibile",
+      "matchExpired": "Questa partita è scaduta",
+      "maxBetsReached": "Hai raggiunto il numero massimo di scommesse per oggi.",
+      "insufficientBalance": "Non hai abbastanza FCFA per completare questa scommessa.",
+      "placeBet": "Piazza la scommessa",
+      "placingBet": "Effettuare la scommessa...",
+      "loading": "Caricamento partita..."
+    },
+    "matches": {
+      "loading": "Caricamento partite..."
+    },
+    "bets": {
+      "details": "Dettagli scommessa",
+      "loading": "Caricamento scommesse...",
+      "loadingOne": "Caricamento scommessa...",
+      "unsettledWithCount": "Irrisolto ({{count}})",
+      "settledWithCount": "Saldato ({{count}})",
+      "match": "Incontro",
+      "league": "Lega",
+      "matchId": "Identificativo della corrispondenza",
+      "score": "Punto",
+      "odds": "Probabilità",
+      "stake": "Palo",
+      "pick": "Scegliere",
+      "potentialWinnings": "Vincite potenziali",
+      "kickoff": "Calcio d'inizio",
+      "result": "Risultato",
+      "status": "Stato",
+      "betId": "ID scommessa",
+      "cancelNote": "Annulla questa scommessa: contatta l'amministratore per rimuovere questa scommessa"
+    },
+    "profile": {
+      "vipReferralLine": "Riferimenti VIP {{level}} · {{count}}",
+      "hello": "Ciao,",
+      "currentBalance": "Saldo attuale",
+      "referralsTitle": "RIFERIMENTI",
+      "allReferral": "Tutti i rinvii",
+      "fundAccount": "Conto del fondo",
+      "vipProgress": "Progresso VIP",
+      "withdrawalTitle": "Ritiro",
+      "history": "Storia",
+      "codeSetting": "Impostazione del codice",
+      "linkWallets": "Collega portafogli",
+      "betsTitle": "Scommesse",
+      "aboutTitle": "Di",
+      "language": "Lingua",
+      "telegramChannel": "Canale Telegram",
+      "whatsappGroup": "Gruppo WhatsApp",
+      "customerService": "Assistenza clienti",
+      "telegramGroup": "Gruppo Telegram",
+      "contact": "Contatto",
+      "closureTitle": "Chiusura",
+      "bindWallet": "Legare il portafoglio",
+      "transactions": "Transazioni",
+      "referrals": "Referral",
+      "transactionPin": "PIN della transazione"
+    },
+    "deposit": {
+      "title": "Depositare",
+      "loading": "Caricamento metodi di pagamento...",
+      "paymentDestination": "Destinazione del pagamento",
+      "amountWithMinimum": "Importo · minimo {{amount}}",
+      "submit": "Invia deposito",
+      "submitting": "Invio...",
+      "successTitle": "Deposito inviato",
+      "methodFallback": "Metodo di deposito",
+      "stepMethod": "Metodo",
+      "stepAmount": "Quantità",
+      "stepProof": "Prova di pagamento",
+      "subtitle": "Scegli un metodo, paga, quindi carica la ricevuta.",
+      "paymentMethod": "Metodo di pagamento",
+      "availableOptions": "Opzioni di deposito disponibili",
+      "noMethods": "Nessun metodo di deposito è disponibile al momento. Si prega di contattare l'assistenza.",
+      "copiedLabel": "{{label}} copiato",
+      "chooseTransferOption": "Scegli un'opzione di trasferimento",
+      "minShort": "Min {{amount}} {{currency}}",
+      "transferOption": "Opzione di trasferimento",
+      "minimumPlaceholder": "Minimo {{amount}} {{currency}}",
+      "chooseMethodFirst": "Scegli prima un metodo",
+      "fcfaEquivalent": "Equivalente FCFA",
+      "sendExactly": "Invia esattamente {{amount}} ai dettagli di pagamento riportati di seguito.",
+      "sendEnteredAmount": "Invia esattamente l'importo inserito ai dettagli di pagamento riportati di seguito.",
+      "chooseMethodDetails": "Scegli un metodo di deposito per visualizzare i dettagli del pagamento.",
+      "enterValidAmount": "Inserisci un importo valido per continuare.",
+      "enterValidAmountAndTransfer": "Inserisci un importo valido e scegli un'opzione di trasferimento per continuare.",
+      "noPaymentAddress": "Nessun indirizzo di pagamento è disponibile per questo metodo al momento. Si prega di contattare l'assistenza.",
+      "paymentDetailsAlt": "Dettagli del pagamento",
+      "receiptUpload": "Caricamento della ricevuta",
+      "browseReceiptImage": "Sfoglia l'immagine della ricevuta",
+      "receiptHint": "PNG, JPG o screenshot",
+      "noFileSelected": "Nessun file selezionato",
+      "uploadRequired": "Caricamento richiesto",
+      "removeReceipt": "Rimuovi la ricevuta"
+    },
+    "withdraw": {
+      "title": "Ritirare",
+      "loading": "Caricamento portafogli...",
+      "bindFirst": "Prima lega un portafoglio",
+      "fee": "Commissione {{percent}}%",
+      "totalDebit": "Debito totale: {{amount}} FCFA",
+      "submit": "Ritirare",
+      "successTitle": "Ritiro riuscito",
+      "withdrawalFee": "Commissione di prelievo",
+      "requestedAmount": "Importo richiesto",
+      "youReceive": "Ricevi",
+      "totalDeducted": "Totale detratto",
+      "youReceiveIn": "Ricevi in ​​{{currency}}",
+      "bindWallet": "Legare il portafoglio",
+      "chooseWallet": "Scegli il portafoglio di pagamento preferito",
+      "selectWithdrawalMethod": "Seleziona il tuo metodo di prelievo",
+      "noWallet": "Nessuno",
+      "amountLabel": "Inserisci l'importo che desideri prelevare in FCFA",
+      "noPinSet": "Non è stato impostato alcun PIN di transazione.",
+      "wrongPin": "PIN transazione errato.",
+      "insufficientFunds": "Fondi insufficienti",
+      "betRequirement": "Devi piazzare 5 scommesse dopo il tuo ultimo deposito andato a buon fine prima di prelevare.",
+      "maximumWithdrawal": "Il prelievo massimo è {{amount}} FCFA.",
+      "enterAmount": "Inserisci l'importo",
+      "connectionError": "Controlla la tua connessione Internet e aggiorna il sito web."
+    },
+    "wallet": {
+      "bind": "Legare il portafoglio",
+      "loading": "Metodi di caricamento...",
+      "submit": "Legare il portafoglio",
+      "saving": "Risparmio..."
+    },
+    "transactions": {
+      "title": "Transazioni",
+      "deposits": "Depositi",
+      "withdrawals": "Prelievi",
+      "loading": "Caricamento transazioni...",
+      "metaDescription": "Storico dei pagamenti nel calcio europeo",
+      "count": "Transazioni {{count}}",
+      "paymentHistory": "Cronologia dei pagamenti",
+      "totalDeposits": "Depositi totali",
+      "totalWithdrawals": "Prelievi totali",
+      "noTime": "Non c'è tempo",
+      "paymentMethod": "Metodo di pagamento",
+      "transactionRequest": "Richiesta di transazione",
+      "emptyAll": "Le transazioni di pagamento appariranno qui dopo aver depositato o prelevato.",
+      "emptyFiltered": "Nessuna transazione {{type}} trovata.",
+      "transactionUnavailable": "Transazioni non disponibili",
+      "retry": "Riprova",
+      "submittedAmount": "Importo inviato",
+      "fcfaEquivalent": "Equivalente FCFA",
+      "payoutAmount": "Importo del pagamento",
+      "destinationDetail": "Destinazione: {{destination}}",
+      "receiptUploaded": "Ricevuta caricata",
+      "depositRequest": "Richiesta di deposito",
+      "withdrawalRequest": "Richiesta di ritiro",
+      "methodMissingRate": "Pagamento {{currency}} non disponibile perché manca la tariffa",
+      "titleDeposit": "Depositare",
+      "titleWithdrawal": "Ritiro"
+    },
+    "referrals": {
+      "title": "Referral",
+      "inviteCode": "Codice invito",
+      "copyInvite": "Copia il link di invito",
+      "level": "Livello {{level}}",
+      "totalDeposit": "Deposito totale {{amount}}",
+      "loading": "Caricamento referral",
+      "activeReferrals": "Attivo",
+      "filteredReferrals": "Riferimenti {{count}}",
+      "joined": "Iscritto a {{date}}"
+    },
+    "vip": {
+      "totalDeposit": "Deposito totale",
+      "referrals": "Referral",
+      "total": "Totale"
+    },
+    "pin": {
+      "checking": "Verifica dello stato del PIN...",
+      "warning": "Il PIN della transazione non può essere modificato nell'app dopo averlo impostato.",
+      "set": "Imposta il PIN"
+    },
+    "notifications": {
+      "title": "Notifiche",
+      "loading": "Caricamento notifiche...",
+      "fallbackTitle": "Notifica",
+      "count": "Notifiche {{count}}",
+      "titles": {
+        "rebateBonus": "Bonus sconto",
+        "referralDepositBonus": "Bonus sul deposito di riferimento",
+        "bonus": "Bonus",
+        "firstDepositBonus": "Bonus sul primo deposito",
+        "betWon": "Scommessa vinta",
+        "announcement": "Annuncio",
+        "depositUpdate": "Aggiornamento del deposito",
+        "withdrawalUpdate": "Aggiornamento sul ritiro",
+        "adminReward": "Ricompensa dell'amministratore"
+      },
+      "messages": {
+        "rebateBonus": "Hai ricevuto un bonus sconto di {{amount}} da {{sourceUsername}}",
+        "referralDepositBonus": "Hai ricevuto un bonus sul deposito di {{amount}} da {{sourceUsername}}",
+        "bonus": "Hai ricevuto un bonus di {{amount}}",
+        "firstDepositBonus": "Hai ricevuto un bonus sul primo deposito di {{amount}}",
+        "betWon": "Hai vinto la tua scommessa di {{amount}}",
+        "transactionUpdate": "Il tuo {{typeLabel}} di {{amount}} {{method}} è {{status}}",
+        "adminReward": "Hai ricevuto {{amount}} {{method}} dall'amministratore"
+      },
+      "events": {
+        "deposit_approved": {
+          "title": "Deposito approvato",
+          "message": "Il tuo deposito di {{amount}} {{method}} è stato approvato."
+        },
+        "deposit_declined": {
+          "title": "Deposito rifiutato",
+          "message": "Il tuo deposito di {{amount}} {{method}} è stato rifiutato."
+        },
+        "withdrawal_approved": {
+          "title": "Ritiro approvato",
+          "message": "Il tuo ritiro di {{amount}} {{method}} è stato approvato."
+        },
+        "withdrawal_declined": {
+          "title": "Il ritiro è stato rifiutato",
+          "message": "Il tuo prelievo di {{amount}} {{method}} è stato rifiutato."
+        },
+        "company_match_posted": {
+          "title": "Nuova partita societaria",
+          "message": "{{home}} contro {{away}} è ora disponibile."
+        },
+        "bet_settled": {
+          "title": "Scommessa risolta",
+          "message": "La tua scommessa {{home}} vs {{away}} è stata definita: {{outcome}}."
+        },
+        "team_member_joined": {
+          "title": "Nuovo membro della squadra",
+          "message": "{{username}} si è unito al team {{level}} del tuo livello."
+        },
+        "test_push": {
+          "title": "Test di notifica EFC",
+          "message": "Le notifiche push sono pronte su questo dispositivo."
+        }
+      }
+    },
+    "faq": {
+      "items": [
+        {
+          "q": "Come deposito?",
+          "a": "Apri Deposito, scegli un metodo disponibile, inserisci l'importo, paga alla destinazione mostrata, quindi carica la ricevuta."
+        },
+        {
+          "q": "Come posso ritirare?",
+          "a": "Associa prima un portafoglio o un conto bancario, quindi apri Prelievo, scegli il conto, inserisci l'importo e il PIN della transazione."
+        },
+        {
+          "q": "Dove posso vedere le mie scommesse?",
+          "a": "Utilizza Le mie scommesse dalla navigazione in basso per passare dai record delle scommesse non definite a quelli definiti."
+        }
+      ]
+    }
+  },
+  "user": {
+    "pages": {
+      "account": "Account",
+      "address": "Indirizzo",
+      "bets": "Scommesse",
+      "deposit": "Depositare",
+      "fund": "Finanziare",
+      "history": "Storia",
+      "matches": "Partite",
+      "notification": "Notifica",
+      "transaction": "Transazione",
+      "withdraw": "Ritirare"
+    }
+  },
+  "admin": {
+    "common": {
+      "overview": "Panoramica dell'amministratore",
+      "login": "Accesso amministratore",
+      "dashboard": "Pannello di amministrazione",
+      "summary": "Riepilogo",
+      "pendingReview": "In attesa di revisione",
+      "depositRows": "Righe di deposito",
+      "withdrawalRows": "Righe di prelievo",
+      "decision": "Decisione",
+      "copy": "COPIA",
+      "done": "Fatto",
+      "pending": "IN ATTESA DI",
+      "completed": "COMPLETATO",
+      "viewProof": "Visualizza la prova",
+      "copyAddress": "Copia indirizzo",
+      "approve": "Approvare",
+      "reject": "Rifiutare"
+    },
+    "finance": {
+      "title": "Finanza amministrativa",
+      "queueTitle": "Coda finanziaria",
+      "queueCopy": "Approva depositi, regola i prelievi e controlla le prove di pagamento.",
+      "latestFinance": "Ultima Finanza",
+      "depositsWithdrawals": "Depositi e prelievi"
+    },
+    "control": {
+      "title": "Centro di controllo",
+      "copy": "Strumenti di amministrazione operativi per premi, portafogli, annunci e sicurezza.",
+      "firstDepositBonus": "Bonus sul primo deposito",
+      "firstDepositBonusCopy": "Applicato una volta quando un amministratore approva un primo deposito.",
+      "withdrawalSettings": "Impostazioni di prelievo",
+      "withdrawalSettingsCopy": "Configura il minimo, il massimo e la commissione per i prelievi degli utenti."
+    }
+  },
+  "errors": {
+    "generic": "Qualcosa è andato storto.",
+    "unableToLoad": "Impossibile caricare questo contenuto."
+  }
+}

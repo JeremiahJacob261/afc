@@ -26,7 +26,7 @@ function MyApp({ Component, pageProps }) {
   useEffect(() => {
     const locale = router.locale || 'en'
     document.documentElement.lang = locale
-    document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr'
+    document.documentElement.dir = 'ltr'
   }, [router.locale])
 
   useEffect(() => {

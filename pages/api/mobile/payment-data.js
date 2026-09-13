@@ -1,6 +1,7 @@
 import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
 import { getWithdrawalSettings } from '@/lib/adminSettings'
 import { getCurrencySettings } from '@/lib/currency'
+import { getWithdrawalEligibility, isWithdrawalLimitExempt } from '@/lib/withdrawalEligibility'
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -8,7 +9,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { profile, supabase } = await getCurrentProfile(req, 'userid,uid')
+    const { profile, supabase } = await getCurrentProfile(req, 'userid,uid,username')
     const walletOwnerId = String(profile.uid || profile.userid || '').trim()
 
     const [methodsResult, destinationsResult, walletsResult, settings, currency] = await Promise.all([
@@ -33,6 +34,12 @@ export default async function handler(req, res) {
     if (destinationsResult.error) throw destinationsResult.error
     if (walletsResult.error) throw walletsResult.error
 
+    const withdrawalEligibility = await getWithdrawalEligibility(
+      supabase,
+      profile.username,
+      { exempt: isWithdrawalLimitExempt(profile.username, settings) }
+    )
+
     return res.status(200).json({
       status: 'success',
       methods: methodsResult.data || [],
@@ -40,6 +47,7 @@ export default async function handler(req, res) {
       wallets: walletsResult.data || [],
       settings,
       currency,
+      withdrawalEligibility,
     })
   } catch (error) {
     return sendApiError(res, error)

@@ -41,6 +41,8 @@ function translateWithdrawalMessage(message, t, values = {}) {
   if (normalized === 'wrong password') return t('mobile.withdraw.wrongPin')
   if (normalized === 'insufficient funds') return t('mobile.withdraw.insufficientFunds')
   if (normalized.includes('after your latest successful deposit')) return t('mobile.withdraw.betRequirement')
+  if (normalized.includes('pending withdrawal')) return t('messages.withdrawalPending')
+  if (normalized.includes('24 hours')) return t('messages.withdrawalCooldown')
   if (normalized.includes('minimum')) return t('messages.minimumWithdrawal', { amount: values.min ?? values.amount })
   if (normalized.includes('maximum')) return t('mobile.withdraw.maximumWithdrawal', { amount: values.max ?? values.amount })
   if (normalized === 'withdrawal request as been sent') return t('messages.withdrawalSent')
@@ -69,6 +71,7 @@ export default function Deposit() {
   const [withdrawalsEnabled, setWithdrawalsEnabled] = useState(true);
   const [withdrawalDisabledMessage, setWithdrawalDisabledMessage] = useState('Withdrawals are temporarily unavailable. Please try again later.');
   const [withdrawalDisabledDialogOpen, setWithdrawalDisabledDialogOpen] = useState(false);
+  const [withdrawalEligibility, setWithdrawalEligibility] = useState({ canWithdraw: true, reason: null, retryAt: null });
   //the below controls the loading modal
   const [openx, setOpenx] = useState(false);
   const handleOpenx = () => setOpenx(true);
@@ -123,7 +126,13 @@ export default function Deposit() {
             return;
           }
           if (test[0].status === 'Failed') {
-            toast.error(translateWithdrawalMessage(test[0].message, t, { min: minWithdrawalAmount, max: maxWithdrawalAmount }));
+            const message = test[0].code === 'WITHDRAWAL_PENDING'
+              ? t('messages.withdrawalPending')
+              : test[0].code === 'WITHDRAWAL_COOLDOWN'
+                ? t('messages.withdrawalCooldown')
+                : translateWithdrawalMessage(test[0].message, t, { min: minWithdrawalAmount, max: maxWithdrawalAmount });
+            const retryAt = test[0].retryAt ? ` ${t('messages.withdrawalAvailableAt', { time: new Date(test[0].retryAt).toLocaleString() })}` : '';
+            toast.error(`${message}${retryAt}`);
             handleClosex();
             if (test[0].message === 'No transaction pin has been set') {
               router.push('/user/codesetting')
@@ -150,6 +159,11 @@ export default function Deposit() {
 
     if (!withdrawalsEnabled) {
       setWithdrawalDisabledDialogOpen(true)
+      return
+    }
+
+    if (!withdrawalEligibility.canWithdraw) {
+      toast.error(withdrawalEligibility.reason === 'cooldown' ? t('messages.withdrawalCooldown') : t('messages.withdrawalPending'))
       return
     }
 
@@ -209,6 +223,7 @@ export default function Deposit() {
           setWithdrawalDisabledMessage(result.settings.withdrawalDisabledMessage ?? 'Withdrawals are temporarily unavailable. Please try again later.');
           setWithdrawalDisabledDialogOpen(!enabled);
         }
+        setWithdrawalEligibility(result.withdrawalEligibility ?? { canWithdraw: true, reason: null, retryAt: null });
       } catch (e) {
         console.log(e)
         toast.error(t('mobile.withdraw.connectionError'))
@@ -336,7 +351,7 @@ export default function Deposit() {
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={method}
-                disabled={!withdrawalsEnabled}
+                disabled={!withdrawalsEnabled || !withdrawalEligibility.canWithdraw}
                 style={{ background: "#06101F", color: '#E9E5DA', border: '1px solid #E9E5DA' }}
                 onChange={(e) => {
                   setMethod(e.target.value);
@@ -378,7 +393,7 @@ export default function Deposit() {
               sx={{ border: '1px solid #E9E5DA', input: { color: '#E9E5DA', } }}
               type="number"
               value={amount}
-              disabled={!withdrawalsEnabled}
+              disabled={!withdrawalsEnabled || !withdrawalEligibility.canWithdraw}
               onChange={(a) => {
                 setAmount(a.target.value)
 
@@ -390,7 +405,7 @@ export default function Deposit() {
               sx={{ border: '1px solid #E9E5DA', input: { color: '#E9E5DA', }, textAlign: 'center' }}
               type="pin"
               value={pin}
-              disabled={!withdrawalsEnabled}
+              disabled={!withdrawalsEnabled || !withdrawalEligibility.canWithdraw}
               onChange={(a) => {
                 if (!isNaN(a.target.value)) {
                   setPin(a.target.value)
@@ -402,12 +417,19 @@ export default function Deposit() {
           <motion.div whileTap={{ scale: 0.98 }}
             role="button"
             tabIndex={0}
-            style={{ cursor: withdrawalsEnabled ? 'pointer' : 'not-allowed', display: 'flex', flexDirection: 'row', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: '#E9E5DA', height: '50px', background: withdrawalsEnabled ? '#1BB6FF' : '#526170', minWidth: '310px', padding: '12px', border: '1px solid #1BB6FF' }}
+            style={{ cursor: withdrawalsEnabled && withdrawalEligibility.canWithdraw ? 'pointer' : 'not-allowed', display: 'flex', flexDirection: 'row', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: '#E9E5DA', height: '50px', background: withdrawalsEnabled && withdrawalEligibility.canWithdraw ? '#1BB6FF' : '#526170', minWidth: '310px', padding: '12px', border: '1px solid #1BB6FF' }}
             onClick={transaction}
             onKeyDown={(event) => {
               if (event.key === 'Enter' || event.key === ' ') transaction()
             }}
           >{t('mobile.withdraw.submit')}</motion.div>
+
+          {!withdrawalEligibility.canWithdraw ? (
+            <Typography sx={{ color: '#FFB4AB', fontSize: '13px', textAlign: 'center' }}>
+              {withdrawalEligibility.reason === 'cooldown' ? t('messages.withdrawalCooldown') : t('messages.withdrawalPending')}
+              {withdrawalEligibility.retryAt ? ` ${t('messages.withdrawalAvailableAt', { time: new Date(withdrawalEligibility.retryAt).toLocaleString() })}` : ''}
+            </Typography>
+          ) : null}
 
         </Stack>
       </Stack>
