@@ -473,7 +473,7 @@ export default function Match({ matchDat }) {
         const expext = Number((stakeAmount + profit).toFixed(3));
         let gcount = info.gcount ?? 0;
         const availableBalance = Math.max(0, Number(balance || 0));
-        const availableStake = Math.floor(availableBalance);
+        const availableStake = Number(availableBalance.toFixed(3));
         const useAllBalance = () => setStake(String(availableStake));
 
         let stamx = getMatchStartSeconds(matches);
@@ -541,7 +541,7 @@ export default function Match({ matchDat }) {
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#E9E5DA' }}>{t('common.currentBalance')}</Typography>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{availableStake.toLocaleString()} FCFA</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{availableStake.toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT</Typography>
                         </Stack>
                         <input placeholder={t('mobile.match.stakeAmount')} type='text'
                             style={{ fontFamily: 'Poppins, sans-serif', padding: "10px", borderRadius: '12px', width: '100%', background: '#06101F', color: '#FFFFFF', border: '3px solid #E9E5DA' }}
@@ -563,11 +563,11 @@ export default function Match({ matchDat }) {
                         </Button>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#E9E5DA' }}>{t('mobile.match.profit')}</Typography>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{Math.round(profit).toLocaleString()} FCFA</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{profit.toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#E9E5DA' }}>{t('mobile.match.expectedReturn')}</Typography>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#E9E5DA' }}>{Math.round(expext).toLocaleString()} FCFA</Typography>
+                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#E9E5DA' }}>{expext.toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT</Typography>
                         </Stack>
                         <Button disabled={openx} sx={{ fontFamily: 'Poppins,sans-serif', margin: '8px', fontSize: '16', fontWeight: '300', color: '#06101F', background: "#1BB6FF", padding: '10px' }}
                             onClick={() => {
@@ -575,7 +575,7 @@ export default function Match({ matchDat }) {
                                 if (!picked || tofal <= 0) {
                                     toast.error(t('messages.chooseScoreMarket'))
                                 } else if (stakeAmount <= availableStake) {
-                                    if (stakeAmount < 600) {
+                                    if (stakeAmount < 1) {
                                         toast.error(t('messages.stakeMinimum'))
 
                                     }

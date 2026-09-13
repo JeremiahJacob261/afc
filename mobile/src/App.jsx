@@ -1263,7 +1263,7 @@ function HomeScreen({ navigate, onLogout, online }) {
       <section className="balance-panel">
         <div>
           <span>{t('common.currentBalance')}</span>
-          <strong>{profile ? formatFcfa(profile.balance) : '-- FCFA'}</strong>
+          <strong>{profile ? formatFcfa(profile.balance) : '-- USDT'}</strong>
         </div>
         <button className="mini-cta" type="button" onClick={() => navigate('deposit')}>
           {t('common.deposit')}
@@ -2103,8 +2103,8 @@ function DepositScreen({ navigate, setSuccessAmount }) {
         {selectedMethod ? (
           <div className="deposit-web-progress">
             <span>
-              <small>{t('mobile.deposit.fcfaEquivalent')}</small>
-              <b>{formatMoney(numericAmount / rate)} FCFA</b>
+              <small>{t('mobile.deposit.usdtEquivalent')}</small>
+              <b>{formatMoney(numericAmount / rate)} USDT</b>
             </span>
             <i><em className={amountIsValid ? 'valid' : ''} style={{ width: `${progressValue}%` }} /></i>
           </div>
@@ -2270,8 +2270,8 @@ function WithdrawScreen({ navigate }) {
       notifyMessage(setMessage, 'error', t('messages.enterTransactionPin'))
       return
     }
-    if (requested < Number(settings.minWithdrawalAmount || 6000)) {
-      notifyMessage(setMessage, 'error', t('messages.minimumWithdrawal', { amount: settings.minWithdrawalAmount || 6000 }))
+    if (requested < Number(settings.minWithdrawalAmount || 10)) {
+      notifyMessage(setMessage, 'error', t('messages.minimumWithdrawal', { amount: settings.minWithdrawalAmount || 10 }))
       return
     }
 
@@ -2353,7 +2353,7 @@ function WithdrawScreen({ navigate }) {
         </InputShell>
         <div className="fee-note">
           <span>{t('mobile.withdraw.fee', { percent: feePercent })}</span>
-          <b>{t('mobile.withdraw.totalDebit', { amount: `${formatMoney(total)} FCFA` })}</b>
+          <b>{t('mobile.withdraw.totalDebit', { amount: `${formatMoney(total)} USDT` })}</b>
         </div>
         <button className="primary-button full" type="button" onClick={submitWithdraw} disabled={submitting || !canWithdraw}>
           {submitting ? t('mobile.deposit.submitting') : t('mobile.withdraw.submit')}
@@ -3325,7 +3325,7 @@ function getRate(method) {
 }
 
 function getMinimum(method) {
-  return getRate(method) * 3000
+  return getRate(method) * 5
 }
 
 function methodLabel(method, t) {
@@ -3339,8 +3339,8 @@ function formatMoney(value) {
 }
 
 function formatFcfa(value) {
-  const amount = Math.floor(Number(value || 0))
-  return `${amount.toLocaleString()} FCFA`
+  const amount = Number(value || 0)
+  return `${amount.toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT`
 }
 
 function findDestination(destinations, method, transferKey) {
@@ -3380,7 +3380,7 @@ function hasNamedDestination(destinations, method) {
 }
 
 function formatFcfaLedger(value) {
-  return `${Math.round(Number(value || 0)).toLocaleString()} FCFA`
+  return `${Number(value || 0).toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT`
 }
 
 function formatNumber(value) {

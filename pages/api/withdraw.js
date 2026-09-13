@@ -2,12 +2,12 @@ import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
 import { getWithdrawalSettings, WITHDRAWAL_HARD_LIMIT_AMOUNT } from '@/lib/adminSettings'
 import { calculateWithdrawalAmounts } from '@/lib/withdrawalFee'
 import { getWithdrawalEligibility, isWithdrawalLimitExempt } from '@/lib/withdrawalEligibility'
-import { formatFcfa, getCurrencySettings, parseFcfa } from '@/lib/currency'
+import { formatCurrency, getCurrencySettings, parseCurrency } from '@/lib/currency'
 import {
   displayPaymentCurrency,
   getPaymentMethod,
   getPaymentRate,
-  isFcfaPaymentCode,
+  isUsdtPaymentCode,
   methodCodeFromRow,
   normalizePaymentCode,
 } from '@/lib/paymentMethods'
@@ -24,7 +24,7 @@ export default async function handler(req, res) {
     const body = req.body || {}
     const { supabase: currencySupabase } = await getCurrentProfile(req, 'userid')
     const currencySettings = await getCurrencySettings(currencySupabase)
-    const amount = parseFcfa(body.amount)
+    const amount = parseCurrency(body.amount)
 
     if (!Number.isFinite(amount) || amount <= 0) {
       return res.status(400).json([{ status: 'Failed', message: 'Invalid amount' }])
@@ -35,7 +35,7 @@ export default async function handler(req, res) {
       'userid,username,codeset,pin,newrefer,balance'
     )
 
-    const requestedMethod = normalizePaymentCode(body.method || 'fcfa')
+    const requestedMethod = normalizePaymentCode(body.method || 'usdt')
     const [withdrawalSettings, { data: latestDeposit, error: depositError }, savedMethod] = await Promise.all([
       getWithdrawalSettings(supabase, {
         allowDefaultOnMissingTable: true,
@@ -67,7 +67,7 @@ export default async function handler(req, res) {
     }
 
     const methodCode = methodCodeFromRow(savedMethod) || requestedMethod
-    const methodRate = getPaymentRate(savedMethod, isFcfaPaymentCode(methodCode) ? 1 : 0)
+    const methodRate = getPaymentRate(savedMethod, isUsdtPaymentCode(methodCode) ? 1 : 0)
     if (!methodRate) {
       return res.status(400).json([{ status: 'Failed', message: 'Withdrawal method rate is unavailable. Please select another wallet.' }])
     }
@@ -84,11 +84,11 @@ export default async function handler(req, res) {
     }
 
     if (amount < withdrawalSettings.minWithdrawalAmount) {
-      return res.status(200).json([{ status: 'Failed', message: `Minimum amount to withdraw is ${formatFcfa(withdrawalSettings.minWithdrawalAmount, currencySettings)}` }])
+      return res.status(200).json([{ status: 'Failed', message: `Minimum amount to withdraw is ${formatCurrency(withdrawalSettings.minWithdrawalAmount, currencySettings)}` }])
     }
 
     if (amount > WITHDRAWAL_HARD_LIMIT_AMOUNT) {
-      return res.status(200).json([{ status: 'Failed', message: `Maximum amount to withdraw is ${formatFcfa(WITHDRAWAL_HARD_LIMIT_AMOUNT, currencySettings)}` }])
+      return res.status(200).json([{ status: 'Failed', message: `Maximum amount to withdraw is ${formatCurrency(WITHDRAWAL_HARD_LIMIT_AMOUNT, currencySettings)}` }])
     }
 
     if (!profile.codeset) {

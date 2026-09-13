@@ -526,7 +526,7 @@ export default function UserDetailModal() {
                             className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-lg font-semibold text-white outline-none focus:border-[#1BB6FF] sm:w-44"
                           />
                         ) : (
-                          <p className="mt-2 text-2xl font-semibold text-[#1BB6FF]">{formatNumber(datas.balance)} FCFA</p>
+                          <p className="mt-2 text-2xl font-semibold text-[#1BB6FF]">{formatNumber(datas.balance)} USDT</p>
                         )}
                       </div>
                       <div className="flex gap-2">
@@ -566,7 +566,7 @@ export default function UserDetailModal() {
                             className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-lg font-semibold text-white outline-none focus:border-[#B96CFF] disabled:opacity-60 sm:w-44"
                           />
                         ) : (
-                          <p className="mt-2 text-2xl font-semibold text-[#B96CFF]">{formatNumber(datas.totald)} FCFA</p>
+                          <p className="mt-2 text-2xl font-semibold text-[#B96CFF]">{formatNumber(datas.totald)} USDT</p>
                         )}
                       </div>
                       <div className="flex gap-2">

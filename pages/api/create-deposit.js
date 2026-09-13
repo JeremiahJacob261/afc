@@ -3,7 +3,7 @@ import {
   displayPaymentCurrency,
   getPaymentMethod,
   getPaymentRate,
-  isFcfaPaymentCode,
+  isUsdtPaymentCode,
   methodCodeFromRow,
   normalizePaymentCode,
 } from '@/lib/paymentMethods'
@@ -30,9 +30,9 @@ export default async function handler(req, res) {
     }
 
     const notificationMethod = methodCodeFromRow(savedMethod) || requestedCode
-    const rate = getPaymentRate(savedMethod, isFcfaPaymentCode(notificationMethod) ? 1 : 0)
-    if (!rate || numericAmount / rate < 3000) {
-      return res.status(400).json({ status: 'error', message: 'Minimum deposit is 3,000 FCFA equivalent' })
+    const rate = getPaymentRate(savedMethod, isUsdtPaymentCode(notificationMethod) ? 1 : 0)
+    if (!rate || numericAmount / rate < 5) {
+      return res.status(400).json({ status: 'error', message: 'Minimum deposit is 5 USDT equivalent' })
     }
 
     const { error } = await supabase

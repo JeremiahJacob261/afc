@@ -1,5 +1,5 @@
 import { getCurrentProfile } from '@/lib/apiAuth'
-import { formatFcfa, getCurrencySettings, parseFcfa } from '@/lib/currency'
+import { formatCurrency, getCurrencySettings, parseCurrency } from '@/lib/currency'
 
 const markets = {
   nilnil: '0 - 0',
@@ -28,7 +28,7 @@ function getRpcStatus(error) {
   if (message.includes('already settled') || message.includes('Odds changed')) return 409
   if (
     message.includes('Invalid bet details')
-    || message.includes('Enough FCFA')
+    || message.includes('Enough USDT')
     || message.includes('maximum number of bets')
     || message.includes('expired')
     || message.includes('market is not available')
@@ -55,18 +55,18 @@ export default async function handler(req, res) {
     const { match_id, picked, stake, client_bet_id, expected_odd } = req.body || {}
     const { user, supabase } = await getCurrentProfile(req, 'userid')
     const currencySettings = await getCurrencySettings(supabase)
-    const amount = parseFcfa(stake)
+    const amount = parseCurrency(stake)
     const expectedOdd = Number(expected_odd)
 
     if (
       !match_id
       || !markets[picked]
       || !Number.isFinite(amount)
-      || amount < 600
+      || amount < 1
       || !Number.isFinite(expectedOdd)
       || expectedOdd <= 0
     ) {
-      const message = `Minimum stake is ${formatFcfa(600, currencySettings)}`
+      const message = `Minimum stake is ${formatCurrency(1, currencySettings)}`
       return res.status(400).json({ status: 'error', message })
     }
 

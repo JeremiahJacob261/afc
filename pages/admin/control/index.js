@@ -38,10 +38,10 @@ const tools = [
 export default function Controls() {
   const router = useRouter()
   const [bonusPercent, setBonusPercent] = useState('3')
-  const [membershipBalanceThreshold, setMembershipBalanceThreshold] = useState('1000')
-  const [minWithdrawalAmount, setMinWithdrawalAmount] = useState('6000')
-  const [dailyWithdrawalLimit, setDailyWithdrawalLimit] = useState('60000')
-  const [annualWithdrawalLimit, setAnnualWithdrawalLimit] = useState('60000000')
+  const [membershipBalanceThreshold, setMembershipBalanceThreshold] = useState('1.667')
+  const [minWithdrawalAmount, setMinWithdrawalAmount] = useState('10')
+  const [dailyWithdrawalLimit, setDailyWithdrawalLimit] = useState('100')
+  const [annualWithdrawalLimit, setAnnualWithdrawalLimit] = useState('100000')
   const [withdrawalLimitExemptUsernames, setWithdrawalLimitExemptUsernames] = useState('')
   const [withdrawalFeePercent, setWithdrawalFeePercent] = useState('7')
   const [withdrawalsEnabled, setWithdrawalsEnabled] = useState(true)
@@ -68,10 +68,10 @@ export default function Controls() {
 
         if (active) {
           setBonusPercent(String(result.settings?.firstDepositBonusPercent ?? 3))
-          setMembershipBalanceThreshold(String(result.settings?.membershipBalanceThreshold ?? 1000))
-          setMinWithdrawalAmount(String(result.settings?.minWithdrawalAmount ?? 6000))
-          setDailyWithdrawalLimit(String(result.settings?.dailyWithdrawalLimit ?? 60000))
-          setAnnualWithdrawalLimit(String(result.settings?.annualWithdrawalLimit ?? 60000000))
+          setMembershipBalanceThreshold(String(result.settings?.membershipBalanceThreshold ?? 1.667))
+          setMinWithdrawalAmount(String(result.settings?.minWithdrawalAmount ?? 10))
+          setDailyWithdrawalLimit(String(result.settings?.dailyWithdrawalLimit ?? 100))
+          setAnnualWithdrawalLimit(String(result.settings?.annualWithdrawalLimit ?? 100000))
           setWithdrawalLimitExemptUsernames((result.settings?.withdrawalLimitExemptUsernames || []).join('\n'))
           setWithdrawalFeePercent(String(result.settings?.withdrawalFeePercent ?? 7))
           setWithdrawalsEnabled(result.settings?.withdrawalsEnabled ?? true)
@@ -162,8 +162,8 @@ export default function Controls() {
       return
     }
 
-    if (minAmount > 60000) {
-      toast.error('Minimum withdrawal amount cannot exceed the 60,000 FCFA hard limit')
+    if (minAmount > 100) {
+      toast.error('Minimum withdrawal amount cannot exceed the 100 USDT hard limit')
       return
     }
 
@@ -270,7 +270,7 @@ export default function Controls() {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-white">Active Member Balance</h3>
-                  <p className="text-sm text-zinc-500">Users with at least this FCFA balance count as active members.</p>
+                  <p className="text-sm text-zinc-500">Users with at least this USDT balance count as active members.</p>
                 </div>
               </div>
             </div>
@@ -287,7 +287,7 @@ export default function Controls() {
                   onChange={(event) => setMembershipBalanceThreshold(event.target.value)}
                   className="min-w-0 flex-1 bg-transparent text-right text-lg font-semibold text-white outline-none disabled:text-zinc-500"
                 />
-                <span className="text-sm font-semibold text-zinc-400">FCFA</span>
+                <span className="text-sm font-semibold text-zinc-400">USDT</span>
               </label>
               <button
                 type="button"
@@ -376,7 +376,7 @@ export default function Controls() {
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-white">Withdrawal Settings</h3>
-                <p className="text-sm text-zinc-500">Each request is capped at 60,000 FCFA. Set daily and annual totals below.</p>
+                <p className="text-sm text-zinc-500">Each request is capped at 100 USDT. Set daily and annual totals below.</p>
               </div>
             </div>
 
@@ -435,7 +435,7 @@ export default function Controls() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold text-white">Minimum Withdrawal Amount (FCFA)</label>
+                <label className="text-sm font-semibold text-white">Minimum Withdrawal Amount (USDT)</label>
                 <label className="flex h-12 items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4">
                   <input
                     type="number"
@@ -451,7 +451,7 @@ export default function Controls() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold text-white">Daily Withdrawal Limit (FCFA)</label>
+                <label className="text-sm font-semibold text-white">Daily Withdrawal Limit (USDT)</label>
                 <label className="flex h-12 items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4">
                   <input
                     type="number"
@@ -467,7 +467,7 @@ export default function Controls() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold text-white">Annual Withdrawal Limit (FCFA)</label>
+                <label className="text-sm font-semibold text-white">Annual Withdrawal Limit (USDT)</label>
                 <label className="flex h-12 items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4">
                   <input type="number" inputMode="decimal" min="0" step="0.001" value={annualWithdrawalLimit} disabled={loadingSettings || savingSettings} onChange={(event) => setAnnualWithdrawalLimit(event.target.value)} className="min-w-0 flex-1 bg-transparent text-lg font-semibold text-white outline-none disabled:text-zinc-500" />
                 </label>
@@ -476,7 +476,7 @@ export default function Controls() {
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-semibold text-white">Daily & Annual Limit Exemptions</label>
                 <textarea value={withdrawalLimitExemptUsernames} disabled={loadingSettings || savingSettings} onChange={(event) => setWithdrawalLimitExemptUsernames(event.target.value)} placeholder="One username per line" className="min-h-[96px] rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm text-white outline-none disabled:text-zinc-500" />
-                <p className="text-xs text-zinc-500">Enter one username per line. Exemptions do not bypass the 60,000 FCFA limit per request.</p>
+                <p className="text-xs text-zinc-500">Enter one username per line. Exemptions do not bypass the 100 USDT limit per request.</p>
               </div>
 
               <div className="flex flex-col gap-2">

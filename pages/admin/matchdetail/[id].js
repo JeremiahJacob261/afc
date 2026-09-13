@@ -64,7 +64,7 @@ const marketLabels = marketGroups
 
 function money(value) {
   const number = Number(value || 0)
-  return `${number.toLocaleString(undefined, { maximumFractionDigits: 2 })} FCFA`
+  return `${number.toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT`
 }
 
 function compactDate(value) {

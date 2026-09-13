@@ -60,7 +60,7 @@ export default function Home({ referd, lvlad, lvlbd,getup1,refid, membershipBala
                                     <p style={{ color: 'whitesmoke', fontWeight: '300', fontSize: '13px', fontFamily: 'Poppins,sans-serif' }}>{isActiveMember(m.balance, membershipBalanceThreshold) ? 'active' : 'not active'}</p>
                                </Stack>
                                 <Stack>
-                                    <p style={{ color: '#F2EDEB', fontFamily: 'Poppins,sans-serif', margin: 0 }}>{m.balance} FCFA</p>
+                                    <p style={{ color: '#F2EDEB', fontFamily: 'Poppins,sans-serif', margin: 0 }}>{m.balance} USDT</p>
                                     <p style={{ color: '#F2EDEB', fontFamily: 'Poppins,sans-serif', margin: 0 }}>{fullDate}</p>
                                     <p style={{ color: '#F2EDEB', fontFamily: 'Poppins,sans-serif', margin: 0 }}>Referral: {m.newrefer}</p>
                                 </Stack>
@@ -108,7 +108,7 @@ export default function Home({ referd, lvlad, lvlbd,getup1,refid, membershipBala
                                         <p style={{ color: isActiveMember(m.balance, membershipBalanceThreshold) ? 'black' : 'white', fontWeight: '300', fontSize: '13px', fontFamily: 'Poppins,sans-serif' }}>{isActiveMember(m.balance, membershipBalanceThreshold) ? 'active' : 'not active'}</p>
                                </Stack>
                                     <Stack>
-                                        <p style={{ color: '#F2EDEB', fontFamily: 'Poppins,sans-serif', margin: 0 }}>{m.balance} FCFA</p>
+                                        <p style={{ color: '#F2EDEB', fontFamily: 'Poppins,sans-serif', margin: 0 }}>{m.balance} USDT</p>
                                         <p style={{ color: '#F2EDEB', fontFamily: 'Poppins,sans-serif', margin: 0 }}>{fullDate}</p>
                                         <p style={{ color: '#F2EDEB', fontFamily: 'Poppins,sans-serif', margin: 0 }}>Referral: {m.newrefer}</p>
                                     </Stack>
@@ -151,7 +151,7 @@ export default function Home({ referd, lvlad, lvlbd,getup1,refid, membershipBala
                               
                                 </Stack>
                                 <Stack>
-                                    <p style={{ color: '#F2EDEB', fontFamily: 'Poppins,sans-serif', margin: 0 }}>{m.balance} FCFA</p>
+                                    <p style={{ color: '#F2EDEB', fontFamily: 'Poppins,sans-serif', margin: 0 }}>{m.balance} USDT</p>
                                     <p style={{ color: '#F2EDEB', fontFamily: 'Poppins,sans-serif', margin: 0 }}>{fullDate}</p>
                                     <p style={{ color: '#F2EDEB', fontFamily: 'Poppins,sans-serif', margin: 0 }}>Referral: {m.newrefer}</p>
                                 </Stack>
@@ -193,7 +193,7 @@ export default function Home({ referd, lvlad, lvlbd,getup1,refid, membershipBala
                               
                                 </Stack>
                                 <Stack>
-                                    <p style={{ color: '#F2EDEB', fontFamily: 'Poppins,sans-serif', margin: 0 }}>{m.balance} FCFA</p>
+                                    <p style={{ color: '#F2EDEB', fontFamily: 'Poppins,sans-serif', margin: 0 }}>{m.balance} USDT</p>
                                     <p style={{ color: '#F2EDEB', fontFamily: 'Poppins,sans-serif', margin: 0 }}>{fullDate}</p>
                                     <p style={{ color: '#F2EDEB', fontFamily: 'Poppins,sans-serif', margin: 0 }}>Referral: {m.newrefer}</p>
                                 </Stack>

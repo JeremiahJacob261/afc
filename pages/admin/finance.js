@@ -386,7 +386,7 @@ export default function Noti({ notiS }) {
                         onClick={() => {
                           if (d.type === 'withdraw') {
                             navigator.clipboard.writeText(d.address)
-                            setMessages("FCFA Address Copied Successfully!")
+                            setMessages("USDT Address Copied Successfully!")
                             handleClick()
                           } else {
                             setDrop(true);
@@ -462,7 +462,7 @@ export default function Noti({ notiS }) {
                         onClick={() => {
                           if (d.type === 'withdraw') {
                             navigator.clipboard.writeText(d.address)
-                            setMessages("FCFA Address Copied Successfully!")
+                            setMessages("USDT Address Copied Successfully!")
                             handleClick()
                           } else {
                             setDrop(true);

@@ -57,8 +57,8 @@ const statusMeta = {
 }
 
 const emptySummary = {
-  totalDepositsFcfa: 0,
-  totalWithdrawalsFcfa: 0,
+  totalDepositsUsdt: 0,
+  totalWithdrawalsUsdt: 0,
   count: 0,
 }
 
@@ -69,26 +69,26 @@ function toNumber(value) {
 
 function formatNumber(value, currency, locale = 'en') {
   const numericValue = toNumber(value)
-  const isFcfa = String(currency || '').toUpperCase() === 'FCFA'
+  const isUsdt = String(currency || '').toUpperCase() === 'USDT'
 
   return new Intl.NumberFormat(locale, {
     minimumFractionDigits: 0,
-    maximumFractionDigits: isFcfa ? 0 : 2,
+    maximumFractionDigits: isUsdt ? 3 : 2,
   }).format(numericValue)
 }
 
 function formatAmount(amount, t, locale) {
   if (!amount || amount.value === null || amount.value === undefined) return t('common.notAvailable')
 
-  const currency = String(amount.currency || 'FCFA').toUpperCase()
+  const currency = String(amount.currency || 'USDT').toUpperCase()
   const formatted = formatNumber(amount.value, currency, locale)
-  const label = currency === 'FCFA' ? `${formatted} FCFA` : `${currency} ${formatted}`
+  const label = currency === 'USDT' ? `${formatted} USDT` : `${currency} ${formatted}`
 
   return amount.approximate ? `~ ${label}` : label
 }
 
-function formatFcfa(value, locale) {
-  return `${formatNumber(value, 'FCFA', locale)} FCFA`
+function formatUsdt(value, locale) {
+  return `${formatNumber(value, 'USDT', locale)} USDT`
 }
 
 function formatDate(value, locale, t) {
@@ -489,13 +489,13 @@ export default function TransactionHistory() {
           <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
             <SummaryStat
               label={t('mobile.transactions.totalDeposits')}
-              value={formatFcfa(summary.totalDepositsFcfa, locale)}
+              value={formatUsdt(summary.totalDepositsUsdt, locale)}
               icon="solar:wallet-money-bold"
               color="#32D7FF"
             />
             <SummaryStat
               label={t('mobile.transactions.totalWithdrawals')}
-              value={formatFcfa(summary.totalWithdrawalsFcfa, locale)}
+              value={formatUsdt(summary.totalWithdrawalsUsdt, locale)}
               icon="solar:card-transfer-bold"
               color="#FF9E7A"
             />

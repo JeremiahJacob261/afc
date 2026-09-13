@@ -33,7 +33,7 @@ const toNumber = (value) => {
   return Number.isFinite(amount) ? amount : 0
 }
 
-const formatFcfa = (value) => `${Math.round(toNumber(value)).toLocaleString()} FCFA`
+const formatFcfa = (value) => `${toNumber(value).toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT`
 const formatOdd = (value) => toNumber(value).toFixed(3)
 
 function getStatus(bet, t) {

@@ -68,8 +68,8 @@ BEGIN
     RAISE EXCEPTION 'Profile not found';
   END IF;
 
-  IF p_payout_amount > 60000 THEN
-    RAISE EXCEPTION 'Maximum amount to withdraw is 60,000 FCFA';
+  IF p_payout_amount > 100 THEN
+    RAISE EXCEPTION 'Maximum amount to withdraw is 100 USDT';
   END IF;
 
   SELECT * INTO settings_row FROM admin_settings WHERE id = 1;
@@ -118,7 +118,7 @@ BEGIN
       AND created_at >= utc_day_start;
 
     IF daily_total + p_payout_amount > settings_row.daily_withdrawal_limit THEN
-      RAISE EXCEPTION 'Daily withdrawal limit of % FCFA reached', settings_row.daily_withdrawal_limit;
+      RAISE EXCEPTION 'Daily withdrawal limit of % USDT reached', settings_row.daily_withdrawal_limit;
     END IF;
 
     SELECT COALESCE(SUM(amount), 0) INTO annual_total
@@ -129,7 +129,7 @@ BEGIN
       AND created_at >= utc_year_start;
 
     IF annual_total + p_payout_amount > settings_row.max_withdrawal_amount THEN
-      RAISE EXCEPTION 'Annual withdrawal limit of % FCFA reached', settings_row.max_withdrawal_amount;
+      RAISE EXCEPTION 'Annual withdrawal limit of % USDT reached', settings_row.max_withdrawal_amount;
     END IF;
   END IF;
 
@@ -217,8 +217,8 @@ BEGIN
     RAISE EXCEPTION 'Profile not found';
   END IF;
 
-  IF p_payout_amount > 60000 THEN
-    RAISE EXCEPTION 'Maximum amount to withdraw is 60,000 FCFA';
+  IF p_payout_amount > 100 THEN
+    RAISE EXCEPTION 'Maximum amount to withdraw is 100 USDT';
   END IF;
 
   SELECT * INTO settings_row FROM admin_settings WHERE id = 1;
@@ -263,7 +263,7 @@ BEGIN
       AND created_at >= utc_day_start;
 
     IF daily_total + p_payout_amount > settings_row.daily_withdrawal_limit THEN
-      RAISE EXCEPTION 'Daily withdrawal limit of % FCFA reached', settings_row.daily_withdrawal_limit;
+      RAISE EXCEPTION 'Daily withdrawal limit of % USDT reached', settings_row.daily_withdrawal_limit;
     END IF;
 
     SELECT COALESCE(SUM(amount), 0) INTO annual_total
@@ -274,7 +274,7 @@ BEGIN
       AND created_at >= utc_year_start;
 
     IF annual_total + p_payout_amount > settings_row.max_withdrawal_amount THEN
-      RAISE EXCEPTION 'Annual withdrawal limit of % FCFA reached', settings_row.max_withdrawal_amount;
+      RAISE EXCEPTION 'Annual withdrawal limit of % USDT reached', settings_row.max_withdrawal_amount;
     END IF;
   END IF;
 

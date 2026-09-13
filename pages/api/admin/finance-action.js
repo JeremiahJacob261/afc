@@ -3,24 +3,24 @@ import { requireAdmin } from '@/lib/adminAuth'
 import { getFirstDepositBonusPercent } from '@/lib/adminSettings'
 import {
   displayPaymentCurrency,
-  fromFcfaLedgerAmount,
+  fromLedgerAmount,
   getPaymentMethod,
   getPaymentRate,
-  isFcfaPaymentCode,
+  isUsdtPaymentCode,
   normalizePaymentCode,
-  toFcfaLedgerAmount,
+  toLedgerAmount,
 } from '@/lib/paymentMethods'
 import { notifyFinanceAction } from '@/lib/pushNotifications'
 
 async function getNotificationRate(supabase, notification) {
-  const method = normalizePaymentCode(notification.method_currency || notification.method || 'fcfa')
+  const method = normalizePaymentCode(notification.method_currency || notification.method || 'usdt')
   const snapshotRate = Number(notification.method_rate)
   if (Number.isFinite(snapshotRate) && snapshotRate > 0) {
     return { method, rate: snapshotRate }
   }
 
   const savedMethod = await getPaymentMethod(supabase, method)
-  const fallback = isFcfaPaymentCode(method) ? 1 : 0
+  const fallback = isUsdtPaymentCode(method) ? 1 : 0
   const rate = getPaymentRate(savedMethod, fallback)
 
   if (!rate) {
@@ -42,7 +42,7 @@ async function getLedgerAmount(supabase, notification) {
     throw error
   }
 
-  return toFcfaLedgerAmount(amount, rate)
+  return toLedgerAmount(amount, rate)
 }
 
 async function getLocalWithdrawAmount(supabase, notification) {
@@ -55,7 +55,7 @@ async function getLocalWithdrawAmount(supabase, notification) {
     throw error
   }
 
-  return fromFcfaLedgerAmount(amount, rate)
+  return fromLedgerAmount(amount, rate)
 }
 
 function normalizedSent(sent) {

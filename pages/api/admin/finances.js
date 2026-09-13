@@ -5,7 +5,7 @@ import {
   fetchPaymentMethods,
   findPaymentMethod,
   getPaymentRate,
-  isFcfaPaymentCode,
+  isUsdtPaymentCode,
   methodCodeFromRow,
   normalizePaymentCode,
 } from '@/lib/paymentMethods'
@@ -38,14 +38,14 @@ export default async function handler(req, res) {
     if (error) throw error
 
     const notifications = (data || []).map((notification) => {
-      const rawMethod = normalizePaymentCode(notification.method_currency || notification.method || 'fcfa')
+      const rawMethod = normalizePaymentCode(notification.method_currency || notification.method || 'usdt')
       const savedMethod = findPaymentMethod(methods, rawMethod)
       const methodCode = normalizePaymentCode(notification.method_currency) || (savedMethod ? methodCodeFromRow(savedMethod) : rawMethod)
-      const isFcfa = isFcfaPaymentCode(methodCode)
+      const isUsdt = isUsdtPaymentCode(methodCode)
       const snapshotRate = Number(notification.method_rate)
       const methodRate = Number.isFinite(snapshotRate) && snapshotRate > 0
         ? snapshotRate
-        : getPaymentRate(savedMethod, isFcfa ? 1 : 0)
+        : getPaymentRate(savedMethod, isUsdt ? 1 : 0)
 
       return {
         ...notification,
@@ -53,7 +53,7 @@ export default async function handler(req, res) {
         methodCurrency: displayPaymentCurrency(methodCode),
         methodRate,
         requiresRateReview: !methodRate,
-        isFcfaMethod: isFcfa,
+        isUsdtMethod: isUsdt,
       }
     })
 

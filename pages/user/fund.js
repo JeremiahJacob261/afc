@@ -95,7 +95,7 @@ function getRate(method) {
 }
 
 function getMinimum(method) {
-  return getRate(method) * 3000
+  return getRate(method) * 5
 }
 
 function methodLabel(method, t) {
@@ -445,9 +445,9 @@ export default function Funds() {
             {selectedMethod && (
               <Stack spacing={0.8}>
                 <Stack direction="row" justifyContent="space-between">
-                  <Typography sx={{ fontSize: 12, color: brand.muted }}>{t('mobile.deposit.fcfaEquivalent')}</Typography>
+                  <Typography sx={{ fontSize: 12, color: brand.muted }}>{t('mobile.deposit.usdtEquivalent')}</Typography>
                   <Typography sx={{ fontSize: 13, fontWeight: 700 }}>
-                    {formatMoney(numericAmount / rate)} FCFA
+                    {formatMoney(numericAmount / rate)} USDT
                   </Typography>
                 </Stack>
                 <LinearProgress

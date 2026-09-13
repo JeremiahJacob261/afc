@@ -3,12 +3,12 @@ import {
   displayPaymentCurrency,
   fetchPaymentMethods,
   findPaymentMethod,
-  fromFcfaLedgerAmount,
+  fromLedgerAmount,
   getPaymentRate,
-  isFcfaPaymentCode,
+  isUsdtPaymentCode,
   methodCodeFromRow,
   normalizePaymentCode,
-  toFcfaLedgerAmount,
+  toLedgerAmount,
 } from '@/lib/paymentMethods'
 
 const allowedFilters = new Set(['all', 'deposit', 'withdraw'])
@@ -68,16 +68,16 @@ function timestampOf(row) {
 }
 
 function getMethodDetails(row, methods) {
-  const rawMethod = normalizePaymentCode(row.method_currency || row.method || 'fcfa')
+  const rawMethod = normalizePaymentCode(row.method_currency || row.method || 'usdt')
   const savedMethod = findPaymentMethod(methods, rawMethod)
   const savedCode = savedMethod ? methodCodeFromRow(savedMethod) : ''
-  const methodCode = normalizePaymentCode(row.method_currency) || savedCode || rawMethod || 'fcfa'
+  const methodCode = normalizePaymentCode(row.method_currency) || savedCode || rawMethod || 'usdt'
   const methodCurrency = displayPaymentCurrency(methodCode)
   const methodLabel = savedMethod?.name || displayPaymentCurrency(row.method_currency || row.method || methodCode)
   const snapshotRate = Number(row.method_rate)
   const rate = Number.isFinite(snapshotRate) && snapshotRate > 0
     ? snapshotRate
-    : getPaymentRate(savedMethod, isFcfaPaymentCode(methodCode) ? 1 : 0)
+    : getPaymentRate(savedMethod, isUsdtPaymentCode(methodCode) ? 1 : 0)
 
   return {
     methodCode,
@@ -142,11 +142,11 @@ function normalizeTransaction(row, methods) {
   const amount = amountValue(row.amount)
   const status = normalizeStatus(row.sent)
   const method = getMethodDetails(row, methods)
-  const isFcfa = isFcfaPaymentCode(method.methodCode)
+  const isUsdt = isUsdtPaymentCode(method.methodCode)
 
   let primaryAmount
   let secondaryAmount = null
-  let accountingAmountFcfa = null
+  let accountingAmountUsdt = null
   let conversionNote = ''
   let conversionNoteKey = ''
   let conversionNoteValues = {}
@@ -154,26 +154,26 @@ function normalizeTransaction(row, methods) {
   if (type === 'deposit') {
     primaryAmount = amountPayload(amount, method.methodCurrency, 'Submitted amount', { labelKey: 'mobile.transactions.submittedAmount' })
 
-    if (isFcfa) {
-      accountingAmountFcfa = amount
+    if (isUsdt) {
+      accountingAmountUsdt = amount
     } else if (method.rate) {
-      accountingAmountFcfa = Number(toFcfaLedgerAmount(amount, method.rate).toFixed(2))
-      secondaryAmount = amountPayload(accountingAmountFcfa, 'FCFA', 'FCFA equivalent', { approximate: true })
+      accountingAmountUsdt = Number(toLedgerAmount(amount, method.rate).toFixed(3))
+      secondaryAmount = amountPayload(accountingAmountUsdt, 'USDT', 'USDT equivalent', { approximate: true })
     } else {
       conversionNote = `${method.methodCurrency} conversion unavailable because rate is missing`
       conversionNoteKey = 'mobile.transactions.methodMissingRate'
       conversionNoteValues = { currency: method.methodCurrency }
     }
   } else {
-    accountingAmountFcfa = amount
+    accountingAmountUsdt = amount
 
-    if (isFcfa) {
-      primaryAmount = amountPayload(amount, 'FCFA', 'Payout amount', { labelKey: 'mobile.transactions.payoutAmount' })
+    if (isUsdt) {
+      primaryAmount = amountPayload(amount, 'USDT', 'Payout amount', { labelKey: 'mobile.transactions.payoutAmount' })
     } else if (method.rate) {
-      primaryAmount = amountPayload(fromFcfaLedgerAmount(amount, method.rate), method.methodCurrency, 'Payout amount', { labelKey: 'mobile.transactions.payoutAmount' })
-      secondaryAmount = amountPayload(amount, 'FCFA', 'FCFA amount')
+      primaryAmount = amountPayload(fromLedgerAmount(amount, method.rate), method.methodCurrency, 'Payout amount', { labelKey: 'mobile.transactions.payoutAmount' })
+      secondaryAmount = amountPayload(amount, 'USDT', 'USDT amount')
     } else {
-      primaryAmount = amountPayload(amount, 'FCFA', 'Payout amount', { labelKey: 'mobile.transactions.payoutAmount' })
+      primaryAmount = amountPayload(amount, 'USDT', 'Payout amount', { labelKey: 'mobile.transactions.payoutAmount' })
       conversionNote = `${method.methodCurrency} payout unavailable because rate is missing`
       conversionNoteKey = 'mobile.transactions.methodMissingRate'
       conversionNoteValues = { currency: method.methodCurrency }
@@ -195,7 +195,7 @@ function normalizeTransaction(row, methods) {
     methodLabel: method.methodLabel,
     primaryAmount,
     secondaryAmount,
-    accountingAmountFcfa,
+    accountingAmountUsdt,
     conversionNote,
     conversionNoteKey,
     conversionNoteValues,
@@ -222,13 +222,13 @@ function matchesFilter(transaction, filter) {
 }
 
 function buildSummary(profile, transactions) {
-  const totalWithdrawalsFcfa = transactions
+  const totalWithdrawalsUsdt = transactions
     .filter((item) => item.type === 'withdraw' && item.status === 'success')
-    .reduce((total, item) => total + amountValue(item.accountingAmountFcfa), 0)
+    .reduce((total, item) => total + amountValue(item.accountingAmountUsdt), 0)
 
   return {
-    totalDepositsFcfa: amountValue(profile.totald),
-    totalWithdrawalsFcfa: Number(totalWithdrawalsFcfa.toFixed(3)),
+    totalDepositsUsdt: amountValue(profile.totald),
+    totalWithdrawalsUsdt: Number(totalWithdrawalsUsdt.toFixed(3)),
     count: transactions.length,
   }
 }

@@ -9,14 +9,14 @@ ALTER TABLE public.notification
   ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   ADD COLUMN IF NOT EXISTS processed_at TIMESTAMP;
 
--- FCFA aliases have a stable 1:1 rate and can be safely backfilled. Other
+-- USDT aliases have a stable 1:1 rate and can be safely backfilled. Other
 -- legacy rows intentionally remain NULL so they require an explicit review.
 UPDATE public.notification
-SET method_currency = 'FCFA',
+SET method_currency = 'USDT',
     method_rate = 1
 WHERE method_rate IS NULL
   AND lower(regexp_replace(COALESCE(method, ''), '[()_-]+', ' ', 'g'))
-    ~ '(^| )(fcfa|xof|cfa)( |$)';
+    ~ '(^| )(usdt|usd|tether)( |$)';
 
 CREATE INDEX IF NOT EXISTS idx_notification_withdrawal_pending
   ON public.notification (username, created_at)
@@ -59,7 +59,7 @@ BEGIN
 
   SELECT * INTO user_row FROM users WHERE userid = p_userid FOR UPDATE;
   IF NOT FOUND THEN RAISE EXCEPTION 'Profile not found'; END IF;
-  IF p_payout_amount > 60000 THEN RAISE EXCEPTION 'Maximum amount to withdraw is 60,000 FCFA'; END IF;
+  IF p_payout_amount > 100 THEN RAISE EXCEPTION 'Maximum amount to withdraw is 100 USDT'; END IF;
 
   SELECT * INTO settings_row FROM admin_settings WHERE id = 1;
   IF NOT FOUND THEN RAISE EXCEPTION 'Withdrawal settings are not configured'; END IF;
@@ -98,13 +98,13 @@ BEGIN
     WHERE username = user_row.username AND lower(COALESCE(type, '')) IN ('withdraw', 'withdrawer')
       AND lower(COALESCE(sent::TEXT, 'pending')) NOT IN ('failed', 'false', 'rejected') AND created_at >= utc_day_start;
     IF daily_total + p_payout_amount > settings_row.daily_withdrawal_limit THEN
-      RAISE EXCEPTION 'Daily withdrawal limit of % FCFA reached', settings_row.daily_withdrawal_limit;
+      RAISE EXCEPTION 'Daily withdrawal limit of % USDT reached', settings_row.daily_withdrawal_limit;
     END IF;
     SELECT COALESCE(SUM(amount), 0) INTO annual_total FROM notification
     WHERE username = user_row.username AND lower(COALESCE(type, '')) IN ('withdraw', 'withdrawer')
       AND lower(COALESCE(sent::TEXT, 'pending')) NOT IN ('failed', 'false', 'rejected') AND created_at >= utc_year_start;
     IF annual_total + p_payout_amount > settings_row.max_withdrawal_amount THEN
-      RAISE EXCEPTION 'Annual withdrawal limit of % FCFA reached', settings_row.max_withdrawal_amount;
+      RAISE EXCEPTION 'Annual withdrawal limit of % USDT reached', settings_row.max_withdrawal_amount;
     END IF;
   END IF;
 

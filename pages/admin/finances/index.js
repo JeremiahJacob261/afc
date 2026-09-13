@@ -55,13 +55,13 @@ function methodLogo(method) {
 }
 
 function convertedAmount(data) {
-  const methodCurrency = data.methodCurrency || String(data.method || 'FCFA').toUpperCase()
+  const methodCurrency = data.methodCurrency || String(data.method || 'USDT').toUpperCase()
   const rate = Number(data.methodRate)
   const amount = Number(data.amount || 0)
   if (!Number.isFinite(rate) || rate <= 0) return 'Rate unavailable'
-  if (data.isFcfaMethod) return `${formatAmount(amount)} FCFA`
+  if (data.isUsdtMethod) return `${formatAmount(amount)} USDT`
   if (data.type !== 'deposit') return `${formatAmount(amount * rate)} ${methodCurrency}`
-  return `${formatAmount(amount / rate)} FCFA`
+  return `${formatAmount(amount / rate)} USDT`
 }
 
 export default function Finances() {
@@ -240,7 +240,7 @@ export default function Finances() {
                     </div>
                     <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-zinc-400">
                       <Image src={methodLogo(data.method)} width={24} height={20} alt={data.method || 'method'} className="rounded bg-white p-0.5" />
-                      <span>{formatAmount(data.amount)} {isDeposit ? (data.methodCurrency || String(data.method || 'FCFA').toUpperCase()) : 'FCFA'}</span>
+                      <span>{formatAmount(data.amount)} {isDeposit ? (data.methodCurrency || String(data.method || 'USDT').toUpperCase()) : 'USDT'}</span>
                       <span className="text-zinc-600">/</span>
                       <span>{convertedAmount(data)}</span>
                       <span className="text-zinc-600">/</span>
