@@ -426,9 +426,40 @@ CREATE TABLE IF NOT EXISTS referral (
 CREATE TABLE IF NOT EXISTS walle (
   id BIGSERIAL PRIMARY KEY,
   name TEXT UNIQUE NOT NULL,
+  type TEXT NOT NULL DEFAULT 'mobile-money',
   available BOOLEAN DEFAULT TRUE,
+  currency_code TEXT,
+  rates DECIMAL(20, 8) NOT NULL DEFAULT 1,
+  image TEXT DEFAULT '',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE walle ADD COLUMN IF NOT EXISTS type TEXT NOT NULL DEFAULT 'mobile-money';
+ALTER TABLE walle ADD COLUMN IF NOT EXISTS currency_code TEXT;
+ALTER TABLE walle ADD COLUMN IF NOT EXISTS rates DECIMAL(20, 8) NOT NULL DEFAULT 1;
+ALTER TABLE walle ADD COLUMN IF NOT EXISTS image TEXT DEFAULT '';
+
+-- Destination details are intentionally separate from payment-method metadata.
+CREATE TABLE IF NOT EXISTS depositwallet (
+  id BIGSERIAL PRIMARY KEY,
+  name TEXT UNIQUE NOT NULL,
+  type TEXT NOT NULL DEFAULT 'mobile-money',
+  available BOOLEAN DEFAULT TRUE,
+  currency_code TEXT,
+  image TEXT DEFAULT '',
+  address TEXT NOT NULL,
+  accountname TEXT NOT NULL,
+  bank TEXT DEFAULT '',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE depositwallet ADD COLUMN IF NOT EXISTS type TEXT NOT NULL DEFAULT 'mobile-money';
+ALTER TABLE depositwallet ADD COLUMN IF NOT EXISTS available BOOLEAN DEFAULT TRUE;
+ALTER TABLE depositwallet ADD COLUMN IF NOT EXISTS currency_code TEXT;
+ALTER TABLE depositwallet ADD COLUMN IF NOT EXISTS image TEXT DEFAULT '';
+ALTER TABLE depositwallet ADD COLUMN IF NOT EXISTS address TEXT;
+ALTER TABLE depositwallet ADD COLUMN IF NOT EXISTS accountname TEXT;
+ALTER TABLE depositwallet ADD COLUMN IF NOT EXISTS bank TEXT DEFAULT '';
 
 -- ============================================================================
 -- INDEXES FOR PERFORMANCE
