@@ -51,11 +51,11 @@ const bootSplashDelayMs = 700
 const sessionBootTimeoutMs = 5000
 const referralFilters = ['all', 1, 2, 3]
 const bfcImages = [
-  '/fcfa/IMG-20260723-WA0042.jpg',
-  '/fcfa/IMG-20260723-WA0043.jpg',
-  '/fcfa/IMG-20260723-WA0044.jpg',
-  '/fcfa/IMG-20260723-WA0045.jpg',
-  '/fcfa/IMG-20260723-WA0046.jpg',
+  '/usd/bfc1.jpg',
+  '/usd/bfc2.jpg',
+  '/usd/bfc3.jpg',
+  '/usd/bfc4.jpg',
+  '/usd/bfc5.jpg',
 ]
 const ballImage = '/simps/ball.png'
 const languageStorageKey = 'efc-language'

@@ -43,6 +43,20 @@ ALTER TABLE public.admin_settings
   ADD COLUMN IF NOT EXISTS max_withdrawal_amount DECIMAL(15, 3) NOT NULL DEFAULT 100000.000,
   ADD COLUMN IF NOT EXISTS daily_withdrawal_limit DECIMAL(15, 3) NOT NULL DEFAULT 100.000;
 
+ALTER TABLE public.notification
+  ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  ADD COLUMN IF NOT EXISTS processed_at TIMESTAMP,
+  ADD COLUMN IF NOT EXISTS processing_started_at TIMESTAMP;
+
+CREATE INDEX IF NOT EXISTS idx_notification_withdrawal_pending
+  ON public.notification (username, created_at)
+  WHERE lower(COALESCE(type, '')) IN ('withdraw', 'withdrawer')
+    AND lower(COALESCE(sent, 'pending')) IN ('pending', 'processing');
+CREATE INDEX IF NOT EXISTS idx_notification_withdrawal_success
+  ON public.notification (username, processed_at, created_at)
+  WHERE lower(COALESCE(type, '')) IN ('withdraw', 'withdrawer')
+    AND lower(COALESCE(sent, '')) IN ('success', 'true', 'completed');
+
 ALTER TABLE public.admin_settings
   ALTER COLUMN membership_balance_threshold SET DEFAULT 1.667,
   ALTER COLUMN min_withdrawal_amount SET DEFAULT 10.000,
