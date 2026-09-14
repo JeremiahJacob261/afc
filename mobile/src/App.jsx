@@ -731,6 +731,77 @@ function LoginScreen({ onBack, onReset, onRegister, onSignedIn }) {
   )
 }
 
+function CountryFlag({ country, eager = false }) {
+  const [imageFailed, setImageFailed] = useState(false)
+
+  if (!country?.flagImage || imageFailed) {
+    return <span className="country-flag-fallback" aria-hidden="true">{country?.flag}</span>
+  }
+
+  return (
+    <img
+      className="country-flag-image"
+      src={country.flagImage}
+      alt={`${country.name} flag`}
+      width="22"
+      height="16"
+      loading={eager ? 'eager' : 'lazy'}
+      onError={() => setImageFailed(true)}
+    />
+  )
+}
+
+function CountryPicker({ countries, value, onChange, searchPlaceholder }) {
+  const [open, setOpen] = useState(false)
+  const [query, setQuery] = useState('')
+  const selected = countries.find((country) => country.countryCode === value) || countries[0]
+  const normalizedQuery = query.trim().toLowerCase()
+  const visibleCountries = normalizedQuery
+    ? countries.filter((country) => `${country.name} ${country.code}`.toLowerCase().includes(normalizedQuery))
+    : countries
+
+  return (
+    <div className="country-picker">
+      <button type="button" className="country-picker-toggle" aria-expanded={open} onClick={() => setOpen((current) => !current)}>
+        <CountryFlag country={selected} eager />
+        <span>{selected.code} {selected.name}</span>
+        <ChevronRight size={16} className={open ? 'country-picker-chevron open' : 'country-picker-chevron'} />
+      </button>
+      {open && (
+        <div className="country-picker-menu">
+          <input
+            autoFocus
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder={searchPlaceholder}
+          />
+          <div className="country-picker-options" role="listbox">
+            {visibleCountries.map((country) => (
+              <button
+                key={country.countryCode}
+                type="button"
+                role="option"
+                aria-selected={country.countryCode === selected.countryCode}
+                className={country.countryCode === selected.countryCode ? 'active' : ''}
+                onClick={() => {
+                  onChange(country)
+                  setOpen(false)
+                  setQuery('')
+                }}
+              >
+                <CountryFlag country={country} />
+                <span>{country.name}</span>
+                <small>{country.code}</small>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 function RegisterScreen({ onBack, onLogin, onSignedIn }) {
   const { t } = useTranslation('common')
   const countryCodes = countryData.countries
@@ -845,20 +916,15 @@ function RegisterScreen({ onBack, onLogin, onSignedIn }) {
         <div className="two-column">
           <label className="mini-field">
             <span>{t('auth.register.code')}</span>
-            <select
+            <CountryPicker
+              countries={countryCodes}
               value={selectedCountry}
-              onChange={(event) => {
-                const country = countryCodes.find((item) => item.countryCode === event.target.value)
-                setSelectedCountry(event.target.value)
-                updateField('countrycode', country?.code || event.target.value)
+              searchPlaceholder={t('auth.register.searchCountry')}
+              onChange={(country) => {
+                setSelectedCountry(country.countryCode)
+                updateField('countrycode', country.code)
               }}
-            >
-              {countryCodes.map((country) => (
-                <option key={country.countryCode || country.name} value={country.countryCode || country.code}>
-                  {country.flag} {country.code} {country.name}
-                </option>
-              ))}
-            </select>
+            />
           </label>
           <label className="mini-field">
             <span>{t('auth.register.phone')}</span>

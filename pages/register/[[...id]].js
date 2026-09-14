@@ -3,7 +3,7 @@ import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import Head from "next/head";
 import Link from 'next/link'
 import { Stack } from "@mui/material";
-import { ArrowLeft, Mail, Lock, ArrowRight, User, Globe, Phone, Hash } from "lucide-react";
+import { ArrowLeft, Mail, Lock, ArrowRight, User, Phone, Hash } from "lucide-react";
 import { useRouter } from 'next/router'
 import LOGO from '@/public/european.ico'
 import Image from 'next/image'
@@ -17,6 +17,88 @@ import FeedbackDialog from '@/components/FeedbackDialog';
 import { waitForPaint } from '@/lib/uiFeedback';
 import toast, { Toaster } from 'react-hot-toast';
 import { useTranslation } from 'next-i18next';
+
+function CountryFlag({ country, eager = false }) {
+  const [imageFailed, setImageFailed] = useState(false)
+
+  if (!country?.flagImage || imageFailed) {
+    return <span className="text-lg leading-none" aria-hidden="true">{country?.flag}</span>
+  }
+
+  return (
+    <img
+      src={country.flagImage}
+      alt={`${country.name} flag`}
+      width={22}
+      height={16}
+      loading={eager ? 'eager' : 'lazy'}
+      onError={() => setImageFailed(true)}
+      className="h-4 w-[22px] shrink-0 rounded-sm object-cover shadow-sm"
+    />
+  )
+}
+
+function CountryCodePicker({ countries, value, onChange, label, searchPlaceholder }) {
+  const [open, setOpen] = useState(false)
+  const [query, setQuery] = useState('')
+  const selected = countries.find((item) => item.countryCode === value) || countries[0]
+  const normalizedQuery = query.trim().toLowerCase()
+  const visibleCountries = normalizedQuery
+    ? countries.filter((item) => `${item.name} ${item.code}`.toLowerCase().includes(normalizedQuery))
+    : countries
+
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        aria-label={label}
+        aria-expanded={open}
+        onClick={() => setOpen((current) => !current)}
+        className="flex w-full items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-3 pr-3 text-left text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all"
+      >
+        <CountryFlag country={selected} eager />
+        <span className="min-w-0 flex-1 truncate">{selected.code} {selected.name}</span>
+        <span className="text-gray-400" aria-hidden="true">▾</span>
+      </button>
+
+      {open && (
+        <div className="absolute z-30 mt-2 w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xl">
+          <div className="border-b border-gray-100 p-2">
+            <input
+              autoFocus
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder={searchPlaceholder}
+              className="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-900 outline-none focus:border-[#1BB6FF]"
+            />
+          </div>
+          <div role="listbox" aria-label={label} className="max-h-64 overflow-y-auto p-1">
+            {visibleCountries.map((item) => (
+              <button
+                key={item.countryCode}
+                type="button"
+                role="option"
+                aria-selected={item.countryCode === selected.countryCode}
+                onClick={() => {
+                  onChange(item.countryCode)
+                  setOpen(false)
+                  setQuery('')
+                }}
+                className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition-colors ${item.countryCode === selected.countryCode ? 'bg-[#1BB6FF]/10 text-gray-900' : 'text-gray-700 hover:bg-gray-100'}`}
+              >
+                <CountryFlag country={item} />
+                <span className="min-w-0 flex-1 truncate">{item.name}</span>
+                <span className="text-gray-500">{item.code}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function Register({ refer }) {
   const { t } = useTranslation('common')
 
@@ -258,23 +340,13 @@ export default function Register({ refer }) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-sm font-medium text-gray-700 ml-1">{t('auth.register.code')}</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                      <Globe className="w-4 h-4 text-gray-400" />
-                    </div>
-                    <select
-                      className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all text-sm appearance-none"
-                      required
-                      value={country}
-                      onChange={(e) => setCountry(e.target.value)}
-                    >
-                      {codes.countries.map((c) => (
-                        <option value={c.countryCode || c.code} key={c.countryCode || c.name} className="text-gray-900">
-                          {c.flag} {c.code} {c.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                  <CountryCodePicker
+                    countries={codes.countries}
+                    value={country}
+                    onChange={setCountry}
+                    label={t('auth.register.code')}
+                    searchPlaceholder={t('auth.register.searchCountry')}
+                  />
                 </div>
 
                 <div className="space-y-1.5">

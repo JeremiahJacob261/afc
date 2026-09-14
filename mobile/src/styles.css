@@ -542,6 +542,126 @@ a {
   border: 1px solid #dbe4ee;
 }
 
+.country-picker {
+  position: relative;
+}
+
+.country-picker-toggle {
+  width: 100%;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  border: 1px solid #dbe4ee;
+  border-radius: 15px;
+  background: #eef3f8;
+  color: #06101f;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.country-picker-toggle > span {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.country-picker-chevron {
+  flex: 0 0 auto;
+  color: #64748b;
+  transition: transform var(--mobile-motion-fast) var(--mobile-motion-ease);
+}
+
+.country-picker-chevron.open {
+  transform: rotate(90deg);
+}
+
+.country-flag-image {
+  width: 22px;
+  height: 16px;
+  flex: 0 0 auto;
+  border-radius: 3px;
+  object-fit: cover;
+  box-shadow: 0 1px 3px rgba(6, 16, 31, 0.2);
+}
+
+.country-flag-fallback {
+  flex: 0 0 auto;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.country-picker-menu {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 8px);
+  left: 0;
+  width: min(340px, calc(100vw - 48px));
+  overflow: hidden;
+  border: 1px solid #dbe4ee;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 18px 38px rgba(6, 16, 31, 0.22);
+}
+
+.country-picker-menu input {
+  width: calc(100% - 16px);
+  min-height: 42px;
+  margin: 8px;
+  padding: 0 10px;
+  border: 1px solid #dbe4ee;
+  border-radius: 10px;
+  outline: 0;
+  background: #f8fafc;
+  color: #06101f;
+}
+
+.country-picker-menu input:focus {
+  border-color: #1bb6ff;
+}
+
+.country-picker-options {
+  max-height: 270px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.country-picker-options button {
+  width: 100%;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 10px;
+  padding: 7px 8px;
+  background: transparent;
+  color: #334155;
+  text-align: left;
+}
+
+.country-picker-options button.active,
+.country-picker-options button:active {
+  background: rgba(27, 182, 255, 0.14);
+}
+
+.country-picker-options button > span {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.country-picker-options small {
+  color: #64748b;
+  font-weight: 700;
+}
+
 .check-row {
   display: flex;
   gap: 10px;

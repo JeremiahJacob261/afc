@@ -79,6 +79,7 @@
       "email": "Email",
       "emailPlaceholder": "you@example.com",
       "code": "Code",
+      "searchCountry": "Search country or code",
       "phone": "Phone",
       "phonePlaceholder": "8000000000",
       "referralCode": "Referral code",

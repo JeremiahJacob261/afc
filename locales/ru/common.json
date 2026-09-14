@@ -79,6 +79,7 @@
       "email": "Электронная почта",
       "emailPlaceholder": "you@example.com",
       "code": "Код",
+      "searchCountry": "Поиск страны или кода",
       "phone": "Телефон",
       "phonePlaceholder": "8000000000",
       "referralCode": "Реферальный код",

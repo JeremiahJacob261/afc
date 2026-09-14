@@ -79,6 +79,7 @@
       "email": "Correo electrónico",
       "emailPlaceholder": "tu@ejemplo.com",
       "code": "Código",
+      "searchCountry": "Buscar país o prefijo",
       "phone": "Teléfono",
       "phonePlaceholder": "8000000000",
       "referralCode": "Código de referido",

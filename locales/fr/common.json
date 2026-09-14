@@ -79,6 +79,7 @@
       "email": "Email",
       "emailPlaceholder": "vous@example.com",
       "code": "Code",
+      "searchCountry": "Rechercher un pays ou un indicatif",
       "phone": "Téléphone",
       "phonePlaceholder": "8000000000",
       "referralCode": "Code de parrainage",
