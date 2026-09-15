@@ -43,6 +43,12 @@ import { getLocalStorageItem, setLocalStorageItem } from './lib/storage.js'
 import { checkForBundleUpdate, markBundleReady } from './lib/updater.js'
 import countryData from '../../pages/api/codeswithflag.json'
 
+const registrationCountries = [
+  ...countryData.countries.filter((country) => country.countryCode === 'US'),
+  ...countryData.countries.filter((country) => country.countryCode === 'RU'),
+  ...countryData.countries.filter((country) => country.countryCode !== 'US' && country.countryCode !== 'RU'),
+]
+
 const referralCode = '000208'
 const defaultTelegramGroupUrl = 'https://t.me/+Giav1o1JVGNkYzNk'
 const defaultWhatsappGroupUrl = 'https://chat.whatsapp.com/I1D6NNWndu6HDrbzB5BkPX?s=hd&p=i&mlu=0&ilr=0'
@@ -804,11 +810,11 @@ function CountryPicker({ countries, value, onChange, searchPlaceholder }) {
 
 function RegisterScreen({ onBack, onLogin, onSignedIn }) {
   const { t } = useTranslation('common')
-  const countryCodes = countryData.countries
+  const countryCodes = registrationCountries
   const [form, setForm] = useState({
     username: '',
     email: '',
-    countrycode: '+234',
+    countrycode: '+1',
     phone: '',
     referral: referralCode,
     password: '',
@@ -818,7 +824,7 @@ function RegisterScreen({ onBack, onLogin, onSignedIn }) {
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
-  const [selectedCountry, setSelectedCountry] = useState('NG')
+  const [selectedCountry, setSelectedCountry] = useState('US')
 
   function updateField(name, value) {
     setForm((current) => ({ ...current, [name]: value }))

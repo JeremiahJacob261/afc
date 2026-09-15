@@ -18,6 +18,12 @@ import { waitForPaint } from '@/lib/uiFeedback';
 import toast, { Toaster } from 'react-hot-toast';
 import { useTranslation } from 'next-i18next';
 
+const registrationCountries = [
+  ...codes.countries.filter((country) => country.countryCode === 'US'),
+  ...codes.countries.filter((country) => country.countryCode === 'RU'),
+  ...codes.countries.filter((country) => country.countryCode !== 'US' && country.countryCode !== 'RU'),
+]
+
 function CountryFlag({ country, eager = false }) {
   const [imageFailed, setImageFailed] = useState(false)
 
@@ -107,7 +113,7 @@ export default function Register({ refer }) {
   const route = useRouter();
   const [phone, setPhone] = useState("")
   const [username, setUsername] = useState("")
-  const [country, setCountry] = useState("IN");
+  const [country, setCountry] = useState("US");
 
   const [loading, setLoading] = useState(false);
   const [idR, setidR] = useState(refer);
@@ -341,7 +347,7 @@ export default function Register({ refer }) {
                 <div className="space-y-1.5">
                   <label className="text-sm font-medium text-gray-700 ml-1">{t('auth.register.code')}</label>
                   <CountryCodePicker
-                    countries={codes.countries}
+                    countries={registrationCountries}
                     value={country}
                     onChange={setCountry}
                     label={t('auth.register.code')}
