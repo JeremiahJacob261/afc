@@ -10,6 +10,17 @@ ALTER TABLE public.admin_settings
   ADD COLUMN IF NOT EXISTS membership_balance_threshold DECIMAL(15, 3) NOT NULL DEFAULT 1.667
   CHECK (membership_balance_threshold >= 0);
 
+ALTER TABLE public.admin_settings
+  ALTER COLUMN membership_balance_threshold SET DEFAULT 1.667;
+
+-- Replace the legacy default introduced by older USDT migrations while
+-- preserving any administrator-selected custom threshold.
+UPDATE public.admin_settings
+SET membership_balance_threshold = 1.667,
+    updated_at = CURRENT_TIMESTAMP
+WHERE id = 1
+  AND membership_balance_threshold = 1000.000;
+
 CREATE INDEX IF NOT EXISTS idx_users_refer_balance
   ON public.users(refer, balance);
 
@@ -22,7 +33,7 @@ SET search_path = public
 AS $$
   SELECT COALESCE(
     (SELECT membership_balance_threshold FROM public.admin_settings WHERE id = 1),
-    1000
+    1.667
   )::NUMERIC;
 $$;
 

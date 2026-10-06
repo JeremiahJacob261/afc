@@ -1,28 +1,28 @@
-import React, { useState, useContext, useEffect } from "react";
-import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
+import React, { useState, useEffect } from "react";
+import { getI18nServerSideProps } from "@/lib/i18nServerSideProps";
 import Head from "next/head";
-import Link from 'next/link'
-import { Stack } from "@mui/material";
-import { ArrowLeft, Mail, Lock, ArrowRight, User, Phone, Hash } from "lucide-react";
-import { useRouter } from 'next/router'
-import LOGO from '@/public/european.ico'
-import Image from 'next/image'
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { supabase } from '@/pages/api/supabase'
-import codes from '@/pages/api/codeswithflag.json'
-import { clearLegacyAuthStorage } from '@/lib/clientAuth';
-import AppLoadingOverlay from '@/components/AppLoadingOverlay';
-import FeedbackDialog from '@/components/FeedbackDialog';
-import { waitForPaint } from '@/lib/uiFeedback';
-import toast, { Toaster } from 'react-hot-toast';
-import { useTranslation } from 'next-i18next';
+import Link from "next/link";
+import { ArrowLeft, ArrowRight, CheckCircle2, Lock, Mail, Phone, ShieldCheck, User, Hash } from "lucide-react";
+import { useRouter } from "next/router";
+import LOGO from "@/public/european.ico";
+import Image from "next/image";
+import { Eye, EyeOff } from "lucide-react";
+import { supabase } from "@/pages/api/supabase";
+import codes from "@/pages/api/codeswithflag.json";
+import { clearLegacyAuthStorage } from "@/lib/clientAuth";
+import AppLoadingOverlay from "@/components/AppLoadingOverlay";
+import FeedbackDialog from "@/components/FeedbackDialog";
+import { waitForPaint } from "@/lib/uiFeedback";
+import toast, { Toaster } from "react-hot-toast";
+import { useTranslation } from "next-i18next";
+import { Hairline, Starfield } from "@/components/ucl/Decor";
+import { Star, Starball } from "@/components/ucl/Starball";
 
 const registrationCountries = [
   ...codes.countries.filter((country) => country.countryCode === 'US'),
   ...codes.countries.filter((country) => country.countryCode === 'RU'),
   ...codes.countries.filter((country) => country.countryCode !== 'US' && country.countryCode !== 'RU'),
-]
+];
 
 function CountryFlag({ country, eager = false }) {
   const [imageFailed, setImageFailed] = useState(false)
@@ -39,7 +39,7 @@ function CountryFlag({ country, eager = false }) {
       height={16}
       loading={eager ? 'eager' : 'lazy'}
       onError={() => setImageFailed(true)}
-      className="h-4 w-[22px] shrink-0 rounded-sm object-cover shadow-sm"
+      className="h-4 w-[22px] shrink-0 rounded-sm object-cover"
     />
   )
 }
@@ -60,23 +60,25 @@ function CountryCodePicker({ countries, value, onChange, label, searchPlaceholde
         aria-label={label}
         aria-expanded={open}
         onClick={() => setOpen((current) => !current)}
-        className="flex w-full items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-3 pr-3 text-left text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all"
+        className="ucl-select-trigger"
       >
         <CountryFlag country={selected} eager />
-        <span className="min-w-0 flex-1 truncate">{selected.code} {selected.name}</span>
-        <span className="text-gray-400" aria-hidden="true">▾</span>
+        <span className="min-w-0 flex-1 truncate">
+          <span className="text-silver-500">{selected.code}</span> {selected.name}
+        </span>
+        <span className="text-xs text-silver-500" aria-hidden="true">▼</span>
       </button>
 
       {open && (
-        <div className="absolute z-30 mt-2 w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xl">
-          <div className="border-b border-gray-100 p-2">
+        <div className="ucl-select-menu">
+          <div className="border-b border-white/10 p-2">
             <input
               autoFocus
               type="search"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder={searchPlaceholder}
-              className="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-900 outline-none focus:border-[#1BB6FF]"
+              className="ucl-field py-2"
             />
           </div>
           <div role="listbox" aria-label={label} className="max-h-64 overflow-y-auto p-1">
@@ -91,11 +93,11 @@ function CountryCodePicker({ countries, value, onChange, label, searchPlaceholde
                   setOpen(false)
                   setQuery('')
                 }}
-                className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition-colors ${item.countryCode === selected.countryCode ? 'bg-[#1BB6FF]/10 text-gray-900' : 'text-gray-700 hover:bg-gray-100'}`}
+                className="ucl-select-option"
               >
                 <CountryFlag country={item} />
                 <span className="min-w-0 flex-1 truncate">{item.name}</span>
-                <span className="text-gray-500">{item.code}</span>
+                <span className="text-silver-500">{item.code}</span>
               </button>
             ))}
           </div>
@@ -103,6 +105,27 @@ function CountryCodePicker({ countries, value, onChange, label, searchPlaceholde
       )}
     </div>
   )
+}
+
+function Field({ id, label, icon: Icon, children, trailing }) {
+  return (
+    <div>
+      <label className="ucl-label" htmlFor={id}>{label}</label>
+      <div className="relative">
+        {Icon && (
+          <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
+            <Icon className="h-4 w-4 text-silver-500" aria-hidden="true" />
+          </span>
+        )}
+        {children}
+        {trailing && (
+          <span className="absolute inset-y-0 right-0 flex items-center pr-3.5">
+            {trailing}
+          </span>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default function Register({ refer }) {
@@ -138,10 +161,6 @@ export default function Register({ refer }) {
       ...values,
       showPassword: !values.showPassword,
     });
-  };
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
   };
 
   useEffect(() => {
@@ -200,9 +219,6 @@ export default function Register({ refer }) {
         }
       })
 
-      console.log('User registered successfully:', data.user);
-      console.log(data)
-
       if (error) throw error;
 
       const profileResponse = await fetch('/api/signup-profile', {
@@ -250,7 +266,7 @@ export default function Register({ refer }) {
 
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 flex flex-col relative overflow-hidden">
+    <div className="ucl-root flex flex-col lg:flex-row">
       <Head>
         <title>{t('auth.register.title')}</title>
         <meta name="description" content={t('auth.register.subtitle')} />
@@ -258,6 +274,7 @@ export default function Register({ refer }) {
         <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
+
       <AppLoadingOverlay open={loading} title={t('auth.register.submitting')} message={t('auth.register.subtitle')} />
       <FeedbackDialog
         open={Boolean(feedback)}
@@ -272,80 +289,131 @@ export default function Register({ refer }) {
       />
       <Toaster position="bottom-center" reverseOrder={false} />
 
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-[#1BB6FF]/10 blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-[#FF4FA3]/10 blur-[120px]" />
-      </div>
+      <Starfield />
+      <div className="ucl-rays" aria-hidden="true" />
+      <Starball
+        className="pointer-events-none absolute -left-28 top-1/4 h-[30rem] w-[30rem] opacity-30 lg:-left-24"
+        tilt={16}
+        density={0.18}
+      />
 
-      <header className="relative z-10 px-6 py-6 sm:px-10">
-        <Link href="/" className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors">
-          <ArrowLeft className="w-5 h-5" />
-          <span className="font-medium">{t('common.backToHome')}</span>
+      {/* ── Brand column ──────────────────────────────────────────────── */}
+      <aside className="ucl-content relative hidden w-[46%] shrink-0 flex-col justify-between border-r border-white/10 p-10 lg:flex xl:p-14">
+        <Link href="/" className="inline-flex items-center gap-2.5">
+          <Star className="h-4 w-4 shrink-0 text-cyan-300" />
+          <Image src={LOGO} alt="" width={30} height={30} aria-hidden="true" />
+          <span className="text-xl font-black uppercase tracking-[0.2em] text-white">
+            {t('common.appName')}
+          </span>
         </Link>
-      </header>
 
-      <main className="flex-1 flex items-center justify-center relative z-10 px-4 py-8">
+        <div className="max-w-md">
+          <p className="flex items-center gap-2.5">
+            <Star className="h-3.5 w-3.5 shrink-0 text-cyan-300" />
+            <span className="ucl-eyebrow">{t('common.brandFull')}</span>
+          </p>
+          <h2 className="ucl-display mt-5 text-5xl text-white">
+            <span className="ucl-silver">{t('landing.hero.titleLine1')}</span>{" "}
+            <span className="ucl-ribbon">{t('landing.hero.titleLine2')}</span>
+          </h2>
+          <div
+            className="mt-7 h-[2px] w-20 bg-ucl-ribbon"
+            style={{ clipPath: "polygon(0 0, 100% 0, calc(100% - 6px) 100%, 0 100%)" }}
+            aria-hidden="true"
+          />
+          <p className="mt-6 text-base leading-7 text-silver-400">
+            {t('landing.hero.copy')}
+          </p>
+
+          <ul className="mt-10 space-y-4">
+            {[
+              { icon: CheckCircle2, copy: t('landing.hero.secureDepositsCopy') },
+              { icon: ShieldCheck, copy: t('landing.hero.responsiblePlayCopy') },
+            ].map((item) => {
+              const Icon = item.icon;
+              return (
+                <li key={item.copy} className="flex items-start gap-3">
+                  <Icon className="mt-0.5 h-5 w-5 shrink-0 text-cyan-300" aria-hidden="true" />
+                  <span className="text-sm leading-6 text-silver-300">{item.copy}</span>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+
+        <p className="text-xs text-silver-500">
+          {t('auth.register.terms')} <Link href="/terms" className="ucl-link">{t('auth.register.termsLink')}</Link>
+        </p>
+      </aside>
+
+      {/* ── Form column ───────────────────────────────────────────────── */}
+      <main className="ucl-content relative flex flex-1 items-center justify-center px-4 py-10 sm:px-8 lg:px-12">
         <div className="w-full max-w-lg">
-          <div className="flex justify-center mb-6">
-            <Link href="/" className="flex items-center gap-2">
-              <Image src={LOGO} alt="EFC Logo" width={40} height={40} className="w-10 h-10 object-contain" />
-              <span className="text-3xl font-black tracking-[-0.04em] text-gray-900">{t('common.appName')}</span>
+          <div className="mb-8 flex items-center justify-between lg:hidden">
+            <Link href="/" className="inline-flex items-center gap-2.5">
+              <Image src={LOGO} alt="" width={30} height={30} aria-hidden="true" />
+              <span className="text-lg font-black uppercase tracking-[0.16em] text-white">
+                {t('common.appName')}
+              </span>
+            </Link>
+            <Link href="/" className="ucl-chip">
+              <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
+              {t('common.backToHome')}
             </Link>
           </div>
 
-          <div className="bg-white border border-gray-200 rounded-[2rem] p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.08)] relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#2ECFC4] to-[#1BB6FF]" />
+          <Link href="/" className="mb-8 hidden items-center gap-2 text-sm font-bold text-silver-400 transition hover:text-white lg:inline-flex">
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+            {t('common.backToHome')}
+          </Link>
 
-            <div className="mb-8 text-center">
-              <h1 className="text-2xl font-black tracking-tight mb-2">{t('auth.register.title')}</h1>
-              <p className="text-gray-500 text-sm">{t('auth.register.subtitle')}</p>
+          <div className="ucl-panel-strong ucl-cut relative overflow-hidden p-6 sm:p-8">
+            <div className="ucl-cut-rule absolute inset-x-0 top-0" />
+
+            <div className="mb-8">
+              <h1 className="text-2xl font-black uppercase tracking-tight text-white">
+                {t('auth.register.title')}
+              </h1>
+              <p className="mt-2 text-sm text-silver-400">{t('auth.register.subtitle')}</p>
             </div>
+
+            <Hairline className="mb-7" />
 
             <form className="space-y-4" onSubmit={(e) => {
               e.preventDefault();
               handleRegister()
             }}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-gray-700 ml-1">{t('auth.register.username')}</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                      <User className="w-4 h-4 text-gray-400" />
-                    </div>
-                    <input
-                      type="text"
-                      placeholder={t('auth.register.usernamePlaceholder')}
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      autoComplete="username"
-                      className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all text-sm"
-                      required
-                    />
-                  </div>
-                </div>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <Field id="reg-username" label={t('auth.register.username')} icon={User}>
+                  <input
+                    id="reg-username"
+                    type="text"
+                    placeholder={t('auth.register.usernamePlaceholder')}
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    autoComplete="username"
+                    className="ucl-field pl-10"
+                    required
+                  />
+                </Field>
 
-                <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-gray-700 ml-1">{t('common.emailAddress')}</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                      <Mail className="w-4 h-4 text-gray-400" />
-                    </div>
-                    <input
-                      type="email"
-                      placeholder={t('auth.register.emailPlaceholder')}
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      autoComplete="email"
-                      className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all text-sm"
-                      required
-                    />
-                  </div>
-                </div>
+                <Field id="reg-email" label={t('common.emailAddress')} icon={Mail}>
+                  <input
+                    id="reg-email"
+                    type="email"
+                    placeholder={t('auth.register.emailPlaceholder')}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    autoComplete="email"
+                    className="ucl-field pl-10"
+                    required
+                  />
+                </Field>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-gray-700 ml-1">{t('auth.register.code')}</label>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <span className="ucl-label">{t('auth.register.code')}</span>
                   <CountryCodePicker
                     countries={registrationCountries}
                     value={country}
@@ -355,112 +423,106 @@ export default function Register({ refer }) {
                   />
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-gray-700 ml-1">{t('auth.register.phone')}</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                      <Phone className="w-4 h-4 text-gray-400" />
-                    </div>
-                    <input
-                      type="tel"
-                      placeholder="5550000000"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      autoComplete="tel"
-                      className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all text-sm"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium text-gray-700 ml-1">{t('auth.register.referralCode')}</label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                    <Hash className="w-4 h-4 text-gray-400" />
-                  </div>
+                <Field id="reg-phone" label={t('auth.register.phone')} icon={Phone}>
                   <input
-                    type="text"
-                    placeholder={t('auth.register.referralCode')}
-                    value={idR}
-                    onChange={(e) => setidR(e.target.value)}
-                    className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all text-sm"
+                    id="reg-phone"
+                    type="tel"
+                    placeholder="5550000000"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    autoComplete="tel"
+                    className="ucl-field pl-10"
+                    required
                   />
-                </div>
+                </Field>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-gray-700 ml-1">{t('auth.register.password')}</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                      <Lock className="w-4 h-4 text-gray-400" />
-                    </div>
-                    <input
-                      type={values.showPassword ? 'text' : 'password'}
-                      placeholder="••••••••"
-                      value={values.password}
-                      onChange={handleChange('password')}
-                      autoComplete="new-password"
-                      className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-10 pr-10 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all text-sm"
-                      required
-                    />
-                    <button type="button" onClick={handleClickShowPassword} className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
-                      {values.showPassword ? <VisibilityOff className="w-4 h-4" /> : <Visibility className="w-4 h-4" />}
-                    </button>
-                  </div>
-                </div>
+              <Field id="reg-referral" label={t('auth.register.referralCode')} icon={Hash}>
+                <input
+                  id="reg-referral"
+                  type="text"
+                  placeholder={t('auth.register.referralCode')}
+                  value={idR}
+                  onChange={(e) => setidR(e.target.value)}
+                  className="ucl-field pl-10"
+                />
+              </Field>
 
-                <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-gray-700 ml-1">{t('auth.register.confirmPassword')}</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                      <Lock className="w-4 h-4 text-gray-400" />
-                    </div>
-                    <input
-                      type={values.showPassword ? 'text' : 'password'}
-                      placeholder="••••••••"
-                      value={cpassword}
-                      onChange={(e) => setcPassword(e.target.value)}
-                      autoComplete="new-password"
-                      className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1BB6FF]/50 focus:border-[#1BB6FF]/50 transition-all text-sm"
-                      required
-                    />
-                  </div>
-                </div>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <Field
+                  id="reg-password"
+                  label={t('auth.register.password')}
+                  icon={Lock}
+                  trailing={
+                    <button
+                      type="button"
+                      onClick={handleClickShowPassword}
+                      aria-label={t('auth.register.password')}
+                      className="text-silver-500 transition hover:text-white"
+                    >
+                      {values.showPassword
+                        ? <EyeOff className="h-4 w-4" aria-hidden="true" />
+                        : <Eye className="h-4 w-4" aria-hidden="true" />}
+                    </button>
+                  }
+                >
+                  <input
+                    id="reg-password"
+                    type={values.showPassword ? 'text' : 'password'}
+                    placeholder="••••••••"
+                    value={values.password}
+                    onChange={handleChange('password')}
+                    autoComplete="new-password"
+                    className="ucl-field pl-10 pr-11"
+                    required
+                  />
+                </Field>
+
+                <Field id="reg-confirm" label={t('auth.register.confirmPassword')} icon={Lock}>
+                  <input
+                    id="reg-confirm"
+                    type={values.showPassword ? 'text' : 'password'}
+                    placeholder="••••••••"
+                    value={cpassword}
+                    onChange={(e) => setcPassword(e.target.value)}
+                    autoComplete="new-password"
+                    className="ucl-field pl-10"
+                    required
+                  />
+                </Field>
               </div>
 
               <div className="pt-2">
-                <label className="flex items-center gap-2 cursor-pointer">
+                <label className="flex cursor-pointer items-start gap-2.5">
                   <input
                     type="checkbox"
                     checked={agecheck}
                     onChange={(e) => setAgecheck(e.target.checked)}
-                    className="w-4 h-4 rounded border-gray-300 text-[#1BB6FF] focus:ring-[#1BB6FF]"
+                    className="ucl-check mt-0.5"
                   />
-                  <span className="text-sm text-gray-600">
+                  <span className="text-sm leading-6 text-silver-400">
                     {t('auth.register.terms')}{' '}
-                    <Link href="/terms" className="text-gray-900 font-semibold hover:text-[#1BB6FF]">{t('auth.register.termsLink')}</Link>
+                    <Link href="/terms" className="ucl-link">{t('auth.register.termsLink')}</Link>
                     {' '}{t('auth.register.and')}{' '}
-                    <Link href="/privacy" className="text-gray-900 font-semibold hover:text-[#1BB6FF]">{t('auth.register.privacyLink')}</Link>
+                    <Link href="/privacy" className="ucl-link">{t('auth.register.privacyLink')}</Link>
                   </span>
                 </label>
               </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full flex items-center justify-center gap-2 bg-[#1BB6FF] hover:bg-[#2ECFC4] text-[#06101F] font-bold rounded-xl py-3.5 transition-all hover:shadow-[0_0_20px_rgba(27,182,255,0.3)] mt-4 group"
-              >
+              <button type="submit" disabled={loading} className="ucl-btn ucl-btn-primary ucl-btn-block group mt-2">
                 {loading ? t('auth.register.submitting') : t('auth.register.submit')}
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight
+                  className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                  aria-hidden="true"
+                />
               </button>
             </form>
 
-            <div className="mt-6 text-center text-sm text-gray-500">
+            <Hairline className="my-7" />
+
+            <div className="text-center text-sm text-silver-400">
               {t('auth.register.hasAccount')}{" "}
-              <Link href="/login" className="text-gray-900 font-semibold hover:text-[#1BB6FF] transition-colors">
+              <Link href="/login" className="ucl-link">
                 {t('auth.login.submit')}
               </Link>
             </div>
@@ -468,7 +530,7 @@ export default function Register({ refer }) {
         </div>
       </main>
     </div>
-  )
+  );
 }
 
 export async function getServerSideProps(context) {

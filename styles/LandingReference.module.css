@@ -1,0 +1,47 @@
+.page { container-type: inline-size; width: 100%; background: #faf9f4; color: #242820; font-family: Arial, Helvetica, sans-serif; padding-bottom: 1.8vw; }
+.page * { box-sizing: border-box; }
+.page a { color: inherit; }
+.hero { height: 55cqw; position: relative; background: linear-gradient(to bottom, rgba(12, 24, 18, .16), rgba(12, 24, 18, .28) 55%, rgba(12, 24, 18, .65)), url('/landing-reference/hero.png') center center / cover no-repeat; color: #fff; }
+.nav { position: absolute; top: 1.625cqw; left: 9.375%; width: 81.25%; height: 4.625cqw; background: #0d1714; border-radius: 3cqw; display: flex; align-items: center; padding: 0 2cqw; }
+.navLinks { display: flex; gap: 1.6cqw; font-size: 1.375cqw; letter-spacing: .015em; }
+.brand { position: absolute; left: 50%; transform: translateX(-50%); font-family: 'Times New Roman', serif; font-size: 2.75cqw; line-height: 1; }
+.join { margin-left: auto; width: 10.75cqw; height: 3.05cqw; display: grid; place-items: center; background: #75886b; border-radius: 2cqw; font-size: 1.375cqw; }
+.heroCopy { position: absolute; left: 0; right: 0; top: 33.15cqw; text-align: center; }
+.heroCopy h1 { font-family: 'Times New Roman', Times, serif; font-size: 4.95cqw; font-weight: 400; line-height: 1.04; margin: 0 0 1.7cqw; letter-spacing: -.08cqw; }
+.heroCopy p { font-size: 1.55cqw; line-height: 1.22; margin: 0 0 1.4cqw; letter-spacing: .015em; }
+.actions { display: flex; justify-content: center; gap: 1.4cqw; font-size: 1.4cqw; }
+.actions a { height: 3.85cqw; border-radius: 3cqw; display: grid; place-items: center; }
+.create { background: white; color: #27322f !important; width: 14.5cqw; }
+.login { background: #263e39; width: 11cqw; }
+.features { height: 20cqw; display: grid; grid-template-columns: repeat(3, 1fr); padding: 1.6cqw 8.5cqw 0; text-align: center; background: #faf9f4; }
+.features article > img, .walletImage { width: 18cqw; height: 9.9cqw; object-fit: contain; display: block; margin: 0 auto; }
+.features h2 { font-family: 'Times New Roman', Times, serif; font-weight: 400; font-size: 1.8cqw; letter-spacing: -.055cqw; line-height: 1.1; margin: .2cqw 0 .4cqw; }
+.features p { color: #7b7d79; font-size: 1.17cqw; line-height: 1.25; margin: 0; }
+.walletImage { position: relative; }
+.walletImage img { width: 100%; height: 100%; object-fit: contain; }
+.walletImage span { position: absolute; top: 64%; left: 56%; background: #17271a; color: #b79b56; font-family: 'Times New Roman', serif; font-size: 1.3cqw; line-height: 1.2; padding: 0 .13cqw; }
+.marketPanel { position: relative; margin: 0 1.125cqw; height: 50.75cqw; background: #eeeee7; border-radius: 1.6cqw; }
+.tabs { position: absolute; top: -1.25cqw; left: 50%; transform: translateX(-50%); height: 4cqw; width: 39cqw; display: flex; align-items: center; padding: .4cqw; border: .125cqw solid #dedfd6; border-radius: 3cqw; background: #faf9f5; }
+.tabs button { background: transparent; border: 0; color: #72776b; font-family: inherit; font-size: 1.18cqw; border-radius: 3cqw; height: 100%; flex: 1; padding: 0; cursor: pointer; }
+.tabs button:first-child { flex: 1.35; }
+.tabs .selected { background: #75886b; color: white; }
+.marketCopy { position: absolute; top: 11.1cqw; left: 10.15cqw; width: 42cqw; }
+.eyebrow { font-size: 1.17cqw; color: #75886b; margin: 0 0 1.4cqw; }
+.marketCopy h2 { font-family: 'Times New Roman', Times, serif; font-size: 4cqw; font-weight: 400; line-height: 1.02; margin: 0 0 2.15cqw; letter-spacing: -.065cqw; }
+.marketIntro { font-size: 1.56cqw; line-height: 1.25; color: #73786d; margin: 0; }
+.marketDetails { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5cqw; border-top: .125cqw solid #d7d9cf; margin-top: 2.2cqw; padding-top: 2.7cqw; }
+.marketDetails h3 { font-size: 1.5cqw; font-weight: 400; margin: 0 0 1.5cqw; }
+.marketDetails p { font-size: 1.36cqw; color: #73786d; line-height: 1.2; margin: 0; letter-spacing: .015em; }
+.phoneFigure { position: absolute; top: 7.8cqw; left: 62.5cqw; width: 23.1cqw; margin: 0; }
+.phone { height: 40.4cqw; border: 1.2cqw solid #111412; border-radius: 3.5cqw; background: white; position: relative; color: #101820; overflow: hidden; }
+.notch { position: absolute; top: 0; left: 28%; width: 50%; height: 1.65cqw; border-radius: 2cqw; background: #111412; }
+.trophy { position: absolute; top: 5.4cqw; left: 5.3cqw; width: 2cqw; height: 2cqw; color: #269ebd; }
+.odds { position: absolute; right: 4.4cqw; top: 4.25cqw; background: #071422; color: white; border-radius: 2cqw; font-size: 1.05cqw; font-weight: bold; padding: .35cqw 1.3cqw; }
+.phoneCopy { position: absolute; left: 4.25cqw; top: 12.6cqw; }
+.phoneLabel { font-size: 1.05cqw; font-weight: 700; color: #2da1c0; margin: 0 0 1.6cqw; }
+.phoneCopy h3 { font-size: 1.8cqw; font-weight: 700; line-height: 1.35; margin: 0 0 1.6cqw; }
+.phoneDescription { font-size: 1.35cqw; color: #69717a; line-height: 1.55; margin: 0; }
+.pick { display: block; margin-top: 3.8cqw; font-size: 1.25cqw; font-weight: bold; color: #2da1c0 !important; }
+.pick span { margin-left: .5cqw; font-size: 1.7cqw; }
+.phoneFigure figcaption { font-size: 1.08cqw; color: #7a8073; text-align: center; margin-top: .6cqw; }
+.page a:focus-visible, .page button:focus-visible { outline: 2px solid #36a6c1; outline-offset: 3px; }

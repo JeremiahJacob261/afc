@@ -36,6 +36,16 @@ const toNumber = (value) => {
 const formatFcfa = (value) => `${toNumber(value).toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT`
 const formatOdd = (value) => toNumber(value).toFixed(3)
 
+// A company-market hit refunds the stake and pays no profit, so it must not
+// read as a win. settlement_outcome is authoritative; fall back to won for bets
+// settled before SETTLEMENT_OUTCOME_MIGRATION.sql was applied.
+const getBetOutcome = (bet) => {
+  if (bet.settlement_outcome) return bet.settlement_outcome
+  if (bet.won === 'true') return 'won'
+  if (bet.won === 'false') return 'lost'
+  return null
+}
+
 const getBetStatus = (bet, t) => {
   const startTime = getMatchStartMs(bet)
   const hasFutureStart = Boolean(startTime && startTime > Date.now())
@@ -44,11 +54,17 @@ const getBetStatus = (bet, t) => {
     return { label: t('status.notStarted'), color: colors.muted, bg: '#121E2D' }
   }
 
-  if (bet.won === 'true') {
+  const outcome = getBetOutcome(bet)
+
+  if (outcome === 'won') {
     return { label: t('status.won'), color: colors.success, bg: '#0F2C24' }
   }
 
-  if (bet.won === 'false') {
+  if (outcome === 'refunded') {
+    return { label: t('status.refunded'), color: colors.accent, bg: colors.accentDark }
+  }
+
+  if (outcome === 'lost') {
     return { label: t('status.lost'), color: colors.danger, bg: '#321923' }
   }
 
@@ -104,12 +120,13 @@ export default function Bets() {
   const currentBets = value === '1' ? bets : fina
   const summary = useMemo(() => {
     const totalStake = [...bets, ...fina].reduce((sum, bet) => sum + toNumber(bet.stake), 0)
-    const won = fina.filter((bet) => bet.won === 'true').length
+    const won = fina.filter((bet) => getBetOutcome(bet) === 'won').length
+    const refunded = fina.filter((bet) => getBetOutcome(bet) === 'refunded').length
 
     return [
       { label: t('status.unsettled'), value: bets.length },
-      { label: t('status.settled'), value: fina.length },
       { label: t('status.won'), value: won },
+      { label: t('status.refunded'), value: refunded },
       { label: t('mobile.bets.stake'), value: formatFcfa(totalStake) },
     ]
   }, [bets, fina, t])
@@ -209,7 +226,10 @@ export default function Bets() {
 
   function BetCard({ bet, onClick }) {
     const status = getBetStatus(bet, t)
-    const returnAmount = toNumber(bet.stake) + toNumber(bet.profit)
+    // A refund returns the stake only, never stake + profit.
+    const returnAmount = getBetOutcome(bet) === 'refunded'
+      ? toNumber(bet.stake)
+      : toNumber(bet.stake) + toNumber(bet.profit)
     const display = useClientMatchDisplay(bet)
 
     return (

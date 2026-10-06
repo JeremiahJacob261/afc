@@ -1,8 +1,8 @@
 {
   "common": {
-    "appName": "EFC",
-    "brandFull": "European Football",
-    "brandCompany": "European Football Clubs",
+    "appName": "UCL",
+    "brandFull": "UCL Football",
+    "brandCompany": "UCL Football",
     "login": "Log in",
     "signIn": "Sign in",
     "signOut": "Sign out",
@@ -56,7 +56,7 @@
   "auth": {
     "login": {
       "title": "Welcome back",
-      "subtitle": "Sign in to open your EFC account.",
+      "subtitle": "Sign in to open your UCL account.",
       "identityLabel": "Email or username",
       "identityPlaceholder": "username or email",
       "passwordLabel": "Password",
@@ -73,7 +73,7 @@
     },
     "register": {
       "title": "Create account",
-      "subtitle": "Join with the EFC mobile flow.",
+      "subtitle": "Join with the UCL mobile flow.",
       "username": "Username",
       "usernamePlaceholder": "johndoe",
       "email": "Email",
@@ -86,7 +86,7 @@
       "password": "Password",
       "confirmPassword": "Confirm password",
       "confirmPasswordPlaceholder": "Confirm password",
-      "terms": "I am at least 18 and accept the EFC terms.",
+      "terms": "I am at least 18 and accept the UCL terms.",
       "termsLink": "Terms",
       "and": "and",
       "privacyLink": "Privacy Policy",
@@ -141,7 +141,7 @@
     "usernameExists": "Username already exists.",
     "unableValidateUsername": "Unable to validate username right now",
     "unableCreateProfile": "Unable to create user profile",
-    "welcomeToEfc": "Welcome to EFC",
+    "welcomeToEfc": "Welcome to UCL",
     "accountCreated": "Your account has been created successfully.",
     "emailExists": "Email already exists!",
     "emailRegistered": "Email already registered",
@@ -244,8 +244,8 @@
   },
   "landing": {
     "meta": {
-      "title": "EFC Football Betting | Live Odds and Football Markets",
-      "description": "Bet on football with EFC. Browse football markets, compare live odds, manage your wallet, and play responsibly."
+      "title": "UCL Football Betting | Live Odds and Football Markets",
+      "description": "Bet on football with UCL. Browse football markets, compare live odds, manage your wallet, and play responsibly."
     },
     "nav": {
       "markets": "Markets",
@@ -257,7 +257,14 @@
     },
     "hero": {
       "title": "Football Betting Made Simple",
-      "copy": "Pick football matches, compare odds, place secure bets, and follow every result from one clear EFC betting experience.",
+      "copy": "Pick football matches, compare odds, place secure bets, and follow every result from one clear UCL betting experience.",
+      "titleLine1": "Call every goal",
+      "titleLine2": "exactly.",
+      "boardEyebrow": "Live market",
+      "boardTitle": "Correct score",
+      "boardStatus": "Open",
+      "boardFixture": "Real Madrid vs Manchester City",
+      "boardFootnote": "Returns are shown as a percentage of your stake. Company markets refund the stake.",
       "createAccount": "Create Account",
       "imageAlt": "Football player kicking a ball",
       "stats": {
@@ -323,7 +330,7 @@
       "steps": [
         {
           "title": "Create your account",
-          "copy": "Register with EFC and secure your football betting profile."
+          "copy": "Register with UCL and secure your football betting profile."
         },
         {
           "title": "Fund your wallet",
@@ -341,9 +348,9 @@
     },
     "operations": {
       "eyebrow": "Platform operations",
-      "title": "EFC football platform terms at a glance",
-      "copy": "The landing page now reflects the EFC operation card: deposit bonus, minimum deposit, daily percentage, and minimum withdrawal.",
-      "imageAlt": "European Football Clubs platform operations showing deposit bonus, minimum deposit, daily percentage, and minimum withdrawal",
+      "title": "UCL football platform terms at a glance",
+      "copy": "The landing page now reflects the UCL operation card: deposit bonus, minimum deposit, daily percentage, and minimum withdrawal.",
+      "imageAlt": "UCL Football platform operations showing deposit bonus, minimum deposit, daily percentage, and minimum withdrawal",
       "items": [
         {
           "label": "Deposit bonus",
@@ -367,7 +374,7 @@
       "eyebrow": "Betting features",
       "title": "Everything focused on football betting",
       "copy": "Clear football markets, secure wallet controls, and simple bet tracking keep users close to the next match.",
-      "walletAlt": "European Football Clubs wallet rewards showing first deposit bonus, bet unlock target, referral bonus, and withdrawal charge",
+      "walletAlt": "UCL Football wallet rewards showing first deposit bonus, bet unlock target, referral bonus, and withdrawal charge",
       "items": [
         {
           "title": "Competitive football odds",
@@ -439,16 +446,16 @@
     },
     "bonuses": {
       "eyebrow": "Bonuses and rewards",
-      "title": "EFC bonus and invitation program",
-      "copy": "Match the EFC invitation bonus card with tiered active-member rewards, welcome bonus details, and agent rebate information.",
-      "imageAlt": "European Football Clubs invitation bonus tiers from 10 to 100 active members",
+      "title": "UCL bonus and invitation program",
+      "copy": "Match the UCL invitation bonus card with tiered active-member rewards, welcome bonus details, and agent rebate information.",
+      "imageAlt": "UCL Football invitation bonus tiers from 10 to 100 active members",
       "inviteActive": "Invite {{members}} active members",
       "earnReward": "Earn {{reward}}",
       "viewOffers": "View offers",
       "items": [
         {
           "title": "Welcome deposit bonus",
-          "copy": "New users can start with the 600 FCFA deposit bonus shown in EFC platform operations."
+          "copy": "New users can start with the 600 FCFA deposit bonus shown in UCL platform operations."
         },
         {
           "title": "Invitation bonus",
@@ -489,9 +496,9 @@
     "agents": {
       "eyebrow": "Agent rewards",
       "title": "15% agent rebates and salary levels",
-      "copy": "Add the EFC agent program details from the provided rebate and salary cards.",
-      "rebateAlt": "European Football Clubs agent rebate levels showing 7 percent, 5 percent, and 3 percent",
-      "salaryAlt": "European Football Clubs agent salary levels from Agent A to Agent G",
+      "copy": "Add the UCL agent program details from the provided rebate and salary cards.",
+      "rebateAlt": "UCL Football agent rebate levels showing 7 percent, 5 percent, and 3 percent",
+      "salaryAlt": "UCL Football agent salary levels from Agent A to Agent G",
       "agent": "Agent",
       "teamLevel": "Team level",
       "teamVolume": "Team volume",
@@ -576,7 +583,7 @@
       "items": [
         {
           "question": "Which football markets can I bet on?",
-          "answer": "EFC highlights popular match result, goals, BTTS, correct score, and live football markets."
+          "answer": "UCL highlights popular match result, goals, BTTS, correct score, and live football markets."
         },
         {
           "question": "How do I start betting?",
@@ -593,13 +600,13 @@
       ]
     },
     "cta": {
-      "eyebrow": "EFC football betting",
+      "eyebrow": "UCL football betting",
       "title": "Ready for your next football pick?",
       "copy": "Create an account, choose a football fixture, and place your bet with clear markets and secure account controls."
     },
     "footer": {
-      "logoAlt": "EFC European Football Clubs logo",
-      "copy": "Football betting markets, live odds, secure wallet controls, and responsible staking guidance in one EFC experience.",
+      "logoAlt": "UCL UCL Football logo",
+      "copy": "Football betting markets, live odds, secure wallet controls, and responsible staking guidance in one UCL experience.",
       "communityLink": "Football community link",
       "matchNews": "Football match news",
       "emailPlaceholder": "Your e-mail",
@@ -664,7 +671,7 @@
   },
   "mobile": {
     "splash": {
-      "eyebrow": "EFC Football",
+      "eyebrow": "UCL Football",
       "title": "Built for match day"
     },
     "onboarding": {
@@ -676,7 +683,7 @@
       "slides": [
         {
           "title": "Football Betting Made Simple",
-          "text": "Pick matches, compare odds, place secure bets, and follow results from one clear EFC mobile experience.",
+          "text": "Pick matches, compare odds, place secure bets, and follow results from one clear UCL mobile experience.",
           "image": "/bfc1.jpg"
         },
         {
@@ -872,7 +879,7 @@
       "deposits": "Deposits",
       "withdrawals": "Withdrawals",
       "loading": "Loading transactions...",
-      "metaDescription": "European Football payment history",
+      "metaDescription": "UCL Football payment history",
       "count": "{{count}} transactions",
       "paymentHistory": "Payment History",
       "totalDeposits": "Total deposits",
@@ -972,7 +979,7 @@
           "message": "{{username}} joined your level {{level}} team."
         },
         "test_push": {
-          "title": "EFC notification test",
+          "title": "UCL notification test",
           "message": "Push notifications are ready on this device."
         }
       }
@@ -1045,20 +1052,20 @@
   },
   "legal": {
     "common": {
-      "backToEfc": "Back to EFC",
+      "backToEfc": "Back to UCL",
       "lastUpdated": "Last updated: June 25, 2026"
     },
     "terms": {
       "title": "Terms",
-      "description": "Terms for using EFC.",
-      "intro": "EFC accounts are for adults who are legally allowed to use football market and wallet services in their location. Do not create an account if you are under 18 or if this service is restricted where you live.",
-      "account": "You are responsible for keeping your login details private, using accurate account information, and understanding the risks before adding funds or placing any market entry. EFC does not ask for your password outside this website.",
+      "description": "Terms for using UCL.",
+      "intro": "UCL accounts are for adults who are legally allowed to use football market and wallet services in their location. Do not create an account if you are under 18 or if this service is restricted where you live.",
+      "account": "You are responsible for keeping your login details private, using accurate account information, and understanding the risks before adding funds or placing any market entry. UCL does not ask for your password outside this website.",
       "restrictions": "Promotions, bonuses, withdrawals, and account access may be limited by verification, fraud prevention, local law, and platform rules. If you believe a page, message, or link is suspicious, stop and contact support through the official in-app support channel."
     },
     "privacy": {
       "title": "Privacy Policy",
-      "description": "Privacy information for EFC accounts.",
-      "collection": "EFC collects account information such as username, email address, phone number, country code, referral code, wallet activity, and authentication data so the service can create accounts, process account actions, and protect users from fraud or unauthorized access.",
+      "description": "Privacy information for UCL accounts.",
+      "collection": "UCL collects account information such as username, email address, phone number, country code, referral code, wallet activity, and authentication data so the service can create accounts, process account actions, and protect users from fraud or unauthorized access.",
       "storage": "Account data is stored with service providers used by the application, including Supabase for authentication and database services. Access to administrative tools should be limited to authorized staff only.",
       "contact": "Do not submit someone else’s personal information. If you need account help or want your data reviewed, contact support through the official in-app support channel."
     }

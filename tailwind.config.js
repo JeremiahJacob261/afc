@@ -57,6 +57,34 @@ module.exports = {
           850: "#0B1D3A",
           800: "#10284D",
         },
+        // UCL brand palette. Deep blue primary, magenta + cyan accents,
+        // silver for the metallic surface treatment.
+        ucl: {
+          950: "#000A1E",
+          900: "#001240",
+          800: "#002D72",
+          700: "#00409E",
+        },
+        magenta: {
+          300: "#FF8AC4",
+          400: "#FF4FA3",
+          500: "#FF2D95",
+          600: "#E6007E",
+        },
+        cyan: {
+          300: "#7CEBFF",
+          400: "#29E0FF",
+          500: "#00C2F3",
+          600: "#00A0CC",
+        },
+        silver: {
+          100: "#F2F5FA",
+          200: "#E4E9F2",
+          300: "#C7CEDB",
+          400: "#A7B0C2",
+          500: "#8B95A9",
+          700: "#5A6478",
+        },
         electric: {
           400: "#23B5FF",
           500: "#1BB6FF",
@@ -70,12 +98,22 @@ module.exports = {
       boxShadow: {
         glow: "0 0 34px rgba(35, 181, 255, 0.24)",
         "soft-xl": "0 28px 80px rgba(6, 16, 31, 0.12)",
+        "ucl-cyan": "0 0 44px rgba(0, 194, 243, 0.30)",
+        "ucl-magenta": "0 0 44px rgba(255, 45, 149, 0.30)",
+        "ucl-lift": "0 30px 90px rgba(0, 10, 30, 0.55)",
       },
       backgroundImage: {
         "premium-radial":
           "radial-gradient(circle at 20% 20%, rgba(35,181,255,0.18), transparent 28%), radial-gradient(circle at 80% 0%, rgba(209,75,69,0.12), transparent 24%), linear-gradient(135deg, #091B34 0%, #06101F 100%)",
         "ice-grid":
           "linear-gradient(rgba(9,27,52,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(9,27,52,0.06) 1px, transparent 1px)",
+        // Deep-blue stage with magenta + cyan bloom, the UCL signature.
+        "ucl-stage":
+          "radial-gradient(ellipse 80% 60% at 15% 0%, rgba(0,194,243,0.20), transparent 60%), radial-gradient(ellipse 70% 55% at 90% 10%, rgba(255,45,149,0.18), transparent 62%), linear-gradient(165deg, #002D72 0%, #001240 45%, #000A1E 100%)",
+        "ucl-ribbon":
+          "linear-gradient(100deg, #00C2F3 0%, #29E0FF 34%, #FF4FA3 68%, #FF2D95 100%)",
+        "ucl-silver":
+          "linear-gradient(160deg, #FFFFFF 0%, #E4E9F2 26%, #A7B0C2 52%, #F2F5FA 74%, #8B95A9 100%)",
       },
       borderRadius: {
         lg: "var(--radius)",

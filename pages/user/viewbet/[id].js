@@ -20,6 +20,7 @@ const colors = {
   cardAlt: '#0F2138',
   border: '#1D3658',
   accent: '#1BB6FF',
+  accentDark: '#0B2B45',
   text: '#F7F9FC',
   muted: '#9EABB9',
   soft: '#D8DEE8',
@@ -36,11 +37,23 @@ const toNumber = (value) => {
 const formatFcfa = (value) => `${toNumber(value).toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT`
 const formatOdd = (value) => toNumber(value).toFixed(3)
 
+// A company-market hit refunds the stake and pays no profit, so it must not
+// read as a win. settlement_outcome is authoritative; fall back to won for bets
+// settled before SETTLEMENT_OUTCOME_MIGRATION.sql was applied.
+function getOutcome(bet) {
+  if (bet.settlement_outcome) return bet.settlement_outcome
+  if (String(bet.won) === 'true') return 'won'
+  if (String(bet.won) === 'false') return 'lost'
+  return null
+}
+
 function getStatus(bet, t) {
   const future = Boolean(getMatchStartMs(bet) && getMatchStartMs(bet) > Date.now())
   if (future) return { label: t('status.notStarted'), color: colors.muted, bg: '#121E2D' }
-  if (String(bet.won) === 'true') return { label: t('status.won'), color: colors.success, bg: '#0F2C24' }
-  if (String(bet.won) === 'false') return { label: t('status.lost'), color: colors.danger, bg: '#321923' }
+  const outcome = getOutcome(bet)
+  if (outcome === 'won') return { label: t('status.won'), color: colors.success, bg: '#0F2C24' }
+  if (outcome === 'refunded') return { label: t('status.refunded'), color: colors.accent, bg: colors.accentDark }
+  if (outcome === 'lost') return { label: t('status.lost'), color: colors.danger, bg: '#321923' }
   return { label: t('status.processing'), color: colors.warning, bg: '#302816' }
 }
 
@@ -83,7 +96,10 @@ export default function ViewBet() {
   }, [router])
 
   const status = getStatus(bet, t)
-  const returnAmount = toNumber(bet.aim) || toNumber(bet.stake) + toNumber(bet.profit)
+  // A refund returns the stake only, never the aim.
+  const returnAmount = getOutcome(bet) === 'refunded'
+    ? toNumber(bet.stake)
+    : toNumber(bet.aim) || toNumber(bet.stake) + toNumber(bet.profit)
   const leagueName = league.otherl || league.league || '—'
 
   return (

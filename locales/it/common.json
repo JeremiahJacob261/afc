@@ -1,7 +1,7 @@
 {
   "common": {
-    "appName": "EFC",
-    "brandFull": "Calcio europeo",
+    "appName": "UCL",
+    "brandFull": "UCL Football",
     "brandCompany": "Club di calcio europei",
     "login": "Login",
     "signIn": "Registrazione",
@@ -56,7 +56,7 @@
   "auth": {
     "login": {
       "title": "Bentornato",
-      "subtitle": "Accedi per aprire il tuo account EFC.",
+      "subtitle": "Accedi per aprire il tuo account UCL.",
       "identityLabel": "E-mail o nome utente",
       "identityPlaceholder": "nome utente o e-mail",
       "passwordLabel": "Password",
@@ -73,7 +73,7 @@
     },
     "register": {
       "title": "Creare un account",
-      "subtitle": "Unisciti al flusso mobile EFC.",
+      "subtitle": "Unisciti al flusso mobile UCL.",
       "username": "Nome utente",
       "usernamePlaceholder": "johndoe",
       "email": "E-mail",
@@ -86,7 +86,7 @@
       "password": "Password",
       "confirmPassword": "Conferma password",
       "confirmPasswordPlaceholder": "Conferma password",
-      "terms": "Ho almeno 18 anni e accetto i termini dell'EFC.",
+      "terms": "Ho almeno 18 anni e accetto i termini dell'UCL.",
       "termsLink": "Termini",
       "and": "e",
       "privacyLink": "Informativa sulla privacy",
@@ -141,7 +141,7 @@
     "usernameExists": "Il nome utente esiste già.",
     "unableValidateUsername": "Impossibile convalidare il nome utente in questo momento",
     "unableCreateProfile": "Impossibile creare il profilo utente",
-    "welcomeToEfc": "Benvenuti all'EFC",
+    "welcomeToEfc": "Benvenuti all'UCL",
     "accountCreated": "Il tuo account è stato creato con successo.",
     "emailExists": "L'e-mail esiste già!",
     "emailRegistered": "E-mail già registrata",
@@ -244,8 +244,8 @@
   },
   "landing": {
     "meta": {
-      "title": "Scommesse sul calcio EFC | Quote in tempo reale e mercati di calcio",
-      "description": "Scommetti sul calcio con EFC. Sfoglia i mercati del calcio, confronta le quote in tempo reale, gestisci il tuo portafoglio e gioca in modo responsabile."
+      "title": "Scommesse sul calcio UCL | Quote in tempo reale e mercati di calcio",
+      "description": "Scommetti sul calcio con UCL. Sfoglia i mercati del calcio, confronta le quote in tempo reale, gestisci il tuo portafoglio e gioca in modo responsabile."
     },
     "nav": {
       "markets": "Mercati",
@@ -257,7 +257,14 @@
     },
     "hero": {
       "title": "Le scommesse sul calcio sono diventate semplici",
-      "copy": "Scegli partite di calcio, confronta le quote, piazza scommesse sicure e segui ogni risultato da un'esperienza di scommesse EFC chiara.",
+      "copy": "Scegli partite di calcio, confronta le quote, piazza scommesse sicure e segui ogni risultato da un'esperienza di scommesse UCL chiara.",
+      "titleLine1": "Indovina ogni gol",
+      "titleLine2": "esattamente.",
+      "boardEyebrow": "Mercato live",
+      "boardTitle": "Punteggio esatto",
+      "boardStatus": "Aperto",
+      "boardFixture": "Real Madrid vs Manchester City",
+      "boardFootnote": "I rendimenti sono mostrati in percentuale sulla puntata. I mercati company rimborsano la puntata.",
       "createAccount": "Creare un account",
       "imageAlt": "Giocatore di football che calcia un pallone",
       "stats": {
@@ -323,7 +330,7 @@
       "steps": [
         {
           "title": "Crea il tuo account",
-          "copy": "Registrati con EFC e proteggi il tuo profilo scommesse sul calcio."
+          "copy": "Registrati con UCL e proteggi il tuo profilo scommesse sul calcio."
         },
         {
           "title": "Finanzia il tuo portafoglio",
@@ -341,8 +348,8 @@
     },
     "operations": {
       "eyebrow": "Operazioni della piattaforma",
-      "title": "Panoramica dei termini della piattaforma di calcio EFC",
-      "copy": "La pagina di destinazione ora riflette la carta operativa EFC: bonus di deposito, deposito minimo, percentuale giornaliera e prelievo minimo.",
+      "title": "Panoramica dei termini della piattaforma di calcio UCL",
+      "copy": "La pagina di destinazione ora riflette la carta operativa UCL: bonus di deposito, deposito minimo, percentuale giornaliera e prelievo minimo.",
       "imageAlt": "Operazioni della piattaforma dei club calcistici europei che mostrano bonus di deposito, deposito minimo, percentuale giornaliera e prelievo minimo",
       "items": [
         {
@@ -439,8 +446,8 @@
     },
     "bonuses": {
       "eyebrow": "Bonus e premi",
-      "title": "Bonus EFC e programma di invito",
-      "copy": "Abbina la carta bonus di invito EFC ai premi per i membri attivi a più livelli, ai dettagli del bonus di benvenuto e alle informazioni sugli sconti degli agenti.",
+      "title": "Bonus UCL e programma di invito",
+      "copy": "Abbina la carta bonus di invito UCL ai premi per i membri attivi a più livelli, ai dettagli del bonus di benvenuto e alle informazioni sugli sconti degli agenti.",
       "imageAlt": "Livelli bonus di invito dei club calcistici europei da 10 a 100 membri attivi",
       "inviteActive": "Invita membri attivi {{members}}",
       "earnReward": "Guadagna {{reward}}",
@@ -448,7 +455,7 @@
       "items": [
         {
           "title": "Bonus sul deposito di benvenuto",
-          "copy": "I nuovi utenti possono iniziare con il bonus di deposito di 600 FCFA mostrato nelle operazioni della piattaforma EFC."
+          "copy": "I nuovi utenti possono iniziare con il bonus di deposito di 600 FCFA mostrato nelle operazioni della piattaforma UCL."
         },
         {
           "title": "Bonus invito",
@@ -489,7 +496,7 @@
     "agents": {
       "eyebrow": "Premi dell'agente",
       "title": "Sconti per agenti e livelli salariali del 15%.",
-      "copy": "Aggiungi i dettagli del programma agente EFC dalle schede sconti e stipendi fornite.",
+      "copy": "Aggiungi i dettagli del programma agente UCL dalle schede sconti e stipendi fornite.",
       "rebateAlt": "I livelli di sconto per gli agenti dei club calcistici europei mostrano il 7%, 5% e 3%.",
       "salaryAlt": "Livelli salariali degli agenti dei club calcistici europei dall'agente A all'agente G",
       "agent": "Agente",
@@ -576,7 +583,7 @@
       "items": [
         {
           "question": "Su quali mercati del calcio posso scommettere?",
-          "answer": "EFC evidenzia i risultati delle partite più popolari, i goal, i BTTS, il punteggio corretto e i mercati di calcio in diretta."
+          "answer": "UCL evidenzia i risultati delle partite più popolari, i goal, i BTTS, il punteggio corretto e i mercati di calcio in diretta."
         },
         {
           "question": "Come inizio a scommettere?",
@@ -593,13 +600,13 @@
       ]
     },
     "cta": {
-      "eyebrow": "Scommesse sul calcio EFC",
+      "eyebrow": "Scommesse sul calcio UCL",
       "title": "Pronto per la tua prossima scelta calcistica?",
       "copy": "Crea un account, scegli un incontro di calcio e piazza la tua scommessa con mercati chiari e controlli sicuri dell'account."
     },
     "footer": {
-      "logoAlt": "Logo dei club europei di calcio EFC",
-      "copy": "Mercati delle scommesse sul calcio, quote in tempo reale, controlli sicuri del portafoglio e guida allo stake responsabile in un'unica esperienza EFC.",
+      "logoAlt": "Logo dei club europei di calcio UCL",
+      "copy": "Mercati delle scommesse sul calcio, quote in tempo reale, controlli sicuri del portafoglio e guida allo stake responsabile in un'unica esperienza UCL.",
       "communityLink": "Collegamento alla comunità calcistica",
       "matchNews": "Notizie sulle partite di calcio",
       "emailPlaceholder": "La tua email",
@@ -664,7 +671,7 @@
   },
   "mobile": {
     "splash": {
-      "eyebrow": "Calcio EFC",
+      "eyebrow": "Calcio UCL",
       "title": "Costruito per il giorno della partita"
     },
     "onboarding": {
@@ -676,7 +683,7 @@
       "slides": [
         {
           "title": "Le scommesse sul calcio sono diventate semplici",
-          "text": "Scegli le partite, confronta le quote, piazza scommesse sicure e segui i risultati da un'unica chiara esperienza mobile EFC.",
+          "text": "Scegli le partite, confronta le quote, piazza scommesse sicure e segui i risultati da un'unica chiara esperienza mobile UCL.",
           "image": "/bfc1.jpg"
         },
         {
@@ -972,7 +979,7 @@
           "message": "{{username}} si è unito al team {{level}} del tuo livello."
         },
         "test_push": {
-          "title": "Test di notifica EFC",
+          "title": "Test di notifica UCL",
           "message": "Le notifiche push sono pronte su questo dispositivo."
         }
       }
@@ -1045,20 +1052,20 @@
   },
   "legal": {
     "common": {
-      "backToEfc": "Torna a EFC",
+      "backToEfc": "Torna a UCL",
       "lastUpdated": "Ultimo aggiornamento: 25 giugno 2026"
     },
     "terms": {
       "title": "Termini e condizioni",
-      "description": "Termini per l'utilizzo di EFC.",
-      "intro": "Gli account EFC sono destinati agli adulti autorizzati per legge a utilizzare i servizi di mercato calcistico e portafoglio nella propria località. Non creare un account se hai meno di 18 anni o se questo servizio è soggetto a restrizioni nella tua zona.",
-      "account": "Sei responsabile della riservatezza dei tuoi dati di accesso, dell'utilizzo di informazioni accurate e della comprensione dei rischi prima di aggiungere fondi o piazzare una scommessa. EFC non chiederà la tua password al di fuori di questo sito web.",
+      "description": "Termini per l'utilizzo di UCL.",
+      "intro": "Gli account UCL sono destinati agli adulti autorizzati per legge a utilizzare i servizi di mercato calcistico e portafoglio nella propria località. Non creare un account se hai meno di 18 anni o se questo servizio è soggetto a restrizioni nella tua zona.",
+      "account": "Sei responsabile della riservatezza dei tuoi dati di accesso, dell'utilizzo di informazioni accurate e della comprensione dei rischi prima di aggiungere fondi o piazzare una scommessa. UCL non chiederà la tua password al di fuori di questo sito web.",
       "restrictions": "Promozioni, bonus, prelievi e accesso all'account possono essere limitati da verifiche, prevenzione delle frodi, leggi locali e regole della piattaforma. Se ritieni sospetta una pagina, un messaggio o un link, interrompi l'operazione e contatta l'assistenza tramite il canale ufficiale nell'app."
     },
     "privacy": {
       "title": "Informativa sulla privacy",
-      "description": "Informazioni sulla privacy degli account EFC.",
-      "collection": "EFC raccoglie informazioni sull'account, come nome utente, indirizzo e-mail, numero di telefono, prefisso internazionale, codice di riferimento, attività del portafoglio e dati di autenticazione, per creare account, elaborare le operazioni e proteggere gli utenti da frodi o accessi non autorizzati.",
+      "description": "Informazioni sulla privacy degli account UCL.",
+      "collection": "UCL raccoglie informazioni sull'account, come nome utente, indirizzo e-mail, numero di telefono, prefisso internazionale, codice di riferimento, attività del portafoglio e dati di autenticazione, per creare account, elaborare le operazioni e proteggere gli utenti da frodi o accessi non autorizzati.",
       "storage": "I dati dell'account sono archiviati presso i fornitori di servizi utilizzati dall'applicazione, tra cui Supabase per l'autenticazione e i servizi di database. L'accesso agli strumenti amministrativi deve essere limitato esclusivamente al personale autorizzato.",
       "contact": "Non inviare dati personali di altre persone. Se hai bisogno di assistenza per l'account o vuoi che i tuoi dati vengano esaminati, contatta l'assistenza tramite il canale ufficiale nell'app."
     }

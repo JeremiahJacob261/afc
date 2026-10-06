@@ -1734,6 +1734,13 @@ button.list-card {
   background: rgba(34, 197, 94, 0.16);
 }
 
+/* A company-market hit refunds the stake and pays no profit, so it must not
+   read as a win. Neutral blue, distinct from success green. */
+.tone-refunded {
+  color: #bae6fd;
+  background: rgba(14, 165, 233, 0.16);
+}
+
 .tone-failed {
   color: #fecaca;
   background: rgba(239, 68, 68, 0.16);

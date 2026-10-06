@@ -1475,7 +1475,7 @@ function MatchDetailScreen({ matchId, navigate }) {
     }
 
     const amount = Math.floor(Number(stake))
-    if (!Number.isFinite(amount) || amount < 600) {
+    if (!Number.isFinite(amount) || amount < 1) {
       notifyMessage(setMessage, 'error', t('messages.stakeMinimum'))
       return
     }
@@ -1734,7 +1734,9 @@ function BetDetailScreen({ betId, navigate }) {
   const selectedMarketKey = getMarketKey(selectedMarketValue)
   const isCompanyScore = selectedMarketKey && isProtectedMarket(match, selectedMarketKey)
   const odd = Number(bet?.odd)
-  const winnings = bet?.aim ?? bet?.profit
+  // A refund returns the stake only, so there is no winnings to show.
+  const isRefund = betOutcome(bet) === 'refunded'
+  const winnings = isRefund ? 0 : (bet?.aim ?? bet?.profit)
   const result = match?.results || status.label
   const matchName = `${bet?.home || match?.home || t('common.home')} vs ${bet?.away || match?.away || t('common.away')}`
 
@@ -3355,11 +3357,23 @@ function formatMarketName(value, t) {
   return label.includes('.') ? t(label) : label
 }
 
+// A company-market hit refunds the stake and pays no profit, so it must not
+// read as a win. settlement_outcome is authoritative; fall back to won for bets
+// settled before SETTLEMENT_OUTCOME_MIGRATION.sql was applied.
+function betOutcome(bet) {
+  if (bet?.settlement_outcome) return bet.settlement_outcome
+  if (bet?.won === 'true') return 'won'
+  if (bet?.won === 'false') return 'lost'
+  return null
+}
+
 function betStatus(bet, t) {
   const startMs = getMatchStartMs(bet)
   if (startMs && startMs > Date.now()) return { label: t('status.notStarted'), tone: 'pending' }
-  if (bet?.won === 'true') return { label: t('status.won'), tone: 'success' }
-  if (bet?.won === 'false') return { label: t('status.lost'), tone: 'failed' }
+  const outcome = betOutcome(bet)
+  if (outcome === 'won') return { label: t('status.won'), tone: 'success' }
+  if (outcome === 'refunded') return { label: t('status.refunded'), tone: 'refunded' }
+  if (outcome === 'lost') return { label: t('status.lost'), tone: 'failed' }
   return { label: t('status.ongoing'), tone: 'processing' }
 }
 

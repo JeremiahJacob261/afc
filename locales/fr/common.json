@@ -1,8 +1,8 @@
 {
   "common": {
-    "appName": "EFC",
-    "brandFull": "European Football",
-    "brandCompany": "European Football Clubs",
+    "appName": "UCL",
+    "brandFull": "UCL Football",
+    "brandCompany": "UCL Football",
     "login": "Se connecter",
     "signIn": "Connexion",
     "signOut": "Déconnexion",
@@ -56,7 +56,7 @@
   "auth": {
     "login": {
       "title": "Bon retour",
-      "subtitle": "Connectez-vous pour ouvrir votre compte EFC.",
+      "subtitle": "Connectez-vous pour ouvrir votre compte UCL.",
       "identityLabel": "Email ou nom d'utilisateur",
       "identityPlaceholder": "nom d'utilisateur ou email",
       "passwordLabel": "Mot de passe",
@@ -73,7 +73,7 @@
     },
     "register": {
       "title": "Créer un compte",
-      "subtitle": "Rejoindre avec le flux mobile EFC.",
+      "subtitle": "Rejoindre avec le flux mobile UCL.",
       "username": "Nom d'utilisateur",
       "usernamePlaceholder": "johndoe",
       "email": "Email",
@@ -86,7 +86,7 @@
       "password": "Mot de passe",
       "confirmPassword": "Confirmez le mot de passe",
       "confirmPasswordPlaceholder": "Confirmez le mot de passe",
-      "terms": "J'ai au moins 18 ans et j'accepte les conditions de EFC.",
+      "terms": "J'ai au moins 18 ans et j'accepte les conditions de UCL.",
       "termsLink": "Conditions",
       "and": "et",
       "privacyLink": "Politique de confidentialité",
@@ -141,7 +141,7 @@
     "usernameExists": "Le nom d'utilisateur existe déjà.",
     "unableValidateUsername": "Impossible de valider le nom d'utilisateur pour le moment",
     "unableCreateProfile": "Impossible de créer le profil utilisateur",
-    "welcomeToEfc": "Bienvenue sur EFC",
+    "welcomeToEfc": "Bienvenue sur UCL",
     "accountCreated": "Votre compte a été créé avec succès.",
     "emailExists": "L'email existe déjà !",
     "emailRegistered": "Email déjà enregistré",
@@ -244,8 +244,8 @@
   },
   "landing": {
     "meta": {
-      "title": "EFC Paris Football | Cotes en Direct et Marchés de Football",
-      "description": "Pariez sur le football avec EFC. Parcourez les marchés de football, comparez les cotes en direct, gérez votre portefeuille et jouez de manière responsable."
+      "title": "UCL Paris Football | Cotes en Direct et Marchés de Football",
+      "description": "Pariez sur le football avec UCL. Parcourez les marchés de football, comparez les cotes en direct, gérez votre portefeuille et jouez de manière responsable."
     },
     "nav": {
       "markets": "Marchés",
@@ -257,7 +257,14 @@
     },
     "hero": {
       "title": "Le Paris Football Simplifié",
-      "copy": "Choisissez des matchs de football, comparez les cotes, placez des paris sécurisés et suivez chaque résultat à partir d'une expérience de paris EFC claire.",
+      "copy": "Choisissez des matchs de football, comparez les cotes, placez des paris sécurisés et suivez chaque résultat à partir d'une expérience de paris UCL claire.",
+      "titleLine1": "Devinez chaque but",
+      "titleLine2": "au juste.",
+      "boardEyebrow": "Marché en direct",
+      "boardTitle": "Score exact",
+      "boardStatus": "Ouvert",
+      "boardFixture": "Real Madrid vs Manchester City",
+      "boardFootnote": "Les rendements sont affichés en pourcentage de votre mise. Les marchés company remboursent la mise.",
       "createAccount": "Créer un Compte",
       "imageAlt": "Joueur de football frappant un ballon",
       "stats": {
@@ -323,7 +330,7 @@
       "steps": [
         {
           "title": "Créez votre compte",
-          "copy": "Inscrivez-vous avec EFC et sécurisez votre profil de paris football."
+          "copy": "Inscrivez-vous avec UCL et sécurisez votre profil de paris football."
         },
         {
           "title": "Approvisionnez votre portefeuille",
@@ -341,8 +348,8 @@
     },
     "operations": {
       "eyebrow": "Opérations de la plateforme",
-      "title": "Conditions de la plateforme de football EFC en un coup d'œil",
-      "copy": "La page d'accueil reflète maintenant la carte d'opération EFC : bonus de dépôt, dépôt minimum, pourcentage quotidien et retrait minimum.",
+      "title": "Conditions de la plateforme de football UCL en un coup d'œil",
+      "copy": "La page d'accueil reflète maintenant la carte d'opération UCL : bonus de dépôt, dépôt minimum, pourcentage quotidien et retrait minimum.",
       "imageAlt": "Opérations des plateformes des clubs de football européens montrant le bonus de dépôt, le dépôt minimum, le pourcentage quotidien et le retrait minimum",
       "items": [
         {
@@ -439,8 +446,8 @@
     },
     "bonuses": {
       "eyebrow": "Bonus et récompenses",
-      "title": "Programme de bonus et d'invitation EFC",
-      "copy": "Associez la carte de bonus d'invitation EFC avec les récompenses des membres actifs par niveau, les détails du bonus de bienvenue et les informations sur le remboursement des agents.",
+      "title": "Programme de bonus et d'invitation UCL",
+      "copy": "Associez la carte de bonus d'invitation UCL avec les récompenses des membres actifs par niveau, les détails du bonus de bienvenue et les informations sur le remboursement des agents.",
       "imageAlt": "Niveaux de bonus d'invitation des clubs de football européens de 10 à 100 membres actifs",
       "inviteActive": "Invitez des membres actifs {{members}}",
       "earnReward": "Gagnez {{reward}}",
@@ -448,7 +455,7 @@
       "items": [
         {
           "title": "Bonus de dépôt de bienvenue",
-          "copy": "Les nouveaux utilisateurs peuvent commencer avec le bonus de dépôt de 600 FCFA indiqué dans les opérations de la plateforme EFC."
+          "copy": "Les nouveaux utilisateurs peuvent commencer avec le bonus de dépôt de 600 FCFA indiqué dans les opérations de la plateforme UCL."
         },
         {
           "title": "Bonus d'invitation",
@@ -489,7 +496,7 @@
     "agents": {
       "eyebrow": "Récompenses pour agents",
       "title": "Remboursements d'agents et niveaux de salaire de 15 %",
-      "copy": "Ajoutez les détails du programme d'agent EFC à partir des cartes de remise et de salaire fournies.",
+      "copy": "Ajoutez les détails du programme d'agent UCL à partir des cartes de remise et de salaire fournies.",
       "rebateAlt": "Niveaux de remise pour les agents des clubs de football européens montrant 7 pour cent, 5 pour cent et 3 pour cent",
       "salaryAlt": "Niveaux de salaire des agents des clubs de football européens de l'agent A à l'agent G",
       "agent": "Agent",
@@ -576,7 +583,7 @@
       "items": [
         {
           "question": "Sur quels marchés de football puis-je parier ?",
-          "answer": "EFC met en évidence les marchés populaires : résultat du match, buts, BTTS, score exact et football en direct."
+          "answer": "UCL met en évidence les marchés populaires : résultat du match, buts, BTTS, score exact et football en direct."
         },
         {
           "question": "Comment commencer à parier ?",
@@ -593,13 +600,13 @@
       ]
     },
     "cta": {
-      "eyebrow": "Pari football EFC",
+      "eyebrow": "Pari football UCL",
       "title": "Prêt pour votre prochain pari de football ?",
       "copy": "Créez un compte, choisissez un match de football et placez votre pari avec des marchés clairs et des contrôles de compte sécurisés."
     },
     "footer": {
-      "logoAlt": "Logo des clubs de football européens EFC",
-      "copy": "Marchés de paris football, cotes en direct, contrôles sécurisés de portefeuille et conseils de jeu responsable dans une expérience EFC.",
+      "logoAlt": "Logo des clubs de football européens UCL",
+      "copy": "Marchés de paris football, cotes en direct, contrôles sécurisés de portefeuille et conseils de jeu responsable dans une expérience UCL.",
       "communityLink": "Lien communauté football",
       "matchNews": "Actualités des matchs de football",
       "emailPlaceholder": "Votre e-mail",
@@ -664,7 +671,7 @@
   },
   "mobile": {
     "splash": {
-      "eyebrow": "EFC Football",
+      "eyebrow": "UCL Football",
       "title": "Conçu pour le jour du match"
     },
     "onboarding": {
@@ -676,7 +683,7 @@
       "slides": [
         {
           "title": "Pari sur le football simplifié",
-          "text": "Choisissez des matchs, comparez les cotes, placez des paris sécurisés et suivez les résultats depuis une expérience mobile EFC claire.",
+          "text": "Choisissez des matchs, comparez les cotes, placez des paris sécurisés et suivez les résultats depuis une expérience mobile UCL claire.",
           "image": "/bfc1.jpg"
         },
         {
@@ -717,7 +724,7 @@
     "nav": {
       "label": "Navigation principale",
       "top": "Haut",
-      "matches": "Matches",
+      "matches": "Matchs",
       "bets": "Mes Paris",
       "profile": "Profil"
     },
@@ -725,6 +732,8 @@
       "hello": "Bonjour",
       "telegram": "Canal Telegram",
       "telegramCopy": "Rejoignez notre groupe Telegram pour gagner plus",
+      "whatsapp": "Groupe WhatsApp",
+      "whatsappCopy": "Rejoignez notre groupe WhatsApp",
       "topMatches": "Meilleurs matchs de football"
     },
     "match": {
@@ -741,7 +750,7 @@
       "marketUnavailable": "Ce marché n'est pas disponible",
       "matchExpired": "Ce match a expiré",
       "maxBetsReached": "Vous avez atteint le nombre maximum de paris pour aujourd'hui.",
-      "insufficientBalance": "Vous n'avez pas assez d'FCFA pour terminer ce pari.",
+      "insufficientBalance": "Votre solde en USDT est insuffisant pour placer ce pari.",
       "placeBet": "Placer un pari",
       "placingBet": "Placement du pari...",
       "loading": "Chargement du match..."
@@ -787,6 +796,7 @@
       "telegramChannel": "Canal Telegram",
       "customerService": "Service client",
       "telegramGroup": "Groupe Telegram",
+      "whatsappGroup": "Groupe WhatsApp",
       "contact": "Contact",
       "closureTitle": "Clôture",
       "bindWallet": "Lier le portefeuille",
@@ -869,7 +879,7 @@
       "deposits": "Dépôts",
       "withdrawals": "Retraits",
       "loading": "Chargement des transactions...",
-      "metaDescription": "Historique des paiements European Football",
+      "metaDescription": "Historique des paiements UCL Football",
       "count": "{{count}} transactions",
       "paymentHistory": "Historique des paiements",
       "totalDeposits": "Total des dépôts",
@@ -969,7 +979,7 @@
           "message": "{{username}} a rejoint votre équipe de niveau {{level}}."
         },
         "test_push": {
-          "title": "Test de notification EFC",
+          "title": "Test de notification UCL",
           "message": "Les notifications push sont prêtes sur cet appareil."
         }
       }
@@ -1038,6 +1048,26 @@
       "firstDepositBonusCopy": "Appliqué une seule fois lorsqu'un administrateur approuve un premier dépôt.",
       "withdrawalSettings": "Paramètres de retrait",
       "withdrawalSettingsCopy": "Configurer le minimum, le maximum et les frais pour les retraits des utilisateurs."
+    }
+  },
+  "legal": {
+    "common": {
+      "backToEfc": "Retour à UCL",
+      "lastUpdated": "Dernière mise à jour : 25 juin 2026"
+    },
+    "terms": {
+      "title": "Conditions d’utilisation",
+      "description": "Conditions d’utilisation d’UCL.",
+      "intro": "Les comptes UCL sont réservés aux adultes légalement autorisés à utiliser les services de marchés de football et de portefeuille dans leur lieu de résidence. Ne créez pas de compte si vous avez moins de 18 ans ou si ce service est interdit là où vous vivez.",
+      "account": "Vous êtes responsable de la confidentialité de vos identifiants de connexion, de l’exactitude des informations de votre compte et de la compréhension des risques avant d’ajouter des fonds ou de placer un pari sur un marché. UCL ne vous demande pas votre mot de passe en dehors de ce site.",
+      "restrictions": "Les promotions, les bonus, les retraits et l’accès au compte peuvent être limités par les vérifications, la prévention de la fraude, la législation locale et les règles de la plateforme. Si une page, un message ou un lien vous semble suspect, arrêtez-vous et contactez l’assistance via le canal officiel de l’application."
+    },
+    "privacy": {
+      "title": "Politique de confidentialité",
+      "description": "Informations sur la confidentialité des comptes UCL.",
+      "collection": "UCL collecte des informations de compte telles que le nom d’utilisateur, l’adresse e-mail, le numéro de téléphone, l’indicatif du pays, le code de parrainage, l’activité du portefeuille et les données d’authentification afin de créer des comptes, de traiter les opérations et de protéger les utilisateurs contre la fraude ou les accès non autorisés.",
+      "storage": "Les données des comptes sont stockées auprès des prestataires utilisés par l’application, notamment Supabase pour l’authentification et les services de base de données. L’accès aux outils d’administration doit être réservé au personnel autorisé.",
+      "contact": "Ne transmettez pas les informations personnelles d’une autre personne. Si vous avez besoin d’aide pour votre compte ou souhaitez faire examiner vos données, contactez l’assistance via le canal officiel de l’application."
     }
   },
   "errors": {

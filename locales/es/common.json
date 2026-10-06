@@ -1,8 +1,8 @@
 {
   "common": {
-    "appName": "EFC",
-    "brandFull": "European Football",
-    "brandCompany": "European Football Clubs",
+    "appName": "UCL",
+    "brandFull": "UCL Football",
+    "brandCompany": "UCL Football",
     "login": "Iniciar sesión",
     "signIn": "Iniciar sesión",
     "signOut": "Cerrar sesión",
@@ -56,7 +56,7 @@
   "auth": {
     "login": {
       "title": "Bienvenido de nuevo",
-      "subtitle": "Inicia sesión para abrir tu cuenta EFC.",
+      "subtitle": "Inicia sesión para abrir tu cuenta UCL.",
       "identityLabel": "Correo electrónico o nombre de usuario",
       "identityPlaceholder": "nombre de usuario o correo electrónico",
       "passwordLabel": "Contraseña",
@@ -73,7 +73,7 @@
     },
     "register": {
       "title": "Crear cuenta",
-      "subtitle": "Únete con el flujo móvil EFC.",
+      "subtitle": "Únete con el flujo móvil UCL.",
       "username": "Nombre de usuario",
       "usernamePlaceholder": "johndoe",
       "email": "Correo electrónico",
@@ -86,7 +86,7 @@
       "password": "Contraseña",
       "confirmPassword": "Confirmar contraseña",
       "confirmPasswordPlaceholder": "Confirmar contraseña",
-      "terms": "Tengo al menos 18 años y acepto los términos de EFC.",
+      "terms": "Tengo al menos 18 años y acepto los términos de UCL.",
       "termsLink": "Términos",
       "and": "y",
       "privacyLink": "Política de privacidad",
@@ -141,7 +141,7 @@
     "usernameExists": "El nombre de usuario ya existe.",
     "unableValidateUsername": "No se puede validar el nombre de usuario en este momento",
     "unableCreateProfile": "No se puede crear el perfil de usuario",
-    "welcomeToEfc": "Bienvenido a EFC",
+    "welcomeToEfc": "Bienvenido a UCL",
     "accountCreated": "Su cuenta ha sido creada exitosamente.",
     "emailExists": "¡El correo electrónico ya existe!",
     "emailRegistered": "Correo electrónico ya registrado",
@@ -244,8 +244,8 @@
   },
   "landing": {
     "meta": {
-      "title": "EFC Apuestas de Fútbol | Cuotas en Vivo y Mercados de Fútbol",
-      "description": "Apueste en fútbol con EFC. Explore los mercados de fútbol, compare cuotas en vivo, gestione su billetera y juegue responsablemente."
+      "title": "UCL Apuestas de Fútbol | Cuotas en Vivo y Mercados de Fútbol",
+      "description": "Apueste en fútbol con UCL. Explore los mercados de fútbol, compare cuotas en vivo, gestione su billetera y juegue responsablemente."
     },
     "nav": {
       "markets": "Mercados",
@@ -257,7 +257,14 @@
     },
     "hero": {
       "title": "Apuestas de Fútbol Hechas Simples",
-      "copy": "Elija partidos de fútbol, compare cuotas, haga apuestas seguras y siga cada resultado desde una experiencia clara de apuestas en EFC.",
+      "copy": "Elija partidos de fútbol, compare cuotas, haga apuestas seguras y siga cada resultado desde una experiencia clara de apuestas en UCL.",
+      "titleLine1": "Predice cada gol",
+      "titleLine2": "exactamente.",
+      "boardEyebrow": "Mercado en vivo",
+      "boardTitle": "Marcador exacto",
+      "boardStatus": "Abierto",
+      "boardFixture": "Real Madrid vs Manchester City",
+      "boardFootnote": "Los retornos se muestran como porcentaje de tu apuesta. Los mercados company devuelven la apuesta.",
       "createAccount": "Crear Cuenta",
       "imageAlt": "Jugador de fútbol pateando un balón",
       "stats": {
@@ -323,7 +330,7 @@
       "steps": [
         {
           "title": "Crea tu cuenta",
-          "copy": "Regístrate en EFC y asegura tu perfil de apuestas de fútbol."
+          "copy": "Regístrate en UCL y asegura tu perfil de apuestas de fútbol."
         },
         {
           "title": "Financia tu billetera",
@@ -341,8 +348,8 @@
     },
     "operations": {
       "eyebrow": "Operaciones de la plataforma",
-      "title": "Términos de la plataforma de fútbol EFC de un vistazo",
-      "copy": "La página de inicio ahora refleja la tarjeta de operación de EFC: bono de depósito, depósito mínimo, porcentaje diario y retiro mínimo.",
+      "title": "Términos de la plataforma de fútbol UCL de un vistazo",
+      "copy": "La página de inicio ahora refleja la tarjeta de operación de UCL: bono de depósito, depósito mínimo, porcentaje diario y retiro mínimo.",
       "imageAlt": "Operaciones de la plataforma de clubes de fútbol europeos mostrando bono de depósito, depósito mínimo, porcentaje diario y retiro mínimo",
       "items": [
         {
@@ -439,8 +446,8 @@
     },
     "bonuses": {
       "eyebrow": "Bonos y recompensas",
-      "title": "Programa de bonificación e invitación EFC",
-      "copy": "Combine la tarjeta de bonificación de invitación EFC con recompensas por miembros activos por niveles, detalles del bono de bienvenida e información de reembolso para agentes.",
+      "title": "Programa de bonificación e invitación UCL",
+      "copy": "Combine la tarjeta de bonificación de invitación UCL con recompensas por miembros activos por niveles, detalles del bono de bienvenida e información de reembolso para agentes.",
       "imageAlt": "Niveles de bonificación por invitación de clubes de fútbol europeos de 10 a 100 miembros activos",
       "inviteActive": "Invita a {{members}} miembros activos",
       "earnReward": "Gana {{reward}}",
@@ -448,7 +455,7 @@
       "items": [
         {
           "title": "Bono de depósito de bienvenida",
-          "copy": "Los nuevos usuarios pueden comenzar con el bono de depósito de 600 FCFA mostrado en las operaciones de la plataforma EFC."
+          "copy": "Los nuevos usuarios pueden comenzar con el bono de depósito de 600 FCFA mostrado en las operaciones de la plataforma UCL."
         },
         {
           "title": "Bono por invitación",
@@ -489,7 +496,7 @@
     "agents": {
       "eyebrow": "Recompensas para agentes",
       "title": "Reembolsos y niveles salariales para agentes del 15%",
-      "copy": "Agregue los detalles del programa de agentes EFC a partir de las tarjetas de reembolso y salario proporcionadas.",
+      "copy": "Agregue los detalles del programa de agentes UCL a partir de las tarjetas de reembolso y salario proporcionadas.",
       "rebateAlt": "Niveles de reembolso de agentes de clubes de fútbol europeos mostrando 7 por ciento, 5 por ciento y 3 por ciento",
       "salaryAlt": "Niveles de salario de agentes de clubes de fútbol europeos desde el Agente A hasta el Agente G",
       "agent": "Agente",
@@ -576,7 +583,7 @@
       "items": [
         {
           "question": "¿En qué mercados de fútbol puedo apostar?",
-          "answer": "EFC destaca los mercados de resultados populares, goles, ambos equipos marcan (BTTS), marcador correcto y fútbol en vivo."
+          "answer": "UCL destaca los mercados de resultados populares, goles, ambos equipos marcan (BTTS), marcador correcto y fútbol en vivo."
         },
         {
           "question": "¿Cómo empiezo a apostar?",
@@ -593,13 +600,13 @@
       ]
     },
     "cta": {
-      "eyebrow": "EFC apuestas de fútbol",
+      "eyebrow": "UCL apuestas de fútbol",
       "title": "¿Listo para tu próxima apuesta de fútbol?",
       "copy": "Crea una cuenta, elige un partido de fútbol y realiza tu apuesta con mercados claros y controles de cuenta seguros."
     },
     "footer": {
-      "logoAlt": "Logo de EFC Clubes de Fútbol Europeos",
-      "copy": "Mercados de apuestas de fútbol, cuotas en vivo, controles seguros de la cartera y orientación para apostar de manera responsable en una sola experiencia EFC.",
+      "logoAlt": "Logo de UCL Clubes de Fútbol Europeos",
+      "copy": "Mercados de apuestas de fútbol, cuotas en vivo, controles seguros de la cartera y orientación para apostar de manera responsable en una sola experiencia UCL.",
       "communityLink": "Enlace a la comunidad de fútbol",
       "matchNews": "Noticias de partidos de fútbol",
       "emailPlaceholder": "Tu correo electrónico",
@@ -664,7 +671,7 @@
   },
   "mobile": {
     "splash": {
-      "eyebrow": "EFC Fútbol",
+      "eyebrow": "UCL Fútbol",
       "title": "Diseñado para el día del partido"
     },
     "onboarding": {
@@ -676,7 +683,7 @@
       "slides": [
         {
           "title": "Apuestas de fútbol simplificadas",
-          "text": "Elige partidos, compara cuotas, realiza apuestas seguras y sigue los resultados desde una experiencia móvil clara de EFC.",
+          "text": "Elige partidos, compara cuotas, realiza apuestas seguras y sigue los resultados desde una experiencia móvil clara de UCL.",
           "image": "/bfc1.jpg"
         },
         {
@@ -869,7 +876,7 @@
       "deposits": "Depósitos",
       "withdrawals": "Retiros",
       "loading": "Cargando transacciones...",
-      "metaDescription": "Historial de pagos de European Football",
+      "metaDescription": "Historial de pagos de UCL Football",
       "count": "{{count}} transacciones",
       "paymentHistory": "Historial de pagos",
       "totalDeposits": "Depósitos totales",
@@ -969,7 +976,7 @@
           "message": "{{username}} se unió a tu equipo de nivel {{level}}."
         },
         "test_push": {
-          "title": "Prueba de notificación EFC",
+          "title": "Prueba de notificación UCL",
           "message": "Las notificaciones push están listas en este dispositivo."
         }
       }

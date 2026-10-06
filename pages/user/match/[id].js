@@ -4,6 +4,7 @@ import { supabase } from "@/pages/api/supabase"
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { useRouter } from "next/router";
 import React, { useEffect, useState, useRef } from "react";
+import { v4 as uuidv4 } from 'uuid'
 import Head from 'next/head';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
@@ -88,6 +89,16 @@ function formatOdd(value) {
     return Number.isFinite(value) && value > 0 ? value.toFixed(3) : 'N/A'
 }
 
+// Identifies one bet attempt so a retry of the same selection is deduplicated
+// by the server instead of placing a second bet. Always returns a real id —
+// passing null would silently opt out of the protection.
+function newClientBetId() {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        return crypto.randomUUID()
+    }
+    return uuidv4()
+}
+
 function getLeagueName(match) {
     return (match?.league === 'others' ? match?.otherl : match?.league) || 'League unavailable'
 }
@@ -137,6 +148,9 @@ export default function Match({ matchDat }) {
     const router = useRouter()
     const initialMatch = Array.isArray(matchDat) && matchDat.length ? matchDat[0] : null
     const hasRun = useRef(false);
+    // Guards against a double-tap placing two bets, and keeps a retry of the
+    // same selection on one client_bet_id so the server deduplicates it.
+    const betAttemptRef = useRef({ signature: '', id: null, pending: false });
     //snackbar1
     const [messages, setMessages] = useState("")
     const [opened, setOpened] = useState(false)
@@ -572,6 +586,7 @@ export default function Match({ matchDat }) {
                         <Button disabled={openx} sx={{ fontFamily: 'Poppins,sans-serif', margin: '8px', fontSize: '16', fontWeight: '300', color: '#06101F', background: "#1BB6FF", padding: '10px' }}
                             onClick={() => {
                                 if (openx) return
+                                if (betAttemptRef.current.pending) return
                                 if (!picked || tofal <= 0) {
                                     toast.error(t('messages.chooseScoreMarket'))
                                 } else if (stakeAmount <= availableStake) {
@@ -587,6 +602,15 @@ export default function Match({ matchDat }) {
                                         toast.error(t('mobile.match.maxBetsReached'));
 
                                     } else {
+                                        // A retry of the same pick + stake reuses the
+                                        // same id, so a dropped response cannot place
+                                        // a second bet. Changing either starts a new one.
+                                        const signature = `${picked}:${stakeFcfa}`
+                                        if (betAttemptRef.current.signature !== signature) {
+                                            betAttemptRef.current = { signature, id: newClientBetId(), pending: false }
+                                        }
+                                        const clientBetId = betAttemptRef.current.id
+                                        betAttemptRef.current.pending = true
                                         handleClose();
                                         handleOpenx()
                                         const deductBet = async () => {
@@ -599,6 +623,7 @@ export default function Match({ matchDat }) {
                                                         match_id: matches.match_id,
                                                         picked,
                                                         stake: stakeFcfa,
+                                                        client_bet_id: clientBetId,
                                                         expected_odd: tofal,
                                                     }),
                                                 })
@@ -620,6 +645,12 @@ export default function Match({ matchDat }) {
                                                 console.log(error)
                                                 toast.error(t('messages.unablePlaceBet'))
                                                 handleClosex()
+                                            } finally {
+                                                // Release the tap lock either way. The id stays
+                                                // on the ref so a retry of the same pick + stake
+                                                // is deduplicated by the server instead of
+                                                // charged twice.
+                                                betAttemptRef.current.pending = false
                                             }
                                         }
                                         deductBet();

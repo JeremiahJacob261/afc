@@ -1,0 +1,332 @@
+{
+  "account-card": {
+    "width": 227,
+    "height": 151,
+    "sourceWidth": 227,
+    "sourceHeight": 157,
+    "widths": [
+      48,
+      96,
+      192,
+      227
+    ]
+  },
+  "badge-barcelona": {
+    "width": 26,
+    "height": 26,
+    "sourceWidth": 26,
+    "sourceHeight": 29,
+    "widths": [
+      26
+    ]
+  },
+  "badge-city": {
+    "width": 29,
+    "height": 29,
+    "sourceWidth": 29,
+    "sourceHeight": 28,
+    "widths": [
+      29
+    ]
+  },
+  "badge-inter": {
+    "width": 28,
+    "height": 28,
+    "sourceWidth": 28,
+    "sourceHeight": 32,
+    "widths": [
+      28
+    ]
+  },
+  "badge-liverpool": {
+    "width": 21,
+    "height": 21,
+    "sourceWidth": 21,
+    "sourceHeight": 27,
+    "widths": [
+      21
+    ]
+  },
+  "badge-madrid": {
+    "width": 24,
+    "height": 24,
+    "sourceWidth": 24,
+    "sourceHeight": 30,
+    "widths": [
+      24
+    ]
+  },
+  "badge-milan": {
+    "width": 23,
+    "height": 23,
+    "sourceWidth": 23,
+    "sourceHeight": 32,
+    "widths": [
+      23
+    ]
+  },
+  "blue-check": {
+    "width": 111,
+    "height": 74,
+    "sourceWidth": 111,
+    "sourceHeight": 74,
+    "widths": [
+      48,
+      96,
+      111
+    ]
+  },
+  "blue-stadium": {
+    "width": 225,
+    "height": 127,
+    "sourceWidth": 225,
+    "sourceHeight": 95,
+    "widths": [
+      48,
+      96,
+      192,
+      225
+    ]
+  },
+  "blue-wallet": {
+    "width": 185,
+    "height": 123,
+    "sourceWidth": 185,
+    "sourceHeight": 124,
+    "widths": [
+      48,
+      96,
+      185
+    ]
+  },
+  "carousel-btts": {
+    "width": 122,
+    "height": 92,
+    "sourceWidth": 122,
+    "sourceHeight": 139,
+    "widths": [
+      48,
+      96,
+      122
+    ]
+  },
+  "carousel-goals": {
+    "width": 166,
+    "height": 125,
+    "sourceWidth": 166,
+    "sourceHeight": 139,
+    "widths": [
+      48,
+      96,
+      166
+    ]
+  },
+  "carousel-live": {
+    "width": 91,
+    "height": 68,
+    "sourceWidth": 91,
+    "sourceHeight": 141,
+    "widths": [
+      48,
+      91
+    ]
+  },
+  "carousel-result": {
+    "width": 190,
+    "height": 143,
+    "sourceWidth": 190,
+    "sourceHeight": 159,
+    "widths": [
+      48,
+      96,
+      190
+    ]
+  },
+  "carousel-score": {
+    "width": 126,
+    "height": 95,
+    "sourceWidth": 126,
+    "sourceHeight": 139,
+    "widths": [
+      48,
+      96,
+      126
+    ]
+  },
+  "floodlight": {
+    "width": 210,
+    "height": 118,
+    "sourceWidth": 210,
+    "sourceHeight": 145,
+    "widths": [
+      48,
+      96,
+      192,
+      210
+    ]
+  },
+  "football": {
+    "width": 255,
+    "height": 143,
+    "sourceWidth": 255,
+    "sourceHeight": 145,
+    "widths": [
+      48,
+      96,
+      192,
+      255
+    ]
+  },
+  "fund-wallet": {
+    "width": 212,
+    "height": 141,
+    "sourceWidth": 212,
+    "sourceHeight": 143,
+    "widths": [
+      48,
+      96,
+      192,
+      212
+    ]
+  },
+  "hero": {
+    "width": 1691,
+    "height": 930,
+    "sourceWidth": 1691,
+    "sourceHeight": 930,
+    "widths": [
+      48,
+      96,
+      192,
+      320,
+      480,
+      768,
+      1024,
+      1280,
+      1536,
+      1691
+    ]
+  },
+  "market-ball": {
+    "width": 177,
+    "height": 100,
+    "sourceWidth": 177,
+    "sourceHeight": 63,
+    "widths": [
+      48,
+      96,
+      177
+    ]
+  },
+  "market-balls": {
+    "width": 165,
+    "height": 110,
+    "sourceWidth": 165,
+    "sourceHeight": 71,
+    "widths": [
+      48,
+      96,
+      165
+    ]
+  },
+  "market-goal": {
+    "width": 161,
+    "height": 107,
+    "sourceWidth": 161,
+    "sourceHeight": 72,
+    "widths": [
+      48,
+      96,
+      161
+    ]
+  },
+  "market-scoreboard": {
+    "width": 130,
+    "height": 87,
+    "sourceWidth": 130,
+    "sourceHeight": 67,
+    "widths": [
+      48,
+      96,
+      130
+    ]
+  },
+  "market-stopwatch": {
+    "width": 84,
+    "height": 56,
+    "sourceWidth": 84,
+    "sourceHeight": 75,
+    "widths": [
+      48,
+      84
+    ]
+  },
+  "market-trophy": {
+    "width": 145,
+    "height": 97,
+    "sourceWidth": 145,
+    "sourceHeight": 91,
+    "widths": [
+      48,
+      96,
+      145
+    ]
+  },
+  "match-phone": {
+    "width": 284,
+    "height": 400,
+    "sourceWidth": 284,
+    "sourceHeight": 400,
+    "widths": [
+      48,
+      96,
+      192,
+      284
+    ]
+  },
+  "resource-markets": {
+    "width": 190,
+    "height": 143,
+    "sourceWidth": 190,
+    "sourceHeight": 135,
+    "widths": [
+      48,
+      96,
+      190
+    ]
+  },
+  "resource-odds": {
+    "width": 190,
+    "height": 143,
+    "sourceWidth": 190,
+    "sourceHeight": 135,
+    "widths": [
+      48,
+      96,
+      190
+    ]
+  },
+  "resource-wallet": {
+    "width": 190,
+    "height": 143,
+    "sourceWidth": 190,
+    "sourceHeight": 135,
+    "widths": [
+      48,
+      96,
+      190
+    ]
+  },
+  "wallet": {
+    "width": 250,
+    "height": 141,
+    "sourceWidth": 250,
+    "sourceHeight": 145,
+    "widths": [
+      48,
+      96,
+      192,
+      250
+    ]
+  }
+}

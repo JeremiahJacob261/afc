@@ -1,0 +1,62 @@
+.closing { --ink: #080f32; --blue: #0649ff; --muted: #7a849e; background: #fdfcf8; color: var(--ink); font-family: Arial, Helvetica, sans-serif; }
+.closing button, .closing a { -webkit-tap-highlight-color: transparent; }
+.closing button { font: inherit; }
+.closing a { color: inherit; text-decoration: none; }
+.closing button:focus-visible, .closing a:focus-visible { outline: 3px solid var(--blue); outline-offset: 5px; }
+.resources { max-width: 1200px; width: calc(100% - 112px); margin: 0 auto; padding: 65px 0 0; display: grid; grid-template-columns: .47fr 1fr; gap: 55px; scroll-margin-top: 30px; }
+.resources header { padding-top: 22px; }
+.resources h2 { font-family: 'Times New Roman', Times, serif; font-size: clamp(48px, 6.5vw, 80px); font-weight: 400; line-height: 1; letter-spacing: -.055em; margin: 0 0 17px; }
+.resources header p { font-size: 22px; line-height: 1.4; color: var(--muted); letter-spacing: -.03em; margin: 0; }
+.resourceArticle + .resourceArticle { border-top: 1px solid #e0e1e7; }
+.resourceLink { display: grid; grid-template-columns: 31% 1fr 20px; align-items: center; gap: 24px; width: 100%; padding: 18px 0; background: none; border: 0; text-align: left; cursor: pointer; color: inherit; }
+.resourceArticle:first-child .resourceLink { padding-top: 0; }
+.resourceLink img { width: 100%; height: auto; aspect-ratio: 190 / 135; object-fit: cover; border-radius: 8px; }
+.resourceText { display: block; }
+.category { display: block; color: var(--blue); font-size: 13px; line-height: 1.3; font-weight: 700; letter-spacing: .06em; margin: 0 0 10px; }
+.resourceTitle { display: block; font-family: 'Times New Roman', Times, serif; font-size: clamp(23px, 2.4vw, 31px); font-weight: 400; line-height: 1.06; letter-spacing: -.045em; margin-bottom: 8px; }
+.description { display: block; color: var(--muted); font-size: 16px; line-height: 1.4; letter-spacing: -.03em; }
+.arrow { color: var(--blue); font-size: 27px; transition: transform 180ms ease; }
+.resourceLink:hover .arrow { transform: translateX(4px); }
+.resourceLink:hover .resourceTitle { color: #1742af; }
+.viewAll { display: inline-flex; align-items: center; gap: 12px; background: none; border: 0; padding: 9px 0; margin-top: 3px; color: var(--blue); font-size: 19px !important; cursor: pointer; }
+.viewAll span { font-size: 25px; }
+.cta { text-align: center; padding: 115px 24px 50px; }
+.cta h2 { font-family: 'Times New Roman', Times, serif; font-size: clamp(54px, 7.7vw, 104px); font-weight: 400; line-height: .95; letter-spacing: -.065em; color: var(--ink); margin: 0; }
+.cta > p { color: var(--muted); font-size: clamp(17px, 2vw, 25px); line-height: 1.4; letter-spacing: -.025em; margin: 28px 0 38px; }
+.ctaActions { display: flex; align-items: center; justify-content: center; gap: 36px; }
+.createAccount { display: inline-flex; justify-content: center; align-items: center; min-height: 62px; min-width: 270px; border-radius: 40px; padding: 14px 36px; background: var(--blue); color: white !important; font-size: 20px; transition: background 160ms; }
+.createAccount:hover { background: #0037d6; }
+.login { display: inline-flex; align-items: center; gap: 12px; color: var(--blue) !important; font-size: 20px; }
+.login span { font-size: 26px; }
+.cta small { display: block; margin-top: 34px; color: var(--muted); font-size: 15px; }
+.footer { background: #f3f2ef; border-radius: 26px 26px 0 0; padding: 50px 0 25px; }
+.footerInner { max-width: 1200px; width: calc(100% - 112px); margin: 0 auto; }
+.footerTop { display: grid; grid-template-columns: .85fr 1fr; gap: 60px; }
+.wordmark { display: inline-block; font-family: 'Times New Roman', Times, serif; font-size: 80px; letter-spacing: -.06em; line-height: .9; margin-bottom: 15px; }
+.tagline { color: var(--ink); font-family: 'Times New Roman', Times, serif; font-size: 27px; letter-spacing: -.035em; line-height: 1.15; margin: 0 0 7px; }
+.brandDescription { color: var(--muted); font-size: 15px; line-height: 1.5; letter-spacing: -.025em; margin: 0; }
+.footerNav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; padding-top: 1px; }
+.footerNav h3 { font-family: 'Times New Roman', Times, serif; font-weight: 400; font-size: 20px; letter-spacing: -.035em; margin: 0 0 15px; }
+.footerNav a, .footerNav button { display: block; width: fit-content; margin: 0 0 8px; color: var(--muted); font-size: 15px; line-height: 1.4; background: none; border: 0; padding: 0; text-align: left; cursor: pointer; }
+.closing .footerNav a { color: var(--muted); }
+.closing .footerNav a:hover, .footerNav button:hover { color: var(--blue); }
+.footerBottom { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-top: 16px; margin-top: 35px; border-top: 1px solid #cbd0dc; color: var(--muted); font-size: 14px; }
+.footerBottom p { margin: 0; color: var(--muted); }
+.footerBottom button { display: inline-flex; align-items: center; gap: 11px; background: none; padding: 0; border: 0; color: inherit; cursor: pointer; }
+.ageBadge { display: grid; place-items: center; width: 35px; height: 35px; border-radius: 50%; border: 1px solid currentColor; font-size: 13px; }
+.guideDialog { width: min(640px, calc(100% - 32px)); max-height: calc(100dvh - 48px); border: 1px solid #e1e2e7; border-radius: 20px; padding: 40px; color: var(--ink); background: #fdfcf8; box-shadow: 0 25px 100px #080f3240; }
+.guideDialog::backdrop { background: #080f3280; backdrop-filter: blur(4px); }
+.guideDialog h2 { font-family: 'Times New Roman', Times, serif; font-size: 38px; font-weight: 400; letter-spacing: -.035em; line-height: 1.1; margin: 10px 25px 15px 0; }
+.closeDialog { position: absolute; top: 12px; right: 15px; width: 36px; height: 36px; border: 0; border-radius: 50%; background: #edede8; font-size: 27px !important; cursor: pointer; color: var(--ink); }
+.guideIntro { color: var(--muted); font-size: 17px; line-height: 1.5; }
+.guideSection { margin-top: 24px; }
+.guideSection h3 { font-size: 18px; margin: 0 0 9px; }
+.guideSection p { font-size: 16px; line-height: 1.65; color: #626d84; margin: 0 0 15px; }
+.guideSection a { color: var(--blue); }
+.guideIndex { display: grid; margin-top: 25px; }
+.guideIndex button { border: 0; border-top: 1px solid #dedfe5; padding: 20px 0; background: transparent; display: flex; justify-content: space-between; gap: 20px; text-align: left; color: var(--ink); cursor: pointer; }
+.guideIndex button:hover { color: var(--blue); }
+@media (max-width: 1000px) { .resources, .footerInner { width: calc(100% - 64px); } .resources { grid-template-columns: .45fr 1fr; gap: 30px; } .resources header p { font-size: 18px; } .resourceLink { gap: 16px; } .resourceTitle { font-size: 25px; } .description { font-size: 14px; } .footerTop { gap: 30px; } .footerNav { gap: 18px; } .footerNav a, .footerNav button { font-size: 14px; } .tagline { font-size: 25px; } }
+@media (max-width: 700px) { .resources { width: calc(100% - 40px); padding-top: 40px; grid-template-columns: 1fr; gap: 25px; } .resources header { padding: 0; } .resources h2 { font-size: 52px; margin-bottom: 12px; } .resources header p { font-size: 18px; } .desktopBreak { display: none; } .resourceLink { grid-template-columns: 105px 1fr 14px; gap: 14px; padding: 20px 0; } .resourceLink img { height: 105px; object-fit: cover; } .resourceTitle { font-size: 23px; } .category { font-size: 10px; letter-spacing: .04em; margin-bottom: 7px; } .description { font-size: 13px; } .arrow { font-size: 22px; } .cta { padding: 70px 20px 45px; } .cta h2 { font-size: clamp(45px, 9.5vw, 66px); line-height: 1; } .cta > p { font-size: 17px; margin: 24px auto 28px; max-width: 420px; } .ctaActions { gap: 23px; } .createAccount { min-width: 190px; min-height: 54px; padding: 12px 24px; font-size: 17px; } .login { font-size: 17px; gap: 8px; } .cta small { margin-top: 28px; font-size: 13px; } .footer { padding-top: 35px; border-radius: 20px 20px 0 0; } .footerInner { width: calc(100% - 40px); } .footerTop { grid-template-columns: 1fr; gap: 32px; } .wordmark { font-size: 66px; } .tagline { font-size: 25px; } .brandDescription { font-size: 14px; } .footerNav { gap: 16px; } .footerNav h3 { font-size: 18px; } .footerNav a, .footerNav button { font-size: 13px; margin-bottom: 10px; } .footerBottom { flex-wrap: wrap; font-size: 12px; gap: 15px; margin-top: 25px; } .guideDialog { padding: 36px 24px 24px; } .guideDialog h2 { font-size: 31px; } }
+@media (max-width: 360px) { .resourceLink { grid-template-columns: 82px 1fr 12px; gap: 10px; } .resourceLink img { height: 90px; } .resourceTitle { font-size: 21px; } .ctaActions { gap: 18px; } .createAccount { min-width: 170px; } .footerNav { column-gap: 10px; } }
+@media (prefers-reduced-motion: reduce) { .arrow, .createAccount { transition: none; } }

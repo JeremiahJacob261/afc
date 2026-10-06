@@ -1,4 +1,5 @@
 import '@/styles/globals.css'
+import '@/styles/ucl.css'
 import '@/styles/bind.css';
 import { AppContext, SlipContext } from '@/pages/api/Context'
 import { useEffect, useState } from 'react'
