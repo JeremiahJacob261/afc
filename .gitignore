@@ -37,6 +37,9 @@ yarn-error.log*
 # local env files
 .env*.local
 
+# local mcp config (machine-specific paths)
+.mcp.json
+
 # vercel
 .vercel
 

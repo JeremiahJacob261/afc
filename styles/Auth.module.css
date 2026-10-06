@@ -1,0 +1,673 @@
+/* ============================================================================
+   Auth screens — registration and sign-in.
+   ----------------------------------------------------------------------------
+   Inherits everything from the landing system: this file's root class is
+   applied alongside LandingSystem's .page, so --ink, --paper, --accent,
+   --surface, --sage, --line, the serif/sans type scale, the 48px target floor
+   and the 2px focus ring are all already in scope. Every selector below is
+   scoped under .auth so it outranks .page no matter which stylesheet loads
+   first.
+   ========================================================================== */
+
+.auth {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* ── Dark ground + artwork ────────────────────────────────────────────────
+   The landing hero's treatment, reused verbatim: photograph, navy wash,
+   content lifted above it.                                                     */
+
+.auth .dark {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  background: #0d1714;
+  color: var(--paper);
+}
+
+.auth .artwork {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: #0d1714;
+}
+
+.auth .artwork picture {
+  display: block;
+  height: 100%;
+}
+
+.auth .artwork picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+  border-radius: 0;
+}
+
+.auth .artwork::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 15, 50, .8);
+}
+
+.auth .darkInner {
+  position: relative;
+  z-index: 1;
+}
+
+.auth .dark h1,
+.auth .dark h2 {
+  color: var(--paper);
+}
+
+.auth .dark p {
+  color: rgba(253, 252, 248, .76);
+}
+
+.auth .dark a {
+  color: var(--paper);
+}
+
+.auth .dark :where(a, button):focus-visible {
+  outline-color: var(--paper);
+}
+
+/* ── Brand row ─────────────────────────────────────────────────────────────
+   The landing's masthead: serif wordmark left, outline pill right.           */
+
+.auth .brandRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.auth .labelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.auth .brand {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 32px;
+  line-height: 1.125;
+}
+
+.auth a.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 8px 16px;
+  border: 2px solid currentColor;
+  border-radius: 24px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.auth .dark a.pill:hover {
+  background: rgba(253, 252, 248, .14);
+  text-decoration: none;
+}
+
+/* ── Type blocks ─────────────────────────────────────────────────────────── */
+
+.auth .lede {
+  max-width: 46ch;
+}
+
+.auth .rule {
+  height: 2px;
+  background: var(--line);
+}
+
+/* ── Ruled label / value rows ──────────────────────────────────────────────
+   One component, two grounds: stacked on the dark brand column, spread
+   across three columns on paper.                                             */
+
+.auth .facts {
+  display: grid;
+  gap: 24px;
+}
+
+.auth .fact {
+  display: grid;
+  gap: 4px;
+  padding-top: 16px;
+  border-top: 2px solid var(--line);
+}
+
+.auth .dark .fact {
+  border-top-color: rgba(253, 252, 248, .3);
+}
+
+.auth .factLabel {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.auth .dark .factLabel {
+  color: var(--paper);
+}
+
+.auth .factValue {
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--body);
+}
+
+.auth .dark .factValue {
+  color: rgba(253, 252, 248, .76);
+}
+
+/* ── Fields ──────────────────────────────────────────────────────────────── */
+
+.auth .form {
+  display: grid;
+  gap: 24px;
+}
+
+.auth .grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 20px 24px;
+}
+
+.auth .grid > * {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+.auth .field {
+  display: grid;
+  gap: 8px;
+}
+
+.auth .label {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.auth .control {
+  position: relative;
+}
+
+.auth .input,
+.auth .selectTrigger {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 16px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  transition: border-color 140ms ease;
+}
+
+.auth .input::placeholder {
+  color: var(--body);
+  opacity: .6;
+}
+
+.auth .input:hover,
+.auth .selectTrigger:hover {
+  border-color: var(--ink);
+}
+
+.auth .input:focus-visible,
+.auth .selectTrigger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.auth .input:disabled,
+.auth .selectTrigger:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.auth .withReveal {
+  padding-right: 56px;
+}
+
+.auth .reveal {
+  position: absolute;
+  top: 50%;
+  right: 2px;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: 24px;
+  background: transparent;
+  color: var(--body);
+}
+
+.auth .reveal:hover {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+/* ── Country picker ──────────────────────────────────────────────────────── */
+
+.auth .selectTrigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.auth .flag {
+  display: block;
+  flex: none;
+  width: 22px;
+  height: 16px;
+  border-radius: 2px;
+  object-fit: cover;
+}
+
+.auth .flagEmoji {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 22px;
+  height: 16px;
+  overflow: hidden;
+  font-size: 15px;
+  line-height: 1;
+}
+
+.auth .selectValue {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ink);
+}
+
+.auth .selectCode {
+  color: var(--body);
+}
+
+.auth .selectCaret {
+  display: grid;
+  place-items: center;
+  flex: none;
+  color: var(--body);
+}
+
+.auth .selectMenu {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 8px);
+  left: 0;
+  width: min(28rem, calc(100vw - 32px));
+  overflow: hidden;
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  background: var(--paper);
+  box-shadow: 0 24px 48px rgba(8, 15, 50, .18);
+}
+
+.auth .selectSearch {
+  width: 100%;
+  padding: 14px 16px;
+  border: 0;
+  border-bottom: 2px solid var(--line);
+  border-radius: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.auth .selectSearch:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.auth .selectList {
+  max-height: 16rem;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.auth .selectOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  text-align: left;
+  cursor: pointer;
+}
+
+.auth .selectOption:hover {
+  background: var(--surface);
+}
+
+.auth .selectOption[aria-selected='true'] {
+  background: var(--sage);
+  color: var(--ink);
+}
+
+.auth .selectName {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.auth .selectDial {
+  flex: none;
+  color: var(--body);
+}
+
+.auth .selectOption[aria-selected='true'] .selectDial {
+  color: var(--ink);
+}
+
+/* ── Terms ───────────────────────────────────────────────────────────────── */
+
+.auth .terms {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--body);
+  cursor: pointer;
+}
+
+.auth .terms input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.auth a.link {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.auth a.link:hover {
+  color: var(--ink);
+}
+
+/* ── Actions ─────────────────────────────────────────────────────────────── */
+
+.auth .submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 24px;
+  border: 2px solid var(--accent);
+  border-radius: 24px;
+  background: var(--accent);
+  color: var(--paper);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+  cursor: pointer;
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+
+.auth .submit:hover:not(:disabled) {
+  background: #0534bd;
+  border-color: #0534bd;
+  text-decoration: none;
+}
+
+.auth .submit:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.auth .submit:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.auth .switch {
+  padding-top: 24px;
+  border-top: 2px solid var(--line);
+  text-align: center;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--body);
+}
+
+/* ══ Registration ══════════════════════════════════════════════════════════
+   Vertical split: the landing's dark masthead running as a full-height brand
+   column, the task on paper beside it.                                        */
+
+/* .auth and .register share the root element, so this is a compound selector,
+   not a descendant one. */
+.auth.register {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.auth .brandPanel {
+  min-height: 0;
+}
+
+.auth .brandPanelInner {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  height: 100%;
+  padding: 24px;
+}
+
+.auth .brandCopy {
+  display: grid;
+  gap: 20px;
+  align-content: center;
+  flex: 1;
+  padding-block: 8px;
+}
+
+.auth .formColumn {
+  display: flex;
+  justify-content: center;
+  padding: 32px 24px 64px;
+}
+
+.auth .formInner {
+  display: grid;
+  gap: 28px;
+  align-content: start;
+  width: 100%;
+  max-width: 640px;
+}
+
+.auth .formHead {
+  display: grid;
+  gap: 12px;
+}
+
+.auth .formHead p {
+  max-width: 46ch;
+}
+
+/* ══ Sign in ═══════════════════════════════════════════════════════════════
+   Horizontal split: the masthead runs full width and the form panel straddles
+   its lower edge, so the seam between dark and paper does the dividing.       */
+
+.auth .band {
+  padding: 24px 0 120px;
+}
+
+.auth .bandInner {
+  display: grid;
+  gap: 40px;
+}
+
+.auth .bandCopy {
+  display: grid;
+  gap: 16px;
+}
+
+.auth .lower {
+  position: relative;
+  z-index: 1;
+  margin-top: -80px;
+}
+
+.auth .panel {
+  width: min(100%, 460px);
+  padding: 32px;
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+/* ── Container: matches LandingSystem's gutters ──────────────────────────── */
+
+.auth .container {
+  width: calc(100% - 48px);
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+/* ── Breakpoints ─────────────────────────────────────────────────────────── */
+
+@media (min-width: 768px) {
+  .auth .container {
+    width: calc(100% - 80px);
+  }
+
+  .auth .brandPanelInner {
+    padding: 40px;
+  }
+
+  .auth .formColumn {
+    padding: 40px 40px 80px;
+  }
+
+  .auth .grid > .span6 {
+    grid-column: span 6;
+  }
+
+  .auth .grid > .span7 {
+    grid-column: span 7;
+  }
+
+  .auth .grid > .span5 {
+    grid-column: span 5;
+  }
+
+  .auth .band {
+    padding: 32px 0 128px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .auth.register {
+    grid-template-columns: minmax(0, 46%) minmax(0, 1fr);
+  }
+
+  .auth .brandPanel {
+    min-height: 100dvh;
+  }
+
+  .auth .brandPanelInner {
+    padding: 40px 48px 48px;
+  }
+
+  .auth .brandCopy {
+    padding-block: 48px;
+  }
+
+  .auth .formColumn {
+    padding: 56px 56px 96px;
+  }
+
+  .auth .band {
+    padding: 40px 0 136px;
+  }
+
+  .auth .bandInner {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 32px 24px;
+  }
+
+  .auth .bandInner > .brandRow {
+    grid-column: 1 / -1;
+  }
+
+  .auth .bandCopy {
+    grid-column: 1 / span 6;
+    max-width: 640px;
+    gap: 20px;
+    align-content: center;
+  }
+
+  .auth .bandInner > .facts {
+    grid-column: 8 / -1;
+    align-self: center;
+  }
+}
+
+/* Proof rows belong to the split desktop layout; the stacked masthead stays
+   short enough that the form is reachable without scrolling. */
+@media (max-width: 1023px) {
+  .auth .dark .facts {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .auth .band {
+    padding-bottom: 96px;
+  }
+
+  .auth .lower {
+    margin-top: -56px;
+  }
+
+  .auth .panel {
+    padding: 24px;
+  }
+}
