@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { ArrowDownLeft, ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Clock3, MessageCircle, Send, ShieldCheck, Trophy, Wallet } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Clock3, MessageCircle, Send, Trophy } from 'lucide-react'
 import { useTranslation } from 'next-i18next'
 import { Toaster, toast } from 'react-hot-toast'
 import Cover from './cover'
@@ -104,7 +104,6 @@ export default function Home() {
   const router = useRouter()
   const { t } = useTranslation('common')
   const [username, setUsername] = useState('')
-  const [balance, setBalance] = useState(null)
   const [matches, setMatches] = useState([])
   const [openBets, setOpenBets] = useState([])
   const [betsStatus, setBetsStatus] = useState('loading')
@@ -132,7 +131,6 @@ export default function Home() {
         const result = await response.json()
         if (active && result.status === 'success') {
           setUsername(result.profile?.username || '')
-          setBalance(Number(result.profile?.balance || 0))
         } else if (active) toast.error(result.message || t('messages.unableRefreshAccount'))
       } catch (error) { if (active) toast.error(t('messages.unableRefreshAccount')) }
 
@@ -175,6 +173,14 @@ export default function Home() {
     <Toaster position="bottom-center" />
     <main className={styles.dashboard}>
       <DashboardCarousel />
+      <section className={styles.spinInvite} aria-labelledby="spin-invite-heading">
+        <span className={styles.spinInviteWheel} aria-hidden="true"><span>GO</span></span>
+        <div className={styles.spinInviteCopy}>
+          <h2 id="spin-invite-heading">Wheel Spin</h2>
+          <p>Take your daily spin. One spin every 24 hours.</p>
+        </div>
+        <Link href="/user/wheel" className={styles.spinInviteButton}>Spin wheel <ArrowRight size={18} aria-hidden="true" /></Link>
+      </section>
       <div className={styles.masthead}>
         <div><p className={styles.greeting}>{username ? `Hello, ${username}` : 'Your matchday'}</p><h1>Matchday<span>.</span></h1></div>
         <div className={styles.date} aria-label={date?.toLocaleDateString(undefined, { dateStyle: 'full' }) || 'Loading date'}><strong>{date ? String(date.getDate()).padStart(2, '0') : '—'}</strong><span>{date ? date.toLocaleDateString(undefined, { month: 'short' }).toUpperCase() : ''}</span></div>
@@ -189,7 +195,6 @@ export default function Home() {
           {shownMatches.length ? shownMatches.map((match) => <Fixture match={match} key={match.match_id} />) : <div className={styles.empty}><Trophy size={28} aria-hidden="true" /><strong>{loadingMatches ? 'Loading fixtures…' : matchError ? 'Fixtures unavailable' : 'No matches in this window'}</strong><p>{loadingMatches ? 'Checking the latest schedule.' : matchError ? 'Please try the full matches page.' : 'Try another time window or see every match.'}</p>{!loadingMatches && <Link href="/user/matches">Browse all matches <ArrowRight size={16} /></Link>}</div>}
         </section>
         <aside className={styles.account} aria-label="Your account">
-          <section className={styles.wallet} aria-labelledby="wallet-heading"><div className={styles.walletHead}><h2 id="wallet-heading"><Wallet size={19} aria-hidden="true" /> Wallet</h2><ShieldCheck size={19} aria-hidden="true" /></div><p>Available balance</p><div className={styles.balance}>{balance === null ? '—' : balance.toLocaleString(undefined, { maximumFractionDigits: 3 })}<span>USDT</span></div><div className={styles.walletActions}><Link href="/user/fund"><ArrowDownLeft size={18} aria-hidden="true" /> Deposit</Link><Link href="/user/withdraw"><ArrowUpRight size={18} aria-hidden="true" /> Withdraw</Link></div></section>
           <section className={styles.bets} aria-labelledby="bets-heading"><div className={styles.betsHead}><h2 id="bets-heading">Open bets <span>{betsStatus === 'ready' ? openBets.length : '—'}</span></h2><Link href="/user/bets" aria-label="View all bets"><ArrowRight size={19} /></Link></div>{latestBet ? <Link href={`/user/viewbet/${latestBet.betid}`} className={styles.betLink}><strong>{latestBet.home} — {latestBet.away}</strong><span>{latestBet.market || 'Match selection'} · {Number(latestBet.stake || 0).toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT stake</span><span>View bet <ArrowUpRight size={16} aria-hidden="true" /></span></Link> : <p className={styles.noBets}>{betsStatus === 'loading' ? 'Loading open bets…' : betsStatus === 'error' ? 'Unable to load open bets. Open your bets to try again.' : 'No open bets right now. Your next selection will appear here.'}</p>}</section>
           <section className={styles.community} aria-label="Community"><h2>Community</h2><div><a href={links.telegram} target="_blank" rel="noopener noreferrer"><Send size={18} aria-hidden="true" /> Telegram <ArrowUpRight size={16} aria-hidden="true" /></a><a href={links.whatsapp} target="_blank" rel="noopener noreferrer"><MessageCircle size={18} aria-hidden="true" /> WhatsApp <ArrowUpRight size={16} aria-hidden="true" /></a></div></section>
         </aside>
@@ -198,7 +203,7 @@ export default function Home() {
   </Cover>
 }
 
-export async function getServerSideProps(context) {
+export async function getStaticProps(context) {
   const i18nProps = await getI18nServerSideProps(context.locale)
   return { props: { ...i18nProps } }
 }

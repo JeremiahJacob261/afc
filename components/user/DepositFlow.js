@@ -283,7 +283,7 @@ export default function DepositFlow({ step }) {
                 {step === 2 && <>
                   <label htmlFor="deposit-amount" className={styles.fieldLabel}>{t('common.amount')}</label>
                   <div className={`${styles.amountInput} ${draft.amount !== '' && !amountValid ? styles.inputInvalid : ''}`}>
-                    <input id="deposit-amount" type="number" inputMode="decimal" min="0" step="0.0001" value={draft.amount} aria-invalid={draft.amount !== '' && !amountValid} aria-describedby="deposit-minimum deposit-equivalent" placeholder={t('mobile.deposit.minimumPlaceholder', { amount: formatMoney(minimumAmount(selectedMethod)), currency: code.toUpperCase() })} onChange={(event) => changeAmount(event.target.value)} />
+                    <input id="deposit-amount" type="text" inputMode="decimal" autoComplete="off" value={draft.amount} aria-invalid={draft.amount !== '' && !amountValid} aria-describedby="deposit-minimum deposit-equivalent" placeholder={t('mobile.deposit.minimumPlaceholder', { amount: formatMoney(minimumAmount(selectedMethod)), currency: code.toUpperCase() })} onChange={(event) => changeAmount(event.target.value)} />
                     <span>{code.toUpperCase()}</span>
                   </div>
                   <p id="deposit-minimum" className={styles.helpText} role={draft.amount !== '' && !amountValid ? 'alert' : undefined}>{draft.amount !== '' && !amountValid ? /^\d{1,11}(?:\.\d{1,4})?$/.test(draft.amount) ? t('messages.minimumDeposit', { amount: formatMoney(minimumAmount(selectedMethod)), currency: code.toUpperCase() }) : t('mobile.deposit.enterValidAmount') : t('mobile.deposit.minShort', { amount: formatMoney(minimumAmount(selectedMethod)), currency: code.toUpperCase() })}</p>
@@ -320,17 +320,12 @@ export default function DepositFlow({ step }) {
                 </>}
               </section>
 
-              <aside className={styles.summary} aria-label={t('mobile.deposit.title')}>
-                <span className={styles.summaryBrand}>UCL</span>
-                <h2>{t('mobile.deposit.title')}</h2>
-                <div className={styles.summaryRows}>
-                  <div><span>{t('mobile.deposit.stepMethod')}</span><strong>{selectedMethod ? methodLabel(selectedMethod, t) : '—'}</strong></div>
-                  <div><span>{t('common.amount')}</span><strong>{selectedMethod && draft.amount !== '' ? `${draft.amount} ${code.toUpperCase()}` : '—'}</strong></div>
-                  <div><span>{t('mobile.deposit.usdtEquivalent')}</span><strong>{selectedMethod && draft.amount !== '' && equivalent !== null ? `${formatMoney(equivalent)} USDT` : '—'}</strong></div>
-                </div>
-                {step >= 3 && destination && <p className={styles.summaryAddress}>{t('mobile.deposit.paymentDestination')}<strong>{destination.address}</strong></p>}
-              </aside>
             </div>}
+      <picture className={styles.stadiumImage} aria-hidden="true">
+        <source media="(max-width: 600px)" srcSet="/assets/generated/stadium-night-640.webp" />
+        <source media="(max-width: 1000px)" srcSet="/assets/generated/stadium-night-960.webp" />
+        <img src="/assets/generated/stadium-night-1600.webp" width="1600" height="900" alt="" loading="lazy" decoding="async" />
+      </picture>
     </main>
   </Cover>
 }

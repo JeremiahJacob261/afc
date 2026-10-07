@@ -19,7 +19,7 @@ export default function Faq() {
   </Cover>
 }
 
-export async function getServerSideProps(context) {
+export async function getStaticProps(context) {
   const i18nProps = await getI18nServerSideProps(context.locale)
   return { props: { ...i18nProps } }
 }

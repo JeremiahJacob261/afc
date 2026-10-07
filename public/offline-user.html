@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#fdfcf8" />
+    <title>Offline · UCL</title>
+    <style>
+      * { box-sizing: border-box; }
+      body { min-height: 100vh; margin: 0; background: #fdfcf8; color: #080f32; font: 15px/1.5 Arial, sans-serif; }
+      body::before { content: ''; position: fixed; top: 18%; right: -110px; width: min(90vw, 520px); aspect-ratio: 1; background: url('/assets/dashboard/star-ball.webp') center/contain no-repeat; opacity: .075; pointer-events: none; animation: ball-turn 90s linear infinite; }
+      @keyframes ball-turn { to { transform: rotate(360deg); } }
+      @media (prefers-reduced-motion: reduce) { body::before { animation: none; } }
+      header { position: relative; padding: 17px 24px; border-bottom: 1px solid #dfe5df; background: #fffefa; }
+      header a { color: #080f32; font: 36px/1 Georgia, serif; text-decoration: none; }
+      main { position: relative; width: min(100% - 32px, 660px); margin: 50px auto; }
+      h1 { margin: 0 0 12px; font: 38px/1.1 Georgia, serif; }
+      p { max-width: 55ch; color: #52685d; }
+      .notice { margin-top: 28px; padding: 20px; border: 1px solid #dfe5df; border-radius: 16px; background: #fff; }
+      .notice strong { display: block; font-size: 18px; }
+      .form { display: grid; gap: 14px; margin-top: 20px; padding: 24px; border: 1px solid #dfe5df; border-radius: 16px; background: #fff; }
+      label { display: grid; gap: 6px; color: #52685d; font-weight: 700; }
+      input, button { min-height: 44px; border-radius: 8px; font: inherit; }
+      input { width: 100%; padding: 10px 12px; border: 1px solid #dfe5df; background: #f1f3ee; }
+      button { border: 0; background: #b9c2cc; color: #324053; font-weight: 700; }
+      .links { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 24px; }
+      .links a { color: #0649ff; font-weight: 700; }
+      .retry { min-height: 44px; margin-top: 16px; padding: 9px 18px; border: 0; border-radius: 8px; background: #102451; color: #fff; cursor: pointer; }
+    </style>
+  </head>
+  <body>
+    <header><a href="/user" aria-label="UCL home">UCL</a></header>
+    <main>
+      <h1>You are offline</h1>
+      <p>The page shell is available, but account details, prices, and transaction actions need a connection.</p>
+      <div class="notice" role="status"><strong>Actions are paused</strong>Reconnect to get current information and continue safely.</div>
+      <fieldset class="form" disabled aria-label="Unavailable transaction form">
+        <label>Live information<input placeholder="Available when connected" /></label>
+        <label>Amount or selection<input placeholder="Available when connected" /></label>
+        <button type="button">Continue</button>
+      </fieldset>
+      <button class="retry" type="button" onclick="location.reload()">Try again</button>
+      <nav class="links" aria-label="Offline navigation"><a href="/user">Home</a><a href="/user/faq">FAQ</a><a href="/user/account">More</a></nav>
+    </main>
+  </body>
+</html>

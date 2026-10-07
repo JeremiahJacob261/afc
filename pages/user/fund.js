@@ -5,6 +5,6 @@ export default function FundMethodPage() {
   return <DepositFlow step={1} />
 }
 
-export async function getServerSideProps(context) {
+export async function getStaticProps(context) {
   return { props: await getI18nServerSideProps(context.locale) }
 }
