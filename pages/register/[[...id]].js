@@ -242,6 +242,7 @@ export default function Register({ refer }) {
       } else if (error.message === 'Username Already Exist!') {
         toast.error(t('messages.usernameExists'))
       } else {
+        console.error('Unexpected error during registration:', error);
         showErrorDialog(t('messages.checkConnectionTryAgain'))
       }
     } finally {

@@ -12,37 +12,37 @@ import { useTranslation } from 'next-i18next'
 const categoryMeta = {
   bonus: {
     icon: 'solar:gift-bold',
-    color: '#35E0A1',
+    color: '#286746',
     bg: 'rgba(53, 224, 161, 0.12)',
     border: 'rgba(53, 224, 161, 0.28)',
   },
   bet: {
     icon: 'solar:football-bold',
-    color: '#F8C14A',
+    color: '#8a6013',
     bg: 'rgba(248, 193, 74, 0.12)',
     border: 'rgba(248, 193, 74, 0.28)',
   },
   broadcast: {
     icon: 'solar:bell-bing-bold',
-    color: '#8CCBFF',
+    color: '#31588f',
     bg: 'rgba(140, 203, 255, 0.12)',
     border: 'rgba(140, 203, 255, 0.28)',
   },
   admin: {
     icon: 'solar:shield-check-bold',
-    color: '#C7A6FF',
+    color: '#594596',
     bg: 'rgba(199, 166, 255, 0.12)',
     border: 'rgba(199, 166, 255, 0.28)',
   },
   deposit: {
     icon: 'solar:wallet-money-bold',
-    color: '#32D7FF',
+    color: '#0649ff',
     bg: 'rgba(50, 215, 255, 0.12)',
     border: 'rgba(50, 215, 255, 0.28)',
   },
   withdrawal: {
     icon: 'solar:card-transfer-bold',
-    color: '#FF9E7A',
+    color: '#a43d4a',
     bg: 'rgba(255, 158, 122, 0.12)',
     border: 'rgba(255, 158, 122, 0.28)',
   },
@@ -114,11 +114,11 @@ function NotificationCard({ item, t, locale }) {
       sx={{
         width: '100%',
         minHeight: 96,
-        borderRadius: '8px',
+        borderRadius: '12px',
         border: `1px solid ${meta.border}`,
-        background: '#10284D',
+        background: '#ffffff',
         padding: '12px',
-        boxShadow: '0 14px 30px rgba(0, 0, 0, 0.22)',
+        boxShadow: 'none',
       }}
     >
       <Stack
@@ -128,7 +128,7 @@ function NotificationCard({ item, t, locale }) {
           width: 42,
           height: 42,
           flex: '0 0 42px',
-          borderRadius: '8px',
+          borderRadius: '12px',
           color: meta.color,
           background: meta.bg,
         }}
@@ -140,8 +140,8 @@ function NotificationCard({ item, t, locale }) {
         <Stack direction="row" spacing={1} sx={{ justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <Typography
             sx={{
-              color: '#FFFFFF',
-              fontFamily: 'Inter, Poppins, sans-serif',
+              color: '#080f32',
+              fontFamily: 'Inter, Arial, sans-serif',
               fontSize: '14px',
               fontWeight: 700,
               lineHeight: 1.25,
@@ -152,8 +152,8 @@ function NotificationCard({ item, t, locale }) {
           </Typography>
           <Typography
             sx={{
-              color: '#8EA4C2',
-              fontFamily: 'Inter, Poppins, sans-serif',
+              color: '#52685d',
+              fontFamily: 'Inter, Arial, sans-serif',
               fontSize: '11px',
               lineHeight: 1.25,
               whiteSpace: 'nowrap',
@@ -166,7 +166,7 @@ function NotificationCard({ item, t, locale }) {
         <Typography
           sx={{
             color: '#DDE7F5',
-            fontFamily: 'Inter, Poppins, sans-serif',
+            fontFamily: 'Inter, Arial, sans-serif',
             fontSize: '13px',
             fontWeight: 400,
             lineHeight: 1.45,
@@ -188,18 +188,18 @@ function EmptyState({ t }) {
         alignItems: 'center',
         justifyContent: 'center',
         minHeight: 340,
-        borderRadius: '8px',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
-        background: 'rgba(16, 40, 77, 0.62)',
+        borderRadius: '12px',
+        border: '1px solid #dfe5df',
+        background: '#f1f3ee',
         padding: '24px',
         textAlign: 'center',
       }}
     >
-      <Icon icon="solar:bell-off-bold" width="38" height="38" style={{ color: '#8EA4C2' }} />
-      <Typography sx={{ color: '#FFFFFF', fontFamily: 'Inter, Poppins, sans-serif', fontWeight: 700 }}>
+      <Icon icon="solar:bell-off-bold" width="38" height="38" style={{ color: '#52685d' }} />
+      <Typography sx={{ color: '#080f32', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 700 }}>
         {t('emptyStates.noNotifications')}
       </Typography>
-      <Typography sx={{ color: '#8EA4C2', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '13px' }}>
+      <Typography sx={{ color: '#52685d', fontFamily: 'Inter, Arial, sans-serif', fontSize: '13px' }}>
         {t('emptyStates.notificationsComing')}
       </Typography>
     </Stack>
@@ -260,13 +260,13 @@ export default function Notification() {
         <link rel="icon" href="/european.ico" />
       </Head>
 
-      <Box sx={{ width: '100%', minHeight: '80vh', color: '#E9E5DA' }}>
+      <Box sx={{ width: '100%', minHeight: '80vh', color: '#080f32' }}>
         <Stack direction="row" spacing={1} sx={{ alignItems: 'center', padding: '4px 0 12px' }}>
           <KeyboardArrowLeftOutlinedIcon
-            sx={{ width: '24px', height: '24px', color: '#E9E5DA', cursor: 'pointer' }}
+            sx={{ width: '24px', height: '24px', color: '#080f32', cursor: 'pointer' }}
             onClick={() => router.push('/user')}
           />
-          <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins, sans-serif', fontWeight: 500, color: '#E9E5DA' }}>
+          <Typography component="h1" sx={{ fontSize: { xs: '32px', sm: '48px' }, fontFamily: 'Georgia,serif', fontWeight: 400, color: '#080f32' }}>
             {t('mobile.notifications.title')}
           </Typography>
         </Stack>
@@ -276,18 +276,18 @@ export default function Notification() {
           sx={{
             alignItems: 'center',
             justifyContent: 'space-between',
-            borderRadius: '8px',
+            borderRadius: '12px',
             border: '1px solid rgba(27, 182, 255, 0.24)',
-            background: '#10284D',
+            background: '#ffffff',
             padding: '14px',
             marginBottom: '12px',
           }}
         >
           <Stack spacing={0.25}>
-            <Typography sx={{ color: '#FFFFFF', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '18px', fontWeight: 800 }}>
+            <Typography sx={{ color: '#080f32', fontFamily: 'Inter, Arial, sans-serif', fontSize: '18px', fontWeight: 800 }}>
               {t('mobile.notifications.title')}
             </Typography>
-            <Typography sx={{ color: '#8EA4C2', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '12px' }}>
+            <Typography sx={{ color: '#52685d', fontFamily: 'Inter, Arial, sans-serif', fontSize: '12px' }}>
               {t('mobile.notifications.count', { count: notifications.length })}
             </Typography>
           </Stack>
@@ -297,8 +297,8 @@ export default function Notification() {
               justifyContent: 'center',
               width: 40,
               height: 40,
-              borderRadius: '8px',
-              color: '#1BB6FF',
+              borderRadius: '12px',
+              color: '#0649ff',
               background: 'rgba(27, 182, 255, 0.12)',
             }}
           >
@@ -308,8 +308,8 @@ export default function Notification() {
 
         {loading ? (
           <Stack spacing={1.5} sx={{ alignItems: 'center', justifyContent: 'center', minHeight: 360 }}>
-            <CircularProgress size={28} sx={{ color: '#1BB6FF' }} />
-            <Typography sx={{ color: '#8EA4C2', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '13px' }}>
+            <CircularProgress size={28} sx={{ color: '#0649ff' }} />
+            <Typography sx={{ color: '#52685d', fontFamily: 'Inter, Arial, sans-serif', fontSize: '13px' }}>
               {t('mobile.notifications.loading')}
             </Typography>
           </Stack>
@@ -317,16 +317,16 @@ export default function Notification() {
           <Stack
             spacing={1}
             sx={{
-              borderRadius: '8px',
+              borderRadius: '12px',
               border: '1px solid rgba(255, 158, 122, 0.28)',
               background: 'rgba(255, 158, 122, 0.08)',
               padding: '16px',
             }}
           >
-            <Typography sx={{ color: '#FFFFFF', fontFamily: 'Inter, Poppins, sans-serif', fontWeight: 700 }}>
+            <Typography sx={{ color: '#080f32', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 700 }}>
               {t('messages.unableLoadNotifications')}
             </Typography>
-            <Typography sx={{ color: '#FFC9B8', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '13px' }}>
+            <Typography sx={{ color: '#a43d4a', fontFamily: 'Inter, Arial, sans-serif', fontSize: '13px' }}>
               {error}
             </Typography>
           </Stack>

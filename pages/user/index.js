@@ -1,464 +1,204 @@
-import React, { useRef, useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from 'react'
+import Head from 'next/head'
+import Image from 'next/image'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
-import Head from "next/head";
+import { ArrowDownLeft, ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Clock3, MessageCircle, Send, ShieldCheck, Trophy, Wallet } from 'lucide-react'
+import { useTranslation } from 'next-i18next'
+import { Toaster, toast } from 'react-hot-toast'
 import Cover from './cover'
-import { Box, Stack } from "@mui/system";
-import { useState } from "react";
-import Image from "next/image";
-import Link from 'next/link';
-import { Typography, Divider } from "@mui/material";
 import { supabase } from '@/pages/api/supabase'
-const Agent = '/usd/bfc1.jpg'
-const Agent1 = '/usd/bfc2.jpg'
-const Agent2 = '/usd/bfc3.jpg'
-import { AnimatePresence, motion } from 'framer-motion'
-import { Icon } from '@iconify/react'
-const Agent3 = '/usd/bfc4.jpg'
-const Agent4 = '/usd/bfc5.jpg'
-import AnimatedCarousel from '../../components/AnimatedCarousel'
-import Loading from "../components/loading";
-import Ims from '@/public/simps/ball.png'
-import { app } from '@/pages/api/firebase';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import { getAuth, signOut } from "firebase/auth";
-import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
-import toast, { Toaster } from 'react-hot-toast';
-import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay';
-import { useTranslation } from 'next-i18next';
-import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
+import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth'
+import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay'
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
+import ball from '@/public/simps/ball.png'
+import styles from '@/styles/UserDashboard.module.css'
 
-const defaultTelegramGroupUrl = 'https://t.me/+Giav1o1JVGNkYzNk'
-const defaultWhatsappGroupUrl = 'https://chat.whatsapp.com/I1D6NNWndu6HDrbzB5BkPX?s=hd&p=i&mlu=0&ilr=0'
 const HOUR_MS = 60 * 60 * 1000
+const fallbackTelegram = 'https://t.me/+Giav1o1JVGNkYzNk'
+const fallbackWhatsapp = 'https://chat.whatsapp.com/I1D6NNWndu6HDrbzB5BkPX?s=hd&p=i&mlu=0&ilr=0'
 
-function getLocalDateKey(date) {
-  return [
-    date.getFullYear(),
-    String(date.getMonth() + 1).padStart(2, '0'),
-    String(date.getDate()).padStart(2, '0'),
-  ].join('-')
+function localDateKey(date) {
+  return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, '0'), String(date.getDate()).padStart(2, '0')].join('-')
 }
 
-function getFilteredMatches(matches, activeFilter, nowMs = Date.now()) {
-  const todayKey = getLocalDateKey(new Date(nowMs))
-  const tomorrow = new Date(nowMs)
-  tomorrow.setDate(tomorrow.getDate() + 1)
-  const tomorrowKey = getLocalDateKey(tomorrow)
-
-  return (Array.isArray(matches) ? matches : [])
-    .map((match) => ({ match, startMs: getMatchStartMs(match) }))
-    .filter(({ startMs }) => Number.isFinite(startMs) && startMs > nowMs)
-    .sort((a, b) => a.startMs - b.startMs)
-    .filter(({ startMs }) => {
-      if (activeFilter === 'next3h') return startMs <= nowMs + (3 * HOUR_MS)
-      if (activeFilter === 'next12h') return startMs <= nowMs + (12 * HOUR_MS)
-      if (activeFilter === 'tomorrow') return getLocalDateKey(new Date(startMs)) === tomorrowKey
-      return getLocalDateKey(new Date(startMs)) === todayKey
+function filteredMatches(matches, filter, now) {
+  const today = localDateKey(new Date(now))
+  const tomorrowDate = new Date(now)
+  tomorrowDate.setDate(tomorrowDate.getDate() + 1)
+  const tomorrow = localDateKey(tomorrowDate)
+  return matches
+    .map((match) => ({ match, start: getMatchStartMs(match) }))
+    .filter(({ start }) => Number.isFinite(start) && start > now)
+    .filter(({ start }) => {
+      if (filter === 'next3h') return start <= now + 3 * HOUR_MS
+      if (filter === 'next12h') return start <= now + 12 * HOUR_MS
+      if (filter === 'tomorrow') return localDateKey(new Date(start)) === tomorrow
+      return localDateKey(new Date(start)) === today
     })
+    .sort((a, b) => a.start - b.start)
     .map(({ match }) => match)
 }
 
+const slides = [
+  { label: 'MATCHDAY', title: 'Follow the match.', detail: 'Fixtures and live movement, all in one place.', action: 'View matches', href: '/user/matches' },
+  { label: 'MARKETS', title: 'Find your market.', detail: 'Explore football prices before you place a bet.', action: 'Explore markets', href: '/user/matches' },
+  { label: 'YOUR ACCOUNT', title: 'Your funds, in view.', detail: 'Manage deposits and withdrawals from your wallet.', action: 'Open wallet', href: '/user/fund' },
+]
 
-async function processBets(name) {
-  try {
-    await fetch('/api/rpc/process_bets', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name })
-    })
-    console.log('Bets processed for', name)
-  } catch (err) {
-    console.error('Error processing bets:', err)
-  }
+function DashboardCarousel() {
+  const [active, setActive] = useState(0)
+  const startX = useRef(null)
+  const slide = slides[active]
+  const previous = () => setActive((current) => (current + slides.length - 1) % slides.length)
+  const next = () => setActive((current) => (current + 1) % slides.length)
+  return <section className={styles.carousel} aria-label="UCL highlights" aria-roledescription="carousel"
+    onTouchStart={(event) => { startX.current = event.changedTouches[0]?.screenX ?? null }}
+    onTouchEnd={(event) => {
+      if (startX.current === null) return
+      const delta = event.changedTouches[0].screenX - startX.current
+      if (Math.abs(delta) > 50) delta > 0 ? previous() : next()
+      startX.current = null
+    }}>
+    <div className={styles.carouselCopy} aria-live="polite">
+      <span className={styles.carouselLabel}>{slide.label}</span>
+      <h2>{slide.title}</h2>
+      <p>{slide.detail}</p>
+      <Link href={slide.href} className={styles.carouselLink}>{slide.action}<ArrowRight size={18} aria-hidden="true" /></Link>
+    </div>
+    <div className={styles.pitch} aria-hidden="true"><span /></div>
+    <div className={styles.carouselControls}>
+      <button type="button" onClick={previous} aria-label="Previous highlight"><ChevronLeft size={20} /></button>
+      <span aria-label={`Slide ${active + 1} of ${slides.length}`}>{active + 1} / {slides.length}</span>
+      <button type="button" onClick={next} aria-label="Next highlight"><ChevronRight size={20} /></button>
+    </div>
+  </section>
 }
 
+function Team({ name, image }) {
+  return <span className={styles.team}>
+    <span className={styles.crest}><Image src={image || ball} width={28} height={28} alt="" unoptimized /></span>
+    <strong>{name || 'Team'}</strong>
+  </span>
+}
+
+function Fixture({ match }) {
+  const display = useClientMatchDisplay(match)
+  const league = (match.league === 'others' ? match.otherl : match.league) || 'Football'
+  const prices = [['1–0', match.onenil], ['1–1', match.oneone], ['1–2', match.onetwo]]
+  return <Link href={`/user/match/${match.match_id}`} className={styles.fixture} aria-label={`${match.home || 'Home'} vs ${match.away || 'Away'} — open match markets`}>
+    <div className={styles.fixtureMeta}><span>{league}</span><span><Clock3 size={14} aria-hidden="true" /> {display.dateTime} local time</span></div>
+    <div className={styles.fixtureBody}>
+      <div className={styles.teams}><Team name={match.home} image={match.ihome} /><Team name={match.away} image={match.iaway} /></div>
+      <div className={styles.fixtureRight}>
+        <div className={styles.prices} aria-label="Featured correct score odds">
+          {prices.map(([score, price]) => <span className={styles.price} key={score}><span>{score}</span><strong>{price || '—'}</strong></span>)}
+        </div>
+        <span className={styles.matchLink} aria-hidden="true"><ArrowUpRight size={18} /></span>
+      </div>
+    </div>
+  </Link>
+}
 
 export default function Home() {
-  const { t } = useTranslation('common');
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [username, setUsername] = useState('');
-  const hasRun = useRef(false);
-  const openr = Boolean(anchorEl);
-  const handleClickr = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleCloser = () => {
-    setAnchorEl(null);
-  };
-  const [footDat, setFootDat] = useState([]);
-  const [activeMatchFilter, setActiveMatchFilter] = useState('today');
-  const [telegramGroupUrl, setTelegramGroupUrl] = useState(defaultTelegramGroupUrl)
-  const [whatsappGroupUrl, setWhatsappGroupUrl] = useState(defaultWhatsappGroupUrl)
-
-  //the below controls the loading modal
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  //the end of thellaoding modal control
-
-  const [balance, setBalance] = useState(0)
-  const auth = getAuth(app);
-  const [draw, setDraw] = useState(false);
-  const router = useRouter();
-  let loads = 0;
-  const visibleMatches = useMemo(() => (
-    getFilteredMatches(footDat, activeMatchFilter)
-  ), [footDat, activeMatchFilter]);
-  const matchFilters = useMemo(() => ([
-    { key: 'today', label: t('mobile.filters.today') },
-    { key: 'next3h', label: t('mobile.filters.next3h') },
-    { key: 'next12h', label: t('mobile.filters.next12h') },
-    { key: 'tomorrow', label: t('mobile.filters.tomorrow') },
-  ]), [t]);
-
+  const router = useRouter()
+  const { t } = useTranslation('common')
+  const [username, setUsername] = useState('')
+  const [balance, setBalance] = useState(null)
+  const [matches, setMatches] = useState([])
+  const [openBets, setOpenBets] = useState([])
+  const [betsStatus, setBetsStatus] = useState('loading')
+  const [filter, setFilter] = useState('today')
+  const [now, setNow] = useState(null)
+  const [loadingMatches, setLoadingMatches] = useState(true)
+  const [matchError, setMatchError] = useState(false)
+  const [links, setLinks] = useState({ telegram: fallbackTelegram, whatsapp: fallbackWhatsapp })
 
   useEffect(() => {
-    fetch('/api/platform-settings')
-      .then((response) => response.ok ? response.json() : null)
-      .then((result) => {
-        if (result?.links?.telegramGroupUrl) setTelegramGroupUrl(result.links.telegramGroupUrl)
-        if (result?.links?.whatsappGroupUrl) setWhatsappGroupUrl(result.links.whatsappGroupUrl)
-      })
-      .catch(() => {})
+    setNow(Date.now())
+    const clock = setInterval(() => setNow(Date.now()), 60_000)
+    return () => clearInterval(clock)
   }, [])
 
   useEffect(() => {
-
-    //guild functions (use backend RPC endpoints)
-    const Depositing = async (damount, dusername) => {
+    let active = true
+    async function load() {
+      const session = await requireSession(router)
+      if (!session || !active) return
+      clearLegacyAuthStorage()
       try {
-        await fetch('/api/rpc/depositor', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ names: dusername, amount: damount })
-        })
-      } catch (e) { console.log(e) }
+        const response = await authFetch('/api/me')
+        if (response.status === 401 || response.status === 404) { router.push('/login'); return }
+        const result = await response.json()
+        if (active && result.status === 'success') {
+          setUsername(result.profile?.username || '')
+          setBalance(Number(result.profile?.balance || 0))
+        } else if (active) toast.error(result.message || t('messages.unableRefreshAccount'))
+      } catch (error) { if (active) toast.error(t('messages.unableRefreshAccount')) }
+
+      const [matchResult, betsResult] = await Promise.allSettled([
+        supabase.from('bets').select('*').eq('verified', false).gt('tsgmt', Date.now()).order('tsgmt', { ascending: true }).limit(50),
+        authFetch('/api/my-bets'),
+      ])
+      if (!active) return
+      if (matchResult.status === 'fulfilled' && !matchResult.value.error) setMatches(matchResult.value.data || [])
+      else setMatchError(true)
+      setLoadingMatches(false)
+      if (betsResult.status === 'fulfilled' && betsResult.value.ok) {
+        try {
+          const result = await betsResult.value.json()
+          if (active && result.status === 'success') { setOpenBets(result.unsettled || []); setBetsStatus('ready') }
+          else if (active) setBetsStatus('error')
+        } catch (error) { if (active) setBetsStatus('error') }
+      } else setBetsStatus('error')
     }
+    load()
+    fetch('/api/platform-settings').then((response) => response.ok ? response.json() : null).then((result) => {
+      if (!active || !result?.links) return
+      setLinks({ telegram: result.links.telegramGroupUrl || fallbackTelegram, whatsapp: result.links.whatsappGroupUrl || fallbackWhatsapp })
+    }).catch(() => {})
+    return () => { active = false }
+  }, [router, t])
 
-    const Chan = async (bets, type) => {
-      try {
-        await fetch('/api/rpc/chan', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ bet: bets, des: type })
-        })
-      } catch (e) { console.log(e) }
-    }
+  const shownMatches = useMemo(() => now ? filteredMatches(matches, filter, now) : [], [matches, filter, now])
+  const date = now ? new Date(now) : null
+  const filters = [
+    ['today', t('mobile.filters.today')],
+    ['next3h', t('mobile.filters.next3h')],
+    ['next12h', t('mobile.filters.next12h')],
+    ['tomorrow', t('mobile.filters.tomorrow')],
+  ]
+  const latestBet = openBets[0]
 
-    const AffBonus = async (damount, dusername, refer, lvla, lvlb) => {
-      try {
-        await fetch('/api/rpc/affbonus', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: dusername, sourceUsername: dusername, type: 'affbonus', amount: damount, refers: refer, lvls: lvla, lvlss: lvlb })
-        })
-      } catch (e) { console.log(e) }
-    }
-
-    const NUser = async (reason, username, amount) => {
-      const { error } = await supabase
-        .from('activa')
-        .insert({
-          'code': reason,
-          'username': username,
-          'amount': amount
-        });
-    }
-    //end of functions
-    let active = true;
-    if (!hasRun.current) {
-
-      console.log('hi')
-      // ...
-      hasRun.current = true;
-    }
-
-    const runer = async () => {
-      const session = await requireSession(router);
-      if (!session) return;
-      clearLegacyAuthStorage();
-
-      try {
-        const response = await authFetch('/api/me');
-        if (response.status === 401 || response.status === 404) {
-          await supabase.auth.signOut();
-          router.push('/login');
-          return;
-        }
-
-        const result = await response.json();
-        if (!active) return;
-        if (result.status !== 'success') {
-          toast.error(result.message || t('messages.unableRefreshAccount'))
-          return
-        }
-        setUsername(result.profile.username || '');
-        setBalance(Number(result.profile.balance || 0));
-      } catch (e) {
-        console.log(e)
-        toast.error(t('messages.unableRefreshAccount'))
-      }
-    }
-    runer();
-
-    const getMatch = async () => {
-      const nowMs = Date.now()
-      const { data, error } = await supabase
-        .from('bets')
-        .select('*')
-        .eq('verified', false)
-        .gt('tsgmt', nowMs)
-        .limit(50)
-        .order('tsgmt', { ascending: true });
-      if (error) {
-        console.log(error)
-        setFootDat([])
-        return
-      }
-      setFootDat(data || []);
-    }
-    getMatch();
-    return () => {
-      active = false;
-    }
-  }, [router, t]);
-
-
-
-  return (
-    <Stack justifyContent="start" alignItems="center"
-      style={{ background: "#06101F", width: '100%', minHeight: '100dvh', overflowX: 'hidden' }}
-    >
-
-      <Loading open={open} handleClose={handleClose} />
-      <Toaster position="bottom-center" reverseOrder={false} />
-
-      <Cover sx={{ background: '#06101F', minWidth: '100%', minHeight: '100vh' }}>
-        <Head>
-          <title>{`${t('mobile.home.hello')} - ${username || t('status.pending')}`}</title>
-          <link rel="icon" href="/european.ico" />
-        </Head>
-        <Stack sx={{ background: "#06101F", marginTop: '10px', width: '100%', maxWidth: '450px', display: 'flex', justifyContent: 'center', alignItems: 'center' }} spacing={2} >
-
-          <Stack direction="column" spacing={1} style={{ background: '#10284D', width: '100%', maxWidth: '450px', padding: '12px', borderRadius: '10px' }}>
-
-            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center', minWidth: 0 }}>
-              <Typography style={{ fontSize: '16px', fontWeight: '600', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: 'auto', textAlign: 'left', color: '#1BB6FF' }} >{t('mobile.home.hello')}.</Typography>
-              <p className="notranslate" style={{ fontSize: '16px', margin: 0, textAlign: 'left', fontWeight: '600', fontFamily: 'Poppins, sans-serif', minHeight: '24px', padding: '1px', width: 'auto', minWidth: 0, color: '#1BB6FF', overflowWrap: 'anywhere' }}>{username ? ` ${username}` : t('status.pending')}</p>
-
-            </div>
-
-            <Stack direction='row' justifyContent='space-between' alignItems='center' flexWrap='wrap' gap={1} >
-              <Stack sx={{ minWidth: 0, flex: '1 1 150px' }}>
-                <Typography style={{ fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>{t('common.currentBalance')}</Typography>
-                <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', minHeight: '24px', padding: '1px', width: '100%', color: '#E9E5DA', overflowWrap: 'anywhere' }}>{Number(balance || 0).toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT</Typography>
-              </Stack>
-              <Link href='/user/fund' style={{ textDecoration: "none", color: 'white', flexShrink: 0 }}>
-                <Stack direction='row' justifyContent='center' alignItems='center' sx={{ background: '#1BB6FF', borderRadius: '20px', padding: '8px', width: '95px', height: '32px' }}>
-                  <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: 'white', fontSize: '12px' }}>
-                    {t('common.deposit')}
-                  </Typography>
-                  <KeyboardArrowRightIcon sx={{ width: '16px', height: '16px' }} />
-                </Stack>
-              </Link>
-            </Stack>
-            <Divider sx={{ bgcolor: "secondary.light" }} />
-            <CommunityLink href={telegramGroupUrl} icon="mingcute:telegram-line" title={t('mobile.home.telegram')} copy={t('mobile.home.telegramCopy')} color="#1BB6FF" />
-            <CommunityLink href={whatsappGroupUrl} icon="mingcute:chat-2-line" title={t('mobile.home.whatsapp')} copy={t('mobile.home.whatsappCopy')} color="#25D366" />
-          </Stack>
-          <Divider sx={{ background: '#E9E5DA' }} />
-
-          <AnimatedCarousel images={[Agent, Agent1, Agent2, Agent3, Agent4]} interval={5000} />
-
-          <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ width: '100%', gap: 1 }}>
-            <Stack direction='row' spacing={1}>
-              <Icon icon="carbon:football-american" width="24" height="24" style={{ color: '#E9E5DA' }} />
-              <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '16px', fontWeight: '600' }}>{t('mobile.home.topMatches')}</Typography>
-            </Stack>
-            <Link href="/user/matches" style={{ textDecoration: 'none' }}>
-              <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{t('common.all')}</Typography>
-            </Link>
-          </Stack>
-          <Stack direction='row' spacing={1} sx={{ width: '100%', overflowX: 'auto', pb: 0.5 }}>
-            {matchFilters.map((filter) => (
-              <MatchFilterPill
-                key={filter.key}
-                label={filter.label}
-                active={activeMatchFilter === filter.key}
-                onClick={() => setActiveMatchFilter(filter.key)}
-              />
-            ))}
-          </Stack>
-
-          <Stack alignItems='center' sx={{ width: '100%' }}>
-            {visibleMatches.map((match) => (
-              <DashboardMatchCard
-                key={match.match_id}
-                match={match}
-                onOpen={handleOpen}
-                onSelect={(matchId) => router.push(`/user/match/${matchId}`)}
-                t={t}
-              />
-            ))}
-          </Stack>
-
-          <Stack>
-
-          </Stack>
-        </Stack>
-      </Cover>
-    </Stack>
-  )
-}
-
-function CommunityLink({ href, icon, title, copy, color }) {
-  return (
-    <Link href={href} target="_blank" style={{ textDecoration: 'none' }}>
-      <Stack direction="row" justifyContent="space-between" sx={{ padding: '8px', minWidth: 0 }}>
-        <Stack direction="row" spacing={1} justifyContent="start" sx={{ minWidth: 0 }}>
-          <Icon icon={icon} width="24" height="24" style={{ color }} />
-          <Stack direction="column" spacing={0} justifyContent="start" sx={{ minWidth: 0 }}>
-            <Typography sx={{ color, fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif', textDecoration: 'underline' }}>{title}</Typography>
-            <Typography sx={{ color, fontSize: '12px', fontWeight: 300, fontFamily: 'Inter,sans-serif', textDecoration: 'underline', overflowWrap: 'anywhere' }}>{copy}</Typography>
-          </Stack>
-        </Stack>
-        <KeyboardArrowRightIcon sx={{ color }} />
-      </Stack>
-    </Link>
-  )
-}
-
-function MatchFilterPill({ label, active, onClick }) {
-  return (
-    <Stack
-      component="button"
-      type="button"
-      onClick={onClick}
-      aria-pressed={active}
-      sx={{
-        flex: '0 0 auto',
-        minHeight: 36,
-        background: active ? '#1BB6FF' : '#10284D',
-        padding: '10px',
-        borderRadius: '20px',
-        border: 0,
-        cursor: 'pointer',
-      }}
-    >
-      <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: active ? '#06101F' : '#E9E5DA', fontSize: '12px', fontWeight: '100', whiteSpace: 'nowrap' }}>
-        {label}
-      </Typography>
-    </Stack>
-  )
-}
-
-function DashboardMatchCard({ match, onOpen, onSelect, t }) {
-  const display = useClientMatchDisplay(match)
-  const startMs = display.startMs || getMatchStartMs(match)
-
-  if (startMs && startMs < Date.now()) return null
-
-  const league = (match.league === 'others' ? match.otherl : match.league) || t('common.league')
-
-  return (
-    <Stack
-      direction="column"
-      spacing={2}
-      justifyContent="center"
-      alignItems="center"
-      sx={{
-        mb: 1,
-        p: '18.5px',
-        background: '#10284D',
-        width: '100%',
-        maxWidth: '343px',
-        boxSizing: 'border-box',
-        borderRadius: '5px',
-        minHeight: '210px',
-        border: match.company ? '1px solid #1BB6FF' : '1px solid transparent',
-        cursor: 'pointer',
-      }}
-      onClick={() => {
-        onOpen()
-        onSelect(match.match_id)
-      }}
-    >
-      <Stack direction="column" sx={{ width: '100%', minWidth: 0 }}>
-        {match.company ? (
-          <Stack direction="row" alignItems="center" justifyContent="center" spacing={0.5}>
-            <Icon icon="solar:star-bold-duotone" width="24" height="24" style={{ color: '#1BB6FF', flexShrink: 0 }} />
-            <Typography sx={{ color: '#E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: 12 }}>
-              {t('common.verified')}
-            </Typography>
-          </Stack>
-        ) : null}
-        <Typography sx={{ color: '#E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-          {league}
-        </Typography>
-        <Divider sx={{ background: '#1BB6FF' }} />
-      </Stack>
-
-      <Box sx={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 82px minmax(0, 1fr)', alignItems: 'center', gap: 1, width: '100%' }}>
-        <DashboardTeam image={match.ihome} name={match.home} t={t} />
-        <Box sx={{ textAlign: 'center', color: '#E9E5DA', fontFamily: 'Poppins,sans-serif' }}>
-          <Typography sx={{ fontSize: 14, fontWeight: 300, lineHeight: 1.3 }}>{display.time}</Typography>
-          <Typography sx={{ fontSize: 12, fontWeight: 300, lineHeight: 1.3 }}>{display.date}</Typography>
-        </Box>
-        <DashboardTeam image={match.iaway} name={match.away} t={t} />
-      </Box>
-
-      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 1, width: '100%' }}>
-        <DashboardOdd label="1-0" value={match.onenil} />
-        <DashboardOdd label="1-1" value={match.oneone} />
-        <DashboardOdd label="1-2" value={match.onetwo} />
-      </Box>
-    </Stack>
-  )
-}
-
-function DashboardTeam({ image, name, t }) {
-  return (
-    <Stack direction="column" justifyContent="center" alignItems="center" spacing={1} sx={{ minWidth: 0 }}>
-      <Image src={image || Ims} width={50} height={50} alt={name || t('common.team')} style={{ objectFit: 'contain' }} unoptimized />
-      <Typography
-        sx={{
-          minHeight: 34,
-          textAlign: 'center',
-          fontFamily: 'Poppins,sans-serif',
-          color: '#E9E5DA',
-          fontSize: 12,
-          fontWeight: 300,
-          lineHeight: 1.35,
-          overflow: 'hidden',
-          display: '-webkit-box',
-          WebkitLineClamp: 2,
-          WebkitBoxOrient: 'vertical',
-          overflowWrap: 'anywhere',
-        }}
-      >
-        {name || t('common.team')}
-      </Typography>
-    </Stack>
-  )
+  return <Cover dashboard>
+    <Head><title>UCL — Matchday</title><link rel="icon" href="/european.ico" /><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
+    <Toaster position="bottom-center" />
+    <main className={styles.dashboard}>
+      <DashboardCarousel />
+      <div className={styles.masthead}>
+        <div><p className={styles.greeting}>{username ? `Hello, ${username}` : 'Your matchday'}</p><h1>Matchday<span>.</span></h1></div>
+        <div className={styles.date} aria-label={date?.toLocaleDateString(undefined, { dateStyle: 'full' }) || 'Loading date'}><strong>{date ? String(date.getDate()).padStart(2, '0') : '—'}</strong><span>{date ? date.toLocaleDateString(undefined, { month: 'short' }).toUpperCase() : ''}</span></div>
+      </div>
+      <div className={styles.contentGrid}>
+        <section className={styles.fixtures} aria-labelledby="fixtures-heading">
+          <div className={styles.sectionHead}><div><h2 id="fixtures-heading">Fixtures</h2><p>Kickoff times shown in your local time.</p></div><Link href="/user/matches">View all <ArrowUpRight size={18} aria-hidden="true" /></Link></div>
+          <div className={styles.tabs} aria-label="Fixture time window">
+            {filters.map(([key, label]) => <button type="button" key={key} aria-pressed={filter === key} className={filter === key ? styles.tabActive : ''} onClick={() => setFilter(key)}>{label}</button>)}
+          </div>
+          <div className={styles.marketHeading}><span>FOOTBALL FIXTURES</span><span>FEATURED CORRECT SCORE</span></div>
+          {shownMatches.length ? shownMatches.map((match) => <Fixture match={match} key={match.match_id} />) : <div className={styles.empty}><Trophy size={28} aria-hidden="true" /><strong>{loadingMatches ? 'Loading fixtures…' : matchError ? 'Fixtures unavailable' : 'No matches in this window'}</strong><p>{loadingMatches ? 'Checking the latest schedule.' : matchError ? 'Please try the full matches page.' : 'Try another time window or see every match.'}</p>{!loadingMatches && <Link href="/user/matches">Browse all matches <ArrowRight size={16} /></Link>}</div>}
+        </section>
+        <aside className={styles.account} aria-label="Your account">
+          <section className={styles.wallet} aria-labelledby="wallet-heading"><div className={styles.walletHead}><h2 id="wallet-heading"><Wallet size={19} aria-hidden="true" /> Wallet</h2><ShieldCheck size={19} aria-hidden="true" /></div><p>Available balance</p><div className={styles.balance}>{balance === null ? '—' : balance.toLocaleString(undefined, { maximumFractionDigits: 3 })}<span>USDT</span></div><div className={styles.walletActions}><Link href="/user/fund"><ArrowDownLeft size={18} aria-hidden="true" /> Deposit</Link><Link href="/user/withdraw"><ArrowUpRight size={18} aria-hidden="true" /> Withdraw</Link></div></section>
+          <section className={styles.bets} aria-labelledby="bets-heading"><div className={styles.betsHead}><h2 id="bets-heading">Open bets <span>{betsStatus === 'ready' ? openBets.length : '—'}</span></h2><Link href="/user/bets" aria-label="View all bets"><ArrowRight size={19} /></Link></div>{latestBet ? <Link href={`/user/viewbet/${latestBet.betid}`} className={styles.betLink}><strong>{latestBet.home} — {latestBet.away}</strong><span>{latestBet.market || 'Match selection'} · {Number(latestBet.stake || 0).toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT stake</span><span>View bet <ArrowUpRight size={16} aria-hidden="true" /></span></Link> : <p className={styles.noBets}>{betsStatus === 'loading' ? 'Loading open bets…' : betsStatus === 'error' ? 'Unable to load open bets. Open your bets to try again.' : 'No open bets right now. Your next selection will appear here.'}</p>}</section>
+          <section className={styles.community} aria-label="Community"><h2>Community</h2><div><a href={links.telegram} target="_blank" rel="noopener noreferrer"><Send size={18} aria-hidden="true" /> Telegram <ArrowUpRight size={16} aria-hidden="true" /></a><a href={links.whatsapp} target="_blank" rel="noopener noreferrer"><MessageCircle size={18} aria-hidden="true" /> WhatsApp <ArrowUpRight size={16} aria-hidden="true" /></a></div></section>
+        </aside>
+      </div>
+    </main>
+  </Cover>
 }
 
 export async function getServerSideProps(context) {
   const i18nProps = await getI18nServerSideProps(context.locale)
-  return {
-    props: {
-      ...i18nProps,
-    },
-  }
-}
-
-function DashboardOdd({ label, value }) {
-  return (
-    <Stack direction="row" justifyContent="space-around" alignItems="center" sx={{ borderRadius: '5px', minWidth: 0, height: 40, background: '#E6E8F3', border: '3px solid #1BB6FF' }}>
-      <Typography sx={{ fontSize: 12, fontFamily: 'Poppins,sans-serif', fontWeight: 400, color: '#06101F' }}>{label}</Typography>
-      <Typography sx={{ minWidth: 0, fontSize: 16, fontFamily: 'Poppins,sans-serif', fontWeight: 400, color: '#06101F', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-        {value}
-      </Typography>
-    </Stack>
-  )
+  return { props: { ...i18nProps } }
 }

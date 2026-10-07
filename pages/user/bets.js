@@ -14,18 +14,18 @@ import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay'
 import { useTranslation } from 'next-i18next'
 
 const colors = {
-  page: '#06101F',
-  card: '#0B1628',
-  cardAlt: '#0F2138',
-  border: '#1D3658',
-  accent: '#1BB6FF',
-  accentDark: '#0B2B45',
-  text: '#F7F9FC',
-  muted: '#9EABB9',
-  soft: '#D8DEE8',
-  warning: '#F5B942',
-  success: '#39D98A',
-  danger: '#FF6B7A',
+  page: '#fdfcf8',
+  card: '#ffffff',
+  cardAlt: '#f1f3ee',
+  border: '#dfe5df',
+  accent: '#0649ff',
+  accentDark: '#eaf0fb',
+  text: '#080f32',
+  muted: '#52685d',
+  soft: '#52685d',
+  warning: '#8a6013',
+  success: '#286746',
+  danger: '#a43d4a',
 }
 
 const toNumber = (value) => {
@@ -51,13 +51,13 @@ const getBetStatus = (bet, t) => {
   const hasFutureStart = Boolean(startTime && startTime > Date.now())
 
   if (hasFutureStart) {
-    return { label: t('status.notStarted'), color: colors.muted, bg: '#121E2D' }
+    return { label: t('status.notStarted'), color: colors.muted, bg: '#f1f3ee' }
   }
 
   const outcome = getBetOutcome(bet)
 
   if (outcome === 'won') {
-    return { label: t('status.won'), color: colors.success, bg: '#0F2C24' }
+    return { label: t('status.won'), color: colors.success, bg: '#e8f4ea' }
   }
 
   if (outcome === 'refunded') {
@@ -65,10 +65,10 @@ const getBetStatus = (bet, t) => {
   }
 
   if (outcome === 'lost') {
-    return { label: t('status.lost'), color: colors.danger, bg: '#321923' }
+    return { label: t('status.lost'), color: colors.danger, bg: '#fbecee' }
   }
 
-  return { label: t('status.ongoing'), color: colors.warning, bg: '#302816' }
+  return { label: t('status.ongoing'), color: colors.warning, bg: '#fbf2dc' }
 }
 
 export default function Bets() {
@@ -139,7 +139,7 @@ export default function Bets() {
     <Cover>
       <Loading open={openx} handleClose={handleClosex} />
       <Head>
-        <title>{`EFC - ${t('common.myBets')}`}</title>
+        <title>{`UCL — ${t('common.myBets')}`}</title>
         <meta name="description" content="View your recent bet slips" />
         <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -153,8 +153,8 @@ export default function Bets() {
             aria-label="Back to dashboard"
             onClick={() => router.push('/user')}
             sx={{
-              width: 36,
-              height: 36,
+              width: 44,
+              height: 44,
               border: `1px solid ${colors.border}`,
               borderRadius: '8px',
               background: colors.card,
@@ -168,7 +168,7 @@ export default function Bets() {
             <KeyboardArrowLeftOutlinedIcon sx={{ width: 24, height: 24 }} />
           </Box>
           <Box>
-            <Typography sx={{ fontSize: 18, fontFamily: 'Poppins,sans-serif', fontWeight: 600 }}>
+            <Typography component="h1" sx={{ fontSize: { xs: 32, md: 40 }, fontFamily: 'Georgia,serif', fontWeight: 400, letterSpacing: '-0.02em' }}>
               {t('common.myBets')}
             </Typography>
           </Box>
@@ -198,10 +198,10 @@ export default function Bets() {
             textAlign: 'center',
           }}
         >
-          <Typography sx={{ color: colors.text, fontFamily: 'Poppins,sans-serif', fontWeight: 600 }}>
+          <Typography sx={{ color: colors.text, fontFamily: 'Arial,sans-serif', fontWeight: 600 }}>
             {emptyLabel}
           </Typography>
-          <Typography sx={{ color: colors.muted, fontFamily: 'Poppins,sans-serif', fontSize: 13 }}>
+          <Typography sx={{ color: colors.muted, fontFamily: 'Arial,sans-serif', fontSize: 13 }}>
             {t('emptyStates.betsComing')}
           </Typography>
         </Stack>
@@ -209,8 +209,8 @@ export default function Bets() {
     }
 
     return (
-      <Stack spacing={1.5} direction="column-reverse" sx={{ mt: 2 }}>
-        {betItems.map((bet) => (
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2,minmax(0,1fr))' }, gap: 2, mt: 2 }}>
+        {betItems.slice().reverse().map((bet) => (
           <BetCard
             key={bet.betid}
             bet={bet}
@@ -220,7 +220,7 @@ export default function Bets() {
             }}
           />
         ))}
-      </Stack>
+      </Box>
     )
   }
 
@@ -240,7 +240,7 @@ export default function Bets() {
         sx={{
           width: '100%',
           border: `1px solid ${colors.border}`,
-          borderRadius: '8px',
+          borderRadius: '16px',
           background: colors.card,
           color: colors.text,
           p: 0,
@@ -252,7 +252,7 @@ export default function Bets() {
         <Stack spacing={1.5} sx={{ p: 1.5 }}>
           <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
             <Team name={bet.home} image={bet.ihome} />
-            <Typography sx={{ fontFamily: 'Poppins,sans-serif', color: colors.warning, fontSize: 12, fontWeight: 700 }}>
+            <Typography sx={{ fontFamily: 'Arial,sans-serif', color: colors.warning, fontSize: 12, fontWeight: 700 }}>
               VS
             </Typography>
             <Team name={bet.away} image={bet.iaway} align="right" />
@@ -260,10 +260,10 @@ export default function Bets() {
 
           <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ background: colors.cardAlt, borderRadius: '8px', p: 1 }}>
             <Box>
-              <Typography sx={{ color: colors.muted, fontFamily: 'Poppins,sans-serif', fontSize: 11 }}>
+              <Typography sx={{ color: colors.muted, fontFamily: 'Arial,sans-serif', fontSize: 11 }}>
                 {t('landing.markets.pickMarket')}
               </Typography>
-              <Typography sx={{ color: colors.text, fontFamily: 'Poppins,sans-serif', fontSize: 14, fontWeight: 600 }}>
+              <Typography sx={{ color: colors.text, fontFamily: 'Arial,sans-serif', fontSize: 14, fontWeight: 600 }}>
                 {bet.market || t('landing.markets.pickMarket')}
               </Typography>
             </Box>
@@ -288,16 +288,16 @@ export default function Bets() {
           alignItems="center"
           justifyContent="space-between"
           sx={{
-            background: '#081223',
+            background: '#f1f3ee',
             borderTop: `1px solid ${colors.border}`,
             px: 1.5,
             py: 1,
           }}
         >
-          <Typography sx={{ color: colors.muted, fontFamily: 'Poppins,sans-serif', fontSize: 12 }}>
+          <Typography sx={{ color: colors.muted, fontFamily: 'Arial,sans-serif', fontSize: 12 }}>
             {t('mobile.bets.kickoff')}: {display.dateTime}
           </Typography>
-          <Typography sx={{ color: colors.muted, fontFamily: 'Poppins,sans-serif', fontSize: 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <Typography sx={{ color: colors.muted, fontFamily: 'Arial,sans-serif', fontSize: 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             Bet ID: {bet.betid}
           </Typography>
           <ArrowForwardIosRoundedIcon sx={{ width: 14, height: 14, color: colors.accent }} />
@@ -312,7 +312,7 @@ function SummaryGrid({ items }) {
     <Box
       sx={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+        gridTemplateColumns: { xs: 'repeat(2, minmax(0, 1fr))', md: 'repeat(4, minmax(0, 1fr))' },
         gap: 1,
         my: 1.5,
       }}
@@ -328,10 +328,10 @@ function SummaryGrid({ items }) {
             minHeight: 72,
           }}
         >
-          <Typography sx={{ color: colors.muted, fontFamily: 'Poppins,sans-serif', fontSize: 11 }}>
+          <Typography sx={{ color: colors.muted, fontFamily: 'Arial,sans-serif', fontSize: 11 }}>
             {item.label}
           </Typography>
-          <Typography sx={{ color: colors.text, fontFamily: 'Poppins,sans-serif', fontSize: item.label === 'Stake' ? 15 : 20, fontWeight: 700 }}>
+          <Typography sx={{ color: colors.text, fontFamily: 'Arial,sans-serif', fontSize: item.label === 'Stake' ? 15 : 20, fontWeight: 700 }}>
             {item.value}
           </Typography>
         </Box>
@@ -349,7 +349,7 @@ function BetTabs({ value, onChange, tabs }) {
         gap: 1,
         border: `1px solid ${colors.border}`,
         borderRadius: '8px',
-        background: '#081223',
+        background: '#f1f3ee',
         p: 0.5,
       }}
     >
@@ -363,12 +363,12 @@ function BetTabs({ value, onChange, tabs }) {
             type="button"
             onClick={() => onChange(tab.value)}
             sx={{
-              minHeight: 42,
+              minHeight: 44,
               border: 0,
               borderRadius: '6px',
-              background: selected ? colors.accentDark : 'transparent',
-              color: selected ? colors.text : colors.muted,
-              fontFamily: 'Poppins,sans-serif',
+              background: selected ? '#102451' : 'transparent',
+              color: selected ? '#fff' : colors.muted,
+              fontFamily: 'Arial,sans-serif',
               fontSize: 13,
               fontWeight: selected ? 700 : 500,
               cursor: 'pointer',
@@ -399,13 +399,13 @@ function Team({ name, image, align = 'left' }) {
       alignItems="center"
       sx={{ minWidth: 0, flex: 1 }}
     >
-      <Box sx={{ width: 28, height: 28, flex: '0 0 auto', borderRadius: '50%', overflow: 'hidden', background: '#15243A' }}>
+      <Box sx={{ width: 28, height: 28, flex: '0 0 auto', borderRadius: '50%', overflow: 'hidden', background: '#f1f3ee' }}>
         <Image src={image ?? Ims} width={28} height={28} alt="" />
       </Box>
       <Typography
         sx={{
           color: colors.text,
-          fontFamily: 'Poppins,sans-serif',
+          fontFamily: 'Arial,sans-serif',
           fontSize: 13,
           fontWeight: 600,
           overflow: 'hidden',
@@ -423,13 +423,13 @@ function Team({ name, image, align = 'left' }) {
 function Metric({ label, value }) {
   return (
     <Box sx={{ border: `1px solid ${colors.border}`, borderRadius: '8px', p: 1, minWidth: 0 }}>
-      <Typography sx={{ color: colors.muted, fontFamily: 'Poppins,sans-serif', fontSize: 11 }}>
+      <Typography sx={{ color: colors.muted, fontFamily: 'Arial,sans-serif', fontSize: 11 }}>
         {label}
       </Typography>
       <Typography
         sx={{
           color: colors.soft,
-          fontFamily: 'Poppins,sans-serif',
+          fontFamily: 'Arial,sans-serif',
           fontSize: 12,
           fontWeight: 700,
           overflowWrap: 'anywhere',
@@ -452,7 +452,7 @@ function StatusPill({ status }) {
         borderRadius: '999px',
         px: 1,
         py: 0.4,
-        fontFamily: 'Poppins,sans-serif',
+        fontFamily: 'Arial,sans-serif',
         fontSize: 11,
         fontWeight: 700,
         whiteSpace: 'nowrap',

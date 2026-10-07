@@ -1,74 +1,25 @@
-import { useState } from 'react'
-import { Stack, Container } from '@mui/material'
-import Accordion from '@mui/material/Accordion';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useRouter } from 'next/router'
+import Head from 'next/head'
+import Link from 'next/link'
+import { ArrowLeft, ChevronDown } from 'lucide-react'
+import Cover from './cover'
 import faq from '@/pages/api/faq.json'
-import CloseIcon from '@mui/icons-material/Close';
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
+import styles from '@/styles/UserSubpage.module.css'
+
 export default function Faq() {
-  const [expanded, setExpanded] = useState(false);
-
-  let i = 0;
-  const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
-  const router = useRouter();
-  return (
-    <div stylle={{ minHeight: '80vh' }}>
-      <Stack direction="row" justifyContent="left">
-        <CloseIcon style={{ color: '#CACACA', width: '30px', height: '30px', margin: '8px' }}
-          onClick={() => {
-            router.push('/user/account')
-          }}
-        />
-      </Stack>
-      <Typography sx={{ width: '100%', height: '91px', color: '#D9D9D9', textAlign: 'center', fontSize: '32px', fontWeight: '900' }}>
-        FREQUENTLY ASKED QUESTIONS
-      </Typography>
-      <Container sx={{ height: '42px' }}></Container>
-      <Stack sx={{ padding: '8px' }}>
-        {
-          faq.QA.map((f) => {
-
-            return (
-              <Accordion expanded={expanded === `panel${f.id}`} onChange={handleChange(`panel${f.id}`)}
-                sx={{ background: '#373636' }}
-                key={f.id}
-              >
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon sx={{ color: '#EE8F00' }} />}
-                  aria-controls="panel1bh-content"
-                  id="panel1bh-header"
-                >
-                  <Typography sx={{ width: '33%', flexShrink: 0, color: '#CACACA', fontFamily: 'Poppins,sans-serif' }}>
-                    {f.Question}
-                  </Typography>
-                  <Typography sx={{ color: '#CACACA' }}></Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Typography sx={{ color: '#CACACA', fontWeight: '100', fontSize: '15px', fontFamily: 'Poppins,sans-serif' }}>
-                    {f.Answer}
-                  </Typography>
-                </AccordionDetails>
-              </Accordion>
-            )
-          })
-        }
-      </Stack>
-
-    </div>
-  )
+  return <Cover>
+    <Head><title>UCL — Frequently asked questions</title><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
+    <main className={styles.page}>
+      <Link href="/user/account" className={styles.back}><ArrowLeft size={18} aria-hidden="true" /> Account</Link>
+      <div className={styles.heading}><h1>Frequently asked questions</h1><p>Find answers about your UCL account and betting experience.</p></div>
+      <div className={styles.accordion}>
+        {faq.QA.map((item) => <details key={item.id}><summary><span>{item.Question}</span><ChevronDown size={19} aria-hidden="true" /></summary><div>{item.Answer}</div></details>)}
+      </div>
+    </main>
+  </Cover>
 }
 
 export async function getServerSideProps(context) {
   const i18nProps = await getI18nServerSideProps(context.locale)
-  return {
-    props: {
-      ...i18nProps,
-    },
-  }
+  return { props: { ...i18nProps } }
 }

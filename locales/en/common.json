@@ -828,6 +828,8 @@
       "chooseMethodFirst": "Choose a method first",
       "fcfaEquivalent": "USDT equivalent",
       "usdtEquivalent": "USDT equivalent",
+      "rateUnavailable": "Rate unavailable",
+      "rateChanged": "The payment rate changed. Review the amount and payment details again.",
       "sendExactly": "Send exactly {{amount}} to the payment details below.",
       "sendEnteredAmount": "Send exactly the entered amount to the payment details below.",
       "chooseMethodDetails": "Choose a deposit method to see payment details.",

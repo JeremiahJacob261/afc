@@ -1,89 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-
-.powerbtn {
-    min-width: 270px;
-    height: 44px;
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #4c4a44;
-    cursor: pointer;
-    background-color: #1BB6FF;
-  }
-  
-  .powerbtn p {
-    font-family: "Poppins",sans-serif;
-    font-size: 13px;
-    font-weight: bold;
-    text-align: center;
-    color: #06101F;
-    margin: 0px;
-    text-align: center;
-    cursor: pointer;
-  }
-  
-  .userinfo {
-    background-color: #1a1a1a;
-    padding: 20px;
-    width: 100%;
-    height: auto;
-    border: 8px;
-  }
-  
-  .userinfo-x {
-    background-color: #1a1a1a;
-    padding: 10px;
-    width: 100%;
-    height: 66px;
-    border: 8px;
-  }
-  
-  .normal-bold {
-    font-size: 15px;
-    padding:2px;
-    font-weight: 700;
-    font-family: var(--font-pops);
-    color: #ffffff;
-  }
-
-  .amountinput {
-    min-width: 300px;
-    height: auto;
-    padding: 8px;
-    background-color: #212121;
-    color: whitesmoke;
-    border-radius: 5px;
-    border: 1px solid #E9E5DA;
-  }
-  
-  .amountinput::placeholder {
-    color: #4c4a44;
-  }
-
-  .transactionrow{
-    padding: 12px;
-    margin: 8px;
-    max-width: 323px;
-    height: auto;
-    color:whitesmoke;
-    border-radius: 5px;
-  }
-
-  .betspent  {
-    width: 310px;
-    border: 0.6px solid #06101F;
-    height: auto;
-    background-color: #10284D;
-    padding: 10px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: nowrap;
-    text-align: center;
-    margin: 10px;
-    border-radius: 10px;
-   }
-
-   .skiptranslate {
-    display: none !important;
-   }
+.powerbtn{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;padding:8px 24px;border:0;border-radius:8px;background:#0649ff;color:#fff;font:700 16px/1.4 'DM Sans',Arial,sans-serif;cursor:pointer}
+.powerbtn:hover{background:#003bcc}
+.powerbtn:focus-visible,.amountinput:focus-visible{outline:2px solid #0649ff;outline-offset:2px}
+.powerbtn p{margin:0;color:inherit;font:inherit}
+.userinfo,.userinfo-x{width:100%;padding:16px;border:1px solid #dfe5df;border-radius:12px;background:#fff}
+.normal-bold{margin:0 0 8px;color:#080f32;font:700 16px/1.5 'DM Sans',Arial,sans-serif}
+.amountinput{width:100%;min-width:0;min-height:48px;padding:12px 16px;border:1px solid #75886b;border-radius:8px;background:#fff;color:#080f32;font:400 16px/1.5 'DM Sans',Arial,sans-serif}
+.amountinput::placeholder{color:#52685d}
+.transactionrow{width:100%;padding:16px;border:1px solid #dfe5df;border-radius:8px;background:#fff;color:#080f32}
+.betspent{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;padding:16px;border:1px solid #dfe5df;border-radius:12px;background:#fff;color:#080f32}
+.skiptranslate{display:none!important}

@@ -1,29 +1,25 @@
-import { Typography, Stack, Divider, Button, Paper } from "@mui/material"
+import { Typography, Stack, Divider, Button } from "@mui/material"
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { supabase } from "@/pages/api/supabase"
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { useRouter } from "next/router";
 import React, { useEffect, useState, useRef } from "react";
 import { v4 as uuidv4 } from 'uuid'
 import Head from 'next/head';
+import Link from 'next/link';
+import { ArrowLeft, ChevronRight, Clock3 } from 'lucide-react';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import Cover from '../cover'
 import { Drawer } from '@mui/material'
 import toast, { Toaster } from "react-hot-toast";
-import { app } from '@/pages/api/firebase';
 import Image from 'next/image'
 import Loading from "../../components/loading";
-import { motion } from 'framer-motion'
 import Ims from '@/public/simps/ball.png'
-import Bal from '@/public/bball.png'
-import { onAuthStateChanged } from "firebase/auth";
-import { getAuth, signOut } from "firebase/auth";
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay';
 import { waitForPaint } from '@/lib/uiFeedback';
 import { useTranslation } from 'next-i18next';
+import styles from '@/styles/UserMatch.module.css';
 
 
 
@@ -112,42 +108,10 @@ function getMatchStartSeconds(match) {
     return timestamp ? timestamp / 1000 : 0
 }
 
-async function processBets(name) {
-    try {
-        await fetch('/api/rpc/process_bets', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name })
-        })
-        console.log('Bets processed for', name)
-    } catch (err) {
-        console.error('Error processing bets:', err)
-    }
-}
-
-// ─── Liquid glow animation keyframes ─────────────────────────────────────────
-// The inset shadow shifts vertically (top ↔ bottom) to simulate liquid sloshing
-// inside the container; the outer glow pulses in sync to radiate outward.
-const liquidBoxShadow = [
-    'inset 0 0 10px 3px rgba(178,34,34,0.20), 0 0 8px 2px rgba(178,34,34,0.38)',
-    'inset 0 5px 22px 7px rgba(210,52,20,0.55), 0 0 18px 5px rgba(204,44,18,0.72)',
-    'inset 0 -5px 20px 7px rgba(190,38,14,0.48), inset 0 3px 12px 4px rgba(215,58,22,0.32), 0 0 14px 4px rgba(192,40,16,0.58)',
-    'inset 0 5px 22px 7px rgba(210,52,20,0.55), 0 0 18px 5px rgba(204,44,18,0.72)',
-    'inset 0 0 10px 3px rgba(178,34,34,0.20), 0 0 8px 2px rgba(178,34,34,0.38)',
-]
-
-const liquidTransition = {
-    duration: 2.8,
-    repeat: Infinity,
-    ease: 'easeInOut',
-}
-// ─────────────────────────────────────────────────────────────────────────────
-
 export default function Match({ matchDat }) {
     const { t } = useTranslation('common')
     const router = useRouter()
     const initialMatch = Array.isArray(matchDat) && matchDat.length ? matchDat[0] : null
-    const hasRun = useRef(false);
     // Guards against a double-tap placing two bets, and keeps a retry of the
     // same selection on one client_bet_id so the server deduplicates it.
     const betAttemptRef = useRef({ signature: '', id: null, pending: false });
@@ -160,27 +124,11 @@ export default function Match({ matchDat }) {
     //end of snackbar1
 
     const [matches, setMatches] = useState(initialMatch || {})
-    const [display, setDisplay] = useState({})
-    const [open, setOpen] = useState(false)
     const [picked, setPicked] = useState('')
-    const [odds, setOdds] = useState(0);
     const [bottom, setBottom] = useState(false)
     const [info, setInfo] = useState({});
     const [balance, setBalance] = useState(0);
-    const [refCount, setRefCount] = useState(0);
     const [viplevel, setViplevel] = useState(1);
-    const auth = getAuth(app);
-    const Reads = async (dtype, damount) => {
-        try {
-            await fetch(`/api/rpc/${dtype}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ amount: damount })
-            })
-        } catch (e) {
-            console.log(e)
-        }
-    }
 
 
 
@@ -206,9 +154,7 @@ export default function Match({ matchDat }) {
 
                 setInfo(result.profile);
                 setBalance(Number(result.profile.balance || 0));
-                setRefCount(result.referralCount || 0);
                 setViplevel(result.vip?.viplevel || 1);
-                hasRun.current = true;
             } catch (e) {
                 console.log(e)
                 toast.error(t('messages.unableRefreshAccount'))
@@ -228,15 +174,6 @@ export default function Match({ matchDat }) {
     const handleClosex = () => setOpenx(false);
 
     //the end of thellaoding modal control
-    //dialog-start
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-    //dialog-end
     //snackbar2
     const handleClick = () => {
         setOpened(true);
@@ -267,215 +204,76 @@ export default function Match({ matchDat }) {
     if (!initialMatch) {
         return (
             <Cover>
-                <Stack style={{ width: "100%", minHeight: '100vh', background: '#06101F', padding: '24px' }} alignItems="center" justifyContent="center" spacing={2}>
-                    <Head>
-                        <title>{t('messages.unableLoadMatch')}</title>
-                        <link rel="icon" href="/european.ico" />
-                    </Head>
-                    <Typography sx={{ color: '#E9E5DA', fontFamily: 'Poppins,sans-serif', fontWeight: '600' }}>{t('messages.unableLoadMatch')}</Typography>
-                    <Typography sx={{ color: '#CACACA', fontFamily: 'Poppins,sans-serif', fontSize: '13px', textAlign: 'center' }}>
-                        {t('errors.unableToLoad')}
-                    </Typography>
-                    <Button variant="contained" onClick={() => router.push('/user/matches')} sx={{ background: '#1BB6FF', color: '#06101F' }}>
-                        {t('common.back')}
-                    </Button>
-                </Stack>
+                <Head><title>{t('messages.unableLoadMatch')} — UCL</title></Head>
+                <main className={styles.errorState}>
+                    <h1>{t('messages.unableLoadMatch')}</h1>
+                    <p>{t('errors.unableToLoad')}</p>
+                    <Link href="/user/matches" className={styles.back}><ArrowLeft size={18} aria-hidden="true" /> {t('mobile.nav.matches')}</Link>
+                </main>
             </Cover>
         )
     }
 
-    //main ui
     return (
         <Cover>
-            <Toaster position="bottom-center"
-                reverseOrder={false} />
+            <Toaster position="bottom-center" reverseOrder={false} />
             <Loading open={openx} handleClose={handleClosex} />
-            <Stack style={{ width: "100%", minHeight: '100vh', background: '#06101F' }} alignItems="center">
-                <Draws />
-                <Sncks message={messages} />
-                <Head>
-                    <title>{`${homeName} VS ${awayName}`}</title>
-                    <meta name="description" content="A Premium EFC  match" />
-                    <link rel="icon" href="/european.ico" />
-                    <meta name="viewport" content="width=device-width, initial-scale=1" />
-                </Head>
-                <Stack direction='row' alignItems='left' justifyContent='left' spacing={1} sx={{ width: '100%', margin: '5px' }} onClick={() => { router.push('/user/matches') }}>
-                    <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px', color: '#E9E5DA' }} />
-                    <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontWeight: '300', width: '90%', textAlign: 'center' }}>{t('mobile.match.placeBet')}</Typography>
-                </Stack>
+            <Draws />
+            <Sncks message={messages} />
+            <Head>
+                <title>{`${homeName} vs ${awayName} — UCL`}</title>
+                <meta name="description" content="UCL football match markets" />
+                <link rel="icon" href="/european.ico" />
+            </Head>
+            <main className={styles.page}>
+                <Link href="/user/matches" className={styles.back}><ArrowLeft size={18} aria-hidden="true" /> {t('mobile.nav.matches')}</Link>
+                <section className={styles.hero} aria-labelledby="match-title">
+                    <div className={styles.heroMeta}>
+                        <span>{leagueName}</span>
+                        <span><Clock3 size={16} aria-hidden="true" /> {matchDisplay.dateTime} local time</span>
+                    </div>
+                    <div className={styles.heroBody}>
+                        <span className={styles.teamCrest}><Image src={matches.ihome || Ims} width={64} height={64} alt="" unoptimized /></span>
+                        <div className={styles.heroCopy}>
+                            <h1 id="match-title">{homeName} <span>vs</span> {awayName}</h1>
+                            <p>{t('mobile.match.matchId')} {matches.match_id || t('common.notAvailable')}</p>
+                        </div>
+                        <span className={styles.teamCrest}><Image src={matches.iaway || Ims} width={64} height={64} alt="" unoptimized /></span>
+                    </div>
+                    {matches.company && <p className={styles.company}>{matches.company}</p>}
+                </section>
 
-
-                <Stack direction="column" spacing={2} justifyContent='center' alignItems='center'
-
-                    style={{
-                        display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'space-between',
-                        marginBottom: "8px", padding: "18.5px",
-                        background: '#10284D',
-                        width: '343px',
-                        borderRadius: '5px',
-                    }} >
-                    <Stack direction='column'>
-                        <Typography style={{ color: '#E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{leagueName}</Typography>
-                        <Divider sx={{ background: '#E9E5DA' }} />
-                    </Stack>
-                    <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
-                        <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                            <Image src={matches.ihome ? matches.ihome : Ims} width={50} height={50} alt='home' style={{ borderRadius: '10px', objectFit: 'contain' }} unoptimized />
-                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{homeName}</Typography>
-                        </Stack>
-                        <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{matchDisplay.time}</Typography>
-                            <p style={{ color: '#E9E5DA' }}>|</p>
-                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{matchDisplay.date}</Typography>
-                        </Stack>
-                        <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
-                            <Image src={matches.iaway ? matches.iaway : Ims} width={50} height={50} alt='away' style={{ borderRadius: '10px', objectFit: 'contain' }} unoptimized />
-                            <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{awayName}</Typography>
-                        </Stack>
-                    </Stack>
-                    <Divider sx={{ background: '#E9E5DA' }} />
-                    <p>{matches?.company ? matches.company : t('common.no')}</p>
-                    {
-                        marketsArray.map((m) => {
-                            // ── Protection check ──────────────────────────────────────────────
-                            // A market is "company protected" when matches.company is truthy
-                            // AND this row's key matches the comarket field.
-                            const isProtected = Boolean(matches.company) && matches.comarket === m.word
-
-                            return (
-                                <Stack direction="column" spacing={1} key={m.num} style={{ width: '100%' }}>
-                                    {/*
-                                     * Outer motion.div handles the liquid-glow effect:
-                                     *   • inset boxShadow shifts top ↔ bottom  → liquid sloshing
-                                     *   • outer boxShadow pulses               → radiating brick-red light
-                                     * A secondary motion.div sweeps a gradient across like flowing lava.
-                                     */}
-                                    <motion.div
-                                        animate={isProtected ? { boxShadow: liquidBoxShadow } : {}}
-                                        transition={isProtected ? liquidTransition : {}}
-                                        style={{
-                                            position: 'relative',
-                                            overflow: 'hidden',
-                                            borderRadius: '8px',
-                                            border: isProtected
-                                                ? '1px solid rgba(0, 202, 229, 0.55)'
-                                                : '1px solid transparent',
-                                            background: isProtected
-                                                ? 'rgba(32, 255, 244, 0.22)'
-                                                : 'transparent',
-                                        }}
-                                    >
-                                        {/* Liquid shimmer sweep – only rendered when protected */}
-                                        {isProtected && (
-                                            <motion.div
-                                                animate={{ x: ['-130%', '230%'] }}
-                                                transition={{
-                                                    duration: 2.8,
-                                                    repeat: Infinity,
-                                                    ease: 'easeInOut',
-                                                    repeatDelay: 0.2,
-                                                }}
-                                                style={{
-                                                    position: 'absolute',
-                                                    top: 0,
-                                                    left: 0,
-                                                    width: '60%',
-                                                    height: '100%',
-                                                    background:
-                                                        'linear-gradient(90deg, transparent, rgba(20, 185, 210, 0.16), rgba(26, 211, 228, 0.3), rgba(20, 178, 210, 0.16), transparent)',
-                                                    pointerEvents: 'none',
-                                                    zIndex: 0,
-                                                }}
-                                            />
-                                        )}
-
-                                        {/* Row content sits above the shimmer layer */}
-                                        <Stack
-                                            style={{
-                                                minWidth: '300px',
-                                                height: '44px',
-                                                display: 'flex',
-                                                flexDirection: 'row',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'center',
-                                                position: 'relative',
-                                                zIndex: 1,
-                                                padding: '0 4px',
-                                            }}
-                                        >
-                                            {/* Score label + optional badge */}
-                                            <Stack direction='row' alignItems='center' spacing={0.5}>
-                                                <p
-                                                    style={{
-                                                        color: isProtected ? '#7af6ff' : '#E9E5DA',
-                                                        padding: '8px',
-                                                        fontWeight: isProtected ? '600' : '400',
-                                                        margin: 0,
-                                                    }}
-                                                >
-                                                    {m.word === 'otherscores' ? t('mobile.markets.other') : m.num}
-                                                </p>
-                                                {isProtected && (
-                                                    <motion.span
-                                                        animate={{ opacity: [0.65, 1, 0.65] }}
-                                                        transition={{
-                                                            duration: 1.6,
-                                                            repeat: Infinity,
-                                                            ease: 'easeInOut',
-                                                        }}
-                                                        style={{
-                                                            fontSize: '8px',
-                                                            color: '#00fffb',
-                                                            fontFamily: 'Poppins, sans-serif',
-                                                            fontWeight: '700',
-                                                            letterSpacing: '0.06em',
-                                                            textTransform: 'uppercase',
-                                                            lineHeight: 1,
-                                                        }}
-                                                    >
-                                                        {t('mobile.match.companyGame')}
-                                                    </motion.span>
-                                                )}
-                                            </Stack>
-
-                                            {/* Odds */}
-                                            <p style={{ color: '#1BB6FF', padding: '8px', margin: 0 }}>
-                                                {formatOdd(getMatchOdd(matches, m.word, viplevel))}%
-                                            </p>
-
-                                            {/* Choose button */}
-                                            <motion.div
-                                                onClick={() => {
-                                                    if (getMatchOdd(matches, m.word, viplevel) <= 0) {
-                                                        toast.error(t('mobile.match.marketUnavailable'))
-                                                        return
-                                                    }
-                                                    setPicked(m.word)
-                                                    setBottom(true)
-                                                }}
-                                                whileHover={{ scale: 1.1 }}
-                                                whileTap={{ scale: 0.95 }}
-                                                style={{
-                                                    cursor: 'pointer',
-                                                    color: '#06101F',
-                                                    background: '#1BB6FF',
-                                                    padding: '4px 8px',
-                                                    borderRadius: '5px',
-                                                }}
-                                            >
-                                                {t('mobile.match.choose')}
-                                            </motion.div>
-                                        </Stack>
-                                    </motion.div>
-                                    <Divider sx={{ bgcolor: "secondary.light" }} />
-                                </Stack>
-                            )
-                        })
-                    }
-
-
-                </Stack>
-            </Stack>
+                <section className={styles.markets} aria-labelledby="markets-title">
+                    <div className={styles.marketsHead}>
+                        <div>
+                            <h2 id="markets-title">{t('mobile.match.market')}</h2>
+                            <p>{t('mobile.match.placeBet')}</p>
+                        </div>
+                    </div>
+                    <div className={styles.marketGrid}>
+                        {marketsArray.map((market) => {
+                            const odd = getMatchOdd(matches, market.word, viplevel)
+                            const isProtected = Boolean(matches.company) && matches.comarket === market.word
+                            const label = market.word === 'otherscores' ? t('mobile.markets.other') : market.num
+                            return <button
+                                key={market.word}
+                                type="button"
+                                className={`${styles.marketCard} ${isProtected ? styles.protectedMarket : ''}`}
+                                disabled={odd <= 0}
+                                aria-label={odd > 0 ? `${label}, ${formatOdd(odd)}%. ${t('mobile.match.choose')}` : `${label}, ${t('mobile.match.marketUnavailable')}`}
+                                onClick={() => { setPicked(market.word); setBottom(true) }}
+                            >
+                                <span className={styles.marketScore}>{label}</span>
+                                <span className={styles.marketBottom}>
+                                    <span>{isProtected ? t('mobile.match.companyGame') : t('landing.live.odds')}</span>
+                                    <strong>{odd > 0 ? `${formatOdd(odd)}%` : '—'}</strong>
+                                    <ChevronRight size={18} aria-hidden="true" />
+                                </span>
+                            </button>
+                        })}
+                    </div>
+                </section>
+            </main>
         </Cover>
     );
     function Draws() {
@@ -501,64 +299,65 @@ export default function Match({ matchDat }) {
             <Drawer
                 anchor='bottom'
                 open={bottom}
+                PaperProps={{ sx: { width: 'min(100%, 560px)', mx: 'auto', maxHeight: '92dvh', overflowY: 'auto', borderRadius: '20px 20px 0 0', background: '#fdfcf8' } }}
                 onClose={() => {
                     setBottom(false)
                 }}
             >
 
-                <Cover>
-                    <Stack direction='column' spacing={2} style={{ background: '#06101F', padding: '8px', minHeight: '90vh', paddingBottom: '70px' }}>
-                        <Stack direction='row' sx={{ padding: '5px' }}>
-                            <KeyboardArrowLeftOutlinedIcon style={{ color: '#E9E5DA' }} onClick={() => {
+                <div className={styles.betSlip}>
+                    <Stack direction='column' spacing={2} className={styles.betSlipContent}>
+                        <Stack direction='row' alignItems='center' spacing={1}>
+                            <button type="button" className={styles.slipBack} aria-label={t('common.back')} onClick={() => {
                                 setBottom(false)
-                            }} />
-                            <Typography sx={{ width: '100%', fontFamily: 'Poppins,sans-serif', textAlign: 'center', color: '#E9E5DA' }}>{t('mobile.match.placeBet')}</Typography>
+                            }}><ArrowLeft size={20} aria-hidden="true" /></button>
+                            <Typography component="h2" sx={{ fontFamily: 'Georgia,serif', fontSize: 24, color: '#080f32' }}>{t('mobile.match.placeBet')}</Typography>
                         </Stack>
                         <Stack direction='column' alignItems='center' justifyContent='center'>
-                            <Typography style={{ color: '#E9E5DA', fontFamily: 'Poppins, sans-serif', fontSize: '12px' }}>{leagueName}</Typography>
-                            <Divider sx={{ background: '#E9E5DA' }} />
+                            <Typography style={{ color: '#080f32', fontFamily: 'Arial, sans-serif', fontSize: '12px' }}>{leagueName}</Typography>
+                            <Divider sx={{ background: '#080f32' }} />
                         </Stack>
-                        <Stack direction='row' justifyContent='center' alignItems='center' spacing={3}>
+                        <Stack direction='row' justifyContent='center' alignItems='center' spacing={3} className={styles.slipFixture}>
                             <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                                 <Image src={matches.ihome ? matches.ihome : Ims} width={50} height={50} alt='home' style={{ objectFit: 'contain' }} unoptimized />
-                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{homeName}</Typography>
+                                <Typography sx={{ textAlign: 'center', fontFamily: 'Arial,sans-serif', color: '#080f32', fontSize: '12px', fontWeight: '100' }}>{homeName}</Typography>
                             </Stack>
                             <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{matchDisplay.time}</Typography>
-                                <p style={{ color: '#E9E5DA' }}>|</p>
-                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '14px', fontWeight: '100' }}>{matchDisplay.date}</Typography>
+                                <Typography sx={{ textAlign: 'center', fontFamily: 'Arial,sans-serif', color: '#080f32', fontSize: '14px', fontWeight: '100' }}>{matchDisplay.time}</Typography>
+                                <p style={{ color: '#080f32' }}>|</p>
+                                <Typography sx={{ textAlign: 'center', fontFamily: 'Arial,sans-serif', color: '#080f32', fontSize: '14px', fontWeight: '100' }}>{matchDisplay.date}</Typography>
                             </Stack>
                             <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                                 <Image src={matches.iaway ? matches.iaway : Ims} width={50} height={50} alt='away' style={{ objectFit: 'contain' }} unoptimized />
-                                <Typography sx={{ textAlign: 'center', fontFamily: 'Poppins,sans-serif', color: '#E9E5DA', fontSize: '12px', fontWeight: '100' }}>{awayName}</Typography>
+                                <Typography sx={{ textAlign: 'center', fontFamily: 'Arial,sans-serif', color: '#080f32', fontSize: '12px', fontWeight: '100' }}>{awayName}</Typography>
                             </Stack>
 
                         </Stack>
-                        <Divider sx={{ background: '#E9E5DA' }} />
+                        <Divider sx={{ background: '#080f32' }} />
                         <Stack direction='column' spacing={3}>
                             <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#E9E5DA' }}>{t('mobile.match.matchId')}</Typography>
-                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{matches.match_id || t('common.notAvailable')}</Typography>
+                                <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#080f32' }}>{t('mobile.match.matchId')}</Typography>
+                                <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: '#080f32' }}>{matches.match_id || t('common.notAvailable')}</Typography>
                             </Stack>
                             <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#E9E5DA' }}>{t('mobile.match.market')}</Typography>
-                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{picked === 'otherscores' ? t('mobile.markets.other') : markets[picked] || t('mobile.match.noMarketSelected')}</Typography>
+                                <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#080f32' }}>{t('mobile.match.market')}</Typography>
+                                <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: '#080f32' }}>{picked === 'otherscores' ? t('mobile.markets.other') : markets[picked] || t('mobile.match.noMarketSelected')}</Typography>
                             </Stack>
                             <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#E9E5DA' }}>{t('landing.live.odds')}</Typography>
-                                <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{formatOdd(tofal)}</Typography>
+                                <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#080f32' }}>{t('landing.live.odds')}</Typography>
+                                <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: 16, fontWeight: 700, color: '#080f32' }}>{formatOdd(tofal)}%</Typography>
                             </Stack>
                         </Stack>
-                        <Divider sx={{ background: '#E9E5DA' }} />
+                        <Divider sx={{ background: '#080f32' }} />
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#E9E5DA', width: '210px' }}>{t('mobile.match.stakeAmount')}</Typography>
+                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '300', color: '#080f32', width: '210px' }}>{t('mobile.match.stakeAmount')}</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#E9E5DA' }}>{t('common.currentBalance')}</Typography>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{availableStake.toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT</Typography>
+                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '300', color: '#080f32' }}>{t('common.currentBalance')}</Typography>
+                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: '#080f32' }}>{availableStake.toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT</Typography>
                         </Stack>
-                        <input placeholder={t('mobile.match.stakeAmount')} type='text'
-                            style={{ fontFamily: 'Poppins, sans-serif', padding: "10px", borderRadius: '12px', width: '100%', background: '#06101F', color: '#FFFFFF', border: '3px solid #E9E5DA' }}
+                        <input placeholder={t('mobile.match.stakeAmount')} aria-label={t('mobile.match.stakeAmount')} type='text' inputMode="decimal"
+                            style={{ fontFamily: 'Arial, sans-serif', padding: "10px", borderRadius: '8px', width: '100%', minHeight: '48px', fontSize: '16px', background: '#fff', color: '#080f32', border: '1px solid #75886b' }}
                             value={stake}
                             onChange={(e) => {
                                 if (!isNaN(e.target.value)) {
@@ -571,19 +370,19 @@ export default function Match({ matchDat }) {
                             variant="outlined"
                             disabled={availableStake <= 0}
                             onClick={useAllBalance}
-                            sx={{ alignSelf: 'flex-start', borderColor: '#1BB6FF', color: '#1BB6FF', fontFamily: 'Poppins,sans-serif', fontWeight: 600 }}
+                            sx={{ alignSelf: 'flex-start', borderColor: '#0649ff', color: '#0649ff', fontFamily: 'Arial,sans-serif', fontWeight: 600 }}
                         >
                             {t('mobile.match.useAllBalance')}
                         </Button>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '300', color: '#E9E5DA' }}>{t('mobile.match.profit')}</Typography>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '500', color: '#E9E5DA' }}>{profit.toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT</Typography>
+                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '300', color: '#080f32' }}>{t('mobile.match.profit')}</Typography>
+                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: '#080f32' }}>{profit.toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#E9E5DA' }}>{t('mobile.match.expectedReturn')}</Typography>
-                            <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontSize: '16', fontWeight: '600', color: '#E9E5DA' }}>{expext.toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT</Typography>
+                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '600', color: '#080f32' }}>{t('mobile.match.expectedReturn')}</Typography>
+                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '600', color: '#080f32' }}>{expext.toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT</Typography>
                         </Stack>
-                        <Button disabled={openx} sx={{ fontFamily: 'Poppins,sans-serif', margin: '8px', fontSize: '16', fontWeight: '300', color: '#06101F', background: "#1BB6FF", padding: '10px' }}
+                        <Button disabled={openx} variant="contained" sx={{ fontFamily: 'Arial,sans-serif', minHeight: 48, fontSize: 16, fontWeight: 700, color: '#fff', background: "#0649ff", padding: '10px 16px', textTransform: 'none', '&:hover': { background: '#003bcc' } }}
                             onClick={() => {
                                 if (openx) return
                                 if (betAttemptRef.current.pending) return
@@ -611,7 +410,6 @@ export default function Match({ matchDat }) {
                                         }
                                         const clientBetId = betAttemptRef.current.id
                                         betAttemptRef.current.pending = true
-                                        handleClose();
                                         handleOpenx()
                                         const deductBet = async () => {
                                             try {
@@ -663,7 +461,7 @@ export default function Match({ matchDat }) {
                             {openx ? t('mobile.match.placingBet') : t('mobile.match.placeBet')}
                         </Button>
                     </Stack>
-                </Cover>
+                </div>
             </Drawer>
         )
     }

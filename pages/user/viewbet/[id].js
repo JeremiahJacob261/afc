@@ -15,18 +15,18 @@ import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay'
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
 
 const colors = {
-  page: '#06101F',
-  card: '#0B1628',
-  cardAlt: '#0F2138',
-  border: '#1D3658',
-  accent: '#1BB6FF',
-  accentDark: '#0B2B45',
-  text: '#F7F9FC',
-  muted: '#9EABB9',
-  soft: '#D8DEE8',
-  warning: '#F5B942',
-  success: '#39D98A',
-  danger: '#FF6B7A',
+  page: '#fdfcf8',
+  card: '#ffffff',
+  cardAlt: '#f1f3ee',
+  border: '#dfe5df',
+  accent: '#0649ff',
+  accentDark: '#eaf0fb',
+  text: '#080f32',
+  muted: '#52685d',
+  soft: '#52685d',
+  warning: '#8a6013',
+  success: '#286746',
+  danger: '#a43d4a',
 }
 
 const toNumber = (value) => {
@@ -49,12 +49,12 @@ function getOutcome(bet) {
 
 function getStatus(bet, t) {
   const future = Boolean(getMatchStartMs(bet) && getMatchStartMs(bet) > Date.now())
-  if (future) return { label: t('status.notStarted'), color: colors.muted, bg: '#121E2D' }
+  if (future) return { label: t('status.notStarted'), color: colors.muted, bg: '#f1f3ee' }
   const outcome = getOutcome(bet)
-  if (outcome === 'won') return { label: t('status.won'), color: colors.success, bg: '#0F2C24' }
+  if (outcome === 'won') return { label: t('status.won'), color: colors.success, bg: '#e8f4ea' }
   if (outcome === 'refunded') return { label: t('status.refunded'), color: colors.accent, bg: colors.accentDark }
-  if (outcome === 'lost') return { label: t('status.lost'), color: colors.danger, bg: '#321923' }
-  return { label: t('status.processing'), color: colors.warning, bg: '#302816' }
+  if (outcome === 'lost') return { label: t('status.lost'), color: colors.danger, bg: '#fbecee' }
+  return { label: t('status.processing'), color: colors.warning, bg: '#fbf2dc' }
 }
 
 export default function ViewBet() {
@@ -105,18 +105,18 @@ export default function ViewBet() {
   return (
     <Cover>
       <Head>
-        <title>{`EFC - ${t('mobile.bets.details')}`}</title>
+        <title>{`UCL — ${t('mobile.bets.details')}`}</title>
         <meta name="description" content="View the details of your bet" />
         <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      <Box sx={{ minHeight: '90vh', pb: 3, color: colors.text }}>
+      <Box sx={{ width: '100%', maxWidth: 800, mx: 'auto', minHeight: '90vh', pb: 3, color: colors.text }}>
         <Stack direction="row" alignItems="center" spacing={1} sx={{ py: 1 }}>
           <Box component="button" type="button" aria-label="Back to my bets" onClick={() => router.push('/user/bets')} sx={backButtonSx}>
             <KeyboardArrowLeftOutlinedIcon sx={{ width: 24, height: 24 }} />
           </Box>
-          <Typography sx={{ fontSize: 18, fontFamily: 'Poppins,sans-serif', fontWeight: 600 }}>
+          <Typography component="h1" sx={{ fontSize: { xs: 32, md: 40 }, fontFamily: 'Georgia,serif', fontWeight: 400, letterSpacing: '-0.02em' }}>
             {t('mobile.bets.details')}
           </Typography>
         </Stack>
@@ -133,7 +133,7 @@ export default function ViewBet() {
           <Stack spacing={1.5} sx={{ p: 1.5 }}>
             <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
               <Team name={bet.home} image={bet.ihome} />
-              <Typography sx={{ color: colors.warning, fontFamily: 'Poppins,sans-serif', fontSize: 12, fontWeight: 700 }}>VS</Typography>
+              <Typography sx={{ color: colors.warning, fontFamily: 'Arial,sans-serif', fontSize: 12, fontWeight: 700 }}>VS</Typography>
               <Team name={bet.away} image={bet.iaway} align="right" />
             </Stack>
             <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ background: colors.cardAlt, borderRadius: '8px', p: 1 }}>
@@ -185,21 +185,21 @@ export default function ViewBet() {
   }
 }
 
-const backButtonSx = { width: 36, height: 36, border: `1px solid ${colors.border}`, borderRadius: '8px', background: colors.card, color: colors.text, display: 'grid', placeItems: 'center', cursor: 'pointer', p: 0 }
-const cardSx = { border: `1px solid ${colors.border}`, borderRadius: '8px', background: colors.card, overflow: 'hidden' }
-const labelSx = { color: colors.muted, fontFamily: 'Poppins,sans-serif', fontSize: 11 }
-const valueSx = { color: colors.text, fontFamily: 'Poppins,sans-serif', fontSize: 14, fontWeight: 600 }
+const backButtonSx = { width: 44, height: 44, border: `1px solid ${colors.border}`, borderRadius: '8px', background: colors.card, color: colors.text, display: 'grid', placeItems: 'center', cursor: 'pointer', p: 0 }
+const cardSx = { border: `1px solid ${colors.border}`, borderRadius: '16px', background: colors.card, overflow: 'hidden' }
+const labelSx = { color: colors.muted, fontFamily: 'Arial,sans-serif', fontSize: 11 }
+const valueSx = { color: colors.text, fontFamily: 'Arial,sans-serif', fontSize: 14, fontWeight: 600 }
 
 function LoadingState() {
   return <Stack alignItems="center" justifyContent="center" spacing={1.5} sx={{ minHeight: 300, border: `1px solid ${colors.border}`, borderRadius: '8px', background: colors.card }}><CircularProgress size={28} sx={{ color: colors.accent }} /><Typography sx={{ ...labelSx, fontSize: 13 }}>Loading bet details…</Typography></Stack>
 }
 
 function SectionTitle({ icon, title }) {
-  return <Stack direction="row" alignItems="center" spacing={0.75} sx={{ px: 1.5, py: 1.25, borderBottom: `1px solid ${colors.border}`, color: colors.accent }}><Box sx={{ display: 'grid', placeItems: 'center' }}>{icon}</Box><Typography sx={{ color: colors.text, fontFamily: 'Poppins,sans-serif', fontSize: 14, fontWeight: 700 }}>{title}</Typography></Stack>
+  return <Stack direction="row" alignItems="center" spacing={0.75} sx={{ px: 1.5, py: 1.25, borderBottom: `1px solid ${colors.border}`, color: colors.accent }}><Box sx={{ display: 'grid', placeItems: 'center' }}>{icon}</Box><Typography sx={{ color: colors.text, fontFamily: 'Arial,sans-serif', fontSize: 14, fontWeight: 700 }}>{title}</Typography></Stack>
 }
 
 function Team({ name, image, align = 'left' }) {
-  return <Stack direction={align === 'right' ? 'row-reverse' : 'row'} spacing={1} alignItems="center" sx={{ minWidth: 0, flex: 1 }}><Box sx={{ width: 34, height: 34, flex: '0 0 auto', borderRadius: '50%', overflow: 'hidden', background: '#15243A' }}><Image src={image || Ball} width={34} height={34} alt="" /></Box><Typography sx={{ ...valueSx, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', textAlign: align }}>{name || 'Team'}</Typography></Stack>
+  return <Stack direction={align === 'right' ? 'row-reverse' : 'row'} spacing={1} alignItems="center" sx={{ minWidth: 0, flex: 1 }}><Box sx={{ width: 34, height: 34, flex: '0 0 auto', borderRadius: '50%', overflow: 'hidden', background: '#f1f3ee' }}><Image src={image || Ball} width={34} height={34} alt="" /></Box><Typography sx={{ ...valueSx, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', textAlign: align }}>{name || 'Team'}</Typography></Stack>
 }
 
 function Metric({ label, value }) {
@@ -211,7 +211,7 @@ function DetailRow({ icon, label, value, last = false }) {
 }
 
 function StatusPill({ status }) {
-  return <Typography component="span" sx={{ color: status.color, background: status.bg, border: `1px solid ${status.color}40`, borderRadius: '999px', px: 1, py: 0.4, fontFamily: 'Poppins,sans-serif', fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap' }}>{status.label}</Typography>
+  return <Typography component="span" sx={{ color: status.color, background: status.bg, border: `1px solid ${status.color}40`, borderRadius: '999px', px: 1, py: 0.4, fontFamily: 'Arial,sans-serif', fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap' }}>{status.label}</Typography>
 }
 
 export async function getServerSideProps(context) {

@@ -1,214 +1,48 @@
-import Cover from './cover'
-import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
-import { supabase } from '@/pages/api/supabase'
-import { useState } from 'react'
-import { Box, Stack, Typography } from '@mui/material'
-import Image from 'next/image'
 import Head from 'next/head'
-import Ims from '@/public/simps/ball.png'
-import { Icon } from '@iconify/react'
-import { useRouter } from 'next/router'
-import Loading from '../components/loading'
-import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined'
-import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay'
+import Link from 'next/link'
+import Image from 'next/image'
+import { ArrowLeft, ArrowUpRight, Clock3, Trophy } from 'lucide-react'
+import Cover from './cover'
+import { supabase } from '@/pages/api/supabase'
+import { useClientMatchDisplay } from '@/lib/matchDisplay'
+import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
+import ball from '@/public/simps/ball.png'
+import styles from '@/styles/UserSubpage.module.css'
 
-function TeamBlock({ image, name, align = 'center' }) {
-  return (
-    <Box sx={{ minWidth: 0, textAlign: align }}>
-      <Box sx={{ display: 'grid', placeItems: 'center' }}>
-        <Image src={image || Ims} width={50} height={50} alt={name || 'team'} style={{ objectFit: 'contain' }} unoptimized />
-      </Box>
-      <Typography
-        sx={{
-          mt: 1,
-          minHeight: 34,
-          color: '#E9E5DA',
-          fontFamily: 'Poppins,sans-serif',
-          fontSize: 12,
-          fontWeight: 300,
-          lineHeight: 1.35,
-          overflow: 'hidden',
-          display: '-webkit-box',
-          WebkitLineClamp: 2,
-          WebkitBoxOrient: 'vertical',
-          overflowWrap: 'anywhere',
-        }}
-      >
-        {name || 'Team'}
-      </Typography>
-    </Box>
-  )
+function Team({ name, image }) {
+  return <span className={styles.matchTeam}><span><Image src={image || ball} width={32} height={32} alt="" unoptimized /></span><strong>{name || 'Team'}</strong></span>
 }
 
-function OddChip({ label, value, company }) {
-  return (
-    <Box
-      sx={{
-        height: 40,
-        minWidth: 0,
-        borderRadius: '5px',
-        background: '#E6E8F3',
-        border: `3px solid ${company ? '#FFB400' : '#D4AF37'}`,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        gap: 0.5,
-        px: 0.5,
-      }}
-    >
-      <Typography sx={{ fontSize: 12, fontFamily: 'Poppins,sans-serif', fontWeight: 400, color: '#808080' }}>
-        {label}
-      </Typography>
-      <Typography
-        sx={{
-          minWidth: 0,
-          fontSize: 16,
-          fontFamily: 'Poppins,sans-serif',
-          fontWeight: 400,
-          color: '#808080',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-        }}
-      >
-        {value}
-      </Typography>
-    </Box>
-  )
-}
-
-function MatchCard({ match, onOpen, onSelect }) {
+function MatchCard({ match }) {
   const display = useClientMatchDisplay(match)
-  const startMs = display.startMs || getMatchStartMs(match)
-
-  if (startMs && startMs < Date.now()) return null
-
-  const league = (match.league === 'others' ? match.otherl : match.league) || 'League'
-
-  return (
-    <Box
-      component="button"
-      type="button"
-      onClick={() => {
-        onOpen()
-        onSelect(match.match_id)
-      }}
-      sx={{
-        width: '100%',
-        maxWidth: 343,
-        minHeight: 210,
-        mb: 1,
-        p: '18px',
-        boxSizing: 'border-box',
-        borderRadius: '5px',
-        border: match.company ? '1px solid #1BB6FF' : '1px solid transparent',
-        background: '#10284D',
-        color: 'inherit',
-        cursor: 'pointer',
-        textAlign: 'left',
-      }}
-    >
-      <Stack spacing={1.5}>
-        <Box sx={{ minWidth: 0 }}>
-          {match.company ? (
-            <Stack direction="row" alignItems="center" justifyContent="center" spacing={0.5} sx={{ mb: 0.5 }}>
-              <Icon icon="solar:star-bold-duotone" width="24" height="24" style={{ color: '#1BB6FF', flexShrink: 0 }} />
-              <Typography sx={{ color: '#E9E5DA', fontFamily: 'Poppins,sans-serif', fontSize: 12 }}>
-                Verified Company Game
-              </Typography>
-            </Stack>
-          ) : null}
-          <Typography
-            sx={{
-              color: '#E9E5DA',
-              fontFamily: 'Poppins,sans-serif',
-              fontSize: 12,
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {league}
-          </Typography>
-          <Box sx={{ mt: 0.5, height: 1, background: '#1BB6FF' }} />
-        </Box>
-
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: 'minmax(0, 1fr) 82px minmax(0, 1fr)',
-            alignItems: 'center',
-            gap: 1,
-          }}
-        >
-          <TeamBlock image={match.ihome} name={match.home} />
-          <Box sx={{ textAlign: 'center', color: '#CACACA', fontFamily: 'Poppins,sans-serif' }}>
-            <Typography sx={{ fontSize: 14, lineHeight: 1.3 }}>{display.time}</Typography>
-            <Typography sx={{ fontSize: 12, lineHeight: 1.3 }}>{display.date}</Typography>
-          </Box>
-          <TeamBlock image={match.iaway} name={match.away} />
-        </Box>
-
-        <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 1 }}>
-          <OddChip label="1-0" value={match.onenil} company={match.company} />
-          <OddChip label="1-1" value={match.oneone} company={match.company} />
-          <OddChip label="1-2" value={match.onetwo} company={match.company} />
-        </Box>
-      </Stack>
-    </Box>
-  )
+  const league = (match.league === 'others' ? match.otherl : match.league) || 'Football'
+  const outcomes = [['1–0', match.onenil], ['1–1', match.oneone], ['1–2', match.onetwo]]
+  return <article>
+    <Link href={`/user/match/${match.match_id}`} className={styles.matchCard} aria-label={`${match.home || 'Home'} vs ${match.away || 'Away'} — open match markets`}>
+      <div className={styles.matchMeta}><span>{league}</span><span><Clock3 size={15} aria-hidden="true" />{display.dateTime} local time</span></div>
+      <div className={styles.matchBody}>
+        <div className={styles.matchTeams}><Team name={match.home} image={match.ihome} /><Team name={match.away} image={match.iaway} /></div>
+        <div className={styles.matchMarket}><span>Featured correct score</span><div>{outcomes.map(([score, odd]) => <span key={score}><small>{score}</small><strong>{Number(odd) > 0 ? `${odd}%` : '—'}</strong></span>)}</div></div>
+      </div>
+      <ArrowUpRight className={styles.matchArrow} size={20} aria-hidden="true" />
+    </Link>
+  </article>
 }
 
 export default function Matches({ footDat = [] }) {
-  const router = useRouter()
-  const [open, setOpen] = useState(false)
   const matches = Array.isArray(footDat) ? footDat : []
-
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
-
-  return (
-    <Cover>
-      <Loading open={open} handleClose={handleClose} />
-      <Head>
-        <title>EUROPEAN - Matches</title>
-        <meta name="description" content="See the Best Matches Provided By EUROPEAN FC- " />
-        <link rel="icon" href="/european.ico" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-      <Box sx={{ width: '100%', maxWidth: 450, minHeight: '90vh', mx: 'auto', px: 1.5, pb: 3, boxSizing: 'border-box', background: '#06101F' }}>
-        <Stack direction="row" alignItems="center" spacing={1} sx={{ py: 1 }}>
-          <KeyboardArrowLeftOutlinedIcon sx={{ width: 24, height: 24, color: '#E9E5DA' }} onClick={() => router.push('/user')} />
-          <Typography sx={{ flex: 1, fontSize: 16, color: 'white', fontFamily: 'Poppins,sans-serif', fontWeight: 300, textAlign: 'center', pr: 3 }}>
-            Matches
-          </Typography>
-        </Stack>
-
-        <Stack alignItems="center">
-          {matches.map((match) => (
-            <MatchCard
-              key={match.match_id}
-              match={match}
-              onOpen={handleOpen}
-              onSelect={(matchId) => router.push(`/user/match/${matchId}`)}
-            />
-          ))}
-        </Stack>
-      </Box>
-    </Cover>
-  )
+  return <Cover>
+    <Head><title>UCL — Matches</title><meta name="description" content="Browse upcoming football matches and markets." /><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
+    <main className={styles.matchesPage}>
+      <Link href="/user" className={styles.back}><ArrowLeft size={18} aria-hidden="true" /> Matchday</Link>
+      <div className={styles.heading}><h1>Football matches</h1><p>Upcoming fixtures and featured correct-score prices. Open a match to see every market.</p></div>
+      {matches.length ? <div className={styles.matchList}>{matches.map((match) => <MatchCard match={match} key={match.match_id} />)}</div> : <div className={styles.emptyState}><Trophy size={28} aria-hidden="true" /><strong>No upcoming matches</strong><p>Check back when new fixtures are available.</p></div>}
+    </main>
+  </Cover>
 }
 
 export async function getServerSideProps(context) {
   const i18nProps = await getI18nServerSideProps(context.locale)
-  const { data } = await supabase
-    .from('bets')
-    .select('*')
-    .eq('verified', false)
-    .limit(50)
-    .order('tsgmt', { ascending: true })
-
-  return {
-    props: {
-      ...i18nProps, footDat: data || [] },
-  }
+  const { data } = await supabase.from('bets').select('*').eq('verified', false).gt('tsgmt', Date.now()).limit(50).order('tsgmt', { ascending: true })
+  return { props: { ...i18nProps, footDat: data || [] } }
 }

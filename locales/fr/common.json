@@ -828,6 +828,8 @@
       "chooseMethodFirst": "Choisissez d’abord une méthode",
       "fcfaEquivalent": "Équivalent USDT",
       "usdtEquivalent": "Équivalent USDT",
+      "rateUnavailable": "Taux indisponible",
+      "rateChanged": "Le taux a changé. Vérifiez à nouveau le montant et les détails du paiement.",
       "sendExactly": "Envoyez exactement {{amount}} aux coordonnées de paiement ci-dessous.",
       "sendEnteredAmount": "Envoyez exactement le montant saisi aux coordonnées de paiement ci-dessous.",
       "chooseMethodDetails": "Choisissez une méthode de dépôt pour voir les coordonnées de paiement.",

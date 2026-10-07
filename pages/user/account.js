@@ -171,7 +171,7 @@ export default function Account() {
         <link rel="icon" href="/european.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Box className="account-wrap" sx={{ padding: "8px", background: "#06101F", width: '100%', minHeight: '90vh', paddingBottom: '5vh' }}>
+      <Box className="account-wrap" sx={{ padding: "8px", background: "#fdfcf8", width: '100%', minHeight: '90vh', paddingBottom: '5vh' }}>
         <div className="page-decor" aria-hidden="true">
           <svg width="100%" height="100%" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', inset: 0 }}>
             <defs>
@@ -191,56 +191,56 @@ export default function Account() {
           </svg>
         </div>
         <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '5px', margin: '2px' }}>
-          <KeyboardArrowLeftOutlinedIcon sx={{ color: "#E9E5DA", width: '24px', height: '24px' }} onClick={() => {
+          <KeyboardArrowLeftOutlinedIcon sx={{ color: "#080f32", width: '24px', height: '24px' }} onClick={() => {
             router.push('/user')
           }} />
-          <Typography sx={{ color: "#E9E5DA", fontSize: '16px', fontFamily: 'Poppins,sans-serif', fontWeight: '300' }}>{t('common.profile')}</Typography>
+          <Typography component="h1" sx={{ color: "#080f32", fontSize: { xs: '32px', sm: '48px' }, fontFamily: 'Georgia,serif', fontWeight: 400 }}>{t('common.profile')}</Typography>
         </Stack>
         {
           //start of profile
         }
-        <Stack spacing={4} className="dark-glass" sx={{ minWidth: '344px' }}>
+        <Stack spacing={4} className="dark-glass" sx={{ minWidth: 0 }}>
           <Stack spacing={1} sx={{ background: 'inherit', padding: '8px', borderRadius: '5px' }}>
             <Stack direction='row' spacing={2} sx={{ padding: '8px' }} alignItems='center' justifyContent={"start"}>
               <Image src={profile} width={50} height={50} alt="profile" />
               <Stack direction='column' spacing={0}>
                 <Stack direction="row">
-                  <Typography sx={{ color: "#FFFFFF", fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins, sans-serif' }}>{t('mobile.profile.hello')}</Typography>
-                  <p className="notranslate" style={{ color: "#FFFFFF", fontSize: '14px', fontWeight: '500', fontFamily: 'Poppins, sans-serif' }}>. {username || (loadingProfile ? t('status.pending') : t('common.account'))}</p>
+                  <Typography sx={{ color: "#080f32", fontSize: '14px', fontWeight: '500', fontFamily: 'Arial, sans-serif' }}>{t('mobile.profile.hello')}</Typography>
+                  <p className="notranslate" style={{ color: "#080f32", fontSize: '14px', fontWeight: '500', fontFamily: 'Arial, sans-serif' }}>. {username || (loadingProfile ? t('status.pending') : t('common.account'))}</p>
                 </Stack>
-                <Typography sx={{ color: "#E9E5DA", fontSize: '14px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', width: '50px', textAlign: 'start' }}>VIP {viplevel}</Typography>
+                <Typography sx={{ color: "#080f32", fontSize: '14px', fontWeight: '300', fontFamily: 'Arial, sans-serif', width: '50px', textAlign: 'start' }}>VIP {viplevel}</Typography>
               </Stack>
             </Stack>
             <Stack style={{ padding: '8px', borderRadius: '10px', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
               <Stack>
-                <Typography style={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>{t('common.currentBalance')}</Typography>
-                <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Poppins, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#E9E5DA' }}>{Number(balance || 0).toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT</Typography>
+                <Typography style={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Arial, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#080f32' }}>{t('common.currentBalance')}</Typography>
+                <Typography style={{ fontSize: '18px', fontWeight: '500', fontFamily: 'Arial, sans-serif', height: '24px', padding: '1px', width: '100%', color: '#080f32' }}>{Number(balance || 0).toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT</Typography>
               </Stack>
               <Link href='/user/fund' style={{ textDecoration: "none", color: 'white' }}>
-                <Stack style={{ background: '#1BB6FF', borderRadius: '20px', padding: '8px', width: '95px', height: '32px', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <Typography sx={{ fontFamily: 'Poppins,sans-serif', fontWeight: '300', color: '#10284D', fontSize: '12px' }}>
+                <Stack style={{ background: '#0649ff', borderRadius: '24px', padding: '8px 16px', minWidth: '112px', minHeight: '44px', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Typography sx={{ fontFamily: 'Arial,sans-serif', fontWeight: '300', color: '#ffffff', fontSize: '12px' }}>
                     {t('common.deposit')}
                   </Typography>
-                  <KeyboardArrowRightIcon sx={{ width: '16px', height: '16px', color: "#10284D" }} />
+                  <KeyboardArrowRightIcon sx={{ width: '16px', height: '16px', color: "#ffffff" }} />
                 </Stack>
               </Link>
             </Stack>
-            <Divider sx={{ bgcolor: "#1BB6FF" }} />
+            <Divider sx={{ bgcolor: "#0649ff" }} />
             < Link href={telegramGroupUrl} style={{ textDecoration: 'none' }}>
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                 <Stack direction='row' spacing={1} justifyContent='start'>
-                  <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
+                  <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#52685d' }} />
 
-                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.telegramChannel')}</Typography>
+                  <Typography sx={{ color: '#080f32', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.telegramChannel')}</Typography>
                 </Stack>
               </Stack>
             </Link>
-            <Divider sx={{ bgcolor: "#1BB6FF" }} />
+            <Divider sx={{ bgcolor: "#0649ff" }} />
             < Link href={whatsappGroupUrl} style={{ textDecoration: 'none' }}>
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }}>
                 <Stack direction='row' spacing={1} justifyContent='start'>
                   <Icon icon="mingcute:chat-2-line" width="24" height="24" style={{ color: '#25D366' }} />
-                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.whatsappGroup')}</Typography>
+                  <Typography sx={{ color: '#080f32', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.whatsappGroup')}</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} sx={{ color: '#25D366' }} />
               </Stack>
@@ -249,23 +249,23 @@ export default function Account() {
           {
             //deposit
           }
-          <Stack direction='column' spacing={1} style={{ background: '#10284D', padding: '12px', borderRadius: "5px", border: '1px solid #1BB6FF' }}>
-            <Typography sx={{ color: "#1BB6FF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.referralsTitle')}</Typography>
+          <Stack direction='column' spacing={1} style={{ background: '#ffffff', padding: '12px', borderRadius: "5px", border: '1px solid #0649ff' }}>
+            <Typography sx={{ color: "#0649ff", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.referralsTitle')}</Typography>
 
-            <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', height: '110px', padding: '8px', background: '#06101F', borderRadius: '8px' }}>
+            <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', height: '110px', padding: '8px', background: '#fdfcf8', borderRadius: '8px' }}>
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} alignItems="center">
                 <Stack direction='row' spacing={1} justifyContent='center' alignItems="center">
-                  <Icon icon="ant-design:link-outlined" width="24" height="24" style={{ color: "#a3a3a3" }} />
-                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>register/{info?.newrefer || ''}</Typography>
+                  <Icon icon="ant-design:link-outlined" width="24" height="24" style={{ color: "#52685d" }} />
+                  <Typography sx={{ color: '#080f32', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>register/{info?.newrefer || ''}</Typography>
                 </Stack>
-                <Icon icon="solar:copy-bold-duotone" width="24" height="24" style={{ color: '#a3a3a3' }} onClick={() => {
+                <Icon icon="solar:copy-bold-duotone" width="24" height="24" style={{ color: '#52685d' }} onClick={() => {
                   if (!info?.newrefer) return
                   navigator.clipboard.writeText("https://europeanfc01.com/register/" + info.newrefer)
                   setMessages(t('messages.inviteLinkCopied'))
                   toast.success(t('messages.inviteLinkCopied'))
                 }} />
               </Stack>
-              <Divider sx={{ bgcolor: "#1BB6FF" }} />
+              <Divider sx={{ bgcolor: "#0649ff" }} />
               <Stack direction='row' justifyContent='space-between' alignItems={"center"} sx={{ padding: '8px', cursor: 'pointer' }}
                 onClick={() => {
                   router.push('/user/refferal');
@@ -284,29 +284,29 @@ export default function Account() {
           {
             //fun
           }
-          <Stack direction='column' spacing={1} style={{ background: '#10284D', padding: '12px', borderRadius: "5px", border: '1px solid #1BB6FF' }}>
-            <Typography sx={{ color: "#1BB6FF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>{t('common.deposit')}</Typography>
+          <Stack direction='column' spacing={1} style={{ background: '#ffffff', padding: '12px', borderRadius: "5px", border: '1px solid #0649ff' }}>
+            <Typography sx={{ color: "#0649ff", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>{t('common.deposit')}</Typography>
             <Divider />
-            <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', height: '110px', padding: '8px', background: '#06101F', borderRadius: '8px' }}>
+            <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', height: '110px', padding: '8px', background: '#fdfcf8', borderRadius: '8px' }}>
 
               <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px' }} onClick={() => {
                 router.push('/user/fund');
               }}>
                 <Stack direction='row' spacing={1} justifyContent='start' alignItems={"center"} style={{ cursor: 'pointer' }}>
-                  <Icon icon="streamline:money-atm-card-3-deposit-money-payment-finance-atm-withdraw" width="24" height="24" style={{ color: "#a3a3a3" }} />
-                  <Typography sx={{ color: '#E9E5DA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.fundAccount')}</Typography>
+                  <Icon icon="streamline:money-atm-card-3-deposit-money-payment-finance-atm-withdraw" width="24" height="24" style={{ color: "#52685d" }} />
+                  <Typography sx={{ color: '#080f32', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.fundAccount')}</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
 
-              <Divider sx={{ bgcolor: "#1BB6FF" }} />
+              <Divider sx={{ bgcolor: "#0649ff" }} />
 
               <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px', cursor: 'pointer' }} onClick={() => {
                 router.push('/user/vip');
               }}>
                 <Stack direction='row' spacing={1} justifyContent='start' alignItems={"center"}>
-                  <Icon icon="icon-park-twotone:diamond-one" width="24" height="24" style={{ color: "#1BB6FF" }} />
-                  <Typography sx={{ color: '#E9E5DA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.vipProgress')}</Typography>
+                  <Icon icon="icon-park-twotone:diamond-one" width="24" height="24" style={{ color: "#0649ff" }} />
+                  <Typography sx={{ color: '#080f32', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.vipProgress')}</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
@@ -318,53 +318,53 @@ export default function Account() {
           {
             //withdraw
           }
-          <Stack direction='column' spacing={1} style={{ background: '#10284D', padding: '12px', borderRadius: "5px", border: '1px solid #1BB6FF' }}>
-            <Typography sx={{ color: "#1BB6FF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.withdrawalTitle')}</Typography>
+          <Stack direction='column' spacing={1} style={{ background: '#ffffff', padding: '12px', borderRadius: "5px", border: '1px solid #0649ff' }}>
+            <Typography sx={{ color: "#0649ff", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.withdrawalTitle')}</Typography>
             <Divider />
-            <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '150px', padding: '8px', background: '#06101F', borderRadius: '8px' }}>
+            <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '150px', padding: '8px', background: '#fdfcf8', borderRadius: '8px' }}>
 
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px', cursor: 'pointer' }} onClick={() => {
                 router.push('/user/withdraw');
               }}>
                 <Stack direction='row' spacing={1} justifyContent='start' alignItems="center">
-                  <Icon icon="uil:money-withdraw" width="24" height="24" style={{ color: '#a3a3a3' }} />
-                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('common.withdraw')}</Typography>
+                  <Icon icon="uil:money-withdraw" width="24" height="24" style={{ color: '#52685d' }} />
+                  <Typography sx={{ color: '#080f32', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('common.withdraw')}</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
 
-              <Divider sx={{ bgcolor: "#1BB6FF" }} />
+              <Divider sx={{ bgcolor: "#0649ff" }} />
 
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px', cursor: 'pointer' }} onClick={() => {
                 router.push('/user/history');
               }}>
                 <Stack direction='row' spacing={1} justifyContent='start' alignItems="center">
-                  <Icon icon="ri:history-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
-                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.history')}</Typography>
+                  <Icon icon="ri:history-line" width="24" height="24" style={{ color: '#52685d' }} />
+                  <Typography sx={{ color: '#080f32', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.history')}</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
 
-              <Divider sx={{ bgcolor: "#1BB6FF" }} />
+              <Divider sx={{ bgcolor: "#0649ff" }} />
 
               <Stack direction='row' justifyContent='space-between' alignItems="center" sx={{ padding: '8px', cursor: 'pointer' }} onClick={() => {
                 router.push('/user/codesetting');
               }}>
                 <Stack direction='row' spacing={1} justifyContent='start' alignItems="center">
-                  <Icon icon="iconamoon:lock-light" width="24" height="24" style={{ color: '#a3a3a3' }} />
-                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.codeSetting')}</Typography>
+                  <Icon icon="iconamoon:lock-light" width="24" height="24" style={{ color: '#52685d' }} />
+                  <Typography sx={{ color: '#080f32', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.codeSetting')}</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
 
-              <Divider sx={{ bgcolor: "#1BB6FF" }} />
+              <Divider sx={{ bgcolor: "#0649ff" }} />
 
               <Stack direction='row' justifyContent='space-between' alignItems="center" sx={{ padding: '8px', cursor: 'pointer' }} onClick={() => {
                 router.push('/user/bindwallet');
               }}>
                 <Stack direction='row' spacing={1} justifyContent='start'>
-                  <Icon icon="icon-park-twotone:connect" width="24" height="24" style={{ color: '#a3a3a3' }} />
-                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.linkWallets')}</Typography>
+                  <Icon icon="icon-park-twotone:connect" width="24" height="24" style={{ color: '#52685d' }} />
+                  <Typography sx={{ color: '#080f32', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.linkWallets')}</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
@@ -376,17 +376,17 @@ export default function Account() {
           {
             //fun
           }
-          <Stack direction='column' spacing={1} style={{ background: '#10284D', padding: '12px', borderRadius: "5px", border: '1px solid #1BB6FF' }}>
-            <Typography sx={{ color: "#1BB6FF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.betsTitle')}</Typography>
+          <Stack direction='column' spacing={1} style={{ background: '#ffffff', padding: '12px', borderRadius: "5px", border: '1px solid #0649ff' }}>
+            <Typography sx={{ color: "#0649ff", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.betsTitle')}</Typography>
             <Divider />
-            <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '50px', padding: '8px', background: '#06101F', borderRadius: '8px' }}>
+            <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '50px', padding: '8px', background: '#fdfcf8', borderRadius: '8px' }}>
 
               <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px', cursor: 'pointer' }} onClick={() => {
                 router.push('/user/bets');
               }}>
                 <Stack direction='row' spacing={1} justifyContent='start' alignItems="center">
-                  <Icon icon="mdi:clipboard-text-history-outline" width="24" height="24" style={{ color: '#a3a3a3' }} />
-                  <Typography sx={{ color: '#E9E5DA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('common.myBets')}</Typography>
+                  <Icon icon="mdi:clipboard-text-history-outline" width="24" height="24" style={{ color: '#52685d' }} />
+                  <Typography sx={{ color: '#080f32', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('common.myBets')}</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
@@ -398,67 +398,67 @@ export default function Account() {
           {
             //About
           }
-          <Stack direction='column' spacing={1} style={{ background: '#10284D', padding: '12px', borderRadius: "5px", border: '1px solid #1BB6FF' }}>
-            <Typography sx={{ color: "#1BB6FF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.aboutTitle')}</Typography>
+          <Stack direction='column' spacing={1} style={{ background: '#ffffff', padding: '12px', borderRadius: "5px", border: '1px solid #0649ff' }}>
+            <Typography sx={{ color: "#0649ff", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.aboutTitle')}</Typography>
             <Divider />
-            <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '50px', padding: '8px', background: '#06101F', borderRadius: '8px' }}>
+            <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '50px', padding: '8px', background: '#fdfcf8', borderRadius: '8px' }}>
 
               <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px', cursor: 'pointer' }} onClick={() => {
                 router.push("/user/faq")
               }
               }>
                 <Stack direction='row' spacing={1} justifyContent='start'>
-                  <Icon icon="streamline:interface-help-question-circle-circle-faq-frame-help-info-mark-more-query-question" width="24" height="24" style={{ color: '#a3a3a3' }} />
-                  <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('common.faq')}</Typography>
+                  <Icon icon="streamline:interface-help-question-circle-circle-faq-frame-help-info-mark-more-query-question" width="24" height="24" style={{ color: '#52685d' }} />
+                  <Typography sx={{ color: '#080f32', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('common.faq')}</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>
 
 
 
-              <Divider sx={{ bgcolor: "#1BB6FF" }} />
+              <Divider sx={{ bgcolor: "#0649ff" }} />
               < Link href={customerSupportUrl} style={{ textDecoration: 'none' }}>
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                   <Stack direction='row' spacing={1} justifyContent='start'>
-                    <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
+                    <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#52685d' }} />
 
-                    <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.customerService')}</Typography>
+                    <Typography sx={{ color: '#080f32', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.customerService')}</Typography>
                   </Stack>
                   <KeyboardArrowRightIcon width={24} height={24} />
                 </Stack>
               </Link>
 
-              <Divider sx={{ bgcolor: "#1BB6FF" }} />
+              <Divider sx={{ bgcolor: "#0649ff" }} />
               < Link href={telegramGroupUrl} style={{ textDecoration: 'none' }}>
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                   <Stack direction='row' spacing={1} justifyContent='start'>
-                    <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#a3a3a3' }} />
+                    <Icon icon="mingcute:telegram-line" width="24" height="24" style={{ color: '#52685d' }} />
 
-                    <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.telegramGroup')}</Typography>
+                    <Typography sx={{ color: '#080f32', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.telegramGroup')}</Typography>
                   </Stack>
                   <KeyboardArrowRightIcon width={24} height={24} />
                 </Stack>
               </Link>
 
-              <Divider sx={{ bgcolor: "#1BB6FF" }} />
+              <Divider sx={{ bgcolor: "#0649ff" }} />
 
               < Link href={whatsappGroupUrl} style={{ textDecoration: 'none' }}>
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }}>
                   <Stack direction='row' spacing={1} justifyContent='start'>
                     <Icon icon="mingcute:chat-2-line" width="24" height="24" style={{ color: '#25D366' }} />
-                    <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.whatsappGroup')}</Typography>
+                    <Typography sx={{ color: '#080f32', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.whatsappGroup')}</Typography>
                   </Stack>
                   <KeyboardArrowRightIcon width={24} height={24} sx={{ color: '#25D366' }} />
                 </Stack>
               </Link>
 
-              <Divider sx={{ bgcolor: "#1BB6FF" }} />
+              <Divider sx={{ bgcolor: "#0649ff" }} />
 
               < Link href={customerSupportUrl} style={{ textDecoration: 'none' }}>
                 <Stack direction='row' justifyContent='space-between' sx={{ padding: '8px' }} >
                   <Stack direction='row' spacing={1} justifyContent='start'>
-                    <Icon icon="mdi:support" width="24" height="24" style={{ color: '#a3a3a3' }} />
-                    <Typography sx={{ color: '#E9E5DA', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.contact')}</Typography>
+                    <Icon icon="mdi:support" width="24" height="24" style={{ color: '#52685d' }} />
+                    <Typography sx={{ color: '#080f32', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.contact')}</Typography>
                   </Stack>
                   <KeyboardArrowRightIcon width={24} height={24} />
                 </Stack>
@@ -471,16 +471,16 @@ export default function Account() {
           {
             //close
           }
-          <Stack direction='column' spacing={1} style={{ background: '#10284D', padding: '12px', borderRadius: "5px", border: '1px solid #1BB6FF' }}>
-            <Typography sx={{ color: "#1BB6FF", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.closureTitle')}</Typography>
+          <Stack direction='column' spacing={1} style={{ background: '#ffffff', padding: '12px', borderRadius: "5px", border: '1px solid #0649ff' }}>
+            <Typography sx={{ color: "#0649ff", fontSize: '16px', fontWeight: '400', fontFamily: 'Inter,sans-serif' }}>{t('mobile.profile.closureTitle')}</Typography>
             <Divider />
-            <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '50px', padding: '8px', background: '#06101F', borderRadius: '8px' }}>
+            <Stack spacing={1} justifyContent="center" sx={{ paddingTop: '16px', paddingBottom: '16px', minHeight: '50px', padding: '8px', background: '#fdfcf8', borderRadius: '8px' }}>
 
               <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ padding: '8px', cursor: 'pointer' }}
                 onClick={signOutAccount}>
                 <Stack direction='row' spacing={1} justifyContent='start' >
-                  <Icon icon="hugeicons:logout-05" width="24" height="24" style={{ color: '#a3a3a3' }} />
-                  <Typography sx={{ color: '#E9E5DA', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('common.signOut')}</Typography>
+                  <Icon icon="hugeicons:logout-05" width="24" height="24" style={{ color: '#52685d' }} />
+                  <Typography sx={{ color: '#080f32', verticallyAlign: 'center', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('common.signOut')}</Typography>
                 </Stack>
                 <KeyboardArrowRightIcon width={24} height={24} />
               </Stack>

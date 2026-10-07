@@ -17,13 +17,13 @@ const tabs = [
 const typeMeta = {
   deposit: {
     icon: 'solar:wallet-money-bold',
-    color: '#32D7FF',
+    color: '#0649ff',
     bg: 'rgba(50, 215, 255, 0.12)',
     border: 'rgba(50, 215, 255, 0.28)',
   },
   withdraw: {
     icon: 'solar:card-transfer-bold',
-    color: '#FF9E7A',
+    color: '#a43d4a',
     bg: 'rgba(255, 158, 122, 0.12)',
     border: 'rgba(255, 158, 122, 0.28)',
   },
@@ -32,25 +32,25 @@ const typeMeta = {
 const statusMeta = {
   success: {
     labelKey: 'status.success',
-    color: '#35E0A1',
+    color: '#286746',
     bg: 'rgba(53, 224, 161, 0.12)',
     border: 'rgba(53, 224, 161, 0.28)',
   },
   failed: {
     labelKey: 'status.failed',
-    color: '#FF8CA0',
+    color: '#a43d4a',
     bg: 'rgba(255, 140, 160, 0.12)',
     border: 'rgba(255, 140, 160, 0.28)',
   },
   processing: {
     labelKey: 'status.processing',
-    color: '#C7A6FF',
+    color: '#594596',
     bg: 'rgba(199, 166, 255, 0.12)',
     border: 'rgba(199, 166, 255, 0.28)',
   },
   pending: {
     labelKey: 'status.pending',
-    color: '#F8C14A',
+    color: '#8a6013',
     bg: 'rgba(248, 193, 74, 0.12)',
     border: 'rgba(248, 193, 74, 0.28)',
   },
@@ -152,22 +152,22 @@ function SummaryStat({ label, value, icon, color }) {
       sx={{
         flex: '1 1 150px',
         minWidth: 0,
-        borderRadius: '8px',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
-        background: 'rgba(6, 16, 31, 0.68)',
+        borderRadius: '12px',
+        border: '1px solid #dfe5df',
+        background: '#ffffff',
         padding: '12px',
       }}
     >
       <Stack direction="row" spacing={0.75} sx={{ alignItems: 'center', color }}>
         <Icon icon={icon} width="18" height="18" />
-        <Typography sx={{ color: '#8EA4C2', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '12px' }}>
+        <Typography sx={{ color: '#52685d', fontFamily: 'Inter, Arial, sans-serif', fontSize: '12px' }}>
           {label}
         </Typography>
       </Stack>
       <Typography
         sx={{
-          color: '#FFFFFF',
-          fontFamily: 'Inter, Poppins, sans-serif',
+          color: '#080f32',
+          fontFamily: 'Inter, Arial, sans-serif',
           fontSize: '18px',
           fontWeight: 800,
           lineHeight: 1.2,
@@ -190,11 +190,11 @@ function TransactionCard({ item, t, locale }) {
       spacing={1.25}
       sx={{
         width: '100%',
-        borderRadius: '8px',
+        borderRadius: '12px',
         border: `1px solid ${type.border}`,
-        background: '#10284D',
+        background: '#ffffff',
         padding: '12px',
-        boxShadow: '0 14px 30px rgba(0, 0, 0, 0.22)',
+        boxShadow: 'none',
       }}
     >
       <Stack direction="row" spacing={1.25} sx={{ alignItems: 'flex-start', minWidth: 0 }}>
@@ -205,7 +205,7 @@ function TransactionCard({ item, t, locale }) {
             width: 42,
             height: 42,
             flex: '0 0 42px',
-            borderRadius: '8px',
+            borderRadius: '12px',
             color: type.color,
             background: type.bg,
           }}
@@ -218,8 +218,8 @@ function TransactionCard({ item, t, locale }) {
             <Stack spacing={0.25} sx={{ minWidth: 0 }}>
               <Typography
                 sx={{
-                  color: '#FFFFFF',
-                  fontFamily: 'Inter, Poppins, sans-serif',
+                  color: '#080f32',
+                  fontFamily: 'Inter, Arial, sans-serif',
                   fontSize: '15px',
                   fontWeight: 800,
                   lineHeight: 1.2,
@@ -230,8 +230,8 @@ function TransactionCard({ item, t, locale }) {
               </Typography>
               <Typography
                 sx={{
-                  color: '#8EA4C2',
-                  fontFamily: 'Inter, Poppins, sans-serif',
+                  color: '#52685d',
+                  fontFamily: 'Inter, Arial, sans-serif',
                   fontSize: '12px',
                   overflowWrap: 'anywhere',
                 }}
@@ -251,7 +251,7 @@ function TransactionCard({ item, t, locale }) {
                   padding: '5px 9px',
                 }}
               >
-                <Typography sx={{ fontFamily: 'Inter, Poppins, sans-serif', fontSize: '11px', fontWeight: 800, lineHeight: 1 }}>
+                <Typography sx={{ fontFamily: 'Inter, Arial, sans-serif', fontSize: '11px', fontWeight: 800, lineHeight: 1 }}>
                   {translatedStatus(item, status, t)}
                 </Typography>
               </Stack>
@@ -259,13 +259,13 @@ function TransactionCard({ item, t, locale }) {
           </Stack>
 
           <Stack spacing={0.25}>
-            <Typography sx={{ color: '#8EA4C2', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '11px' }}>
+            <Typography sx={{ color: '#52685d', fontFamily: 'Inter, Arial, sans-serif', fontSize: '11px' }}>
               {translatedAmountLabel(item.primaryAmount, t)}
             </Typography>
             <Typography
               sx={{
-                color: '#FFFFFF',
-                fontFamily: 'Inter, Poppins, sans-serif',
+                color: '#080f32',
+                fontFamily: 'Inter, Arial, sans-serif',
                 fontSize: '18px',
                 fontWeight: 800,
                 lineHeight: 1.2,
@@ -275,12 +275,12 @@ function TransactionCard({ item, t, locale }) {
               {formatAmount(item.primaryAmount, t, locale)}
             </Typography>
             {secondary ? (
-              <Typography sx={{ color: '#DDE7F5', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '12px', overflowWrap: 'anywhere' }}>
+              <Typography sx={{ color: '#DDE7F5', fontFamily: 'Inter, Arial, sans-serif', fontSize: '12px', overflowWrap: 'anywhere' }}>
                 {translatedAmountLabel(item.secondaryAmount, t)}: {secondary}
               </Typography>
             ) : null}
             {item.conversionNote ? (
-              <Typography sx={{ color: '#F8C14A', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '12px', overflowWrap: 'anywhere' }}>
+              <Typography sx={{ color: '#8a6013', fontFamily: 'Inter, Arial, sans-serif', fontSize: '12px', overflowWrap: 'anywhere' }}>
                 {item.conversionNoteKey ? t(item.conversionNoteKey, item.conversionNoteValues || {}) : item.conversionNote}
               </Typography>
             ) : null}
@@ -294,15 +294,15 @@ function TransactionCard({ item, t, locale }) {
         sx={{
           justifyContent: 'space-between',
           alignItems: 'center',
-          borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+          borderTop: '1px solid #dfe5df',
           paddingTop: '10px',
           gap: 1,
         }}
       >
         <Typography
           sx={{
-            color: '#8EA4C2',
-            fontFamily: 'Inter, Poppins, sans-serif',
+            color: '#52685d',
+            fontFamily: 'Inter, Arial, sans-serif',
             fontSize: '12px',
             minWidth: 0,
             overflow: 'hidden',
@@ -315,8 +315,8 @@ function TransactionCard({ item, t, locale }) {
         <Typography
           sx={{
             flex: '0 0 auto',
-            color: '#8EA4C2',
-            fontFamily: 'Inter, Poppins, sans-serif',
+            color: '#52685d',
+            fontFamily: 'Inter, Arial, sans-serif',
             fontSize: '11px',
             whiteSpace: 'nowrap',
           }}
@@ -340,18 +340,18 @@ function EmptyState({ selected, t }) {
         alignItems: 'center',
         justifyContent: 'center',
         minHeight: 320,
-        borderRadius: '8px',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
-        background: 'rgba(16, 40, 77, 0.62)',
+        borderRadius: '12px',
+        border: '1px solid #dfe5df',
+        background: '#f1f3ee',
         padding: '24px',
         textAlign: 'center',
       }}
     >
-      <Icon icon="solar:bill-list-bold" width="38" height="38" style={{ color: '#8EA4C2' }} />
-      <Typography sx={{ color: '#FFFFFF', fontFamily: 'Inter, Poppins, sans-serif', fontWeight: 800 }}>
+      <Icon icon="solar:bill-list-bold" width="38" height="38" style={{ color: '#52685d' }} />
+      <Typography sx={{ color: '#080f32', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 800 }}>
         {t('emptyStates.noTransactions')}
       </Typography>
-      <Typography sx={{ color: '#8EA4C2', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '13px', lineHeight: 1.45 }}>
+      <Typography sx={{ color: '#52685d', fontFamily: 'Inter, Arial, sans-serif', fontSize: '13px', lineHeight: 1.45 }}>
         {copy}
       </Typography>
     </Stack>
@@ -425,7 +425,7 @@ export default function TransactionHistory() {
         <link rel="icon" href="/european.ico" />
       </Head>
 
-      <Box sx={{ width: '100%', minHeight: '80vh', color: '#E9E5DA', paddingBottom: '20px' }}>
+      <Box sx={{ width: '100%', minHeight: '80vh', color: '#080f32', paddingBottom: '20px' }}>
         <Stack direction="row" spacing={1} sx={{ alignItems: 'center', padding: '4px 0 12px' }}>
           <Stack
             component="button"
@@ -435,18 +435,18 @@ export default function TransactionHistory() {
             sx={{
               alignItems: 'center',
               justifyContent: 'center',
-              width: 36,
-              height: 36,
+              width: 44,
+              height: 44,
               border: 0,
-              borderRadius: '8px',
-              background: 'rgba(233, 229, 218, 0.08)',
-              color: '#E9E5DA',
+              borderRadius: '12px',
+              background: '#f1f3ee',
+              color: '#080f32',
               cursor: 'pointer',
             }}
           >
             <Icon icon="material-symbols:arrow-back-ios-new-rounded" width="20" height="20" />
           </Stack>
-          <Typography sx={{ fontSize: '16px', fontFamily: 'Poppins, sans-serif', fontWeight: 600, color: '#E9E5DA' }}>
+          <Typography component="h1" sx={{ fontSize: { xs: '32px', sm: '48px' }, fontFamily: 'Georgia,serif', fontWeight: 400, color: '#080f32' }}>
             {t('mobile.transactions.title')}
           </Typography>
         </Stack>
@@ -454,19 +454,19 @@ export default function TransactionHistory() {
         <Stack
           spacing={1.25}
           sx={{
-            borderRadius: '8px',
+            borderRadius: '12px',
             border: '1px solid rgba(27, 182, 255, 0.24)',
-            background: '#10284D',
+            background: '#ffffff',
             padding: '14px',
             marginBottom: '12px',
           }}
         >
           <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center', gap: 1 }}>
             <Stack spacing={0.25} sx={{ minWidth: 0 }}>
-              <Typography sx={{ color: '#FFFFFF', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '18px', fontWeight: 800 }}>
+              <Typography sx={{ color: '#080f32', fontFamily: 'Inter, Arial, sans-serif', fontSize: '18px', fontWeight: 800 }}>
                 {t('mobile.transactions.paymentHistory')}
               </Typography>
-              <Typography sx={{ color: '#8EA4C2', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '12px' }}>
+              <Typography sx={{ color: '#52685d', fontFamily: 'Inter, Arial, sans-serif', fontSize: '12px' }}>
                 {t('mobile.transactions.count', { count: transactions.length })}
               </Typography>
             </Stack>
@@ -477,8 +477,8 @@ export default function TransactionHistory() {
                 width: 40,
                 height: 40,
                 flex: '0 0 40px',
-                borderRadius: '8px',
-                color: '#1BB6FF',
+                borderRadius: '12px',
+                color: '#0649ff',
                 background: 'rgba(27, 182, 255, 0.12)',
               }}
             >
@@ -491,13 +491,13 @@ export default function TransactionHistory() {
               label={t('mobile.transactions.totalDeposits')}
               value={formatUsdt(summary.totalDepositsUsdt, locale)}
               icon="solar:wallet-money-bold"
-              color="#32D7FF"
+              color="#0649ff"
             />
             <SummaryStat
               label={t('mobile.transactions.totalWithdrawals')}
               value={formatUsdt(summary.totalWithdrawalsUsdt, locale)}
               icon="solar:card-transfer-bold"
-              color="#FF9E7A"
+              color="#a43d4a"
             />
           </Stack>
         </Stack>
@@ -518,19 +518,19 @@ export default function TransactionHistory() {
                   justifyContent: 'center',
                   flex: '1 0 116px',
                   minHeight: 42,
-                  border: `1px solid ${active ? 'rgba(27, 182, 255, 0.5)' : 'rgba(255, 255, 255, 0.08)'}`,
-                  borderRadius: '8px',
-                  background: active ? '#1BB6FF' : '#10284D',
-                  color: active ? '#06101F' : '#E9E5DA',
+                  border: `1px solid ${active ? 'rgba(27, 182, 255, 0.5)' : '#dfe5df'}`,
+                  borderRadius: '12px',
+                  background: active ? '#0649ff' : '#ffffff',
+                  color: active ? '#fdfcf8' : '#080f32',
                   padding: '8px 10px',
                   cursor: 'pointer',
                 }}
               >
                 <Icon icon={tab.icon} width="17" height="17" />
-                <Typography sx={{ fontFamily: 'Inter, Poppins, sans-serif', fontSize: '12px', fontWeight: 800, whiteSpace: 'nowrap' }}>
+                <Typography sx={{ fontFamily: 'Inter, Arial, sans-serif', fontSize: '12px', fontWeight: 800, whiteSpace: 'nowrap' }}>
                   {t(tab.labelKey)}
                 </Typography>
-                <Typography sx={{ fontFamily: 'Inter, Poppins, sans-serif', fontSize: '11px', fontWeight: 800, opacity: 0.72 }}>
+                <Typography sx={{ fontFamily: 'Inter, Arial, sans-serif', fontSize: '11px', fontWeight: 800, opacity: 0.72 }}>
                   {countFor(transactions, tab.key)}
                 </Typography>
               </Stack>
@@ -540,8 +540,8 @@ export default function TransactionHistory() {
 
         {loading ? (
           <Stack spacing={1.5} sx={{ alignItems: 'center', justifyContent: 'center', minHeight: 360 }}>
-            <CircularProgress size={28} sx={{ color: '#1BB6FF' }} />
-            <Typography sx={{ color: '#8EA4C2', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '13px' }}>
+            <CircularProgress size={28} sx={{ color: '#0649ff' }} />
+            <Typography sx={{ color: '#52685d', fontFamily: 'Inter, Arial, sans-serif', fontSize: '13px' }}>
               {t('mobile.transactions.loading')}
             </Typography>
           </Stack>
@@ -549,16 +549,16 @@ export default function TransactionHistory() {
           <Stack
             spacing={1.25}
             sx={{
-              borderRadius: '8px',
+              borderRadius: '12px',
               border: '1px solid rgba(255, 158, 122, 0.28)',
               background: 'rgba(255, 158, 122, 0.08)',
               padding: '16px',
             }}
           >
-            <Typography sx={{ color: '#FFFFFF', fontFamily: 'Inter, Poppins, sans-serif', fontWeight: 800 }}>
+            <Typography sx={{ color: '#080f32', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 800 }}>
               {t('mobile.transactions.transactionUnavailable')}
             </Typography>
-            <Typography sx={{ color: '#FFC9B8', fontFamily: 'Inter, Poppins, sans-serif', fontSize: '13px' }}>
+            <Typography sx={{ color: '#a43d4a', fontFamily: 'Inter, Arial, sans-serif', fontSize: '13px' }}>
               {error}
             </Typography>
             <Stack
@@ -572,15 +572,15 @@ export default function TransactionHistory() {
                 justifyContent: 'center',
                 alignSelf: 'flex-start',
                 border: 0,
-                borderRadius: '8px',
-                background: '#1BB6FF',
-                color: '#06101F',
+                borderRadius: '12px',
+                background: '#0649ff',
+                color: '#fdfcf8',
                 padding: '9px 12px',
                 cursor: 'pointer',
               }}
             >
               <Icon icon="solar:refresh-bold" width="16" height="16" />
-              <Typography sx={{ fontFamily: 'Inter, Poppins, sans-serif', fontSize: '12px', fontWeight: 800 }}>
+              <Typography sx={{ fontFamily: 'Inter, Arial, sans-serif', fontSize: '12px', fontWeight: 800 }}>
                 {t('mobile.transactions.retry')}
               </Typography>
             </Stack>
