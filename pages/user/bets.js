@@ -33,7 +33,7 @@ const toNumber = (value) => {
   return Number.isFinite(amount) ? amount : 0
 }
 
-const formatFcfa = (value) => `${toNumber(value).toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT`
+const formatFcfa = (value) => `${toNumber(value).toLocaleString(undefined, { maximumFractionDigits: 3 })} MMK`
 const formatOdd = (value) => toNumber(value).toFixed(3)
 
 // A company-market hit refunds the stake and pays no profit, so it must not

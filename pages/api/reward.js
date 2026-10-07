@@ -50,8 +50,9 @@ export default async function handler(req, res) {
                 .insert({
                     'username': id,
                     'amount': reward ?? 0,
-                    'type': 'deposit',
-                    'method': reason ?? 'usdt',
+                    'type': 'reward',
+                    'sent': 'success',
+                    'method': reason ?? 'reward',
                     'address': 'admin'
                 })
             if (nerror) {

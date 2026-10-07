@@ -56,6 +56,7 @@ const defaultCustomerSupportUrl = 'https://t.me/EFC_Support'
 const appReadyWaitMs = 1500
 const bootSplashDelayMs = 700
 const sessionBootTimeoutMs = 5000
+const MMK_PER_USDT = 5000
 const referralFilters = ['all', 1, 2, 3]
 const bfcImages = [
   '/usd/bfc1.jpg',
@@ -1336,7 +1337,7 @@ function HomeScreen({ navigate, onLogout, online }) {
       <section className="balance-panel">
         <div>
           <span>{t('common.currentBalance')}</span>
-          <strong>{profile ? formatFcfa(profile.balance) : '-- USDT'}</strong>
+          <strong>{profile ? formatFcfa(profile.balance) : '-- MMK'}</strong>
         </div>
         <button className="mini-cta" type="button" onClick={() => navigate('deposit')}>
           {t('common.deposit')}
@@ -1475,7 +1476,7 @@ function MatchDetailScreen({ matchId, navigate }) {
     }
 
     const amount = Math.floor(Number(stake))
-    if (!Number.isFinite(amount) || amount < 1) {
+    if (!Number.isFinite(amount) || amount < 5000) {
       notifyMessage(setMessage, 'error', t('messages.stakeMinimum'))
       return
     }
@@ -1505,7 +1506,7 @@ function MatchDetailScreen({ matchId, navigate }) {
       navigate('bet', { id: nextBetId })
     } catch (error) {
       const errorMessage = String(error?.message || '')
-      const isInsufficientBalance = /insufficient|not enough|enough\s+(?:USDT|FCFA)/i.test(errorMessage)
+      const isInsufficientBalance = /insufficient|not enough|enough\s+(?:MMK|USDT|FCFA)/i.test(errorMessage)
       notifyMessage(setMessage, 'error', isInsufficientBalance ? t('mobile.match.insufficientBalance') : (errorMessage || t('messages.unablePlaceBet')))
       if (/odds changed/i.test(errorMessage)) {
         try {
@@ -2008,7 +2009,7 @@ function DepositScreen({ navigate, setSuccessAmount }) {
     () => findDestination(data.destinations, selectedMethod, transferKey),
     [data.destinations, selectedMethod, transferKey]
   )
-  const canSubmit = Boolean(selectedMethod && amountIsValid && destination && file && !submitting)
+  const canSubmit = Boolean(!data.pendingPaymentRequest && selectedMethod && amountIsValid && destination && file && !submitting)
   const progressValue = amountIsValid ? 100 : Math.min(((numericAmount || 0) / minimum) * 100, 100)
 
   function copyDepositText(value, label) {
@@ -2030,6 +2031,10 @@ function DepositScreen({ navigate, setSuccessAmount }) {
   }
 
   async function submitDeposit() {
+    if (data.pendingPaymentRequest) {
+      notifyMessage(setMessage, 'error', t('messages.paymentRequestPending'))
+      return
+    }
     if (!selectedMethod) {
       notifyMessage(setMessage, 'error', t('messages.chooseDepositMethod'))
       return
@@ -2076,7 +2081,7 @@ function DepositScreen({ navigate, setSuccessAmount }) {
         },
       })
 
-      setSuccessAmount(formatNumber(numericAmount))
+      setSuccessAmount(formatMoney(numericAmount / rate * MMK_PER_USDT))
       toast.success(t('messages.depositSubmitted'))
       navigate('deposit-success')
     } catch (error) {
@@ -2100,6 +2105,7 @@ function DepositScreen({ navigate, setSuccessAmount }) {
 
       {loading ? <LoadingState text={t('mobile.deposit.loading')} /> : null}
       <Message value={message} />
+      {data.pendingPaymentRequest ? <DepositNotice tone="warning">{t('messages.paymentRequestPending')}</DepositNotice> : null}
 
       <DepositStepBar activeStep={activeStep} steps={steps} />
 
@@ -2179,7 +2185,7 @@ function DepositScreen({ navigate, setSuccessAmount }) {
           <div className="deposit-web-progress">
             <span>
               <small>{t('mobile.deposit.usdtEquivalent')}</small>
-              <b>{formatMoney(numericAmount / rate)} USDT</b>
+              <b>{formatMoney(numericAmount / rate * MMK_PER_USDT)} MMK</b>
             </span>
             <i><em className={amountIsValid ? 'valid' : ''} style={{ width: `${progressValue}%` }} /></i>
           </div>
@@ -2334,7 +2340,7 @@ function WithdrawScreen({ navigate }) {
       return
     }
     if (!withdrawalEligibility.canWithdraw) {
-      notifyMessage(setMessage, 'error', withdrawalEligibility.reason === 'cooldown' ? t('messages.withdrawalCooldown') : t('messages.withdrawalPending'))
+      notifyMessage(setMessage, 'error', withdrawalEligibility.reason === 'cooldown' ? t('messages.withdrawalCooldown') : withdrawalEligibility.code === 'PAYMENT_REQUEST_PENDING' ? t('messages.paymentRequestPending') : t('messages.withdrawalPending'))
       return
     }
     if (!wallet) {
@@ -2345,8 +2351,8 @@ function WithdrawScreen({ navigate }) {
       notifyMessage(setMessage, 'error', t('messages.enterTransactionPin'))
       return
     }
-    if (requested < Number(settings.minWithdrawalAmount || 10)) {
-      notifyMessage(setMessage, 'error', t('messages.minimumWithdrawal', { amount: settings.minWithdrawalAmount || 10 }))
+    if (requested < Number(settings.minWithdrawalAmount || 50000)) {
+      notifyMessage(setMessage, 'error', t('messages.minimumWithdrawal', { amount: settings.minWithdrawalAmount || 50000 }))
       return
     }
 
@@ -2368,7 +2374,9 @@ function WithdrawScreen({ navigate }) {
 
       const row = Array.isArray(result) ? result[0] : result
       if (String(row?.status).toLowerCase() === 'failed') {
-        const message = row.code === 'WITHDRAWAL_PENDING'
+        const message = row.code === 'PAYMENT_REQUEST_PENDING'
+          ? t('messages.paymentRequestPending')
+          : row.code === 'WITHDRAWAL_PENDING'
           ? t('messages.withdrawalPending')
           : row.code === 'WITHDRAWAL_COOLDOWN'
             ? t('messages.withdrawalCooldown')
@@ -2403,7 +2411,7 @@ function WithdrawScreen({ navigate }) {
       <section className="detail-card form-stack">
         {!withdrawalEligibility.canWithdraw ? (
           <DepositNotice tone="error">
-            {withdrawalEligibility.reason === 'cooldown' ? t('messages.withdrawalCooldown') : t('messages.withdrawalPending')}
+            {withdrawalEligibility.reason === 'cooldown' ? t('messages.withdrawalCooldown') : withdrawalEligibility.code === 'PAYMENT_REQUEST_PENDING' ? t('messages.paymentRequestPending') : t('messages.withdrawalPending')}
             {withdrawalEligibility.retryAt ? ` ${t('messages.withdrawalAvailableAt', { time: new Date(withdrawalEligibility.retryAt).toLocaleString() })}` : ''}
           </DepositNotice>
         ) : null}
@@ -2428,7 +2436,7 @@ function WithdrawScreen({ navigate }) {
         </InputShell>
         <div className="fee-note">
           <span>{t('mobile.withdraw.fee', { percent: feePercent })}</span>
-          <b>{t('mobile.withdraw.totalDebit', { amount: `${formatMoney(total)} USDT` })}</b>
+          <b>{t('mobile.withdraw.totalDebit', { amount: `${formatMoney(total)} MMK` })}</b>
         </div>
         <button className="primary-button full" type="button" onClick={submitWithdraw} disabled={submitting || !canWithdraw}>
           {submitting ? t('mobile.deposit.submitting') : t('mobile.withdraw.submit')}
@@ -3427,7 +3435,7 @@ function formatMoney(value) {
 
 function formatFcfa(value) {
   const amount = Number(value || 0)
-  return `${amount.toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT`
+  return `${amount.toLocaleString(undefined, { maximumFractionDigits: 3 })} MMK`
 }
 
 function findDestination(destinations, method, transferKey) {
@@ -3467,12 +3475,7 @@ function hasNamedDestination(destinations, method) {
 }
 
 function formatFcfaLedger(value) {
-  return `${Number(value || 0).toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT`
-}
-
-function formatNumber(value) {
-  const number = Number(value)
-  return Number.isFinite(number) ? number.toFixed(3) : '0.000'
+  return `${Number(value || 0).toLocaleString(undefined, { maximumFractionDigits: 3 })} MMK`
 }
 
 function formatDate(value, t) {

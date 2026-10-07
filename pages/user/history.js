@@ -57,8 +57,8 @@ const statusMeta = {
 }
 
 const emptySummary = {
-  totalDepositsUsdt: 0,
-  totalWithdrawalsUsdt: 0,
+  totalDepositsMmk: 0,
+  totalWithdrawalsMmk: 0,
   count: 0,
 }
 
@@ -69,7 +69,7 @@ function toNumber(value) {
 
 function formatNumber(value, currency, locale = 'en') {
   const numericValue = toNumber(value)
-  const isUsdt = String(currency || '').toUpperCase() === 'USDT'
+  const isUsdt = ['USDT', 'MMK'].includes(String(currency || '').toUpperCase())
 
   return new Intl.NumberFormat(locale, {
     minimumFractionDigits: 0,
@@ -80,15 +80,15 @@ function formatNumber(value, currency, locale = 'en') {
 function formatAmount(amount, t, locale) {
   if (!amount || amount.value === null || amount.value === undefined) return t('common.notAvailable')
 
-  const currency = String(amount.currency || 'USDT').toUpperCase()
+  const currency = String(amount.currency || 'MMK').toUpperCase()
   const formatted = formatNumber(amount.value, currency, locale)
-  const label = currency === 'USDT' ? `${formatted} USDT` : `${currency} ${formatted}`
+  const label = ['USDT', 'MMK'].includes(currency) ? `${formatted} ${currency}` : `${currency} ${formatted}`
 
   return amount.approximate ? `~ ${label}` : label
 }
 
-function formatUsdt(value, locale) {
-  return `${formatNumber(value, 'USDT', locale)} USDT`
+function formatMmk(value, locale) {
+  return `${formatNumber(value, 'MMK', locale)} MMK`
 }
 
 function formatDate(value, locale, t) {
@@ -489,13 +489,13 @@ export default function TransactionHistory() {
           <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
             <SummaryStat
               label={t('mobile.transactions.totalDeposits')}
-              value={formatUsdt(summary.totalDepositsUsdt, locale)}
+              value={formatMmk(summary.totalDepositsMmk, locale)}
               icon="solar:wallet-money-bold"
               color="#0649ff"
             />
             <SummaryStat
               label={t('mobile.transactions.totalWithdrawals')}
-              value={formatUsdt(summary.totalWithdrawalsUsdt, locale)}
+              value={formatMmk(summary.totalWithdrawalsMmk, locale)}
               icon="solar:card-transfer-bold"
               color="#a43d4a"
             />

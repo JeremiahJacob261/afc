@@ -28,6 +28,7 @@ import { DriveFileRenameOutlineRounded } from "@mui/icons-material";
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 import { waitForPaint } from '@/lib/uiFeedback';
 import { calculateWithdrawalAmounts } from '@/lib/withdrawalFee';
+import { MMK_PER_USDT } from '@/lib/currency';
 
 function isLocalMethod(type) {
   return ['local', 'local-transfer', 'bank', 'mobile-money'].includes(String(type || '').trim().toLowerCase());
@@ -65,8 +66,8 @@ export default function Deposit() {
   const [swallet,setSWallet] = useState({});
   const [bank,setBank] = useState('');
   //withdrawal settings
-  const [minWithdrawalAmount, setMinWithdrawalAmount] = useState(10);
-  const [maxWithdrawalAmount, setMaxWithdrawalAmount] = useState(100);
+  const [minWithdrawalAmount, setMinWithdrawalAmount] = useState(50000);
+  const [maxWithdrawalAmount, setMaxWithdrawalAmount] = useState(500000);
   const [withdrawalFeePercent, setWithdrawalFeePercent] = useState(7);
   const [withdrawalsEnabled, setWithdrawalsEnabled] = useState(true);
   const [withdrawalDisabledMessage, setWithdrawalDisabledMessage] = useState('Withdrawals are temporarily unavailable. Please try again later.');
@@ -126,7 +127,9 @@ export default function Deposit() {
             return;
           }
           if (test[0].status === 'Failed') {
-            const message = test[0].code === 'WITHDRAWAL_PENDING'
+            const message = test[0].code === 'PAYMENT_REQUEST_PENDING'
+              ? t('messages.paymentRequestPending')
+              : test[0].code === 'WITHDRAWAL_PENDING'
               ? t('messages.withdrawalPending')
               : test[0].code === 'WITHDRAWAL_COOLDOWN'
                 ? t('messages.withdrawalCooldown')
@@ -163,7 +166,7 @@ export default function Deposit() {
     }
 
     if (!withdrawalEligibility.canWithdraw) {
-      toast.error(withdrawalEligibility.reason === 'cooldown' ? t('messages.withdrawalCooldown') : t('messages.withdrawalPending'))
+      toast.error(withdrawalEligibility.reason === 'cooldown' ? t('messages.withdrawalCooldown') : withdrawalEligibility.code === 'PAYMENT_REQUEST_PENDING' ? t('messages.paymentRequestPending') : t('messages.withdrawalPending'))
       return
     }
 
@@ -215,8 +218,8 @@ export default function Deposit() {
         setBalance(Number(result.profile.balance || 0));
 
         if (result.settings) {
-          setMinWithdrawalAmount(result.settings.minWithdrawalAmount ?? 10);
-          setMaxWithdrawalAmount(result.settings.maxWithdrawalAmount ?? 100);
+          setMinWithdrawalAmount(result.settings.minWithdrawalAmount ?? 50000);
+          setMaxWithdrawalAmount(result.settings.maxWithdrawalAmount ?? 500000);
           setWithdrawalFeePercent(result.settings.withdrawalFeePercent ?? 7);
           const enabled = result.settings.withdrawalsEnabled ?? true;
           setWithdrawalsEnabled(enabled);
@@ -273,9 +276,9 @@ export default function Deposit() {
   }
   //end of snackbar2
   const { requestedAmount, feeAmount, totalAmount } = calculateWithdrawalAmounts(Number(amount || 0), withdrawalFeePercent);
-  const usdt = (value) => `${Number(value || 0).toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT`;
+  const usdt = (value) => `${Number(value || 0).toLocaleString(undefined, { maximumFractionDigits: 3 })} MMK`;
   const currencyCode = String(currency || "USDT").toUpperCase();
-  const showConvertedPayout = currencyCode !== 'USDT';
+  const showConvertedPayout = currencyCode !== 'MMK';
   const feePercent = Number(withdrawalFeePercent.toFixed(2));
   return (
     <Cover style={{ minHeight: '95vh', paddingBottom: '100px' }}>
@@ -317,7 +320,7 @@ export default function Deposit() {
           {showConvertedPayout && (
             <Stack direction='row' alignItems='center' justifyContent='space-between'>
               <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{t('mobile.withdraw.youReceiveIn', { currency: currencyCode })}</Typography>
-              <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{parseFloat(requestedAmount * rate).toFixed(2)} {currencyCode}</Typography>
+              <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{parseFloat(requestedAmount / MMK_PER_USDT * rate).toFixed(2)} {currencyCode}</Typography>
             </Stack>
           )}
           <Divider sx={{ borderColor: '#dfe5df' }} />
@@ -426,7 +429,7 @@ export default function Deposit() {
 
           {!withdrawalEligibility.canWithdraw ? (
             <Typography sx={{ color: '#9f2020', fontSize: '14px', textAlign: 'center' }}>
-              {withdrawalEligibility.reason === 'cooldown' ? t('messages.withdrawalCooldown') : t('messages.withdrawalPending')}
+              {withdrawalEligibility.reason === 'cooldown' ? t('messages.withdrawalCooldown') : withdrawalEligibility.code === 'PAYMENT_REQUEST_PENDING' ? t('messages.paymentRequestPending') : t('messages.withdrawalPending')}
               {withdrawalEligibility.retryAt ? ` ${t('messages.withdrawalAvailableAt', { time: new Date(withdrawalEligibility.retryAt).toLocaleString() })}` : ''}
             </Typography>
           ) : null}

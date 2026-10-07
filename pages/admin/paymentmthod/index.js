@@ -681,7 +681,7 @@ function PreviewCard({ method, draft, editing }) {
           <div className="min-w-0 flex-1">
             <p className="truncate text-lg font-semibold text-white">{preview.name || 'Payment method'}</p>
             <p className="mt-1 text-sm text-zinc-500">
-              Min 5 USDT equivalent · {preview.currencyCode || 'CODE'}
+              Min 25,000 MMK equivalent · {preview.currencyCode || 'CODE'}
             </p>
             <div className="mt-4 grid gap-2 sm:grid-cols-3">
               <div className="rounded-2xl bg-white/[0.06] p-3">

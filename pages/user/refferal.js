@@ -159,7 +159,7 @@ export default function Refferal() {
             <Stack direction="row" spacing={1} sx={{ width: '100%' }}>
               <SummaryStat label={t('mobile.vip.total')} value={referrals.length} />
               <SummaryStat label={t('status.active')} value={activeCount} />
-              <SummaryStat label={t('mobile.transactions.deposits')} value={`${money(totalDeposit)} USDT`} />
+              <SummaryStat label={t('mobile.transactions.deposits')} value={`${money(totalDeposit)} MMK`} />
             </Stack>
           </Box>
 
@@ -218,7 +218,7 @@ export default function Refferal() {
                 {t('mobile.referrals.title')}: {visibleReferrals.length}
               </Typography>
               <Typography sx={{ fontSize: 13, color: '#080f32', fontWeight: 600, fontFamily: 'Arial,sans-serif' }}>
-                {money(filteredDeposit)} USDT
+                {money(filteredDeposit)} MMK
               </Typography>
             </Stack>
           </Box>
@@ -404,7 +404,7 @@ function ReferralRow({ item, t }) {
             {money(item.totald)}
           </Typography>
           <Typography sx={{ color: '#52685d', fontFamily: 'Arial,sans-serif', fontSize: 11 }}>
-            USDT
+            MMK
           </Typography>
         </Box>
       </Stack>

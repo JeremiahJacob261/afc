@@ -3,7 +3,6 @@ import { requireAdmin } from '@/lib/adminAuth'
 import { getFirstDepositBonusPercent } from '@/lib/adminSettings'
 import {
   displayPaymentCurrency,
-  fromLedgerAmount,
   getPaymentMethod,
   getPaymentRate,
   isUsdtPaymentCode,
@@ -45,8 +44,7 @@ async function getLedgerAmount(supabase, notification) {
   return toLedgerAmount(amount, rate)
 }
 
-async function getLocalWithdrawAmount(supabase, notification) {
-  const { method, rate } = await getNotificationRate(supabase, notification)
+async function getLedgerWithdrawAmount(notification) {
   const amount = Number(notification.amount)
 
   if (!Number.isFinite(amount) || amount <= 0) {
@@ -55,7 +53,7 @@ async function getLocalWithdrawAmount(supabase, notification) {
     throw error
   }
 
-  return fromLedgerAmount(amount, rate)
+  return amount
 }
 
 function normalizedSent(sent) {
@@ -127,7 +125,7 @@ export default async function handler(req, res) {
     if (action === 'approve' && !isLockedStatus(notification.sent)) {
       approvedAmount = isDeposit
         ? Number((await getLedgerAmount(supabase, notification)).toFixed(3))
-        : Number((await getLocalWithdrawAmount(supabase, notification)).toFixed(3))
+        : Number((await getLedgerWithdrawAmount(notification)).toFixed(3))
 
       if (isDeposit) {
         firstDepositBonusPercent = await getFirstDepositBonusPercent(supabase)

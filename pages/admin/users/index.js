@@ -22,7 +22,7 @@ function formatDate(value) {
 
 function formatBalance(value) {
   const number = Number(value || 0)
-  return `${Number.isFinite(number) ? number.toFixed(3) : '0.000'} USDT`
+  return `${Number.isFinite(number) ? number.toFixed(3) : '0.000'} MMK`
 }
 
 function isMissingColumnError(error, column) {

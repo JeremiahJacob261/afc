@@ -354,7 +354,7 @@ export default function Match({ matchDat }) {
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '300', color: '#080f32' }}>{t('common.currentBalance')}</Typography>
-                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: '#080f32' }}>{availableStake.toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT</Typography>
+                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: '#080f32' }}>{availableStake.toLocaleString(undefined, { maximumFractionDigits: 3 })} MMK</Typography>
                         </Stack>
                         <input placeholder={t('mobile.match.stakeAmount')} aria-label={t('mobile.match.stakeAmount')} type='text' inputMode="decimal"
                             style={{ fontFamily: 'Arial, sans-serif', padding: "10px", borderRadius: '8px', width: '100%', minHeight: '48px', fontSize: '16px', background: '#fff', color: '#080f32', border: '1px solid #75886b' }}
@@ -376,11 +376,11 @@ export default function Match({ matchDat }) {
                         </Button>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '300', color: '#080f32' }}>{t('mobile.match.profit')}</Typography>
-                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: '#080f32' }}>{profit.toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT</Typography>
+                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: '#080f32' }}>{profit.toLocaleString(undefined, { maximumFractionDigits: 3 })} MMK</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '600', color: '#080f32' }}>{t('mobile.match.expectedReturn')}</Typography>
-                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '600', color: '#080f32' }}>{expext.toLocaleString(undefined, { maximumFractionDigits: 3 })} USDT</Typography>
+                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '600', color: '#080f32' }}>{expext.toLocaleString(undefined, { maximumFractionDigits: 3 })} MMK</Typography>
                         </Stack>
                         <Button disabled={openx} variant="contained" sx={{ fontFamily: 'Arial,sans-serif', minHeight: 48, fontSize: 16, fontWeight: 700, color: '#fff', background: "#0649ff", padding: '10px 16px', textTransform: 'none', '&:hover': { background: '#003bcc' } }}
                             onClick={() => {
@@ -389,7 +389,7 @@ export default function Match({ matchDat }) {
                                 if (!picked || tofal <= 0) {
                                     toast.error(t('messages.chooseScoreMarket'))
                                 } else if (stakeAmount <= availableStake) {
-                                    if (stakeAmount < 1) {
+                                    if (stakeAmount < 5000) {
                                         toast.error(t('messages.stakeMinimum'))
 
                                     }
@@ -427,7 +427,7 @@ export default function Match({ matchDat }) {
                                                 })
                                                 const result = await response.json().catch(() => ({}))
                                                 if (!response.ok || result.status !== 'success') {
-                                                    const isInsufficientBalance = /insufficient|not enough|enough\s+(?:USDT|FCFA)/i.test(String(result.message || ''))
+                                                    const isInsufficientBalance = /insufficient|not enough|enough\s+(?:MMK|USDT|FCFA)/i.test(String(result.message || ''))
                                                     toast.error(isInsufficientBalance ? t('mobile.match.insufficientBalance') : (result.message || t('messages.unablePlaceBet')))
                                                     handleClosex()
                                                     if (/odds changed/i.test(String(result.message || ''))) {

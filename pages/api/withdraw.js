@@ -3,6 +3,7 @@ import { getWithdrawalSettings, WITHDRAWAL_HARD_LIMIT_AMOUNT } from '@/lib/admin
 import { calculateWithdrawalAmounts } from '@/lib/withdrawalFee'
 import { getWithdrawalEligibility, isWithdrawalLimitExempt } from '@/lib/withdrawalEligibility'
 import { formatCurrency, getCurrencySettings, parseCurrency } from '@/lib/currency'
+import { getPendingPaymentRequest, isPendingPaymentConflict, PENDING_PAYMENT_MESSAGE } from '@/lib/pendingPaymentRequest'
 import {
   displayPaymentCurrency,
   getPaymentMethod,
@@ -34,6 +35,11 @@ export default async function handler(req, res) {
       req,
       'userid,username,codeset,pin,newrefer,balance'
     )
+
+    const pendingRequest = await getPendingPaymentRequest(supabase, profile.username)
+    if (pendingRequest) {
+      return res.status(200).json([{ status: 'Failed', code: 'PAYMENT_REQUEST_PENDING', message: PENDING_PAYMENT_MESSAGE }])
+    }
 
     const requestedMethod = normalizePaymentCode(body.method || 'usdt')
     const [withdrawalSettings, { data: latestDeposit, error: depositError }, savedMethod] = await Promise.all([
@@ -118,6 +124,9 @@ export default async function handler(req, res) {
 
     if (withdrawError) {
       const message = withdrawError.message || ''
+      if (isPendingPaymentConflict(withdrawError)) {
+        return res.status(200).json([{ status: 'Failed', code: 'PAYMENT_REQUEST_PENDING', message: PENDING_PAYMENT_MESSAGE }])
+      }
       if (/Insufficient funds/i.test(message)) {
         return res.status(200).json([{ status: 'Failed', message: 'Insufficient funds' }])
       }

@@ -28,7 +28,7 @@ function getRpcStatus(error) {
   if (message.includes('already settled') || message.includes('Odds changed')) return 409
   if (
     message.includes('Invalid bet details')
-    || message.includes('Enough USDT')
+    || message.includes('enough MMK')
     || message.includes('maximum number of bets')
     || message.includes('expired')
     || message.includes('market is not available')
@@ -62,11 +62,11 @@ export default async function handler(req, res) {
       !match_id
       || !markets[picked]
       || !Number.isFinite(amount)
-      || amount < 1
+      || amount < 5000
       || !Number.isFinite(expectedOdd)
       || expectedOdd <= 0
     ) {
-      const message = `Minimum stake is ${formatCurrency(1, currencySettings)}`
+      const message = `Minimum stake is ${formatCurrency(5000, currencySettings)}`
       return res.status(400).json({ status: 'error', message })
     }
 

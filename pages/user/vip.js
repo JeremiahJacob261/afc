@@ -144,7 +144,7 @@ export default function Vip() {
               <Wallet sx={{ color: accent, fontSize: 20 }} />
               <Box>
                 <Typography sx={{ color: '#d7e2ed', fontSize: 11 }}>Current balance</Typography>
-                <Typography sx={{ color: '#fff', fontSize: 17, fontWeight: 800 }}>{amount(profile?.balance)} USDT</Typography>
+                <Typography sx={{ color: '#fff', fontSize: 17, fontWeight: 800 }}>{amount(profile?.balance)} MMK</Typography>
               </Box>
             </Stack>
             <Box sx={{ textAlign: 'right' }}>
@@ -157,7 +157,7 @@ export default function Vip() {
         <Box>
           <Typography sx={{ mb: 1.25, color: '#080f32', fontSize: 17, fontWeight: 800 }}>Your progress</Typography>
           <Stack spacing={1.25}>
-            <ProgressCard icon={<Wallet sx={{ fontSize: 18 }} />} label="Total deposits" value={vip?.depositProgress} color="#56CCF2" detail={`${amount(profile?.totald)} of ${amount(vip?.depositLimit)} USDT`} />
+            <ProgressCard icon={<Wallet sx={{ fontSize: 18 }} />} label="Total deposits" value={vip?.depositProgress} color="#56CCF2" detail={`${amount(profile?.totald)} of ${amount(vip?.depositLimit)} MMK`} />
             <ProgressCard icon={<Groups sx={{ fontSize: 18 }} />} label="Active direct downlines" value={vip?.referralProgress} color="#A78BFA" detail={`${refCount} of ${vip?.referralLimit || 0} active members`} />
           </Stack>
         </Box>
@@ -193,7 +193,7 @@ export default function Vip() {
                         <Typography sx={{ color: '#080f32', fontSize: 13, fontWeight: 800 }}>VIP {tier}</Typography>
                         {current && <Chip label="CURRENT" size="small" sx={{ height: 18, color: '#fdfcf8', background: tierColor, fontSize: 9, fontWeight: 900 }} />}
                       </Stack>
-                      <Typography sx={{ mt: 0.35, color: '#52685d', fontSize: 11 }}>{amount(vipDepositLimits[tier])} USDT deposit • {vipReferralLimits[tier]} active downlines</Typography>
+                      <Typography sx={{ mt: 0.35, color: '#52685d', fontSize: 11 }}>{amount(vipDepositLimits[tier])} MMK deposit • {vipReferralLimits[tier]} active downlines</Typography>
                     </Box>
                     <Typography sx={{ color: tierColor, fontSize: 14, fontWeight: 900 }}>{percent((vipDailyRates[tier] || 0) * 100)}</Typography>
                   </Stack>

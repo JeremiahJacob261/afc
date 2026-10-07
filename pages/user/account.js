@@ -156,7 +156,7 @@ export default function Account() {
           </div>
           <div className={styles.heroBalance}>
             <span>{t('common.currentBalance')}</span>
-            <strong aria-live="polite">{loading ? '—' : balance}<small>USDT</small></strong>
+            <strong aria-live="polite">{loading ? '—' : balance}<small>MMK</small></strong>
             <div className={styles.heroActions}>
               <Link href="/user/fund" className={styles.primaryAction}><ArrowDownToLine size={18} aria-hidden="true" />{t('common.deposit')}</Link>
               <Link href="/user/withdraw" className={styles.secondaryAction}><ArrowUpFromLine size={18} aria-hidden="true" />{t('common.withdraw')}</Link>

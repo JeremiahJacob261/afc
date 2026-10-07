@@ -14,7 +14,7 @@ import {
   DEPOSIT_DRAFT_KEY, DEPOSIT_SUCCESS_KEY, EMPTY_DEPOSIT_DRAFT,
   destinationSnapshot, findDestination, formatMoney, isLocalDestination,
   methodCode, methodIdentity, methodRate, minimumAmount, needsTransferOption,
-  readDepositDraft, reviewSignature, transferOptions, usdtAmount, validAmount,
+  readDepositDraft, reviewSignature, transferOptions, ledgerAmount, validAmount,
 } from '@/lib/depositFlow'
 import styles from '@/styles/UserFund.module.css'
 
@@ -56,6 +56,7 @@ export default function DepositFlow({ step }) {
   const [reloadKey, setReloadKey] = useState(0)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
+  const [pendingRequest, setPendingRequest] = useState(false)
 
   const updateDraft = useCallback((patch) => {
     const next = { ...draftRef.current, ...patch }
@@ -85,15 +86,19 @@ export default function DepositFlow({ step }) {
       setReceipt(receiptInMemory)
 
       try {
-        const [{ data: methodRows, error: methodError }, { data: destinationRows, error: destinationError }] = await Promise.all([
+        const [{ data: methodRows, error: methodError }, { data: destinationRows, error: destinationError }, pendingResponse] = await Promise.all([
           supabase.from('walle').select('*').eq('available', true),
           supabase.from('depositwallet').select('*'),
+          authFetch('/api/pending-payment-request'),
         ])
         if (methodError) throw methodError
         if (destinationError) throw destinationError
+        if (!pendingResponse.ok) throw new Error('Unable to check pending requests')
+        const pendingResult = await pendingResponse.json()
         if (!active) return
         setMethods(Array.isArray(methodRows) ? methodRows : [])
         setDestinations(Array.isArray(destinationRows) ? destinationRows : [])
+        setPendingRequest(Boolean(pendingResult.pending))
       } catch (_) {
         if (active) setLoadError(true)
       } finally {
@@ -110,7 +115,7 @@ export default function DepositFlow({ step }) {
   )
   const code = methodCode(selectedMethod)
   const amountValid = validAmount(draft.amount, selectedMethod)
-  const equivalent = usdtAmount(draft.amount, selectedMethod)
+  const equivalent = ledgerAmount(draft.amount, selectedMethod)
   const requiresTransfer = needsTransferOption(destinations, selectedMethod)
   const transferReady = !requiresTransfer || Boolean(draft.transferKey)
   const liveDestination = useMemo(
@@ -167,7 +172,7 @@ export default function DepositFlow({ step }) {
   }
 
   const submit = async () => {
-    if (!selectedMethod || !amountValid || !destination || !reviewed || !receipt || submitting) return
+    if (pendingRequest || !selectedMethod || !amountValid || !destination || !reviewed || !receipt || submitting) return
     setSubmitError('')
     setSubmitting(true)
     await waitForPaint()
@@ -200,7 +205,7 @@ export default function DepositFlow({ step }) {
         throw new Error(result.code === 'rate_changed' ? t('mobile.deposit.rateChanged') : result.message || t('messages.depositFailed'))
       }
 
-      sessionStorage.setItem(DEPOSIT_SUCCESS_KEY, JSON.stringify({ userId: draft.userId, usdtAmount: equivalent }))
+      sessionStorage.setItem(DEPOSIT_SUCCESS_KEY, JSON.stringify({ userId: draft.userId, mmkAmount: equivalent }))
       sessionStorage.removeItem(DEPOSIT_DRAFT_KEY)
       draftRef.current = { ...EMPTY_DEPOSIT_DRAFT, userId: draft.userId }
       receiptInMemory = null
@@ -255,6 +260,7 @@ export default function DepositFlow({ step }) {
 
       {loading ? <div className={styles.status} role="status" aria-live="polite">{t('mobile.deposit.loading')}</div>
         : loadError ? <div className={styles.status} role="alert"><p>{t('messages.unableLoadPaymentData')}</p><button type="button" className={styles.secondaryAction} onClick={() => setReloadKey((key) => key + 1)}><RefreshCw size={18} aria-hidden="true" />{t('mobile.transactions.retry')}</button></div>
+          : pendingRequest ? <div className={styles.status} role="status">{t('messages.paymentRequestPending')}</div>
           : blocked ? <Recovery {...blocked} />
             : <div className={styles.workspace}>
               <section className={styles.primaryPanel} aria-label={titles[step - 1]}>
@@ -287,7 +293,7 @@ export default function DepositFlow({ step }) {
                     <span>{code.toUpperCase()}</span>
                   </div>
                   <p id="deposit-minimum" className={styles.helpText} role={draft.amount !== '' && !amountValid ? 'alert' : undefined}>{draft.amount !== '' && !amountValid ? /^\d{1,11}(?:\.\d{1,4})?$/.test(draft.amount) ? t('messages.minimumDeposit', { amount: formatMoney(minimumAmount(selectedMethod)), currency: code.toUpperCase() }) : t('mobile.deposit.enterValidAmount') : t('mobile.deposit.minShort', { amount: formatMoney(minimumAmount(selectedMethod)), currency: code.toUpperCase() })}</p>
-                  <div id="deposit-equivalent" className={styles.equivalent}><span>{t('mobile.deposit.usdtEquivalent')}</span><strong>{draft.amount !== '' && equivalent !== null ? formatMoney(equivalent) : '—'} USDT</strong></div>
+                  <div id="deposit-equivalent" className={styles.equivalent}><span>{t('mobile.deposit.usdtEquivalent')}</span><strong>{draft.amount !== '' && equivalent !== null ? formatMoney(equivalent) : '—'} MMK</strong></div>
                   <button type="button" className={styles.primaryAction} disabled={!canEnterPayment} onClick={() => router.push(routes[2])}>{t('common.continue')}<ArrowRight size={18} aria-hidden="true" /></button>
                 </>}
 

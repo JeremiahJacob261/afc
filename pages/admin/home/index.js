@@ -297,7 +297,7 @@ export default function AdminHome({ dashboard }) {
                     <p className="text-sm font-semibold text-white">{user.username}</p>
                     <p className="text-xs text-zinc-500">{user.uid}</p>
                   </div>
-                  <p className="text-sm text-zinc-300">{formatNumber(user.balance, { decimals: 3 })} USDT</p>
+                  <p className="text-sm text-zinc-300">{formatNumber(user.balance, { decimals: 3 })} MMK</p>
                 </div>
               )) : (
                 <p className="rounded-2xl bg-white/[0.04] p-4 text-sm text-zinc-500">No users found.</p>

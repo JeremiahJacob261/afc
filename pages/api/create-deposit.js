@@ -1,4 +1,5 @@
 import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
+import { getPendingPaymentRequest, isPendingPaymentConflict, PENDING_PAYMENT_MESSAGE } from '@/lib/pendingPaymentRequest'
 import {
   displayPaymentCurrency,
   getPaymentMethod,
@@ -6,6 +7,7 @@ import {
   isUsdtPaymentCode,
   methodCodeFromRow,
   normalizePaymentCode,
+  toLedgerAmount,
 } from '@/lib/paymentMethods'
 
 export default async function handler(req, res) {
@@ -42,6 +44,11 @@ export default async function handler(req, res) {
       return res.status(409).json({ status: 'error', message: 'This receipt was already used for another deposit' })
     }
 
+    const pendingRequest = await getPendingPaymentRequest(supabase, profile.username)
+    if (pendingRequest) {
+      return res.status(409).json({ status: 'error', code: 'PAYMENT_REQUEST_PENDING', message: PENDING_PAYMENT_MESSAGE })
+    }
+
     const savedMethod = await getPaymentMethod(supabase, requestedMethod, { requireAvailable: true })
     if (!savedMethod) {
       return res.status(400).json({ status: 'error', message: 'Unknown or unavailable deposit method' })
@@ -50,13 +57,13 @@ export default async function handler(req, res) {
     const notificationMethod = methodCodeFromRow(savedMethod) || requestedCode
     const rate = getPaymentRate(savedMethod, isUsdtPaymentCode(notificationMethod) ? 1 : 0)
     if (!rate) {
-      return res.status(400).json({ status: 'error', message: 'Minimum deposit is 5 USDT equivalent' })
+      return res.status(400).json({ status: 'error', message: 'Minimum deposit is 25,000 MMK equivalent' })
     }
     if (expectedRate != null && Number(expectedRate) !== rate) {
       return res.status(409).json({ status: 'error', code: 'rate_changed', message: 'Payment rate changed. Review the amount and payment details again.' })
     }
-    if (numericAmount / rate < 5) {
-      return res.status(400).json({ status: 'error', message: 'Minimum deposit is 5 USDT equivalent' })
+    if (toLedgerAmount(numericAmount, rate) < 25000) {
+      return res.status(400).json({ status: 'error', message: 'Minimum deposit is 25,000 MMK equivalent' })
     }
 
     const { data: savedDestinations, error: destinationError } = await supabase
@@ -87,6 +94,9 @@ export default async function handler(req, res) {
         adminaddress,
       })
 
+    if (isPendingPaymentConflict(error)) {
+      return res.status(409).json({ status: 'error', code: 'PAYMENT_REQUEST_PENDING', message: PENDING_PAYMENT_MESSAGE })
+    }
     if (error) throw error
 
     return res.status(200).json({ status: 'success' })

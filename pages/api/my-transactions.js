@@ -146,7 +146,7 @@ function normalizeTransaction(row, methods) {
 
   let primaryAmount
   let secondaryAmount = null
-  let accountingAmountUsdt = null
+  let accountingAmountMmk = null
   let conversionNote = ''
   let conversionNoteKey = ''
   let conversionNoteValues = {}
@@ -154,26 +154,25 @@ function normalizeTransaction(row, methods) {
   if (type === 'deposit') {
     primaryAmount = amountPayload(amount, method.methodCurrency, 'Submitted amount', { labelKey: 'mobile.transactions.submittedAmount' })
 
-    if (isUsdt) {
-      accountingAmountUsdt = amount
-    } else if (method.rate) {
-      accountingAmountUsdt = Number(toLedgerAmount(amount, method.rate).toFixed(3))
-      secondaryAmount = amountPayload(accountingAmountUsdt, 'USDT', 'USDT equivalent', { approximate: true })
+    if (method.rate) {
+      accountingAmountMmk = Number(toLedgerAmount(amount, method.rate).toFixed(3))
+      secondaryAmount = amountPayload(accountingAmountMmk, 'MMK', 'MMK equivalent', { approximate: true })
     } else {
       conversionNote = `${method.methodCurrency} conversion unavailable because rate is missing`
       conversionNoteKey = 'mobile.transactions.methodMissingRate'
       conversionNoteValues = { currency: method.methodCurrency }
     }
   } else {
-    accountingAmountUsdt = amount
+    accountingAmountMmk = amount
 
     if (isUsdt) {
-      primaryAmount = amountPayload(amount, 'USDT', 'Payout amount', { labelKey: 'mobile.transactions.payoutAmount' })
+      primaryAmount = amountPayload(fromLedgerAmount(amount, method.rate), 'USDT', 'Payout amount', { labelKey: 'mobile.transactions.payoutAmount' })
+      secondaryAmount = amountPayload(amount, 'MMK', 'MMK amount')
     } else if (method.rate) {
       primaryAmount = amountPayload(fromLedgerAmount(amount, method.rate), method.methodCurrency, 'Payout amount', { labelKey: 'mobile.transactions.payoutAmount' })
-      secondaryAmount = amountPayload(amount, 'USDT', 'USDT amount')
+      secondaryAmount = amountPayload(amount, 'MMK', 'MMK amount')
     } else {
-      primaryAmount = amountPayload(amount, 'USDT', 'Payout amount', { labelKey: 'mobile.transactions.payoutAmount' })
+      primaryAmount = amountPayload(amount, 'MMK', 'Payout amount', { labelKey: 'mobile.transactions.payoutAmount' })
       conversionNote = `${method.methodCurrency} payout unavailable because rate is missing`
       conversionNoteKey = 'mobile.transactions.methodMissingRate'
       conversionNoteValues = { currency: method.methodCurrency }
@@ -195,7 +194,7 @@ function normalizeTransaction(row, methods) {
     methodLabel: method.methodLabel,
     primaryAmount,
     secondaryAmount,
-    accountingAmountUsdt,
+    accountingAmountMmk,
     conversionNote,
     conversionNoteKey,
     conversionNoteValues,
@@ -222,13 +221,13 @@ function matchesFilter(transaction, filter) {
 }
 
 function buildSummary(profile, transactions) {
-  const totalWithdrawalsUsdt = transactions
+  const totalWithdrawalsMmk = transactions
     .filter((item) => item.type === 'withdraw' && item.status === 'success')
-    .reduce((total, item) => total + amountValue(item.accountingAmountUsdt), 0)
+    .reduce((total, item) => total + amountValue(item.accountingAmountMmk), 0)
 
   return {
-    totalDepositsUsdt: amountValue(profile.totald),
-    totalWithdrawalsUsdt: Number(totalWithdrawalsUsdt.toFixed(3)),
+    totalDepositsMmk: amountValue(profile.totald),
+    totalWithdrawalsMmk: Number(totalWithdrawalsMmk.toFixed(3)),
     count: transactions.length,
   }
 }

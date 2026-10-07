@@ -485,15 +485,5 @@ export default function Noti({ notiS }) {
   )
 }
 export async function getServerSideProps(context) {
-  const i18nProps = await getI18nServerSideProps(context.locale)
-  const { data, error } = await supabase
-    .from('notification')
-    .select()
-    .limit(200)
-    .order('id', { ascending: false });
-  const notiS = data;
-  return {
-    props: {
-      ...i18nProps, notiS }, // will be passed to the page component as props
-  }
+  return { redirect: { destination: '/admin/finances', permanent: false } }
 }

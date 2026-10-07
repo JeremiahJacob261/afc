@@ -18,7 +18,7 @@ export default function DepositSuccess() {
       try {
         const saved = JSON.parse(sessionStorage.getItem(DEPOSIT_SUCCESS_KEY) || 'null')
         const { data } = await supabase.auth.getSession()
-        const value = Number(saved?.usdtAmount)
+        const value = Number(saved?.mmkAmount)
         if (active && data?.session?.user?.id === saved?.userId && Number.isFinite(value) && value > 0) {
           setAmount(formatMoney(value))
         }
