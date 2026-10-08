@@ -7,7 +7,7 @@ import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded'
 import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded'
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded'
 import Image from 'next/image'
-import LOGO from '@/public/european.ico'
+import LOGO from '@/public/champions-league-logo.png'
 
 const contentByType = {
   success: {

@@ -88,10 +88,7 @@ export async function middleware(request) {
   }
 
   if (pathname.startsWith('/api/admin')) {
-    return withCors(NextResponse.json(
-      { status: 'error', message: 'Unauthorized' },
-      { status: 401 }
-    ), corsHeaders)
+    return withCors(new NextResponse(null, { status: 401 }), corsHeaders)
   }
 
   const loginUrl = new URL('/admin', request.url)

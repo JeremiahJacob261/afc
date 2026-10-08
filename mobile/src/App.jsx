@@ -576,7 +576,7 @@ function Onboarding({ onLogin, onRegister }) {
     <main className="screen onboarding-screen">
       <header className="brand-row">
         <span className="brand-lockup">
-          <img src="/european.ico" alt="EFC" />
+          <img src="/champions-league-logo.png" alt="EFC" />
           <strong>{t('common.appName')}</strong>
         </span>
         <button className="text-action" type="button" onClick={onLogin}>
@@ -628,7 +628,7 @@ function AuthFrame({ title, subtitle, children, onBack }) {
       </button>
       <section className="auth-card">
         <div className="auth-logo">
-          <img src="/european.ico" alt="EFC" />
+          <img src="/champions-league-logo.png" alt="EFC" />
           <span>{t('common.appName')}</span>
         </div>
         <h1>{title}</h1>
@@ -1829,7 +1829,7 @@ function ProfileScreen({ navigate, onLogout }) {
       <div className="mobile-dark-glass">
         <section className="account-profile-card">
           <div className="account-user-row">
-            <img src="/european.ico" alt="" />
+            <img src="/champions-league-logo.png" alt="" />
             <div>
               <p>
                 {t('mobile.profile.hello')}{' '}

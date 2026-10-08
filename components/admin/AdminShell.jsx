@@ -11,7 +11,7 @@ import {
   Trophy,
   Users,
 } from 'lucide-react'
-import Logo from '@/public/european.ico'
+import Logo from '@/public/champions-league-logo.png'
 
 const navItems = [
   { label: 'Overview', href: '/admin/home', icon: LayoutDashboard },
@@ -27,6 +27,7 @@ const pageTitles = {
   '/admin/users': 'Users',
   '/admin/match': 'Bets',
   '/admin/control': 'Control',
+  '/admin/wheel': 'Spin Wheel',
   '/admin/generate': 'Generate Claim Code',
   '/admin/paymentmthod': 'Payment Wallets',
   '/admin/wallets': 'Wallet Tools',

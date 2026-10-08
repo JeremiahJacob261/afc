@@ -11,7 +11,7 @@ import {
   Users,
   Wallet,
 } from 'lucide-react'
-import Logo from '@/public/european.ico'
+import Logo from '@/public/champions-league-logo.png'
 import { requireAdmin } from '@/lib/adminAuth'
 import { getAdminDashboardData } from '@/lib/adminDashboardData'
 

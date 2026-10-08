@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
-import Logo from "@/public/european.ico";
+import Logo from "@/public/champions-league-logo.png";
 import { Star } from "./Starball";
 
 const languageOptions = [

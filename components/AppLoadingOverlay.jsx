@@ -3,7 +3,7 @@ import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import Image from 'next/image'
-import LOGO from '@/public/european.ico'
+import LOGO from '@/public/champions-league-logo.png'
 
 export default function AppLoadingOverlay({
   open,

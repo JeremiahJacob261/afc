@@ -88,9 +88,8 @@ function MyApp({ Component, pageProps }) {
         <meta name="msapplication-TileColor" content="#06101F" />
         <meta name="format-detection" content="telephone=no" />
         <link rel="manifest" href="/manifest.webmanifest" />
-        <link rel="icon" href="/european.ico" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
@@ -101,6 +100,7 @@ function MyApp({ Component, pageProps }) {
       ) : (
         <Component {...pageProps} style={{ background: "#06101F" ,width:"100%",display:'flex'}} />
       )}
+      <div className="champions-doodle-layer" aria-hidden="true" />
       <AppLoadingOverlay open={routeLoading} title="" message="" />
       
 </div>

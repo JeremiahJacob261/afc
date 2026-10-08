@@ -83,6 +83,28 @@ body,
   min-height: 100dvh;
   background: #06101F;
 }
+
+/* Quiet football linework across public, account, and admin pages. */
+.champions-doodle-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  pointer-events: none;
+  background-image: url('/assets/champions-doodle.svg'), url('/assets/champions-doodle.svg');
+  background-repeat: no-repeat;
+  background-size: 430px 430px, 275px 275px;
+  background-position: left -165px bottom -115px, right -110px top 125px;
+  mix-blend-mode: difference;
+  opacity: .085;
+}
+
+@media (max-width: 640px) {
+  .champions-doodle-layer {
+    background-size: 300px 300px, 185px 185px;
+    background-position: left -155px bottom -88px, right -105px top 140px;
+    opacity: .075;
+  }
+}
 .MuiInputLabel-root {
   color: #06101F !important;
 }

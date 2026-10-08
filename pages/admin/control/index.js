@@ -2,9 +2,16 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
-import { ArrowUpRight, Bell, KeyRound, Link2, Lock, Percent, Save, ShieldCheck, WalletCards } from 'lucide-react'
+import { ArrowUpRight, Bell, Disc3, KeyRound, Link2, Lock, Percent, Save, ShieldCheck, WalletCards } from 'lucide-react'
 
 const tools = [
+  {
+    label: 'Spin Wheel',
+    description: 'Edit wheel prizes, images, colors, and slice order.',
+    href: '/admin/wheel',
+    icon: Disc3,
+    tone: 'text-[#ffe084]',
+  },
   {
     label: 'Generate Bonus Claim Code',
     description: 'Create a claim code for a selected user.',

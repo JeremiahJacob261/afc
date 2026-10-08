@@ -73,7 +73,7 @@ export function FinalCtaFooter() {
             <div>
               <div className="flex items-center gap-3">
                 <Image
-                  src="/assets/efc-logo.jpg"
+                  src="/champions-league-logo.png"
                   alt={t("landing.footer.logoAlt")}
                   width={48}
                   height={48}

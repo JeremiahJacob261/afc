@@ -2,7 +2,7 @@ import { Stack } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import { useState } from 'react';
 import Image from 'next/image';
-import Logo from '@/public/european.ico'
+import Logo from '@/public/champions-league-logo.png'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/router';
 import Refresh from '@/public/refresh.png';

@@ -1,4 +1,4 @@
-const VERSION = 'efc-pwa-v2'
+const VERSION = 'efc-pwa-v3'
 const STATIC_CACHE = `${VERSION}-static`
 const RUNTIME_CACHE = `${VERSION}-runtime`
 const IMAGE_CACHE = `${VERSION}-images`
@@ -20,6 +20,7 @@ const APP_SHELL = [
   '/manifest.webmanifest',
   '/favicon.ico',
   '/european.ico',
+  '/champions-league-logo.png',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
   '/icons/maskable-icon-512x512.png',

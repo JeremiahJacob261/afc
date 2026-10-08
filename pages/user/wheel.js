@@ -8,7 +8,11 @@ import { authFetch, requireSession } from '@/lib/clientAuth'
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
 import styles from '@/styles/UserWheel.module.css'
 
-const prizes = ['iPhone 17', 'K5,000', 'K20,000', 'K100,000', 'K10', 'K500', 'K1,000', 'K30,000']
+function sectorGradient(items) {
+  if (!items.length) return '#f8c522'
+  const sector = 360 / items.length
+  return `conic-gradient(from -${sector / 2}deg, ${items.map((item, index) => `${item.color} ${index * sector}deg ${(index + 1) * sector}deg`).join(', ')})`
+}
 
 function remainingTime(nextSpinAt, now) {
   const remaining = Math.max(0, Date.parse(nextSpinAt) - now)
@@ -25,6 +29,8 @@ export default function Wheel() {
   const [nextSpinAt, setNextSpinAt] = useState(null)
   const [wonPrize, setWonPrize] = useState(null)
   const [lastPrize, setLastPrize] = useState(null)
+  const [items, setItems] = useState([])
+  const [revision, setRevision] = useState(null)
   const [rotation, setRotation] = useState(0)
   const [now, setNow] = useState(Date.now())
   const spinTimer = useRef(null)
@@ -43,7 +49,12 @@ export default function Wheel() {
         const response = await authFetch('/api/wheel-spin')
         if (!response.ok) throw new Error('Unable to load the wheel. Please try again.')
         const result = await response.json()
-        if (active) { setNextSpinAt(result.nextSpinAt); setLastPrize(result.lastPrize) }
+        if (active) {
+          setNextSpinAt(result.nextSpinAt)
+          setLastPrize(result.lastPrize)
+          setItems(result.items || [])
+          setRevision(result.revision)
+        }
       } catch (caught) {
         if (active) setError(caught.message)
       } finally { if (active) setLoading(false) }
@@ -55,27 +66,37 @@ export default function Wheel() {
   const coolingDown = nextSpinAt && now < Date.parse(nextSpinAt)
 
   async function spin() {
-    if (loading || spinning || coolingDown) return
+    if (loading || spinning || coolingDown || !items.length) return
     setError('')
     setWonPrize(null)
     setSpinning(true)
     try {
-      const response = await authFetch('/api/wheel-spin', { method: 'POST' })
+      const response = await authFetch('/api/wheel-spin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ revision }),
+      })
       const result = await response.json()
       if (response.status === 409) {
-        setNextSpinAt(result.nextSpinAt)
+        if (result.status === 'wheel_updated') {
+          setItems(result.items || [])
+          setRevision(result.revision)
+          setRotation(0)
+        } else {
+          setNextSpinAt(result.nextSpinAt)
+        }
         setNow(Date.now())
         setError(result.message)
         setSpinning(false)
         return
       }
-      if (!response.ok || !Number.isInteger(result.prizeIndex) || !prizes[result.prizeIndex]) throw new Error('The spin could not be completed. Please try again.')
+      if (!response.ok || !Number.isInteger(result.prizeIndex) || !items[result.prizeIndex]) throw new Error('The spin could not be completed. Please try again.')
       setNextSpinAt(result.nextSpinAt)
       setLastPrize(result.prize)
       setNow(Date.now())
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
       const currentMod = ((rotation % 360) + 360) % 360
-      const targetMod = (360 - result.prizeIndex * 45) % 360
+      const targetMod = (360 - result.prizeIndex * 360 / items.length) % 360
       const alignment = (targetMod - currentMod + 360) % 360
       setRotation(rotation + (reducedMotion ? 0 : 360 * 6) + alignment)
       spinTimer.current = window.setTimeout(() => { setWonPrize(result.prize); setSpinning(false) }, reducedMotion ? 0 : 5200)
@@ -95,17 +116,17 @@ export default function Wheel() {
             })}
           </div>
           <div className={styles.wheel} style={{ transform: `rotate(${rotation}deg)` }}>
-            <div className={styles.sectors} />
-            {prizes.map((label, index) => {
-              const angle = index * Math.PI / 4
-              return <div key={label} className={styles.prize} style={{ left: `${50 + 34 * Math.sin(angle)}%`, top: `${50 - 34 * Math.cos(angle)}%` }}>
-                <span>{label}</span>
-                <img src={index === 0 ? '/assets/wheel/phone.png' : '/assets/wheel/gift.png'} className={`${styles.prizeImage} ${index === 5 || index === 6 ? styles.purpleGift : ''}`} alt="" draggable="false" />
+            <div className={styles.sectors} style={{ background: sectorGradient(items) }} />
+            {items.map((item, index) => {
+              const angle = index * Math.PI * 2 / items.length
+              return <div key={item.id} className={styles.prize} style={{ left: `${50 + 34 * Math.sin(angle)}%`, top: `${50 - 34 * Math.cos(angle)}%`, width: `${Math.min(26, Math.max(15, 185 / items.length))}%` }}>
+                <span>{item.label}</span>
+                {item.imageUrl && <img src={item.imageUrl} className={styles.prizeImage} alt="" draggable="false" />}
               </div>
             })}
           </div>
           <span className={styles.pointer} aria-hidden="true" />
-          <button className={styles.hub} type="button" onClick={spin} disabled={loading || spinning || Boolean(coolingDown)} aria-label="Spin the wheel">GO</button>
+          <button className={styles.hub} type="button" onClick={spin} disabled={loading || spinning || !items.length || Boolean(coolingDown)} aria-label="Spin the wheel">GO</button>
         </div>
         <div className={styles.status} aria-live="polite">
           {wonPrize ? <><strong>You won {wonPrize}!</strong><span>Your result has been recorded. You can spin again in 24 hours.</span></>
