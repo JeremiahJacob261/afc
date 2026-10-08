@@ -33,7 +33,7 @@ const toNumber = (value) => {
   return Number.isFinite(amount) ? amount : 0
 }
 
-const formatFcfa = (value) => `${toNumber(value).toLocaleString(undefined, { maximumFractionDigits: 3 })} MMK`
+const formatFcfa = (value, locale) => `${toNumber(value).toLocaleString(locale, { maximumFractionDigits: 3 })} MMK`
 const formatOdd = (value) => toNumber(value).toFixed(3)
 
 // A company-market hit refunds the stake and pays no profit, so it must not
@@ -72,7 +72,7 @@ const getBetStatus = (bet, t) => {
 }
 
 export default function Bets() {
-  const { t } = useTranslation('common')
+  const { t, i18n } = useTranslation('common')
   const router = useRouter()
   const [openx, setOpenx] = useState(false)
   const [bets, setBets] = useState([])
@@ -127,9 +127,9 @@ export default function Bets() {
       { label: t('status.unsettled'), value: bets.length },
       { label: t('status.won'), value: won },
       { label: t('status.refunded'), value: refunded },
-      { label: t('mobile.bets.stake'), value: formatFcfa(totalStake) },
+      { label: t('mobile.bets.stake'), value: formatFcfa(totalStake, i18n.language) },
     ]
-  }, [bets, fina, t])
+  }, [bets, fina, t, i18n.language])
   const tabs = [
     { value: '1', label: t('status.unsettled') },
     { value: '2', label: t('status.settled') },
@@ -150,7 +150,7 @@ export default function Bets() {
           <Box
             component="button"
             type="button"
-            aria-label="Back to dashboard"
+            aria-label={t('website.backToDashboard')}
             onClick={() => router.push('/user')}
             sx={{
               width: 44,
@@ -278,8 +278,8 @@ export default function Bets() {
             }}
           >
             <Metric label={t('landing.live.odds')} value={`${formatOdd(bet.odd)}%`} />
-            <Metric label={t('mobile.bets.stake')} value={formatFcfa(bet.stake)} />
-            <Metric label="Profit" value={formatFcfa(returnAmount)} />
+            <Metric label={t('mobile.bets.stake')} value={formatFcfa(bet.stake, i18n.language)} />
+            <Metric label={t('mobile.match.profit')} value={formatFcfa(returnAmount, i18n.language)} />
           </Box>
         </Stack>
 
@@ -298,7 +298,7 @@ export default function Bets() {
             {t('mobile.bets.kickoff')}: {display.dateTime}
           </Typography>
           <Typography sx={{ color: colors.muted, fontFamily: 'Arial,sans-serif', fontSize: 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            Bet ID: {bet.betid}
+            {t('mobile.bets.betId')}: {bet.betid}
           </Typography>
           <ArrowForwardIosRoundedIcon sx={{ width: 14, height: 14, color: colors.accent }} />
         </Stack>

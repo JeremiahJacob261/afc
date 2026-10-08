@@ -4,11 +4,11 @@ function cleanText(value) {
   return String(value || '').trim()
 }
 
-const supportedLanguages = new Set(['en', 'fr', 'es', 'it', 'ru'])
+const supportedLanguages = new Set(['en', 'my'])
 
 function cleanLanguage(value) {
-  const language = cleanText(value || 'en').toLowerCase()
-  return supportedLanguages.has(language) ? language : 'en'
+  const language = cleanText(value || 'my').toLowerCase()
+  return supportedLanguages.has(language) ? language : 'my'
 }
 
 export default async function handler(req, res) {

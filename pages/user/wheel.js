@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next';
 import { useEffect, useRef, useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -14,14 +15,15 @@ function sectorGradient(items) {
   return `conic-gradient(from -${sector / 2}deg, ${items.map((item, index) => `${item.color} ${index * sector}deg ${(index + 1) * sector}deg`).join(', ')})`
 }
 
-function remainingTime(nextSpinAt, now) {
+function remainingTime(nextSpinAt, now, t, locale) {
   const remaining = Math.max(0, Date.parse(nextSpinAt) - now)
   const hours = Math.floor(remaining / 3_600_000)
   const minutes = Math.ceil((remaining % 3_600_000) / 60_000)
-  return `${hours}h ${String(minutes).padStart(2, '0')}m`
+  return t('website.wheelDuration', { hours: hours.toLocaleString(locale), minutes: minutes.toLocaleString(locale, { minimumIntegerDigits: 2 }) })
 }
 
 export default function Wheel() {
+  const { t, i18n } = useTranslation('common');
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -47,7 +49,7 @@ export default function Wheel() {
       if (!session || !active) return
       try {
         const response = await authFetch('/api/wheel-spin')
-        if (!response.ok) throw new Error('Unable to load the wheel. Please try again.')
+        if (!response.ok) throw new Error(t('website.unableToLoadTheWheelPleaseTryAgain'))
         const result = await response.json()
         if (active) {
           setNextSpinAt(result.nextSpinAt)
@@ -56,12 +58,12 @@ export default function Wheel() {
           setRevision(result.revision)
         }
       } catch (caught) {
-        if (active) setError(caught.message)
+        if (active) setError(t('website.unableToLoadTheWheelPleaseTryAgain'))
       } finally { if (active) setLoading(false) }
     }
     load()
     return () => { active = false }
-  }, [router])
+  }, [router, t])
 
   const coolingDown = nextSpinAt && now < Date.parse(nextSpinAt)
 
@@ -86,11 +88,11 @@ export default function Wheel() {
           setNextSpinAt(result.nextSpinAt)
         }
         setNow(Date.now())
-        setError(result.message)
+        setError(t(result.status === 'wheel_updated' ? 'website.wheelChanged' : 'website.wheelCooldown'))
         setSpinning(false)
         return
       }
-      if (!response.ok || !Number.isInteger(result.prizeIndex) || !items[result.prizeIndex]) throw new Error('The spin could not be completed. Please try again.')
+      if (!response.ok || !Number.isInteger(result.prizeIndex) || !items[result.prizeIndex]) throw new Error(t('website.theSpinCouldNotBeCompletedPleaseTryAgain'))
       setNextSpinAt(result.nextSpinAt)
       setLastPrize(result.prize)
       setNow(Date.now())
@@ -100,13 +102,13 @@ export default function Wheel() {
       const alignment = (targetMod - currentMod + 360) % 360
       setRotation(rotation + (reducedMotion ? 0 : 360 * 6) + alignment)
       spinTimer.current = window.setTimeout(() => { setWonPrize(result.prize); setSpinning(false) }, reducedMotion ? 0 : 5200)
-    } catch (caught) { setError(caught.message); setSpinning(false) }
+    } catch (caught) { setError(t('website.theSpinCouldNotBeCompletedPleaseTryAgain')); setSpinning(false) }
   }
 
   return <Cover>
-    <Head><title>Wheel Spin — UCL</title><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
+    <Head><title>{t('website.wheelSpinUcl')}</title><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
     <main className={styles.page}>
-      <div className={styles.heading}><Link href="/user" className={styles.back} aria-label="Back to dashboard"><ArrowLeft size={22} aria-hidden="true" /></Link><h1>Wheel Spin</h1></div>
+      <div className={styles.heading}><Link href="/user" className={styles.back} aria-label={t('website.backToDashboard')}><ArrowLeft size={22} aria-hidden="true" /></Link><h1>{t('website.wheelSpin')}</h1></div>
       <div className={styles.stage}>
         <div className={styles.wheelFrame}>
           <div className={styles.lights} aria-hidden="true">
@@ -126,14 +128,14 @@ export default function Wheel() {
             })}
           </div>
           <span className={styles.pointer} aria-hidden="true" />
-          <button className={styles.hub} type="button" onClick={spin} disabled={loading || spinning || !items.length || Boolean(coolingDown)} aria-label="Spin the wheel">GO</button>
+          <button className={styles.hub} type="button" onClick={spin} disabled={loading || spinning || !items.length || Boolean(coolingDown)} aria-label={t('website.spinTheWheel')}>{t('website.go')}</button>
         </div>
         <div className={styles.status} aria-live="polite">
-          {wonPrize ? <><strong>You won {wonPrize}!</strong><span>Your result has been recorded. You can spin again in 24 hours.</span></>
-            : spinning ? <strong>Spinning…</strong>
-              : loading ? <span>Checking your spin…</span>
-                : coolingDown ? <><strong>{lastPrize ? `Last spin: ${lastPrize}` : 'Spin complete'}</strong><span>Next spin in {remainingTime(nextSpinAt, now)}.</span></>
-                  : <><strong>Ready to spin?</strong><span>Tap GO for your daily spin.</span></>}
+          {wonPrize ? <><strong>{t('website.wheelWon', { prize: wonPrize })}</strong><span>{t('website.yourResultHasBeenRecordedYouCanSpinAgainIn24Hours')}</span></>
+            : spinning ? <strong>{t('website.spinning')}</strong>
+              : loading ? <span>{t('website.checkingYourSpin')}</span>
+                : coolingDown ? <><strong>{lastPrize ? t('website.wheelLastSpin', { prize: lastPrize }) : t('website.spinComplete')}</strong><span>{t('website.wheelNextSpin', { time: remainingTime(nextSpinAt, now, t, i18n.language) })}</span></>
+                  : <><strong>{t('website.readyToSpin')}</strong><span>{t('website.tapGoForYourDailySpin')}</span></>}
         </div>
         {error && <p className={styles.error} role="alert">{error}</p>}
       </div>

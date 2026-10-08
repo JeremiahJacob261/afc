@@ -4,12 +4,14 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import Image from 'next/image'
 import LOGO from '@/public/champions-league-logo.png'
+import { useTranslation } from 'next-i18next'
 
 export default function AppLoadingOverlay({
   open,
   title = 'Please wait',
   message = 'We are processing your request.',
 }) {
+  const { t } = useTranslation('common')
   return (
     <Backdrop
       open={Boolean(open)}
@@ -37,7 +39,7 @@ export default function AppLoadingOverlay({
             },
           }}
         >
-          <Image src={LOGO} width={58} height={58} alt="EFC loading" />
+          <Image src={LOGO} width={58} height={58} alt={t('common.loading')} />
         </Box>
     </Backdrop>
   )

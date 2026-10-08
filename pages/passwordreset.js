@@ -1,3 +1,4 @@
+import { translateApiMessage } from '@/lib/translateApiMessage'
 import React, { useState } from "react";
 import Head from "next/head";
 import { Stack, Button, Typography, Divider } from "@mui/material";
@@ -40,7 +41,7 @@ export default function PasswordReset() {
       setFeedback({
         type: 'error',
         title: t('messages.unableSendEmail'),
-        message: error?.code || error?.message || t('messages.pleaseTryAgain'),
+        message: translateApiMessage(error, t, 'messages.unableSendReset'),
       })
     } finally {
       setLoading(false)

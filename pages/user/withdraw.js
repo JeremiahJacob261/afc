@@ -1,3 +1,4 @@
+import { translateApiMessage } from '@/lib/translateApiMessage'
 import { Button, Stack, TextField, Typography, MenuItem, Divider } from "@mui/material";
 import React, { useState, useContext, useEffect } from "react";
 import { AppContext } from '@/pages/api/Context'
@@ -34,25 +35,9 @@ function isLocalMethod(type) {
   return ['local', 'local-transfer', 'bank', 'mobile-money'].includes(String(type || '').trim().toLowerCase());
 }
 
-function translateWithdrawalMessage(message, t, values = {}) {
-  const normalized = String(message || '').trim().toLowerCase()
-
-  if (!normalized) return t('messages.unableSubmitWithdrawal')
-  if (normalized === 'no transaction pin has been set') return t('mobile.withdraw.noPinSet')
-  if (normalized === 'wrong password') return t('mobile.withdraw.wrongPin')
-  if (normalized === 'insufficient funds') return t('mobile.withdraw.insufficientFunds')
-  if (normalized.includes('after your latest successful deposit')) return t('mobile.withdraw.betRequirement')
-  if (normalized.includes('pending withdrawal')) return t('messages.withdrawalPending')
-  if (normalized.includes('24 hours')) return t('messages.withdrawalCooldown')
-  if (normalized.includes('minimum')) return t('messages.minimumWithdrawal', { amount: values.min ?? values.amount })
-  if (normalized.includes('maximum')) return t('mobile.withdraw.maximumWithdrawal', { amount: values.max ?? values.amount })
-  if (normalized === 'withdrawal request as been sent') return t('messages.withdrawalSent')
-
-  return message
-}
 
 export default function Deposit() {
-  const { t } = useTranslation('common')
+  const { t, i18n } = useTranslation('common')
   const [wallx,setWallx] = useState([]);
   //86f36a9d-c8e8-41cb-a8aa-3bbe7b66d0a5
   function findObjectById(id) {
@@ -133,8 +118,8 @@ export default function Deposit() {
               ? t('messages.withdrawalPending')
               : test[0].code === 'WITHDRAWAL_COOLDOWN'
                 ? t('messages.withdrawalCooldown')
-                : translateWithdrawalMessage(test[0].message, t, { min: minWithdrawalAmount, max: maxWithdrawalAmount });
-            const retryAt = test[0].retryAt ? ` ${t('messages.withdrawalAvailableAt', { time: new Date(test[0].retryAt).toLocaleString() })}` : '';
+                : translateApiMessage(test[0], t, 'messages.unableSubmitWithdrawal');
+            const retryAt = test[0].retryAt ? ` ${t('messages.withdrawalAvailableAt', { time: new Date(test[0].retryAt).toLocaleString(i18n.language) })}` : '';
             toast.error(`${message}${retryAt}`);
             handleClosex();
             if (test[0].message === 'No transaction pin has been set') {
@@ -276,7 +261,7 @@ export default function Deposit() {
   }
   //end of snackbar2
   const { requestedAmount, feeAmount, totalAmount } = calculateWithdrawalAmounts(Number(amount || 0), withdrawalFeePercent);
-  const usdt = (value) => `${Number(value || 0).toLocaleString(undefined, { maximumFractionDigits: 3 })} MMK`;
+  const usdt = (value) => `${Number(value || 0).toLocaleString(i18n.language, { maximumFractionDigits: 3 })} MMK`;
   const currencyCode = String(currency || "USDT").toUpperCase();
   const showConvertedPayout = currencyCode !== 'MMK';
   const feePercent = Number(withdrawalFeePercent.toFixed(2));
@@ -430,7 +415,7 @@ export default function Deposit() {
           {!withdrawalEligibility.canWithdraw ? (
             <Typography sx={{ color: '#9f2020', fontSize: '14px', textAlign: 'center' }}>
               {withdrawalEligibility.reason === 'cooldown' ? t('messages.withdrawalCooldown') : withdrawalEligibility.code === 'PAYMENT_REQUEST_PENDING' ? t('messages.paymentRequestPending') : t('messages.withdrawalPending')}
-              {withdrawalEligibility.retryAt ? ` ${t('messages.withdrawalAvailableAt', { time: new Date(withdrawalEligibility.retryAt).toLocaleString() })}` : ''}
+              {withdrawalEligibility.retryAt ? ` ${t('messages.withdrawalAvailableAt', { time: new Date(withdrawalEligibility.retryAt).toLocaleString(i18n.language) })}` : ''}
             </Typography>
           ) : null}
 
@@ -439,8 +424,8 @@ export default function Deposit() {
       <Loading open={openx} handleClose={handleClosex} />
       <Modal open={withdrawalDisabledDialogOpen} onClose={() => setWithdrawalDisabledDialogOpen(false)} aria-labelledby="withdrawals-disabled-title">
         <Stack alignItems='center' justifyContent='space-evenly' sx={{ background: '#fdfcf8', width: '290px', minHeight: '250px', borderRadius: '20px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '20px' }}>
-          <Typography id="withdrawals-disabled-title" sx={{ fontFamily: 'Arial,sans-serif', fontSize: '20px', fontWeight: '500', color: '#080f32' }}>Withdrawals unavailable</Typography>
-          <Typography sx={{ mt: 2, textAlign: 'center', fontSize: '14px', fontWeight: '300', color: '#080f32' }}>{withdrawalDisabledMessage}</Typography>
+          <Typography id="withdrawals-disabled-title" sx={{ fontFamily: 'Arial,sans-serif', fontSize: '20px', fontWeight: '500', color: '#080f32' }}>{t('website.withdrawalsUnavailableTitle')}</Typography>
+          <Typography sx={{ mt: 2, textAlign: 'center', fontSize: '14px', fontWeight: '300', color: '#080f32' }}>{translateApiMessage(withdrawalDisabledMessage, t, 'messages.withdrawalsUnavailable')}</Typography>
           <Button variant='contained' sx={{ mt: 3, fontFamily: 'Arial,sans-serif', color: '#fdfcf8', background: '#0649ff', padding: '8px', width: '100%' }} onClick={() => setWithdrawalDisabledDialogOpen(false)}>{t('common.continue')}</Button>
         </Stack>
       </Modal>

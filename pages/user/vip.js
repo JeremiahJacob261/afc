@@ -20,8 +20,8 @@ import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientA
 
 const tierColors = ['#9BE15D', '#56CCF2', '#A78BFA', '#FBBF24', '#FB923C', '#F472B6', '#FDE68A']
 
-function amount(value) {
-  return Number(value || 0).toLocaleString(undefined, {
+function amount(value, locale) {
+  return Number(value || 0).toLocaleString(locale, {
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   })
@@ -60,7 +60,7 @@ function ProgressCard({ icon, label, value, detail, color }) {
 }
 
 export default function Vip() {
-  const { t } = useTranslation('common')
+  const { t, i18n } = useTranslation('common')
   const router = useRouter()
   const [vip, setVip] = useState(null)
   const [profile, setProfile] = useState(null)
@@ -116,21 +116,21 @@ export default function Vip() {
             component="button"
             type="button"
             onClick={() => router.push('/user/account')}
-            aria-label="Back to account"
+            aria-label={t('website.backToAccount')}
             sx={{ display: 'grid', placeItems: 'center', width: 44, height: 44, p: 0, border: '1px solid #dfe5df', borderRadius: 2, color: '#080f32', background: '#fff', cursor: 'pointer' }}
           >
             <KeyboardArrowLeftOutlined />
           </Box>
-          <Typography component="h1" sx={{ color: '#080f32', fontSize: { xs: 32, sm: 48 }, fontFamily: 'Georgia,serif', fontWeight: 400 }}>VIP rewards</Typography>
+          <Typography component="h1" sx={{ color: '#080f32', fontSize: { xs: 32, sm: 48 }, fontFamily: 'Georgia,serif', fontWeight: 400 }}>{t('website.vipRewards')}</Typography>
         </Stack>
 
         <Box sx={{ position: 'relative', overflow: 'hidden', p: { xs: 2.5, sm: 3.5 }, borderRadius: 4, background: `radial-gradient(circle at 90% 0%, ${accent}45, transparent 36%), linear-gradient(135deg, #142D52 0%, #09182D 100%)`, border: `1px solid ${accent}55`, boxShadow: `0 22px 60px ${accent}1c` }}>
           <Box sx={{ position: 'absolute', top: -60, right: -45, width: 160, height: 160, borderRadius: '50%', border: `1px solid ${accent}35` }} />
           <Stack direction="row" justifyContent="space-between" alignItems="flex-start" spacing={2}>
             <Stack spacing={1}>
-              <Chip icon={<AutoAwesome sx={{ color: `${accent} !important` }} />} label="MEMBER BENEFITS" size="small" sx={{ width: 'fit-content', color: accent, background: `${accent}18`, border: `1px solid ${accent}45`, fontWeight: 800, fontSize: 10 }} />
+              <Chip icon={<AutoAwesome sx={{ color: `${accent} !important` }} />} label={t('website.memberBenefits')} size="small" sx={{ width: 'fit-content', color: accent, background: `${accent}18`, border: `1px solid ${accent}45`, fontWeight: 800, fontSize: 10 }} />
               <Typography sx={{ color: '#fff', fontSize: { xs: 31, sm: 38 }, lineHeight: 1, fontWeight: 900 }}>VIP {level}</Typography>
-              <Typography sx={{ maxWidth: 260, color: '#B8C9DE', fontSize: 13, lineHeight: 1.5 }}>Build your team, grow together, and unlock higher daily rewards.</Typography>
+              <Typography sx={{ maxWidth: 260, color: '#B8C9DE', fontSize: 13, lineHeight: 1.5 }}>{t('website.vipTeamIntro')}</Typography>
             </Stack>
             <Box sx={{ display: 'grid', placeItems: 'center', width: { xs: 66, sm: 82 }, height: { xs: 66, sm: 82 }, flexShrink: 0, borderRadius: '50%', color: accent, background: `${accent}18`, border: `1px solid ${accent}75` }}>
               <Diamond sx={{ fontSize: { xs: 38, sm: 48 } }} />
@@ -143,22 +143,22 @@ export default function Vip() {
             <Stack direction="row" spacing={1} alignItems="center">
               <Wallet sx={{ color: accent, fontSize: 20 }} />
               <Box>
-                <Typography sx={{ color: '#d7e2ed', fontSize: 11 }}>Current balance</Typography>
-                <Typography sx={{ color: '#fff', fontSize: 17, fontWeight: 800 }}>{amount(profile?.balance)} MMK</Typography>
+                <Typography sx={{ color: '#d7e2ed', fontSize: 11 }}>{t('website.currentBalance')}</Typography>
+                <Typography sx={{ color: '#fff', fontSize: 17, fontWeight: 800 }}>{amount(profile?.balance, i18n.language)} MMK</Typography>
               </Box>
             </Stack>
             <Box sx={{ textAlign: 'right' }}>
-              <Typography sx={{ color: '#d7e2ed', fontSize: 11 }}>Daily increase</Typography>
+              <Typography sx={{ color: '#d7e2ed', fontSize: 11 }}>{t('website.dailyIncrease')}</Typography>
               <Typography sx={{ color: accent, fontSize: 20, fontWeight: 900 }}>{percent(dailyRate * 100)}</Typography>
             </Box>
           </Stack>
         </Box>
 
         <Box>
-          <Typography sx={{ mb: 1.25, color: '#080f32', fontSize: 17, fontWeight: 800 }}>Your progress</Typography>
+          <Typography sx={{ mb: 1.25, color: '#080f32', fontSize: 17, fontWeight: 800 }}>{t('website.yourProgress')}</Typography>
           <Stack spacing={1.25}>
-            <ProgressCard icon={<Wallet sx={{ fontSize: 18 }} />} label="Total deposits" value={vip?.depositProgress} color="#56CCF2" detail={`${amount(profile?.totald)} of ${amount(vip?.depositLimit)} MMK`} />
-            <ProgressCard icon={<Groups sx={{ fontSize: 18 }} />} label="Active direct downlines" value={vip?.referralProgress} color="#A78BFA" detail={`${refCount} of ${vip?.referralLimit || 0} active members`} />
+            <ProgressCard icon={<Wallet sx={{ fontSize: 18 }} />} label={t('website.totalDeposits')} value={vip?.depositProgress} color="#56CCF2" detail={t('website.vipDepositProgress', { current: amount(profile?.totald, i18n.language), total: amount(vip?.depositLimit, i18n.language) })} />
+            <ProgressCard icon={<Groups sx={{ fontSize: 18 }} />} label={t('website.activeDirectDownlines')} value={vip?.referralProgress} color="#A78BFA" detail={t('website.vipMemberProgress', { current: refCount, total: vip?.referralLimit || 0 })} />
           </Stack>
         </Box>
 
@@ -166,18 +166,18 @@ export default function Vip() {
           <Stack direction="row" spacing={1.25} alignItems="flex-start">
             <CheckCircleRounded sx={{ color: '#286746', fontSize: 21, mt: 0.15 }} />
             <Box>
-              <Typography sx={{ color: '#080f32', fontSize: 13, fontWeight: 800 }}>How to unlock the next tier</Typography>
-              <Typography sx={{ mt: 0.5, color: '#52685d', fontSize: 12, lineHeight: 1.45 }}>Meet both the deposit requirement and the active direct-downline requirement for a tier.</Typography>
+              <Typography sx={{ color: '#080f32', fontSize: 13, fontWeight: 800 }}>{t('website.unlockNextTier')}</Typography>
+              <Typography sx={{ mt: 0.5, color: '#52685d', fontSize: 12, lineHeight: 1.45 }}>{t('website.vipRequirement')}</Typography>
             </Box>
           </Stack>
         </Box>
 
         <Box>
           <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1.25 }}>
-            <Typography sx={{ color: '#080f32', fontSize: 17, fontWeight: 800 }}>VIP tiers</Typography>
+            <Typography sx={{ color: '#080f32', fontSize: 17, fontWeight: 800 }}>{t('website.vipTiers')}</Typography>
             <Stack direction="row" spacing={0.5} alignItems="center">
               <TrendingUp sx={{ color: '#286746', fontSize: 17 }} />
-              <Typography sx={{ color: '#286746', fontSize: 11, fontWeight: 800 }}>DAILY GROWTH</Typography>
+              <Typography sx={{ color: '#286746', fontSize: 11, fontWeight: 800 }}>{t('website.dailyGrowth')}</Typography>
             </Stack>
           </Stack>
           <Stack spacing={1}>
@@ -191,9 +191,9 @@ export default function Vip() {
                     <Box sx={{ minWidth: 0, flex: 1 }}>
                       <Stack direction="row" spacing={0.75} alignItems="center">
                         <Typography sx={{ color: '#080f32', fontSize: 13, fontWeight: 800 }}>VIP {tier}</Typography>
-                        {current && <Chip label="CURRENT" size="small" sx={{ height: 18, color: '#fdfcf8', background: tierColor, fontSize: 9, fontWeight: 900 }} />}
+                        {current && <Chip label={t('website.currentTier')} size="small" sx={{ height: 18, color: '#fdfcf8', background: tierColor, fontSize: 9, fontWeight: 900 }} />}
                       </Stack>
-                      <Typography sx={{ mt: 0.35, color: '#52685d', fontSize: 11 }}>{amount(vipDepositLimits[tier])} MMK deposit • {vipReferralLimits[tier]} active downlines</Typography>
+                      <Typography sx={{ mt: 0.35, color: '#52685d', fontSize: 11 }}>{t('website.vipTierRequirements', { amount: amount(vipDepositLimits[tier], i18n.language), count: vipReferralLimits[tier] })}</Typography>
                     </Box>
                     <Typography sx={{ color: tierColor, fontSize: 14, fontWeight: 900 }}>{percent((vipDailyRates[tier] || 0) * 100)}</Typography>
                   </Stack>

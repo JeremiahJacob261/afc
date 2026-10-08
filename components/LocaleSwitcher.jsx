@@ -3,10 +3,7 @@ import { useTranslation } from "next-i18next";
 
 const languageOptions = [
   { code: "en", label: "English" },
-  { code: "fr", label: "Français" },
-  { code: "es", label: "Español" },
-  { code: "it", label: "Italiano" },
-  { code: "ru", label: "Русский" },
+  { code: "my", label: "မြန်မာ" },
 ];
 
 export default function LocaleSwitcher({ className = "", compact = false }) {
@@ -17,7 +14,7 @@ export default function LocaleSwitcher({ className = "", compact = false }) {
     router.push(router.pathname, router.asPath, { locale, scroll: false });
   };
 
-  const currentLocale = router.locale || i18n.language || "en";
+  const currentLocale = router.locale || i18n.language || "my";
   const selectPadding = compact ? "pr-4" : "pr-6";
   const selectWidth = compact ? "max-w-[72px]" : "";
 

@@ -1,3 +1,4 @@
+import { translateApiMessage } from '@/lib/translateApiMessage'
 import { Box, CircularProgress, Stack, Typography } from '@mui/material'
 import { Icon } from '@iconify/react'
 import Head from 'next/head'
@@ -361,7 +362,7 @@ function EmptyState({ selected, t }) {
 export default function TransactionHistory() {
   const { t } = useTranslation('common')
   const router = useRouter()
-  const locale = router.locale || 'en'
+  const locale = router.locale || 'my'
   const [selected, setSelected] = useState('all')
   const [transactions, setTransactions] = useState([])
   const [summary, setSummary] = useState(emptySummary)
@@ -396,7 +397,7 @@ export default function TransactionHistory() {
         }
 
         if (!response.ok) {
-          throw new Error(result.message || t('messages.unableLoadTransactions'))
+          throw new Error(translateApiMessage(result, t, 'messages.unableLoadTransactions'))
         }
 
         if (!active) return

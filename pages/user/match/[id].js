@@ -1,3 +1,4 @@
+import { translateApiMessage } from '@/lib/translateApiMessage'
 import { Typography, Stack, Divider, Button } from "@mui/material"
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { supabase } from "@/pages/api/supabase"
@@ -109,7 +110,7 @@ function getMatchStartSeconds(match) {
 }
 
 export default function Match({ matchDat }) {
-    const { t } = useTranslation('common')
+    const { t, i18n } = useTranslation('common')
     const router = useRouter()
     const initialMatch = Array.isArray(matchDat) && matchDat.length ? matchDat[0] : null
     // Guards against a double-tap placing two bets, and keeps a retry of the
@@ -230,7 +231,7 @@ export default function Match({ matchDat }) {
                 <section className={styles.hero} aria-labelledby="match-title">
                     <div className={styles.heroMeta}>
                         <span>{leagueName}</span>
-                        <span><Clock3 size={16} aria-hidden="true" /> {matchDisplay.dateTime} local time</span>
+                        <span><Clock3 size={16} aria-hidden="true" /> {matchDisplay.dateTime} {t('website.localTime')}</span>
                     </div>
                     <div className={styles.heroBody}>
                         <span className={styles.teamCrest}><Image src={matches.ihome || Ims} width={64} height={64} alt="" unoptimized /></span>
@@ -354,7 +355,7 @@ export default function Match({ matchDat }) {
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '300', color: '#080f32' }}>{t('common.currentBalance')}</Typography>
-                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: '#080f32' }}>{availableStake.toLocaleString(undefined, { maximumFractionDigits: 3 })} MMK</Typography>
+                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: '#080f32' }}>{availableStake.toLocaleString(i18n.language, { maximumFractionDigits: 3 })} MMK</Typography>
                         </Stack>
                         <input placeholder={t('mobile.match.stakeAmount')} aria-label={t('mobile.match.stakeAmount')} type='text' inputMode="decimal"
                             style={{ fontFamily: 'Arial, sans-serif', padding: "10px", borderRadius: '8px', width: '100%', minHeight: '48px', fontSize: '16px', background: '#fff', color: '#080f32', border: '1px solid #75886b' }}
@@ -376,11 +377,11 @@ export default function Match({ matchDat }) {
                         </Button>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '300', color: '#080f32' }}>{t('mobile.match.profit')}</Typography>
-                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: '#080f32' }}>{profit.toLocaleString(undefined, { maximumFractionDigits: 3 })} MMK</Typography>
+                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: '#080f32' }}>{profit.toLocaleString(i18n.language, { maximumFractionDigits: 3 })} MMK</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '600', color: '#080f32' }}>{t('mobile.match.expectedReturn')}</Typography>
-                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '600', color: '#080f32' }}>{expext.toLocaleString(undefined, { maximumFractionDigits: 3 })} MMK</Typography>
+                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '600', color: '#080f32' }}>{expext.toLocaleString(i18n.language, { maximumFractionDigits: 3 })} MMK</Typography>
                         </Stack>
                         <Button disabled={openx} variant="contained" sx={{ fontFamily: 'Arial,sans-serif', minHeight: 48, fontSize: 16, fontWeight: 700, color: '#fff', background: "#0649ff", padding: '10px 16px', textTransform: 'none', '&:hover': { background: '#003bcc' } }}
                             onClick={() => {
@@ -428,7 +429,7 @@ export default function Match({ matchDat }) {
                                                 const result = await response.json().catch(() => ({}))
                                                 if (!response.ok || result.status !== 'success') {
                                                     const isInsufficientBalance = /insufficient|not enough|enough\s+(?:MMK|USDT|FCFA)/i.test(String(result.message || ''))
-                                                    toast.error(isInsufficientBalance ? t('mobile.match.insufficientBalance') : (result.message || t('messages.unablePlaceBet')))
+                                                    toast.error(isInsufficientBalance ? t('mobile.match.insufficientBalance') : translateApiMessage(result, t, 'messages.unablePlaceBet'))
                                                     handleClosex()
                                                     if (/odds changed/i.test(String(result.message || ''))) {
                                                         router.replace(router.asPath)
@@ -436,7 +437,7 @@ export default function Match({ matchDat }) {
                                                     return
                                                 }
 
-                                                setMessages(result.message || t('messages.betPlaced'))
+                                                setMessages(t('messages.betPlaced'))
                                                 handleClick();
                                                 router.push('/user/bets');
                                             } catch (error) {

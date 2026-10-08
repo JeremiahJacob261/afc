@@ -68,11 +68,8 @@ const bfcImages = [
 const ballImage = '/simps/ball.png'
 const languageStorageKey = 'efc-language'
 const languageOptions = [
-  { code: 'en', label: 'English' },
-  { code: 'fr', label: 'Français' },
-  { code: 'es', label: 'Español' },
-  { code: 'it', label: 'Italiano' },
-  { code: 'ru', label: 'Русский' },
+  { code: "en", label: "English" },
+  { code: "my", label: "မြန်မာ" },
 ]
 
 const transferOptions = {
@@ -333,7 +330,7 @@ export default function App() {
         hasSeenLanguagePrompt = getLocalStorageItem('efc-language-prompt-shown', '') === 'true'
 
         if (session) {
-          updateStoredPushTokenLanguage(storedLanguage || 'en').catch((error) => {
+          updateStoredPushTokenLanguage(storedLanguage || 'my').catch((error) => {
             console.warn('Unable to sync push notification language:', error)
           })
         }
@@ -516,13 +513,13 @@ function InAppSplash() {
 function FirstLaunchLanguageDialog({ open, onSelect, onDismiss }) {
   const { t, i18n } = useTranslation('common')
   const [selectedLanguage, setSelectedLanguage] = useState(() => {
-    return languageOptions.some((language) => language.code === i18n.language) ? i18n.language : 'en'
+    return languageOptions.some((language) => language.code === i18n.language) ? i18n.language : 'my'
   })
 
   useEffect(() => {
     if (!open) return
 
-    setSelectedLanguage(languageOptions.some((language) => language.code === i18n.language) ? i18n.language : 'en')
+    setSelectedLanguage(languageOptions.some((language) => language.code === i18n.language) ? i18n.language : 'my')
   }, [open, i18n.language])
 
   if (!open) return null
@@ -537,8 +534,7 @@ function FirstLaunchLanguageDialog({ open, onSelect, onDismiss }) {
         transition={{ duration: 0.2, ease: motionEase }}
       >
         <p className="eyebrow">{t('common.language')}</p>
-        <h2>Choose your app language</h2>
-        <p>This will set the language for your app experience and account.</p>
+        <h2>{t('common.language')}</h2>
 
         <div className="language-option-grid">
           {languageOptions.map((language) => (
@@ -554,12 +550,8 @@ function FirstLaunchLanguageDialog({ open, onSelect, onDismiss }) {
         </div>
 
         <div className="language-actions">
-          <button className="secondary-button" type="button" onClick={onDismiss}>
-            Skip
-          </button>
-          <button className="primary-button" type="button" onClick={() => onSelect(selectedLanguage)}>
-            Continue
-          </button>
+          <button className="secondary-button" type="button" onClick={onDismiss}>{t('common.close')}</button>
+          <button className="primary-button" type="button" onClick={() => onSelect(selectedLanguage)}>{t('common.continue')}</button>
         </div>
       </motion.div>
     </div>
@@ -1812,7 +1804,7 @@ function ProfileScreen({ navigate, onLogout }) {
 
   const inviteCode = profile?.newrefer || referralCode
   const inviteLink = `${mobileConfig.apiBaseUrl}/register/${inviteCode}`
-  const currentLanguage = languageOptions.some((language) => language.code === i18n.language) ? i18n.language : 'en'
+  const currentLanguage = languageOptions.some((language) => language.code === i18n.language) ? i18n.language : 'my'
 
   const changeLanguage = (language) => {
     i18n.changeLanguage(language)

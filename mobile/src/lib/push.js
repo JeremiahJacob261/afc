@@ -6,7 +6,7 @@ import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from
 const pushTokenStorageKey = 'efc-push-token'
 const deviceIdStorageKey = 'efc-device-id'
 const languageStorageKey = 'efc-language'
-const supportedLanguages = new Set(['en', 'fr', 'es', 'it', 'ru'])
+const supportedLanguages = new Set(['en', 'my'])
 
 function isNativePushAvailable() {
   return Capacitor.isNativePlatform?.() && Capacitor.getPlatform?.() === 'android'
@@ -30,8 +30,8 @@ export function getStoredPushToken() {
 }
 
 function currentLanguage() {
-  const language = getLocalStorageItem(languageStorageKey, 'en')
-  return supportedLanguages.has(language) ? language : 'en'
+  const language = getLocalStorageItem(languageStorageKey, 'my')
+  return supportedLanguages.has(language) ? language : 'my'
 }
 
 async function registerPushToken(token, language = currentLanguage()) {
@@ -51,7 +51,7 @@ export async function updateStoredPushTokenLanguage(language = currentLanguage()
   const token = getStoredPushToken()
   if (!token) return
 
-  await registerPushToken(token, supportedLanguages.has(language) ? language : 'en')
+  await registerPushToken(token, supportedLanguages.has(language) ? language : 'my')
 }
 
 export async function unregisterPushToken() {

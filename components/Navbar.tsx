@@ -8,10 +8,7 @@ import Logo from "@/public/champions-league-logo.png";
 
 const languageOptions = [
   { code: "en", label: "English" },
-  { code: "fr", label: "Français" },
-  { code: "es", label: "Español" },
-  { code: "it", label: "Italiano" },
-  { code: "ru", label: "Русский" },
+  { code: "my", label: "မြန်မာ" },
 ];
 
 export function Navbar() {
@@ -61,7 +58,7 @@ export function Navbar() {
             <span className="sr-only">{t("common.changeLanguage")}</span>
             <select
               aria-label={t("common.changeLanguage")}
-              value={router.locale || "en"}
+              value={router.locale || "my"}
               onChange={(event) => changeLanguage(event.target.value)}
               className="min-h-[42px] cursor-pointer appearance-none bg-transparent pr-6 text-sm font-bold text-white outline-none"
             >

@@ -34,7 +34,7 @@ const toNumber = (value) => {
   return Number.isFinite(amount) ? amount : 0
 }
 
-const formatFcfa = (value) => `${toNumber(value).toLocaleString(undefined, { maximumFractionDigits: 3 })} MMK`
+const formatFcfa = (value, locale) => `${toNumber(value).toLocaleString(locale, { maximumFractionDigits: 3 })} MMK`
 const formatOdd = (value) => toNumber(value).toFixed(3)
 
 // A company-market hit refunds the stake and pays no profit, so it must not
@@ -59,7 +59,7 @@ function getStatus(bet, t) {
 
 export default function ViewBet() {
   const router = useRouter()
-  const { t } = useTranslation('common')
+  const { t, i18n } = useTranslation('common')
   const [bet, setBet] = useState({})
   const [league, setLeague] = useState({})
   const [loading, setLoading] = useState(true)
@@ -113,7 +113,7 @@ export default function ViewBet() {
 
       <Box sx={{ width: '100%', maxWidth: 800, mx: 'auto', minHeight: '90vh', pb: 3, color: colors.text }}>
         <Stack direction="row" alignItems="center" spacing={1} sx={{ py: 1 }}>
-          <Box component="button" type="button" aria-label="Back to my bets" onClick={() => router.push('/user/bets')} sx={backButtonSx}>
+          <Box component="button" type="button" aria-label={t('common.myBets')} onClick={() => router.push('/user/bets')} sx={backButtonSx}>
             <KeyboardArrowLeftOutlinedIcon sx={{ width: 24, height: 24 }} />
           </Box>
           <Typography component="h1" sx={{ fontSize: { xs: 32, md: 40 }, fontFamily: 'Georgia,serif', fontWeight: 400, letterSpacing: '-0.02em' }}>
@@ -155,8 +155,8 @@ export default function ViewBet() {
             </Box>
             <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 1 }}>
               <Metric label={t('mobile.bets.odds')} value={`${formatOdd(bet.odd)}%`} />
-              <Metric label={t('mobile.bets.stake')} value={formatFcfa(bet.stake)} />
-              <Metric label={t('mobile.bets.potentialWinnings')} value={formatFcfa(returnAmount)} />
+              <Metric label={t('mobile.bets.stake')} value={formatFcfa(bet.stake, i18n.language)} />
+              <Metric label={t('mobile.bets.potentialWinnings')} value={formatFcfa(returnAmount, i18n.language)} />
             </Box>
           </Stack>
         </Box>
@@ -191,7 +191,8 @@ const labelSx = { color: colors.muted, fontFamily: 'Arial,sans-serif', fontSize:
 const valueSx = { color: colors.text, fontFamily: 'Arial,sans-serif', fontSize: 14, fontWeight: 600 }
 
 function LoadingState() {
-  return <Stack alignItems="center" justifyContent="center" spacing={1.5} sx={{ minHeight: 300, border: `1px solid ${colors.border}`, borderRadius: '8px', background: colors.card }}><CircularProgress size={28} sx={{ color: colors.accent }} /><Typography sx={{ ...labelSx, fontSize: 13 }}>Loading bet details…</Typography></Stack>
+  const { t } = useTranslation('common')
+  return <Stack alignItems="center" justifyContent="center" spacing={1.5} sx={{ minHeight: 300, border: `1px solid ${colors.border}`, borderRadius: '8px', background: colors.card }}><CircularProgress size={28} sx={{ color: colors.accent }} /><Typography sx={{ ...labelSx, fontSize: 13 }}>{t('mobile.bets.loadingOne')}</Typography></Stack>
 }
 
 function SectionTitle({ icon, title }) {

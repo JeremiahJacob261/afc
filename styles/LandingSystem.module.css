@@ -46,6 +46,7 @@
 .nav { grid-template-columns:repeat(2,minmax(0,1fr)); background: #0d1714; border-radius: 24px; padding: 16px; row-gap: 8px; align-items: center; }
 .brand { grid-column: 1; grid-row: 1; font-family: 'Times New Roman',Times,serif; font-size: 32px; line-height: 1.125; display: inline-flex; align-items: center; justify-self: start; }
 .join { grid-column: 2; grid-row: 1; justify-self: end; display: inline-flex; align-items: center; justify-content: center; padding: 8px 16px; border: 2px solid var(--paper); border-radius: 24px; }
+.navActions { grid-column:2; grid-row:1; justify-self:end; display:flex; align-items:center; justify-content:flex-end; flex-wrap:wrap; gap:8px; min-width:0; }
 .navLinks { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
 .navLinks a { display: flex; align-items: center; justify-content: center; padding: 8px; text-align: center; }
 .hero :where(a,button):focus-visible { outline-color: var(--paper); }
@@ -194,6 +195,7 @@
   .container { grid-template-columns:repeat(12,minmax(0,1fr)); }
   .brand { grid-column:1 / 7; }
   .join { grid-column:7 / -1; }
+  .navActions { grid-column:7 / -1; }
   .page h1, .page h2 { font-size:48px; line-height:1.125; letter-spacing:-.02em; }
   .hero { min-height:768px; padding-block:24px 64px; }
   .heroCopy { padding-top:48px; gap:24px; }
@@ -242,6 +244,7 @@
   .brand { grid-column:1 / 3; }
   .navLinks { grid-column:3 / 11; grid-row:1; }
   .join { grid-column:11 / -1; }
+  .navActions { grid-column:11 / -1; }
   .features h2 { font-size:24px; }
   .marketPanel { padding:48px; }
   .featureGrid > *, .featureGrid .liveCard { grid-column:span 4; }

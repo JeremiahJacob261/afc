@@ -1,3 +1,4 @@
+import { translateApiMessage } from '@/lib/translateApiMessage'
 import Cover from "./cover";
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
 import { Stack, Typography, TextField, Button, Divider } from '@mui/material'
@@ -102,7 +103,7 @@ export default function Code() {
         setPinSet(true);
         setPin('');
         setCPin('');
-        Alerts(result.message || t('messages.pinSet'), true);
+        Alerts(t('messages.pinSet'), true);
         return;
       }
 
@@ -110,7 +111,7 @@ export default function Code() {
         setPinSet(true);
       }
 
-      toast.error(result.message || t('messages.unableSetPin'));
+      toast.error(translateApiMessage(result, t, 'messages.unableSetPin'));
     } catch {
       toast.error(t('messages.unableSetPin'));
     } finally {

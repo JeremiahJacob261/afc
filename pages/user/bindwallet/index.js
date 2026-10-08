@@ -1,3 +1,4 @@
+import { translateApiMessage } from '@/lib/translateApiMessage'
 import { Stack } from '@mui/material';
 import Head from 'next/head';
 import { styled } from '@mui/material/styles';
@@ -141,7 +142,7 @@ export default function Home() {
                 router.push('/user/account');
 
             } else {
-                toast.error(data.message || t('messages.unableBindWallet'))
+                toast.error(translateApiMessage(data, t, 'messages.unableBindWallet'))
                 handleClose();
             }
         } catch (e) {
@@ -263,7 +264,7 @@ export default function Home() {
                                                         onChange={handleBhange}
                                                         input={<BootstrapInput />}
                                                     >
-                                                        <option aria-label="None" value="" style={{ color: '#52685d', background: '#f1f3ee' }} />
+                                                        <option aria-label={t('mobile.withdraw.noWallet')} value="" style={{ color: '#52685d', background: '#f1f3ee' }} />
                                                         {
                                                             IDRBANK.map((w) => {
                                                                 return (

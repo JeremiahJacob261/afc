@@ -1,3 +1,4 @@
+import { translateApiMessage } from '@/lib/translateApiMessage'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -43,7 +44,8 @@ function Recovery({ message, href, action }) {
 }
 
 export default function DepositFlow({ step }) {
-  const { t } = useTranslation('common')
+  const { t, i18n } = useTranslation('common')
+  const money = (value) => formatMoney(value, i18n.language)
   const router = useRouter()
   const fileInputRef = useRef(null)
   const draftRef = useRef(EMPTY_DEPOSIT_DRAFT)
@@ -202,7 +204,7 @@ export default function DepositFlow({ step }) {
       const result = await response.json().catch(() => ({}))
       if (!response.ok) {
         if (result.code === 'rate_changed') updateDraft({ reviewedRate: null, reviewedSignature: '' })
-        throw new Error(result.code === 'rate_changed' ? t('mobile.deposit.rateChanged') : result.message || t('messages.depositFailed'))
+        throw new Error(translateApiMessage(result, t, 'messages.depositFailed'))
       }
 
       sessionStorage.setItem(DEPOSIT_SUCCESS_KEY, JSON.stringify({ userId: draft.userId, mmkAmount: equivalent }))
@@ -213,7 +215,7 @@ export default function DepositFlow({ step }) {
       toast.success(t('messages.depositSubmitted'))
       router.push('/user/depositsuccess')
     } catch (error) {
-      const message = error.message || t('messages.depositFailed')
+      const message = translateApiMessage(error, t, 'messages.depositFailed')
       setSubmitError(message)
       toast.error(message)
     } finally {
@@ -255,7 +257,7 @@ export default function DepositFlow({ step }) {
 
       <div className={styles.heading}>
         <h1>{titles[step - 1]}</h1>
-        <p>{step === 1 ? t('mobile.deposit.availableOptions') : step === 2 ? t('mobile.deposit.minShort', { amount: formatMoney(minimumAmount(selectedMethod)), currency: code.toUpperCase() }) : step === 3 ? t('mobile.deposit.sendExactly', { amount: `${draft.amount} ${code.toUpperCase()}` }) : t('mobile.deposit.receiptHint')}</p>
+        <p>{step === 1 ? t('mobile.deposit.availableOptions') : step === 2 ? t('mobile.deposit.minShort', { amount: money(minimumAmount(selectedMethod)), currency: code.toUpperCase() }) : step === 3 ? t('mobile.deposit.sendExactly', { amount: `${draft.amount} ${code.toUpperCase()}` }) : t('mobile.deposit.receiptHint')}</p>
       </div>
 
       {loading ? <div className={styles.status} role="status" aria-live="polite">{t('mobile.deposit.loading')}</div>
@@ -271,7 +273,7 @@ export default function DepositFlow({ step }) {
                       const minimum = minimumAmount(method)
                       return <button key={methodIdentity(method)} type="button" className={`${styles.methodOption} ${selected ? styles.methodSelected : ''}`} aria-pressed={selected} onClick={() => chooseMethod(method)}>
                         <span className={styles.methodIcon}>{method.image ? <img src={method.image} alt="" width="40" height="40" loading="lazy" /> : <CreditCard size={24} strokeWidth={1.8} aria-hidden="true" />}</span>
-                        <span className={styles.methodCopy}><strong>{methodLabel(method, t)}</strong><small>{minimum === null ? t('mobile.deposit.rateUnavailable') : t('mobile.deposit.minShort', { amount: formatMoney(minimum), currency: methodCode(method).toUpperCase() })}</small></span>
+                        <span className={styles.methodCopy}><strong>{methodLabel(method, t)}</strong><small>{minimum === null ? t('mobile.deposit.rateUnavailable') : t('mobile.deposit.minShort', { amount: money(minimum), currency: methodCode(method).toUpperCase() })}</small></span>
                         <span className={styles.methodCheck} aria-hidden="true">{selected && <Check size={16} strokeWidth={2.5} />}</span>
                       </button>
                     })}
@@ -289,11 +291,11 @@ export default function DepositFlow({ step }) {
                 {step === 2 && <>
                   <label htmlFor="deposit-amount" className={styles.fieldLabel}>{t('common.amount')}</label>
                   <div className={`${styles.amountInput} ${draft.amount !== '' && !amountValid ? styles.inputInvalid : ''}`}>
-                    <input id="deposit-amount" type="text" inputMode="decimal" autoComplete="off" value={draft.amount} aria-invalid={draft.amount !== '' && !amountValid} aria-describedby="deposit-minimum deposit-equivalent" placeholder={t('mobile.deposit.minimumPlaceholder', { amount: formatMoney(minimumAmount(selectedMethod)), currency: code.toUpperCase() })} onChange={(event) => changeAmount(event.target.value)} />
+                    <input id="deposit-amount" type="text" inputMode="decimal" autoComplete="off" value={draft.amount} aria-invalid={draft.amount !== '' && !amountValid} aria-describedby="deposit-minimum deposit-equivalent" placeholder={t('mobile.deposit.minimumPlaceholder', { amount: money(minimumAmount(selectedMethod)), currency: code.toUpperCase() })} onChange={(event) => changeAmount(event.target.value)} />
                     <span>{code.toUpperCase()}</span>
                   </div>
-                  <p id="deposit-minimum" className={styles.helpText} role={draft.amount !== '' && !amountValid ? 'alert' : undefined}>{draft.amount !== '' && !amountValid ? /^\d{1,11}(?:\.\d{1,4})?$/.test(draft.amount) ? t('messages.minimumDeposit', { amount: formatMoney(minimumAmount(selectedMethod)), currency: code.toUpperCase() }) : t('mobile.deposit.enterValidAmount') : t('mobile.deposit.minShort', { amount: formatMoney(minimumAmount(selectedMethod)), currency: code.toUpperCase() })}</p>
-                  <div id="deposit-equivalent" className={styles.equivalent}><span>{t('mobile.deposit.usdtEquivalent')}</span><strong>{draft.amount !== '' && equivalent !== null ? formatMoney(equivalent) : '—'} MMK</strong></div>
+                  <p id="deposit-minimum" className={styles.helpText} role={draft.amount !== '' && !amountValid ? 'alert' : undefined}>{draft.amount !== '' && !amountValid ? /^\d{1,11}(?:\.\d{1,4})?$/.test(draft.amount) ? t('messages.minimumDeposit', { amount: money(minimumAmount(selectedMethod)), currency: code.toUpperCase() }) : t('mobile.deposit.enterValidAmount') : t('mobile.deposit.minShort', { amount: money(minimumAmount(selectedMethod)), currency: code.toUpperCase() })}</p>
+                  <div id="deposit-equivalent" className={styles.equivalent}><span>{t('mobile.deposit.usdtEquivalent')}</span><strong>{draft.amount !== '' && equivalent !== null ? money(equivalent) : '—'} MMK</strong></div>
                   <button type="button" className={styles.primaryAction} disabled={!canEnterPayment} onClick={() => router.push(routes[2])}>{t('common.continue')}<ArrowRight size={18} aria-hidden="true" /></button>
                 </>}
 

@@ -8,22 +8,23 @@ import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded'
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded'
 import Image from 'next/image'
 import LOGO from '@/public/champions-league-logo.png'
+import { useTranslation } from 'next-i18next'
 
 const contentByType = {
   success: {
     icon: CheckCircleRoundedIcon,
     color: '#2ECFC4',
-    title: 'Success',
+    titleKey: 'status.success',
   },
   error: {
     icon: ErrorRoundedIcon,
     color: '#FFB4AB',
-    title: 'Something went wrong',
+    titleKey: 'errors.generic',
   },
   info: {
     icon: InfoRoundedIcon,
     color: '#1BB6FF',
-    title: 'Information',
+    titleKey: 'common.information',
   },
 }
 
@@ -32,12 +33,13 @@ export default function FeedbackDialog({
   type = 'info',
   title,
   message,
-  actionLabel = 'Okay',
+  actionLabel,
   onClose,
 }) {
+  const { t } = useTranslation('common')
   const content = contentByType[type] || contentByType.info
   const Icon = content.icon
-  const dialogTitle = title || content.title
+  const dialogTitle = title || t(content.titleKey)
 
   return (
     <Dialog
@@ -94,7 +96,7 @@ export default function FeedbackDialog({
             '&:hover': { bgcolor: '#2ECFC4' },
           }}
         >
-          {actionLabel}
+          {actionLabel ?? t('common.okay')}
         </Button>
       </Stack>
     </Dialog>

@@ -10,7 +10,7 @@ import { supabase } from '@/pages/api/supabase'
 import styles from '@/styles/UserSubpage.module.css'
 
 export default function DepositSuccess() {
-  const { t } = useTranslation('common')
+  const { t, i18n } = useTranslation('common')
   const [amount, setAmount] = useState(null)
   useEffect(() => {
     let active = true
@@ -20,7 +20,7 @@ export default function DepositSuccess() {
         const { data } = await supabase.auth.getSession()
         const value = Number(saved?.mmkAmount)
         if (active && data?.session?.user?.id === saved?.userId && Number.isFinite(value) && value > 0) {
-          setAmount(formatMoney(value))
+          setAmount(value)
         }
       } catch (_) {
         // The generic success copy remains accurate without a stored summary.
@@ -30,11 +30,11 @@ export default function DepositSuccess() {
     return () => { active = false }
   }, [])
   return <Cover>
-    <Head><title>UCL — Deposit submitted</title><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
+    <Head><title>{`${t('website.depositSubmittedTitle')} — UCL`}</title><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
     <main className={styles.successPage}>
       <div className={styles.successIcon}><Check size={32} strokeWidth={2} aria-hidden="true" /></div>
       <h1>{t('mobile.deposit.successTitle')}</h1>
-      <p>{amount ? t('messages.depositSubmittedWithAmount', { amount }) : t('messages.depositSubmitted')}</p>
+      <p>{amount ? t('messages.depositSubmittedWithAmount', { amount: formatMoney(amount, i18n.language) }) : t('messages.depositSubmitted')}</p>
       <Link href="/user" className={styles.primaryLink}>{t('common.continue')} <ArrowRight size={18} aria-hidden="true" /></Link>
     </main>
   </Cover>

@@ -1,5 +1,4 @@
 import { Button, Typography, Paper, Stack, Box, Divider } from "@mui/material"
-import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { callAdminRpc } from '@/lib/adminRpcClient';
 import React, { useEffect, useState, useContext } from "react"
 import { supabase } from '@/pages/api/supabase'

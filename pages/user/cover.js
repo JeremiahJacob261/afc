@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next';
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -6,15 +7,17 @@ import { clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth'
 import LocaleSwitcher from '@/components/LocaleSwitcher'
 import styles from '@/styles/UserDashboard.module.css'
 
-const navigation = [
-  { href: '/user', label: 'Home', icon: Home },
-  { href: '/user/matches', label: 'Matches', icon: Trophy },
-  { href: '/user/bets', label: 'Bets', icon: History },
-  { href: '/user/fund', label: 'Wallet', icon: Wallet },
-  { href: '/user/account', label: 'More', icon: Menu },
-]
+function getNavigation(t) { return [
+  { href: '/user', label: t('website.home'), icon: Home },
+  { href: '/user/matches', label: t('website.matches'), icon: Trophy },
+  { href: '/user/bets', label: t('website.bets'), icon: History },
+  { href: '/user/fund', label: t('website.wallet'), icon: Wallet },
+  { href: '/user/account', label: t('website.more'), icon: Menu },
+] }
 
 export default function Cover({ children, dashboard = false }) {
+  const { t } = useTranslation('common');
+  const navigation = getNavigation(t);
   const router = useRouter()
   const contentRef = useRef(null)
   const [offline, setOffline] = useState(false)
@@ -77,22 +80,22 @@ export default function Cover({ children, dashboard = false }) {
     <div className={styles.ambientBall} data-paused={!visible} aria-hidden="true" />
     <header className={styles.shellHeader}>
       <div className={styles.shellHeaderInner}>
-        <Link href="/user" className={styles.shellBrand} aria-label="UCL home">UCL</Link>
-        <nav className={styles.desktopNav} aria-label="Dashboard navigation">
+        <Link href="/user" className={styles.shellBrand} aria-label={t('website.uclHome')}>UCL</Link>
+        <nav className={styles.desktopNav} aria-label={t('website.dashboardNavigation')}>
           {navigation.map(({ href, label }) => <Link key={href} href={href} aria-current={router.pathname === href ? 'page' : undefined}>{label}</Link>)}
         </nav>
         <div className={styles.headerActions}>
           <LocaleSwitcher compact className={styles.dashboardLocale} />
-          <Link href="/user/notification" className={styles.notificationLink} aria-label="Notifications" aria-current={router.pathname === '/user/notification' ? 'page' : undefined}><Bell size={21} strokeWidth={1.8} /></Link>
+          <Link href="/user/notification" className={styles.notificationLink} aria-label={t('website.notifications')} aria-current={router.pathname === '/user/notification' ? 'page' : undefined}><Bell size={21} strokeWidth={1.8} /></Link>
         </div>
       </div>
     </header>
     {offline && <div className={styles.offlineNotice} role="status">
-      <strong>You are offline.</strong> {transactionPage ? 'Transactions are unavailable until you reconnect.' : 'Live information will refresh when you reconnect.'}
-      {draftAmount && <span>Saved deposit draft: {draftAmount}</span>}
+      <strong>{t('website.youAreOffline')}</strong> {transactionPage ? t('website.transactionsAreUnavailableUntilYouReconnect') : t('website.liveInformationWillRefreshWhenYouReconnect')}
+      {draftAmount && <span>{t('website.savedDepositDraft')} {draftAmount}</span>}
     </div>}
     {dashboard ? children : <div className={styles.subpageContent} data-page={router.pathname} ref={contentRef} data-offline-disabled={offline && transactionPage}>{children}</div>}
-    <nav className={styles.mobileNav} aria-label="Mobile navigation">
+    <nav className={styles.mobileNav} aria-label={t('website.mobileNavigation')}>
       {navigation.map(({ href, label, icon: ItemIcon }) => <Link key={href} href={href} aria-current={router.pathname === href ? 'page' : undefined}><ItemIcon size={21} strokeWidth={1.8} aria-hidden="true" /><span>{label}</span></Link>)}
     </nav>
   </div>

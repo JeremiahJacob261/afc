@@ -1,3 +1,4 @@
+import { translateApiMessage } from '@/lib/translateApiMessage'
 import { useState } from "react"
 import Head from "next/head"
 import Link from "next/link"
@@ -100,7 +101,7 @@ export default function Login() {
         setFeedback({
           type: 'error',
           title: t('messages.unableSignIn'),
-          message: error.message === 'Invalid login credentials' ? t('messages.incorrectLoginDetails') : error.message,
+          message: translateApiMessage(error, t, 'messages.unableSignIn'),
         })
         return
       }
@@ -145,7 +146,7 @@ export default function Login() {
         </div>
         <div className={`${styles.container} ${styles.bandInner} ${styles.darkInner}`}>
           <div className={styles.brandRow}>
-            <Link href="/" className={styles.brand} aria-label="UCL home">UCL</Link>
+            <Link href="/" className={styles.brand} aria-label={t('website.uclHome')}>UCL</Link>
             <Link href="/register/000208" className={styles.pill}>{t('common.joinNow')}</Link>
           </div>
           <div className={styles.bandCopy}>

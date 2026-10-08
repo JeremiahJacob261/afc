@@ -23,12 +23,12 @@ function money(value) {
   return Number.isFinite(amount) ? amount.toFixed(2) : '0.00'
 }
 
-function formatJoinedAt(value) {
-  if (!value) return 'Date unavailable'
+function formatJoinedAt(value, locale, t) {
+  if (!value) return t('website.dateUnavailable')
   const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return 'Date unavailable'
+  if (Number.isNaN(date.getTime())) return t('website.dateUnavailable')
 
-  return date.toLocaleString('en', {
+  return date.toLocaleString(locale, {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
@@ -42,7 +42,7 @@ function countByLevel(referrals, label) {
 }
 
 export default function Refferal() {
-  const { t } = useTranslation('common')
+  const { t, i18n } = useTranslation('common')
   const router = useRouter()
   const mountedRef = useRef(false)
   const [referCode, setReferCode] = useState('')
@@ -385,7 +385,7 @@ function ReferralRow({ item, t }) {
           </Stack>
           <Stack direction="row" alignItems="center" spacing={0.75} sx={{ mt: 0.5 }}>
             <Typography sx={{ color: '#52685d', fontFamily: 'Arial,sans-serif', fontSize: 12 }}>
-              {formatJoinedAt(item.joinedAt || item.created_at || item.crdate)}
+              {formatJoinedAt(item.joinedAt || item.created_at || item.crdate, i18n.language, t)}
             </Typography>
             <Typography
               sx={{

@@ -182,7 +182,7 @@ export default function Account() {
                 <AccountRow href="/user/bindwallet" label={t('mobile.profile.linkWallets')} icon={Link2} />
                 <AccountRow href="/user/codesetting" label={t('mobile.profile.codeSetting')} icon={LockKeyhole} />
                 <AccountRow href="/user/vip" label={t('mobile.profile.vipProgress')} icon={ShieldCheck} />
-                <AccountRow href="/user/wheel" label="Spin wheel" icon={Sparkles} />
+                <AccountRow href="/user/wheel" label={t('website.spinWheel')} icon={Sparkles} />
               </div>
             </section>
           </div>

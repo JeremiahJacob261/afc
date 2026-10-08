@@ -9,10 +9,7 @@ import { Star } from "./Starball";
 
 const languageOptions = [
   { code: "en", label: "English" },
-  { code: "fr", label: "Français" },
-  { code: "es", label: "Español" },
-  { code: "it", label: "Italiano" },
-  { code: "ru", label: "Русский" },
+  { code: "my", label: "မြန်မာ" },
 ];
 
 export function UclNavbar() {
@@ -63,7 +60,7 @@ export function UclNavbar() {
             <span className="sr-only">{t("common.changeLanguage")}</span>
             <select
               aria-label={t("common.changeLanguage")}
-              value={router.locale || "en"}
+              value={router.locale || "my"}
               onChange={(event) => changeLanguage(event.target.value)}
               className="min-h-[42px] cursor-pointer appearance-none bg-transparent pr-5 text-sm font-bold text-silver-200 outline-none"
             >

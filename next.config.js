@@ -49,6 +49,14 @@ const privatePageHeaders = [
 const nextConfig = {
   reactStrictMode: true,
   i18n,
+  webpack(config) {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'i18next-fs-backend$': require.resolve('i18next-fs-backend/cjs'),
+    }
+
+    return config
+  },
   images: {
   domains: ['pctajnbqkposgymgbqkc.supabase.co','restcountries.eu','firebasestorage.googleapis.com','media-1.api-sports.io','media-2.api-sports.io','media-3.api-sports.io','media.api-sports.io','media-4.api-sports.io','upload.wikimedia.org'],
 },
