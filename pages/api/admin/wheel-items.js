@@ -1,5 +1,7 @@
 import { requireAdmin } from '@/lib/adminAuth'
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
+import { formatCurrency } from '@/lib/currency'
+import { isWheelAmount } from '@/lib/wheel'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 const COLOR = /^#[0-9a-f]{6}$/i
@@ -10,16 +12,16 @@ function invalid(message) {
   throw error
 }
 
-function normalizeItems(input) {
+export function normalizeItems(input) {
   if (!Array.isArray(input) || input.length < 2 || input.length > 12) invalid('Add between 2 and 12 wheel items')
   return input.map((item, index) => {
-    const label = String(item?.label || '').trim()
+    const amount = Number(item?.amount)
     const imageUrl = String(item?.imageUrl || '').trim()
     const color = String(item?.color || '').trim()
-    if (!label || label.length > 32) invalid(`Item ${index + 1} needs a label of 1–32 characters`)
+    if (!isWheelAmount(item?.amount)) invalid(`Item ${index + 1} needs a positive whole MMK amount`)
     if (imageUrl.length > 2048 || (imageUrl && !/^\/(?!\/)|^https:\/\//i.test(imageUrl))) invalid(`Item ${index + 1} has an invalid image URL`)
     if (!COLOR.test(color)) invalid(`Item ${index + 1} needs a valid color`)
-    return { id: UUID.test(String(item?.id || '')) ? item.id : null, label, imageUrl, color }
+    return { id: UUID.test(String(item?.id || '')) ? item.id : null, amount, label: formatCurrency(amount, null, 'en'), imageUrl, color }
   })
 }
 

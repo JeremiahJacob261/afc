@@ -15,7 +15,8 @@
     "android:run": "bun run mobile:build && cap run android",
     "android:apk": "bun run mobile:build && cap sync android && cd android && ./gradlew assembleRelease",
     "check:i18n": "node scripts/check-i18n.js",
-    "test:i18n": "node --test tests/i18n.test.cjs"
+    "test:i18n": "node --test tests/i18n.test.cjs",
+    "test:wheel": "node --test tests/wheel.test.cjs"
   },
   "dependencies": {
     "@capacitor/android": "6.2.1",

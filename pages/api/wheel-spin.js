@@ -1,26 +1,12 @@
 import { randomInt } from 'node:crypto'
-import { getCurrentUser, sendApiError } from '@/lib/apiAuth'
-import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
+import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
+import { sendPushToUsername } from '@/lib/pushNotifications'
+import { WHEEL_INTERVAL_MS, WHEEL_MINIMUM_BALANCE } from '@/lib/wheel'
 
-const SPIN_INTERVAL_MS = 24 * 60 * 60 * 1000
 const ORIGINAL_PRIZES = ['iPhone 17', 'K5,000', 'K20,000', 'K100,000', 'K10', 'K500', 'K1,000', 'K30,000']
 
 function nextSpinAt(spunAt) {
-  return spunAt ? new Date(new Date(spunAt).getTime() + SPIN_INTERVAL_MS).toISOString() : null
-}
-
-async function getSpinState(supabase, userId) {
-  const { data, error } = await supabase.from('wheel_spin_state')
-    .select('spun_at,prize_index,prize_label').eq('user_id', userId).maybeSingle()
-  if (error) throw error
-  return data
-}
-
-async function getWheelConfiguration(supabase) {
-  const { data, error } = await supabase.rpc('read_wheel_configuration')
-  if (error) throw error
-  if (!data || !Array.isArray(data.items) || data.items.length < 2) throw new Error('Wheel items are unavailable')
-  return data
+  return spunAt ? new Date(new Date(spunAt).getTime() + WHEEL_INTERVAL_MS).toISOString() : null
 }
 
 export default async function handler(req, res) {
@@ -28,65 +14,55 @@ export default async function handler(req, res) {
     res.setHeader('Allow', 'GET, POST')
     return res.status(405).json({ status: 'error', message: 'Method not allowed' })
   }
-
   res.setHeader('Cache-Control', 'no-store')
   try {
-    const user = await getCurrentUser(req)
-    const supabase = getSupabaseAdmin()
-    const [current, wheel] = await Promise.all([getSpinState(supabase, user.id), getWheelConfiguration(supabase)])
-    const availableAt = nextSpinAt(current?.spun_at)
+    const { user, profile, supabase } = await getCurrentProfile(req, 'userid,username,balance')
+    const { data: wheel, error: wheelError } = await supabase.rpc('read_wheel_configuration')
+    if (wheelError) throw wheelError
+    if (!wheel || !Array.isArray(wheel.items) || wheel.items.length < 2) throw new Error('Wheel items are unavailable')
 
     if (req.method === 'GET') {
+      const { data: current, error } = await supabase.from('wheel_spin_state')
+        .select('spun_at,prize_index,prize_label,prize_amount').eq('user_id', user.id).maybeSingle()
+      if (error) throw error
+      const availableAt = nextSpinAt(current?.spun_at)
+      const balance = Number(profile.balance || 0)
+      const eligible = balance >= WHEEL_MINIMUM_BALANCE
       return res.status(200).json({
-        status: 'success',
-        canSpin: !availableAt || Date.now() >= Date.parse(availableAt),
+        status: 'success', balance, minimumBalance: WHEEL_MINIMUM_BALANCE, eligible,
+        canSpin: eligible && (!availableAt || Date.now() >= Date.parse(availableAt)),
         nextSpinAt: availableAt,
         lastPrize: current ? current.prize_label || ORIGINAL_PRIZES[current.prize_index] || null : null,
-        revision: wheel.revision,
-        items: wheel.items,
+        lastAmount: current?.prize_amount ?? null,
+        revision: wheel.revision, items: wheel.items,
       })
     }
 
-    if (availableAt && Date.now() < Date.parse(availableAt)) {
-      return res.status(409).json({ status: 'cooldown', message: 'You can spin again after 24 hours.', nextSpinAt: availableAt })
+    const revision = req.body?.revision
+    if (!Number.isSafeInteger(revision) || revision < 1) {
+      return res.status(400).json({ status: 'error', message: 'Invalid wheel revision' })
     }
-
-    if (Number(req.body?.revision) !== wheel.revision) {
-      return res.status(409).json({ status: 'wheel_updated', message: 'The wheel items changed. Review the updated wheel and spin again.', revision: wheel.revision, items: wheel.items })
-    }
-
-    const prizeIndex = randomInt(wheel.items.length)
-    const prize = wheel.items[prizeIndex]
-    const now = new Date()
-    const cutoff = new Date(now.getTime() - SPIN_INTERVAL_MS).toISOString()
-    let saved = null
-
-    if (current) {
-      const { data, error } = await supabase.from('wheel_spin_state')
-        .update({ spun_at: now.toISOString(), prize_index: prizeIndex, prize_label: prize.label })
-        .eq('user_id', user.id).lte('spun_at', cutoff)
-        .select('spun_at,prize_index,prize_label').maybeSingle()
-      if (error) throw error
-      saved = data
-    } else {
-      const { data, error } = await supabase.from('wheel_spin_state')
-        .insert({ user_id: user.id, spun_at: now.toISOString(), prize_index: prizeIndex, prize_label: prize.label })
-        .select('spun_at,prize_index,prize_label').single()
-      if (error && error.code !== '23505') throw error
-      saved = data
-    }
-
-    if (!saved) {
-      const latest = await getSpinState(supabase, user.id)
-      return res.status(409).json({ status: 'cooldown', message: 'You can spin again after 24 hours.', nextSpinAt: nextSpinAt(latest?.spun_at) })
-    }
-
-    return res.status(200).json({
-      status: 'success',
-      prizeIndex: saved.prize_index,
-      prize: saved.prize_label,
-      nextSpinAt: nextSpinAt(saved.spun_at),
+    // The database resolves the amount from this index under the configuration lock.
+    const { data: result, error } = await supabase.rpc('spin_wheel_atomic', {
+      p_user_id: user.id, p_expected_revision: revision, p_prize_index: randomInt(wheel.items.length),
     })
+    if (error) throw error
+    if (!result) throw new Error('Missing spin result')
+    if (result.status === 'insufficient_balance') return res.status(403).json(result)
+    if (result.status === 'cooldown' || result.status === 'wheel_updated') return res.status(409).json(result)
+    if (result.status !== 'success') throw new Error('Invalid spin result')
+
+    const { notification, ...award } = result
+    // The in-app notification already committed with the award. Never insert it again.
+    try {
+      await sendPushToUsername(supabase, notification.username, {
+        title: notification.title, body: notification.body,
+        data: { ...notification.data, eventType: 'wheel_reward', notificationId: notification.id },
+      })
+    } catch (pushError) {
+      console.warn('Wheel reward push delivery failed:', pushError.message)
+    }
+    return res.status(200).json(award)
   } catch (error) {
     return sendApiError(res, error)
   }

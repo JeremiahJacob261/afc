@@ -1003,6 +1003,10 @@
         "test_push": {
           "title": "UCL notification test",
           "message": "Push notifications are ready on this device."
+        },
+        "wheel_reward": {
+          "title": "Wheel reward",
+          "message": "You won {{amount}} MMK on the wheel. It has been added to your balance."
         }
       }
     },
@@ -1343,6 +1347,13 @@
     "vipMemberProgress": "{{current}} of {{total}} active members",
     "vipTierRequirements": "{{amount}} MMK deposit • {{count}} active downlines",
     "dateUnavailable": "Date unavailable",
-    "withdrawalsUnavailableTitle": "Withdrawals unavailable"
+    "withdrawalsUnavailableTitle": "Withdrawals unavailable",
+    "wheelCashWon": "You won {{amount}}—added to your balance!",
+    "wheelBalanceRequired": "A balance of at least {{amount}} is required to spin.",
+    "wheelCurrentBalance": "Your balance: {{amount}}",
+    "wheelDeposit": "Deposit funds",
+    "wheelFreeDailySpin": "One free cash spin every 24 hours.",
+    "wheelVerificationFailed": "Reload the wheel to verify your balance and latest spin before trying again.",
+    "wheelReload": "Reload wheel"
   }
 }

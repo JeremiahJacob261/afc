@@ -3,6 +3,8 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { ArrowDown, ArrowUp, ImagePlus, Plus, RotateCcw, Save, Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { formatCurrency } from '@/lib/currency'
+import { isWheelAmount, WHEEL_MAX_AMOUNT } from '@/lib/wheel'
 import styles from '@/styles/AdminWheel.module.css'
 
 const COLORS = ['#d047dc', '#a840d6', '#1daedc', '#f235a0', '#29dc45', '#ffe700', '#eb7608', '#ef5f9d']
@@ -51,7 +53,9 @@ export default function WheelEditor() {
   useEffect(() => { load() }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   function change(id, field, value) {
-    setItems(current => current.map(item => item.id === id ? { ...item, [field]: value } : item))
+    setItems(current => current.map(item => item.id === id ? {
+      ...item, [field]: value, ...(field === 'amount' ? { label: formatCurrency(value, null, 'en') } : {}),
+    } : item))
   }
 
   function move(index, direction) {
@@ -66,8 +70,9 @@ export default function WheelEditor() {
     if (items.length >= 12) return
     setItems(current => [...current, {
       id: `new-${Date.now()}-${Math.random()}`,
-      label: 'New prize',
-      imageUrl: '/assets/wheel/gift.png',
+      amount: 1000,
+      label: '1,000 MMK',
+      imageUrl: '/assets/wheel/cash-emerald.png',
       color: COLORS[current.length % COLORS.length],
     }])
   }
@@ -95,8 +100,8 @@ export default function WheelEditor() {
 
   async function save() {
     setError('')
-    if (items.some(item => !item.label.trim() || item.label.trim().length > 32)) {
-      setError('Each item needs a label of 1–32 characters.')
+    if (items.some(item => !isWheelAmount(item.amount))) {
+      setError('Each item needs a positive whole MMK amount.')
       return
     }
     setSaving(true)
@@ -120,7 +125,7 @@ export default function WheelEditor() {
     <Head><title>Wheel Items — Admin</title></Head>
     <div className={styles.layout}>
       <div className={styles.intro}>
-        <div><p className={styles.eyebrow}>Daily spin</p><h2>Wheel items</h2><p>Edit the prize names, artwork, colors, and slice order. Changes appear on the user wheel after you save.</p></div>
+        <div><h2>Wheel items</h2><p>Edit the cash amounts, artwork, colors, and slice order. Changes appear on the user wheel after you save.</p></div>
         <div className={styles.actions}>
           <button type="button" className={styles.secondary} onClick={load} disabled={loading || saving || Boolean(uploading)}><RotateCcw size={16} /> Reload</button>
           <button type="button" className={styles.primary} onClick={save} disabled={loading || saving || Boolean(uploading) || !dirty}><Save size={16} /> {saving ? 'Saving…' : 'Save wheel'}</button>
@@ -140,13 +145,13 @@ export default function WheelEditor() {
               </div>
             </div>
             <div className={styles.fields}>
-              <label>Prize name<input value={item.label} maxLength={32} onChange={event => change(item.id, 'label', event.target.value)} placeholder="e.g. K5,000" /></label>
+              <label>Amount (MMK)<input type="number" inputMode="numeric" min="1" max={WHEEL_MAX_AMOUNT} step="1" value={item.amount} onChange={event => change(item.id, 'amount', event.target.value)} placeholder="e.g. 5000" /></label>
               <label>Slice color<div className={styles.colorField}><input type="color" value={item.color} onChange={event => change(item.id, 'color', event.target.value)} aria-label={`Color for ${item.label}`} /><span>{item.color}</span></div></label>
             </div>
             <div className={styles.imageField}>
               <div className={styles.thumb}>{item.imageUrl ? <img src={item.imageUrl} alt="" /> : <ImagePlus size={24} />}</div>
               <div className={styles.imageControls}>
-                <label>Image URL<input value={item.imageUrl} onChange={event => change(item.id, 'imageUrl', event.target.value)} placeholder="/assets/wheel/gift.png or https://…" /></label>
+                <label>Image URL<input value={item.imageUrl} onChange={event => change(item.id, 'imageUrl', event.target.value)} placeholder="/assets/wheel/cash-emerald.png or https://…" /></label>
                 <label className={styles.upload}><ImagePlus size={15} /> {uploading === item.id ? 'Uploading…' : 'Upload image'}<input type="file" accept="image/png,image/jpeg,image/webp,image/avif" disabled={Boolean(uploading)} onChange={event => { upload(item.id, event.target.files?.[0]); event.target.value = '' }} /></label>
               </div>
             </div>
@@ -163,7 +168,7 @@ export default function WheelEditor() {
               <div className={styles.previewHub}>GO</div>
             </div>
           </div>
-          <p className={styles.note}>Each slice has an equal chance. Spins only record a displayed result; no balance or reward is credited.</p>
+          <p className={styles.note}>Each slice has an equal chance and credits its amount to the user&apos;s balance. One free spin every 24 hours requires a balance of at least 100,000 MMK.</p>
           {dirty && <p className={styles.unsaved}>Unsaved changes</p>}
         </aside>
       </div>

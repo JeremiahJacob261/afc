@@ -1003,6 +1003,10 @@
         "test_push": {
           "title": "UCL အသိပေးချက် စမ်းသပ်မှု",
           "message": "ဤစက်တွင် အသိပေးချက်များ အသင့်ဖြစ်ပါပြီ။"
+        },
+        "wheel_reward": {
+          "title": "ကံစမ်းဘီးဆုငွေ",
+          "message": "ကံစမ်းဘီးမှ {{amount}} MMK ရရှိပြီး သင့်လက်ကျန်ငွေထဲသို့ ထည့်ပေးပြီးပါပြီ။"
         }
       }
     },
@@ -1343,6 +1347,13 @@
     "vipMemberProgress": "အသုံးပြုနေသော အဖွဲ့ဝင် {{total}} ဦးအနက် {{current}} ဦး",
     "vipTierRequirements": "ငွေသွင်းမှု {{amount}} MMK • အသုံးပြုနေသော ဖိတ်ခေါ်ထားသူ {{count}} ဦး",
     "dateUnavailable": "ရက်စွဲ မရရှိပါ",
-    "withdrawalsUnavailableTitle": "ငွေထုတ်ခြင်း ပြုလုပ်၍ မရပါ"
+    "withdrawalsUnavailableTitle": "ငွေထုတ်ခြင်း ပြုလုပ်၍ မရပါ",
+    "wheelCashWon": "သင် {{amount}} ရရှိပြီး သင့်လက်ကျန်ငွေထဲသို့ ထည့်ပေးပြီးပါပြီ။",
+    "wheelBalanceRequired": "ကံစမ်းဘီးလှည့်ရန် လက်ကျန်ငွေ အနည်းဆုံး {{amount}} ရှိရပါမည်။",
+    "wheelCurrentBalance": "သင့်လက်ကျန်ငွေ - {{amount}}",
+    "wheelDeposit": "ငွေသွင်းရန်",
+    "wheelFreeDailySpin": "၂၄ နာရီလျှင် ငွေသားဆုအတွက် တစ်ကြိမ် အခမဲ့လှည့်နိုင်ပါသည်။",
+    "wheelVerificationFailed": "ထပ်မံမလှည့်မီ သင့်လက်ကျန်ငွေနှင့် နောက်ဆုံးလှည့်မှုကို စစ်ဆေးရန် ကံစမ်းဘီးကို ပြန်ဖွင့်ပါ။",
+    "wheelReload": "ကံစမ်းဘီးကို ပြန်ဖွင့်ရန်"
   }
 }

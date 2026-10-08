@@ -36,6 +36,7 @@ function notificationSourceKey(sourceTable, sourceId) {
 }
 
 function categoryForAppEvent(eventType) {
+  if (eventType === 'wheel_reward') return 'bonus'
   if (String(eventType || '').startsWith('deposit_')) return 'deposit'
   if (String(eventType || '').startsWith('withdrawal_')) return 'withdrawal'
   if (eventType === 'bet_settled') return 'bet'
