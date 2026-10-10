@@ -48,3 +48,4 @@ yarn-error.log*
 next-env.d.ts
 
 anon-cadb6-c070d66a07fb.json
+/artifacts/native/

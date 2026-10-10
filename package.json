@@ -14,6 +14,8 @@
     "android:open": "cap open android",
     "android:run": "bun run mobile:build && cap run android",
     "android:apk": "bun run mobile:build && cap sync android && cd android && ./gradlew assembleRelease",
+    "android:native:debug": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-native-debug.ps1",
+    "android:native:release": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-native-release.ps1",
     "check:i18n": "node scripts/check-i18n.js",
     "test:i18n": "node --test tests/i18n.test.cjs",
     "test:wheel": "node --test tests/wheel.test.cjs"

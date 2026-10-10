@@ -240,7 +240,7 @@ CREATE TABLE IF NOT EXISTS push_tokens (
   last_seen_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT push_tokens_language_check CHECK (language IN ('en', 'fr', 'es', 'it', 'ru')),
+  CONSTRAINT push_tokens_language_check CHECK (language IN ('en', 'my', 'fr', 'es', 'it', 'ru')),
   FOREIGN KEY (username) REFERENCES users(username)
 );
 
@@ -254,7 +254,7 @@ ALTER TABLE push_tokens ALTER COLUMN language SET DEFAULT 'en';
 UPDATE push_tokens
 SET language = 'en'
 WHERE language IS NULL
-  OR language NOT IN ('en', 'fr', 'es', 'it', 'ru');
+  OR language NOT IN ('en', 'my', 'fr', 'es', 'it', 'ru');
 ALTER TABLE push_tokens ALTER COLUMN language SET NOT NULL;
 ALTER TABLE push_tokens ADD COLUMN IF NOT EXISTS enabled BOOLEAN NOT NULL DEFAULT TRUE;
 ALTER TABLE push_tokens ADD COLUMN IF NOT EXISTS last_seen_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
@@ -263,7 +263,7 @@ ALTER TABLE push_tokens ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CU
 ALTER TABLE push_tokens DROP CONSTRAINT IF EXISTS push_tokens_language_check;
 ALTER TABLE push_tokens
   ADD CONSTRAINT push_tokens_language_check
-  CHECK (language IN ('en', 'fr', 'es', 'it', 'ru'));
+  CHECK (language IN ('en', 'my', 'fr', 'es', 'it', 'ru'));
 
 -- Canonical app notification feed used by native push and the in-app bell.
 CREATE TABLE IF NOT EXISTS app_notifications (
@@ -1773,3 +1773,246 @@ INSERT INTO walle (name, available) VALUES
   ('M-Pesa', true),
   ('GCash', true)
 ON CONFLICT (name) DO NOTHING;
+
+-- Native registration: deployed as native_atomic_profile_provisioning (2026-10-10).
+-- Invoked by the authenticated Next.js adapter with a server key. RLS is unchanged.
+CREATE OR REPLACE FUNCTION public.provision_native_profile_atomic(
+  p_userid text, p_email text, p_username text, p_phone text,
+  p_countrycode text, p_refer text DEFAULT NULL
+) RETURNS jsonb LANGUAGE plpgsql SECURITY INVOKER SET search_path = '' AS $$
+DECLARE
+  v_profile public.users%ROWTYPE;
+  v_referrer public.users%ROWTYPE;
+  v_code text;
+  v_refer text := nullif(trim(p_refer), '');
+  v_constraint text;
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE id::text=p_userid
+      AND lower(email)=lower(p_email) AND email_confirmed_at IS NOT NULL) THEN
+    RAISE EXCEPTION 'Confirmed account required';
+  END IF;
+  IF nullif(trim(p_username),'') IS NULL OR length(trim(p_username)) > 64
+      OR trim(p_username) ~ '\s' OR length(coalesce(p_phone,'')) > 40
+      OR trim(p_countrycode) !~ '^\+[0-9]{1,4}$' THEN
+    RAISE EXCEPTION 'Invalid signup fields';
+  END IF;
+  PERFORM pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(p_userid, 8124));
+  SELECT * INTO v_profile FROM public.users WHERE userid=p_userid FOR UPDATE;
+  IF FOUND THEN
+    INSERT INTO public.referral(refer,count) VALUES(v_profile.newrefer,0)
+      ON CONFLICT(refer) DO NOTHING;
+    RETURN jsonb_build_object('newrefer',v_profile.newrefer,'created',false);
+  END IF;
+  IF v_refer IS NOT NULL THEN
+    SELECT * INTO v_referrer FROM public.users WHERE newrefer=v_refer;
+    IF NOT FOUND THEN RAISE EXCEPTION 'Invalid referral code'; END IF;
+  END IF;
+  FOR attempt IN 1..10 LOOP
+    v_code := (floor(pg_catalog.random()*9000000)+1000000)::bigint::text;
+    BEGIN
+      INSERT INTO public.users(userid,uid,username,email,phone,countrycode,refer,newrefer,lvla,lvlb)
+      VALUES(p_userid,'uid_'||pg_catalog.gen_random_uuid()::text,trim(p_username),p_email,
+        trim(p_phone),trim(p_countrycode),v_refer,v_code,v_referrer.refer,v_referrer.lvla)
+      RETURNING * INTO v_profile;
+      INSERT INTO public.referral(refer,count) VALUES(v_code,0);
+      RETURN jsonb_build_object('newrefer',v_code,'created',true);
+    EXCEPTION WHEN unique_violation THEN
+      GET STACKED DIAGNOSTICS v_constraint=CONSTRAINT_NAME;
+      IF v_constraint <> 'users_newrefer_key' THEN RAISE; END IF;
+    END;
+  END LOOP;
+  RAISE EXCEPTION 'Unable to create referral code';
+END;
+$$;
+REVOKE ALL ON FUNCTION public.provision_native_profile_atomic(text,text,text,text,text,text) FROM PUBLIC,anon,authenticated;
+GRANT EXECUTE ON FUNCTION public.provision_native_profile_atomic(text,text,text,text,text,text) TO service_role;
+
+-- Native quote/retry contracts; no existing financial RPC or RLS settings changed.
+CREATE OR REPLACE FUNCTION public.native_bet_quote(p_userid text,p_match_id text,p_picked text,p_stake numeric)
+RETURNS jsonb LANGUAGE plpgsql SECURITY INVOKER SET search_path='' AS $$
+DECLARE
+  v_user public.users%ROWTYPE; v_match public.bets%ROWTYPE;
+  v_market text; v_label text; v_start numeric; v_base numeric; v_odd numeric; v_level integer; v_count integer;
+BEGIN
+  v_market := public.score_market_key(p_picked);
+  v_label := public.score_market_label(p_picked);
+  IF v_market IS NULL OR v_label IS NULL OR p_stake IS NULL OR p_stake < 5000 OR p_stake::text IN ('NaN','Infinity','-Infinity') THEN
+    RAISE EXCEPTION 'Invalid bet details';
+  END IF;
+  SELECT * INTO v_user FROM public.users WHERE userid=p_userid;
+  IF NOT FOUND THEN RAISE EXCEPTION 'Profile not found'; END IF;
+  SELECT * INTO v_match FROM public.bets WHERE match_id=p_match_id;
+  IF NOT FOUND THEN RAISE EXCEPTION 'Match not found'; END IF;
+  v_start := coalesce(v_match.tsgmt,0);
+  IF v_start > 0 AND v_start < 1000000000000 THEN v_start := v_start*1000; END IF;
+  IF coalesce(v_match.verified,false) OR v_start <= extract(epoch FROM now())*1000 THEN
+    RAISE EXCEPTION 'This Match has expired';
+  END IF;
+  IF coalesce(v_user.balance,0) < p_stake THEN RAISE EXCEPTION 'You do not have enough MMK to complete this bet'; END IF;
+  IF coalesce(v_user.gcount,0)>2 THEN RAISE EXCEPTION 'You have reached the maximum number of bets for today'; END IF;
+  v_base := coalesce(nullif(to_jsonb(v_match)->>v_market,'')::numeric,0);
+  IF v_base<=0 THEN RAISE EXCEPTION 'This market is not available'; END IF;
+  SELECT count(*)::integer INTO v_count FROM public.users WHERE refer=v_user.newrefer AND public.is_active_member(balance);
+  v_level := public.vip_level_for_user(v_user.totald,v_count);
+  v_odd := round(v_base*(1+public.vip_bonus_for_level(v_level)),3);
+  RETURN jsonb_build_object('status','success','odd',v_odd,'profit',round(v_odd*p_stake/100,2),
+    'balance',v_user.balance,'market',v_label,'home',v_match.home,'away',v_match.away);
+END; $$;
+CREATE OR REPLACE FUNCTION public.place_native_bet_atomic(
+  p_userid text,p_match_id text,p_picked text,p_stake numeric,p_expected_odd numeric,p_client_bet_id uuid
+) RETURNS jsonb LANGUAGE plpgsql SECURITY INVOKER SET search_path='' AS $$
+DECLARE
+  v_user public.users%ROWTYPE; v_existing public.placed%ROWTYPE; v_market text; v_result jsonb;
+BEGIN
+  v_market := public.score_market_label(p_picked);
+  IF p_client_bet_id IS NULL OR v_market IS NULL OR p_stake IS NULL OR p_stake<5000
+      OR p_stake::text IN ('NaN','Infinity','-Infinity') OR p_expected_odd IS NULL
+      OR p_expected_odd<=0 OR p_expected_odd::text IN ('NaN','Infinity','-Infinity') THEN
+    RAISE EXCEPTION 'Invalid bet details';
+  END IF;
+  PERFORM pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(p_client_bet_id::text,8417));
+  SELECT * INTO v_user FROM public.users WHERE userid=p_userid FOR UPDATE;
+  IF NOT FOUND THEN RAISE EXCEPTION 'Profile not found'; END IF;
+  SELECT * INTO v_existing FROM public.placed WHERE betid=p_client_bet_id::text;
+  IF FOUND THEN
+    IF v_existing.username IS DISTINCT FROM v_user.username OR v_existing.match_id IS DISTINCT FROM p_match_id
+        OR v_existing.market IS DISTINCT FROM v_market OR v_existing.stake IS DISTINCT FROM p_stake
+        OR round(v_existing.odd,3) IS DISTINCT FROM round(p_expected_odd,3) THEN
+      RAISE EXCEPTION 'Duplicate bet id';
+    END IF;
+    RETURN jsonb_build_object('status','success','message','Bet Successful','betid',v_existing.betid,
+      'balance',v_user.balance,'profit',v_existing.profit,'odd',v_existing.odd,'reused',true);
+  END IF;
+  -- The legacy calculation runs only for a new attempt, under the same transaction/user lock.
+  -- It retains existing pricing, eligibility, debit, activity and referral rules.
+  v_result := public.place_bet_with_expected_odd_atomic(p_userid,p_match_id,p_picked,p_stake,p_expected_odd,p_client_bet_id);
+  RETURN v_result;
+END; $$;
+REVOKE ALL ON FUNCTION public.native_bet_quote(text,text,text,numeric) FROM PUBLIC,anon,authenticated;
+REVOKE ALL ON FUNCTION public.place_native_bet_atomic(text,text,text,numeric,numeric,uuid) FROM PUBLIC,anon,authenticated;
+GRANT EXECUTE ON FUNCTION public.native_bet_quote(text,text,text,numeric) TO service_role;
+GRANT EXECUTE ON FUNCTION public.place_native_bet_atomic(text,text,text,numeric,numeric,uuid) TO service_role;
+ALTER FUNCTION public.place_native_bet_atomic(text,text,text,numeric,numeric,uuid) SET search_path=pg_catalog,public;
+
+-- Server PIN controls, outside the exposed schema. No RLS changes.
+CREATE SCHEMA IF NOT EXISTS ucl_native_private;
+REVOKE ALL ON SCHEMA ucl_native_private FROM PUBLIC,anon,authenticated;
+GRANT USAGE ON SCHEMA ucl_native_private TO service_role;
+CREATE TABLE IF NOT EXISTS ucl_native_private.pin_attempts (
+  userid text PRIMARY KEY REFERENCES public.users(userid) ON DELETE CASCADE,
+  attempts integer NOT NULL DEFAULT 0 CHECK(attempts>=0),
+  window_start timestamptz NOT NULL DEFAULT now()
+);
+REVOKE ALL ON ucl_native_private.pin_attempts FROM PUBLIC,anon,authenticated;
+GRANT SELECT,INSERT,UPDATE,DELETE ON ucl_native_private.pin_attempts TO service_role;
+CREATE OR REPLACE FUNCTION public.set_transaction_pin_atomic(p_userid text,p_pin_hash text,p_admin_reset boolean DEFAULT false)
+RETURNS boolean LANGUAGE plpgsql SECURITY INVOKER SET search_path='' AS $$
+DECLARE v_user public.users%ROWTYPE;
+BEGIN
+  IF p_pin_hash IS NULL OR p_pin_hash !~ '^scrypt-v1:[a-f0-9]{32}:[a-f0-9]{64}$' THEN RAISE EXCEPTION 'Invalid PIN hash'; END IF;
+  SELECT * INTO v_user FROM public.users WHERE userid=p_userid FOR UPDATE;
+  IF NOT FOUND THEN RAISE EXCEPTION 'Profile not found'; END IF;
+  IF NOT coalesce(p_admin_reset,false) AND (coalesce(v_user.codeset,false) OR nullif(trim(v_user.pin),'') IS NOT NULL) THEN
+    RAISE EXCEPTION 'Transaction PIN already set';
+  END IF;
+  UPDATE public.users SET pin=p_pin_hash,codeset=true WHERE userid=p_userid;
+  DELETE FROM ucl_native_private.pin_attempts WHERE userid=p_userid;
+  RETURN true;
+END; $$;
+CREATE OR REPLACE FUNCTION public.reserve_transaction_pin_attempt(p_userid text)
+RETURNS jsonb LANGUAGE plpgsql SECURITY INVOKER SET search_path='' AS $$
+DECLARE v_user public.users%ROWTYPE; v_attempt ucl_native_private.pin_attempts%ROWTYPE;
+BEGIN
+  -- Keep user/attempt lock ordering consistent with setup, reset and successful verification.
+  SELECT * INTO v_user FROM public.users WHERE userid=p_userid FOR SHARE;
+  IF NOT FOUND THEN RAISE EXCEPTION 'Profile not found'; END IF;
+  IF NOT coalesce(v_user.codeset,false) OR nullif(trim(v_user.pin),'') IS NULL THEN RAISE EXCEPTION 'No transaction PIN has been set'; END IF;
+  INSERT INTO ucl_native_private.pin_attempts(userid) VALUES(p_userid) ON CONFLICT(userid) DO NOTHING;
+  SELECT * INTO v_attempt FROM ucl_native_private.pin_attempts WHERE userid=p_userid FOR UPDATE;
+  IF v_attempt.window_start <= now()-interval '15 minutes' THEN
+    v_attempt.attempts := 0;
+    v_attempt.window_start := now();
+  END IF;
+  IF v_attempt.attempts>=5 THEN
+    RETURN jsonb_build_object('allowed',false,'retryAt',v_attempt.window_start+interval '15 minutes');
+  END IF;
+  UPDATE ucl_native_private.pin_attempts SET attempts=v_attempt.attempts+1,window_start=v_attempt.window_start WHERE userid=p_userid;
+  RETURN jsonb_build_object('allowed',true,'pin',v_user.pin);
+END; $$;
+CREATE OR REPLACE FUNCTION public.finish_transaction_pin_attempt(p_userid text,p_expected_pin text,p_replacement_hash text DEFAULT NULL)
+RETURNS boolean LANGUAGE plpgsql SECURITY INVOKER SET search_path='' AS $$
+DECLARE v_pin text;
+BEGIN
+  IF p_replacement_hash IS NOT NULL AND p_replacement_hash !~ '^scrypt-v1:[a-f0-9]{32}:[a-f0-9]{64}$' THEN RAISE EXCEPTION 'Invalid PIN hash'; END IF;
+  SELECT pin INTO v_pin FROM public.users WHERE userid=p_userid FOR UPDATE;
+  IF NOT FOUND OR v_pin IS DISTINCT FROM p_expected_pin THEN RETURN false; END IF;
+  IF p_replacement_hash IS NOT NULL THEN UPDATE public.users SET pin=p_replacement_hash WHERE userid=p_userid; END IF;
+  DELETE FROM ucl_native_private.pin_attempts WHERE userid=p_userid;
+  RETURN true;
+END; $$;
+REVOKE ALL ON FUNCTION public.set_transaction_pin_atomic(text,text,boolean) FROM PUBLIC,anon,authenticated;
+REVOKE ALL ON FUNCTION public.reserve_transaction_pin_attempt(text) FROM PUBLIC,anon,authenticated;
+REVOKE ALL ON FUNCTION public.finish_transaction_pin_attempt(text,text,text) FROM PUBLIC,anon,authenticated;
+GRANT EXECUTE ON FUNCTION public.set_transaction_pin_atomic(text,text,boolean) TO service_role;
+GRANT EXECUTE ON FUNCTION public.reserve_transaction_pin_attempt(text) TO service_role;
+GRANT EXECUTE ON FUNCTION public.finish_transaction_pin_attempt(text,text,text) TO service_role;
+
+-- Server-only withdrawal quote, PIN freshness, owned destination and pending-request invariants.
+CREATE OR REPLACE FUNCTION public.quote_withdrawal_amounts(p_amount numeric)
+RETURNS jsonb LANGUAGE plpgsql SECURITY INVOKER SET search_path='' AS $$
+DECLARE v_percent numeric; v_amount numeric; v_fee numeric;
+BEGIN
+  IF p_amount IS NULL OR p_amount<=0 OR p_amount::text IN ('NaN','Infinity','-Infinity') THEN RAISE EXCEPTION 'Invalid amount'; END IF;
+  SELECT greatest(0,least(100,coalesce(withdrawal_fee_percent,7))) INTO v_percent FROM public.admin_settings WHERE id=1;
+  IF NOT FOUND THEN RAISE EXCEPTION 'Withdrawal settings are not configured'; END IF;
+  v_amount := round(p_amount,3);
+  v_fee := round(v_amount*v_percent/100,3);
+  RETURN jsonb_build_object('amount',v_amount,'fee',v_fee,'total',round(v_amount+v_fee,3),'feePercent',v_percent);
+END; $$;
+CREATE OR REPLACE FUNCTION public.create_verified_withdrawal_request_atomic(
+  p_userid text,p_amount numeric,p_payout_amount numeric,p_wallet_id bigint,p_method_id bigint,
+  p_pin_hash text,p_wallet_snapshot jsonb,p_method_currency text,p_method_rate numeric
+) RETURNS jsonb LANGUAGE plpgsql SECURITY INVOKER SET search_path='' AS $$
+DECLARE
+  v_user public.users%ROWTYPE; v_wallet public.user_wallets%ROWTYPE; v_method public.walle%ROWTYPE;
+  v_quote jsonb; v_rate numeric; v_deposit_at timestamp; v_count integer; v_result jsonb;
+BEGIN
+  SELECT * INTO v_user FROM public.users WHERE userid=p_userid FOR UPDATE;
+  IF NOT FOUND THEN RAISE EXCEPTION 'Profile not found'; END IF;
+  IF NOT coalesce(v_user.codeset,false) OR v_user.pin IS DISTINCT FROM p_pin_hash OR p_pin_hash IS NULL THEN RAISE EXCEPTION 'Transaction PIN changed'; END IF;
+  SELECT * INTO v_wallet FROM public.user_wallets WHERE id=p_wallet_id
+    AND uid=coalesce(nullif(trim(v_user.uid),''),v_user.userid) FOR SHARE;
+  IF NOT FOUND THEN RAISE EXCEPTION 'Payout wallet not found'; END IF;
+  IF v_wallet.wallet IS DISTINCT FROM (p_wallet_snapshot->>'wallet')
+      OR coalesce(v_wallet.bank,'') IS DISTINCT FROM coalesce(p_wallet_snapshot->>'bank','')
+      OR coalesce(v_wallet.names,'') IS DISTINCT FROM coalesce(p_wallet_snapshot->>'names','') THEN
+    RAISE EXCEPTION 'Payout wallet changed';
+  END IF;
+  SELECT * INTO v_method FROM public.walle WHERE id=p_method_id AND available=true
+    AND lower(trim(name))=lower(trim(v_wallet.walletnames)) FOR SHARE;
+  IF NOT FOUND THEN RAISE EXCEPTION 'Withdrawal method is unavailable'; END IF;
+  v_rate := CASE WHEN coalesce(v_method.rates,0)>0 THEN v_method.rates WHEN p_method_currency='USDT' THEN 1 ELSE 0 END;
+  IF v_rate<=0 OR v_rate IS DISTINCT FROM p_method_rate THEN RAISE EXCEPTION 'Payment method rate changed'; END IF;
+  IF p_payout_amount < (SELECT min_withdrawal_amount FROM public.admin_settings WHERE id=1) THEN RAISE EXCEPTION 'Minimum withdrawal amount changed'; END IF;
+  v_quote := public.quote_withdrawal_amounts(p_payout_amount);
+  IF (v_quote->>'total')::numeric IS DISTINCT FROM p_amount THEN RAISE EXCEPTION 'Withdrawal fee changed'; END IF;
+  IF EXISTS(SELECT 1 FROM public.notification WHERE username=v_user.username
+      AND lower(coalesce(type,'')) IN ('deposit','withdraw','withdrawer')
+      AND lower(coalesce(sent,'pending')) IN ('pending','processing')) THEN
+    RAISE EXCEPTION 'A pending payment request already exists';
+  END IF;
+  SELECT created_at INTO v_deposit_at FROM public.notification WHERE username=v_user.username
+    AND type='deposit' AND lower(coalesce(sent,'')) IN ('success','true','completed') ORDER BY created_at DESC LIMIT 1;
+  IF FOUND THEN
+    SELECT count(*)::integer INTO v_count FROM public.placed WHERE username=v_user.username AND created_at>=v_deposit_at;
+    IF v_count<5 THEN RAISE EXCEPTION 'Five bets are required after the latest successful deposit'; END IF;
+  END IF;
+  v_result := public.create_withdrawal_request_with_rate_snapshot_atomic(
+    p_userid,p_amount,p_payout_amount,v_wallet.wallet,
+    lower(trim(coalesce(nullif(v_method.currency_code,''),v_method.name))),v_wallet.bank,v_wallet.names,p_method_currency,v_rate);
+  RETURN v_result;
+END; $$;
+REVOKE ALL ON FUNCTION public.quote_withdrawal_amounts(numeric) FROM PUBLIC,anon,authenticated;
+REVOKE ALL ON FUNCTION public.create_verified_withdrawal_request_atomic(text,numeric,numeric,bigint,bigint,text,jsonb,text,numeric) FROM PUBLIC,anon,authenticated;
+GRANT EXECUTE ON FUNCTION public.quote_withdrawal_amounts(numeric) TO service_role;
+GRANT EXECUTE ON FUNCTION public.create_verified_withdrawal_request_atomic(text,numeric,numeric,bigint,bigint,text,jsonb,text,numeric) TO service_role;

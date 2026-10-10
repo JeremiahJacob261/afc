@@ -1,12 +1,12 @@
 import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
+import { verifyTransactionPin } from '@/lib/transactionPin'
 import { getWithdrawalSettings, WITHDRAWAL_HARD_LIMIT_AMOUNT } from '@/lib/adminSettings'
-import { calculateWithdrawalAmounts } from '@/lib/withdrawalFee'
+import { getWithdrawalDestination } from '@/lib/withdrawalDestination'
 import { getWithdrawalEligibility, isWithdrawalLimitExempt } from '@/lib/withdrawalEligibility'
 import { formatCurrency, getCurrencySettings, parseCurrency } from '@/lib/currency'
 import { getPendingPaymentRequest, isPendingPaymentConflict, PENDING_PAYMENT_MESSAGE } from '@/lib/pendingPaymentRequest'
 import {
   displayPaymentCurrency,
-  getPaymentMethod,
   getPaymentRate,
   isUsdtPaymentCode,
   methodCodeFromRow,
@@ -33,7 +33,7 @@ export default async function handler(req, res) {
 
     const { profile, supabase } = await getCurrentProfile(
       req,
-      'userid,username,codeset,pin,newrefer,balance'
+      'userid,uid,username,codeset,newrefer,balance'
     )
 
     const pendingRequest = await getPendingPaymentRequest(supabase, profile.username)
@@ -42,7 +42,7 @@ export default async function handler(req, res) {
     }
 
     const requestedMethod = normalizePaymentCode(body.method || 'usdt')
-    const [withdrawalSettings, { data: latestDeposit, error: depositError }, savedMethod] = await Promise.all([
+    const [withdrawalSettings, { data: latestDeposit, error: depositError }, destination] = await Promise.all([
       getWithdrawalSettings(supabase, {
         allowDefaultOnMissingTable: true,
       }),
@@ -55,10 +55,12 @@ export default async function handler(req, res) {
         .order('created_at', { ascending: false })
         .limit(1)
         .maybeSingle(),
-      getPaymentMethod(supabase, requestedMethod),
+      getWithdrawalDestination(supabase, profile, body),
     ])
 
     if (depositError) throw depositError
+    if (!destination) return res.status(400).json([{ status: 'Failed', message: 'Please select an available wallet linked to your account.' }])
+    const savedMethod = destination.method
 
     let placedBetCount = 0
     if (latestDeposit?.created_at) {
@@ -101,29 +103,39 @@ export default async function handler(req, res) {
       return res.status(200).json([{ status: 'Failed', message: 'No transaction pin has been set' }])
     }
 
-    if (profile.pin !== body.pass) {
+    const verifiedPin = await verifyTransactionPin(supabase, profile.userid, body.pass)
+    if (!verifiedPin) {
       return res.status(200).json([{ status: 'Failed', message: 'Wrong password' }])
     }
 
-    const { requestedAmount, totalAmount } = calculateWithdrawalAmounts(
-      amount,
-      withdrawalSettings.withdrawalFeePercent
-    )
+    const { data: quote, error: quoteError } = await supabase.rpc('quote_withdrawal_amounts', { p_amount: amount })
+    if (quoteError) throw quoteError
+    const requestedAmount = quote.amount
+    const totalAmount = quote.total
 
-    const { error: withdrawError } = await supabase.rpc('create_withdrawal_request_with_rate_snapshot_atomic', {
+    const { error: withdrawError } = await supabase.rpc('create_verified_withdrawal_request_atomic', {
       p_userid: profile.userid,
       p_amount: totalAmount,
       p_payout_amount: requestedAmount,
-      p_wallet: body.wallet || null,
-      p_method: methodCode,
+      p_wallet_id: destination.wallet.id,
+      p_method_id: savedMethod.id,
+      p_pin_hash: verifiedPin.hash,
+      p_wallet_snapshot: { wallet: destination.wallet.wallet, bank: destination.wallet.bank, names: destination.wallet.names },
       p_method_currency: displayPaymentCurrency(methodCode),
       p_method_rate: methodRate,
-      p_bank: body.bank || null,
-      p_accountname: body.accountname || null,
     })
 
     if (withdrawError) {
       const message = withdrawError.message || ''
+      if (/changed|Payout wallet not found|Withdrawal method is unavailable/i.test(message)) {
+        return res.status(409).json([{ status: 'Failed', message: 'Account or payment details changed. Please refresh and try again.' }])
+      }
+      if (/Five bets are required/i.test(message)) {
+        return res.status(400).json([{ status: 'Failed', message }])
+      }
+      if (/pending payment request/i.test(message)) {
+        return res.status(200).json([{ status: 'Failed', code: 'PAYMENT_REQUEST_PENDING', message: PENDING_PAYMENT_MESSAGE }])
+      }
       if (isPendingPaymentConflict(withdrawError)) {
         return res.status(200).json([{ status: 'Failed', code: 'PAYMENT_REQUEST_PENDING', message: PENDING_PAYMENT_MESSAGE }])
       }
@@ -165,7 +177,10 @@ export default async function handler(req, res) {
     return res.status(200).json([{ status: 'Success', message: 'Withdrawal Request as been sent' }])
   } catch (error) {
     if (error.statusCode) {
-      return res.status(error.statusCode).json([{ status: 'Failed', message: error.message }])
+      if (error.retryAt) {
+        res.setHeader('Retry-After', String(Math.max(1, Math.ceil((Date.parse(error.retryAt) - Date.now()) / 1000))))
+      }
+      return res.status(error.statusCode).json([{ status: 'Failed', message: error.message, ...(error.retryAt ? { retryAt: error.retryAt } : {}) }])
     }
 
     return sendApiError(res, error)

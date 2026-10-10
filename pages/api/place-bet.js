@@ -65,12 +65,14 @@ export default async function handler(req, res) {
       || amount < 5000
       || !Number.isFinite(expectedOdd)
       || expectedOdd <= 0
+      || (client_bet_id && !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(client_bet_id)))
     ) {
       const message = `Minimum stake is ${formatCurrency(5000, currencySettings)}`
       return res.status(400).json({ status: 'error', message })
     }
 
-    const { data, error } = await supabase.rpc('place_bet_with_expected_odd_atomic', {
+    // Requests with an attempt ID check a stored acceptance before current balance/expiry.
+    const { data, error } = await supabase.rpc(client_bet_id ? 'place_native_bet_atomic' : 'place_bet_with_expected_odd_atomic', {
       p_userid: user.id,
       p_match_id: match_id,
       p_picked: picked,

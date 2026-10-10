@@ -4,12 +4,17 @@ import { getCurrencySettings } from '@/lib/currency'
 import { getWithdrawalEligibility, isWithdrawalLimitExempt } from '@/lib/withdrawalEligibility'
 import { getPendingPaymentRequest } from '@/lib/pendingPaymentRequest'
 
+function publicFields(row, keys) {
+  return Object.fromEntries(keys.filter((key) => Object.hasOwn(row, key)).map((key) => [key, row[key]]))
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ status: 'error', message: 'Method not allowed' })
   }
 
   try {
+    res.setHeader('Cache-Control', 'no-store')
     const { profile, supabase } = await getCurrentProfile(req, 'userid,uid,username')
     const walletOwnerId = String(profile.uid || profile.userid || '').trim()
 
@@ -42,10 +47,10 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       status: 'success',
-      methods: methodsResult.data || [],
-      destinations: destinationsResult.data || [],
-      wallets: walletsResult.data || [],
-      settings,
+      methods: (methodsResult.data || []).map((row) => publicFields(row, ['id', 'name', 'currency_code', 'type', 'rates', 'available', 'image', 'notes'])),
+      destinations: (destinationsResult.data || []).map((row) => publicFields(row, ['id', 'name', 'currency_code', 'type', 'address', 'bank', 'accountname', 'image'])),
+      wallets: (walletsResult.data || []).map((row) => publicFields(row, ['id', 'wallet', 'walletnames', 'bank', 'names', 'method'])),
+      settings: publicFields(settings, ['withdrawalsEnabled', 'minWithdrawalAmount', 'maxWithdrawalAmount', 'withdrawalFeePercent', 'withdrawalDisabledMessage', 'dailyWithdrawalLimit', 'annualWithdrawalLimit']),
       currency,
       withdrawalEligibility,
       pendingPaymentRequest: pendingPaymentRequest ? { type: pendingPaymentRequest.type } : null,

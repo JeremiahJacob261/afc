@@ -1,5 +1,6 @@
 import { requireAdmin } from '@/lib/adminAuth'
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
+import { setTransactionPin } from '@/lib/transactionPin'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -28,12 +29,7 @@ export default async function handler(req, res) {
       return res.status(404).json({ status: 'error', message: 'User not found' })
     }
 
-    const { error: updateError } = await supabase
-      .from('users')
-      .update({ pin: cleanPin, codeset: true })
-      .eq('userid', cleanUserId)
-
-    if (updateError) throw updateError
+    await setTransactionPin(supabase, cleanUserId, cleanPin, true)
 
     console.info('Admin credential reset', {
       type: 'pin',

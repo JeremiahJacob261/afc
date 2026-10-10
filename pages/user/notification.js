@@ -165,7 +165,7 @@ function NotificationCard({ item, t, locale }) {
         </Stack>
         <Typography
           sx={{
-            color: '#DDE7F5',
+            color: '#114690',
             fontFamily: 'Inter, Arial, sans-serif',
             fontSize: '13px',
             fontWeight: 400,
