@@ -1788,8 +1788,8 @@ DECLARE
   v_constraint text;
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM auth.users WHERE id::text=p_userid
-      AND lower(email)=lower(p_email) AND email_confirmed_at IS NOT NULL) THEN
-    RAISE EXCEPTION 'Confirmed account required';
+      AND lower(email)=lower(p_email)) THEN
+    RAISE EXCEPTION 'Account identity required';
   END IF;
   IF nullif(trim(p_username),'') IS NULL OR length(trim(p_username)) > 64
       OR trim(p_username) ~ '\s' OR length(coalesce(p_phone,'')) > 40
@@ -1894,60 +1894,37 @@ GRANT EXECUTE ON FUNCTION public.native_bet_quote(text,text,text,numeric) TO ser
 GRANT EXECUTE ON FUNCTION public.place_native_bet_atomic(text,text,text,numeric,numeric,uuid) TO service_role;
 ALTER FUNCTION public.place_native_bet_atomic(text,text,text,numeric,numeric,uuid) SET search_path=pg_catalog,public;
 
--- Server PIN controls, outside the exposed schema. No RLS changes.
-CREATE SCHEMA IF NOT EXISTS ucl_native_private;
-REVOKE ALL ON SCHEMA ucl_native_private FROM PUBLIC,anon,authenticated;
-GRANT USAGE ON SCHEMA ucl_native_private TO service_role;
-CREATE TABLE IF NOT EXISTS ucl_native_private.pin_attempts (
-  userid text PRIMARY KEY REFERENCES public.users(userid) ON DELETE CASCADE,
-  attempts integer NOT NULL DEFAULT 0 CHECK(attempts>=0),
-  window_start timestamptz NOT NULL DEFAULT now()
-);
-REVOKE ALL ON ucl_native_private.pin_attempts FROM PUBLIC,anon,authenticated;
-GRANT SELECT,INSERT,UPDATE,DELETE ON ucl_native_private.pin_attempts TO service_role;
+-- Plaintext PIN setup and compatibility operations; no attempt limits or RLS changes.
 CREATE OR REPLACE FUNCTION public.set_transaction_pin_atomic(p_userid text,p_pin_hash text,p_admin_reset boolean DEFAULT false)
 RETURNS boolean LANGUAGE plpgsql SECURITY INVOKER SET search_path='' AS $$
 DECLARE v_user public.users%ROWTYPE;
 BEGIN
-  IF p_pin_hash IS NULL OR p_pin_hash !~ '^scrypt-v1:[a-f0-9]{32}:[a-f0-9]{64}$' THEN RAISE EXCEPTION 'Invalid PIN hash'; END IF;
+  IF p_pin_hash IS NULL OR p_pin_hash !~ '^[0-9]{4}$' THEN RAISE EXCEPTION 'PIN must be 4 digits'; END IF;
   SELECT * INTO v_user FROM public.users WHERE userid=p_userid FOR UPDATE;
   IF NOT FOUND THEN RAISE EXCEPTION 'Profile not found'; END IF;
   IF NOT coalesce(p_admin_reset,false) AND (coalesce(v_user.codeset,false) OR nullif(trim(v_user.pin),'') IS NOT NULL) THEN
     RAISE EXCEPTION 'Transaction PIN already set';
   END IF;
   UPDATE public.users SET pin=p_pin_hash,codeset=true WHERE userid=p_userid;
-  DELETE FROM ucl_native_private.pin_attempts WHERE userid=p_userid;
   RETURN true;
 END; $$;
+-- Retain the old server RPC name while deployed clients transition; it no longer limits attempts.
 CREATE OR REPLACE FUNCTION public.reserve_transaction_pin_attempt(p_userid text)
 RETURNS jsonb LANGUAGE plpgsql SECURITY INVOKER SET search_path='' AS $$
-DECLARE v_user public.users%ROWTYPE; v_attempt ucl_native_private.pin_attempts%ROWTYPE;
+DECLARE v_user public.users%ROWTYPE;
 BEGIN
-  -- Keep user/attempt lock ordering consistent with setup, reset and successful verification.
-  SELECT * INTO v_user FROM public.users WHERE userid=p_userid FOR SHARE;
+  SELECT * INTO v_user FROM public.users WHERE userid=p_userid;
   IF NOT FOUND THEN RAISE EXCEPTION 'Profile not found'; END IF;
   IF NOT coalesce(v_user.codeset,false) OR nullif(trim(v_user.pin),'') IS NULL THEN RAISE EXCEPTION 'No transaction PIN has been set'; END IF;
-  INSERT INTO ucl_native_private.pin_attempts(userid) VALUES(p_userid) ON CONFLICT(userid) DO NOTHING;
-  SELECT * INTO v_attempt FROM ucl_native_private.pin_attempts WHERE userid=p_userid FOR UPDATE;
-  IF v_attempt.window_start <= now()-interval '15 minutes' THEN
-    v_attempt.attempts := 0;
-    v_attempt.window_start := now();
-  END IF;
-  IF v_attempt.attempts>=5 THEN
-    RETURN jsonb_build_object('allowed',false,'retryAt',v_attempt.window_start+interval '15 minutes');
-  END IF;
-  UPDATE ucl_native_private.pin_attempts SET attempts=v_attempt.attempts+1,window_start=v_attempt.window_start WHERE userid=p_userid;
   RETURN jsonb_build_object('allowed',true,'pin',v_user.pin);
 END; $$;
 CREATE OR REPLACE FUNCTION public.finish_transaction_pin_attempt(p_userid text,p_expected_pin text,p_replacement_hash text DEFAULT NULL)
 RETURNS boolean LANGUAGE plpgsql SECURITY INVOKER SET search_path='' AS $$
 DECLARE v_pin text;
 BEGIN
-  IF p_replacement_hash IS NOT NULL AND p_replacement_hash !~ '^scrypt-v1:[a-f0-9]{32}:[a-f0-9]{64}$' THEN RAISE EXCEPTION 'Invalid PIN hash'; END IF;
+  IF p_replacement_hash IS NOT NULL THEN RAISE EXCEPTION 'PIN replacement requires the admin reset operation'; END IF;
   SELECT pin INTO v_pin FROM public.users WHERE userid=p_userid FOR UPDATE;
   IF NOT FOUND OR v_pin IS DISTINCT FROM p_expected_pin THEN RETURN false; END IF;
-  IF p_replacement_hash IS NOT NULL THEN UPDATE public.users SET pin=p_replacement_hash WHERE userid=p_userid; END IF;
-  DELETE FROM ucl_native_private.pin_attempts WHERE userid=p_userid;
   RETURN true;
 END; $$;
 REVOKE ALL ON FUNCTION public.set_transaction_pin_atomic(text,text,boolean) FROM PUBLIC,anon,authenticated;

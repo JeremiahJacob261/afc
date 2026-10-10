@@ -4,7 +4,6 @@ import { parseCurrency } from '@/lib/currency'
 export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ status: 'error', message: 'Method not allowed' })
   res.setHeader('Cache-Control', 'no-store')
-  if (process.env.UCL_NATIVE_BETTING_ENABLED !== 'true') return res.status(503).json({ status: 'error', message: 'Betting is unavailable' })
   try {
     const { user, supabase } = await getCurrentProfile(req, 'userid')
     const stake = parseCurrency(req.query.stake)

@@ -5,10 +5,9 @@ import { notifyTeamMemberJoined } from '@/lib/pushNotifications'
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ status: 'error', message: 'Method not allowed' })
   res.setHeader('Cache-Control', 'no-store')
-  if (process.env.UCL_NATIVE_REGISTRATION_ENABLED !== 'true') return res.status(503).json({ status: 'error', message: 'Registration is unavailable' })
   try {
     const user = await getCurrentUser(req)
-    if (!user.email || !user.email_confirmed_at) return res.status(403).json({ status: 'error', message: 'Confirm your email before completing registration' })
+    if (!user.email) return res.status(400).json({ status: 'error', message: 'Account email is required' })
     const body = req.body || {}
     // Auth owns identity; the database creates the profile and referral record in one transaction.
     const supabase = getSupabaseAdmin()

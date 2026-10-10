@@ -99,3 +99,35 @@ The debug artifacts above predate service configuration and Firebase registratio
 - Catalog readback confirms the withdrawal minimum guard and server-only function grants. Missing-identity checks previously rejected native registration, betting and PIN attempts without creating customer records. No successful money action or live PIN mutation was exercised.
 - Next.js changes remain local. Before deployment, securely load `TRANSACTION_PIN_PEPPER` into the Vercel server environment and preserve a backup. Its protected local copy is outside Git at `%LOCALAPPDATA%/UclNative/server-secrets/transaction-pin.xml`; `scripts/load-server-pin-secret.ps1` loads it only into the current server process. Missing pepper returns 503 for PIN services. Never pass it to Android or expose it as a public environment variable.
 - Withdrawal submission still needs a persisted request UUID and a comparison against the user's reviewed total before activation. Receipt privacy/retention, legacy direct access, device checks and coordinated old-app shutdown remain launch gates.
+
+## Deployed route checks — 2026-10-10
+
+### Subsequent product correction: plaintext PINs
+
+The user rejected PIN hashing and the pepper requirement. Migration `restore_plaintext_transaction_pins` is applied: PIN setup accepts four digits, and successful verification no longer rewrites PIN values. Server source now verifies plaintext PINs without a pepper while retaining shared attempt limits, admin-only reset, owner checks and PIN freshness checks at withdrawal. Admin detail again includes its existing PIN field behind admin authentication. No scrypt hashes were present in the database, and no stored user PINs were modified. The hashing/pepper notes elsewhere in this historical record are superseded. The two secret helper scripts were removed. The revised Next.js source needs redeployment; the Android APK is unchanged.
+
+The user confirmed Vercel deployment after the preceding local build record. Requests to `https://www.europeanfc01.com` now return:
+
+| Route/check | Result |
+| --- | --- |
+| `GET /api/mobile/release` | 200, correct application ID, version code 0 (no release advertised) |
+| `GET /api/mobile/withdrawal-quote?amount=5000`, no token | 401, authentication required |
+| Payment data and withdrawal quote, invalid token | 401, invalid or expired session |
+| `POST /api/set-pin` and `/api/withdraw`, invalid token | 401, invalid or expired session |
+| `GET /api/mobile/bet-quote` | 503, betting unavailable |
+| `GET /api/mobile/signup-profile` | 405, method not allowed |
+| `POST /api/mobile/signup-profile` and `/api/mobile/upload-receipt` | 503, respective activation gates remain closed |
+
+These are route and denied-session checks, not successful customer journey tests. No PIN, wallet, receipt, balance or account was mutated. Confirmation that Vercel has `TRANSACTION_PIN_PEPPER` is pending. `adb devices` still reports no attached device. The earlier deployment-pending statements describe the state before this confirmation.
+
+## User correction: remove added restrictions ? 2026-10-10
+
+This section supersedes the activation and PIN restrictions recorded above.
+
+- Deleted `NativeJourneyGates` and its registration, payment, PIN and betting guards.
+- Removed the production-only wheel restriction and development-only support-link restriction. Wheel availability still comes from the existing server eligibility/cooldown response; valid configured support URLs open in either flavor.
+- Removed all three `UCL_NATIVE_*_ENABLED` API checks. Revised signup, bet quotes and receipt uploads are available to authenticated callers without those environment switches. These Next.js revisions require redeployment.
+- Removed the extra email-confirmation check from both the signup adapter and atomic profile function. A read-only Auth settings request confirmed the existing Supabase project already has `mailer_autoconfirm=true`; no project setting change was required. Atomic profile/referral creation remains intact.
+- Removed PIN attempt limits from server source and compatibility RPCs. Dropped only the private PIN attempt-counter table; no customer PIN/profile rows were modified. Migration `remove_native_launch_restrictions` is applied and catalog readback confirms the confirmation check, timer and counter table are absent.
+- Plaintext PINs remain; no hashing or pepper requirement. PIN verification still checks the authenticated profile, and the withdrawal transaction rechecks that PIN before deduction. RLS remains unchanged.
+- Version 2 (`1.0.1`) signed APK build completed successfully in 8m 19s, including release lint. `artifacts/native/ucl-1.0.1-2.apk` is 11,088,499 bytes; SHA-256 `99d64a670fb64951fb81c94c0db2ddf79d6881bd5b7085e023d2ba2d480d4c7d`. Signature verification passed with the same protected release certificate as version 1. The previous version 1 APK still contains the old disabled journeys. Device testing, visual parity and old-app shutdown remain outstanding. The manifest URL is staging metadata; the APK has not been published.

@@ -131,7 +131,6 @@ class PaymentViewModel(private val repository: PaymentRepository, private val se
     }
     fun submitDeposit() = work(mutation = true) {
         val current = state.value
-        if (!NativeJourneyGates.payments) return@work fail(R.string.journey_unavailable)
         if (current.hasPending || current.uncertain) return@work fail(R.string.journey_payment_pending)
         val method = current.method ?: return@work fail(R.string.journey_incomplete)
         val destination = current.destination ?: return@work fail(R.string.journey_incomplete)
@@ -146,7 +145,6 @@ class PaymentViewModel(private val repository: PaymentRepository, private val se
         mutableState.update { it.copy(page = PaymentPage.DepositSuccess, receipt = null, receiptUrl = null, reviewed = false) }
     }
     fun bindWallet() = work(mutation = true) {
-        if (!NativeJourneyGates.payments) return@work fail(R.string.journey_unavailable)
         val current = state.value
         val method = current.method ?: return@work fail(R.string.journey_choose_method)
         if (current.wallet.isBlank() || method.local && (current.holder.isBlank() || current.bank.isBlank())) return@work fail(R.string.journey_incomplete)
@@ -156,7 +154,6 @@ class PaymentViewModel(private val repository: PaymentRepository, private val se
         mutableState.update { it.copy(data = data, wallet = "", holder = "", bank = "", page = PaymentPage.Wallet) }
     }
     fun submitWithdrawal() = work(mutation = true) {
-        if (!NativeJourneyGates.payments || !NativeJourneyGates.pin) return@work fail(R.string.journey_unavailable)
         val current = state.value
         if (current.uncertain || current.hasPending) return@work fail(R.string.journey_payment_pending)
         val wallet = current.payoutWallet ?: return@work fail(R.string.journey_incomplete)
@@ -167,7 +164,6 @@ class PaymentViewModel(private val repository: PaymentRepository, private val se
         mutableState.update { it.copy(page = PaymentPage.WithdrawalSuccess, pin = "", withdrawalQuote = null) }
     }
     fun setPin() = work(mutation = true) {
-        if (!NativeJourneyGates.pin) return@work fail(R.string.journey_unavailable)
         val current = state.value
         if (current.hasPin) return@work fail(R.string.journey_pin_locked)
         if (current.pin.length != 4 || current.pin != current.confirmPin) return@work fail(R.string.journey_pin_mismatch)

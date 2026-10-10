@@ -98,7 +98,7 @@ fun WheelRoute(
         viewModel.finishAnimation()
     }
     val wheel = state.wheel
-    val canSpin = BuildConfig.WHEEL_SPIN_ENABLED && wheel?.canSpin == true && !state.isLoading && !state.isSpinning
+    val canSpin = wheel?.canSpin == true && !state.isLoading && !state.isSpinning
 
     Scaffold(
         contentWindowInsets = WindowInsets.statusBars,
@@ -160,7 +160,6 @@ fun WheelRoute(
                             state.result != null && wheel.lastAmount != null -> WheelNotice(stringResource(R.string.wheel_won, displayAmount(wheel.lastAmount)))
                             state.recoveredAward != null -> WheelNotice(stringResource(R.string.wheel_recovered, state.recoveredAward!!))
                             BuildConfig.CURRENCY_LABEL.isBlank() -> Unit
-                            !BuildConfig.WHEEL_SPIN_ENABLED -> WheelNotice(stringResource(R.string.wheel_launch_pending))
                             wheel.eligible != true -> WheelNotice(stringResource(R.string.wheel_balance_required, displayAmount(wheel.minimumBalance)))
                             wheel.canSpin != true -> WheelNotice(stringResource(R.string.wheel_cooldown))
                             else -> WheelNotice(stringResource(R.string.wheel_ready))

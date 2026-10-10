@@ -40,8 +40,7 @@ fun SupportRoute(container: UclAppContainer, onBack: () -> Unit) {
         listOf(R.string.journey_contact_support to links?.customerSupportUrl,
             R.string.journey_telegram to links?.telegramGroupUrl, R.string.journey_whatsapp to links?.whatsappGroupUrl).forEach { (label, url) ->
             val uri = url?.let(Uri::parse)?.takeIf { it.scheme == "https" && !it.host.isNullOrBlank() && it.userInfo == null }
-            // Current-market defaults are development-only until launch support destinations are approved.
-            JourneyAction(stringResource(label), enabled = uri != null && com.pro.uclfootball.BuildConfig.FLAVOR == "development") {
+            JourneyAction(stringResource(label), enabled = uri != null) {
                 runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, uri)) }.onFailure { error = R.string.journey_unavailable }
             }
         }

@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     const membershipBalanceThreshold = await getMembershipBalanceThreshold(supabase)
     const { data: users, error: userError } = await supabase
       .from('users')
-      .select('userid,newrefer,username,email,uid,phone,countrycode,refer,lvla,lvlb,password,codeset,balance,totald')
+      .select('userid,newrefer,username,email,uid,phone,countrycode,refer,lvla,lvlb,password,pin,codeset,balance,totald')
       .eq('uid', uid)
 
     if (userError) throw userError

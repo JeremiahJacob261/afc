@@ -13,8 +13,6 @@ function imageExtension(bytes, mime) {
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ status: 'error', message: 'Method not allowed' })
   res.setHeader('Cache-Control', 'no-store')
-  // Keep off until receipt visibility and retention are approved; no RLS or bucket change is made here.
-  if (process.env.UCL_NATIVE_RECEIPT_UPLOAD_ENABLED !== 'true') return res.status(503).json({ status: 'error', message: 'Receipt uploads are unavailable' })
   try {
     const { user, supabase } = await getCurrentProfile(req, 'userid')
     const { image, mimeType, uploadId } = req.body || {}

@@ -46,12 +46,10 @@ class BetSlipViewModel(private val api: NativeApiClient, private val sessions: A
     fun quote() = work(false) {
         val current = state.value
         if (current.stake.toBigDecimalOrNull()?.signum() != 1) return@work fail(R.string.journey_valid_amount)
-        if (!NativeJourneyGates.betting) return@work fail(R.string.journey_unavailable)
         val quote = api.getJson<BetQuoteDto>("api/mobile/bet-quote?match_id=${encode(matchId)}&picked=${encode(market)}&stake=${encode(current.stake)}", true)
         mutableState.update { it.copy(quote = quote) }
     }
     fun submit() = work(true) {
-        if (!NativeJourneyGates.betting) return@work fail(R.string.journey_unavailable)
         val current = state.value
         if (current.uncertain || current.result != null) return@work fail(R.string.journey_uncertain)
         val quote = current.quote ?: return@work fail(R.string.journey_data_changed)

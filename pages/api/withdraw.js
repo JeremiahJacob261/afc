@@ -119,7 +119,7 @@ export default async function handler(req, res) {
       p_payout_amount: requestedAmount,
       p_wallet_id: destination.wallet.id,
       p_method_id: savedMethod.id,
-      p_pin_hash: verifiedPin.hash,
+      p_pin_hash: verifiedPin.pin,
       p_wallet_snapshot: { wallet: destination.wallet.wallet, bank: destination.wallet.bank, names: destination.wallet.names },
       p_method_currency: displayPaymentCurrency(methodCode),
       p_method_rate: methodRate,

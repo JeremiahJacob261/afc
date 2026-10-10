@@ -3,7 +3,6 @@ package com.pro.uclfootball.auth
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pro.uclfootball.R
-import com.pro.uclfootball.network.NativeJourneyGates
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import java.io.IOException
@@ -40,7 +39,6 @@ class RegistrationViewModel(private val repository: RegistrationRepository, refe
             current.phone.filter(Char::isDigit).length < 9 || !Regex("\\+[0-9]{1,4}").matches(current.dialCode.trim()) -> R.string.registration_invalid_phone
             !current.acceptedTerms -> R.string.registration_accept_terms
             current.password.length < 6 || (!current.awaitingConfirmation && current.password != current.confirmation) -> R.string.registration_password_mismatch
-            !NativeJourneyGates.registration -> R.string.journey_unavailable
             else -> null
         }
         if (error != null) { mutableState.update { it.copy(error = error) }; return }
