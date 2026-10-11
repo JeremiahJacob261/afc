@@ -49,3 +49,6 @@ next-env.d.ts
 
 anon-cadb6-c070d66a07fb.json
 /artifacts/native/
+
+# Local visual QA captures and emulator preparation
+/.impeccable/review/

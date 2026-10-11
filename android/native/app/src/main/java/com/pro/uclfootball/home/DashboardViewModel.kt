@@ -81,48 +81,32 @@ class DashboardViewModel(
     }
 
     private fun load(force: Boolean) {
-        if (!force && mutableState.value.isLoading) return
-        mutableState.update { it.copy(isLoading = it.matches.isEmpty() && it.username == null, errorMessage = null, requiresSignIn = false) }
+        mutableState.update { it.copy(isLoading = it.matches.isEmpty(), errorMessage = null, requiresSignIn = false) }
+        // Account failures must not cancel the independent public fixture request.
         viewModelScope.launch {
             try {
                 val userId = authSessionRepository.currentSession()?.user?.id
                 mutableState.update { it.copy(username = identityCache.username(userId)) }
-                val (profile, matches) = coroutineScope {
-                    val profileRequest = async {
-                        apiClient.getJson<MeResponse>("api/me", authenticated = true, oncePerForeground = force, onCached = { saved ->
-                            mutableState.update { it.copy(username = saved.profile.username, isLoading = false) }
-                        }).profile.also { profile ->
-                            if (authSessionRepository.currentSession()?.user?.id == userId) {
-                                identityCache.update(userId, profile.username)
-                                mutableState.update { it.copy(username = profile.username) }
-                            }
-                        }
-                    }
-                    val matchRequest = async {
-                        apiClient.getJson<MatchesResponse>("api/mobile/matches?limit=$matchLimit", oncePerForeground = force, onCached = { saved ->
-                            mutableState.update { it.copy(matches = saved.matches, isLoading = false) }
-                        }).matches
-                    }
-                    profileRequest.await() to matchRequest.await()
+                val profile = apiClient.getJson<MeResponse>("api/me", authenticated = true, oncePerForeground = force, onCached = { saved ->
+                    mutableState.update { it.copy(username = saved.profile.username) }
+                }).profile
+                if (authSessionRepository.currentSession()?.user?.id == userId) {
+                    identityCache.update(userId, profile.username)
+                    mutableState.update { it.copy(username = profile.username) }
                 }
-                mutableState.update {
-                    it.copy(isLoading = false, username = profile.username, matches = matches)
+            } catch (e: CancellationException) { throw e }
+            catch (e: ApiException) { if (e.httpStatus == 401) mutableState.update { it.copy(requiresSignIn = true) } }
+            catch (_: Exception) { /* Preserve cached identity; fixture status belongs to the fixture request. */ }
+        }
+        viewModelScope.launch {
+            try {
+                val matches = com.pro.uclfootball.match.FixturesRepository(apiClient).load(matchLimit, force) { saved ->
+                    mutableState.update { it.copy(matches = saved, isLoading = false) }
                 }
-            } catch (error: CancellationException) {
-                throw error
-            } catch (error: ApiException) {
-                if (error.httpStatus == 401) {
-                    mutableState.update {
-                        it.copy(isLoading = false, requiresSignIn = true, errorMessage = null)
-                    }
-                } else {
-                    setError("We couldn’t refresh your account or fixtures. Please retry.")
-                }
-            } catch (error: IOException) {
-                setError("You’re offline. Connect and retry to load current fixtures.")
-            } catch (error: Exception) {
-                setError("We couldn’t refresh your account or fixtures. Please retry.")
-            }
+                mutableState.update { it.copy(matches = matches, isLoading = false, errorMessage = null) }
+            } catch (e: CancellationException) { throw e }
+            catch (_: IOException) { setError("You are offline. Connect and retry to load current fixtures.") }
+            catch (_: Exception) { setError("We could not refresh fixtures. Please retry.") }
         }
     }
 

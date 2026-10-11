@@ -53,6 +53,7 @@ class MatchDetailViewModel(
                 val response = apiClient.getJson<MatchResponse>("api/mobile/match?id=$encodedId", onCached = { saved ->
                     mutableState.update { it.copy(match = saved.match, isLoading = false, hasContent = true) }
                 })
+                mutableState.update { it.copy(isLoading = false, hasContent = true, match = response.match) }
                 val account = apiClient.getJson<MeResponse>("api/me", authenticated = true, onCached = { saved ->
                     val savedLevel = runCatching { saved.vip?.jsonObject?.get("viplevel")?.jsonPrimitive?.intOrNull }.getOrNull() ?: 1
                     mutableState.update { it.copy(vipLevel = savedLevel) }

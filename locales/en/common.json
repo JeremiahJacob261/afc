@@ -1354,6 +1354,24 @@
     "wheelDeposit": "Deposit funds",
     "wheelFreeDailySpin": "One free cash spin every 24 hours.",
     "wheelVerificationFailed": "Reload the wheel to verify your balance and latest spin before trying again.",
-    "wheelReload": "Reload wheel"
+    "wheelReload": "Reload wheel",
+    "recharge": "Recharge"
+  },
+  "bulletin": {
+    "retry": "Retry",
+    "betsIntro": "Your selections, stakes, and results in one clear view.",
+    "betsUnavailable": "Bets unavailable",
+    "tryAgain": "We could not load this information. Please try again.",
+    "refreshFailed": "Could not refresh. Previously loaded information is shown.",
+    "return": "Return",
+    "potentialReturn": "Potential return",
+    "stakeReturned": "Stake returned",
+    "financialBreakdown": "Financial breakdown",
+    "refundExplanation": "This selection was refunded. Your stake is returned with no profit.",
+    "fixtureCount": "{{count}} fixtures",
+    "selectMarket": "Select a score to review your stake.",
+    "closed": "Betting closed",
+    "marketInfo": "Returns are a percentage of your stake. Review your selection before confirming.",
+    "allMarkets": "All score markets"
   }
 }

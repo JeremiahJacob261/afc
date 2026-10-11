@@ -1,464 +1,84 @@
+import { useEffect, useState } from 'react'
+import Head from 'next/head'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useTranslation } from 'next-i18next'
+import { ArrowLeft, ChevronRight, Trophy } from 'lucide-react'
 import Cover from './cover'
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
-import { useRouter } from 'next/router'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
-import Head from 'next/head'
-import { Box, Stack, Typography } from '@mui/material'
-import Image from 'next/image'
-import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined'
-import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded'
-import Loading from '@/pages/components/loading'
-import Ims from '@/public/simps/ball.png'
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth'
-import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay'
-import { useTranslation } from 'next-i18next'
+import { useClientMatchDisplay } from '@/lib/matchDisplay'
+import { betMoney, betNumber, getBetOutcome, getBetReturn } from '@/lib/betDisplay'
+import { BulletinTeam, BetBadge, BulletinLoading, BulletinState } from '@/components/user/BulletinUI'
+import styles from '@/styles/MatchdayBulletin.module.css'
 
-const colors = {
-  page: '#f5f7fc',
-  card: '#ffffff',
-  cardAlt: '#f0f2fb',
-  border: '#d9e2f2',
-  accent: '#00409e',
-  accentDark: '#eaf0fb',
-  text: '#080f32',
-  muted: '#526583',
-  soft: '#526583',
-  warning: '#8a6013',
-  success: '#286746',
-  danger: '#a43d4a',
-}
-
-const toNumber = (value) => {
-  const amount = Number(value)
-  return Number.isFinite(amount) ? amount : 0
-}
-
-const formatFcfa = (value, locale) => `${toNumber(value).toLocaleString(locale, { maximumFractionDigits: 3 })} MMK`
-const formatOdd = (value) => toNumber(value).toFixed(3)
-
-// A company-market hit refunds the stake and pays no profit, so it must not
-// read as a win. settlement_outcome is authoritative; fall back to won for bets
-// settled before SETTLEMENT_OUTCOME_MIGRATION.sql was applied.
-const getBetOutcome = (bet) => {
-  if (bet.settlement_outcome) return bet.settlement_outcome
-  if (bet.won === 'true') return 'won'
-  if (bet.won === 'false') return 'lost'
-  return null
-}
-
-const getBetStatus = (bet, t) => {
-  const startTime = getMatchStartMs(bet)
-  const hasFutureStart = Boolean(startTime && startTime > Date.now())
-
-  if (hasFutureStart) {
-    return { label: t('status.notStarted'), color: colors.muted, bg: '#f0f2fb' }
-  }
-
-  const outcome = getBetOutcome(bet)
-
-  if (outcome === 'won') {
-    return { label: t('status.won'), color: colors.success, bg: '#e8f4ea' }
-  }
-
-  if (outcome === 'refunded') {
-    return { label: t('status.refunded'), color: colors.accent, bg: colors.accentDark }
-  }
-
-  if (outcome === 'lost') {
-    return { label: t('status.lost'), color: colors.danger, bg: '#fbecee' }
-  }
-
-  return { label: t('status.ongoing'), color: colors.warning, bg: '#fbf2dc' }
+function BetRow({ bet }) {
+  const { t, i18n } = useTranslation('common')
+  const display = useClientMatchDisplay(bet)
+  return <Link href={`/user/viewbet/${bet.betid}`} className={styles.ledgerRow}>
+    <div className={styles.ledgerFixture}><div className={styles.teams}><BulletinTeam name={bet.home} image={bet.ihome} /><BulletinTeam name={bet.away} image={bet.iaway} /></div><div className={styles.meta}>{display.dateTime}</div></div>
+    <div className={styles.cell}><small>{t('mobile.bets.pick')}</small><span>{bet.market || '—'}</span></div>
+    <div className={styles.cell}><small>{t('mobile.bets.stake')}</small><span>{betMoney(bet.stake, i18n.language)}</span></div>
+    <div className={`${styles.cell} ${styles.returnCell}`}><small>{t(getBetOutcome(bet) === 'refunded' ? 'bulletin.stakeReturned' : 'bulletin.potentialReturn')}</small><span>{betMoney(getBetReturn(bet), i18n.language)}</span></div>
+    <BetBadge bet={bet} /><ChevronRight className={styles.arrow} size={18} aria-hidden="true" />
+  </Link>
 }
 
 export default function Bets() {
   const { t, i18n } = useTranslation('common')
   const router = useRouter()
-  const [openx, setOpenx] = useState(false)
-  const [bets, setBets] = useState([])
-  const [fina, setFina] = useState([])
-  const [value, setValue] = useState('1')
-  const hasRun = useRef(false)
-
-  const handleOpenx = () => setOpenx(true)
-  const handleClosex = () => setOpenx(false)
-
+  const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
+  const [retry, setRetry] = useState(0)
+  const [tab, setTab] = useState('unsettled')
   useEffect(() => {
     let active = true
-
-    const getbets = async () => {
-      const session = await requireSession(router)
-      if (!session) return
-      clearLegacyAuthStorage()
-
+    async function load() {
+      setLoading(true); setError(false)
       try {
+        const session = await requireSession(router)
+        if (!session) return
+        clearLegacyAuthStorage()
         const response = await authFetch('/api/my-bets')
-        if (response.status === 401 || response.status === 404) {
-          router.push('/login')
-          return
-        }
-
+        if (response.status === 401 || response.status === 404) { router.push('/login'); return }
         const result = await response.json()
-        if (!active || result.status !== 'success') return
-        setBets(result.unsettled || [])
-        setFina(result.settled || [])
-      } catch (e) {
-        console.log(e)
-      }
+        if (!response.ok || result.status !== 'success') throw new Error('Unable to load bets')
+        if (active) setData({ unsettled: result.unsettled || [], settled: result.settled || [] })
+      } catch { if (active) setError(true) }
+      finally { if (active) setLoading(false) }
     }
-
-    getbets()
-    if (!hasRun.current) {
-      hasRun.current = true
-    }
-
-    return () => {
-      active = false
-    }
-  }, [router])
-
-  const currentBets = value === '1' ? bets : fina
-  const summary = useMemo(() => {
-    const totalStake = [...bets, ...fina].reduce((sum, bet) => sum + toNumber(bet.stake), 0)
-    const won = fina.filter((bet) => getBetOutcome(bet) === 'won').length
-    const refunded = fina.filter((bet) => getBetOutcome(bet) === 'refunded').length
-
-    return [
-      { label: t('status.unsettled'), value: bets.length },
-      { label: t('status.won'), value: won },
-      { label: t('status.refunded'), value: refunded },
-      { label: t('mobile.bets.stake'), value: formatFcfa(totalStake, i18n.language) },
-    ]
-  }, [bets, fina, t, i18n.language])
-  const tabs = [
-    { value: '1', label: t('status.unsettled') },
-    { value: '2', label: t('status.settled') },
+    load()
+    return () => { active = false }
+  }, [router, retry])
+  const unsettled = data?.unsettled || [], settled = data?.settled || []
+  const summary = [
+    [t('status.unsettled'), unsettled.length],
+    [t('status.won'), settled.filter((bet) => getBetOutcome(bet) === 'won').length],
+    [t('status.refunded'), settled.filter((bet) => getBetOutcome(bet) === 'refunded').length],
+    [t('mobile.bets.stake'), betMoney([...unsettled, ...settled].reduce((sum, bet) => sum + betNumber(bet.stake), 0), i18n.language)],
   ]
-
-  return (
-    <Cover>
-      <Loading open={openx} handleClose={handleClosex} />
-      <Head>
-        <title>{`UCL — ${t('common.myBets')}`}</title>
-        <meta name="description" content="View your recent bet slips" />
-        <link rel="icon" href="/european.ico" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-
-      <Box sx={{ minHeight: '90vh', pb: 3, color: colors.text }}>
-        <Stack direction="row" alignItems="center" spacing={1} sx={{ py: 1 }}>
-          <Box
-            component="button"
-            type="button"
-            aria-label={t('website.backToDashboard')}
-            onClick={() => router.push('/user')}
-            sx={{
-              width: 44,
-              height: 44,
-              border: `1px solid ${colors.border}`,
-              borderRadius: '8px',
-              background: colors.card,
-              color: colors.text,
-              display: 'grid',
-              placeItems: 'center',
-              cursor: 'pointer',
-              p: 0,
-            }}
-          >
-            <KeyboardArrowLeftOutlinedIcon sx={{ width: 24, height: 24 }} />
-          </Box>
-          <Box>
-            <Typography component="h1" sx={{ fontSize: { xs: 32, md: 40 }, fontFamily: 'Georgia,serif', fontWeight: 400, letterSpacing: '-0.02em' }}>
-              {t('common.myBets')}
-            </Typography>
-          </Box>
-        </Stack>
-
-        <SummaryGrid items={summary} />
-        <BetTabs value={value} onChange={setValue} tabs={tabs} />
-        <BetList bets={currentBets} emptyLabel={t('emptyStates.noBets')} onOpen={handleOpenx} />
-      </Box>
-    </Cover>
-  )
-
-  function BetList({ bets: betItems, emptyLabel, onOpen }) {
-    if (!betItems.length) {
-      return (
-        <Stack
-          alignItems="center"
-          justifyContent="center"
-          spacing={1}
-          sx={{
-            mt: 2,
-            minHeight: 260,
-            border: `1px dashed ${colors.border}`,
-            borderRadius: '8px',
-            background: colors.card,
-            px: 3,
-            textAlign: 'center',
-          }}
-        >
-          <Typography sx={{ color: colors.text, fontFamily: 'Arial,sans-serif', fontWeight: 600 }}>
-            {emptyLabel}
-          </Typography>
-          <Typography sx={{ color: colors.muted, fontFamily: 'Arial,sans-serif', fontSize: 13 }}>
-            {t('emptyStates.betsComing')}
-          </Typography>
-        </Stack>
-      )
-    }
-
-    return (
-      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2,minmax(0,1fr))' }, gap: 2, mt: 2 }}>
-        {betItems.slice().reverse().map((bet) => (
-          <BetCard
-            key={bet.betid}
-            bet={bet}
-            onClick={() => {
-              onOpen()
-              router.push(`/user/viewbet/${bet.betid}`)
-            }}
-          />
-        ))}
-      </Box>
-    )
+  const rows = (data?.[tab] || []).slice().reverse()
+  function handleTabKey(event) {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
+    event.preventDefault()
+    const next = event.key === 'Home' ? 'unsettled' : event.key === 'End' ? 'settled' : tab === 'unsettled' ? 'settled' : 'unsettled'
+    setTab(next)
+    document.getElementById(`tab-${next}`)?.focus()
   }
-
-  function BetCard({ bet, onClick }) {
-    const status = getBetStatus(bet, t)
-    // A refund returns the stake only, never stake + profit.
-    const returnAmount = getBetOutcome(bet) === 'refunded'
-      ? toNumber(bet.stake)
-      : toNumber(bet.stake) + toNumber(bet.profit)
-    const display = useClientMatchDisplay(bet)
-
-    return (
-      <Box
-        component="button"
-        type="button"
-        onClick={onClick}
-        sx={{
-          width: '100%',
-          border: `1px solid ${colors.border}`,
-          borderRadius: '16px',
-          background: colors.card,
-          color: colors.text,
-          p: 0,
-          textAlign: 'left',
-          cursor: 'pointer',
-          overflow: 'hidden',
-        }}
-      >
-        <Stack spacing={1.5} sx={{ p: 1.5 }}>
-          <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
-            <Team name={bet.home} image={bet.ihome} />
-            <Typography sx={{ fontFamily: 'Arial,sans-serif', color: colors.warning, fontSize: 12, fontWeight: 700 }}>
-              VS
-            </Typography>
-            <Team name={bet.away} image={bet.iaway} align="right" />
-          </Stack>
-
-          <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ background: colors.cardAlt, borderRadius: '8px', p: 1 }}>
-            <Box>
-              <Typography sx={{ color: colors.muted, fontFamily: 'Arial,sans-serif', fontSize: 11 }}>
-                {t('landing.markets.pickMarket')}
-              </Typography>
-              <Typography sx={{ color: colors.text, fontFamily: 'Arial,sans-serif', fontSize: 14, fontWeight: 600 }}>
-                {bet.market || t('landing.markets.pickMarket')}
-              </Typography>
-            </Box>
-            <StatusPill status={status} />
-          </Stack>
-
-          <Box
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-              gap: 1,
-            }}
-          >
-            <Metric label={t('landing.live.odds')} value={`${formatOdd(bet.odd)}%`} />
-            <Metric label={t('mobile.bets.stake')} value={formatFcfa(bet.stake, i18n.language)} />
-            <Metric label={t('mobile.match.profit')} value={formatFcfa(returnAmount, i18n.language)} />
-          </Box>
-        </Stack>
-
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          sx={{
-            background: '#f0f2fb',
-            borderTop: `1px solid ${colors.border}`,
-            px: 1.5,
-            py: 1,
-          }}
-        >
-          <Typography sx={{ color: colors.muted, fontFamily: 'Arial,sans-serif', fontSize: 12 }}>
-            {t('mobile.bets.kickoff')}: {display.dateTime}
-          </Typography>
-          <Typography sx={{ color: colors.muted, fontFamily: 'Arial,sans-serif', fontSize: 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {t('mobile.bets.betId')}: {bet.betid}
-          </Typography>
-          <ArrowForwardIosRoundedIcon sx={{ width: 14, height: 14, color: colors.accent }} />
-        </Stack>
-      </Box>
-    )
-  }
+  return <Cover><Head><title>{`UCL — ${t('common.myBets')}`}</title><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
+    <main className={styles.page}>
+      <Link className={styles.back} href="/user"><ArrowLeft size={18} aria-hidden="true" />{t('website.backToDashboard')}</Link>
+      <div className={styles.heading}><div><h1>{t('common.myBets')}</h1><p>{t('bulletin.betsIntro')}</p></div><Trophy size={24} className={styles.arrow} aria-hidden="true" /></div>
+      {data && <dl className={styles.summary}>{summary.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>}
+      <div className={styles.tabs} role="tablist" aria-label={t('common.myBets')}>{['unsettled', 'settled'].map((value) => <button key={value} type="button" id={`tab-${value}`} role="tab" tabIndex={tab === value ? 0 : -1} aria-selected={tab === value} aria-controls="bet-ledger" onKeyDown={handleTabKey} onClick={() => setTab(value)}>{t(`status.${value}`)}{data && <span className={styles.tabCount}>{data[value].length}</span>}</button>)}</div>
+      {error && data && <div className={styles.notice} role="status">{t('bulletin.refreshFailed')}<button type="button" onClick={() => setRetry((value) => value + 1)}>{t('bulletin.retry')}</button></div>}
+      <div id="bet-ledger" role="tabpanel" tabIndex={0} aria-labelledby={`tab-${tab}`}>
+        {loading && !data ? <BulletinLoading label={t('mobile.bets.loading')} /> : error && !data ? <BulletinState title={t('bulletin.betsUnavailable')} description={t('bulletin.tryAgain')} onRetry={() => setRetry((value) => value + 1)} /> : rows.length ? <div className={styles.ledger}>
+          <div className={styles.ledgerHeader} aria-hidden="true"><span>{t('common.matches')}</span><span>{t('mobile.bets.pick')}</span><span>{t('mobile.bets.stake')}</span><span>{t('bulletin.return')}</span><span>{t('mobile.bets.result')}</span><span /></div>
+          {rows.map((bet) => <BetRow key={bet.betid} bet={bet} />)}
+        </div> : <BulletinState title={t('emptyStates.noBets')} description={t('emptyStates.betsComing')}><Link className={styles.action} href="/user/matches">{t('website.browseAllMatches')}</Link></BulletinState>}
+      </div>
+    </main></Cover>
 }
-
-function SummaryGrid({ items }) {
-  return (
-    <Box
-      sx={{
-        display: 'grid',
-        gridTemplateColumns: { xs: 'repeat(2, minmax(0, 1fr))', md: 'repeat(4, minmax(0, 1fr))' },
-        gap: 1,
-        my: 1.5,
-      }}
-    >
-      {items.map((item) => (
-        <Box
-          key={item.label}
-          sx={{
-            border: `1px solid ${colors.border}`,
-            borderRadius: '8px',
-            background: colors.card,
-            p: 1.25,
-            minHeight: 72,
-          }}
-        >
-          <Typography sx={{ color: colors.muted, fontFamily: 'Arial,sans-serif', fontSize: 11 }}>
-            {item.label}
-          </Typography>
-          <Typography sx={{ color: colors.text, fontFamily: 'Arial,sans-serif', fontSize: item.label === 'Stake' ? 15 : 20, fontWeight: 700 }}>
-            {item.value}
-          </Typography>
-        </Box>
-      ))}
-    </Box>
-  )
-}
-
-function BetTabs({ value, onChange, tabs }) {
-  return (
-    <Box
-      sx={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-        gap: 1,
-        border: `1px solid ${colors.border}`,
-        borderRadius: '8px',
-        background: '#f0f2fb',
-        p: 0.5,
-      }}
-    >
-      {tabs.map((tab) => {
-        const selected = value === tab.value
-
-        return (
-          <Box
-            key={tab.value}
-            component="button"
-            type="button"
-            onClick={() => onChange(tab.value)}
-            sx={{
-              minHeight: 44,
-              border: 0,
-              borderRadius: '6px',
-              background: selected ? '#102451' : 'transparent',
-              color: selected ? '#fff' : colors.muted,
-              fontFamily: 'Arial,sans-serif',
-              fontSize: 13,
-              fontWeight: selected ? 700 : 500,
-              cursor: 'pointer',
-            }}
-          >
-            {tab.label}
-          </Box>
-        )
-      })}
-    </Box>
-  )
-}
-
-export async function getStaticProps(context) {
-  const i18nProps = await getI18nServerSideProps(context.locale)
-  return {
-    props: {
-      ...i18nProps,
-    },
-  }
-}
-
-function Team({ name, image, align = 'left' }) {
-  return (
-    <Stack
-      direction={align === 'right' ? 'row-reverse' : 'row'}
-      spacing={1}
-      alignItems="center"
-      sx={{ minWidth: 0, flex: 1 }}
-    >
-      <Box sx={{ width: 28, height: 28, flex: '0 0 auto', borderRadius: '50%', overflow: 'hidden', background: '#f0f2fb' }}>
-        <Image src={image ?? Ims} width={28} height={28} alt="" />
-      </Box>
-      <Typography
-        sx={{
-          color: colors.text,
-          fontFamily: 'Arial,sans-serif',
-          fontSize: 13,
-          fontWeight: 600,
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap',
-          textAlign: align,
-        }}
-      >
-        {name || 'Team'}
-      </Typography>
-    </Stack>
-  )
-}
-
-function Metric({ label, value }) {
-  return (
-    <Box sx={{ border: `1px solid ${colors.border}`, borderRadius: '8px', p: 1, minWidth: 0 }}>
-      <Typography sx={{ color: colors.muted, fontFamily: 'Arial,sans-serif', fontSize: 11 }}>
-        {label}
-      </Typography>
-      <Typography
-        sx={{
-          color: colors.soft,
-          fontFamily: 'Arial,sans-serif',
-          fontSize: 12,
-          fontWeight: 700,
-          overflowWrap: 'anywhere',
-        }}
-      >
-        {value}
-      </Typography>
-    </Box>
-  )
-}
-
-function StatusPill({ status }) {
-  return (
-    <Typography
-      component="span"
-      sx={{
-        color: status.color,
-        background: status.bg,
-        border: `1px solid ${status.color}40`,
-        borderRadius: '999px',
-        px: 1,
-        py: 0.4,
-        fontFamily: 'Arial,sans-serif',
-        fontSize: 11,
-        fontWeight: 700,
-        whiteSpace: 'nowrap',
-      }}
-    >
-      {status.label}
-    </Typography>
-  )
-}
+export async function getServerSideProps(context) { return { props: await getI18nServerSideProps(context.locale) } }

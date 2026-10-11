@@ -25,7 +25,7 @@ import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeft
 import Wig from '@/public/icon/wig.png'
 import Image from 'next/image'
 import Big from '@/public/icon/badge.png'
-import { DriveFileRenameOutlineRounded } from "@mui/icons-material";
+import DriveFileRenameOutlineRounded from '@mui/icons-material/DriveFileRenameOutlineRounded'
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 import { waitForPaint } from '@/lib/uiFeedback';
 import { calculateWithdrawalAmounts } from '@/lib/withdrawalFee';

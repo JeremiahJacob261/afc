@@ -28,7 +28,7 @@
     <string name="nav_home">ပင်မစာမျက်နှာ</string>
     <string name="nav_matches">ပွဲစဉ်များ</string>
     <string name="nav_bets">ကျွန်ုပ်၏ လောင်းကြေးများ</string>
-    <string name="nav_wallet">ပိုက်ဆံအိတ်</string>
+    <string name="nav_recharge">ငွေဖြည့်</string>
     <string name="nav_account">ပရိုဖိုင်</string>
     <string name="dashboard_title">ပွဲစဉ်နေ့</string>
     <string name="dashboard_greeting">ကြိုဆိုပါတယ်၊ %1$s</string>

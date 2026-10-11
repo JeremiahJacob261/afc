@@ -2,15 +2,13 @@ import { useEffect, useMemo, useState } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
-import {
-  AutoAwesome,
-  CheckCircleRounded,
-  Diamond,
-  Groups,
-  KeyboardArrowLeftOutlined,
-  TrendingUp,
-  Wallet,
-} from '@mui/icons-material'
+import AutoAwesome from '@mui/icons-material/AutoAwesome'
+import CheckCircleRounded from '@mui/icons-material/CheckCircleRounded'
+import Diamond from '@mui/icons-material/Diamond'
+import Groups from '@mui/icons-material/Groups'
+import KeyboardArrowLeftOutlined from '@mui/icons-material/KeyboardArrowLeftOutlined'
+import TrendingUp from '@mui/icons-material/TrendingUp'
+import Wallet from '@mui/icons-material/Wallet'
 import { Box, Chip, Divider, LinearProgress, Stack, Typography } from '@mui/material'
 import Cover from './cover'
 import { supabase } from '@/pages/api/supabase'

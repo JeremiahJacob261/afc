@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -82,7 +83,8 @@ fun BetDetailRoute(
             contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            item { WebPageHeading(webCopy("mobile.bets.details"), onBack, bordered = true) }
+            item { BulletinHeading(webCopy("mobile.bets.details"), onBack) }
+            if (state.error != null && state.hasContent) item { BulletinRefreshNotice(detailViewModel::refresh) }
             when {
                 state.isLoading && !state.hasContent -> item { BetDetailMessage(stringResource(R.string.bets_loading)) }
                 state.error != null && !state.hasContent -> item {
@@ -98,47 +100,32 @@ fun BetDetailRoute(
 }
 
 @Composable
-private fun BetDetailCard(bet: PlacedBetDto, match: MatchDetailDto?) {
-    val outcome = bet.settlementOutcome ?: when (bet.won) { "true" -> "won"; "false" -> "lost"; else -> null }
+internal fun BetDetailCard(bet: PlacedBetDto, match: MatchDetailDto?) {
+    val outcome = betOutcome(bet)
     val start = matchStartMillis(bet.tsgmt, bet.matchDate ?: bet.date, bet.matchTime ?: bet.time)
-    val status = if ((start ?: 0) > System.currentTimeMillis()) "notStarted" else outcome ?: "ongoing"
-    val tone = when (status) { "won" -> UclColors.success; "refunded" -> UclColors.accent; "lost" -> Color(0xFFA43D4A); "notStarted" -> WebMuted; else -> Color(0xFF8A6013) }
-    val ground = when (status) { "won" -> UclColors.successSurface; "refunded" -> UclColors.blueSurface; "lost" -> Color(0xFFFBECEE); "notStarted" -> UclColors.surface; else -> Color(0xFFFBF2DC) }
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        WebPanel(padding = 12) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                WebBetTeam(bet.home, bet.ihome, Modifier.weight(1f)); Text("VS", color = Color(0xFF8A6013), fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                WebBetTeam(bet.away, bet.iaway, Modifier.weight(1f), right = true)
-            }
-            Row(Modifier.fillMaxWidth().padding(top = 12.dp).background(UclColors.surface, RoundedCornerShape(8.dp)).padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                Column(Modifier.weight(1f)) { Text(webCopy("mobile.bets.league"), color = WebMuted, fontSize = 11.sp); Text(match?.otherl ?: match?.league ?: "?", fontSize = 14.sp, fontWeight = FontWeight.SemiBold) }
-                Text(webCopy("status.$status"), Modifier.background(ground, RoundedCornerShape(20.dp)).padding(horizontal = 8.dp, vertical = 4.dp), color = tone, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+    val date = start?.let { java.text.SimpleDateFormat("dd MMM yyyy, HH:mm", LocalConfiguration.current.locales[0]).format(java.util.Date(it)) } ?: webCopy("common.timeToBeConfirmed")
+    Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
+        Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.surface, border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)) {
+            Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                Text((if (match?.league == "others") match.otherl else match?.league) ?: "—", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                BulletinTeam(bet.home, bet.ihome, large = true); BulletinTeam(bet.away, bet.iaway, large = true)
+                BulletinBetBadge(bet)
             }
         }
-        WebPanel(padding = 12) {
-            BetSectionTitle(webCopy("mobile.bets.pick"), "trophy")
-            Text(webCopy("mobile.bets.pick"), Modifier.padding(top = 10.dp), color = WebMuted, fontSize = 11.sp)
-            Text(bet.market ?: "?", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
-            Row(Modifier.padding(top = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                WebBetMetric(webCopy("mobile.bets.odds"), String.format(java.util.Locale.ROOT, "%.3f%%", bet.odd.textValue().toDoubleOrNull() ?: 0.0), Modifier.weight(1f))
-                val stake = bet.stake.textValue().toDoubleOrNull() ?: 0.0
-                WebBetMetric(webCopy("mobile.bets.stake"), webMoney(stake), Modifier.weight(1f))
-                val winnings = if (outcome == "refunded") stake else bet.aim.textValue().toDoubleOrNull()?.takeIf { it != 0.0 } ?: (stake + (bet.profit.textValue().toDoubleOrNull() ?: 0.0))
-                WebBetMetric(webCopy("mobile.bets.potentialWinnings"), webMoney(winnings), Modifier.weight(1f))
-            }
+        BulletinSection(webCopy("mobile.bets.pick")) {
+            Text(bet.market ?: "—", fontFamily = WebInter, fontSize = 32.sp, fontWeight = FontWeight.Bold)
+            BulletinFact(webCopy("mobile.bets.kickoff"), date)
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            BulletinFact(webCopy("mobile.bets.betId"), bet.betId.orEmpty())
         }
-        WebPanel(padding = 12) {
-            BetSectionTitle(webCopy("mobile.bets.details"), "ticket")
-            val date = start?.let { java.text.SimpleDateFormat("dd MMM yyyy, HH:mm", LocalConfiguration.current.locales[0]).format(java.util.Date(it)) } ?: "TBD"
-            BetDetailValue(webCopy("mobile.bets.kickoff"), date)
-            HorizontalDivider(color = UclColors.dashboardLine)
-            BetDetailValue(webCopy("mobile.bets.betId"), bet.betId.orEmpty())
-        }
-        WebPanel(color = ground, padding = 12) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                Box(Modifier.size(36.dp).background(tone.copy(alpha = .12f), CircleShape), contentAlignment = Alignment.Center) { WebIcon("trophy", tint = tone) }
-                Column { Text(webCopy("mobile.bets.result"), color = WebMuted, fontSize = 11.sp); Text(webCopy("status.$status"), color = tone, fontSize = 14.sp, fontWeight = FontWeight.SemiBold) }
-            }
+        BulletinSection(webCopy("bulletin.financialBreakdown")) {
+            BulletinFact(webCopy("mobile.bets.odds"), String.format(java.util.Locale.ROOT, "%.3f%%", bet.odd.textValue().toDoubleOrNull() ?: 0.0))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            BulletinFact(webCopy("mobile.bets.stake"), webMoney(bet.stake.textValue().toDoubleOrNull() ?: 0.0))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            BulletinFact(webCopy("mobile.match.profit"), webMoney(if (outcome == "refunded") 0.0 else bet.profit.textValue().toDoubleOrNull() ?: 0.0))
+            BulletinFact(webCopy(if (outcome == "refunded") "bulletin.stakeReturned" else "bulletin.potentialReturn"), webMoney(betPotentialReturn(bet)), total = true)
+            if (outcome == "refunded") Text(webCopy("bulletin.refundExplanation"), Modifier.padding(top = 16.dp), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
         }
     }
 }

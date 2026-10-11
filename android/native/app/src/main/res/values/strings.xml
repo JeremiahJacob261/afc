@@ -27,7 +27,7 @@
     <string name="nav_home">Home</string>
     <string name="nav_matches">Matches</string>
     <string name="nav_bets">Bets</string>
-    <string name="nav_wallet">Wallet</string>
+    <string name="nav_recharge">Recharge</string>
     <string name="nav_account">Account</string>
     <string name="dashboard_title">Matchday</string>
     <string name="dashboard_greeting">Welcome, %1$s</string>

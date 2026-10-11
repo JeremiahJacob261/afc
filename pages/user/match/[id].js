@@ -1,5 +1,5 @@
 import { translateApiMessage } from '@/lib/translateApiMessage'
-import { Typography, Stack, Divider, Button } from "@mui/material"
+import { Typography, Stack, Divider, Button, useMediaQuery } from "@mui/material"
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { supabase } from "@/pages/api/supabase"
 import { useRouter } from "next/router";
@@ -112,6 +112,7 @@ function getMatchStartSeconds(match) {
 export default function Match({ matchDat }) {
     const { t, i18n } = useTranslation('common')
     const router = useRouter()
+    const desktop = useMediaQuery('(min-width:1100px)')
     const initialMatch = Array.isArray(matchDat) && matchDat.length ? matchDat[0] : null
     // Guards against a double-tap placing two bets, and keeps a retry of the
     // same selection on one client_bet_id so the server deduplicates it.
@@ -226,7 +227,7 @@ export default function Match({ matchDat }) {
                 <meta name="description" content="UCL football match markets" />
                 <link rel="icon" href="/european.ico" />
             </Head>
-            <main className={styles.page}>
+            <main className={`${styles.page} ${desktop && bottom ? styles.pageWithSlip : ''}`}>
                 <Link href="/user/matches" className={styles.back}><ArrowLeft size={18} aria-hidden="true" /> {t('mobile.nav.matches')}</Link>
                 <section className={styles.hero} aria-labelledby="match-title">
                     <div className={styles.heroMeta}>
@@ -241,26 +242,27 @@ export default function Match({ matchDat }) {
                         </div>
                         <span className={styles.teamCrest}><Image src={matches.iaway || Ims} width={64} height={64} alt="" unoptimized /></span>
                     </div>
-                    {matches.company && <p className={styles.company}>{matches.company}</p>}
+                    {matches.company === true && <p className={styles.company}>{t('mobile.match.companyGame')}</p>}
                 </section>
 
                 <section className={styles.markets} aria-labelledby="markets-title">
                     <div className={styles.marketsHead}>
                         <div>
                             <h2 id="markets-title">{t('mobile.match.market')}</h2>
-                            <p>{t('mobile.match.placeBet')}</p>
+                            <p>{t('bulletin.selectMarket')}</p>
                         </div>
                     </div>
-                    <div className={styles.marketGrid}>
+                    <p className={styles.marketInfo}>{t('bulletin.marketInfo')}</p><div className={styles.marketGrid}>
                         {marketsArray.map((market) => {
                             const odd = getMatchOdd(matches, market.word, viplevel)
-                            const isProtected = Boolean(matches.company) && matches.comarket === market.word
+                            const isProtected = matches.company === true && matches.comarket === market.word
                             const label = market.word === 'otherscores' ? t('mobile.markets.other') : market.num
                             return <button
                                 key={market.word}
                                 type="button"
-                                className={`${styles.marketCard} ${isProtected ? styles.protectedMarket : ''}`}
-                                disabled={odd <= 0}
+                                className={`${styles.marketCard} ${isProtected ? styles.protectedMarket : ''} ${picked === market.word ? styles.selectedMarket : ''}`}
+                                disabled={odd <= 0 || matches.verified === true || (getMatchStartMs(matches) || 0) <= Date.now()}
+                                aria-pressed={picked === market.word}
                                 aria-label={odd > 0 ? `${label}, ${formatOdd(odd)}%. ${t('mobile.match.choose')}` : `${label}, ${t('mobile.match.marketUnavailable')}`}
                                 onClick={() => { setPicked(market.word); setBottom(true) }}
                             >
@@ -298,9 +300,10 @@ export default function Match({ matchDat }) {
         let currenv = d1utc;
         return (
             <Drawer
-                anchor='bottom'
+                anchor={desktop ? 'right' : 'bottom'}
+                variant={desktop ? 'persistent' : 'temporary'}
                 open={bottom}
-                PaperProps={{ sx: { width: 'min(100%, 560px)', mx: 'auto', maxHeight: '92dvh', overflowY: 'auto', borderRadius: '20px 20px 0 0', background: '#f5f7fc' } }}
+                PaperProps={{ sx: { width: desktop ? 380 : 'min(100%, 560px)', mx: desktop ? 0 : 'auto', top: desktop ? 80 : 'auto', height: desktop ? 'calc(100dvh - 80px)' : 'auto', maxHeight: '92dvh', overflowY: 'auto', borderRadius: desktop ? 0 : '20px 20px 0 0', background: '#fff', borderLeft: desktop ? '1px solid #dce4f2' : 0 } }}
                 onClose={() => {
                     setBottom(false)
                 }}
@@ -312,7 +315,7 @@ export default function Match({ matchDat }) {
                             <button type="button" className={styles.slipBack} aria-label={t('common.back')} onClick={() => {
                                 setBottom(false)
                             }}><ArrowLeft size={20} aria-hidden="true" /></button>
-                            <Typography component="h2" sx={{ fontFamily: 'Georgia,serif', fontSize: 24, color: '#080f32' }}>{t('mobile.match.placeBet')}</Typography>
+                            <Typography component="h2" sx={{ fontFamily: 'Inter,Arial,sans-serif', fontWeight: 700, fontSize: 24, color: '#080f32' }}>{t('mobile.match.placeBet')}</Typography>
                         </Stack>
                         <Stack direction='column' alignItems='center' justifyContent='center'>
                             <Typography style={{ color: '#080f32', fontFamily: 'Arial, sans-serif', fontSize: '12px' }}>{leagueName}</Typography>

@@ -123,6 +123,12 @@ fun BetSlipRoute(container: UclAppContainer, matchId: String, market: String, on
     RefreshOnResume(vm::invalidateQuote)
     LaunchedEffect(state.requiresSignIn) { if (state.requiresSignIn) onSignInRequired() }
     LaunchedEffect(state.result) { if (state.result != null) onBets() }
+    BetSlipContent(state, matchId, market, onBack, onBets, vm::stake, vm::submit)
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun BetSlipContent(state: BetSlipState, matchId: String, market: String, onBack: () -> Unit, onBets: () -> Unit, onStake: (String) -> Unit, onSubmit: () -> Unit) {
     val match = state.match
     val level = runCatching { state.account?.vip?.jsonObject?.get("viplevel")?.jsonPrimitive?.intOrNull }.getOrNull() ?: 1
     val base = match?.marketValue(market)?.toDouble() ?: 0.0
@@ -130,9 +136,9 @@ fun BetSlipRoute(container: UclAppContainer, matchId: String, market: String, on
     val stake = state.stake.toDoubleOrNull() ?: 0.0
     val profit = state.quote?.profit.textValue().toDoubleOrNull() ?: stake * odd / 100
     val sheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    ModalBottomSheet(onDismissRequest = onBack, sheetState = sheet, containerColor = UclColors.paper, shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp), dragHandle = null) {
+    ModalBottomSheet(onDismissRequest = onBack, sheetState = sheet, containerColor = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp), dragHandle = null) {
         Column(Modifier.fillMaxWidth().heightIn(max = 720.dp).verticalScroll(rememberScrollState()).padding(start = 16.dp, top = 20.dp, end = 16.dp, bottom = 24.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            WebPageHeading(webCopy("mobile.match.placeBet"), onBack, bordered = true)
+            BulletinHeading(webCopy("mobile.match.placeBet"), onBack)
             JourneyFeedback(state.error)
             if (state.uncertain) { Text(stringResource(R.string.journey_uncertain)); JourneyAction(webCopy("common.myBets"), onClick = onBets); return@Column }
             if (state.result != null) return@Column
@@ -151,11 +157,11 @@ fun BetSlipRoute(container: UclAppContainer, matchId: String, market: String, on
             }
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Text(webCopy("mobile.match.stakeAmount"), fontSize = 14.sp)
-                TextButton(onClick = { vm.stake(state.account?.profile?.balance.textValue()) }, enabled = !state.busy) { Text(webCopy("mobile.match.useAllBalance")) }
+                TextButton(onClick = { onStake(state.account?.profile?.balance.textValue()) }, enabled = !state.busy) { Text(webCopy("mobile.match.useAllBalance")) }
             }
-            OutlinedTextField(state.stake, vm::stake, modifier = Modifier.fillMaxWidth(), singleLine = true, enabled = !state.busy, keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = KeyboardType.Decimal), shape = RoundedCornerShape(8.dp))
+            OutlinedTextField(state.stake, onStake, label = { Text(webCopy("mobile.match.stakeAmount")) }, modifier = Modifier.fillMaxWidth(), singleLine = true, enabled = !state.busy, keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = KeyboardType.Decimal), shape = RoundedCornerShape(8.dp))
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text(webCopy("mobile.match.profit")); Text(webMoney(profit), fontWeight = FontWeight.Bold) }
-            JourneyAction(webCopy("mobile.match.placeBet"), enabled = stake > 0 && odd > 0, busy = state.busy, onClick = vm::submit)
+            JourneyAction(webCopy("mobile.match.placeBet"), enabled = stake > 0 && odd > 0, busy = state.busy, onClick = onSubmit)
         }
     }
 }

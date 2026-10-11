@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -24,6 +25,12 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -94,12 +101,13 @@ fun MatchDetailRoute(
 }
 
 @Composable
-private fun MatchDetailScreen(
+internal fun MatchDetailScreen(
     state: MatchDetailUiState,
     onBack: () -> Unit,
     onRetry: () -> Unit,
     onSelectMarket: (String) -> Unit,
 ) {
+    var selectedMarket by rememberSaveable(state.match?.matchId.textValue()) { mutableStateOf<String?>(null) }
     Scaffold(
         contentWindowInsets = com.pro.uclfootball.ui.UserContentInsets,
         containerColor = androidx.compose.ui.graphics.Color.Transparent,
@@ -109,11 +117,12 @@ private fun MatchDetailScreen(
             contentPadding = androidx.compose.foundation.layout.PaddingValues(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 48.dp),
             verticalArrangement = Arrangement.spacedBy(18.dp),
         ) {
-            item { WebBack(webCopy("mobile.nav.matches"), onBack) }
+            item { BulletinHeading(webCopy("mobile.nav.matches"), onBack) }
+            if (state.error != null && state.hasContent) item { BulletinRefreshNotice(onRetry) }
             when {
                 state.isLoading && !state.hasContent -> item { DetailStateCard(stringResource(R.string.match_loading), "loading") }
                 state.error != null && !state.hasContent -> item {
-                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Column(verticalArrangement = Arrangement.spacedBy(0.dp)) {
                         val message = when (state.error) {
                             MatchDetailError.Network -> stringResource(R.string.match_error_network)
                             MatchDetailError.NotFound -> stringResource(R.string.match_error_not_found)
@@ -129,13 +138,14 @@ private fun MatchDetailScreen(
                     item { MatchHeader(state.match) }
                     item {
                         Column(Modifier.padding(top = 14.dp, bottom = 2.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(webCopy("mobile.match.market"), color = UclColors.ink, fontFamily = FontFamily.Serif, fontSize = 28.sp)
-                            Text(webCopy("mobile.match.placeBet"), color = WebMuted, fontSize = 16.sp)
+                            Text(webCopy("mobile.match.market"), color = MaterialTheme.colorScheme.onSurface, fontFamily = WebInter, fontSize = 22.sp, fontWeight = FontWeight.Bold)
+                            Text(webCopy("bulletin.selectMarket"), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
+                            HorizontalDivider(color = MaterialTheme.colorScheme.primary, thickness = 2.dp)
                         }
                     }
                     items(scoreMarkets.chunked(2)) { row ->
-                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            row.forEach { market -> Box(Modifier.weight(1f)) { MarketAvailabilityCard(state.match, market, state.vipLevel) { onSelectMarket(market.key) } } }
+                        Row(horizontalArrangement = Arrangement.spacedBy(0.dp)) {
+                            row.forEach { market -> Box(Modifier.weight(1f)) { MarketAvailabilityCard(state.match, market, state.vipLevel, selectedMarket == market.key) { selectedMarket = market.key; onSelectMarket(market.key) } } }
                             if (row.size == 1) Spacer(Modifier.weight(1f))
                         }
                     }
@@ -147,42 +157,33 @@ private fun MatchDetailScreen(
 
 @Composable
 private fun MatchHeader(match: MatchDetailDto) {
-    val date = matchStartMillis(match.tsgmt, match.date, match.time)?.let { SimpleDateFormat("dd MMM yyyy, HH:mm", LocalConfiguration.current.locales[0]).format(Date(it)) } ?: "TBD"
-    Surface(shape = RoundedCornerShape(16.dp), color = Color(0xFF102451)) {
-        Column(Modifier.fillMaxWidth().padding(20.dp)) {
-            Text((if (match.league == "others") match.otherl else match.league).orEmpty(), color = Color(0xFFD7E2ED), fontSize = 14.sp, fontWeight = FontWeight.Bold)
-            Row(Modifier.padding(top = 8.dp, bottom = 16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                WebIcon("clock3", Modifier.size(16.dp), Color(0xFFD7E2ED)); Text("$date ${webCopy("website.localTime")}", color = Color(0xFFD7E2ED), fontSize = 14.sp)
-            }
-            HorizontalDivider(color = Color.White.copy(alpha = .2f))
-            Row(Modifier.fillMaxWidth().heightIn(min = 160.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Surface(Modifier.size(56.dp), shape = CircleShape, color = Color.White) { WebRemoteImage(match.ihome.textValue(), Modifier.padding(6.dp)) }
-                Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("${match.home.orEmpty()} vs ${match.away.orEmpty()}", fontFamily = FontFamily.Serif, fontSize = 28.sp, lineHeight = 31.sp, color = Color.White, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
-                    Text("${webCopy("mobile.match.matchId")} ${match.matchId.textValue()}", Modifier.padding(top = 16.dp), color = Color(0xFFD7E2ED), fontSize = 13.sp)
-                }
-                Surface(Modifier.size(56.dp), shape = CircleShape, color = Color.White) { WebRemoteImage(match.iaway.textValue(), Modifier.padding(6.dp)) }
-            }
-            match.company?.takeIf(String::isNotBlank)?.let { HorizontalDivider(color = Color.White.copy(alpha = .2f)); Text(it, Modifier.padding(top = 16.dp), color = Color(0xFFD7E2ED), fontSize = 14.sp) }
+    val date = matchStartMillis(match.tsgmt, match.date, match.time)?.let { SimpleDateFormat("dd MMM yyyy, HH:mm", LocalConfiguration.current.locales[0]).format(Date(it)) } ?: webCopy("common.timeToBeConfirmed")
+    Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.surface, border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)) {
+        Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Text((if (match.league == "others") match.otherl else match.league).orEmpty(), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
+            BulletinTeam(match.home, match.ihome.textValue(), large = true)
+            BulletinTeam(match.away, match.iaway.textValue(), large = true)
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            Text("$date · ${webCopy("website.localTime")}", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
+            if (match.company == true) Text(webCopy("mobile.match.companyGame"), color = MaterialTheme.colorScheme.primary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
         }
     }
 }
 
 @Composable
-private fun MarketAvailabilityCard(match: MatchDetailDto, market: ScoreMarket, vipLevel: Int, onSelect: () -> Unit) {
+private fun MarketAvailabilityCard(match: MatchDetailDto, market: ScoreMarket, vipLevel: Int, isSelected: Boolean, onSelect: () -> Unit) {
     val base = match.marketValue(market.key)?.toDouble() ?: 0.0
     val bonus = listOf(0.0, 0.0, .10, .20, .33, .47, .63, .83).getOrElse(vipLevel) { 0.0 }
     val odd = base * (1 + bonus)
-    val available = odd > 0
-    val protected = !match.company.isNullOrBlank() && match.comarket.textValue() == market.key
-    Surface(shape = RoundedCornerShape(12.dp), color = if (!available) UclColors.surface else if (protected) UclColors.blueSurface else Color.White,
-        border = androidx.compose.foundation.BorderStroke(1.dp, if (protected) UclColors.secondary else UclColors.dashboardLine)) {
-        Column(Modifier.fillMaxWidth().heightIn(min = 120.dp).clickable(enabled = available, onClick = onSelect).padding(16.dp), verticalArrangement = Arrangement.SpaceBetween) {
-            Text(if (market.key == "otherscores") webCopy("mobile.markets.other") else market.label.replace("\u2013", "-"), fontFamily = FontFamily.Serif, fontSize = 24.sp)
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(webCopy(if (protected) "mobile.match.companyGame" else "landing.live.odds"), Modifier.weight(1f), color = WebMuted, fontSize = 12.sp, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis)
-                Text(if (available) String.format(java.util.Locale.ROOT, "%.3f%%", odd) else "\u2014", color = if (available) UclColors.accent else WebMuted, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                WebIcon("chevron_right", Modifier.size(18.dp), if (available) UclColors.accent else WebMuted)
+    val available = odd > 0 && match.verified != true && (matchStartMillis(match.tsgmt, match.date, match.time) ?: 0) > System.currentTimeMillis()
+    val protected = match.company == true && match.comarket.textValue() == market.key
+    Surface(color = if (!available) MaterialTheme.colorScheme.surfaceVariant else if (isSelected || protected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
+        border = androidx.compose.foundation.BorderStroke(if (isSelected) 2.dp else 1.dp, if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant)) {
+        Column(Modifier.fillMaxWidth().heightIn(min = 92.dp).semantics { selected = isSelected }.clickable(enabled = available, role = Role.Button, onClick = onSelect).padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(if (market.key == "otherscores") webCopy("mobile.markets.other") else market.label.replace("\u2013", "-"), fontFamily = WebInter, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(webCopy(if (!available) "mobile.match.marketUnavailable" else if (protected) "mobile.match.companyGame" else "landing.live.odds"), Modifier.weight(1f), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 10.sp)
+                Text(if (available) String.format(java.util.Locale.ROOT, "%.3f%%", odd) else "—", color = MaterialTheme.colorScheme.primary, fontSize = 14.sp, fontWeight = FontWeight.Bold)
             }
         }
     }

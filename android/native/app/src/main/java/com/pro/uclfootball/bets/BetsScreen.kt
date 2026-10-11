@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -77,6 +78,11 @@ fun BetsRoute(
     if (state.requiresSignIn) {
         androidx.compose.runtime.LaunchedEffect(Unit) { onSignInRequired() }
     }
+    BetsContent(state, selectedTab, onSelectTab, onOpenBet, betsViewModel::refresh)
+}
+
+@Composable
+internal fun BetsContent(state: BetsUiState, selectedTab: String, onSelectTab: (String) -> Unit, onOpenBet: (String) -> Unit, onRetry: () -> Unit) {
     var tab by rememberSaveable { mutableStateOf(BetTab.Unsettled) }
     val bets = if (tab == BetTab.Unsettled) state.unsettled else state.settled
     val allBets = state.unsettled + state.settled
@@ -93,38 +99,39 @@ fun BetsRoute(
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(padding),
             contentPadding = PaddingValues(start = 16.dp, top = 20.dp, end = 16.dp, bottom = 24.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(0.dp),
         ) {
-            item { WebPageHeading(webCopy("common.myBets"), { onSelectTab("home") }, bordered = true) }
+            item { Column(Modifier.padding(bottom = 24.dp)) { BulletinHeading(webCopy("common.myBets"), { onSelectTab("home") }, webCopy("bulletin.betsIntro")) } }
             if (state.hasContent) {
                 item {
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        BetMetric(webCopy("status.unsettled"), state.unsettled.size.toString(), Modifier.weight(1f))
-                        BetMetric(webCopy("status.won"), winCount.toString(), Modifier.weight(1f))
-                    }
-                    Spacer(Modifier.height(8.dp))
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        BetMetric(webCopy("status.refunded"), refundCount.toString(), Modifier.weight(1f))
-                        BetMetric(webCopy("mobile.bets.stake"), webMoney(allBets.sumOf { it.stake.textValue().toDoubleOrNull() ?: 0.0 }), Modifier.weight(1f))
+                    Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.surface, border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)) {
+                        Column {
+                            Row {
+                                BetMetric(webCopy("status.unsettled"), state.unsettled.size.toString(), Modifier.weight(1f))
+                                BetMetric(webCopy("status.won"), winCount.toString(), Modifier.weight(1f))
+                            }
+                            androidx.compose.material3.HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                            Row {
+                                BetMetric(webCopy("status.refunded"), refundCount.toString(), Modifier.weight(1f))
+                                BetMetric(webCopy("mobile.bets.stake"), webMoney(allBets.sumOf { it.stake.textValue().toDoubleOrNull() ?: 0.0 }), Modifier.weight(1f))
+                            }
+                        }
                     }
                 }
             }
             item {
-                Row(
-                    modifier = Modifier.fillMaxWidth().background(UclColors.surface, RoundedCornerShape(8.dp)).padding(4.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    BetTabButton(webCopy("status.unsettled"), tab == BetTab.Unsettled, Modifier.weight(1f)) { tab = BetTab.Unsettled }
-                    BetTabButton(webCopy("status.settled"), tab == BetTab.Settled, Modifier.weight(1f)) { tab = BetTab.Settled }
+                androidx.compose.material3.TabRow(selectedTabIndex = if (tab == BetTab.Unsettled) 0 else 1, containerColor = MaterialTheme.colorScheme.surface) {
+                    androidx.compose.material3.Tab(selected = tab == BetTab.Unsettled, onClick = { tab = BetTab.Unsettled }, text = { Text("${webCopy("status.unsettled")} (${state.unsettled.size})") })
+                    androidx.compose.material3.Tab(selected = tab == BetTab.Settled, onClick = { tab = BetTab.Settled }, text = { Text("${webCopy("status.settled")} (${state.settled.size})") })
                 }
             }
-
+            if (state.error != null && state.hasContent) item { BulletinRefreshNotice(onRetry) }
             when {
                 state.isLoading && !state.hasContent -> item { BetMessage(stringResource(R.string.bets_loading)) }
                 state.error != null && !state.hasContent -> item {
                     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
                         BetMessage(stringResource(if (state.error == BetsError.Network) R.string.bets_error_network else R.string.bets_error_general))
-                        TextButton(onClick = betsViewModel::refresh) { Text(stringResource(R.string.common_retry), color = UclColors.accent) }
+                        TextButton(onClick = onRetry) { Text(stringResource(R.string.common_retry), color = UclColors.accent) }
                     }
                 }
                 bets.isEmpty() -> item { WebEmpty(webCopy("emptyStates.noBets"), webCopy("emptyStates.betsComing"), height = 260) }
@@ -140,16 +147,9 @@ fun BetsRoute(
 
 @Composable
 private fun BetMetric(label: String, value: String, modifier: Modifier = Modifier) {
-    Surface(
-        modifier = modifier,
-        shape = RoundedCornerShape(8.dp),
-        color = Color.White,
-        border = BorderStroke(1.dp, UclColors.dashboardLine),
-    ) {
-        Column(Modifier.heightIn(min = 72.dp).padding(10.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
-            Text(label, color = WebMuted, fontSize = 11.sp)
-            Text(value, color = UclColors.ink, fontWeight = FontWeight.Bold, fontSize = 20.sp)
-        }
+    Column(modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Text(label, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
+        Text(value, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold, fontSize = 18.sp)
     }
 }
 

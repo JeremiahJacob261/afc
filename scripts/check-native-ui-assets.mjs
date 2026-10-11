@@ -10,7 +10,7 @@ const copy = ['en', 'my'].map(language => [language, JSON.parse(fs.readFileSync(
 const keys = new Set(), iconNames = new Set(), failures = []
 for (const file of kotlin) {
   const source = fs.readFileSync(file, 'utf8')
-  for (const [, key] of source.matchAll(/"((?:website|mobile|common|forms|messages|emptyStates|status|landing)\.[a-zA-Z0-9_.]+)"/g)) keys.add(key)
+  for (const [, key] of source.matchAll(/"((?:website|mobile|common|forms|messages|emptyStates|status|landing|bulletin)\.[a-zA-Z0-9_.]+)"/g)) keys.add(key)
   for (const [, icon] of source.matchAll(/WebIcon\("([a-z0-9_]+)"/g)) iconNames.add(icon)
 }
 for (const key of keys) {

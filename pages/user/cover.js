@@ -11,7 +11,7 @@ function getNavigation(t) { return [
   { href: '/user', label: t('website.home'), icon: Home },
   { href: '/user/matches', label: t('website.matches'), icon: Trophy },
   { href: '/user/bets', label: t('website.bets'), icon: History },
-  { href: '/user/fund', label: t('website.wallet'), icon: Wallet },
+  { href: '/user/fund', label: t('website.recharge'), icon: Wallet },
   { href: '/user/account', label: t('website.more'), icon: Menu },
 ] }
 

@@ -151,7 +151,7 @@ fun UserWebShell(route: String, onNavigate: (String) -> Unit, content: @Composab
 @Composable
 fun UserBottomNavigation(route: String, onNavigate: (String) -> Unit) {
     val destinations = listOf(Triple("home", "website.home", "home"), Triple("matches", "website.matches", "trophy"),
-        Triple("bets", "website.bets", "history"), Triple("wallet", "website.wallet", "wallet"), Triple("account", "website.more", "menu"))
+        Triple("bets", "website.bets", "history"), Triple("wallet", "website.recharge", "wallet"), Triple("account", "website.more", "menu"))
     Column(Modifier.background(MaterialTheme.colorScheme.surface).windowInsetsPadding(WindowInsets.navigationBars)) {
         HorizontalDivider(color = UclColors.dashboardLine, thickness = 1.dp)
         Row(Modifier.fillMaxWidth().height(71.dp).padding(horizontal = 8.dp, vertical = 4.dp)) {

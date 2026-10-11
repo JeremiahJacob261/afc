@@ -1,0 +1,703 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-11T20:47:19.526958+00:00",
+  "title": "Design System: UCL Matchday Bulletin",
+  "extensions": {
+    "colorMeta": {
+      "bulletin-blue": {
+        "role": "primary",
+        "displayName": "Bulletin Blue",
+        "canonical": "#00409e",
+        "tonalRamp": [
+          "oklch(15.00% 0.16357 259.95)",
+          "oklch(26.43% 0.16357 259.95)",
+          "oklch(37.86% 0.16357 259.95)",
+          "oklch(49.29% 0.16357 259.95)",
+          "oklch(60.71% 0.16357 259.95)",
+          "oklch(72.14% 0.16357 259.95)",
+          "oklch(83.57% 0.16357 259.95)",
+          "oklch(95.00% 0.16357 259.95)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "bulletin-blue-deep": {
+        "role": "primary",
+        "displayName": "Bulletin Blue Deep",
+        "canonical": "#002d72",
+        "tonalRamp": [
+          "oklch(15.00% 0.12786 259.64)",
+          "oklch(26.43% 0.12786 259.64)",
+          "oklch(37.86% 0.12786 259.64)",
+          "oklch(49.29% 0.12786 259.64)",
+          "oklch(60.71% 0.12786 259.64)",
+          "oklch(72.14% 0.12786 259.64)",
+          "oklch(83.57% 0.12786 259.64)",
+          "oklch(95.00% 0.12786 259.64)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "bulletin-ink": {
+        "role": "neutral",
+        "displayName": "Bulletin Ink",
+        "canonical": "#080f32",
+        "tonalRamp": [
+          "oklch(15.00% 0.06982 269.66)",
+          "oklch(26.43% 0.06982 269.66)",
+          "oklch(37.86% 0.06982 269.66)",
+          "oklch(49.29% 0.06982 269.66)",
+          "oklch(60.71% 0.06982 269.66)",
+          "oklch(72.14% 0.06982 269.66)",
+          "oklch(83.57% 0.06982 269.66)",
+          "oklch(95.00% 0.06982 269.66)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "bulletin-muted": {
+        "role": "neutral",
+        "displayName": "Bulletin Muted",
+        "canonical": "#536583",
+        "tonalRamp": [
+          "oklch(15.00% 0.05288 260.49)",
+          "oklch(26.43% 0.05288 260.49)",
+          "oklch(37.86% 0.05288 260.49)",
+          "oklch(49.29% 0.05288 260.49)",
+          "oklch(60.71% 0.05288 260.49)",
+          "oklch(72.14% 0.05288 260.49)",
+          "oklch(83.57% 0.05288 260.49)",
+          "oklch(95.00% 0.05288 260.49)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "bulletin-line": {
+        "role": "neutral",
+        "displayName": "Bulletin Line",
+        "canonical": "#dce4f2",
+        "tonalRamp": [
+          "oklch(15.00% 0.02092 261.77)",
+          "oklch(26.43% 0.02092 261.77)",
+          "oklch(37.86% 0.02092 261.77)",
+          "oklch(49.29% 0.02092 261.77)",
+          "oklch(60.71% 0.02092 261.77)",
+          "oklch(72.14% 0.02092 261.77)",
+          "oklch(83.57% 0.02092 261.77)",
+          "oklch(95.00% 0.02092 261.77)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "White",
+        "canonical": "#fff",
+        "tonalRamp": [
+          "oklch(15.00% 0.00000 89.88)",
+          "oklch(26.43% 0.00000 89.88)",
+          "oklch(37.86% 0.00000 89.88)",
+          "oklch(49.29% 0.00000 89.88)",
+          "oklch(60.71% 0.00000 89.88)",
+          "oklch(72.14% 0.00000 89.88)",
+          "oklch(83.57% 0.00000 89.88)",
+          "oklch(95.00% 0.00000 89.88)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "hover-paper": {
+        "role": "neutral",
+        "displayName": "Hover Paper",
+        "canonical": "#f4f8ff",
+        "tonalRamp": [
+          "oklch(15.00% 0.01027 261.79)",
+          "oklch(26.43% 0.01027 261.79)",
+          "oklch(37.86% 0.01027 261.79)",
+          "oklch(49.29% 0.01027 261.79)",
+          "oklch(60.71% 0.01027 261.79)",
+          "oklch(72.14% 0.01027 261.79)",
+          "oklch(83.57% 0.01027 261.79)",
+          "oklch(95.00% 0.01027 261.79)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "header-paper": {
+        "role": "neutral",
+        "displayName": "Header Paper",
+        "canonical": "#f4f7fc",
+        "tonalRamp": [
+          "oklch(15.00% 0.00740 260.73)",
+          "oklch(26.43% 0.00740 260.73)",
+          "oklch(37.86% 0.00740 260.73)",
+          "oklch(49.29% 0.00740 260.73)",
+          "oklch(60.71% 0.00740 260.73)",
+          "oklch(72.14% 0.00740 260.73)",
+          "oklch(83.57% 0.00740 260.73)",
+          "oklch(95.00% 0.00740 260.73)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "quiet-paper": {
+        "role": "neutral",
+        "displayName": "Quiet Paper",
+        "canonical": "#f1f4fb",
+        "tonalRamp": [
+          "oklch(15.00% 0.00989 267.36)",
+          "oklch(26.43% 0.00989 267.36)",
+          "oklch(37.86% 0.00989 267.36)",
+          "oklch(49.29% 0.00989 267.36)",
+          "oklch(60.71% 0.00989 267.36)",
+          "oklch(72.14% 0.00989 267.36)",
+          "oklch(83.57% 0.00989 267.36)",
+          "oklch(95.00% 0.00989 267.36)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "blue-paper": {
+        "role": "primary",
+        "displayName": "Blue Paper",
+        "canonical": "#eaf0fb",
+        "tonalRamp": [
+          "oklch(15.00% 0.01613 262.75)",
+          "oklch(26.43% 0.01613 262.75)",
+          "oklch(37.86% 0.01613 262.75)",
+          "oklch(49.29% 0.01613 262.75)",
+          "oklch(60.71% 0.01613 262.75)",
+          "oklch(72.14% 0.01613 262.75)",
+          "oklch(83.57% 0.01613 262.75)",
+          "oklch(95.00% 0.01613 262.75)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "selection-paper": {
+        "role": "primary",
+        "displayName": "Selection Paper",
+        "canonical": "#cfe1ff",
+        "tonalRamp": [
+          "oklch(15.00% 0.04555 260.67)",
+          "oklch(26.43% 0.04555 260.67)",
+          "oklch(37.86% 0.04555 260.67)",
+          "oklch(49.29% 0.04555 260.67)",
+          "oklch(60.71% 0.04555 260.67)",
+          "oklch(72.14% 0.04555 260.67)",
+          "oklch(83.57% 0.04555 260.67)",
+          "oklch(95.00% 0.04555 260.67)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "protected-paper": {
+        "role": "secondary",
+        "displayName": "Protected Paper",
+        "canonical": "#fff0f7",
+        "tonalRamp": [
+          "oklch(15.00% 0.01852 347.42)",
+          "oklch(26.43% 0.01852 347.42)",
+          "oklch(37.86% 0.01852 347.42)",
+          "oklch(49.29% 0.01852 347.42)",
+          "oklch(60.71% 0.01852 347.42)",
+          "oklch(72.14% 0.01852 347.42)",
+          "oklch(83.57% 0.01852 347.42)",
+          "oklch(95.00% 0.01852 347.42)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "protected-ink": {
+        "role": "secondary",
+        "displayName": "Protected Ink",
+        "canonical": "#a90059",
+        "tonalRamp": [
+          "oklch(15.00% 0.19327 359.54)",
+          "oklch(26.43% 0.19327 359.54)",
+          "oklch(37.86% 0.19327 359.54)",
+          "oklch(49.29% 0.19327 359.54)",
+          "oklch(60.71% 0.19327 359.54)",
+          "oklch(72.14% 0.19327 359.54)",
+          "oklch(83.57% 0.19327 359.54)",
+          "oklch(95.00% 0.19327 359.54)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "won-paper": {
+        "role": "neutral",
+        "displayName": "Won Paper",
+        "canonical": "#e8f5ec",
+        "tonalRamp": [
+          "oklch(15.00% 0.01817 155.81)",
+          "oklch(26.43% 0.01817 155.81)",
+          "oklch(37.86% 0.01817 155.81)",
+          "oklch(49.29% 0.01817 155.81)",
+          "oklch(60.71% 0.01817 155.81)",
+          "oklch(72.14% 0.01817 155.81)",
+          "oklch(83.57% 0.01817 155.81)",
+          "oklch(95.00% 0.01817 155.81)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "won-ink": {
+        "role": "neutral",
+        "displayName": "Won Ink",
+        "canonical": "#216e42",
+        "tonalRamp": [
+          "oklch(15.00% 0.10295 154.23)",
+          "oklch(26.43% 0.10295 154.23)",
+          "oklch(37.86% 0.10295 154.23)",
+          "oklch(49.29% 0.10295 154.23)",
+          "oklch(60.71% 0.10295 154.23)",
+          "oklch(72.14% 0.10295 154.23)",
+          "oklch(83.57% 0.10295 154.23)",
+          "oklch(95.00% 0.10295 154.23)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "lost-paper": {
+        "role": "neutral",
+        "displayName": "Lost Paper",
+        "canonical": "#fbecee",
+        "tonalRamp": [
+          "oklch(15.00% 0.01646 8.17)",
+          "oklch(26.43% 0.01646 8.17)",
+          "oklch(37.86% 0.01646 8.17)",
+          "oklch(49.29% 0.01646 8.17)",
+          "oklch(60.71% 0.01646 8.17)",
+          "oklch(72.14% 0.01646 8.17)",
+          "oklch(83.57% 0.01646 8.17)",
+          "oklch(95.00% 0.01646 8.17)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "lost-ink": {
+        "role": "neutral",
+        "displayName": "Lost Ink",
+        "canonical": "#a43d4a",
+        "tonalRamp": [
+          "oklch(15.00% 0.13604 15.88)",
+          "oklch(26.43% 0.13604 15.88)",
+          "oklch(37.86% 0.13604 15.88)",
+          "oklch(49.29% 0.13604 15.88)",
+          "oklch(60.71% 0.13604 15.88)",
+          "oklch(72.14% 0.13604 15.88)",
+          "oklch(83.57% 0.13604 15.88)",
+          "oklch(95.00% 0.13604 15.88)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "pending-paper": {
+        "role": "neutral",
+        "displayName": "Pending Paper",
+        "canonical": "#fbf2dc",
+        "tonalRamp": [
+          "oklch(15.00% 0.03049 88.37)",
+          "oklch(26.43% 0.03049 88.37)",
+          "oklch(37.86% 0.03049 88.37)",
+          "oklch(49.29% 0.03049 88.37)",
+          "oklch(60.71% 0.03049 88.37)",
+          "oklch(72.14% 0.03049 88.37)",
+          "oklch(83.57% 0.03049 88.37)",
+          "oklch(95.00% 0.03049 88.37)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "pending-ink": {
+        "role": "neutral",
+        "displayName": "Pending Ink",
+        "canonical": "#805810",
+        "tonalRamp": [
+          "oklch(15.00% 0.09698 75.94)",
+          "oklch(26.43% 0.09698 75.94)",
+          "oklch(37.86% 0.09698 75.94)",
+          "oklch(49.29% 0.09698 75.94)",
+          "oklch(60.71% 0.09698 75.94)",
+          "oklch(72.14% 0.09698 75.94)",
+          "oklch(83.57% 0.09698 75.94)",
+          "oklch(95.00% 0.09698 75.94)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "native-paper": {
+        "role": "neutral",
+        "displayName": "Native Paper",
+        "canonical": "#F8FAFF",
+        "tonalRamp": [
+          "oklch(15.00% 0.00697 268.55)",
+          "oklch(26.43% 0.00697 268.55)",
+          "oklch(37.86% 0.00697 268.55)",
+          "oklch(49.29% 0.00697 268.55)",
+          "oklch(60.71% 0.00697 268.55)",
+          "oklch(72.14% 0.00697 268.55)",
+          "oklch(83.57% 0.00697 268.55)",
+          "oklch(95.00% 0.00697 268.55)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "native-body": {
+        "role": "neutral",
+        "displayName": "Native Body",
+        "canonical": "#293E60",
+        "tonalRamp": [
+          "oklch(15.00% 0.06499 259.68)",
+          "oklch(26.43% 0.06499 259.68)",
+          "oklch(37.86% 0.06499 259.68)",
+          "oklch(49.29% 0.06499 259.68)",
+          "oklch(60.71% 0.06499 259.68)",
+          "oklch(72.14% 0.06499 259.68)",
+          "oklch(83.57% 0.06499 259.68)",
+          "oklch(95.00% 0.06499 259.68)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "native-outline": {
+        "role": "neutral",
+        "displayName": "Native Outline",
+        "canonical": "#667895",
+        "tonalRamp": [
+          "oklch(15.00% 0.04988 259.86)",
+          "oklch(26.43% 0.04988 259.86)",
+          "oklch(37.86% 0.04988 259.86)",
+          "oklch(49.29% 0.04988 259.86)",
+          "oklch(60.71% 0.04988 259.86)",
+          "oklch(72.14% 0.04988 259.86)",
+          "oklch(83.57% 0.04988 259.86)",
+          "oklch(95.00% 0.04988 259.86)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "native-error": {
+        "role": "neutral",
+        "displayName": "Native Error",
+        "canonical": "#9A1B1B",
+        "tonalRamp": [
+          "oklch(15.00% 0.16229 26.93)",
+          "oklch(26.43% 0.16229 26.93)",
+          "oklch(37.86% 0.16229 26.93)",
+          "oklch(49.29% 0.16229 26.93)",
+          "oklch(60.71% 0.16229 26.93)",
+          "oklch(72.14% 0.16229 26.93)",
+          "oklch(83.57% 0.16229 26.93)",
+          "oklch(95.00% 0.16229 26.93)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "native-dark-primary": {
+        "role": "neutral",
+        "displayName": "Native Dark Primary",
+        "canonical": "#8DB8FF",
+        "tonalRamp": [
+          "oklch(15.00% 0.11222 260.16)",
+          "oklch(26.43% 0.11222 260.16)",
+          "oklch(37.86% 0.11222 260.16)",
+          "oklch(49.29% 0.11222 260.16)",
+          "oklch(60.71% 0.11222 260.16)",
+          "oklch(72.14% 0.11222 260.16)",
+          "oklch(83.57% 0.11222 260.16)",
+          "oklch(95.00% 0.11222 260.16)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "native-dark-secondary": {
+        "role": "neutral",
+        "displayName": "Native Dark Secondary",
+        "canonical": "#FF8AC4",
+        "tonalRamp": [
+          "oklch(15.00% 0.15533 350.26)",
+          "oklch(26.43% 0.15533 350.26)",
+          "oklch(37.86% 0.15533 350.26)",
+          "oklch(49.29% 0.15533 350.26)",
+          "oklch(60.71% 0.15533 350.26)",
+          "oklch(72.14% 0.15533 350.26)",
+          "oklch(83.57% 0.15533 350.26)",
+          "oklch(95.00% 0.15533 350.26)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "native-dark-on-secondary": {
+        "role": "neutral",
+        "displayName": "Native Dark On Secondary",
+        "canonical": "#4B002B",
+        "tonalRamp": [
+          "oklch(15.00% 0.11168 353.15)",
+          "oklch(26.43% 0.11168 353.15)",
+          "oklch(37.86% 0.11168 353.15)",
+          "oklch(49.29% 0.11168 353.15)",
+          "oklch(60.71% 0.11168 353.15)",
+          "oklch(72.14% 0.11168 353.15)",
+          "oklch(83.57% 0.11168 353.15)",
+          "oklch(95.00% 0.11168 353.15)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "native-dark-tertiary": {
+        "role": "neutral",
+        "displayName": "Native Dark Tertiary",
+        "canonical": "#7CEBFF",
+        "tonalRamp": [
+          "oklch(15.00% 0.10526 210.69)",
+          "oklch(26.43% 0.10526 210.69)",
+          "oklch(37.86% 0.10526 210.69)",
+          "oklch(49.29% 0.10526 210.69)",
+          "oklch(60.71% 0.10526 210.69)",
+          "oklch(72.14% 0.10526 210.69)",
+          "oklch(83.57% 0.10526 210.69)",
+          "oklch(95.00% 0.10526 210.69)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "native-dark-ground": {
+        "role": "neutral",
+        "displayName": "Native Dark Ground",
+        "canonical": "#000A1E",
+        "tonalRamp": [
+          "oklch(15.00% 0.04827 254.93)",
+          "oklch(26.43% 0.04827 254.93)",
+          "oklch(37.86% 0.04827 254.93)",
+          "oklch(49.29% 0.04827 254.93)",
+          "oklch(60.71% 0.04827 254.93)",
+          "oklch(72.14% 0.04827 254.93)",
+          "oklch(83.57% 0.04827 254.93)",
+          "oklch(95.00% 0.04827 254.93)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "native-dark-surface": {
+        "role": "neutral",
+        "displayName": "Native Dark Surface",
+        "canonical": "#091B34",
+        "tonalRamp": [
+          "oklch(15.00% 0.05453 257.12)",
+          "oklch(26.43% 0.05453 257.12)",
+          "oklch(37.86% 0.05453 257.12)",
+          "oklch(49.29% 0.05453 257.12)",
+          "oklch(60.71% 0.05453 257.12)",
+          "oklch(72.14% 0.05453 257.12)",
+          "oklch(83.57% 0.05453 257.12)",
+          "oklch(95.00% 0.05453 257.12)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "native-dark-variant": {
+        "role": "neutral",
+        "displayName": "Native Dark Variant",
+        "canonical": "#10284D",
+        "tonalRamp": [
+          "oklch(15.00% 0.07457 258.88)",
+          "oklch(26.43% 0.07457 258.88)",
+          "oklch(37.86% 0.07457 258.88)",
+          "oklch(49.29% 0.07457 258.88)",
+          "oklch(60.71% 0.07457 258.88)",
+          "oklch(72.14% 0.07457 258.88)",
+          "oklch(83.57% 0.07457 258.88)",
+          "oklch(95.00% 0.07457 258.88)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "native-dark-ink": {
+        "role": "neutral",
+        "displayName": "Native Dark Ink",
+        "canonical": "#F2F5FA",
+        "tonalRamp": [
+          "oklch(15.00% 0.00741 260.73)",
+          "oklch(26.43% 0.00741 260.73)",
+          "oklch(37.86% 0.00741 260.73)",
+          "oklch(49.29% 0.00741 260.73)",
+          "oklch(60.71% 0.00741 260.73)",
+          "oklch(72.14% 0.00741 260.73)",
+          "oklch(83.57% 0.00741 260.73)",
+          "oklch(95.00% 0.00741 260.73)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "native-dark-muted": {
+        "role": "neutral",
+        "displayName": "Native Dark Muted",
+        "canonical": "#D4DEEF",
+        "tonalRamp": [
+          "oklch(15.00% 0.02569 261.14)",
+          "oklch(26.43% 0.02569 261.14)",
+          "oklch(37.86% 0.02569 261.14)",
+          "oklch(49.29% 0.02569 261.14)",
+          "oklch(60.71% 0.02569 261.14)",
+          "oklch(72.14% 0.02569 261.14)",
+          "oklch(83.57% 0.02569 261.14)",
+          "oklch(95.00% 0.02569 261.14)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "native-dark-outline": {
+        "role": "neutral",
+        "displayName": "Native Dark Outline",
+        "canonical": "#8293B0",
+        "tonalRamp": [
+          "oklch(15.00% 0.04755 261.09)",
+          "oklch(26.43% 0.04755 261.09)",
+          "oklch(37.86% 0.04755 261.09)",
+          "oklch(49.29% 0.04755 261.09)",
+          "oklch(60.71% 0.04755 261.09)",
+          "oklch(72.14% 0.04755 261.09)",
+          "oklch(83.57% 0.04755 261.09)",
+          "oklch(95.00% 0.04755 261.09)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      },
+      "native-dark-error": {
+        "role": "neutral",
+        "displayName": "Native Dark Error",
+        "canonical": "#FFB4AB",
+        "tonalRamp": [
+          "oklch(15.00% 0.08908 26.76)",
+          "oklch(26.43% 0.08908 26.76)",
+          "oklch(37.86% 0.08908 26.76)",
+          "oklch(49.29% 0.08908 26.76)",
+          "oklch(60.71% 0.08908 26.76)",
+          "oklch(72.14% 0.08908 26.76)",
+          "oklch(83.57% 0.08908 26.76)",
+          "oklch(95.00% 0.08908 26.76)"
+        ],
+        "tonalRampPurpose": "Synthesized panel preview only; not implementation palette tokens."
+      }
+    },
+    "typographyMeta": {
+      "headline": {
+        "displayName": "Bulletin headline",
+        "purpose": "Page titles and prominent picks; reduces on phones."
+      },
+      "native-headline": {
+        "displayName": "Compose bulletin heading",
+        "purpose": "Inter override of global theme headline defaults."
+      }
+    },
+    "shadows": [
+      {
+        "name": "score-selection",
+        "value": "inset 0 0 0 2px #00409e",
+        "purpose": "Selected web market indicator."
+      }
+    ],
+    "motion": [
+      {
+        "name": "row-background",
+        "value": "background .18s ease-out",
+        "purpose": "Fixture and market hover; disabled by reduced-motion media query."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "narrow-market-cell",
+        "value": "360px"
+      },
+      {
+        "name": "phone",
+        "value": "620px"
+      },
+      {
+        "name": "intermediate",
+        "value": "900px"
+      },
+      {
+        "name": "desktop-stake",
+        "value": "1100px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Bulletin action",
+      "kind": "button",
+      "description": "Retry and browse actions.",
+      "html": "<button class=\"ds-action\" type=\"button\">Browse matches</button>",
+      "css": ".ds-action{display:inline-flex;justify-content:center;align-items:center;gap:8px;min-height:44px;padding:10px 16px;border:0;border-radius:6px;background:#00409e;color:#fff;font-family:Inter,'DM Sans',Arial,sans-serif;font-size:14px;font-weight:650;line-height:1.5;cursor:pointer}.ds-action:focus-visible{outline:3px solid #00409e;outline-offset:3px}",
+      "refersTo": "action"
+    },
+    {
+      "name": "Back link",
+      "kind": "nav",
+      "description": "Inline navigation to the parent surface.",
+      "html": "<a class=\"ds-back\" href=\"#\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"m12 19-7-7 7-7M5 12h14\"/></svg>My Bets</a>",
+      "css": ".ds-back{display:inline-flex;align-items:center;gap:8px;min-height:44px;color:#00409e;font-size:13px;font-weight:650;text-decoration:none;font-family:Inter,'DM Sans',Arial,sans-serif;}.ds-back:focus-visible{outline:3px solid #00409e;outline-offset:3px}",
+      "refersTo": "back"
+    },
+    {
+      "name": "Stake input",
+      "kind": "input",
+      "description": "The current decimal entry field; its one-off border is implementation residue.",
+      "html": "<input class=\"ds-stake\" type=\"text\" inputmode=\"decimal\" aria-label=\"Stake amount\" placeholder=\"Stake amount\" value=\"1000\"/>",
+      "css": ".ds-stake{font-family:Arial,sans-serif;padding:10px;border-radius:8px;width:100%;min-height:48px;font-size:16px;background:#fff;color:#080f32;border:1px solid #75886b;caret-color:#00409e}.ds-stake:focus-visible{outline:3px solid #00409e;outline-offset:3px}"
+    },
+    {
+      "name": "Count tabs",
+      "kind": "nav",
+      "description": "Unsettled and settled categories with counts and roving tab stops. The application handles ArrowLeft/ArrowRight and Home/End.",
+      "html": "<div class=\"ds-tabs\" role=\"tablist\" aria-label=\"My Bets\"><button type=\"button\" role=\"tab\" aria-selected=\"true\" tabindex=\"0\">Unsettled <span class=\"ds-count\">3</span></button><button type=\"button\" role=\"tab\" aria-selected=\"false\" tabindex=\"-1\">Settled <span class=\"ds-count\">12</span></button></div>",
+      "css": ".ds-tabs{display:flex;gap:24px;border-bottom:1px solid #dce4f2}.ds-tabs button{display:flex;align-items:center;gap:8px;min-height:48px;background:none;border:0;border-bottom:3px solid transparent;color:#536583;padding:8px 0;font-family:Inter,'DM Sans',Arial,sans-serif;font-size:14px;font-weight:650;line-height:1.5;cursor:pointer}.ds-tabs button[aria-selected=true]{border-color:#00409e;color:#00409e}.ds-count{padding:2px 7px;border-radius:4px;background:#eaf0fb;font-size:12px}.ds-tabs button:focus-visible{outline:3px solid #00409e;outline-offset:3px}"
+    },
+    {
+      "name": "Outcome badges",
+      "kind": "chip",
+      "description": "Translated outcomes with semantic fills.",
+      "html": "<div class=\"ds-badges\"><span class=\"ds-badge\" data-state=\"won\">Won</span><span class=\"ds-badge\" data-state=\"lost\">Lost</span><span class=\"ds-badge\" data-state=\"refunded\">Refunded</span><span class=\"ds-badge\" data-state=\"processing\">Processing</span></div>",
+      "css": ".ds-badges{display:flex;gap:8px;flex-wrap:wrap}.ds-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:650;line-height:1.5;padding:5px 8px;border-radius:4px;white-space:normal;font-family:Inter,'DM Sans',Arial,sans-serif;}.ds-badge[data-state=won]{background:#e8f5ec;color:#216e42}.ds-badge[data-state=lost]{background:#fbecee;color:#a43d4a}.ds-badge[data-state=refunded]{background:#eaf0fb;color:#00409e}.ds-badge[data-state=processing]{background:#fbf2dc;color:#805810}",
+      "refersTo": "status-won"
+    },
+    {
+      "name": "Bulletin section",
+      "kind": "card",
+      "description": "Flat bordered section with a blue heading rule.",
+      "html": "<section class=\"ds-section\"><h2>Financial breakdown</h2><p>Stake and return are shown separately.</p></section>",
+      "css": ".ds-section{background:#fff;border:1px solid #dce4f2;border-radius:12px;padding:24px;color:#080f32;font-family:Inter,'DM Sans',Arial,sans-serif;}.ds-section h2{margin:0 0 20px;padding-bottom:12px;border-bottom:2px solid #00409e;font-size:18px;font-weight:700}.ds-section p{font-size:14px;line-height:1.6;color:#536583}",
+      "refersTo": "bulletin-surface"
+    },
+    {
+      "name": "Fixture row",
+      "kind": "custom",
+      "description": "Compact fixture with local kickoff and three odds previews; sample names only.",
+      "html": "<a class=\"ds-fixture\" href=\"#\"><div class=\"ds-meta\"><strong>Football</strong><span>20:00 · Local time</span></div><div class=\"ds-teams\"><span>Home team</span><span>Away team</span></div><div class=\"ds-preview\"><span><small>1–0</small><strong>12%</strong></span><span><small>1–1</small><strong>15%</strong></span><span><small>1–2</small><strong>18%</strong></span></div><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#00409e\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M7 17 17 7M7 7h10v10\"/></svg></a>",
+      "css": ".ds-fixture{display:grid;grid-template-columns:minmax(130px,.8fr) minmax(200px,1.2fr) minmax(250px,1fr) 20px;gap:24px;align-items:center;padding:20px 24px;color:#080f32;text-decoration:none;min-height:112px;background:#fff;border:1px solid #dce4f2;transition:background .18s ease-out;font-family:Inter,'DM Sans',Arial,sans-serif;font-variant-numeric:tabular-nums}.ds-meta{display:flex;flex-direction:column;gap:6px;color:#536583;font-size:12px;line-height:1.5}.ds-meta strong{color:#080f32;font-size:13px;font-weight:650}.ds-teams{display:flex;flex-direction:column;gap:10px;font-size:14px;font-weight:650;line-height:1.5}.ds-preview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.ds-preview>span{text-align:center;padding:8px;border-left:1px solid #dce4f2}.ds-preview small{display:block;color:#536583;font-size:12px;margin-bottom:6px}.ds-preview strong{font-size:16px;color:#00409e}.ds-fixture:hover{background:#f4f8ff}.ds-fixture:focus-visible{outline:3px solid #00409e;outline-offset:-3px}@media(max-width:620px){.ds-fixture{grid-template-columns:1fr 20px;gap:16px;padding:20px 16px}.ds-meta{grid-column:1/-1}.ds-preview{grid-column:1/-1}}@media(prefers-reduced-motion:reduce){.ds-fixture{transition:none}}"
+    },
+    {
+      "name": "Score matrix states",
+      "kind": "custom",
+      "description": "Web available, selected, protected, and disabled cells. Native preserves selection per match ID with primaryContainer, a 2dp primary border, selected semantics, and a Button role.",
+      "html": "<div class=\"ds-matrix\"><button class=\"ds-score\" type=\"button\"><span>1–0</span><div><small>Odds</small><strong>12%</strong></div></button><button class=\"ds-score ds-selected\" type=\"button\" aria-pressed=\"true\"><span>1–1</span><div><small>Odds</small><strong>15%</strong></div></button><button class=\"ds-score ds-protected\" type=\"button\"><span>1–2</span><div><small>Company game</small><strong>18%</strong></div></button><button class=\"ds-score\" type=\"button\" disabled><span>2–0</span><div><small>Unavailable</small><strong>—</strong></div></button></div>",
+      "css": ".ds-matrix{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border:1px solid #dce4f2;border-radius:12px;overflow:hidden}.ds-score{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:80px;padding:16px;border:0;border-right:1px solid #dce4f2;border-bottom:1px solid #dce4f2;background:#fff;color:#080f32;text-align:left;cursor:pointer;transition:background .18s ease-out;font-family:Inter,'DM Sans',Arial,sans-serif;}.ds-score>span{font-size:20px;line-height:1.5;font-weight:700;white-space:nowrap}.ds-score>div{display:flex;flex-direction:column;align-items:flex-end;gap:4px}.ds-score small{color:#536583;font-size:10px;line-height:1.5}.ds-score strong{font-size:16px;color:#00409e;font-weight:700}.ds-score:hover:not(:disabled){background:#f4f8ff}.ds-selected{background:#eaf0fb;box-shadow:inset 0 0 0 2px #00409e}.ds-protected{background:#fff0f7}.ds-protected small{color:#a90059}.ds-score:disabled{background:#f1f4fb;color:#536583;cursor:not-allowed}.ds-score:disabled strong{color:#536583}.ds-score:focus-visible{outline:3px solid #00409e;outline-offset:-3px}@media(prefers-reduced-motion:reduce){.ds-score{transition:none}}",
+      "refersTo": "score-cell"
+    },
+    {
+      "name": "Financial facts",
+      "kind": "custom",
+      "description": "Separate stake, profit, and returned stake; sample refunded record.",
+      "html": "<dl class=\"ds-facts\"><div class=\"ds-fact\"><dt>Stake</dt><dd>1,000 MMK</dd></div><div class=\"ds-fact\"><dt>Profit</dt><dd>0 MMK</dd></div><div class=\"ds-fact ds-total\"><dt>Returned stake</dt><dd>1,000 MMK</dd></div></dl>",
+      "css": ".ds-facts{margin:0;color:#080f32;font-variant-numeric:tabular-nums;font-family:Inter,'DM Sans',Arial,sans-serif;}.ds-fact{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid #dce4f2}.ds-fact dt{color:#536583;font-size:12px;line-height:1.5}.ds-fact dd{margin:0;font-size:15px;font-weight:650;max-width:65%;text-align:right;overflow-wrap:anywhere}.ds-total{background:#eaf0fb;padding:16px;margin-top:12px;border-radius:6px}.ds-total dt,.ds-total dd{color:#00409e;font-weight:700}",
+      "refersTo": "financial-total"
+    }
+  ],
+  "narrative": {
+    "northStar": "Matchday Bulletin",
+    "overview": "A clear football bulletin built for fast scanning: bold sans headings, light surfaces, blue section markers, thin separators, and aligned figures. Hierarchy comes from type, spacing, and columns. Fixture and bet information stays readable when names, translations, or amounts become longer.\n\nThis record describes the user-approved Matches, match markets and stake entry, My Bets, and bet-detail surfaces on the React website and Kotlin Compose Android app. It does not replace the visual identity of the landing page, account, wallet, referral, VIP, or administration experiences. UCL is the confirmed public name; this surface direction is not a new product slogan. Per-surface composition is recorded in `.impeccable/surfaces/matchday-bulletin.md`.",
+    "keyCharacteristics": [
+      "Compact information rows with meaningful separators.",
+      "Bold sans hierarchy and explicit textual states.",
+      "Blue navigation, odds, section rules, and selection emphasis.",
+      "Responsive numerical columns and readable local dates.",
+      "English and Burmese copy with MMK financial values."
+    ],
+    "rules": [
+      {
+        "name": "The Explicit State Rule",
+        "body": "Always pair outcome, unavailable, and protected color treatments with their existing translated labels.",
+        "section": "colors"
+      },
+      {
+        "name": "The Figure Alignment Rule",
+        "body": "Web bulletin pages use tabular numerals. Preserve aligned financial values and the end alignment of fact values; never flatten stake, profit, and returned stake into one unlabeled figure.",
+        "section": "typography"
+      }
+    ],
+    "dos": [
+      "Do keep this direction scoped to the four documented betting surfaces.",
+      "Do preserve the blue section markers, thin separators, bold sans hierarchy, and labeled numerical columns.",
+      "Do allow English and Burmese labels and long team names to wrap without hiding their meaning.",
+      "Do keep local kickoff dates, translated state labels, and MMK financial formatting explicit.",
+      "Do preserve native light/dark Material roles and web keyboard focus treatment.",
+      "Do distinguish refunded stake from profit and potential return."
+    ],
+    "donts": [
+      "Don't infer a new product identity or redesign unrelated surfaces from this scoped record.",
+      "Don't use outcome or market protection color as the only state cue.",
+      "Don't promote native inherited container colors, serif defaults, or the stake field's one-off border into new bulletin tokens.",
+      "Don't claim browser or emulator visual validation until recapture succeeds."
+    ]
+  }
+}

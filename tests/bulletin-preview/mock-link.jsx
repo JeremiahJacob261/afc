@@ -1,0 +1,1 @@
+export default function Link({ href, locale, ...props }) { const lang = locale || (location.pathname.includes('/my/') ? 'my' : 'en'); return <a href={'/' + lang + href.replace(/^\/(en|my)/, '')} {...props} /> }

@@ -21,7 +21,7 @@ fun NativeBottomBar(selectedTab: String, onSelectTab: (String) -> Unit) {
             Triple("home", R.string.nav_home, R.drawable.ic_nav_home),
             Triple("matches", R.string.nav_matches, R.drawable.ic_nav_matches),
             Triple("bets", R.string.nav_bets, R.drawable.ic_nav_bets),
-            Triple("wallet", R.string.nav_wallet, R.drawable.ic_nav_wallet),
+            Triple("wallet", R.string.nav_recharge, R.drawable.ic_nav_wallet),
             Triple("account", R.string.nav_account, R.drawable.ic_nav_account),
         )
         destinations.forEach { (route, labelId, iconId) ->
