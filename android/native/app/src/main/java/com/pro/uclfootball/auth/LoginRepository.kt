@@ -2,7 +2,6 @@ package com.pro.uclfootball.auth
 
 import com.pro.uclfootball.network.NativeApiClient
 import com.pro.uclfootball.network.ApiException
-import com.pro.uclfootball.network.MeResponse
 import kotlinx.serialization.Serializable
 
 class LoginRepository(
@@ -10,18 +9,7 @@ class LoginRepository(
     private val authSessionRepository: AuthSessionRepository,
 ) {
     suspend fun restoreSession(): Boolean {
-        if (authSessionRepository.currentSession() == null) return false
-        return try {
-            apiClient.getJson<MeResponse>("api/me", authenticated = true)
-            true
-        } catch (error: ApiException) {
-            if (error.httpStatus == 401 || error.httpStatus == 404) {
-                authSessionRepository.clear()
-                false
-            } else {
-                throw error
-            }
-        }
+        return authSessionRepository.restoreLocalSession()
     }
 
     suspend fun signIn(identity: String, password: String) {

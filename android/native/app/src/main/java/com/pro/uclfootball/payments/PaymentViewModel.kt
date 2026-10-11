@@ -22,7 +22,7 @@ data class PaymentUiState(
     val amount: String = "", val wallet: String = "", val holder: String = "", val bank: String = "",
     val pin: String = "", val confirmPin: String = "", val reviewed: Boolean = false,
     val quote: DepositQuoteDto? = null, val withdrawalQuote: WithdrawalQuoteDto? = null,
-    val receipt: ByteArray? = null, val receiptMime: String = "", val uploadId: String = "", val receiptUrl: String? = null,
+    val receipt: ByteArray? = null, val receiptName: String = "", val receiptMime: String = "", val uploadId: String = "", val receiptUrl: String? = null,
     val error: Int? = null, val uncertain: Boolean = false, val requiresSignIn: Boolean = false,
 ) {
     val method get() = data?.methods?.find { it.identity == methodId }
@@ -41,17 +41,20 @@ class PaymentViewModel(private val repository: PaymentRepository, private val se
     val state = mutableState.asStateFlow()
     init { refresh() }
 
-    fun refresh() = work {
-        mutableState.update { it.copy(loading = true, data = null, profile = null, quote = null, withdrawalQuote = null, reviewed = false,
-            page = when (it.page) {
-                PaymentPage.Destination, PaymentPage.Receipt -> PaymentPage.Amount
-                PaymentPage.WithdrawalReview -> PaymentPage.Withdraw
-                else -> it.page
+    fun refresh() = work(background = true) {
+        mutableState.update { it.copy(loading = it.data == null) }
+        val (data, profile) = coroutineScope {
+            val dataRequest = async { repository.load(onCached = { saved ->
+                mutableState.update { it.copy(data = saved, loading = false) }
             }) }
-        val data = repository.load()
-        val profile = repository.profile().profile
-        mutableState.update { it.copy(data = data, profile = profile, loading = false) }
+            val profileRequest = async { repository.profile(onCached = { saved ->
+                mutableState.update { it.copy(profile = saved.profile) }
+            }).profile }
+            dataRequest.await() to profileRequest.await()
+        }
+        mutableState.update { refreshPaymentDraft(it, data).copy(profile = profile, loading = false) }
     }
+
     fun go(page: PaymentPage) {
         if (state.value.busy) return
         mutableState.update { it.copy(page = page, error = null, pin = "", confirmPin = "") }
@@ -62,8 +65,8 @@ class PaymentViewModel(private val repository: PaymentRepository, private val se
             PaymentPage.Destination -> PaymentPage.Amount
             PaymentPage.Receipt -> PaymentPage.Destination
             PaymentPage.WithdrawalReview -> PaymentPage.Withdraw
-            PaymentPage.Wallet, PaymentPage.DepositSuccess, PaymentPage.WithdrawalSuccess -> return false
-            else -> PaymentPage.Wallet
+            PaymentPage.Wallet, PaymentPage.Methods, PaymentPage.BindWallet, PaymentPage.Withdraw, PaymentPage.Pin, PaymentPage.DepositSuccess, PaymentPage.WithdrawalSuccess -> return false
+            else -> return false
         }
         go(page); return true
     }
@@ -71,6 +74,10 @@ class PaymentViewModel(private val repository: PaymentRepository, private val se
         if (state.value.busy) return
         mutableState.update { it.copy(methodId = id, destinationId = "", amount = "", quote = null,
             reviewed = false, receipt = null, receiptUrl = null, error = null) }
+        val method = state.value.method
+        if (method != null && method.code !in listOf("mmk", "fcfa", "idr")) {
+            state.value.destinations.firstOrNull()?.let { chooseDestination(it.id.textValue().ifBlank { it.address }) }
+        }
     }
     fun chooseDestination(id: String) { if (!state.value.busy) mutableState.update { it.copy(destinationId = id, reviewed = false, receiptUrl = null) } }
     fun chooseWallet(id: String) { if (!state.value.busy) mutableState.update { it.copy(walletId = id, withdrawalQuote = null) } }
@@ -109,6 +116,9 @@ class PaymentViewModel(private val repository: PaymentRepository, private val se
         val quote = repository.withdrawalQuote(current.amount)
         mutableState.update { it.copy(withdrawalQuote = quote, page = PaymentPage.WithdrawalReview) }
     }
+    fun clearReceipt() {
+        if (!state.value.busy && !state.value.uncertain) mutableState.update { it.copy(receipt = null, receiptName = "", receiptUrl = null) }
+    }
     fun selectReceipt(resolver: ContentResolver, uri: Uri) = work {
         val pair = withContext(Dispatchers.IO) {
             val mime = resolver.getType(uri).orEmpty()
@@ -127,7 +137,12 @@ class PaymentViewModel(private val repository: PaymentRepository, private val se
             require(bytes.isNotEmpty())
             bytes to mime
         }
-        mutableState.update { it.copy(receipt = pair.first, receiptMime = pair.second, uploadId = UUID.randomUUID().toString(), receiptUrl = null) }
+        val name = withContext(Dispatchers.IO) {
+            resolver.query(uri, arrayOf(android.provider.OpenableColumns.DISPLAY_NAME), null, null, null)?.use { cursor ->
+                if (cursor.moveToFirst()) cursor.getString(0) else null
+            }
+        }.orEmpty().ifBlank { "receipt.${pair.second.substringAfter('/')}" }
+        mutableState.update { it.copy(receipt = pair.first, receiptName = name, receiptMime = pair.second, uploadId = UUID.randomUUID().toString(), receiptUrl = null) }
     }
     fun submitDeposit() = work(mutation = true) {
         val current = state.value
@@ -151,13 +166,19 @@ class PaymentViewModel(private val repository: PaymentRepository, private val se
         val result = repository.bind(BindWalletRequest(method.identity, current.wallet.trim(), current.holder.trim(), current.bank.trim()))
         if (result.status != "success") return@work fail(R.string.journey_submission_failed)
         val data = repository.load()
-        mutableState.update { it.copy(data = data, wallet = "", holder = "", bank = "", page = PaymentPage.Wallet) }
+        mutableState.update { it.copy(data = data, wallet = "", holder = "", bank = "", page = PaymentPage.BindWallet) }
     }
     fun submitWithdrawal() = work(mutation = true) {
         val current = state.value
         if (current.uncertain || current.hasPending) return@work fail(R.string.journey_payment_pending)
         val wallet = current.payoutWallet ?: return@work fail(R.string.journey_incomplete)
-        if (current.pin.length != 4 || current.withdrawalQuote == null) return@work fail(R.string.journey_pin_required)
+        if (!positive(current.amount) || current.payoutWallet == null) return@work fail(R.string.journey_incomplete)
+        if (!current.hasPin || current.pin.length != 4) return@work fail(R.string.journey_pin_required)
+        if (current.data?.withdrawalEligibility?.canWithdraw != true) return@work fail(R.string.journey_payment_pending)
+        // Obtain the existing server quote within the submit action, as on the website.
+        val quote = try { current.withdrawalQuote ?: repository.withdrawalQuote(current.amount) }
+        catch (_: IOException) { return@work fail(R.string.journey_offline) }
+        mutableState.update { it.copy(withdrawalQuote = quote) }
         val results = repository.withdraw(WithdrawalRequest(current.pin, wallet.wallet, current.amount, wallet.walletnames, wallet.bank.orEmpty(), wallet.names.orEmpty()))
         mutableState.update { it.copy(pin = "") }
         if (results.firstOrNull()?.status != "Success") return@work fail(R.string.journey_submission_failed)
@@ -174,22 +195,40 @@ class PaymentViewModel(private val repository: PaymentRepository, private val se
     }
     private fun fail(resource: Int) { mutableState.update { it.copy(error = resource) } }
     private fun positive(value: String) = value.toBigDecimalOrNull()?.signum() == 1
-    private fun work(mutation: Boolean = false, block: suspend () -> Unit) {
-        if (state.value.busy) return
-        mutableState.update { it.copy(busy = true, error = null) }
+    private var refreshRunning = false
+    private fun work(mutation: Boolean = false, background: Boolean = false, block: suspend () -> Unit) {
+        if (state.value.busy || background && refreshRunning) return
+        if (background) refreshRunning = true
+        mutableState.update { it.copy(busy = if (background) it.busy else true, error = null) }
         viewModelScope.launch {
             try { block() }
             catch (error: CancellationException) { throw error }
             catch (error: ApiException) {
-                if (error.httpStatus == 401 || error.httpStatus == 404 && error.apiError?.message == "Profile not found") {
-                    sessions.clear(); mutableState.update { it.copy(requiresSignIn = true) }
+                if (error.httpStatus == 401) {
+                    mutableState.update { it.copy(requiresSignIn = true) }
                 } else fail(if (error.httpStatus == 409) R.string.journey_data_changed else R.string.journey_submission_failed)
             }
             catch (error: IOException) {
                 mutableState.update { it.copy(uncertain = it.uncertain || mutation, error = if (mutation) R.string.journey_uncertain else R.string.journey_offline) }
             }
             catch (error: Exception) { fail(R.string.journey_submission_failed) }
-            finally { mutableState.update { it.copy(busy = false, loading = false, pin = if (mutation) "" else it.pin, confirmPin = if (mutation) "" else it.confirmPin) } }
+            finally {
+                if (background) refreshRunning = false
+                mutableState.update { it.copy(busy = if (background) it.busy else false, loading = false, pin = if (mutation) "" else it.pin, confirmPin = if (mutation) "" else it.confirmPin) }
+            }
         }
     }
+}
+
+/** Resume (including photo picker return) retains a draft unless the reviewed payment details changed. */
+internal fun refreshPaymentDraft(current: PaymentUiState, data: PaymentDataResponse): PaymentUiState {
+    val refreshed = current.copy(data = data, withdrawalQuote = null)
+    val reviewed = current.page in listOf(PaymentPage.Destination, PaymentPage.Receipt)
+    val oldDestination = current.destination
+    val newDestination = refreshed.destination
+    val changed = reviewed && (current.quote?.rate != refreshed.method?.rates.textValue().toDoubleOrNull() ||
+        oldDestination == null || newDestination == null || oldDestination.address != newDestination.address ||
+        oldDestination.bank != newDestination.bank || oldDestination.accountname != newDestination.accountname)
+    return if (changed) refreshed.copy(page = PaymentPage.Amount, quote = null, reviewed = false, receiptUrl = null,
+        error = R.string.journey_data_changed) else refreshed
 }

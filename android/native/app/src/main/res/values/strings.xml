@@ -210,7 +210,7 @@
     <string name="referrals_amount_unavailable">Unavailable</string>
     <string name="account_rewards_heading">Rewards</string>
     <string name="account_vip">VIP progress</string>
-    <string name="account_wheel">Reward wheel</string>
+
     <string name="vip_title">VIP Progress</string>
     <string name="vip_back">‹  Back to account</string>
     <string name="vip_loading">Loading VIP progress…</string>
@@ -221,30 +221,30 @@
     <string name="vip_deposit_values">%1$s of %2$s %3$s</string>
     <string name="vip_referral_values">%1$d of %2$s referrals</string>
     <string name="vip_server_authoritative_note">Progress values are returned by the server. Tier requirements for launch are pending approval.</string>
-    <string name="wheel_back">‹  Back to account</string>
-    <string name="wheel_title">Reward wheel</string>
-    <string name="wheel_loading">Loading reward wheel…</string>
-    <string name="wheel_error_network">You’re offline. Reconnect and retry to load the wheel.</string>
-    <string name="wheel_error_general">Unable to load the wheel. Please retry.</string>
-    <string name="wheel_currency_pending">Currency pending approval</string>
-    <string name="wheel_spinning">…</string>
-    <string name="wheel_go">GO</string>
-    <string name="wheel_spinning_message">The server is selecting your reward. Keep this screen open.</string>
-    <string name="wheel_won">You won %1$s</string>
-    <string name="wheel_recovered">Your reward was recorded: %1$s</string>
-    <string name="wheel_balance_required">A balance of at least %1$s is required to spin.</string>
-    <string name="wheel_not_eligible">Your account is not eligible to spin.</string>
-    <string name="wheel_cooldown">You have already spun. Check back after the cooldown.</string>
-    <string name="wheel_updated">The wheel changed. Its latest state has been loaded.</string>
-    <string name="wheel_ready">Your wheel is ready.</string>
-    <string name="wheel_launch_pending">Wheel spins are unavailable for this launch.</string>
-    <string name="wheel_last_prize">Last reward</string>
-    <string name="wheel_balance">Current balance</string>
-    <string name="wheel_prizes_heading">Possible rewards</string>
-    <string name="wheel_refreshing">Refreshing wheel state…</string>
-    <string name="wheel_next_spin">Next spin</string>
-    <string name="wheel_prize_label">Reward %1$d</string>
-    <string name="wheel_amount_unavailable">Unavailable</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <string name="legal_back">Back to UCL</string>
     <string name="legal_last_updated">Last updated: June 25, 2026</string>
     <string name="legal_privacy_title">Privacy Policy</string>

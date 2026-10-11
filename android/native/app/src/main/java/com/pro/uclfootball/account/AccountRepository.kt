@@ -4,5 +4,5 @@ import com.pro.uclfootball.network.MeResponse
 import com.pro.uclfootball.network.NativeApiClient
 
 class AccountRepository(private val apiClient: NativeApiClient) {
-    suspend fun getProfile(): MeResponse = apiClient.getJson("api/me", authenticated = true)
+    suspend fun getProfile(onCached: ((MeResponse) -> Unit)? = null): MeResponse = apiClient.getJson("api/me", authenticated = true, onCached = onCached)
 }

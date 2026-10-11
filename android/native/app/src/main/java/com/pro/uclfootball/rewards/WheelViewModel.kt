@@ -6,6 +6,7 @@ import com.pro.uclfootball.auth.AuthSessionRepository
 import com.pro.uclfootball.network.ApiException
 import com.pro.uclfootball.network.SpinWheelResponse
 import com.pro.uclfootball.network.WheelStateResponse
+import com.pro.uclfootball.network.textValue
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,11 +17,13 @@ import java.io.IOException
 
 data class WheelUiState(
     val isLoading: Boolean = true,
+    val hasContent: Boolean = false,
     val isSpinning: Boolean = false,
     val wheel: WheelStateResponse? = null,
     val result: SpinWheelResponse? = null,
     val resultId: Long = 0,
     val recoveredAward: String? = null,
+    val celebration: WheelReward? = null,
     val error: WheelError? = null,
     val requiresSignIn: Boolean = false,
 )
@@ -37,9 +40,9 @@ class WheelViewModel(
     init { refresh() }
 
     fun refresh() {
-        if (mutableState.value.isSpinning) return
-        mutableState.update { it.copy(isLoading = true, error = null, result = null, recoveredAward = null, requiresSignIn = false) }
-        viewModelScope.launch { loadState() }
+        if (mutableState.value.isSpinning || mutableState.value.isLoading && mutableState.value.wheel != null) return
+        mutableState.update { it.copy(isLoading = !it.hasContent, error = null, result = null, recoveredAward = null, requiresSignIn = false) }
+        viewModelScope.launch { loadState(hydrate = true) }
     }
 
     fun spin() {
@@ -69,7 +72,7 @@ class WheelViewModel(
                     )
                     state.copy(
                         isLoading = false,
-                        isSpinning = false,
+                        isSpinning = true,
                         wheel = wheel,
                         result = result,
                         resultId = state.resultId + 1,
@@ -82,10 +85,9 @@ class WheelViewModel(
                     "insufficient_balance" -> WheelError.NotEligible
                     "cooldown" -> WheelError.Cooldown
                     "wheel_updated" -> WheelError.Updated
-                    else -> if (error.httpStatus == 401 || error.httpStatus == 404) null else WheelError.General
+                    else -> if (error.httpStatus == 401) null else WheelError.General
                 }
-                if (error.httpStatus == 401 || error.httpStatus == 404) {
-                    authSessionRepository.clear()
+                if (error.httpStatus == 401) {
                     mutableState.update { it.copy(isSpinning = false, requiresSignIn = true) }
                 } else {
                     mutableState.update { it.copy(isSpinning = false) }
@@ -101,29 +103,38 @@ class WheelViewModel(
     }
 
     fun finishAnimation() {
-        mutableState.update { it.copy(result = null) }
+        mutableState.update { state ->
+            state.copy(isSpinning = false, result = null,
+                celebration = state.result?.let { confirmedWheelReward(it, state.wheel?.items.orEmpty()) })
+        }
     }
 
+    fun dismissCelebration() { mutableState.update { it.copy(celebration = null) } }
+
     private suspend fun recoverUncertainSpin(preSpinNextAt: String?) {
-        mutableState.update { it.copy(isSpinning = false, isLoading = true, error = null) }
+        mutableState.update { it.copy(isSpinning = false, isLoading = !it.hasContent, error = null) }
         val loaded = loadState()
         if (loaded != null && loaded.nextSpinAt != null && loaded.nextSpinAt != preSpinNextAt) {
-            mutableState.update { it.copy(recoveredAward = loaded.lastPrize ?: loaded.lastAmount?.toString()) }
+            val amount = loaded.lastAmount.textValue().toDoubleOrNull()?.takeIf { it.isFinite() && it >= 0 }
+            mutableState.update { it.copy(recoveredAward = loaded.lastPrize ?: loaded.lastAmount?.toString(),
+                celebration = amount?.let { value -> WheelReward(value) }) }
         } else {
             mutableState.update { it.copy(error = if (loaded == null) WheelError.Network else WheelError.General) }
         }
     }
 
-    private suspend fun loadState(): WheelStateResponse? {
+    private suspend fun loadState(hydrate: Boolean = false): WheelStateResponse? {
         try {
-            val response = repository.getState()
-            mutableState.update { it.copy(isLoading = false, wheel = response, error = null) }
+            val response = repository.getState(onCached = if (hydrate) ({ saved ->
+                mutableState.update { restoreWheelSnapshot(it, saved) }
+            }) else null)
+            mutableState.update { it.copy(isLoading = false, hasContent = true, wheel = response, error = null) }
             return response
         } catch (error: CancellationException) {
             throw error
         } catch (error: ApiException) {
-            if (error.httpStatus == 401 || error.httpStatus == 404) {
-                authSessionRepository.clear()
+            if (error.httpStatus == 401) {
+
                 mutableState.update { it.copy(isLoading = false, requiresSignIn = true) }
             } else {
                 mutableState.update { it.copy(isLoading = false, error = WheelError.General) }
@@ -136,3 +147,7 @@ class WheelViewModel(
         return null
     }
 }
+
+internal fun restoreWheelSnapshot(state: WheelUiState, saved: WheelStateResponse): WheelUiState =
+    state.copy(isLoading = false, hasContent = true, wheel = saved, result = null,
+        celebration = null, recoveredAward = null)

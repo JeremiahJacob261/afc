@@ -4,8 +4,8 @@ import com.pro.uclfootball.network.*
 import java.net.URLEncoder
 
 class PaymentRepository(private val api: NativeApiClient) {
-    suspend fun load() = api.getJson<PaymentDataResponse>("api/mobile/payment-data", authenticated = true)
-    suspend fun profile() = api.getJson<MeResponse>("api/me", authenticated = true)
+    suspend fun load(onCached: ((PaymentDataResponse) -> Unit)? = null) = api.getJson<PaymentDataResponse>("api/mobile/payment-data", authenticated = true, onCached = onCached)
+    suspend fun profile(onCached: ((MeResponse) -> Unit)? = null) = api.getJson<MeResponse>("api/me", authenticated = true, onCached = onCached)
     suspend fun depositQuote(method: String, amount: String) = api.getJson<DepositQuoteDto>(
         "api/mobile/deposit-quote?method=${encode(method)}&amount=${encode(amount)}", authenticated = true)
     suspend fun withdrawalQuote(amount: String) = api.getJson<WithdrawalQuoteDto>(

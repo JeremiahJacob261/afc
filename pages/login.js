@@ -1,5 +1,5 @@
 import { translateApiMessage } from '@/lib/translateApiMessage'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Head from "next/head"
 import Link from "next/link"
 import { ArrowRight, Eye, EyeOff } from "lucide-react"
@@ -8,7 +8,7 @@ import { supabase } from '@/pages/api/supabase'
 import { clearLegacyAuthStorage } from '@/lib/clientAuth'
 import AppLoadingOverlay from '@/components/AppLoadingOverlay'
 import FeedbackDialog from '@/components/FeedbackDialog'
-import { waitForPaint } from '@/lib/uiFeedback'
+import { clearAuthLoginTiming, markAuthLogin, measureAuthLogin } from '@/lib/authLoginTiming'
 import { Toaster } from 'react-hot-toast'
 import { useTranslation } from 'next-i18next'
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
@@ -37,6 +37,10 @@ export default function Login() {
     showPassword: false,
   })
 
+  useEffect(() => {
+    router.prefetch('/user').catch(() => {})
+  }, [router])
+
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value.replace(/\s/g, '') })
   }
@@ -50,19 +54,28 @@ export default function Login() {
 
     setLoading(true)
     let navigating = false
-    await waitForPaint()
+    clearAuthLoginTiming()
+    markAuthLogin('submit')
     clearLegacyAuthStorage()
 
     try {
       let loginEmail = email.trim()
 
       if (!loginEmail.includes("@")) {
-        const response = await fetch('/api/login-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username: loginEmail })
-        })
-        const result = await response.json().catch(() => ({}))
+        markAuthLogin('username-lookup-start')
+        let response
+        let result
+        try {
+          response = await fetch('/api/login-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: loginEmail })
+          })
+          result = await response.json().catch(() => ({}))
+        } finally {
+          markAuthLogin('username-lookup-end')
+          measureAuthLogin('username-lookup', 'username-lookup-start', 'username-lookup-end')
+        }
 
         if (result?.message === 'TypeError: fetch failed') {
           setFeedback({
@@ -91,10 +104,17 @@ export default function Login() {
         loginEmail = result.email
       }
 
-      const { error } = await supabase.auth.signInWithPassword({
-        email: loginEmail,
-        password: values.password,
-      })
+      markAuthLogin('supabase-auth-start')
+      let error
+      try {
+        ({ error } = await supabase.auth.signInWithPassword({
+          email: loginEmail,
+          password: values.password,
+        }))
+      } finally {
+        markAuthLogin('supabase-auth-end')
+        measureAuthLogin('supabase-auth', 'supabase-auth-start', 'supabase-auth-end')
+      }
 
       if (error) {
         console.error(error)
@@ -106,8 +126,11 @@ export default function Login() {
         return
       }
 
+      markAuthLogin('auth-accepted')
+      measureAuthLogin('submit-to-auth-accepted', 'submit', 'auth-accepted')
       clearLegacyAuthStorage()
       navigating = true
+      markAuthLogin('navigation-start')
       router.push('/user')
     } catch (error) {
       console.error(error)

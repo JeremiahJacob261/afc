@@ -13,19 +13,21 @@ import androidx.compose.ui.unit.sp
 
 object UclColors {
     val ink = Color(0xFF080F32)
-    val body = Color(0xFF263E39)
+    val body = Color(0xFF293E60)
     val accent = Color(0xFF0649FF)
-    val paper = Color(0xFFFDFCF8)
-    val surface = Color(0xFFF3F2EF)
-    val sage = Color(0xFF75886B)
-    val line = Color(0xFF73786D)
-    val dashboardLine = Color(0xFFDFE5DF)
-    val muted = Color(0xFF526B5B)
-    val darkGround = Color(0xFF0D1714)
+    val paper = Color(0xFFF8FAFF)
+    val surface = Color(0xFFEDF2FC)
+    val secondary = Color(0xFF315DA8)
+    val line = Color(0xFF6E7D99)
+    val dashboardLine = Color(0xFFDCE4F2)
+    val muted = Color(0xFF536583)
+    val darkGround = Color(0xFF07142E)
     val error = Color(0xFF9A1B1B)
     val errorSurface = Color(0xFFFFF2EF)
     val blueSurface = Color(0xFFEAF0FB)
     val blueInk = Color(0xFF31588F)
+    val success = Color(0xFF174EAC)
+    val successSurface = Color(0xFFE7EFFF)
 }
 
 object UclSpacing {
@@ -41,8 +43,8 @@ object UclSpacing {
 private val UclColorScheme = lightColorScheme(
     primary = UclColors.accent,
     onPrimary = UclColors.paper,
-    secondary = UclColors.sage,
-    onSecondary = UclColors.ink,
+    secondary = UclColors.secondary,
+    onSecondary = Color.White,
     background = UclColors.paper,
     onBackground = UclColors.ink,
     surface = UclColors.paper,

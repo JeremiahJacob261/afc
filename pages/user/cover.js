@@ -27,6 +27,8 @@ export default function Cover({ children, dashboard = false }) {
   const transactionPage = /^\/user\/(?:fund|deposit|withdraw|bets|match|viewbet|wheel|inputvalue|codesetting|bindwallet)(?:\/|$)/.test(router.pathname)
 
   useEffect(() => {
+    if (dashboard) return
+
     async function checkSession() {
       const session = await requireSession(router)
       if (session) {
@@ -35,7 +37,7 @@ export default function Cover({ children, dashboard = false }) {
       }
     }
     checkSession()
-  }, [router])
+  }, [dashboard, router])
 
   useEffect(() => {
     const updateConnection = () => setOffline(!navigator.onLine)

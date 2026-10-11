@@ -162,7 +162,7 @@
     <string name="transactions_amount_label">ပမာဏ</string>
     <string name="transactions_amount_unavailable">မရရှိနိုင်ပါ</string>
     <string name="transactions_currency_pending">ငွေကြေးကို အတည်ပြုရန်လိုသည်</string>
-    <string name="wheel_launch_pending">ဤဗားရှင်းတွင် ကံစမ်းဘီးလှည့်ခြင်းကို မရရှိနိုင်ပါ။</string>
+
     <string name="transactions_conversion_unavailable">ငွေကြေးလဲလှယ်မှုအသေးစိတ် မရရှိနိုင်ပါ။</string>
     <string name="transactions_detail">အသေးစိတ်</string>
     <string name="transactions_status_success">အောင်မြင်</string>

@@ -79,15 +79,20 @@ class NativePushManager(private val context: Context, private val container: Ucl
     }
 
     private suspend fun register(token: String) {
+        val userId = container.authSessionRepository.currentSession()?.user?.id ?: return
         val deviceId = preferences.getString("device_id", null) ?: UUID.randomUUID().toString().also {
             preferences.edit().putString("device_id", it).apply()
         }
         val language = if (Locale.getDefault().language == "en") "en" else "my"
+        if (preferences.getString("registered_token", null) == token &&
+            preferences.getString("registered_user", null) == userId &&
+            preferences.getString("registered_language", null) == language) return
         val body = buildJsonObject {
             put("token", token); put("platform", "android-native"); put("deviceId", deviceId); put("language", language)
         }.toString()
         container.apiClient.post("api/push/register-token", body, authenticated = true)
-        preferences.edit().putString("registered_token", token).apply()
+        preferences.edit().putString("registered_token", token).putString("registered_user", userId)
+            .putString("registered_language", language).apply()
     }
 
     suspend fun unregister() = mutex.withLock {
@@ -106,7 +111,7 @@ class NativePushManager(private val context: Context, private val container: Ucl
             catch (error: CancellationException) { throw error }
             catch (_: Exception) { /* Offline device revocation must also be enforced server-side. */ }
         }
-        preferences.edit().remove("registered_token").apply()
+        preferences.edit().remove("registered_token").remove("registered_user").remove("registered_language").apply()
         NotificationManagerCompat.from(context).cancelAll()
     }
 

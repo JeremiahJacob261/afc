@@ -15,6 +15,7 @@ import java.io.IOException
 
 data class BetsUiState(
     val isLoading: Boolean = true,
+    val hasContent: Boolean = false,
     val unsettled: List<PlacedBetDto> = emptyList(),
     val settled: List<PlacedBetDto> = emptyList(),
     val error: BetsError? = null,
@@ -33,18 +34,19 @@ class BetsViewModel(
     init { refresh() }
 
     fun refresh() {
-        mutableState.update { it.copy(isLoading = true, error = null, requiresSignIn = false) }
+        mutableState.update { it.copy(isLoading = !it.hasContent, error = null, requiresSignIn = false) }
         viewModelScope.launch {
             try {
-                val response = repository.getMyBets()
+                val response = repository.getMyBets(onCached = { saved ->
+                    mutableState.update { it.copy(isLoading = false, hasContent = true, unsettled = saved.unsettled, settled = saved.settled) }
+                })
                 mutableState.update {
-                    it.copy(isLoading = false, unsettled = response.unsettled, settled = response.settled)
+                    it.copy(isLoading = false, hasContent = true, unsettled = response.unsettled, settled = response.settled)
                 }
             } catch (error: CancellationException) {
                 throw error
             } catch (error: ApiException) {
-                if (error.httpStatus == 401 || error.httpStatus == 404) {
-                    authSessionRepository.clear()
+                if (error.httpStatus == 401) {
                     mutableState.update { it.copy(isLoading = false, requiresSignIn = true) }
                 } else {
                     mutableState.update { it.copy(isLoading = false, error = BetsError.General) }

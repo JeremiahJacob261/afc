@@ -10,10 +10,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.pro.uclfootball.R
 
 @Composable
 fun JourneyPage(title: String, onBack: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
+    if (LocalUserShell.current) {
+        Column(Modifier.fillMaxSize().imePadding().verticalScroll(rememberScrollState()).padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 32.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp)) {
+            WebPageHeading(title, onBack)
+            content()
+        }
+        return
+    }
     Scaffold(containerColor = UclColors.paper, contentWindowInsets = WindowInsets.safeDrawing) { padding ->
         Column(Modifier.fillMaxSize().padding(padding).imePadding().verticalScroll(rememberScrollState()).padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(18.dp)) {
@@ -26,7 +35,19 @@ fun JourneyPage(title: String, onBack: () -> Unit, content: @Composable ColumnSc
 
 @Composable
 fun JourneyField(label: String, value: String, onChange: (String) -> Unit,
-    keyboard: KeyboardType = KeyboardType.Text, secret: Boolean = false, enabled: Boolean = true) {
+    keyboard: KeyboardType = KeyboardType.Text, secret: Boolean = false, enabled: Boolean = true, floatingLabel: String? = null) {
+    if (LocalUserShell.current) {
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(label, fontSize = 12.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.Medium, color = UclColors.ink)
+            OutlinedTextField(value, onChange, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp),
+                label = floatingLabel?.let { { Text(it) } }, singleLine = true, enabled = enabled,
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp),
+                colors = OutlinedTextFieldDefaults.colors(unfocusedBorderColor = UclColors.ink, focusedBorderColor = UclColors.accent),
+                keyboardOptions = KeyboardOptions(keyboardType = keyboard),
+                visualTransformation = if (secret) PasswordVisualTransformation() else VisualTransformation.None)
+        }
+        return
+    }
     var visible by remember { mutableStateOf(false) }
     OutlinedTextField(value, onChange, modifier = Modifier.fillMaxWidth(), label = { Text(label) },
         singleLine = true, enabled = enabled, keyboardOptions = KeyboardOptions(keyboardType = keyboard),
@@ -38,7 +59,7 @@ fun JourneyField(label: String, value: String, onChange: (String) -> Unit,
 
 @Composable
 fun JourneyAction(label: String, enabled: Boolean = true, busy: Boolean = false, onClick: () -> Unit) {
-    Button(onClick, enabled = enabled && !busy, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) {
+    Button(onClick, enabled = enabled && !busy, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp), shape = androidx.compose.foundation.shape.RoundedCornerShape(if (LocalUserShell.current) 10.dp else 26.dp)) {
         if (busy) CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp)
         else Text(label)
     }

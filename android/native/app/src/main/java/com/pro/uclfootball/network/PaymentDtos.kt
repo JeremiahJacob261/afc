@@ -18,6 +18,7 @@ data class PaymentDataResponse(
 @Serializable data class PaymentMethodDto(
     val id: JsonElement? = null, val name: String = "", @SerialName("currency_code") val currencyCode: String? = null,
     val type: String? = null, val rates: JsonElement? = null, val available: Boolean = true, val notes: String? = null,
+    val image: String? = null,
 ) {
     val identity get() = id.textValue().ifBlank { name }
     val code get() = (currencyCode ?: name).lowercase()
@@ -26,6 +27,7 @@ data class PaymentDataResponse(
 @Serializable data class PaymentDestinationDto(
     val id: JsonElement? = null, val name: String = "", @SerialName("currency_code") val currencyCode: String? = null,
     val address: String = "", val bank: String? = null, val accountname: String? = null,
+    val image: String? = null, val type: String? = null,
 )
 @Serializable data class PayoutWalletDto(
     val id: JsonElement? = null, val wallet: String = "", val walletnames: String = "",

@@ -8,8 +8,8 @@ import com.pro.uclfootball.network.NotificationsSummaryResponse
 import kotlinx.serialization.json.JsonElement
 
 class NotificationsRepository(private val apiClient: NativeApiClient) {
-    suspend fun getNotifications(): List<NotificationDto> =
-        apiClient.getJson("api/notify", authenticated = true)
+    suspend fun getNotifications(onCached: ((List<NotificationDto>) -> Unit)? = null): List<NotificationDto> =
+        apiClient.getJson("api/notify", authenticated = true, onCached = onCached)
 
     suspend fun getSummary(): NotificationsSummaryResponse =
         apiClient.getJson("api/notify?summary=1", authenticated = true)

@@ -10,6 +10,7 @@ import { Toaster, toast } from 'react-hot-toast'
 import Cover from './cover'
 import { supabase } from '@/pages/api/supabase'
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth'
+import { markAuthLogin, measureAuthLogin } from '@/lib/authLoginTiming'
 import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay'
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
 import ball from '@/public/simps/ball.png'
@@ -119,6 +120,12 @@ export default function Home() {
   const [links, setLinks] = useState({ telegram: fallbackTelegram, whatsapp: fallbackWhatsapp })
 
   useEffect(() => {
+    markAuthLogin('dashboard-first-paint')
+    measureAuthLogin('submit-to-dashboard-paint', 'submit', 'dashboard-first-paint')
+    measureAuthLogin('navigation-to-dashboard-paint', 'navigation-start', 'dashboard-first-paint')
+  }, [])
+
+  useEffect(() => {
     setNow(Date.now())
     const clock = setInterval(() => setNow(Date.now()), 60_000)
     return () => clearInterval(clock)
@@ -130,20 +137,29 @@ export default function Home() {
       const session = await requireSession(router)
       if (!session || !active) return
       clearLegacyAuthStorage()
-      try {
-        const response = await authFetch('/api/me')
-        if (response.status === 401 || response.status === 404) { router.push('/login'); return }
-        const result = await response.json()
-        if (active && result.status === 'success') {
-          setUsername(result.profile?.username || '')
-        } else if (active) toast.error(translateApiMessage(result, t, 'messages.unableRefreshAccount'))
-      } catch (error) { if (active) toast.error(t('messages.unableRefreshAccount')) }
-
-      const [matchResult, betsResult] = await Promise.allSettled([
+      const [profileResult, matchResult, betsResult] = await Promise.allSettled([
+        authFetch('/api/me', {}, session.access_token),
         supabase.from('bets').select('*').eq('verified', false).gt('tsgmt', Date.now()).order('tsgmt', { ascending: true }).limit(50),
-        authFetch('/api/my-bets'),
+        authFetch('/api/my-bets', {}, session.access_token),
       ])
       if (!active) return
+
+      if (profileResult.status === 'fulfilled') {
+        if (profileResult.value.status === 401 || profileResult.value.status === 404) {
+          router.push('/login')
+          return
+        }
+        try {
+          const result = await profileResult.value.json()
+          if (result.status === 'success') setUsername(result.profile?.username || '')
+          else toast.error(translateApiMessage(result, t, 'messages.unableRefreshAccount'))
+        } catch (error) {
+          toast.error(t('messages.unableRefreshAccount'))
+        }
+      } else {
+        toast.error(t('messages.unableRefreshAccount'))
+      }
+
       if (matchResult.status === 'fulfilled' && !matchResult.value.error) setMatches(matchResult.value.data || [])
       else setMatchError(true)
       setLoadingMatches(false)

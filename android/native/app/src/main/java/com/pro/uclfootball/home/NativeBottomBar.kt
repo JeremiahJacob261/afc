@@ -15,6 +15,7 @@ import com.pro.uclfootball.ui.UclColors
 
 @Composable
 fun NativeBottomBar(selectedTab: String, onSelectTab: (String) -> Unit) {
+    if (com.pro.uclfootball.ui.LocalUserShell.current) return
     NavigationBar(containerColor = Color.White) {
         val destinations = listOf(
             Triple("home", R.string.nav_home, R.drawable.ic_nav_home),

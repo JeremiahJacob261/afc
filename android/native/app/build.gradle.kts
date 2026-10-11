@@ -143,7 +143,25 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
     debugImplementation("androidx.compose.ui:ui-tooling")
+    testImplementation("junit:junit:4.13.2")
 }
+
+// Customer copy is shared with the website on every build, including direct Gradle builds.
+val syncNativeWebCopy = tasks.register<Copy>("syncNativeWebCopy") {
+    from(rootProject.file("../../locales")) {
+        include("en/common.json", "my/common.json")
+        eachFile { path = "web-copy/${relativePath.segments.first()}.json" }
+        includeEmptyDirs = false
+    }
+    from(rootProject.file("../../pages/api/idrbanks.json")) { into("web-banks"); rename { "idr.json" } }
+    from(rootProject.file("parity")) {
+        include("Inter-OFL.txt", "Solar-icons-license.json")
+        into("licenses")
+    }
+    into(layout.buildDirectory.dir("generated/webAssets"))
+}
+android.sourceSets.getByName("main").assets.srcDir(layout.buildDirectory.dir("generated/webAssets").get().asFile)
+tasks.matching { it.name == "preBuild" }.configureEach { dependsOn(syncNativeWebCopy) }
 
 tasks.configureEach {
     if (name == "preProductionReleaseBuild") {

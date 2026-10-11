@@ -18,7 +18,8 @@ import com.pro.uclfootball.UclAppContainer
 import com.pro.uclfootball.home.DashboardViewModel
 import com.pro.uclfootball.home.NativeBottomBar
 import com.pro.uclfootball.network.*
-import com.pro.uclfootball.ui.UclColors
+import com.pro.uclfootball.ui.*
+import com.pro.uclfootball.home.WebFixture
 
 @Composable
 fun MatchesRoute(container: UclAppContainer, onBack: () -> Unit, onTab: (String) -> Unit,
@@ -26,47 +27,29 @@ fun MatchesRoute(container: UclAppContainer, onBack: () -> Unit, onTab: (String)
     val vm: DashboardViewModel = viewModel(key = "all-matches", factory = remember(container) {
         object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST") override fun <T : ViewModel> create(modelClass: Class<T>): T =
-                DashboardViewModel(container.apiClient, container.authSessionRepository, 50) as T
+                DashboardViewModel(container.apiClient, container.authSessionRepository, 50, container.identityCache) as T
         }
     })
     val state by vm.state.collectAsStateWithLifecycle()
-    com.pro.uclfootball.ui.RefreshOnResume(vm::refresh)
+    com.pro.uclfootball.ui.RefreshOnResume(vm::resume)
     LaunchedEffect(state.requiresSignIn) { if (state.requiresSignIn) onSignInRequired() }
-    Scaffold(containerColor = UclColors.paper, contentWindowInsets = WindowInsets.safeDrawing,
-        bottomBar = { NativeBottomBar("matches", onTab) }) { padding ->
-        LazyColumn(Modifier.fillMaxSize().padding(padding), contentPadding = PaddingValues(20.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
-            item { TextButton(onClick = onBack) { Text(stringResource(R.string.journey_back)) } }
-            item {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(stringResource(R.string.matches_page_title), style = MaterialTheme.typography.headlineLarge)
-                    Text(stringResource(R.string.matches_page_intro), color = UclColors.muted)
-                }
+    LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, top = 32.dp, end = 16.dp, bottom = 48.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        item { WebBack(webCopy("website.matchdayAlt"), onBack) }
+        item {
+            Column(Modifier.padding(top = 8.dp, bottom = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text(webCopy("website.footballMatches"), style = MaterialTheme.typography.headlineLarge)
+                Text(webCopy("website.matchesIntro"), color = WebMuted, style = MaterialTheme.typography.bodyLarge)
             }
-            when {
-                state.isLoading -> item { CircularProgressIndicator() }
-                state.errorMessage != null -> item {
-                    Text(stringResource(R.string.journey_offline))
-                    TextButton(onClick = vm::refresh) { Text(stringResource(R.string.common_retry)) }
-                }
-                state.matches.isEmpty() -> item { Text(stringResource(R.string.matches_page_empty)) }
-                else -> items(state.matches, key = { it.matchId.textValue().ifBlank { it.id.textValue() } }) { match ->
-                    val id = match.matchId.textValue()
-                    Surface(Modifier.fillMaxWidth().clickable(enabled = id.isNotBlank(), onClick = { onMatch(id) }),
-                        color = UclColors.surface, shape = MaterialTheme.shapes.medium) {
-                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                            Text(if (match.league == "others") match.otherl.orEmpty() else match.league.orEmpty(), color = UclColors.muted)
-                            Text("${match.home.orEmpty()} · ${match.away.orEmpty()}", style = MaterialTheme.typography.titleMedium)
-                            Text(listOfNotNull(match.date, match.time).joinToString(" · "), color = UclColors.muted)
-                            Text(stringResource(R.string.matches_page_featured), style = MaterialTheme.typography.labelMedium)
-                            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                                listOf("1–0" to match.onenil, "1–1" to match.oneone, "1–2" to match.onetwo).forEach { (score, rate) ->
-                                    val price = rate.textValue().takeIf { it.toBigDecimalOrNull()?.signum() == 1 }
-                                    Text("$score · ${price?.let { "$it%" } ?: "—"}")
-                                }
-                            }
-                        }
-                    }
-                }
+        }
+        when {
+            state.isLoading && state.matches.isEmpty() -> item { CircularProgressIndicator() }
+            state.errorMessage != null && state.matches.isEmpty() -> item {
+                WebEmpty(webCopy("website.fixturesUnavailable"), webCopy("website.pleaseTryTheFullMatchesPage"))
+                TextButton(onClick = vm::refresh) { Text(stringResource(R.string.common_retry)) }
+            }
+            state.matches.isEmpty() -> item { WebEmpty(webCopy("website.noUpcomingMatches"), webCopy("website.checkBackForFixtures"), height = 192, icon = "trophy") }
+            else -> items(state.matches, key = { it.matchId.textValue().ifBlank { it.id.textValue() } }) { match ->
+                WebFixture(match, compact = false) { match.matchId.textValue().takeIf(String::isNotBlank)?.let(onMatch) }
             }
         }
     }

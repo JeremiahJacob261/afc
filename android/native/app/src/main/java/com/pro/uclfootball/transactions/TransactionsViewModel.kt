@@ -16,6 +16,7 @@ import java.io.IOException
 
 data class TransactionsUiState(
     val isLoading: Boolean = true,
+    val hasContent: Boolean = false,
     val transactions: List<TransactionDto> = emptyList(),
     val summary: TransactionSummaryDto? = null,
     val error: TransactionsError? = null,
@@ -34,13 +35,15 @@ class TransactionsViewModel(
     init { refresh() }
 
     fun refresh() {
-        mutableState.update { it.copy(isLoading = true, error = null, requiresSignIn = false) }
+        mutableState.update { it.copy(isLoading = !it.hasContent, error = null, requiresSignIn = false) }
         viewModelScope.launch {
             try {
-                val response = repository.getTransactions()
+                val response = repository.getTransactions(onCached = { saved ->
+                    mutableState.update { it.copy(isLoading = false, hasContent = true, transactions = saved.transactions.ifEmpty { saved.data }, summary = saved.summary) }
+                })
                 mutableState.update {
                     it.copy(
-                        isLoading = false,
+                        isLoading = false, hasContent = true,
                         transactions = response.transactions.ifEmpty { response.data },
                         summary = response.summary,
                     )
@@ -48,8 +51,7 @@ class TransactionsViewModel(
             } catch (error: CancellationException) {
                 throw error
             } catch (error: ApiException) {
-                if (error.httpStatus == 401 || error.httpStatus == 404) {
-                    authSessionRepository.clear()
+                if (error.httpStatus == 401) {
                     mutableState.update { it.copy(isLoading = false, requiresSignIn = true) }
                 } else {
                     mutableState.update { it.copy(isLoading = false, error = TransactionsError.General) }

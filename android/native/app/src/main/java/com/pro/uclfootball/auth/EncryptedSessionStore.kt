@@ -16,7 +16,13 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
-class EncryptedSessionStore(context: Context) {
+interface SessionStore {
+    fun read(): SupabaseSession?
+    fun write(session: SupabaseSession)
+    fun clear()
+}
+
+class EncryptedSessionStore(context: Context) : SessionStore {
     private val preferences = context.applicationContext.getSharedPreferences(
         PREFERENCES_NAME,
         Context.MODE_PRIVATE,
@@ -24,7 +30,7 @@ class EncryptedSessionStore(context: Context) {
     private val json = Json { ignoreUnknownKeys = true }
 
     @Synchronized
-    fun read(): SupabaseSession? {
+    override fun read(): SupabaseSession? {
         val iv = preferences.getString(KEY_IV, null)?.decodeBase64() ?: return null
         val ciphertext = preferences.getString(KEY_CIPHERTEXT, null)?.decodeBase64() ?: return null
 
@@ -46,7 +52,7 @@ class EncryptedSessionStore(context: Context) {
     }
 
     @Synchronized
-    fun write(session: SupabaseSession) {
+    override fun write(session: SupabaseSession) {
         require(session.accessToken.isNotBlank()) { "An access token is required." }
         require(session.refreshToken.isNotBlank()) { "A refresh token is required." }
 
@@ -60,7 +66,7 @@ class EncryptedSessionStore(context: Context) {
     }
 
     @Synchronized
-    fun clear() {
+    override fun clear() {
         preferences.edit().clear().apply()
     }
 

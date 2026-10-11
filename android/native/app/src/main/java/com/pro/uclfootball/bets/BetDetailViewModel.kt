@@ -15,6 +15,7 @@ import java.io.IOException
 
 data class BetDetailUiState(
     val isLoading: Boolean = true,
+    val hasContent: Boolean = false,
     val response: MyBetResponse? = null,
     val error: BetDetailError? = null,
     val requiresSignIn: Boolean = false,
@@ -34,17 +35,19 @@ class BetDetailViewModel(
     init { refresh() }
 
     fun refresh() {
-        mutableState.update { it.copy(isLoading = true, error = null, requiresSignIn = false, notFound = false) }
+        mutableState.update { it.copy(isLoading = !it.hasContent, error = null, requiresSignIn = false, notFound = false) }
         viewModelScope.launch {
             try {
-                mutableState.update { it.copy(isLoading = false, response = repository.getMyBet(betId)) }
+                val response = repository.getMyBet(betId, onCached = { saved ->
+                    mutableState.update { it.copy(isLoading = false, hasContent = true, response = saved) }
+                })
+                mutableState.update { it.copy(isLoading = false, hasContent = true, response = response) }
             } catch (error: CancellationException) {
                 throw error
             } catch (error: ApiException) {
                 when (error.httpStatus) {
                     401 -> {
-                        authSessionRepository.clear()
-                        mutableState.update { it.copy(isLoading = false, requiresSignIn = true) }
+                            mutableState.update { it.copy(isLoading = false, requiresSignIn = true) }
                     }
                     404 -> mutableState.update { it.copy(isLoading = false, notFound = true) }
                     else -> mutableState.update { it.copy(isLoading = false, error = BetDetailError.General) }

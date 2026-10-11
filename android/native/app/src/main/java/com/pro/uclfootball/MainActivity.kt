@@ -134,7 +134,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        (application as UclApplication).container.pushManager.synchronize()
+        (application as UclApplication).container.apiClient.beginForeground()
     }
 }
 
@@ -147,7 +147,7 @@ private fun UclNativeApp(
     onNotificationConsumed: () -> Unit,
 ) {
     val navController = rememberNavController()
-    val activity = LocalContext.current as? Activity
+    val activity = androidx.activity.compose.LocalActivity.current
     val currentRoute by navController.currentBackStackEntryAsState()
     SideEffect {
         activity?.window?.let { window ->
@@ -167,6 +167,13 @@ private fun UclNativeApp(
         },
     )
     val loginState by loginViewModel.state.collectAsStateWithLifecycle()
+    val sessionEnded by container.authSessionRepository.sessionEnded.collectAsStateWithLifecycle()
+    androidx.compose.runtime.LaunchedEffect(sessionEnded) {
+        if (sessionEnded) {
+            loginViewModel.sessionEnded()
+            navController.navigate("login") { popUpTo(navController.graph.id) { inclusive = true }; launchSingleTop = true }
+        }
+    }
     androidx.compose.runtime.LaunchedEffect(currentRoute?.destination?.route) {
         if (currentRoute?.destination?.route == "login" && loginState.signedIn) {
             loginViewModel.retrySessionRestore()
@@ -176,8 +183,11 @@ private fun UclNativeApp(
     val permissionLauncher = androidx.activity.compose.rememberLauncherForActivityResult(
         androidx.activity.result.contract.ActivityResultContracts.RequestPermission(),
     ) { container.pushManager.synchronize() }
-    androidx.compose.runtime.LaunchedEffect(loginState.signedIn) {
-        if (loginState.signedIn && container.pushManager.configured) {
+    if (loginState.signedIn) com.pro.uclfootball.ui.RefreshOnResume { container.pushManager.synchronize() }
+    androidx.compose.runtime.LaunchedEffect(loginState.signedIn, currentRoute?.destination?.route) {
+        if (loginState.signedIn && currentRoute?.destination?.route != "login" && container.pushManager.configured) {
+            androidx.compose.runtime.withFrameNanos { }
+            androidx.compose.runtime.withFrameNanos { }
             val preferences = pushContext.getSharedPreferences("native_push", android.content.Context.MODE_PRIVATE)
             if (android.os.Build.VERSION.SDK_INT >= 33 && !container.pushManager.permitted() &&
                 !preferences.getBoolean("permission_asked", false)) {
@@ -217,6 +227,9 @@ private fun UclNativeApp(
         }
     }
 
+    UserRouteFrame(currentRoute?.destination?.route.orEmpty(), onNavigate = { route ->
+        navController.navigate(route) { launchSingleTop = true }
+    }) {
     NavHost(navController = navController, startDestination = "login") {
         composable("login") {
             LoginScreen(
@@ -262,6 +275,7 @@ private fun UclNativeApp(
             DashboardRoute(
                 container = container,
                 selectedTab = "home",
+                onOpenBet = { betId -> navController.navigate("bet/${Uri.encode(betId)}") },
                 onSelectTab = { route -> navController.navigate(route) { launchSingleTop = true } },
                 onOpenMatch = { matchId -> navController.navigate("match/${Uri.encode(matchId)}") },
                 onSignInRequired = {
@@ -294,6 +308,8 @@ private fun UclNativeApp(
         composable("bet-slip/{matchId}/{market}", arguments = listOf(
             navArgument("matchId") { type = NavType.StringType }, navArgument("market") { type = NavType.StringType },
         )) { entry ->
+            MatchDetailRoute(entry.arguments?.getString("matchId").orEmpty(), container,
+                onBack = { navController.popBackStack() }, onSelectMarket = { })
             BetSlipRoute(container, entry.arguments?.getString("matchId").orEmpty(), entry.arguments?.getString("market").orEmpty(),
                 onBack = { navController.popBackStack() }, onBets = { navController.navigate("bets") },
                 onBet = { id -> navController.navigate("bet/${Uri.encode(id)}") },
@@ -324,11 +340,12 @@ private fun UclNativeApp(
                 },
             )
         }
-        listOf("wallet" to PaymentPage.Wallet, "deposit" to PaymentPage.Methods, "withdraw" to PaymentPage.Withdraw,
+        listOf("wallet" to PaymentPage.Methods, "deposit" to PaymentPage.Methods, "withdraw" to PaymentPage.Withdraw,
             "bind-wallet" to PaymentPage.BindWallet, "pin" to PaymentPage.Pin).forEach { (route, page) ->
             composable(route) {
                 PaymentFlowRoute(container, page, onBack = { navController.popBackStack() },
                     onHistory = { navController.navigate("transactions") },
+                    onDone = { withdrawal -> navController.navigate(if (withdrawal) "account" else "home") { popUpTo("home"); launchSingleTop = true } },
                     onSignInRequired = { navController.navigate("login") { popUpTo("home") { inclusive = true } } })
             }
         }
@@ -411,6 +428,13 @@ private fun UclNativeApp(
             )
         }
     }
+    }
+}
+
+@Composable
+private fun UserRouteFrame(route: String, onNavigate: (String) -> Unit, content: @Composable () -> Unit) {
+    val customerPage = route.isNotBlank() && route !in listOf("login", "reset", "privacy", "terms") && !route.startsWith("register")
+    if (customerPage) com.pro.uclfootball.ui.UserWebShell(route, onNavigate, content) else content()
 }
 
 private fun isAuthRecoveryRedirect(uri: Uri?): Boolean {

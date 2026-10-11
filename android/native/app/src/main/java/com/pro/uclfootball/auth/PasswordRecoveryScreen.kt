@@ -176,7 +176,7 @@ private fun RecoveryFeedback(message: PasswordRecoveryMessage?) {
     Text(
         text = text,
         color = if (message == PasswordRecoveryMessage.RecoverySent || message == PasswordRecoveryMessage.PasswordUpdated) {
-            androidx.compose.ui.graphics.Color(0xFF286746)
+            UclColors.success
         } else {
             UclColors.error
         },

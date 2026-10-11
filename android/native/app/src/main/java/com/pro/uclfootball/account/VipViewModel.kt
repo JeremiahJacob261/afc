@@ -15,6 +15,7 @@ import java.io.IOException
 
 data class VipUiState(
     val isLoading: Boolean = true,
+    val hasContent: Boolean = false,
     val response: MeResponse? = null,
     val error: AccountError? = null,
     val requiresSignIn: Boolean = false,
@@ -30,15 +31,17 @@ class VipViewModel(
     init { refresh() }
 
     fun refresh() {
-        mutableState.update { it.copy(isLoading = true, error = null, requiresSignIn = false) }
+        mutableState.update { it.copy(isLoading = !it.hasContent, error = null, requiresSignIn = false) }
         viewModelScope.launch {
             try {
-                mutableState.update { it.copy(isLoading = false, response = repository.getProfile()) }
+                val response = repository.getProfile(onCached = { saved ->
+                    mutableState.update { it.copy(isLoading = false, hasContent = true, response = saved) }
+                })
+                mutableState.update { it.copy(isLoading = false, hasContent = true, response = response) }
             } catch (error: CancellationException) {
                 throw error
             } catch (error: ApiException) {
-                if (error.httpStatus == 401 || error.httpStatus == 404) {
-                    authSessionRepository.clear()
+                if (error.httpStatus == 401) {
                     mutableState.update { it.copy(isLoading = false, requiresSignIn = true) }
                 } else {
                     mutableState.update { it.copy(isLoading = false, error = AccountError.General) }
