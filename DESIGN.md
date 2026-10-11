@@ -235,7 +235,7 @@ Two count-bearing tabs separate unsettled and settled records. Web active tabs h
 
 ### Stake field and financial facts
 
-The stake input is decimal-oriented with a translated accessible label, white background, and a minimum 48px height. Its current one-off border and legacy Arial styles are implementation residue, not additional palette or typography rules. Financial facts use thin separators and right-aligned values. The final financial row has blue paper and stronger blue text. Refunded records label that row as returned stake, set displayed profit to zero, and show the refund explanation.
+The web stake input is decimal-oriented with a translated accessible label, white background, and a minimum 48px height. Its current one-off border and legacy Arial styles are implementation residue, not additional palette or typography rules. Both web and native stake entry show profit; only the web stake drawer currently has a separate expected-return row. Bet-detail financial facts use thin separators and right-aligned values. The final detail financial row has blue paper and stronger blue text on the web, with corresponding Material container roles on native. Refunded records label that row as returned stake, set displayed profit to zero, and show the refund explanation.
 
 ### Loading, empty, and failure states
 

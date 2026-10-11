@@ -10,7 +10,7 @@ Evidence: `pages/user/matches.js`, `lib/fixtureDisplay.js`, `lib/matchDisplay.js
 
 ## Match markets and stake entry
 
-Lead with fixture identity, league, local kickoff, and company-game information. Follow with a divided correct-score matrix containing explicit available, selected, unavailable, and protected states. Open stake entry alongside the matrix at desktop widths (1100px minimum; 380px drawer), or in a bottom drawer below that width. Native uses a modal bottom sheet and retains its selected cell with primaryContainer fill and a 2dp primary border; selection is saved per match ID and exposed through selected semantics and a Button role. Preserve stake, current balance, use-all-balance, odds, profit, expected return, and submission feedback in MMK.
+Lead with fixture identity, league, local kickoff, and company-game information. Follow with a divided correct-score matrix containing explicit available, selected, unavailable, and protected states. Open stake entry alongside the matrix at desktop widths (1100px minimum; 380px drawer), or in a bottom drawer below that width. Native uses a modal bottom sheet and retains its selected cell with primaryContainer fill and a 2dp primary border; selection is saved per match ID and exposed through selected semantics and a Button role. Both stake experiences show stake, current balance, use-all-balance, odds, profit, and submission feedback, with financial values in MMK. The website also shows a separate expected-return row; the current native sheet shows profit without that additional row.
 
 Evidence: `pages/user/match/[id].js`, `styles/UserMatch.module.css`, native `match/MatchDetailScreen.kt` and `bets/BetSlipScreen.kt`.
 
