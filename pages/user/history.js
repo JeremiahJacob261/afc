@@ -18,7 +18,7 @@ const tabs = [
 const typeMeta = {
   deposit: {
     icon: 'solar:wallet-money-bold',
-    color: '#0649ff',
+    color: '#00409e',
     bg: 'rgba(50, 215, 255, 0.12)',
     border: 'rgba(50, 215, 255, 0.28)',
   },
@@ -154,14 +154,14 @@ function SummaryStat({ label, value, icon, color }) {
         flex: '1 1 150px',
         minWidth: 0,
         borderRadius: '12px',
-        border: '1px solid #dfe5df',
+        border: '1px solid #d9e2f2',
         background: '#ffffff',
         padding: '12px',
       }}
     >
       <Stack direction="row" spacing={0.75} sx={{ alignItems: 'center', color }}>
         <Icon icon={icon} width="18" height="18" />
-        <Typography sx={{ color: '#52685d', fontFamily: 'Inter, Arial, sans-serif', fontSize: '12px' }}>
+        <Typography sx={{ color: '#526583', fontFamily: 'Inter, Arial, sans-serif', fontSize: '12px' }}>
           {label}
         </Typography>
       </Stack>
@@ -231,7 +231,7 @@ function TransactionCard({ item, t, locale }) {
               </Typography>
               <Typography
                 sx={{
-                  color: '#52685d',
+                  color: '#526583',
                   fontFamily: 'Inter, Arial, sans-serif',
                   fontSize: '12px',
                   overflowWrap: 'anywhere',
@@ -260,7 +260,7 @@ function TransactionCard({ item, t, locale }) {
           </Stack>
 
           <Stack spacing={0.25}>
-            <Typography sx={{ color: '#52685d', fontFamily: 'Inter, Arial, sans-serif', fontSize: '11px' }}>
+            <Typography sx={{ color: '#526583', fontFamily: 'Inter, Arial, sans-serif', fontSize: '11px' }}>
               {translatedAmountLabel(item.primaryAmount, t)}
             </Typography>
             <Typography
@@ -295,14 +295,14 @@ function TransactionCard({ item, t, locale }) {
         sx={{
           justifyContent: 'space-between',
           alignItems: 'center',
-          borderTop: '1px solid #dfe5df',
+          borderTop: '1px solid #d9e2f2',
           paddingTop: '10px',
           gap: 1,
         }}
       >
         <Typography
           sx={{
-            color: '#52685d',
+            color: '#526583',
             fontFamily: 'Inter, Arial, sans-serif',
             fontSize: '12px',
             minWidth: 0,
@@ -316,7 +316,7 @@ function TransactionCard({ item, t, locale }) {
         <Typography
           sx={{
             flex: '0 0 auto',
-            color: '#52685d',
+            color: '#526583',
             fontFamily: 'Inter, Arial, sans-serif',
             fontSize: '11px',
             whiteSpace: 'nowrap',
@@ -342,17 +342,17 @@ function EmptyState({ selected, t }) {
         justifyContent: 'center',
         minHeight: 320,
         borderRadius: '12px',
-        border: '1px solid #dfe5df',
-        background: '#f1f3ee',
+        border: '1px solid #d9e2f2',
+        background: '#f0f2fb',
         padding: '24px',
         textAlign: 'center',
       }}
     >
-      <Icon icon="solar:bill-list-bold" width="38" height="38" style={{ color: '#52685d' }} />
+      <Icon icon="solar:bill-list-bold" width="38" height="38" style={{ color: '#526583' }} />
       <Typography sx={{ color: '#080f32', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 800 }}>
         {t('emptyStates.noTransactions')}
       </Typography>
-      <Typography sx={{ color: '#52685d', fontFamily: 'Inter, Arial, sans-serif', fontSize: '13px', lineHeight: 1.45 }}>
+      <Typography sx={{ color: '#526583', fontFamily: 'Inter, Arial, sans-serif', fontSize: '13px', lineHeight: 1.45 }}>
         {copy}
       </Typography>
     </Stack>
@@ -440,7 +440,7 @@ export default function TransactionHistory() {
               height: 44,
               border: 0,
               borderRadius: '12px',
-              background: '#f1f3ee',
+              background: '#f0f2fb',
               color: '#080f32',
               cursor: 'pointer',
             }}
@@ -467,7 +467,7 @@ export default function TransactionHistory() {
               <Typography sx={{ color: '#080f32', fontFamily: 'Inter, Arial, sans-serif', fontSize: '18px', fontWeight: 800 }}>
                 {t('mobile.transactions.paymentHistory')}
               </Typography>
-              <Typography sx={{ color: '#52685d', fontFamily: 'Inter, Arial, sans-serif', fontSize: '12px' }}>
+              <Typography sx={{ color: '#526583', fontFamily: 'Inter, Arial, sans-serif', fontSize: '12px' }}>
                 {t('mobile.transactions.count', { count: transactions.length })}
               </Typography>
             </Stack>
@@ -479,7 +479,7 @@ export default function TransactionHistory() {
                 height: 40,
                 flex: '0 0 40px',
                 borderRadius: '12px',
-                color: '#0649ff',
+                color: '#00409e',
                 background: 'rgba(27, 182, 255, 0.12)',
               }}
             >
@@ -492,7 +492,7 @@ export default function TransactionHistory() {
               label={t('mobile.transactions.totalDeposits')}
               value={formatMmk(summary.totalDepositsMmk, locale)}
               icon="solar:wallet-money-bold"
-              color="#0649ff"
+              color="#00409e"
             />
             <SummaryStat
               label={t('mobile.transactions.totalWithdrawals')}
@@ -519,10 +519,10 @@ export default function TransactionHistory() {
                   justifyContent: 'center',
                   flex: '1 0 116px',
                   minHeight: 42,
-                  border: `1px solid ${active ? 'rgba(27, 182, 255, 0.5)' : '#dfe5df'}`,
+                  border: `1px solid ${active ? 'rgba(27, 182, 255, 0.5)' : '#d9e2f2'}`,
                   borderRadius: '12px',
-                  background: active ? '#0649ff' : '#ffffff',
-                  color: active ? '#fdfcf8' : '#080f32',
+                  background: active ? '#00409e' : '#ffffff',
+                  color: active ? '#f5f7fc' : '#080f32',
                   padding: '8px 10px',
                   cursor: 'pointer',
                 }}
@@ -541,8 +541,8 @@ export default function TransactionHistory() {
 
         {loading ? (
           <Stack spacing={1.5} sx={{ alignItems: 'center', justifyContent: 'center', minHeight: 360 }}>
-            <CircularProgress size={28} sx={{ color: '#0649ff' }} />
-            <Typography sx={{ color: '#52685d', fontFamily: 'Inter, Arial, sans-serif', fontSize: '13px' }}>
+            <CircularProgress size={28} sx={{ color: '#00409e' }} />
+            <Typography sx={{ color: '#526583', fontFamily: 'Inter, Arial, sans-serif', fontSize: '13px' }}>
               {t('mobile.transactions.loading')}
             </Typography>
           </Stack>
@@ -574,8 +574,8 @@ export default function TransactionHistory() {
                 alignSelf: 'flex-start',
                 border: 0,
                 borderRadius: '12px',
-                background: '#0649ff',
-                color: '#fdfcf8',
+                background: '#00409e',
+                color: '#f5f7fc',
                 padding: '9px 12px',
                 cursor: 'pointer',
               }}

@@ -35,6 +35,16 @@
 @media(max-width:620px){.hero{padding:20px}.heroMeta{align-items:flex-start;flex-direction:column;padding-bottom:16px}.heroBody{grid-template-columns:56px minmax(0,1fr) 56px;gap:8px;min-height:160px}.teamCrest{width:56px;height:56px}.teamCrest img{width:44px;height:44px}.heroCopy h1{font-size:28px}.markets{margin-top:32px}.marketGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.marketsHead h2{font-size:28px}.marketsHead>span{font-size:12px}}
 @media(max-width:380px){.heroBody{grid-template-columns:48px minmax(0,1fr) 48px}.teamCrest{width:48px;height:48px}.teamCrest img{width:38px;height:38px}.heroCopy h1{font-size:24px}.marketCard{padding:12px;min-height:112px}.marketScore{font-size:22px}.marketBottom{gap:4px}.marketBottom strong{font-size:14px}}
 @media(prefers-reduced-motion:reduce){.marketCard{transition:none}.marketCard:hover:not(:disabled),.marketCard:active:not(:disabled){transform:none}}
+.page{--brand-blue:var(--ucl-blue-accent,#00409e);--brand-pink:var(--ucl-pink-ink,#a90059)}
+.back{color:var(--brand-blue)}
+.hero{background:radial-gradient(ellipse at 88% 0%,rgba(255,45,149,.26),transparent 42%),linear-gradient(140deg,#002d72,#001240)}
+.marketsHead>span{background:#fff0f7;color:#a90059}
+.marketCard{border-color:#d9e2f2;transition:background-color .18s ease-out,border-color .18s ease-out,transform .18s ease-out,box-shadow .18s ease-out}
+.marketCard:hover:not(:disabled){border-color:#ff8ac4;background:#fff8fc;box-shadow:0 8px 20px rgba(0,45,114,.08)}
+.marketCard:active:not(:disabled){transform:scale(.985)}
+.marketBottom strong,.marketBottom svg{color:#00409e}
+.protectedMarket{border-color:#ff8ac4;background:#fff0f7}
+@media(prefers-reduced-motion:reduce){.marketCard:hover:not(:disabled),.marketCard:active:not(:disabled){transform:none}}
 .betSlip{width:100%;color:#080f32;font-family:'DM Sans',Arial,sans-serif}
 .betSlipContent{padding:24px 24px max(32px,env(safe-area-inset-bottom))}
 .slipBack{display:grid;place-items:center;flex:none;width:44px;height:44px;border:1px solid #dfe5df;border-radius:10px;background:#fff;color:#080f32;cursor:pointer}

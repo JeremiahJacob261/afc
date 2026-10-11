@@ -33,7 +33,7 @@ function percent(value) {
 
 function ProgressCard({ icon, label, value, detail, color }) {
   return (
-    <Box sx={{ p: 2, borderRadius: 2, background: '#fff', border: '1px solid #dfe5df' }}>
+    <Box sx={{ p: 2, borderRadius: 2, background: '#fff', border: '1px solid #d9e2f2' }}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
         <Stack direction="row" alignItems="center" spacing={1}>
           <Box sx={{ display: 'grid', placeItems: 'center', width: 34, height: 34, borderRadius: 2, color, background: `${color}1f` }}>
@@ -50,11 +50,11 @@ function ProgressCard({ icon, label, value, detail, color }) {
           mt: 1.5,
           height: 8,
           borderRadius: 99,
-          backgroundColor: '#f1f3ee',
+          backgroundColor: '#f0f2fb',
           '& .MuiLinearProgress-bar': { borderRadius: 99, backgroundColor: color },
         }}
       />
-      <Typography sx={{ mt: 1, color: '#52685d', fontSize: 11 }}>{detail}</Typography>
+      <Typography sx={{ mt: 1, color: '#526583', fontSize: 11 }}>{detail}</Typography>
     </Box>
   )
 }
@@ -117,7 +117,7 @@ export default function Vip() {
             type="button"
             onClick={() => router.push('/user/account')}
             aria-label={t('website.backToAccount')}
-            sx={{ display: 'grid', placeItems: 'center', width: 44, height: 44, p: 0, border: '1px solid #dfe5df', borderRadius: 2, color: '#080f32', background: '#fff', cursor: 'pointer' }}
+            sx={{ display: 'grid', placeItems: 'center', width: 44, height: 44, p: 0, border: '1px solid #d9e2f2', borderRadius: 2, color: '#080f32', background: '#fff', cursor: 'pointer' }}
           >
             <KeyboardArrowLeftOutlined />
           </Box>
@@ -167,7 +167,7 @@ export default function Vip() {
             <CheckCircleRounded sx={{ color: '#286746', fontSize: 21, mt: 0.15 }} />
             <Box>
               <Typography sx={{ color: '#080f32', fontSize: 13, fontWeight: 800 }}>{t('website.unlockNextTier')}</Typography>
-              <Typography sx={{ mt: 0.5, color: '#52685d', fontSize: 12, lineHeight: 1.45 }}>{t('website.vipRequirement')}</Typography>
+              <Typography sx={{ mt: 0.5, color: '#526583', fontSize: 12, lineHeight: 1.45 }}>{t('website.vipRequirement')}</Typography>
             </Box>
           </Stack>
         </Box>
@@ -185,15 +185,15 @@ export default function Vip() {
               const tierColor = tierColors[tier - 1]
               const current = tier === level
               return (
-                <Box key={tier} sx={{ p: 1.5, borderRadius: 2, background: current ? '#eaf0fb' : '#fff', border: `1px solid ${current ? '#0649ff' : '#dfe5df'}` }}>
+                <Box key={tier} sx={{ p: 1.5, borderRadius: 2, background: current ? '#eaf0fb' : '#fff', border: `1px solid ${current ? '#00409e' : '#d9e2f2'}` }}>
                   <Stack direction="row" alignItems="center" spacing={1.25}>
                     <Box sx={{ display: 'grid', placeItems: 'center', width: 40, height: 40, flexShrink: 0, borderRadius: 2, color: tierColor, background: `${tierColor}20`, fontWeight: 900, fontSize: 12 }}>V{tier}</Box>
                     <Box sx={{ minWidth: 0, flex: 1 }}>
                       <Stack direction="row" spacing={0.75} alignItems="center">
                         <Typography sx={{ color: '#080f32', fontSize: 13, fontWeight: 800 }}>VIP {tier}</Typography>
-                        {current && <Chip label={t('website.currentTier')} size="small" sx={{ height: 18, color: '#fdfcf8', background: tierColor, fontSize: 9, fontWeight: 900 }} />}
+                        {current && <Chip label={t('website.currentTier')} size="small" sx={{ height: 18, color: '#f5f7fc', background: tierColor, fontSize: 9, fontWeight: 900 }} />}
                       </Stack>
-                      <Typography sx={{ mt: 0.35, color: '#52685d', fontSize: 11 }}>{t('website.vipTierRequirements', { amount: amount(vipDepositLimits[tier], i18n.language), count: vipReferralLimits[tier] })}</Typography>
+                      <Typography sx={{ mt: 0.35, color: '#526583', fontSize: 11 }}>{t('website.vipTierRequirements', { amount: amount(vipDepositLimits[tier], i18n.language), count: vipReferralLimits[tier] })}</Typography>
                     </Box>
                     <Typography sx={{ color: tierColor, fontSize: 14, fontWeight: 900 }}>{percent((vipDailyRates[tier] || 0) * 100)}</Typography>
                   </Stack>

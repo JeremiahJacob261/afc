@@ -28,6 +28,11 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.core.tween
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
@@ -149,12 +154,13 @@ private fun UclNativeApp(
     val navController = rememberNavController()
     val activity = androidx.activity.compose.LocalActivity.current
     val currentRoute by navController.currentBackStackEntryAsState()
+    val systemDarkTheme = androidx.compose.foundation.isSystemInDarkTheme()
     SideEffect {
         activity?.window?.let { window ->
             WindowCompat.setDecorFitsSystemWindows(window, false)
             val insets = WindowCompat.getInsetsController(window, window.decorView)
-            insets.isAppearanceLightStatusBars = currentRoute?.destination?.route != "login"
-            insets.isAppearanceLightNavigationBars = true
+            insets.isAppearanceLightStatusBars = !systemDarkTheme && currentRoute?.destination?.route != "login"
+            insets.isAppearanceLightNavigationBars = !systemDarkTheme
         }
     }
     val loginViewModel: LoginViewModel = viewModel(
@@ -230,7 +236,14 @@ private fun UclNativeApp(
     UserRouteFrame(currentRoute?.destination?.route.orEmpty(), onNavigate = { route ->
         navController.navigate(route) { launchSingleTop = true }
     }) {
-    NavHost(navController = navController, startDestination = "login") {
+    NavHost(
+        navController = navController,
+        startDestination = "login",
+        enterTransition = { fadeIn(tween(180)) + slideInHorizontally(tween(200)) { it / 24 } },
+        exitTransition = { fadeOut(tween(100)) + slideOutHorizontally(tween(120)) { -it / 36 } },
+        popEnterTransition = { fadeIn(tween(180)) + slideInHorizontally(tween(200)) { -it / 24 } },
+        popExitTransition = { fadeOut(tween(100)) + slideOutHorizontally(tween(120)) { it / 36 } },
+    ) {
         composable("login") {
             LoginScreen(
                 state = loginState,

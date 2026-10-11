@@ -161,8 +161,8 @@ export default function Home() {
         '& .MuiInputBase-input': {
             borderRadius: 4,
             position: 'relative',
-            backgroundColor: '#f1f3ee',
-            color: '#52685d',
+            backgroundColor: '#f0f2fb',
+            color: '#526583',
             border: '1px solid #ced4da',
             fontSize: 13,
             fontWeight: 'bold',
@@ -201,11 +201,11 @@ export default function Home() {
             <Stack direction="column" spacing={3} justifyContent="center" alignItems="center" sx={{ minWidth: 0, width: '100%', height: '100%' }} >
 
                 <Stack direction="column" alignItems="center" justifyContent={"center"} sx={{ marginTop: '20px', marginBottom: "20px", background: 'none', minWidth: 0, paddingBottom: '30px', width: '100%', maxWidth: '450px' }}>
-                    <Stack direction="column" alignItems="stretch" justifyContent={"center"} spacing={3} sx={{ background: '#ffffff', padding: { xs: '16px', sm: '32px' }, border: '1px solid #dfe5df', borderRadius: '16px', minWidth: 0, width: '100%', maxWidth: '450px' }}>
+                    <Stack direction="column" alignItems="stretch" justifyContent={"center"} spacing={3} sx={{ background: '#ffffff', padding: { xs: '16px', sm: '32px' }, border: '1px solid #d9e2f2', borderRadius: '16px', minWidth: 0, width: '100%', maxWidth: '450px' }}>
                         <Stack direction="row" alignItems="center" justifyContent={"space-between"} sx={{ width: '100%' }}>
                             <h1 style={{ color: '#080f32', fontFamily: 'Georgia,serif', fontWeight: 400, fontSize: '32px', margin: 0 }}>{t('mobile.profile.bindWallet')}</h1>
                         </Stack>
-                        <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#fdfcf8', padding: '8px', width: '100%', borderRadius: '8px' }}>
+                        <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#f5f7fc', padding: '8px', width: '100%', borderRadius: '8px' }}>
                             <p className='normal-bold' style={{ textAlign: 'start' }}>{t('forms.chooseMethod')}</p>
                             <FormControl sx={{ width: '100%' }} variant="standard">
                                 <NativeSelect
@@ -215,13 +215,13 @@ export default function Home() {
                                     input={<BootstrapInput />}
                                     disabled={loadingMethods}
                                 >
-                                    <option value="" style={{ color: '#52685d', background: '#f1f3ee' }}>
+                                    <option value="" style={{ color: '#526583', background: '#f0f2fb' }}>
                                         {loadingMethods ? t('mobile.wallet.loading') : t('forms.chooseMethod')}
                                     </option>
                                     {
                                         paymentMethods.map((w) => {
                                             return (
-                                                <option key={w.id ?? w.name} value={w.id} style={{ color: '#52685d', background: '#f1f3ee' }}>{String(w.name || '').toUpperCase()}</option>
+                                                <option key={w.id ?? w.name} value={w.id} style={{ color: '#526583', background: '#f0f2fb' }}>{String(w.name || '').toUpperCase()}</option>
                                             )
                                         })
                                     }
@@ -235,7 +235,7 @@ export default function Home() {
                         {
                             isLocal ?
                                 <>
-                                    <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#fdfcf8', padding: '8px', width: '100%', borderRadius: '8px' }}>
+                                    <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#f5f7fc', padding: '8px', width: '100%', borderRadius: '8px' }}>
                                         <p className='normal-bold' style={{ textAlign: 'start' }}>{t('forms.accountNumber')}</p>
                                         <input type="text" className="amountinput" placeholder={t('forms.accountNumber')} value={accountnumber} onChange={(e) => {
                                             if (!isNaN(e.target.value)) {
@@ -244,7 +244,7 @@ export default function Home() {
                                         }} />
                                     </Stack>
 
-                                    <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#fdfcf8', padding: '8px', width: '100%', borderRadius: '8px' }}>
+                                    <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#f5f7fc', padding: '8px', width: '100%', borderRadius: '8px' }}>
                                         <p className='normal-bold' style={{ textAlign: 'start' }}>{t('forms.accountName')}</p>
                                         <input type="text" className="amountinput" placeholder={t('forms.accountName')} value={accountname} onChange={(e) => {
 
@@ -255,7 +255,7 @@ export default function Home() {
 
                                     {
                                         (curcode === 'idr') ?
-                                            <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#fdfcf8', padding: '8px', width: '100%', borderRadius: '8px' }}>
+                                            <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#f5f7fc', padding: '8px', width: '100%', borderRadius: '8px' }}>
                                                 <p className='normal-bold' style={{ textAlign: 'start' }}>{t('forms.bank')}</p>
                                                 <FormControl sx={{ width: '100%' }} variant="standard">
                                                     <NativeSelect
@@ -264,11 +264,11 @@ export default function Home() {
                                                         onChange={handleBhange}
                                                         input={<BootstrapInput />}
                                                     >
-                                                        <option aria-label={t('mobile.withdraw.noWallet')} value="" style={{ color: '#52685d', background: '#f1f3ee' }} />
+                                                        <option aria-label={t('mobile.withdraw.noWallet')} value="" style={{ color: '#526583', background: '#f0f2fb' }} />
                                                         {
                                                             IDRBANK.map((w) => {
                                                                 return (
-                                                                    <option key={w.name} value={w.name} style={{ color: '#52685d', background: '#f1f3ee' }}>{w.name.toUpperCase()}</option>
+                                                                    <option key={w.name} value={w.name} style={{ color: '#526583', background: '#f0f2fb' }}>{w.name.toUpperCase()}</option>
                                                                 )
                                                             })
                                                         }
@@ -276,7 +276,7 @@ export default function Home() {
                                                 </FormControl>
                                             </Stack>
                                             :
-                                            <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#fdfcf8', padding: '12px', width: '100%', borderRadius: '8px' }}>
+                                            <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#f5f7fc', padding: '12px', width: '100%', borderRadius: '8px' }}>
                                                 <p className='normal-bold' style={{ textAlign: 'start' }}>{t('forms.bankName')}</p>
                                                 <input type="text" className="amountinput" placeholder={t('forms.bankName')} value={bank} onChange={(e) => {
 
@@ -289,7 +289,7 @@ export default function Home() {
 
                                 :
                                 <>
-                                    <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#fdfcf8', padding: '12px', width: '100%', borderRadius: '8px' }}>
+                                    <Stack direction="column" alignItems="start" justifyContent={"center"} spacing={0} sx={{ background: '#f5f7fc', padding: '12px', width: '100%', borderRadius: '8px' }}>
                                         <p className='normal-bold' style={{ textAlign: 'start' }}>{t('forms.walletAddress')}</p>
                                         <input type="text" className="amountinput" placeholder={t('forms.walletAddress')} value={address} onChange={(e) => {
 
@@ -304,7 +304,7 @@ export default function Home() {
 
                         <button type="button" className="powerbtn" onClick={nextfund}>{t('mobile.profile.bindWallet')}</button>
                     </Stack>
-                    <button type="button" onClick={() => router.back()} style={{ fontSize: '16px', fontWeight: 700, color: '#0649ff', textAlign: 'center', width: '100%', minHeight: '44px', padding: '8px', textDecoration: 'underline', cursor: 'pointer', background: 'none', border: 0 }}>{t('common.back')}</button>
+                    <button type="button" onClick={() => router.back()} style={{ fontSize: '16px', fontWeight: 700, color: '#00409e', textAlign: 'center', width: '100%', minHeight: '44px', padding: '8px', textDecoration: 'underline', cursor: 'pointer', background: 'none', border: 0 }}>{t('common.back')}</button>
 
                 </Stack>
 

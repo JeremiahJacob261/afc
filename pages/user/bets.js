@@ -14,15 +14,15 @@ import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay'
 import { useTranslation } from 'next-i18next'
 
 const colors = {
-  page: '#fdfcf8',
+  page: '#f5f7fc',
   card: '#ffffff',
-  cardAlt: '#f1f3ee',
-  border: '#dfe5df',
-  accent: '#0649ff',
+  cardAlt: '#f0f2fb',
+  border: '#d9e2f2',
+  accent: '#00409e',
   accentDark: '#eaf0fb',
   text: '#080f32',
-  muted: '#52685d',
-  soft: '#52685d',
+  muted: '#526583',
+  soft: '#526583',
   warning: '#8a6013',
   success: '#286746',
   danger: '#a43d4a',
@@ -51,7 +51,7 @@ const getBetStatus = (bet, t) => {
   const hasFutureStart = Boolean(startTime && startTime > Date.now())
 
   if (hasFutureStart) {
-    return { label: t('status.notStarted'), color: colors.muted, bg: '#f1f3ee' }
+    return { label: t('status.notStarted'), color: colors.muted, bg: '#f0f2fb' }
   }
 
   const outcome = getBetOutcome(bet)
@@ -288,7 +288,7 @@ export default function Bets() {
           alignItems="center"
           justifyContent="space-between"
           sx={{
-            background: '#f1f3ee',
+            background: '#f0f2fb',
             borderTop: `1px solid ${colors.border}`,
             px: 1.5,
             py: 1,
@@ -349,7 +349,7 @@ function BetTabs({ value, onChange, tabs }) {
         gap: 1,
         border: `1px solid ${colors.border}`,
         borderRadius: '8px',
-        background: '#f1f3ee',
+        background: '#f0f2fb',
         p: 0.5,
       }}
     >
@@ -399,7 +399,7 @@ function Team({ name, image, align = 'left' }) {
       alignItems="center"
       sx={{ minWidth: 0, flex: 1 }}
     >
-      <Box sx={{ width: 28, height: 28, flex: '0 0 auto', borderRadius: '50%', overflow: 'hidden', background: '#f1f3ee' }}>
+      <Box sx={{ width: 28, height: 28, flex: '0 0 auto', borderRadius: '50%', overflow: 'hidden', background: '#f0f2fb' }}>
         <Image src={image ?? Ims} width={28} height={28} alt="" />
       </Box>
       <Typography

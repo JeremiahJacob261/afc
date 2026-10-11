@@ -59,7 +59,7 @@ export function UclHero() {
         {/* ── Copy ─────────────────────────────────────────────────────── */}
         <div>
           <div className="flex items-center gap-3">
-            <Star className="h-4 w-4 shrink-0 text-cyan-300" />
+            <Star className="h-4 w-4 shrink-0 text-magenta-300" />
             <p className="ucl-eyebrow">{t("common.brandFull")}</p>
           </div>
 
@@ -122,7 +122,7 @@ export function UclHero() {
                 </h2>
               </div>
               <span className="ucl-chip ucl-cut-sm">
-                <Sparkles className="h-3.5 w-3.5 text-cyan-300" aria-hidden="true" />
+                <Sparkles className="h-3.5 w-3.5 text-magenta-300" aria-hidden="true" />
                 {t("landing.hero.boardStatus")}
               </span>
             </div>
@@ -139,14 +139,14 @@ export function UclHero() {
                   key={score}
                   className={`ucl-cut-sm px-1.5 py-2.5 text-center transition ${
                     index === 3
-                      ? "bg-cyan-400/15 shadow-[inset_0_0_0_1px_rgba(41,224,255,0.55)]"
+                      ? "bg-magenta-400/15 shadow-[inset_0_0_0_1px_rgba(255,138,196,0.55)]"
                       : "bg-white/[0.04] hover:bg-white/[0.09]"
                   }`}
                 >
                   <p className="text-[0.6875rem] font-bold text-silver-400">{score}</p>
                   <p
                     className={`mt-0.5 text-sm font-black tabular-nums ${
-                      index === 3 ? "text-cyan-300" : "text-white"
+                      index === 3 ? "text-magenta-300" : "text-white"
                     }`}
                   >
                     {odds}
@@ -172,7 +172,7 @@ export function UclHero() {
               return (
                 <div key={item.title} className="ucl-panel ucl-cut-sm p-4">
                   <div className="flex items-center gap-2">
-                    <Icon className="h-4 w-4 shrink-0 text-cyan-300" aria-hidden="true" />
+                    <Icon className="h-4 w-4 shrink-0 text-magenta-300" aria-hidden="true" />
                     <span className="text-sm font-black text-white">{item.title}</span>
                   </div>
                   <p className="mt-1.5 text-xs leading-5 text-silver-400">{item.copy}</p>

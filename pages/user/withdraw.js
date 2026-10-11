@@ -308,7 +308,7 @@ export default function Deposit() {
               <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{parseFloat(requestedAmount / MMK_PER_USDT * rate).toFixed(2)} {currencyCode}</Typography>
             </Stack>
           )}
-          <Divider sx={{ borderColor: '#dfe5df' }} />
+          <Divider sx={{ borderColor: '#d9e2f2' }} />
           <motion.div
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.9 }}
@@ -318,7 +318,7 @@ export default function Deposit() {
               router.push('/user/bindwallet')
             }}
           >
-              <Stack direction='row' spacing={1} justifyContent='center' alignItems={"center"} sx={{ background: '#fdfcf8', padding: '8px', borderRadius: '8px' }}
+              <Stack direction='row' spacing={1} justifyContent='center' alignItems={"center"} sx={{ background: '#f5f7fc', padding: '8px', borderRadius: '8px' }}
 
             >
               <Icon icon="icon-park-twotone:add" width="24" height="24" style={{ color: '#a3a3a3' }} />
@@ -332,7 +332,7 @@ export default function Deposit() {
         <Stack direction="column" spacing={3}>
 
           <Stack spacing={1} >
-            <Typography sx={{ fontSize: '12px', color: '#fdfcf8', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{t('mobile.withdraw.chooseWallet')}</Typography>
+            <Typography sx={{ fontSize: '12px', color: '#f5f7fc', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{t('mobile.withdraw.chooseWallet')}</Typography>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">{t('mobile.withdraw.selectWithdrawalMethod')}</InputLabel>
               <Select
@@ -340,7 +340,7 @@ export default function Deposit() {
                 id="demo-simple-select"
                 value={method}
                 disabled={!withdrawalsEnabled || !withdrawalEligibility.canWithdraw}
-                style={{ background: "#fdfcf8", color: '#080f32', border: '1px solid #080f32' }}
+                style={{ background: "#f5f7fc", color: '#080f32', border: '1px solid #080f32' }}
                 onChange={(e) => {
                   setMethod(e.target.value);
                   const walletid = findUserWalletsById(e.target.value);
@@ -405,7 +405,7 @@ export default function Deposit() {
           <motion.div whileTap={{ scale: 0.98 }}
             role="button"
             tabIndex={0}
-            style={{ cursor: withdrawalsEnabled && withdrawalEligibility.canWithdraw ? 'pointer' : 'not-allowed', display: 'flex', flexDirection: 'row', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: '#fff', minHeight: '50px', background: withdrawalsEnabled && withdrawalEligibility.canWithdraw ? '#0649ff' : '#526170', width: '100%', padding: '12px', border: '1px solid #0649ff' }}
+            style={{ cursor: withdrawalsEnabled && withdrawalEligibility.canWithdraw ? 'pointer' : 'not-allowed', display: 'flex', flexDirection: 'row', alignItems: 'center', borderRadius: '8px', justifyContent: 'center', color: '#fff', minHeight: '50px', background: withdrawalsEnabled && withdrawalEligibility.canWithdraw ? '#00409e' : '#526170', width: '100%', padding: '12px', border: '1px solid #00409e' }}
             onClick={transaction}
             onKeyDown={(event) => {
               if (event.key === 'Enter' || event.key === ' ') transaction()
@@ -423,10 +423,10 @@ export default function Deposit() {
       </Stack>
       <Loading open={openx} handleClose={handleClosex} />
       <Modal open={withdrawalDisabledDialogOpen} onClose={() => setWithdrawalDisabledDialogOpen(false)} aria-labelledby="withdrawals-disabled-title">
-        <Stack alignItems='center' justifyContent='space-evenly' sx={{ background: '#fdfcf8', width: '290px', minHeight: '250px', borderRadius: '20px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '20px' }}>
+        <Stack alignItems='center' justifyContent='space-evenly' sx={{ background: '#f5f7fc', width: '290px', minHeight: '250px', borderRadius: '20px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '20px' }}>
           <Typography id="withdrawals-disabled-title" sx={{ fontFamily: 'Arial,sans-serif', fontSize: '20px', fontWeight: '500', color: '#080f32' }}>{t('website.withdrawalsUnavailableTitle')}</Typography>
           <Typography sx={{ mt: 2, textAlign: 'center', fontSize: '14px', fontWeight: '300', color: '#080f32' }}>{translateApiMessage(withdrawalDisabledMessage, t, 'messages.withdrawalsUnavailable')}</Typography>
-          <Button variant='contained' sx={{ mt: 3, fontFamily: 'Arial,sans-serif', color: '#fdfcf8', background: '#0649ff', padding: '8px', width: '100%' }} onClick={() => setWithdrawalDisabledDialogOpen(false)}>{t('common.continue')}</Button>
+          <Button variant='contained' sx={{ mt: 3, fontFamily: 'Arial,sans-serif', color: '#f5f7fc', background: '#00409e', padding: '8px', width: '100%' }} onClick={() => setWithdrawalDisabledDialogOpen(false)}>{t('common.continue')}</Button>
         </Stack>
       </Modal>
       <Toaster position="bottom-center"
@@ -449,7 +449,7 @@ export default function Deposit() {
         aria-describedby="modal-modal-description"
       >
         <Stack alignItems='center' justifyContent='space-evenly' sx={{
-          background: '#fdfcf8', width: '290px', height: '330px', borderRadius: '20px',
+          background: '#f5f7fc', width: '290px', height: '330px', borderRadius: '20px',
           position: 'absolute',
           top: '50%',
           left: '50%',
@@ -465,7 +465,7 @@ export default function Deposit() {
             {ale}
           </Typography>
           <Divider sx={{ background: '#080f32' }} />
-          <Button variant='contained' sx={{ fontFamily: 'Arial,sans-serif', color: '#fdfcf8', background: '#0649ff', padding: '8px', width: '100%' }} onClick={() => {
+          <Button variant='contained' sx={{ fontFamily: 'Arial,sans-serif', color: '#f5f7fc', background: '#00409e', padding: '8px', width: '100%' }} onClick={() => {
             if (aleT) {
               setOpen(false)
               router.push('/user/withdrawsuccess')

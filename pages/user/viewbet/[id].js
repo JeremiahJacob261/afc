@@ -15,15 +15,15 @@ import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay'
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
 
 const colors = {
-  page: '#fdfcf8',
+  page: '#f5f7fc',
   card: '#ffffff',
-  cardAlt: '#f1f3ee',
-  border: '#dfe5df',
-  accent: '#0649ff',
+  cardAlt: '#f0f2fb',
+  border: '#d9e2f2',
+  accent: '#00409e',
   accentDark: '#eaf0fb',
   text: '#080f32',
-  muted: '#52685d',
-  soft: '#52685d',
+  muted: '#526583',
+  soft: '#526583',
   warning: '#8a6013',
   success: '#286746',
   danger: '#a43d4a',
@@ -49,7 +49,7 @@ function getOutcome(bet) {
 
 function getStatus(bet, t) {
   const future = Boolean(getMatchStartMs(bet) && getMatchStartMs(bet) > Date.now())
-  if (future) return { label: t('status.notStarted'), color: colors.muted, bg: '#f1f3ee' }
+  if (future) return { label: t('status.notStarted'), color: colors.muted, bg: '#f0f2fb' }
   const outcome = getOutcome(bet)
   if (outcome === 'won') return { label: t('status.won'), color: colors.success, bg: '#e8f4ea' }
   if (outcome === 'refunded') return { label: t('status.refunded'), color: colors.accent, bg: colors.accentDark }
@@ -200,7 +200,7 @@ function SectionTitle({ icon, title }) {
 }
 
 function Team({ name, image, align = 'left' }) {
-  return <Stack direction={align === 'right' ? 'row-reverse' : 'row'} spacing={1} alignItems="center" sx={{ minWidth: 0, flex: 1 }}><Box sx={{ width: 34, height: 34, flex: '0 0 auto', borderRadius: '50%', overflow: 'hidden', background: '#f1f3ee' }}><Image src={image || Ball} width={34} height={34} alt="" /></Box><Typography sx={{ ...valueSx, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', textAlign: align }}>{name || 'Team'}</Typography></Stack>
+  return <Stack direction={align === 'right' ? 'row-reverse' : 'row'} spacing={1} alignItems="center" sx={{ minWidth: 0, flex: 1 }}><Box sx={{ width: 34, height: 34, flex: '0 0 auto', borderRadius: '50%', overflow: 'hidden', background: '#f0f2fb' }}><Image src={image || Ball} width={34} height={34} alt="" /></Box><Typography sx={{ ...valueSx, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', textAlign: align }}>{name || 'Team'}</Typography></Stack>
 }
 
 function Metric({ label, value }) {

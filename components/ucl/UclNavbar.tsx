@@ -36,7 +36,7 @@ export function UclNavbar() {
         className="mx-auto flex min-h-[72px] max-w-[1420px] items-center justify-between gap-4 px-4 sm:px-8 lg:px-10"
       >
         <Link href="#home" className="flex min-h-[44px] items-center gap-2.5">
-          <Star className="h-4 w-4 shrink-0 text-cyan-300" />
+          <Star className="h-4 w-4 shrink-0 text-magenta-300" />
           <Image src={Logo} alt="" width={30} height={30} aria-hidden="true" />
           <span className="text-xl font-black uppercase tracking-[0.2em] text-white">
             {t("common.appName")}

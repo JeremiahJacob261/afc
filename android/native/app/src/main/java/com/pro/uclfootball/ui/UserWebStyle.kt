@@ -3,6 +3,7 @@ package com.pro.uclfootball.ui
 import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.animation.core.*
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.ui.draw.rotate
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -96,9 +97,9 @@ fun UserWebShell(route: String, onNavigate: (String) -> Unit, content: @Composab
         MaterialTheme(typography = base.copy(bodyLarge = base.bodyLarge.webStyle(), bodyMedium = base.bodyMedium.webStyle(),
             bodySmall = base.bodySmall.webStyle(), headlineLarge = base.headlineLarge.webStyle(), titleMedium = base.titleMedium.webStyle(),
             labelLarge = base.labelLarge.webStyle(), labelMedium = base.labelMedium.webStyle())) {
-            Scaffold(containerColor = UclColors.paper, contentWindowInsets = WindowInsets.safeDrawing,
+            Scaffold(containerColor = MaterialTheme.colorScheme.background, contentWindowInsets = WindowInsets.safeDrawing,
                 topBar = {
-                    Column(Modifier.background(Color.White).windowInsetsPadding(WindowInsets.statusBars)) {
+                    Column(Modifier.background(MaterialTheme.colorScheme.surface).windowInsetsPadding(WindowInsets.statusBars)) {
                         Row(Modifier.fillMaxWidth().height(68.dp).padding(horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween) {
                             IconButton(onClick = { onNavigate("home") }, modifier = Modifier.size(48.dp)) {
@@ -151,15 +152,23 @@ fun UserWebShell(route: String, onNavigate: (String) -> Unit, content: @Composab
 fun UserBottomNavigation(route: String, onNavigate: (String) -> Unit) {
     val destinations = listOf(Triple("home", "website.home", "home"), Triple("matches", "website.matches", "trophy"),
         Triple("bets", "website.bets", "history"), Triple("wallet", "website.wallet", "wallet"), Triple("account", "website.more", "menu"))
-    Column(Modifier.background(Color.White).windowInsetsPadding(WindowInsets.navigationBars)) {
+    Column(Modifier.background(MaterialTheme.colorScheme.surface).windowInsetsPadding(WindowInsets.navigationBars)) {
         HorizontalDivider(color = UclColors.dashboardLine, thickness = 1.dp)
         Row(Modifier.fillMaxWidth().height(71.dp).padding(horizontal = 8.dp, vertical = 4.dp)) {
             destinations.forEach { (destination, key, icon) ->
-                val color = if (route == destination) UclColors.accent else UclColors.muted
+                val selected = route == destination
+                val color by animateColorAsState(
+                    targetValue = if (selected) MaterialTheme.colorScheme.primary else UclColors.muted,
+                    animationSpec = tween(160),
+                    label = "bottom-nav-color",
+                )
                 Column(Modifier.weight(1f).fillMaxHeight().clickable { onNavigate(destination) },
                     horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically)) {
-                    WebIcon(icon, Modifier.size(21.dp), color)
+                    Box(Modifier.clip(CircleShape).background(if (selected) UclColors.pinkSurface else Color.Transparent).padding(horizontal = 12.dp, vertical = 3.dp)) {
+                        WebIcon(icon, Modifier.size(21.dp), color)
+                    }
                     Text(webCopy(key), color = color, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                    Box(Modifier.width(16.dp).height(2.dp).clip(CircleShape).background(if (selected) UclColors.pink else Color.Transparent))
                 }
             }
         }
@@ -196,7 +205,7 @@ fun WebPageHeading(title: String, onBack: () -> Unit, bordered: Boolean = false)
 }
 
 @Composable
-fun WebPanel(modifier: Modifier = Modifier, color: Color = Color.White, radius: Int = 16, padding: Int = 20,
+fun WebPanel(modifier: Modifier = Modifier, color: Color = MaterialTheme.colorScheme.surface, radius: Int = 16, padding: Int = 20,
     content: @Composable ColumnScope.() -> Unit) {
     Surface(modifier.fillMaxWidth(), color = color, shape = RoundedCornerShape(radius.dp), border = BorderStroke(1.dp, UclColors.dashboardLine)) {
         Column(Modifier.padding(padding.dp), content = content)

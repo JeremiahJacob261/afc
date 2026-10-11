@@ -76,7 +76,7 @@ export function UclRewards() {
           <div className="grid content-start gap-4">
             <div className="ucl-panel ucl-cut p-6">
               <div className="flex items-center gap-2.5">
-                <TrendingUp className="h-5 w-5 text-cyan-300" aria-hidden="true" />
+                <TrendingUp className="h-5 w-5 text-magenta-300" aria-hidden="true" />
                 <h3 className="text-lg font-black text-white">
                   {t("landing.agents.title")}
                 </h3>
@@ -86,12 +86,12 @@ export function UclRewards() {
                 {rebates.map((rebate) => (
                   <div
                     key={rebate.level}
-                    className="rounded-lg border border-cyan-400/20 bg-cyan-400/[0.07] p-4 text-center"
+                    className="rounded-lg border border-magenta-400/20 bg-magenta-400/[0.07] p-4 text-center"
                   >
                     <p className="text-[0.625rem] font-bold uppercase tracking-[0.12em] text-silver-400">
                       {rebate.level}
                     </p>
-                    <p className="mt-2 text-2xl font-black tabular-nums text-cyan-300">
+                    <p className="mt-2 text-2xl font-black tabular-nums text-magenta-300">
                       {rebate.rebate}
                     </p>
                   </div>
@@ -122,7 +122,7 @@ export function UclRewards() {
                       <td className="py-3 pr-4 font-black text-white">{row.agent}</td>
                       <td className="py-3 pr-4 text-silver-400">{row.teamLevel}</td>
                       <td className="py-3 pr-4 font-bold text-silver-200">{row.teamVolume}</td>
-                      <td className="py-3 font-black tabular-nums text-cyan-300">{row.salary}</td>
+                      <td className="py-3 font-black tabular-nums text-magenta-300">{row.salary}</td>
                     </tr>
                   ))}
                 </tbody>

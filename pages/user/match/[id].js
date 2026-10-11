@@ -300,7 +300,7 @@ export default function Match({ matchDat }) {
             <Drawer
                 anchor='bottom'
                 open={bottom}
-                PaperProps={{ sx: { width: 'min(100%, 560px)', mx: 'auto', maxHeight: '92dvh', overflowY: 'auto', borderRadius: '20px 20px 0 0', background: '#fdfcf8' } }}
+                PaperProps={{ sx: { width: 'min(100%, 560px)', mx: 'auto', maxHeight: '92dvh', overflowY: 'auto', borderRadius: '20px 20px 0 0', background: '#f5f7fc' } }}
                 onClose={() => {
                     setBottom(false)
                 }}
@@ -371,7 +371,7 @@ export default function Match({ matchDat }) {
                             variant="outlined"
                             disabled={availableStake <= 0}
                             onClick={useAllBalance}
-                            sx={{ alignSelf: 'flex-start', borderColor: '#0649ff', color: '#0649ff', fontFamily: 'Arial,sans-serif', fontWeight: 600 }}
+                            sx={{ alignSelf: 'flex-start', borderColor: '#00409e', color: '#00409e', fontFamily: 'Arial,sans-serif', fontWeight: 600 }}
                         >
                             {t('mobile.match.useAllBalance')}
                         </Button>
@@ -383,7 +383,7 @@ export default function Match({ matchDat }) {
                             <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '600', color: '#080f32' }}>{t('mobile.match.expectedReturn')}</Typography>
                             <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '600', color: '#080f32' }}>{expext.toLocaleString(i18n.language, { maximumFractionDigits: 3 })} MMK</Typography>
                         </Stack>
-                        <Button disabled={openx} variant="contained" sx={{ fontFamily: 'Arial,sans-serif', minHeight: 48, fontSize: 16, fontWeight: 700, color: '#fff', background: "#0649ff", padding: '10px 16px', textTransform: 'none', '&:hover': { background: '#003bcc' } }}
+                        <Button disabled={openx} variant="contained" sx={{ fontFamily: 'Arial,sans-serif', minHeight: 48, fontSize: 16, fontWeight: 700, color: '#fff', background: "#00409e", padding: '10px 16px', textTransform: 'none', '&:hover': { background: '#002d72' } }}
                             onClick={() => {
                                 if (openx) return
                                 if (betAttemptRef.current.pending) return

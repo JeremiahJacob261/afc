@@ -59,3 +59,19 @@
 @media(max-width:767px){.page{padding:0 0 32px}.pageTitle{margin:16px 0 24px!important}.hero{grid-template-columns:1fr;gap:24px;padding:24px}.avatar{width:64px;height:64px;font-size:28px}.identity{gap:16px}.heroBalance{padding:24px 0 0;border-left:0;border-top:1px solid #59708b}.contentGrid{grid-template-columns:1fr;gap:16px;margin-top:24px}.mainColumn,.sideColumn{gap:16px}.group,.referral{padding:20px}.groupHeading h2,.referralHeading h2{font-size:24px}.signOut{margin-top:24px;padding:20px 0}.error{display:grid}}
 @media(max-width:360px){.hero{padding:20px}.identity h2{font-size:32px}.heroActions a{flex:1;padding:8px 12px}.group,.referral{padding:16px}.row{gap:12px}.rowLabel{font-size:15px}.signOut{gap:8px}}
 @media(prefers-reduced-motion:reduce){.heroActions a,.row{transition:none}.heroActions a:hover,.row:hover{transform:none}}
+.page{--brand-blue:var(--ucl-blue-accent,#00409e);--brand-pink:var(--ucl-pink-ink,#a90059)}
+.hero{background:radial-gradient(ellipse at 100% 0%,rgba(255,45,149,.28),transparent 48%),linear-gradient(135deg,#002d72,#001240);}
+.primaryAction{background:#fff;color:#002d72}
+.primaryAction:hover{background:#fff0f7;color:#8d004b}
+.rowIcon{background:#eaf0fb;color:#00409e}
+.row:hover{color:#a90059}
+.row:hover .rowIcon{background:#fff0f7;color:#a90059}
+.rowArrow,.groupHeading svg{color:#00409e}
+.referral{background:linear-gradient(120deg,#fff0f7 0%,#f0f4ff 100%);border:1px solid #f1c8df}
+.referralHeading svg{color:#a90059}
+.referralCode button,.error button{background:#002d72;transition:background-color .16s ease,transform .16s ease}
+.referralCode button:hover,.error button:hover{background:#00409e;transform:translateY(-1px)}
+.referralLink{color:#00409e}
+.signOut button{border-color:#d9e2f2;transition:background-color .16s ease,border-color .16s ease}
+.signOut button:hover{background:#fff0f7;border-color:#ff8ac4}
+@media(prefers-reduced-motion:reduce){.referralCode button,.error button,.signOut button{transition:none}.referralCode button:hover,.error button:hover{transform:none}}

@@ -33,7 +33,7 @@ export function UclSection({
               <p
                 className={`flex items-center gap-2.5 ${centered ? "justify-center" : ""}`}
               >
-                <Star className="h-3.5 w-3.5 shrink-0 text-cyan-300" />
+                <Star className="h-3.5 w-3.5 shrink-0 text-magenta-300" />
                 <span className="ucl-eyebrow">{eyebrow}</span>
               </p>
             )}

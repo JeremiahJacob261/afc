@@ -31,16 +31,24 @@ function MyApp({ Component, pageProps }) {
   }, [router.locale])
 
   useEffect(() => {
+    let loadingTimer
     const handleStart = (url) => {
-      if (url !== router.asPath) setRouteLoading(true)
+      if (url !== router.asPath) {
+        window.clearTimeout(loadingTimer)
+        loadingTimer = window.setTimeout(() => setRouteLoading(true), 180)
+      }
     }
-    const handleStop = () => setRouteLoading(false)
+    const handleStop = () => {
+      window.clearTimeout(loadingTimer)
+      setRouteLoading(false)
+    }
 
     router.events.on('routeChangeStart', handleStart)
     router.events.on('routeChangeComplete', handleStop)
     router.events.on('routeChangeError', handleStop)
 
     return () => {
+      window.clearTimeout(loadingTimer)
       router.events.off('routeChangeStart', handleStart)
       router.events.off('routeChangeComplete', handleStop)
       router.events.off('routeChangeError', handleStop)
@@ -98,7 +106,9 @@ function MyApp({ Component, pageProps }) {
           <Component {...pageProps} style={{ background: "#06101F" ,width:"100%",display:'flex'}} />
         </AdminShell>
       ) : (
-        <Component {...pageProps} style={{ background: "#06101F" ,width:"100%",display:'flex'}} />
+        <div key={router.asPath} className={!router.pathname.startsWith('/admin') ? 'customer-route-enter' : undefined}>
+          <Component {...pageProps} style={{ background: "#06101F" ,width:"100%",display:'flex'}} />
+        </div>
       )}
       <div className="champions-doodle-layer" aria-hidden="true" />
       <AppLoadingOverlay open={routeLoading} title="" message="" />

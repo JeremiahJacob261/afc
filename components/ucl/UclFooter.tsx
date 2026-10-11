@@ -51,7 +51,7 @@ export function UclFooter() {
         />
         <div className="ucl-content mx-auto max-w-3xl text-center">
           <p className="flex items-center justify-center gap-2.5">
-            <Star className="h-3.5 w-3.5 text-cyan-300" />
+            <Star className="h-3.5 w-3.5 text-magenta-300" />
             <span className="ucl-eyebrow">{t("landing.cta.eyebrow")}</span>
           </p>
           <div
@@ -113,7 +113,7 @@ export function UclFooter() {
                     key={index}
                     href="#contact"
                     aria-label={t("landing.footer.communityLink")}
-                    className="grid h-10 w-10 place-items-center rounded-full border border-white/12 text-silver-300 transition hover:border-cyan-400/60 hover:bg-cyan-400/10 hover:text-cyan-300"
+                    className="grid h-10 w-10 place-items-center rounded-full border border-white/12 text-silver-300 transition hover:border-magenta-400/60 hover:bg-magenta-400/10 hover:text-magenta-300"
                   >
                     <Icon className="h-4 w-4" aria-hidden="true" />
                   </a>

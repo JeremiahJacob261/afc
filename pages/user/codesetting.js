@@ -133,8 +133,8 @@ export default function Code() {
           <Typography component="h1" sx={{ fontSize: { xs: '32px', sm: '48px' }, fontFamily: 'Georgia,serif', color: '#080f32' }}>{t('mobile.profile.codeSetting')}</Typography>
         </Stack>
         <Stack direction='row' justifyContent='center' alignItems='center' sx={{ height: 'auto', background: '#eaf0fb', borderRadius: '8px', padding: '16px', width: '100%' }} spacing={2}>
-          <PriorityHighRoundedIcon sx={{ color: '#fdfcf8', background: '#0649ff', width: '20px', height: '20px', borderRadius: '10px' }} />
-          <Typography sx={{ fontSize: '15px', fontFamily: 'Arial,sans-serif', fontWeight: '400', color: '#0649ff' }}>{t('mobile.pin.warning')}</Typography>
+          <PriorityHighRoundedIcon sx={{ color: '#f5f7fc', background: '#00409e', width: '20px', height: '20px', borderRadius: '10px' }} />
+          <Typography sx={{ fontSize: '15px', fontFamily: 'Arial,sans-serif', fontWeight: '400', color: '#00409e' }}>{t('mobile.pin.warning')}</Typography>
         </Stack>
         <Stack spacing={1} sx={{ minWidth: 0 }}>
           <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{t('forms.enterPin')}</Typography>
@@ -176,7 +176,7 @@ export default function Code() {
         <Button
           disabled={inputLocked}
           variant="contained"
-          sx={{ minHeight: '48px', borderRadius: '8px', fontSize: '16px', fontWeight: 700, background: '#0649ff', textTransform: 'none' }}
+          sx={{ minHeight: '48px', borderRadius: '8px', fontSize: '16px', fontWeight: 700, background: '#00409e', textTransform: 'none' }}
           onClick={nextPage}
         >
           {loadingPinStatus ? t('mobile.pin.checking') : pinSet ? t('messages.pinAlreadySet') : submitting ? t('status.pending') : t('mobile.pin.set')}
@@ -199,7 +199,7 @@ export default function Code() {
         aria-describedby="modal-modal-description"
       >
         <Stack alignItems='center' justifyContent='space-evenly' sx={{
-          background: '#fdfcf8', width: '290px', height: '330px', borderRadius: '20px',
+          background: '#f5f7fc', width: '290px', height: '330px', borderRadius: '20px',
           position: 'absolute',
           top: '50%',
           left: '50%',
@@ -215,7 +215,7 @@ export default function Code() {
             {ale}
           </Typography>
           <Divider sx={{ background: '#080f32' }} />
-          <Button variant='contained' sx={{ fontFamily: 'Arial,sans-serif', color: '#fdfcf8', background: '#0649ff', padding: '8px', width: '100%' }} onClick={() => {
+          <Button variant='contained' sx={{ fontFamily: 'Arial,sans-serif', color: '#f5f7fc', background: '#00409e', padding: '8px', width: '100%' }} onClick={() => {
             if (aleT) {
               setOpen(false)
               router.push('/user/account')

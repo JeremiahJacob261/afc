@@ -122,3 +122,22 @@
   .methodOption, .primaryAction { transition: none; }
   .methodOption:hover, .primaryAction:hover:not(:disabled) { transform: none; }
 }
+.page{--brand-blue:var(--ucl-blue-accent,#00409e);--brand-pink:var(--ucl-pink-ink,#a90059)}
+.back,.uploadZone{color:var(--brand-blue)}
+.progressStep.currentStep{border-color:var(--brand-blue)}
+.progressStep.currentStep .progressMarker{border-color:var(--brand-blue);background:var(--brand-blue)}
+.methodOption{border-color:#d9e2f2;transition:border-color .18s ease-out,background-color .18s ease-out,transform .18s ease-out,box-shadow .18s ease-out}
+.methodOption:hover{border-color:#ff8ac4;background:#fff8fc;box-shadow:0 6px 18px rgba(0,45,114,.06)}
+.methodSelected,.methodSelected:hover{border-color:var(--brand-blue);background:#eaf0fb;box-shadow:inset 0 0 0 1px var(--brand-blue)}
+.methodIcon{background:#fff0f7;color:#a90059}
+.methodSelected .methodCheck{border-color:var(--brand-blue);background:var(--brand-blue)}
+.transferSelected,.primaryAction{border-color:var(--brand-blue);background:var(--brand-blue)}
+.transferSelected{color:#fff}
+.primaryAction:hover:not(:disabled){background:#002d72}
+.equivalent{background:linear-gradient(110deg,#eaf0fb,#fff0f7)}
+.equivalent span{color:#31588f}
+.copyRow button{border-color:#d9e2f2;color:var(--brand-blue);transition:background-color .16s ease,border-color .16s ease,transform .16s ease}
+.copyRow button:hover{border-color:#ff8ac4;background:#fff0f7;transform:translateY(-1px)}
+.uploadZone{border-color:#9bb7e3;background:#f4f7ff;transition:background-color .16s ease,border-color .16s ease}
+.uploadZone:hover{border-color:#ff8ac4;background:#fff0f7}
+@media(prefers-reduced-motion:reduce){.copyRow button{transition:none}.copyRow button:hover{transform:none}}

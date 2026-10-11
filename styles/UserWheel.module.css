@@ -29,3 +29,10 @@
 .prize span{color:#080f32;background:rgba(255,255,255,.94);border-radius:4px;padding:3px 4px;text-shadow:none;white-space:nowrap;font-size:clamp(8px,2vw,12px)}
 @media(max-width:480px){.stage{padding:22px 5px 26px}.wheelFrame{width:min(100%,390px)}.wheel{border-width:3px}.prize span{font-size:clamp(8px,2.6vw,11px)}.pointer{top:35%;border-left-width:13px;border-right-width:13px;border-bottom-width:23px}}
 @media(prefers-reduced-motion:reduce){.wheel,.prize{transition:none}}
+.stage{background:radial-gradient(ellipse at 90% 5%,rgba(255,45,149,.14),transparent 36%),linear-gradient(140deg,#edf3ff,#fff4fa)}
+.back{color:#00409e}
+.depositLink,.retry{color:#00409e}
+.retry{border-color:#00409e;transition:background-color .16s ease,border-color .16s ease,transform .16s ease}
+.retry:hover{border-color:#a90059;background:#fff0f7;transform:translateY(-1px)}
+.hub{background:radial-gradient(circle at 35% 26%,#ff78b8,#e6007e 58%,#a90059);box-shadow:0 0 0 4px #00409e,0 5px 12px rgba(0,45,114,.24),inset 0 0 0 2px #ffc2df}
+@media(prefers-reduced-motion:reduce){.retry{transition:none}.retry:hover{transform:none}}

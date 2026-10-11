@@ -76,7 +76,7 @@ export function UclHowItWorks() {
             </div>
 
             <div className="mt-6 flex items-center gap-2 text-xs text-silver-500">
-              <WalletCards className="h-4 w-4 text-cyan-300" aria-hidden="true" />
+              <WalletCards className="h-4 w-4 text-magenta-300" aria-hidden="true" />
               {t("landing.hero.boardFootnote")}
             </div>
           </div>
@@ -100,7 +100,7 @@ export function UclHowItWorks() {
                 </div>
 
                 <div className="flex items-center justify-between gap-5 sm:justify-end">
-                  <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-[0.6875rem] font-black uppercase tracking-[0.08em] text-cyan-300">
+                  <span className="rounded-full border border-magenta-400/30 bg-magenta-400/10 px-3 py-1 text-[0.6875rem] font-black uppercase tracking-[0.08em] text-magenta-300">
                     {match.status}
                   </span>
                   <div className="text-right">

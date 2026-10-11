@@ -26,7 +26,7 @@ export function UclTrust() {
             tilt={22}
             density={0.22}
           />
-          <ShieldCheck className="relative h-10 w-10 text-cyan-300" aria-hidden="true" />
+          <ShieldCheck className="relative h-10 w-10 text-magenta-300" aria-hidden="true" />
           <h3 className="relative mt-5 text-2xl font-black leading-tight text-white">
             {t("landing.trust.cardTitle")}
           </h3>
@@ -41,7 +41,7 @@ export function UclTrust() {
 
             return (
               <div key={item} className="ucl-panel ucl-cut p-5">
-                <Icon className="h-6 w-6 text-cyan-300" aria-hidden="true" />
+                <Icon className="h-6 w-6 text-magenta-300" aria-hidden="true" />
                 <h3 className="mt-4 text-base font-black text-white">{item}</h3>
                 <p className="mt-2 text-sm leading-6 text-silver-400">
                   {t("landing.trust.itemCopy")}

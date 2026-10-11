@@ -36,7 +36,7 @@ const categoryMeta = {
   },
   deposit: {
     icon: 'solar:wallet-money-bold',
-    color: '#0649ff',
+    color: '#00409e',
     bg: 'rgba(50, 215, 255, 0.12)',
     border: 'rgba(50, 215, 255, 0.28)',
   },
@@ -152,7 +152,7 @@ function NotificationCard({ item, t, locale }) {
           </Typography>
           <Typography
             sx={{
-              color: '#52685d',
+              color: '#526583',
               fontFamily: 'Inter, Arial, sans-serif',
               fontSize: '11px',
               lineHeight: 1.25,
@@ -189,17 +189,17 @@ function EmptyState({ t }) {
         justifyContent: 'center',
         minHeight: 340,
         borderRadius: '12px',
-        border: '1px solid #dfe5df',
-        background: '#f1f3ee',
+        border: '1px solid #d9e2f2',
+        background: '#f0f2fb',
         padding: '24px',
         textAlign: 'center',
       }}
     >
-      <Icon icon="solar:bell-off-bold" width="38" height="38" style={{ color: '#52685d' }} />
+      <Icon icon="solar:bell-off-bold" width="38" height="38" style={{ color: '#526583' }} />
       <Typography sx={{ color: '#080f32', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 700 }}>
         {t('emptyStates.noNotifications')}
       </Typography>
-      <Typography sx={{ color: '#52685d', fontFamily: 'Inter, Arial, sans-serif', fontSize: '13px' }}>
+      <Typography sx={{ color: '#526583', fontFamily: 'Inter, Arial, sans-serif', fontSize: '13px' }}>
         {t('emptyStates.notificationsComing')}
       </Typography>
     </Stack>
@@ -287,7 +287,7 @@ export default function Notification() {
             <Typography sx={{ color: '#080f32', fontFamily: 'Inter, Arial, sans-serif', fontSize: '18px', fontWeight: 800 }}>
               {t('mobile.notifications.title')}
             </Typography>
-            <Typography sx={{ color: '#52685d', fontFamily: 'Inter, Arial, sans-serif', fontSize: '12px' }}>
+            <Typography sx={{ color: '#526583', fontFamily: 'Inter, Arial, sans-serif', fontSize: '12px' }}>
               {t('mobile.notifications.count', { count: notifications.length })}
             </Typography>
           </Stack>
@@ -298,7 +298,7 @@ export default function Notification() {
               width: 40,
               height: 40,
               borderRadius: '12px',
-              color: '#0649ff',
+              color: '#00409e',
               background: 'rgba(27, 182, 255, 0.12)',
             }}
           >
@@ -308,8 +308,8 @@ export default function Notification() {
 
         {loading ? (
           <Stack spacing={1.5} sx={{ alignItems: 'center', justifyContent: 'center', minHeight: 360 }}>
-            <CircularProgress size={28} sx={{ color: '#0649ff' }} />
-            <Typography sx={{ color: '#52685d', fontFamily: 'Inter, Arial, sans-serif', fontSize: '13px' }}>
+            <CircularProgress size={28} sx={{ color: '#00409e' }} />
+            <Typography sx={{ color: '#526583', fontFamily: 'Inter, Arial, sans-serif', fontSize: '13px' }}>
               {t('mobile.notifications.loading')}
             </Typography>
           </Stack>

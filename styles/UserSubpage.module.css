@@ -47,3 +47,18 @@
 .matchesPage :is(a):focus-visible{outline:2px solid #0649ff;outline-offset:2px}
 @media(max-width:600px){.matchCard{padding:16px 40px 16px 16px}.matchArrow{right:12px}.matchBody{display:grid;gap:16px}.matchTeam{gap:8px}.matchTeam strong{font-size:16px}.matchMarket{justify-items:start}.matchMarket>div>span{min-width:56px;padding:8px}.matchMeta{font-size:12px}.matchMeta>span:last-child{white-space:normal;text-align:right}}
 @media(prefers-reduced-motion:reduce){.matchCard{transition:none}.matchCard:hover{transform:none}}
+.matchesPage,.page,.successPage{--brand-blue:var(--ucl-blue-accent,#00409e);--brand-pink:var(--ucl-pink-ink,#a90059)}
+.back{color:var(--brand-blue)}
+.matchCard{border-color:#d9e2f2;transition:border-color .18s ease-out,background-color .18s ease-out,transform .18s ease-out,box-shadow .18s ease-out}
+.matchCard:hover{border-color:#ff8ac4;background:linear-gradient(120deg,#fff 52%,#fff5fa);box-shadow:0 10px 24px rgba(0,45,114,.08)}
+.matchArrow{color:var(--brand-blue);transition:color .16s ease,transform .16s ease}
+.matchCard:hover .matchArrow{color:var(--brand-pink);transform:translate(2px,-50%)}
+.matchMarket>div>span{border-color:#d9e2f2;background:#f3f6ff;transition:border-color .16s ease,background-color .16s ease,transform .16s ease}
+.matchMarket>div>span:hover{border-color:#ff8ac4;background:#fff0f7;transform:translateY(-1px)}
+.emptyState{border-color:#d9e2f2;background:linear-gradient(135deg,#f0f4ff,#fff5fa)}
+.emptyState>svg{color:var(--brand-pink)}
+.successIcon,.primaryLink{background:#00409e}
+.successIcon{box-shadow:0 8px 22px rgba(0,64,158,.2)}
+.primaryLink{transition:transform .16s ease,background-color .16s ease,box-shadow .16s ease}
+.primaryLink:hover{background:#002d72;transform:translateY(-1px);box-shadow:0 8px 20px rgba(0,45,114,.2)}
+@media(prefers-reduced-motion:reduce){.matchArrow,.matchMarket>div>span,.primaryLink{transition:none}.matchCard:hover .matchArrow,.matchMarket>div>span:hover,.primaryLink:hover{transform:none}}

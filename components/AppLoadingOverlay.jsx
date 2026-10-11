@@ -24,14 +24,16 @@ export default function AppLoadingOverlay({
       }}
     >
         <Box
+          className="route-loading-mark"
           sx={{
             width: 86,
             height: 86,
             borderRadius: '50%',
             display: 'grid',
             placeItems: 'center',
-            bgcolor: 'rgba(27, 182, 255, 0.12)',
-            border: '1px solid rgba(27, 182, 255, 0.28)',
+            bgcolor: 'rgba(255, 45, 149, 0.12)',
+            border: '1px solid rgba(255, 45, 149, 0.32)',
+            boxShadow: '0 10px 32px rgba(0, 45, 114, 0.2)',
             animation: 'efcLoaderPulse 1.45s ease-in-out infinite',
             '@keyframes efcLoaderPulse': {
               '0%, 100%': { transform: 'scale(1)', opacity: 0.92 },
