@@ -43,15 +43,15 @@ function filteredMatches(matches, filter, now) {
     .map(({ match }) => match)
 }
 
-function getSlides(t) { return [
-  { label: t('website.matchday'), title: t('website.followTheMatchAlt'), detail: t('website.fixturesAndLiveMovementAllInOnePlace'), action: t('website.viewMatches'), href: '/user/matches' },
-  { label: t('website.marketsAlt'), title: t('website.findYourMarket'), detail: t('website.exploreFootballPricesBeforeYouPlaceABet'), action: t('website.exploreMarkets'), href: '/user/matches' },
-  { label: t('website.yourAccount'), title: t('website.yourFundsInView'), detail: t('website.manageDepositsAndWithdrawalsFromYourWallet'), action: t('website.openWallet'), href: '/user/fund' },
-] }
+const dashboardSlides = [
+  { src: '/promotions/ucl-welcome.jpg', altKey: 'website.carouselWelcomeBanner' },
+  { src: '/promotions/ucl-commissions.jpg', altKey: 'website.carouselCommissionBanner' },
+  { src: '/promotions/ucl-referral-rewards.jpg', altKey: 'website.carouselReferralBanner' },
+]
 
 function DashboardCarousel() {
   const { t } = useTranslation('common');
-  const slides = getSlides(t);
+  const slides = dashboardSlides;
   const [active, setActive] = useState(0)
   const startX = useRef(null)
   const slide = slides[active]
@@ -65,13 +65,9 @@ function DashboardCarousel() {
       if (Math.abs(delta) > 50) delta > 0 ? previous() : next()
       startX.current = null
     }}>
-    <div className={styles.carouselCopy} aria-live="polite">
-      <span className={styles.carouselLabel}>{slide.label}</span>
-      <h2>{slide.title}</h2>
-      <p>{slide.detail}</p>
-      <Link href={slide.href} className={styles.carouselLink}>{slide.action}<ArrowRight size={18} aria-hidden="true" /></Link>
+    <div className={styles.carouselImage} aria-live="polite">
+      <Image src={slide.src} width={1280} height={720} alt={t(slide.altKey)} sizes="(max-width: 767px) calc(100vw - 32px), (max-width: 1472px) calc(100vw - 64px), 1408px" priority={active === 0} />
     </div>
-    <div className={styles.pitch} aria-hidden="true"><span /></div>
     <div className={styles.carouselControls}>
       <button type="button" onClick={previous} aria-label={t('website.previousHighlight')}><ChevronLeft size={20} /></button>
       <span aria-label={t('website.slidePosition', { current: active + 1, total: slides.length })}>{active + 1} / {slides.length}</span>

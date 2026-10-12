@@ -69,12 +69,12 @@ LANGUAGE sql
 IMMUTABLE
 AS $$
   SELECT CASE
-    WHEN COALESCE(total_deposit, 0) >= 500 AND COALESCE(referral_count, 0) >= 20 THEN 7
-    WHEN COALESCE(total_deposit, 0) >= 300 AND COALESCE(referral_count, 0) >= 15 THEN 6
-    WHEN COALESCE(total_deposit, 0) >= 200 AND COALESCE(referral_count, 0) >= 12 THEN 5
-    WHEN COALESCE(total_deposit, 0) >= 100 AND COALESCE(referral_count, 0) >= 8 THEN 4
-    WHEN COALESCE(total_deposit, 0) >= 50 AND COALESCE(referral_count, 0) >= 5 THEN 3
-    WHEN COALESCE(total_deposit, 0) >= 20 AND COALESCE(referral_count, 0) >= 3 THEN 2
+    WHEN COALESCE(total_deposit, 0) >= 500 AND COALESCE(referral_count, 0) >= 30 THEN 7
+    WHEN COALESCE(total_deposit, 0) >= 300 AND COALESCE(referral_count, 0) >= 25 THEN 6
+    WHEN COALESCE(total_deposit, 0) >= 200 AND COALESCE(referral_count, 0) >= 20 THEN 5
+    WHEN COALESCE(total_deposit, 0) >= 100 AND COALESCE(referral_count, 0) >= 15 THEN 4
+    WHEN COALESCE(total_deposit, 0) >= 50 AND COALESCE(referral_count, 0) >= 10 THEN 3
+    WHEN COALESCE(total_deposit, 0) >= 20 AND COALESCE(referral_count, 0) >= 5 THEN 2
     ELSE 1
   END;
 $$;

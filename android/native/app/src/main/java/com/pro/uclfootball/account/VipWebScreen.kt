@@ -18,7 +18,7 @@ import kotlinx.serialization.json.*
 
 // Same informational tier table as lib/vip.js; the server determines eligibility.
 private val deposits = listOf(50000, 100000, 250000, 500000, 1000000, 1500000, 2500000)
-private val members = listOf(0, 3, 5, 8, 12, 15, 20)
+private val members = listOf(0, 5, 10, 15, 20, 25, 30)
 private val rates = listOf(0.0, .0015, .003, .005, .007, .0095, .0125)
 private val tierColors = listOf(0xFFA8C7FF, 0xFF56CCF2, 0xFFA78BFA, 0xFFFBBF24, 0xFFFB923C, 0xFFF472B6, 0xFFFDE68A).map { Color(it) }
 

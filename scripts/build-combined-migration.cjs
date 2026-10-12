@@ -15,6 +15,7 @@ const migrations = [
   'BET_ODD_INTEGRITY_MIGRATION.sql',
   'LANGUAGE_AVAILABILITY_MIGRATION.sql',
   'PLATFORM_LINKS_MIGRATION.sql',
+  'VIP_DOWNLINE_REQUIREMENTS_MIGRATION.sql',
 ];
 
 const header = `-- CURRENT AFC/UCL DATABASE MIGRATIONS — COMBINED\n-- Generated from the repository migration files in dependency order.\n-- Paste this entire file into the Supabase SQL Editor and run it once.\n--\n-- Deliberately excluded:\n--   * FCFA_LEDGER_MIGRATION.sql: retired currency conversion.\n--   * USDT_LEDGER_RESET_MIGRATION.sql: only valid after wiping user/auth/transaction data.\n--   * ACTIVE_MEMBER_BALANCE_MIGRATION.sql: superseded by the current 1.667 USDT threshold.\n--   * PAYMENT_CLEANUP_QUERIES.sql: diagnostic queries, not a migration.\n--   * supabase_schema.sql: full fresh-install schema, not an incremental migration.\n\n`;

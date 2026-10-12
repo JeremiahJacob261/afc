@@ -1114,12 +1114,12 @@ LANGUAGE sql
 IMMUTABLE
 AS $$
   SELECT CASE
-    WHEN COALESCE(total_deposit, 0) >= 500 AND COALESCE(referral_count, 0) >= 20 THEN 7
-    WHEN COALESCE(total_deposit, 0) >= 300 AND COALESCE(referral_count, 0) >= 15 THEN 6
-    WHEN COALESCE(total_deposit, 0) >= 200 AND COALESCE(referral_count, 0) >= 12 THEN 5
-    WHEN COALESCE(total_deposit, 0) >= 100 AND COALESCE(referral_count, 0) >= 8 THEN 4
-    WHEN COALESCE(total_deposit, 0) >= 50 AND COALESCE(referral_count, 0) >= 5 THEN 3
-    WHEN COALESCE(total_deposit, 0) >= 20 AND COALESCE(referral_count, 0) >= 3 THEN 2
+    WHEN COALESCE(total_deposit, 0) >= 500 AND COALESCE(referral_count, 0) >= 30 THEN 7
+    WHEN COALESCE(total_deposit, 0) >= 300 AND COALESCE(referral_count, 0) >= 25 THEN 6
+    WHEN COALESCE(total_deposit, 0) >= 200 AND COALESCE(referral_count, 0) >= 20 THEN 5
+    WHEN COALESCE(total_deposit, 0) >= 100 AND COALESCE(referral_count, 0) >= 15 THEN 4
+    WHEN COALESCE(total_deposit, 0) >= 50 AND COALESCE(referral_count, 0) >= 10 THEN 3
+    WHEN COALESCE(total_deposit, 0) >= 20 AND COALESCE(referral_count, 0) >= 5 THEN 2
     ELSE 1
   END;
 $$;
@@ -1778,3 +1778,29 @@ ALTER TABLE public.admin_settings
   ADD COLUMN IF NOT EXISTS telegram_group_url TEXT NOT NULL DEFAULT 'https://t.me/+Giav1o1JVGNkYzNk',
   ADD COLUMN IF NOT EXISTS whatsapp_group_url TEXT NOT NULL DEFAULT 'https://chat.whatsapp.com/I1D6NNWndu6HDrbzB5BkPX?s=hd&p=i&mlu=0&ilr=0',
   ADD COLUMN IF NOT EXISTS customer_support_url TEXT NOT NULL DEFAULT 'https://t.me/EFC_Support';
+
+-- ============================================================================
+-- 12. VIP_DOWNLINE_REQUIREMENTS_MIGRATION.sql
+-- ============================================================================
+-- Current MMK VIP eligibility. Direct downlines are counted by the callers
+-- using the configured active-member balance threshold.
+-- Deposit requirements and reward rates are unchanged.
+BEGIN;
+
+CREATE OR REPLACE FUNCTION public.vip_level_for_user(total_deposit numeric, referral_count integer)
+RETURNS integer
+LANGUAGE sql
+IMMUTABLE
+AS $function$
+  SELECT CASE
+    WHEN COALESCE(total_deposit, 0) >= 2500000 AND COALESCE(referral_count, 0) >= 30 THEN 7
+    WHEN COALESCE(total_deposit, 0) >= 1500000 AND COALESCE(referral_count, 0) >= 25 THEN 6
+    WHEN COALESCE(total_deposit, 0) >= 1000000 AND COALESCE(referral_count, 0) >= 20 THEN 5
+    WHEN COALESCE(total_deposit, 0) >= 500000 AND COALESCE(referral_count, 0) >= 15 THEN 4
+    WHEN COALESCE(total_deposit, 0) >= 250000 AND COALESCE(referral_count, 0) >= 10 THEN 3
+    WHEN COALESCE(total_deposit, 0) >= 100000 AND COALESCE(referral_count, 0) >= 5 THEN 2
+    ELSE 1
+  END;
+$function$;
+
+COMMIT;

@@ -14,6 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import com.pro.uclfootball.R
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -64,7 +67,7 @@ internal fun DashboardScreen(state: DashboardUiState, onNavigate: (String) -> Un
         }
     }.sortedBy { matchStartMillis(it.tsgmt, it.date, it.time) }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 32.dp)) {
-        item { DashboardCarousel(onNavigate) }
+        item { DashboardCarousel() }
         item { Spacer(Modifier.height(16.dp)); SpinInvitation { onNavigate("wheel") } }
         item {
             Row(Modifier.fillMaxWidth().padding(top = 28.dp, bottom = 20.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
@@ -158,34 +161,35 @@ internal fun DashboardScreen(state: DashboardUiState, onNavigate: (String) -> Un
 }
 
 @Composable
-private fun DashboardCarousel(onNavigate: (String) -> Unit) {
+private fun DashboardCarousel() {
     var slide by remember { mutableIntStateOf(0) }; var drag by remember { mutableFloatStateOf(0f) }
-    val slides = listOf(listOf("matchday", "followTheMatchAlt", "fixturesAndLiveMovementAllInOnePlace", "viewMatches", "matches"), listOf("marketsAlt", "findYourMarket", "exploreFootballPricesBeforeYouPlaceABet", "exploreMarkets", "matches"), listOf("yourAccount", "yourFundsInView", "manageDepositsAndWithdrawalsFromYourWallet", "openWallet", "wallet"))
-    val copy = slides[slide]
-    val narrow = LocalConfiguration.current.screenWidthDp <= 390
-    Box(Modifier.fillMaxWidth().heightIn(min = 200.dp).clip(RoundedCornerShape(16.dp)).background(UclColors.blueSurface)
-        .pointerInput(Unit) { detectHorizontalDragGestures(onDragStart = { drag = 0f }, onHorizontalDrag = { change, amount -> change.consume(); drag += amount }, onDragEnd = { if (kotlin.math.abs(drag) > 50.dp.toPx()) slide = (slide + if (drag > 0) 2 else 1) % 3 }) }) {
-        Canvas(Modifier.matchParentSize()) {
-            val center = androidx.compose.ui.geometry.Offset(size.width - 30.dp.toPx(), size.height + 10.dp.toPx())
-            drawCircle(Color(0xFFDDE8F8), 270.dp.toPx(), center); drawCircle(Color(0xFFCFDEF5), 230.dp.toPx(), center)
-            drawCircle(Color(0xFFB7CCEF), 190.dp.toPx(), center, style = Stroke(2.dp.toPx()))
-        }
-        Column(Modifier.padding(if (narrow) 20.dp else 24.dp).widthIn(max = if (narrow) 230.dp else 480.dp)) {
-            Text(webCopy("website.${copy[0]}"), color = UclColors.blueInk, fontSize = 12.sp, fontWeight = FontWeight.Bold, letterSpacing = .96.sp)
-            Text(webCopy("website.${copy[1]}"), Modifier.padding(top = 12.dp, bottom = 8.dp), color = UclColors.ink, fontFamily = FontFamily.Serif, fontSize = 28.sp, lineHeight = 30.sp, letterSpacing = (-.56).sp)
-            Text(webCopy("website.${copy[2]}"), color = Color(0xFF415F86), fontSize = if (narrow) 13.sp else 15.sp, lineHeight = if (narrow) 19.5.sp else 22.5.sp)
-            WebTextLink(webCopy("website.${copy[3]}"), Color(0xFF0D49B5), Modifier.padding(top = 8.dp)) { onNavigate(copy[4]) }
-        }
-        Row(Modifier.align(Alignment.TopEnd).padding(8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            CarouselButton("chevron_left", webCopy("website.previousHighlight")) { slide = (slide + 2) % 3 }
-            Text("${slide + 1} / 3", color = Color(0xFF234C88), fontSize = 12.sp, fontWeight = FontWeight.Bold)
-            CarouselButton("chevron_right", webCopy("website.nextHighlight")) { slide = (slide + 1) % 3 }
+    val slides = listOf(
+        R.drawable.ucl_welcome to "website.carouselWelcomeBanner",
+        R.drawable.ucl_commissions to "website.carouselCommissionBanner",
+        R.drawable.ucl_referral_rewards to "website.carouselReferralBanner",
+    )
+    Surface(shape = RoundedCornerShape(16.dp), color = UclColors.paper,
+        border = BorderStroke(1.dp, UclColors.dashboardLine)) {
+        Column(Modifier.fillMaxWidth()) {
+            Image(painter = painterResource(slides[slide].first), contentDescription = webCopy(slides[slide].second),
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.fillMaxWidth().aspectRatio(16f / 9f).pointerInput(Unit) {
+                    detectHorizontalDragGestures(onDragStart = { drag = 0f },
+                        onHorizontalDrag = { change, amount -> change.consume(); drag += amount },
+                        onDragEnd = { if (kotlin.math.abs(drag) > 50.dp.toPx()) slide = (slide + if (drag > 0) slides.size - 1 else 1) % slides.size })
+                })
+            Row(Modifier.fillMaxWidth().padding(6.dp), verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)) {
+                CarouselButton("chevron_left", webCopy("website.previousHighlight")) { slide = (slide + slides.size - 1) % slides.size }
+                Text("${slide + 1} / ${slides.size}", color = UclColors.blueInk, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                CarouselButton("chevron_right", webCopy("website.nextHighlight")) { slide = (slide + 1) % slides.size }
+            }
         }
     }
 }
 
 @Composable private fun CarouselButton(icon: String, label: String, onClick: () -> Unit) {
-    Surface(onClick, Modifier.size(36.dp), shape = CircleShape, color = Color.White, contentColor = com.pro.uclfootball.ui.UclColors.ink, border = BorderStroke(1.dp, Color(0xFFC7D8EE))) {
+    Surface(onClick, Modifier.size(44.dp), shape = CircleShape, color = Color.White, contentColor = com.pro.uclfootball.ui.UclColors.ink, border = BorderStroke(1.dp, Color(0xFFC7D8EE))) {
         Box(contentAlignment = Alignment.Center) { WebIcon(icon, Modifier.size(20.dp), Color(0xFF234C88), label) }
     }
 }

@@ -59,12 +59,10 @@ const bootSplashDelayMs = 700
 const sessionBootTimeoutMs = 5000
 const MMK_PER_USDT = 5000
 const referralFilters = ['all', 1, 2, 3]
-const bfcImages = [
-  '/usd/bfc1.jpg',
-  '/usd/bfc2.jpg',
-  '/usd/bfc3.jpg',
-  '/usd/bfc4.jpg',
-  '/usd/bfc5.jpg',
+const promotionSlides = [
+  { src: '/promotions/ucl-welcome.jpg', altKey: 'website.carouselWelcomeBanner' },
+  { src: '/promotions/ucl-commissions.jpg', altKey: 'website.carouselCommissionBanner' },
+  { src: '/promotions/ucl-referral-rewards.jpg', altKey: 'website.carouselReferralBanner' },
 ]
 const ballImage = '/simps/ball.png'
 const languageStorageKey = 'efc-language'
@@ -1341,7 +1339,7 @@ function HomeScreen({ navigate, onLogout, online }) {
         </a>
       </div>
 
-      <ImageCarousel images={bfcImages} />
+      <ImageCarousel images={promotionSlides} />
 
       <div className="section-title-row">
         <h2>{t('mobile.home.topMatches')}</h2>
@@ -2998,11 +2996,12 @@ function ImageCarousel({ images }) {
 
   return (
     <div className="promo-frame">
+      <div className="promo-image">
       <AnimatePresence initial={false} mode="wait">
         <motion.img
-          key={images[index]}
-          src={images[index]}
-          alt=""
+          key={images[index].src}
+          src={images[index].src}
+          alt={t(images[index].altKey)}
           variants={imageVariants}
           initial="initial"
           animate="animate"
@@ -3010,6 +3009,7 @@ function ImageCarousel({ images }) {
           transition={{ duration: 0.32, ease: motionEase }}
         />
       </AnimatePresence>
+      </div>
       <Dots className="compact" length={images.length} index={index} onChange={setIndex} label={t('mobile.onboarding.promoLabel')} />
     </div>
   )
