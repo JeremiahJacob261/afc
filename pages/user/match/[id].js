@@ -304,7 +304,7 @@ export default function Match({ matchDat }) {
                 anchor={desktop ? 'right' : 'bottom'}
                 variant={desktop ? 'persistent' : 'temporary'}
                 open={bottom}
-                PaperProps={{ sx: { width: desktop ? 380 : 'min(100%, 560px)', mx: desktop ? 0 : 'auto', top: desktop ? 80 : 'auto', height: desktop ? 'calc(100dvh - 80px)' : 'auto', maxHeight: '92dvh', overflowY: 'auto', borderRadius: desktop ? 0 : '20px 20px 0 0', background: '#fff', borderLeft: desktop ? '1px solid #dce4f2' : 0 } }}
+                PaperProps={{ sx: { width: desktop ? 380 : 'min(100%, 560px)', mx: desktop ? 0 : 'auto', top: desktop ? 80 : 'auto', height: desktop ? 'calc(100dvh - 80px)' : 'auto', maxHeight: '92dvh', overflowY: 'auto', borderRadius: desktop ? 0 : '20px 20px 0 0', background: 'var(--ucl-paper)', borderLeft: desktop ? '1px solid #dce4f2' : 0 } }}
                 onClose={() => {
                     setBottom(false)
                 }}
@@ -316,53 +316,53 @@ export default function Match({ matchDat }) {
                             <button type="button" className={styles.slipBack} aria-label={t('common.back')} onClick={() => {
                                 setBottom(false)
                             }}><ArrowLeft size={20} aria-hidden="true" /></button>
-                            <Typography component="h2" sx={{ fontFamily: 'Inter,Arial,sans-serif', fontWeight: 700, fontSize: 24, color: '#080f32' }}>{t('mobile.match.placeBet')}</Typography>
+                            <Typography component="h2" sx={{ fontFamily: 'Inter,Arial,sans-serif', fontWeight: 700, fontSize: 24, color: 'var(--ucl-ink)' }}>{t('mobile.match.placeBet')}</Typography>
                         </Stack>
                         <Stack direction='column' alignItems='center' justifyContent='center'>
-                            <Typography style={{ color: '#080f32', fontFamily: 'Arial, sans-serif', fontSize: '12px' }}>{leagueName}</Typography>
-                            <Divider sx={{ background: '#080f32' }} />
+                            <Typography style={{ color: 'var(--ucl-ink)', fontFamily: 'Arial, sans-serif', fontSize: '12px' }}>{leagueName}</Typography>
+                            <Divider sx={{ background: 'var(--ucl-ink)' }} />
                         </Stack>
                         <Stack direction='row' justifyContent='center' alignItems='center' spacing={3} className={styles.slipFixture}>
                             <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                                 <Image src={matches.ihome ? matches.ihome : Ims} width={50} height={50} alt='home' style={{ objectFit: 'contain' }} unoptimized />
-                                <Typography sx={{ textAlign: 'center', fontFamily: 'Arial,sans-serif', color: '#080f32', fontSize: '12px', fontWeight: '100' }}>{homeName}</Typography>
+                                <Typography sx={{ textAlign: 'center', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)', fontSize: '12px', fontWeight: '100' }}>{homeName}</Typography>
                             </Stack>
                             <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                                <Typography sx={{ textAlign: 'center', fontFamily: 'Arial,sans-serif', color: '#080f32', fontSize: '14px', fontWeight: '100' }}>{matchDisplay.time}</Typography>
-                                <p style={{ color: '#080f32' }}>|</p>
-                                <Typography sx={{ textAlign: 'center', fontFamily: 'Arial,sans-serif', color: '#080f32', fontSize: '14px', fontWeight: '100' }}>{matchDisplay.date}</Typography>
+                                <Typography sx={{ textAlign: 'center', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)', fontSize: '14px', fontWeight: '100' }}>{matchDisplay.time}</Typography>
+                                <p style={{ color: 'var(--ucl-ink)' }}>|</p>
+                                <Typography sx={{ textAlign: 'center', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)', fontSize: '14px', fontWeight: '100' }}>{matchDisplay.date}</Typography>
                             </Stack>
                             <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                                 <Image src={matches.iaway ? matches.iaway : Ims} width={50} height={50} alt='away' style={{ objectFit: 'contain' }} unoptimized />
-                                <Typography sx={{ textAlign: 'center', fontFamily: 'Arial,sans-serif', color: '#080f32', fontSize: '12px', fontWeight: '100' }}>{awayName}</Typography>
+                                <Typography sx={{ textAlign: 'center', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)', fontSize: '12px', fontWeight: '100' }}>{awayName}</Typography>
                             </Stack>
 
                         </Stack>
-                        <Divider sx={{ background: '#080f32' }} />
+                        <Divider sx={{ background: 'var(--ucl-ink)' }} />
                         <Stack direction='column' spacing={3}>
                             <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                                <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#080f32' }}>{t('mobile.match.matchId')}</Typography>
-                                <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: '#080f32' }}>{matches.match_id || t('common.notAvailable')}</Typography>
+                                <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: 'bold', color: 'var(--ucl-ink)' }}>{t('mobile.match.matchId')}</Typography>
+                                <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: 'var(--ucl-ink)' }}>{matches.match_id || t('common.notAvailable')}</Typography>
                             </Stack>
                             <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                                <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#080f32' }}>{t('mobile.match.market')}</Typography>
-                                <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: '#080f32' }}>{picked === 'otherscores' ? t('mobile.markets.other') : markets[picked] || t('mobile.match.noMarketSelected')}</Typography>
+                                <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: 'bold', color: 'var(--ucl-ink)' }}>{t('mobile.match.market')}</Typography>
+                                <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: 'var(--ucl-ink)' }}>{picked === 'otherscores' ? t('mobile.markets.other') : markets[picked] || t('mobile.match.noMarketSelected')}</Typography>
                             </Stack>
                             <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                                <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: 'bold', color: '#080f32' }}>{t('landing.live.odds')}</Typography>
-                                <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: 16, fontWeight: 700, color: '#080f32' }}>{formatOdd(tofal)}%</Typography>
+                                <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: 'bold', color: 'var(--ucl-ink)' }}>{t('landing.live.odds')}</Typography>
+                                <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: 16, fontWeight: 700, color: 'var(--ucl-ink)' }}>{formatOdd(tofal)}%</Typography>
                             </Stack>
                         </Stack>
-                        <Divider sx={{ background: '#080f32' }} />
+                        <Divider sx={{ background: 'var(--ucl-ink)' }} />
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '300', color: '#080f32', width: '210px' }}>{t('mobile.match.stakeAmount')}</Typography>
+                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '300', color: 'var(--ucl-ink)', width: '210px' }}>{t('mobile.match.stakeAmount')}</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '300', color: '#080f32' }}>{t('common.currentBalance')}</Typography>
-                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: '#080f32' }}>{availableStake.toLocaleString(i18n.language, { maximumFractionDigits: 3 })} MMK</Typography>
+                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '300', color: 'var(--ucl-ink)' }}>{t('common.currentBalance')}</Typography>
+                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: 'var(--ucl-ink)' }}>{availableStake.toLocaleString(i18n.language, { maximumFractionDigits: 3 })} MMK</Typography>
                         </Stack>
                         <input placeholder={t('mobile.match.stakeAmount')} aria-label={t('mobile.match.stakeAmount')} type='text' inputMode="decimal"
-                            style={{ fontFamily: 'Arial, sans-serif', padding: "10px", borderRadius: '8px', width: '100%', minHeight: '48px', fontSize: '16px', background: '#fff', color: '#080f32', border: '1px solid #75886b' }}
+                            style={{ fontFamily: 'Arial, sans-serif', padding: "10px", borderRadius: '8px', width: '100%', minHeight: '48px', fontSize: '16px', background: 'var(--ucl-paper)', color: 'var(--ucl-ink)', border: '1px solid #75886b' }}
                             value={stake}
                             onChange={(e) => {
                                 if (!isNaN(e.target.value)) {
@@ -375,17 +375,17 @@ export default function Match({ matchDat }) {
                             variant="outlined"
                             disabled={availableStake <= 0}
                             onClick={useAllBalance}
-                            sx={{ alignSelf: 'flex-start', borderColor: '#00409e', color: '#00409e', fontFamily: 'Arial,sans-serif', fontWeight: 600 }}
+                            sx={{ alignSelf: 'flex-start', borderColor: '#00409e', color: 'var(--ucl-blue-accent)', fontFamily: 'Arial,sans-serif', fontWeight: 600 }}
                         >
                             {t('mobile.match.useAllBalance')}
                         </Button>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '300', color: '#080f32' }}>{t('mobile.match.profit')}</Typography>
-                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: '#080f32' }}>{profit.toLocaleString(i18n.language, { maximumFractionDigits: 3 })} MMK</Typography>
+                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '300', color: 'var(--ucl-ink)' }}>{t('mobile.match.profit')}</Typography>
+                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: 'var(--ucl-ink)' }}>{profit.toLocaleString(i18n.language, { maximumFractionDigits: 3 })} MMK</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '600', color: '#080f32' }}>{t('mobile.match.expectedReturn')}</Typography>
-                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '600', color: '#080f32' }}>{expext.toLocaleString(i18n.language, { maximumFractionDigits: 3 })} MMK</Typography>
+                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '600', color: 'var(--ucl-ink)' }}>{t('mobile.match.expectedReturn')}</Typography>
+                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '600', color: 'var(--ucl-ink)' }}>{expext.toLocaleString(i18n.language, { maximumFractionDigits: 3 })} MMK</Typography>
                         </Stack>
                         <Button disabled={openx} variant="contained" sx={{ fontFamily: 'Arial,sans-serif', minHeight: 48, fontSize: 16, fontWeight: 700, color: '#fff', background: "#00409e", padding: '10px 16px', textTransform: 'none', '&:hover': { background: '#002d72' } }}
                             onClick={() => {

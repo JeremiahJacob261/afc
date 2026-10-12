@@ -130,16 +130,16 @@ export default function Code() {
           <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px' }} onClick={() => {
             router.push('/user/account')
           }} />
-          <Typography component="h1" sx={{ fontSize: { xs: '32px', sm: '48px' }, fontFamily: 'Georgia,serif', color: '#080f32' }}>{t('mobile.profile.codeSetting')}</Typography>
+          <Typography component="h1" sx={{ fontSize: { xs: '32px', sm: '48px' }, fontFamily: 'Georgia,serif', color: 'var(--ucl-ink)' }}>{t('mobile.profile.codeSetting')}</Typography>
         </Stack>
-        <Stack direction='row' justifyContent='center' alignItems='center' sx={{ height: 'auto', background: '#eaf0fb', borderRadius: '8px', padding: '16px', width: '100%' }} spacing={2}>
-          <PriorityHighRoundedIcon sx={{ color: '#f5f7fc', background: '#00409e', width: '20px', height: '20px', borderRadius: '10px' }} />
-          <Typography sx={{ fontSize: '15px', fontFamily: 'Arial,sans-serif', fontWeight: '400', color: '#00409e' }}>{t('mobile.pin.warning')}</Typography>
+        <Stack direction='row' justifyContent='center' alignItems='center' sx={{ height: 'auto', background: 'var(--ucl-panel)', borderRadius: '8px', padding: '16px', width: '100%' }} spacing={2}>
+          <PriorityHighRoundedIcon sx={{ color: 'var(--ucl-ink)', background: '#00409e', width: '20px', height: '20px', borderRadius: '10px' }} />
+          <Typography sx={{ fontSize: '15px', fontFamily: 'Arial,sans-serif', fontWeight: '400', color: 'var(--ucl-blue-accent)' }}>{t('mobile.pin.warning')}</Typography>
         </Stack>
         <Stack spacing={1} sx={{ minWidth: 0 }}>
-          <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{t('forms.enterPin')}</Typography>
+          <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)' }}>{t('forms.enterPin')}</Typography>
           <TextField
-            sx={{ input: { color: '#080f32', }, border: "1px solid #F5F5F5" }}
+            sx={{ input: { color: 'var(--ucl-ink)', }, border: "1px solid var(--ucl-border)" }}
             value={pin}
             label={t('forms.enterPin')}
             type='pin'
@@ -156,9 +156,9 @@ export default function Code() {
           />
         </Stack>
         <Stack spacing={1} sx={{ minWidth: 0 }}>
-          <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{t('forms.confirmPin')}</Typography>
+          <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)' }}>{t('forms.confirmPin')}</Typography>
           <TextField
-            sx={{ input: { color: '#080f32', }, border: "1px solid #F5F5F5" }}
+            sx={{ input: { color: 'var(--ucl-ink)', }, border: "1px solid var(--ucl-border)" }}
             label={t('forms.enterPin')}
             type='password'
             value={cpin}
@@ -199,7 +199,7 @@ export default function Code() {
         aria-describedby="modal-modal-description"
       >
         <Stack alignItems='center' justifyContent='space-evenly' sx={{
-          background: '#f5f7fc', width: '290px', height: '330px', borderRadius: '20px',
+          background: 'var(--ucl-paper)', width: '290px', height: '330px', borderRadius: '20px',
           position: 'absolute',
           top: '50%',
           left: '50%',
@@ -207,15 +207,15 @@ export default function Code() {
           padding: '12px'
         }}>
           <Image src={aleT ? Big : Wig} width={120} height={120} alt='widh' />
-          <Typography id="modal-modal-title" sx={{ fontFamily: 'Arial,sans-serif', fontSize: '20px', fontWeight: '500', color: '#080f32' }}>
+          <Typography id="modal-modal-title" sx={{ fontFamily: 'Arial,sans-serif', fontSize: '20px', fontWeight: '500', color: 'var(--ucl-ink)' }}>
 
             {aleT ? t('status.success') : t('errors.generic')}
           </Typography>
-          <Typography id="modal-modal-description" sx={{ fontFamily: 'Arial,sans-serif', mt: 2, fontSize: '14px', fontWeight: '300', color: '#080f32' }}>
+          <Typography id="modal-modal-description" sx={{ fontFamily: 'Arial,sans-serif', mt: 2, fontSize: '14px', fontWeight: '300', color: 'var(--ucl-ink)' }}>
             {ale}
           </Typography>
-          <Divider sx={{ background: '#080f32' }} />
-          <Button variant='contained' sx={{ fontFamily: 'Arial,sans-serif', color: '#f5f7fc', background: '#00409e', padding: '8px', width: '100%' }} onClick={() => {
+          <Divider sx={{ background: 'var(--ucl-ink)' }} />
+          <Button variant='contained' sx={{ fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)', background: '#00409e', padding: '8px', width: '100%' }} onClick={() => {
             if (aleT) {
               setOpen(false)
               router.push('/user/account')

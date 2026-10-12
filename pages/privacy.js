@@ -7,7 +7,7 @@ export default function Privacy() {
   const { t } = useTranslation('common')
 
   return (
-    <main className="min-h-screen bg-white text-gray-900 px-6 py-10">
+    <main className="min-h-screen bg-[var(--ucl-canvas)] text-[var(--ucl-ink)] px-6 py-10">
       <Head>
         <title>{t('legal.privacy.title')}</title>
         <meta name="description" content={t('legal.privacy.description')} />
@@ -18,7 +18,7 @@ export default function Privacy() {
         <p>{t('legal.privacy.collection')}</p>
         <p>{t('legal.privacy.storage')}</p>
         <p>{t('legal.privacy.contact')}</p>
-        <p className="text-sm text-gray-500">{t('legal.common.lastUpdated')}</p>
+        <p className="text-sm text-[var(--ucl-muted)]">{t('legal.common.lastUpdated')}</p>
       </div>
     </main>
   )

@@ -2,13 +2,13 @@
    intentionally fluid; fixed geometry follows 8px tokens. Borders/focus use
    the explicitly required 2px. System fonts need no download or font swap. */
 .page {
-  --ink: #080f32;
-  --body: #263e39;
-  --accent: #0649ff;
-  --paper: #fdfcf8;
-  --surface: #f3f2ef;
-  --sage: #75886b;
-  --line: #73786d;
+  --ink: var(--ucl-ink);
+  --body: var(--ucl-muted);
+  --accent: var(--ucl-blue-accent);
+  --paper: var(--ucl-paper);
+  --surface: var(--ucl-panel);
+  --sage: var(--ucl-blue-accent);
+  --line: var(--ucl-border);
   --gutter: 24px;
   --section-space: 48px;
   background: var(--paper);
@@ -37,7 +37,7 @@
 .container > * { grid-column: 1 / -1; min-width: 0; }
 .section { margin-top: var(--section-space); }
 .closing { display: contents; }
-.hero { position: relative; min-height: 640px; padding-block: 16px 48px; background: #0d1714; color: var(--paper); }
+.hero { position: relative; min-height: 640px; padding-block: 16px 48px; background: #0d1714; color:var(--ucl-ink); }
 .heroArtwork { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
 .heroArtwork picture { height: 100%; }
 .heroArtwork img { height: 100%; aspect-ratio: 1691 / 930; object-position: center 35%; border-radius: 0; }
@@ -49,16 +49,16 @@
 .navActions { grid-column:2; grid-row:1; justify-self:end; display:flex; align-items:center; justify-content:flex-end; flex-wrap:wrap; gap:8px; min-width:0; }
 .navLinks { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
 .navLinks a { display: flex; align-items: center; justify-content: center; padding: 8px; text-align: center; }
-.hero :where(a,button):focus-visible { outline-color: var(--paper); }
+.hero :where(a,button):focus-visible { outline-color:var(--ucl-ink); }
 .heroCopy { padding-top: 24px; text-align: center; gap: 16px; justify-items: center; }
-.heroCopy h1, .heroCopy p { color: var(--paper); }
+.heroCopy h1, .heroCopy p { color:var(--ucl-ink); }
 .heroCopy h1 { max-width: 20ch; }
 .heroCopy p { max-width: 64ch; }
 .actions, .ctaActions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; }
 .create, .createAccount, .login { display: inline-flex; justify-content: center; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 24px; border: 2px solid var(--accent); }
-.page .create, .page .createAccount { background: var(--accent); color: var(--paper); }
+.page .create, .page .createAccount { background: var(--accent); color:var(--ucl-ink); }
 .page .login { color: var(--ink); background: transparent; border-color: var(--line); }
-.hero .login { color: var(--paper); border-color: var(--paper); }
+.hero .login { color:var(--ucl-ink); border-color:var(--ucl-ink); }
 .features { text-align: center; }
 .features article { display: grid; justify-items: center; align-content: start; gap: 16px; }
 .features h2 { font-size: 24px; line-height: 1.2; letter-spacing: normal; }
@@ -67,10 +67,10 @@
 .features p { max-width: 64ch; }
 .walletImage { position: relative; }
 .walletImage span { position: absolute; top: 64%; left: 56%; color: #b79b56; background: #17271a; font-family: 'Times New Roman',Times,serif; line-height: 1; font-size: 16px; }
-.marketPanel { border-radius: 24px; padding: 24px; background: #eeeee7; }
+.marketPanel { border-radius: 24px; padding: 24px; background: var(--ucl-panel); }
 .tabs { display: flex; flex-direction: column; gap: 8px; align-items: stretch; }
 .tabs a { padding: 8px 16px; border: 2px solid var(--line); border-radius: 24px; display: inline-flex; align-items: center; justify-content: center; text-align: center; }
-.tabs a[aria-current] { background: var(--sage); color: var(--ink); }
+.tabs a[aria-current] { background: var(--sage); color: #002d72; }
 .marketCopy { display: grid; align-content: center; gap: 24px; }
 .eyebrow, .phoneLabel, .category { font-size: 16px; font-weight: 600; line-height: 1.5; color: var(--ink); }
 .marketDetails { display: grid; grid-template-columns: repeat(12,minmax(0,1fr)); gap: 24px; border-top: 2px solid var(--line); padding-top: 24px; }
@@ -78,7 +78,7 @@
 .phoneFigure { width: 100%; max-width: 320px; justify-self: center; }
 .phone { min-height: 512px; border: 8px solid #111412; border-radius: 32px; padding: 24px 16px; background: var(--paper); }
 .phoneTop { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: var(--ink); margin-bottom: 48px; }
-.odds { padding: 8px 16px; border-radius: 24px; background: var(--ink); color: var(--paper); }
+.odds { padding: 8px 16px; border-radius: 24px; background: var(--ucl-panel); color:var(--ucl-ink); }
 .phoneCopy { display: grid; gap: 24px; }
 .phoneCopy h3 { font-size: 24px; }
 .page .pick { display: inline-flex; align-items: center; gap: 8px; color: var(--ink); justify-self: start; }
@@ -121,17 +121,17 @@
 .marketPills a { display: inline-flex; align-items: center; justify-content: center; text-align: center; padding: 8px; border: 2px solid var(--line); border-radius: 24px; }
 .grassBall { aspect-ratio: 16 / 9; object-position: center bottom; }
 .cardCaption { display: grid; gap: 16px; }
-.liveCard { background: var(--ink); }
-.page .liveCard h3, .page .liveCard p { color: var(--paper); }
+.liveCard { background: var(--ucl-panel); }
+.page .liveCard h3, .page .liveCard p { color:var(--ucl-ink); }
 .liveCard h3 { font-family: 'Times New Roman',Times,serif; font-size: 32px; font-weight: 400; line-height: 1.125; }
 .liveRule { width: 24px; height: 8px; background: var(--paper); }
 .liveCard img { aspect-ratio: 16 / 9; object-position: right bottom; }
-.walletCard, .trackCard { background: #eaf1ff; align-items: center; }
+.walletCard, .trackCard { background: var(--ucl-panel); align-items: center; }
 .walletCard img, .stepCard img, .trackCard img { aspect-ratio: 3 / 2; object-position: center; }
 .walletCard > div, .trackCard > div, .stepCard > div { display: grid; gap: 16px; }
 .steps { display: flex; align-items: center; gap: 8px; }
-.steps span, .stepNumber { display: inline-grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: #e6e7eb; color: var(--ink); font-weight: 600; }
-.steps span:first-child, .stepNumber { background: var(--sage); }
+.steps span, .stepNumber { display: inline-grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--ucl-border); color: var(--ink); font-weight: 600; }
+.steps span:first-child, .stepNumber { background: var(--sage); color: #002d72; }
 .steps i { flex: 1; height: 8px; background: var(--line); }
 .workflowHeading { max-width: 24ch; }
 .matchCard { margin: 0; justify-items: center; align-content: start; }
@@ -181,7 +181,7 @@
 .guideSection a { display: inline-flex; align-items: center; color: var(--accent); }
 .guideIndex { gap: 8px; }
 .guideIndex button { display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left; padding: 16px 8px; border: 2px solid var(--line); background: transparent; border-radius: 8px; }
-@media (hover:hover) { .page a:hover, .page button:hover { text-decoration: underline; text-underline-offset: 4px; } .marketTile:hover { transform: translateY(-4px); background: #eeeee7; } }
+@media (hover:hover) { .page a:hover, .page button:hover { text-decoration: underline; text-underline-offset: 4px; } .marketTile:hover { transform: translateY(-4px); background: var(--ucl-panel); } }
 @media (max-width:767px) {
   /* Twelve 24px gaps cannot fit inside a 320px viewport with 24px gutters.
      The grid collapses to its mandated single-column mobile layout. */
@@ -257,3 +257,5 @@
   .guideDialog h2 { font-size:32px; letter-spacing:normal; }
 }
 @media (prefers-reduced-motion:reduce) { .page *, .page *::before, .page *::after { scroll-behavior:auto !important; transition:none !important; animation:none !important; } .marketTile:hover { transform:none; } }
+
+.page .create,.page .createAccount{color:#002d72}

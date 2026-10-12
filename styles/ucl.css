@@ -16,18 +16,18 @@
   /* Accents */
   --ucl-magenta: #ff2d95;
   --ucl-magenta-soft: #ff4fa3;
-  --ucl-pink-ink: #a90059;
-  --ucl-blue-accent: #00409e;
-  --ucl-blue-tint: #eaf0fb;
-  --ucl-pink-tint: #fff0f7;
-  --ucl-focus: #00409e;
+  --ucl-pink-ink: #ff8ac4;
+  --ucl-blue-accent: #8db8ff;
+  --ucl-blue-tint: #10284d;
+  --ucl-pink-tint: #4b002b;
+  --ucl-focus: #8db8ff;
   /* Customer surfaces share the native app's blue and pink palette. */
-  --ucl-canvas: #eaf0fb;
-  --ucl-paper: #f8faff;
-  --ucl-panel: #f1f4fb;
-  --ucl-ink: #080f32;
-  --ucl-muted: #536583;
-  --ucl-border: #c5d5ed;
+  --ucl-canvas: #000a1e;
+  --ucl-paper: #091b34;
+  --ucl-panel: #10284d;
+  --ucl-ink: #f2f5fa;
+  --ucl-muted: #d4deef;
+  --ucl-border: #475e7d;
   --ucl-cyan: #00c2f3;
   --ucl-cyan-soft: #29e0ff;
 
@@ -40,7 +40,7 @@
   --ucl-line-strong: rgba(199, 206, 219, 0.32);
 }
 
-::selection { background: rgba(255, 45, 149, 0.24); color: #06101f; }
+::selection { background: rgba(255, 45, 149, 0.24); color: #f2f5fa; }
 
 .customer-route-enter { animation: customer-route-enter 180ms cubic-bezier(.16, 1, .3, 1) both; }
 @keyframes customer-route-enter {
@@ -529,4 +529,17 @@
 
 .ucl-skip:focus {
   left: 0;
+}
+
+/* Native dark roles are shared by customer pages and browser controls. */
+:root { color-scheme: dark; --background: #000a1e; --foreground: #f2f5fa; }
+html, body, #__next { background: var(--ucl-canvas); color: var(--ucl-ink); }
+html { scrollbar-color: #8293b0 #000a1e; }
+input, textarea { caret-color: var(--ucl-blue-accent); }
+.MuiInputLabel-root { color: var(--ucl-muted) !important; }
+
+:root {
+  --ucl-success: #8fe0ae; --ucl-success-tint: #123526;
+  --ucl-error: #ffb4ab; --ucl-error-tint: #491e28;
+  --ucl-warning: #f5d58a; --ucl-warning-tint: #3b3018;
 }

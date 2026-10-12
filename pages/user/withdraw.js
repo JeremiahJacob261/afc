@@ -274,41 +274,41 @@ export default function Deposit() {
       </Head>
       <Alertz />
       <Stack direction='row' alignItems='center' spacing={1} sx={{ padding: '8px', margin: '2px' }}>
-        <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px', color:'#080f32', cursor:'pointer' }} onClick={() => {
+        <KeyboardArrowLeftOutlinedIcon sx={{ width: '24px', height: '24px', color: 'var(--ucl-ink)', cursor:'pointer' }} onClick={() => {
           router.push('/user/account')
         }} />
-        <Typography component="h1" sx={{ fontSize: { xs: '32px', sm: '48px' }, fontFamily: 'Georgia,serif', fontWeight: 400, color: '#080f32' }}>{t('mobile.withdraw.title')}</Typography>
+        <Typography component="h1" sx={{ fontSize: { xs: '32px', sm: '48px' }, fontFamily: 'Georgia,serif', fontWeight: 400, color: 'var(--ucl-ink)' }}>{t('mobile.withdraw.title')}</Typography>
       </Stack>
       <Stack spacing={3} sx={{ padding: '8px', marginBottom: '100px' }} >
         <Sncks message={messages} />
-        <Stack sx={{ minWidth: 0, minHeight: '110px', background: '#ffffff', padding: '8px', borderRadius: '5px' }} direction='column' spacing={2} justifyContent='center'>
+        <Stack sx={{ minWidth: 0, minHeight: '110px', background: 'var(--ucl-paper)', padding: '8px', borderRadius: '5px' }} direction='column' spacing={2} justifyContent='center'>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{t('common.currentBalance')}</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{usdt(info.balance)}</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)' }}>{t('common.currentBalance')}</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)' }}>{usdt(info.balance)}</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{t('mobile.withdraw.withdrawalFee')}</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{usdt(feeAmount)} ({feePercent}%)</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)' }}>{t('mobile.withdraw.withdrawalFee')}</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)' }}>{usdt(feeAmount)} ({feePercent}%)</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{t('mobile.withdraw.requestedAmount')}</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{usdt(requestedAmount)}</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)' }}>{t('mobile.withdraw.requestedAmount')}</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)' }}>{usdt(requestedAmount)}</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{t('mobile.withdraw.youReceive')}</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{usdt(requestedAmount)}</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)' }}>{t('mobile.withdraw.youReceive')}</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)' }}>{usdt(requestedAmount)}</Typography>
           </Stack>
           <Stack direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{t('mobile.withdraw.totalDeducted')}</Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{usdt(totalAmount)}</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)' }}>{t('mobile.withdraw.totalDeducted')}</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)' }}>{usdt(totalAmount)}</Typography>
           </Stack>
           {showConvertedPayout && (
             <Stack direction='row' alignItems='center' justifyContent='space-between'>
-              <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{t('mobile.withdraw.youReceiveIn', { currency: currencyCode })}</Typography>
-              <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{parseFloat(requestedAmount / MMK_PER_USDT * rate).toFixed(2)} {currencyCode}</Typography>
+              <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)' }}>{t('mobile.withdraw.youReceiveIn', { currency: currencyCode })}</Typography>
+              <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)' }}>{parseFloat(requestedAmount / MMK_PER_USDT * rate).toFixed(2)} {currencyCode}</Typography>
             </Stack>
           )}
-          <Divider sx={{ borderColor: '#d9e2f2' }} />
+          <Divider sx={{ borderColor: 'var(--ucl-border)' }} />
           <motion.div
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.9 }}
@@ -318,12 +318,12 @@ export default function Deposit() {
               router.push('/user/bindwallet')
             }}
           >
-              <Stack direction='row' spacing={1} justifyContent='center' alignItems={"center"} sx={{ background: '#f5f7fc', padding: '8px', borderRadius: '8px' }}
+              <Stack direction='row' spacing={1} justifyContent='center' alignItems={"center"} sx={{ background: 'var(--ucl-paper)', padding: '8px', borderRadius: '8px' }}
 
             >
               <Icon icon="icon-park-twotone:add" width="24" height="24" style={{ color: '#a3a3a3' }} />
 
-              <Typography sx={{ color: '#080f32', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.withdraw.bindWallet')}</Typography>
+              <Typography sx={{ color: 'var(--ucl-ink)', fontSize: '14px', fontWeight: 300, fontFamily: 'Inter,sans-serif' }}>{t('mobile.withdraw.bindWallet')}</Typography>
             </Stack>
           </motion.div>
 
@@ -332,7 +332,7 @@ export default function Deposit() {
         <Stack direction="column" spacing={3}>
 
           <Stack spacing={1} >
-            <Typography sx={{ fontSize: '12px', color: '#f5f7fc', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{t('mobile.withdraw.chooseWallet')}</Typography>
+            <Typography sx={{ fontSize: '12px', color: 'var(--ucl-ink)', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)' }}>{t('mobile.withdraw.chooseWallet')}</Typography>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">{t('mobile.withdraw.selectWithdrawalMethod')}</InputLabel>
               <Select
@@ -340,7 +340,7 @@ export default function Deposit() {
                 id="demo-simple-select"
                 value={method}
                 disabled={!withdrawalsEnabled || !withdrawalEligibility.canWithdraw}
-                style={{ background: "#f5f7fc", color: '#080f32', border: '1px solid #080f32' }}
+                style={{ background: "var(--ucl-paper)", color: 'var(--ucl-ink)', border: '1px solid var(--ucl-ink)' }}
                 onChange={(e) => {
                   setMethod(e.target.value);
                   const walletid = findUserWalletsById(e.target.value);
@@ -376,9 +376,9 @@ export default function Deposit() {
           </Stack>
 
           <Stack spacing={1}>
-            <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{t('mobile.withdraw.amountLabel')}</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)' }}>{t('mobile.withdraw.amountLabel')}</Typography>
             <TextField
-              sx={{ border: '1px solid #080f32', input: { color: '#080f32', } }}
+              sx={{ border: '1px solid var(--ucl-ink)', input: { color: 'var(--ucl-ink)', } }}
               type="number"
               value={amount}
               disabled={!withdrawalsEnabled || !withdrawalEligibility.canWithdraw}
@@ -388,9 +388,9 @@ export default function Deposit() {
               }} />
           </Stack>
           <Stack spacing={1}>
-            <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: '#080f32' }}>{t('forms.transactionPin')}</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)' }}>{t('forms.transactionPin')}</Typography>
             <TextField
-              sx={{ border: '1px solid #080f32', input: { color: '#080f32', }, textAlign: 'center' }}
+              sx={{ border: '1px solid var(--ucl-ink)', input: { color: 'var(--ucl-ink)', }, textAlign: 'center' }}
               type="pin"
               value={pin}
               disabled={!withdrawalsEnabled || !withdrawalEligibility.canWithdraw}
@@ -423,10 +423,10 @@ export default function Deposit() {
       </Stack>
       <Loading open={openx} handleClose={handleClosex} />
       <Modal open={withdrawalDisabledDialogOpen} onClose={() => setWithdrawalDisabledDialogOpen(false)} aria-labelledby="withdrawals-disabled-title">
-        <Stack alignItems='center' justifyContent='space-evenly' sx={{ background: '#f5f7fc', width: '290px', minHeight: '250px', borderRadius: '20px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '20px' }}>
-          <Typography id="withdrawals-disabled-title" sx={{ fontFamily: 'Arial,sans-serif', fontSize: '20px', fontWeight: '500', color: '#080f32' }}>{t('website.withdrawalsUnavailableTitle')}</Typography>
-          <Typography sx={{ mt: 2, textAlign: 'center', fontSize: '14px', fontWeight: '300', color: '#080f32' }}>{translateApiMessage(withdrawalDisabledMessage, t, 'messages.withdrawalsUnavailable')}</Typography>
-          <Button variant='contained' sx={{ mt: 3, fontFamily: 'Arial,sans-serif', color: '#f5f7fc', background: '#00409e', padding: '8px', width: '100%' }} onClick={() => setWithdrawalDisabledDialogOpen(false)}>{t('common.continue')}</Button>
+        <Stack alignItems='center' justifyContent='space-evenly' sx={{ background: 'var(--ucl-paper)', width: '290px', minHeight: '250px', borderRadius: '20px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '20px' }}>
+          <Typography id="withdrawals-disabled-title" sx={{ fontFamily: 'Arial,sans-serif', fontSize: '20px', fontWeight: '500', color: 'var(--ucl-ink)' }}>{t('website.withdrawalsUnavailableTitle')}</Typography>
+          <Typography sx={{ mt: 2, textAlign: 'center', fontSize: '14px', fontWeight: '300', color: 'var(--ucl-ink)' }}>{translateApiMessage(withdrawalDisabledMessage, t, 'messages.withdrawalsUnavailable')}</Typography>
+          <Button variant='contained' sx={{ mt: 3, fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)', background: '#00409e', padding: '8px', width: '100%' }} onClick={() => setWithdrawalDisabledDialogOpen(false)}>{t('common.continue')}</Button>
         </Stack>
       </Modal>
       <Toaster position="bottom-center"
@@ -449,7 +449,7 @@ export default function Deposit() {
         aria-describedby="modal-modal-description"
       >
         <Stack alignItems='center' justifyContent='space-evenly' sx={{
-          background: '#f5f7fc', width: '290px', height: '330px', borderRadius: '20px',
+          background: 'var(--ucl-paper)', width: '290px', height: '330px', borderRadius: '20px',
           position: 'absolute',
           top: '50%',
           left: '50%',
@@ -457,15 +457,15 @@ export default function Deposit() {
           padding: '12px'
         }}>
           <Image src={aleT ? Big : Wig} width={120} height={120} alt={aleT ? t('status.success') : t('errors.generic')} />
-          <Typography id="modal-modal-title" sx={{ fontFamily: 'Arial,sans-serif', fontSize: '20px', fontWeight: '500', color: '#080f32' }}>
+          <Typography id="modal-modal-title" sx={{ fontFamily: 'Arial,sans-serif', fontSize: '20px', fontWeight: '500', color: 'var(--ucl-ink)' }}>
 
             {aleT ? t('status.success') : t('errors.generic')}
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2, fontSize: '14px', fontWeight: '300', color: '#080f32' }}>
+          <Typography id="modal-modal-description" sx={{ mt: 2, fontSize: '14px', fontWeight: '300', color: 'var(--ucl-ink)' }}>
             {ale}
           </Typography>
-          <Divider sx={{ background: '#080f32' }} />
-          <Button variant='contained' sx={{ fontFamily: 'Arial,sans-serif', color: '#f5f7fc', background: '#00409e', padding: '8px', width: '100%' }} onClick={() => {
+          <Divider sx={{ background: 'var(--ucl-ink)' }} />
+          <Button variant='contained' sx={{ fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)', background: '#00409e', padding: '8px', width: '100%' }} onClick={() => {
             if (aleT) {
               setOpen(false)
               router.push('/user/withdrawsuccess')

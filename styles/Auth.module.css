@@ -24,7 +24,7 @@
   z-index: 0;
   overflow: hidden;
   background: #0d1714;
-  color: var(--paper);
+  color:var(--ucl-ink);
 }
 
 .auth .artwork {
@@ -62,7 +62,7 @@
 
 .auth .dark h1,
 .auth .dark h2 {
-  color: var(--paper);
+  color:var(--ucl-ink);
 }
 
 .auth .dark p {
@@ -70,11 +70,11 @@
 }
 
 .auth .dark a {
-  color: var(--paper);
+  color:var(--ucl-ink);
 }
 
 .auth .dark :where(a, button):focus-visible {
-  outline-color: var(--paper);
+  outline-color:var(--ucl-ink);
 }
 
 /* ── Brand row ─────────────────────────────────────────────────────────────
@@ -159,7 +159,7 @@
 }
 
 .auth .dark .factLabel {
-  color: var(--paper);
+  color:var(--ucl-ink);
 }
 
 .auth .factValue {
@@ -443,7 +443,7 @@
   border: 2px solid var(--accent);
   border-radius: 24px;
   background: var(--accent);
-  color: var(--paper);
+  color:var(--ucl-ink);
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
   font-weight: 700;
@@ -453,8 +453,8 @@
 }
 
 .auth .submit:hover:not(:disabled) {
-  background: #0534bd;
-  border-color: #0534bd;
+  background: #a9caff;
+  border-color: #a9caff;
   text-decoration: none;
 }
 
@@ -671,3 +671,5 @@
     padding: 24px;
   }
 }
+
+.auth .submit{color:#002d72}

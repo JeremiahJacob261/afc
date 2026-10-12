@@ -14,6 +14,8 @@ import { appWithTranslation } from 'next-i18next'
 import AdminShell from '@/components/admin/AdminShell'
 import AppLoadingOverlay from '@/components/AppLoadingOverlay'
 import nextI18NextConfig from '../next-i18next.config'
+import { ThemeProvider } from '@mui/material/styles'
+import { customerTheme, defaultTheme } from '@/lib/customerTheme'
 function MyApp({ Component, pageProps }) {
 
   const [cookie, setCookie] = useCookies(["user"])
@@ -82,7 +84,8 @@ function MyApp({ Component, pageProps }) {
   }, [])
 
   return (
-    <div style={{background: "#06101F",height:'100%'}}>
+    <ThemeProvider theme={router.pathname.startsWith('/admin') ? defaultTheme : customerTheme}>
+    <div style={{background: "var(--ucl-canvas)",height:'100%'}}>
       <Head>
         <title>EFC</title>
         <meta name="description" content="Login to your Account to see whats up with your investments
@@ -114,6 +117,7 @@ function MyApp({ Component, pageProps }) {
       <AppLoadingOverlay open={routeLoading} title="" message="" />
       
 </div>
+    </ThemeProvider>
   )
 }
 
