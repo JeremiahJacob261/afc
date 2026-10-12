@@ -61,15 +61,27 @@ fun PaymentFlowRoute(container: UclAppContainer, initialPage: PaymentPage = Paym
     val back = { if (!vm.back()) onBack() }
     BackHandler { back() }
     PaymentWebLayout(state, back) {
-        JourneyFeedback(state.error)
+        JourneyFeedback(state.error?.takeUnless {
+            state.uncertain && it == R.string.journey_uncertain ||
+                state.hasPending && it in listOf(R.string.journey_payment_pending, R.string.journey_withdrawal_pending)
+        })
         if (state.error == R.string.journey_data_changed) TextButton(onClick = vm::refresh) { Text(stringResource(R.string.common_refresh)) }
+        if (state.error == R.string.journey_transaction_failed_unknown) TextButton(onClick = onHistory) { Text(stringResource(R.string.transactions_title)) }
+        if (!state.hasPending && !state.uncertain && state.error in listOf(R.string.journey_payment_pending, R.string.journey_withdrawal_pending)) {
+            TextButton(onClick = onHistory) { Text(stringResource(R.string.transactions_title)) }
+        }
         if (state.loading) { CircularProgressIndicator(); return@PaymentWebLayout }
         if (state.data == null) {
             JourneyAction(stringResource(R.string.common_retry), busy = state.busy, onClick = vm::refresh)
             return@PaymentWebLayout
         }
         if (state.hasPending || state.uncertain) {
-            Text(stringResource(if (state.uncertain) R.string.journey_uncertain else R.string.journey_payment_pending))
+            val statusMessage = when {
+                state.uncertain -> R.string.journey_uncertain
+                state.error == R.string.journey_withdrawal_pending -> R.string.journey_withdrawal_pending
+                else -> R.string.journey_payment_pending
+            }
+            Text(stringResource(statusMessage))
             TextButton(onClick = onHistory) { Text(stringResource(R.string.transactions_title)) }
         }
         when (state.page) {

@@ -61,7 +61,12 @@ class BetSlipViewModel(private val api: NativeApiClient, private val sessions: A
                 }
                 mutableState.update { it.copy(match = match, account = account) }
             } catch (e: CancellationException) { throw e }
-            catch (e: ApiException) { mutableState.update { it.copy(requiresSignIn = e.httpStatus == 401, error = R.string.journey_submission_failed) } }
+            catch (e: ApiException) {
+                mutableState.update { it.copy(
+                    requiresSignIn = e.httpStatus == 401,
+                    error = if (e.httpStatus == 401) null else submissionFailureMessage(e.failure?.message, e.failure?.code, e.httpStatus, SubmissionFlow.BET),
+                ) }
+            }
             catch (_: Exception) { mutableState.update { it.copy(error = R.string.journey_offline) } }
         }
     }
@@ -101,10 +106,18 @@ class BetSlipViewModel(private val api: NativeApiClient, private val sessions: A
                     mutableState.update { it.copy(quote = null, requiresSignIn = true) }
                     return@launch
                 }
-                mutableState.update { it.copy(quote = null, error = if (error.httpStatus == 409) R.string.bet_slip_odds_changed else R.string.journey_submission_failed) }
+                mutableState.update { it.copy(
+                    quote = null,
+                    error = submissionFailureMessage(error.failure?.message, error.failure?.code, error.httpStatus, SubmissionFlow.BET),
+                ) }
             }
             catch (error: IOException) { mutableState.update { it.copy(uncertain = it.uncertain || mutation, error = if (mutation) R.string.journey_uncertain else R.string.journey_offline) } }
-            catch (error: Exception) { mutableState.update { it.copy(uncertain = it.uncertain || mutation, error = R.string.journey_submission_failed) } }
+            catch (error: Exception) {
+                mutableState.update { it.copy(
+                    uncertain = it.uncertain || mutation,
+                    error = if (mutation) R.string.journey_uncertain else submissionFailureMessage(flow = SubmissionFlow.BET),
+                ) }
+            }
             finally { mutableState.update { it.copy(busy = false) } }
         }
     }
@@ -139,7 +152,7 @@ internal fun BetSlipContent(state: BetSlipState, matchId: String, market: String
     ModalBottomSheet(onDismissRequest = onBack, sheetState = sheet, containerColor = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp), dragHandle = null) {
         Column(Modifier.fillMaxWidth().heightIn(max = 720.dp).verticalScroll(rememberScrollState()).padding(start = 16.dp, top = 20.dp, end = 16.dp, bottom = 24.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             BulletinHeading(webCopy("mobile.match.placeBet"), onBack)
-            JourneyFeedback(state.error)
+            JourneyFeedback(state.error?.takeUnless { state.uncertain && it == R.string.journey_uncertain })
             if (state.uncertain) { Text(stringResource(R.string.journey_uncertain)); JourneyAction(webCopy("common.myBets"), onClick = onBets); return@Column }
             if (state.result != null) return@Column
             Text((if (match?.league == "others") match.otherl else match?.league).orEmpty(), Modifier.fillMaxWidth(), fontSize = 12.sp, textAlign = androidx.compose.ui.text.style.TextAlign.Center)

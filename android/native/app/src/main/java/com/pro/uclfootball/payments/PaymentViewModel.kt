@@ -110,7 +110,7 @@ class PaymentViewModel(private val repository: PaymentRepository, private val se
         if (state.value.destination == null || state.value.quote?.valid != true) return fail(R.string.journey_incomplete)
         mutableState.update { it.copy(reviewed = true, page = PaymentPage.Receipt, error = null) }
     }
-    fun quoteDeposit() = work {
+    fun quoteDeposit() = work(flow = SubmissionFlow.DEPOSIT) {
         val current = state.value
         val method = current.method ?: return@work fail(R.string.journey_choose_method)
         if (!positive(current.amount)) return@work fail(R.string.journey_valid_amount)
@@ -118,10 +118,12 @@ class PaymentViewModel(private val repository: PaymentRepository, private val se
         if (!quote.valid) return@work fail(R.string.journey_deposit_minimum)
         mutableState.update { it.copy(quote = quote, page = PaymentPage.Destination) }
     }
-    fun quoteWithdrawal() = work {
+    fun quoteWithdrawal() = work(flow = SubmissionFlow.WITHDRAWAL) {
         val current = state.value
         if (!positive(current.amount) || current.payoutWallet == null) return@work fail(R.string.journey_incomplete)
-        if (current.hasPending || current.data?.withdrawalEligibility?.canWithdraw != true) return@work fail(R.string.journey_payment_pending)
+        if (current.hasPending) return@work fail(R.string.journey_payment_pending)
+        val eligibility = current.data?.withdrawalEligibility
+        if (eligibility?.canWithdraw != true) return@work fail(withdrawalEligibilityMessage(eligibility?.code))
         if (!current.hasPin) return@work fail(R.string.journey_pin_required)
         val quote = repository.withdrawalQuote(current.amount)
         mutableState.update { it.copy(withdrawalQuote = quote, page = PaymentPage.WithdrawalReview) }
@@ -154,9 +156,10 @@ class PaymentViewModel(private val repository: PaymentRepository, private val se
         }.orEmpty().ifBlank { "receipt.${pair.second.substringAfter('/')}" }
         mutableState.update { it.copy(receipt = pair.first, receiptName = name, receiptMime = pair.second, uploadId = UUID.randomUUID().toString(), receiptUrl = null) }
     }
-    fun submitDeposit() = work(mutation = true) {
+    fun submitDeposit() = work(mutation = true, flow = SubmissionFlow.DEPOSIT) {
         val current = state.value
-        if (current.hasPending || current.uncertain) return@work fail(R.string.journey_payment_pending)
+        if (current.uncertain) return@work fail(R.string.journey_uncertain)
+        if (current.hasPending) return@work fail(R.string.journey_payment_pending)
         val method = current.method ?: return@work fail(R.string.journey_incomplete)
         val destination = current.destination ?: return@work fail(R.string.journey_incomplete)
         val quote = current.quote ?: return@work fail(R.string.journey_incomplete)
@@ -166,47 +169,61 @@ class PaymentViewModel(private val repository: PaymentRepository, private val se
         val url = current.receiptUrl ?: repository.upload(ReceiptUploadRequest(Base64.encodeToString(bytes, Base64.NO_WRAP), current.receiptMime, current.uploadId)).url
         mutableState.update { it.copy(receiptUrl = url) }
         val result = repository.deposit(DepositRequest(current.amount, method.code, method.name, url, destination.address, quote.rate))
-        if (result.status != "success") return@work fail(R.string.journey_submission_failed)
+        if (result.status != "success") return@work fail(submissionFailureMessage(result.message, result.code, flow = SubmissionFlow.DEPOSIT))
         mutableState.update { it.copy(page = PaymentPage.DepositSuccess, receipt = null, receiptUrl = null, reviewed = false) }
     }
-    fun bindWallet() = work(mutation = true) {
+    fun bindWallet() = work(mutation = true, flow = SubmissionFlow.WALLET) {
         val current = state.value
         val method = current.method ?: return@work fail(R.string.journey_choose_method)
         if (current.wallet.isBlank() || method.local && (current.holder.isBlank() || current.bank.isBlank())) return@work fail(R.string.journey_incomplete)
         val result = repository.bind(BindWalletRequest(method.identity, current.wallet.trim(), current.holder.trim(), current.bank.trim()))
-        if (result.status != "success") return@work fail(R.string.journey_submission_failed)
+        if (result.status != "success") return@work fail(submissionFailureMessage(result.message, result.code, flow = SubmissionFlow.WALLET))
         val data = repository.load()
         mutableState.update { it.copy(data = data, wallet = "", holder = "", bank = "", page = PaymentPage.BindWallet) }
     }
-    fun submitWithdrawal() = work(mutation = true) {
+    fun submitWithdrawal() = work(mutation = true, flow = SubmissionFlow.WITHDRAWAL) {
         val current = state.value
-        if (current.uncertain || current.hasPending) return@work fail(R.string.journey_payment_pending)
+        if (current.uncertain) return@work fail(R.string.journey_uncertain)
+        if (current.hasPending) return@work fail(R.string.journey_payment_pending)
         val wallet = current.payoutWallet ?: return@work fail(R.string.journey_incomplete)
         if (!positive(current.amount) || current.payoutWallet == null) return@work fail(R.string.journey_incomplete)
         if (!current.hasPin || current.pin.length != 4) return@work fail(R.string.journey_pin_required)
-        if (current.data?.withdrawalEligibility?.canWithdraw != true) return@work fail(R.string.journey_payment_pending)
+        val eligibility = current.data?.withdrawalEligibility
+        if (eligibility?.canWithdraw != true) return@work fail(withdrawalEligibilityMessage(eligibility?.code))
         // Obtain the existing server quote within the submit action, as on the website.
         val quote = try { current.withdrawalQuote ?: repository.withdrawalQuote(current.amount) }
         catch (_: IOException) { return@work fail(R.string.journey_offline) }
         mutableState.update { it.copy(withdrawalQuote = quote) }
         val results = repository.withdraw(WithdrawalRequest(current.pin, wallet.wallet, current.amount, wallet.walletnames, wallet.bank.orEmpty(), wallet.names.orEmpty()))
         mutableState.update { it.copy(pin = "") }
-        if (results.firstOrNull()?.status != "Success") return@work fail(R.string.journey_submission_failed)
+        val result = results.firstOrNull()
+        if (result?.status != "Success") return@work fail(submissionFailureMessage(result?.message, result?.code, flow = SubmissionFlow.WITHDRAWAL))
         mutableState.update { it.copy(page = PaymentPage.WithdrawalSuccess, pin = "", withdrawalQuote = null) }
     }
-    fun setPin() = work(mutation = true) {
+    fun setPin() = work(mutation = true, flow = SubmissionFlow.PIN) {
         val current = state.value
         if (current.hasPin) return@work fail(R.string.journey_pin_locked)
         if (current.pin.length != 4 || current.pin != current.confirmPin) return@work fail(R.string.journey_pin_mismatch)
         val result = repository.pin(SetPinRequest(current.pin))
-        if (result.status != "success") return@work fail(R.string.journey_submission_failed)
+        if (result.status != "success") return@work fail(submissionFailureMessage(result.message, result.code, flow = SubmissionFlow.PIN))
         val profile = repository.profile().profile
         mutableState.update { it.copy(profile = profile, pin = "", confirmPin = "") }
     }
     private fun fail(resource: Int) { mutableState.update { it.copy(error = resource) } }
     private fun positive(value: String) = value.toBigDecimalOrNull()?.signum() == 1
     private var refreshRunning = false
-    private fun work(mutation: Boolean = false, background: Boolean = false, block: suspend () -> Unit) {
+    private fun withdrawalEligibilityMessage(code: String?): Int = when (code?.uppercase()) {
+        "PAYMENT_REQUEST_PENDING" -> R.string.journey_payment_pending
+        "WITHDRAWAL_PENDING" -> R.string.journey_withdrawal_pending
+        "WITHDRAWAL_COOLDOWN" -> R.string.journey_withdrawal_cooldown
+        else -> R.string.journey_withdrawal_eligibility_unknown
+    }
+    private fun work(
+        mutation: Boolean = false,
+        background: Boolean = false,
+        flow: SubmissionFlow = SubmissionFlow.GENERAL,
+        block: suspend () -> Unit,
+    ) {
         if (state.value.busy || background && refreshRunning) return
         if (background) refreshRunning = true
         mutableState.update { it.copy(busy = if (background) it.busy else true, error = null) }
@@ -216,12 +233,16 @@ class PaymentViewModel(private val repository: PaymentRepository, private val se
             catch (error: ApiException) {
                 if (error.httpStatus == 401) {
                     mutableState.update { it.copy(requiresSignIn = true) }
-                } else fail(if (error.httpStatus == 409) R.string.journey_data_changed else R.string.journey_submission_failed)
+                } else fail(submissionFailureMessage(error.failure?.message, error.failure?.code, error.httpStatus, flow))
             }
             catch (error: IOException) {
                 mutableState.update { it.copy(uncertain = it.uncertain || mutation, error = if (mutation) R.string.journey_uncertain else R.string.journey_offline) }
             }
-            catch (error: Exception) { fail(R.string.journey_submission_failed) }
+            catch (error: Exception) {
+                if (mutation && flow in listOf(SubmissionFlow.DEPOSIT, SubmissionFlow.WITHDRAWAL)) {
+                    mutableState.update { it.copy(uncertain = true, error = R.string.journey_uncertain) }
+                } else fail(submissionFailureMessage(flow = flow))
+            }
             finally {
                 if (background) refreshRunning = false
                 mutableState.update { it.copy(busy = if (background) it.busy else false, loading = false, pin = if (mutation) "" else it.pin, confirmPin = if (mutation) "" else it.confirmPin) }
