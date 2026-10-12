@@ -13,7 +13,7 @@ import {
   normalizePaymentCode,
 } from '@/lib/paymentMethods'
 
-const BETS_REQUIRED_PER_DEPOSIT = 5
+const BETS_REQUIRED_PER_DEPOSIT = 6
 const SUCCESSFUL_DEPOSIT_STATUSES = ['success', 'true', 'completed']
 
 export default async function handler(req, res) {
@@ -130,7 +130,7 @@ export default async function handler(req, res) {
       if (/changed|Payout wallet not found|Withdrawal method is unavailable/i.test(message)) {
         return res.status(409).json([{ status: 'Failed', message: 'Account or payment details changed. Please refresh and try again.' }])
       }
-      if (/Five bets are required/i.test(message)) {
+      if (/Six bets are required/i.test(message)) {
         return res.status(400).json([{ status: 'Failed', message }])
       }
       if (/pending payment request/i.test(message)) {

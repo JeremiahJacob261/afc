@@ -1982,7 +1982,7 @@ BEGIN
     AND type='deposit' AND lower(coalesce(sent,'')) IN ('success','true','completed') ORDER BY created_at DESC LIMIT 1;
   IF FOUND THEN
     SELECT count(*)::integer INTO v_count FROM public.placed WHERE username=v_user.username AND created_at>=v_deposit_at;
-    IF v_count<5 THEN RAISE EXCEPTION 'Five bets are required after the latest successful deposit'; END IF;
+    IF v_count<6 THEN RAISE EXCEPTION 'Six bets are required after the latest successful deposit'; END IF;
   END IF;
   v_result := public.create_withdrawal_request_with_rate_snapshot_atomic(
     p_userid,p_amount,p_payout_amount,v_wallet.wallet,

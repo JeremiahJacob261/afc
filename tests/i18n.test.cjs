@@ -48,8 +48,8 @@ test('payment errors follow the selected language and preserve server limits', a
 
 test('withdrawal instructions retain both required and completed bet counts', async () => {
   const instance = await translator('my')
-  const result = translateApiMessage('You need to place 5 bets after your latest successful deposit before withdrawing. You have placed 3.', instance.t)
-  assert.equal(result, instance.t('mobile.withdraw.betRequirementWithCount', { required: 5, placed: 3 }))
+  const result = translateApiMessage('You need to place 6 bets after your latest successful deposit before withdrawing. You have placed 3.', instance.t)
+  assert.equal(result, instance.t('mobile.withdraw.betRequirementWithCount', { required: 6, placed: 3 }))
 })
 
 test('structured error codes override English text and unknown errors stay localized', async () => {
