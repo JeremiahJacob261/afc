@@ -91,7 +91,7 @@ internal fun PaymentWebLayout(state: PaymentUiState, onBack: () -> Unit, content
 internal fun DepositMethodOption(state: PaymentUiState, method: com.pro.uclfootball.network.PaymentMethodDto, onClick: () -> Unit) {
     val selected = state.methodId == method.identity
     Surface(onClick, modifier = Modifier.fillMaxWidth().heightIn(min = 80.dp), enabled = !state.busy, shape = RoundedCornerShape(12.dp),
-        color = if (selected) Color(0xFFEDF2FF) else Color.White, border = BorderStroke(1.dp, if (selected) UclColors.accent else UclColors.dashboardLine)) {
+        color = if (selected) Color(0xFFEDF2FF) else Color.White, contentColor = UclColors.ink, border = BorderStroke(1.dp, if (selected) UclColors.accent else UclColors.dashboardLine)) {
         Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             Box(Modifier.size(44.dp).background(UclColors.blueSurface, RoundedCornerShape(10.dp)), contentAlignment = Alignment.Center) {
                 if (method.image.isNullOrBlank()) WebIcon("credit_card", Modifier.size(24.dp), UclColors.secondary)

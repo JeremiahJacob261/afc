@@ -106,7 +106,7 @@ fun TransactionsRoute(
         ) {
             item { WebPageHeading(webCopy("mobile.transactions.title"), onBack, bordered = true) }
             item {
-                Surface(Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), color = Color.White, border = BorderStroke(1.dp, Color(0x3D1BB6FF))) {
+                Surface(Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), color = Color.White, contentColor = com.pro.uclfootball.ui.UclColors.ink, border = BorderStroke(1.dp, Color(0x3D1BB6FF))) {
                     Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
@@ -156,7 +156,7 @@ private fun TransactionTotal(label: String, raw: kotlinx.serialization.json.Json
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(12.dp),
-        color = Color.White,
+        color = Color.White, contentColor = com.pro.uclfootball.ui.UclColors.ink,
         border = BorderStroke(1.dp, UclColors.dashboardLine),
     ) {
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
@@ -194,7 +194,7 @@ private fun TransactionCard(item: TransactionDto) {
     val typeColor = if (deposit) Color(0xFF32D7FF) else Color(0xFFFF9E7A)
     val statusTone = when (item.status) { "success" -> UclColors.success; "failed" -> Color(0xFFA43D4A); "processing" -> Color(0xFF594596); else -> Color(0xFF8A6013) }
     val statusGround = when (item.status) { "success" -> Color(0xFFA8C7FF); "failed" -> Color(0xFFFF8CA0); "processing" -> Color(0xFFC7A6FF); else -> Color(0xFFF8C14A) }
-    Surface(Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), color = Color.White, border = BorderStroke(1.dp, typeColor.copy(alpha = .28f))) {
+    Surface(Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), color = Color.White, contentColor = com.pro.uclfootball.ui.UclColors.ink, border = BorderStroke(1.dp, typeColor.copy(alpha = .28f))) {
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.Top) {
                 Box(Modifier.size(42.dp).background(typeColor.copy(alpha = .12f), RoundedCornerShape(12.dp)), contentAlignment = Alignment.Center) {
@@ -215,7 +215,7 @@ private fun TransactionCard(item: TransactionDto) {
                     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                         Text(amountLabel(item.primaryAmount), color = WebMuted, fontSize = 11.sp)
                         Text(formatAmount(item.primaryAmount), fontSize = 18.sp, fontWeight = FontWeight.ExtraBold, lineHeight = 22.sp)
-                        item.secondaryAmount?.let { Text("${amountLabel(it)}: ${formatAmount(it)}", color = Color(0xFFDDE7F5), fontSize = 12.sp) }
+                        item.secondaryAmount?.let { Text("${amountLabel(it)}: ${formatAmount(it)}", color = UclColors.muted, fontSize = 12.sp) }
                         item.conversionNote?.takeIf(String::isNotBlank)?.let { Text(item.conversionNoteKey?.takeIf(String::isNotBlank)?.let { key -> webApiCopy(key, item.conversionNoteValues) } ?: it, color = Color(0xFF8A6013), fontSize = 12.sp) }
                     }
                 }
@@ -252,7 +252,7 @@ private fun TransactionMessage(message: String) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        color = Color.White,
+        color = Color.White, contentColor = com.pro.uclfootball.ui.UclColors.ink,
         border = BorderStroke(1.dp, UclColors.dashboardLine),
     ) { Text(message, modifier = Modifier.padding(20.dp), color = WebMuted) }
 }

@@ -67,12 +67,12 @@ private val tierColors = listOf(0xFFA8C7FF, 0xFF56CCF2, 0xFFA78BFA, 0xFFFBBF24, 
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Text(webCopy("website.vipTiers"), fontSize = 17.sp, fontWeight = FontWeight.ExtraBold)
-                Row { WebIcon("trending_up", Modifier.size(17.dp), UclColors.success); Text(webCopy("website.dailyGrowth"), fontSize = 11.sp, fontWeight = FontWeight.ExtraBold, color = UclColors.success) }
+                Row { WebIcon("trending_up", Modifier.size(17.dp), MaterialTheme.colorScheme.tertiary); Text(webCopy("website.dailyGrowth"), fontSize = 11.sp, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.tertiary) }
             }
             repeat(7) { i ->
                 val current = level == i + 1; val color = tierColors[i]
                 val textTone = if (current) UclColors.accent else UclColors.secondary
-                Surface(color = if (current) UclColors.blueSurface else Color.White, shape = RoundedCornerShape(8.dp), border = BorderStroke(1.dp, if (current) UclColors.accent else UclColors.dashboardLine)) {
+                Surface(color = if (current) UclColors.blueSurface else Color.White, contentColor = UclColors.ink, shape = RoundedCornerShape(8.dp), border = BorderStroke(1.dp, if (current) UclColors.accent else UclColors.dashboardLine)) {
                     Row(Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Box(Modifier.size(40.dp).background(color.copy(alpha = .125f), RoundedCornerShape(8.dp)), contentAlignment = Alignment.Center) { Text("V${i + 1}", fontSize = 12.sp, fontWeight = FontWeight.Black, color = textTone) }
                         Column(Modifier.weight(1f)) {
@@ -89,7 +89,7 @@ private val tierColors = listOf(0xFFA8C7FF, 0xFF56CCF2, 0xFFA78BFA, 0xFFFBBF24, 
 @Composable private fun VipWebProgress(key: String, icon: String, progress: Double, color: Color, detail: String) {
     WebPanel(radius = 8, padding = 16) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Box(Modifier.size(34.dp).background(color.copy(alpha = .12f), RoundedCornerShape(8.dp)), contentAlignment = Alignment.Center) { WebIcon(icon, Modifier.size(18.dp), color) }
+            Box(Modifier.size(34.dp).background(color.copy(alpha = .12f), RoundedCornerShape(8.dp)), contentAlignment = Alignment.Center) { WebIcon(icon, Modifier.size(18.dp), UclColors.accent) }
             Text(webCopy(key), Modifier.weight(1f), fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
             Text(String.format(java.util.Locale.ROOT, "%.2f%%", progress), fontSize = 14.sp, fontWeight = FontWeight.ExtraBold)
         }

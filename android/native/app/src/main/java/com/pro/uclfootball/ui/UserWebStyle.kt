@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -38,7 +39,11 @@ import java.util.Locale
 
 val LocalUserShell = staticCompositionLocalOf { false }
 val LocalUserNavSelectionOverride = staticCompositionLocalOf<MutableState<String?>?> { null }
-val WebMuted = UclColors.muted
+/** Resolve foregrounds from the containing surface, including fixed light panels in dark mode. */
+val WebMuted: Color
+    @Composable get() = if (LocalContentColor.current.luminance() > .5f) Color(0xFFD4DEEF) else UclColors.muted
+val WebAccent: Color
+    @Composable get() = if (LocalContentColor.current.luminance() > .5f) Color(0xFF8DB8FF) else UclColors.accent
 val WebInter = FontFamily(Font(R.font.web_inter))
 
 @Composable
@@ -108,7 +113,7 @@ fun UserWebShell(route: String, onNavigate: (String) -> Unit, content: @Composab
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                                 var expanded by remember { mutableStateOf(false) }
                                 Box {
-                                    Surface(onClick = { expanded = true }, modifier = Modifier.heightIn(min = 48.dp), shape = RoundedCornerShape(8.dp), color = UclColors.surface,
+                                    Surface(onClick = { expanded = true }, modifier = Modifier.heightIn(min = 48.dp), shape = RoundedCornerShape(8.dp), color = UclColors.surface, contentColor = UclColors.ink,
                                         border = BorderStroke(1.dp, UclColors.dashboardLine)) {
                                         Row(Modifier.padding(horizontal = 12.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                                             Text(if (language == "my") "မြန်မာ" else "English", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
@@ -128,7 +133,7 @@ fun UserWebShell(route: String, onNavigate: (String) -> Unit, content: @Composab
                                 Surface(onClick = { onNavigate("notifications") }, modifier = Modifier.size(48.dp), shape = CircleShape,
                                     color = Color.Transparent, border = BorderStroke(1.dp, UclColors.dashboardLine)) {
                                     Box(contentAlignment = Alignment.Center) { WebIcon("bell", Modifier.size(21.dp),
-                                        UclColors.ink, webCopy("website.notifications")) }
+                                        MaterialTheme.colorScheme.onSurface, webCopy("website.notifications")) }
                                 }
                             }
                         }
@@ -158,14 +163,14 @@ fun UserBottomNavigation(route: String, onNavigate: (String) -> Unit) {
             destinations.forEach { (destination, key, icon) ->
                 val selected = route == destination
                 val color by animateColorAsState(
-                    targetValue = if (selected) MaterialTheme.colorScheme.primary else UclColors.muted,
+                    targetValue = if (selected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onSurfaceVariant,
                     animationSpec = tween(160),
                     label = "bottom-nav-color",
                 )
                 Column(Modifier.weight(1f).fillMaxHeight().clickable { onNavigate(destination) },
                     horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically)) {
-                    Box(Modifier.clip(CircleShape).background(if (selected) UclColors.pinkSurface else Color.Transparent).padding(horizontal = 12.dp, vertical = 3.dp)) {
-                        WebIcon(icon, Modifier.size(21.dp), color)
+                    Box(Modifier.clip(CircleShape).background(if (selected) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent).padding(horizontal = 12.dp, vertical = 3.dp)) {
+                        WebIcon(icon, Modifier.size(21.dp), if (selected) MaterialTheme.colorScheme.onSecondaryContainer else color)
                     }
                     Text(webCopy(key), color = color, fontSize = 11.sp, fontWeight = FontWeight.Bold)
                     Box(Modifier.width(16.dp).height(2.dp).clip(CircleShape).background(if (selected) UclColors.pink else Color.Transparent))
@@ -176,7 +181,7 @@ fun UserBottomNavigation(route: String, onNavigate: (String) -> Unit) {
 }
 
 @Composable
-fun WebIcon(name: String, modifier: Modifier = Modifier.size(20.dp), tint: Color = UclColors.ink, description: String? = null) {
+fun WebIcon(name: String, modifier: Modifier = Modifier.size(20.dp), tint: Color = LocalContentColor.current, description: String? = null) {
     val context = LocalContext.current
     val id = remember(name) { context.resources.getIdentifier("web_$name", "drawable", context.packageName) }
     if (id != 0) Icon(painterResource(id), description, modifier, tint = tint)
@@ -186,8 +191,8 @@ fun WebIcon(name: String, modifier: Modifier = Modifier.size(20.dp), tint: Color
 fun WebBack(label: String, onBack: () -> Unit) {
     Row(Modifier.heightIn(min = 44.dp).clickable(onClick = onBack), verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        WebIcon("arrow_left", Modifier.size(18.dp), UclColors.accent)
-        Text(label, color = UclColors.accent, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+        WebIcon("arrow_left", Modifier.size(18.dp), WebAccent)
+        Text(label, color = WebAccent, fontSize = 14.sp, fontWeight = FontWeight.Bold)
     }
 }
 
@@ -196,19 +201,23 @@ fun WebPageHeading(title: String, onBack: () -> Unit, bordered: Boolean = false)
     Row(Modifier.fillMaxWidth().padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         Surface(onClick = onBack, modifier = Modifier.size(if (bordered) 44.dp else 24.dp),
-            color = if (bordered) Color.White else Color.Transparent, shape = RoundedCornerShape(8.dp),
+            color = if (bordered) MaterialTheme.colorScheme.surface else Color.Transparent, contentColor = MaterialTheme.colorScheme.onSurface, shape = RoundedCornerShape(8.dp),
             border = if (bordered) BorderStroke(1.dp, UclColors.dashboardLine) else null) {
             Box(contentAlignment = Alignment.Center) { WebIcon("chevron_left", Modifier.size(24.dp), description = webCopy("common.back")) }
         }
-        Text(title, fontFamily = FontFamily.Serif, fontSize = 32.sp, color = UclColors.ink, lineHeight = 36.sp)
+        Text(title, fontFamily = FontFamily.Serif, fontSize = 32.sp, color = MaterialTheme.colorScheme.onSurface, lineHeight = 36.sp)
     }
 }
 
 @Composable
-fun WebPanel(modifier: Modifier = Modifier, color: Color = MaterialTheme.colorScheme.surface, radius: Int = 16, padding: Int = 20,
+fun WebPanel(modifier: Modifier = Modifier, color: Color = UclColors.paper, radius: Int = 16, padding: Int = 20,
     content: @Composable ColumnScope.() -> Unit) {
-    Surface(modifier.fillMaxWidth(), color = color, shape = RoundedCornerShape(radius.dp), border = BorderStroke(1.dp, UclColors.dashboardLine)) {
-        Column(Modifier.padding(padding.dp), content = content)
+    // These web-parity panels have fixed light backgrounds. Their nested controls
+    // need the matching light roles even when the surrounding shell is dark.
+    MaterialTheme(colorScheme = if (color.luminance() > .5f) UclColorScheme else MaterialTheme.colorScheme) {
+        Surface(modifier.fillMaxWidth(), color = color, contentColor = readableContentColor(color), shape = RoundedCornerShape(radius.dp), border = BorderStroke(1.dp, UclColors.dashboardLine)) {
+            Column(Modifier.padding(padding.dp), content = content)
+        }
     }
 }
 

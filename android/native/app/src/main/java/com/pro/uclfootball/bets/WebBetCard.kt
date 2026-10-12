@@ -62,7 +62,7 @@ internal fun WebBetCard(bet: PlacedBetDto, onClick: () -> Unit) {
     }
 }
 @Composable internal fun WebBetMetric(label: String, value: String, modifier: Modifier) {
-    Surface(modifier, shape = RoundedCornerShape(8.dp), color = Color.White, border = BorderStroke(1.dp, UclColors.dashboardLine)) {
+    Surface(modifier, shape = RoundedCornerShape(8.dp), color = Color.White, contentColor = com.pro.uclfootball.ui.UclColors.ink, border = BorderStroke(1.dp, UclColors.dashboardLine)) {
         Column(Modifier.padding(8.dp)) { Text(label, color = UclColors.muted, fontSize = 11.sp); Text(value, fontSize = 14.sp, fontWeight = FontWeight.Bold) }
     }
 }

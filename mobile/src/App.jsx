@@ -42,6 +42,7 @@ import { getStoredSession, supabase } from './lib/supabase.js'
 import { getLocalStorageItem, setLocalStorageItem } from './lib/storage.js'
 import { checkForBundleUpdate, markBundleReady } from './lib/updater.js'
 import countryData from '../../pages/api/codeswithflag.json'
+import { findDestination, needsTransferOption, transferOptions } from '../../lib/depositFlow'
 
 const registrationCountries = [
   ...countryData.countries.filter((country) => country.countryCode === 'US'),
@@ -71,20 +72,6 @@ const languageOptions = [
   { code: "en", label: "English" },
   { code: "my", label: "မြန်မာ" },
 ]
-
-const transferOptions = {
-  fcfa: [
-    { key: 'wave', label: 'Wave', bank: 'Wave' },
-    { key: 'mtn', label: 'MTN Money', bank: 'MTN Money' },
-  ],
-  mmk: [
-    { key: 'wave', label: 'Wave', bank: 'Wave' },
-    { key: 'kpay', label: 'KPay', bank: 'kpay' },
-  ],
-  idr: [
-    { key: 'DANA', label: 'DANA', bank: 'DANA' },
-  ],
-}
 
 const markets = [
   ['nilnil', '0 - 0'],
@@ -1990,7 +1977,7 @@ function DepositScreen({ navigate, setSuccessAmount }) {
 
   const code = normalizeCode(selectedMethod)
   const selectedMethodIdentity = paymentMethodIdentity(selectedMethod)
-  const requiresTransfer = Boolean(transferOptions[code]) && !hasNamedDestination(data.destinations, selectedMethod)
+  const requiresTransfer = needsTransferOption(data.destinations, selectedMethod)
   const rate = getRate(selectedMethod)
   const minimum = selectedMethod ? getMinimum(selectedMethod) : 0
   const numericAmount = Number(amount)
@@ -3428,42 +3415,6 @@ function formatMoney(value) {
 function formatFcfa(value) {
   const amount = Number(value || 0)
   return `${amount.toLocaleString(undefined, { maximumFractionDigits: 3 })} MMK`
-}
-
-function findDestination(destinations, method, transferKey) {
-  const code = normalizeCode(method)
-  if (!code) return null
-
-  const selectedName = normalizeName(method?.name)
-  const exactMethodDestination = destinations.find((destination) => (
-    selectedName && normalizeName(destination?.name) === selectedName
-  ))
-
-  if (exactMethodDestination) return exactMethodDestination
-
-  const matches = destinations.filter((destination) => (
-    String(destination?.currency_code || '').toLowerCase() === code
-  ))
-
-  if (transferOptions[code]) {
-    const option = transferOptions[code].find((item) => item.key === transferKey)
-    if (!option) return null
-    return matches.find((destination) => (
-      String(destination?.bank || '').toLowerCase() === option.bank.toLowerCase()
-    )) || null
-  }
-
-  if (!matches.length) return null
-  return matches[Math.floor(Math.random() * matches.length)]
-}
-
-function hasNamedDestination(destinations, method) {
-  const selectedName = normalizeName(method?.name)
-  if (!selectedName) return false
-
-  return destinations.some((destination) => (
-    normalizeName(destination?.name) === selectedName
-  ))
 }
 
 function formatFcfaLedger(value) {

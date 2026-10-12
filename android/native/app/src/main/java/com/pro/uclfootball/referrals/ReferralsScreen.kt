@@ -172,7 +172,7 @@ private fun ReferralFilterButton(label: String, count: Int, selected: Boolean, m
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = if (selected) UclColors.accent else UclColors.surface,
-            contentColor = if (selected) Color.White else WebMuted,
+            contentColor = if (selected) Color.White else UclColors.muted,
         ),
     ) { Text("$label ($count)", fontSize = 11.sp, fontWeight = FontWeight.Bold, maxLines = 1) }
 }
@@ -188,7 +188,7 @@ private fun ReferralCard(item: ReferralDto) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = Color.White, contentColor = UclColors.ink),
         border = BorderStroke(1.dp, UclColors.dashboardLine),
     ) {
         Row(Modifier.padding(12.dp), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -240,7 +240,7 @@ private fun ReferralMessage(message: String) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        color = Color.White,
+        color = Color.White, contentColor = com.pro.uclfootball.ui.UclColors.ink,
         border = BorderStroke(1.dp, UclColors.dashboardLine),
     ) { Text(message, modifier = Modifier.padding(20.dp), color = WebMuted) }
 }

@@ -6,7 +6,11 @@ colors:
   bulletin-blue-deep: "#002d72"
   bulletin-ink: "#080f32"
   bulletin-muted: "#536583"
-  bulletin-line: "#dce4f2"
+  bulletin-line: "#c5d5ed"
+  customer-canvas: "#eaf0fb"
+  customer-paper: "#f8faff"
+  customer-heading: "#cfe1ff"
+  customer-heading-muted: "#465a78"
   white: "#fff"
   hover-paper: "#f4f8ff"
   header-paper: "#f4f7fc"
@@ -156,7 +160,7 @@ This is a source-derived record. Browser recapture is pending after the Chrome c
 
 ## Colors
 
-The web palette combines deep blue information markers, navy text, pale cool surfaces, and restrained semantic state colors. The frontmatter owns exact values.
+The web palette combines a pale blue customer canvas (#eaf0fb), navy navigation (#002d72), pink active markers, pale blue heading regions (#cfe1ff), cool reading surfaces (#f8faff), and restrained semantic state colors. The frontmatter owns exact values.
 
 ### Primary
 
@@ -177,7 +181,7 @@ The web palette combines deep blue information markers, navy text, pale cool sur
 
 Compose uses `MaterialTheme.colorScheme` and system dark mode rather than forcing white on every surface. The explicit light roles in `UclTheme.kt` are: primary = Bulletin Blue; onPrimary/background/surface = Native Paper; onBackground/onSurface = Bulletin Ink; secondary = Protected Ink; onSecondary = White; surfaceVariant = Quiet Paper; onSurfaceVariant = Native Body; outline = Native Outline; error = Native Error.
 
-The explicit dark roles are: primary = Native Dark Primary; onPrimary = Bulletin Blue Deep; secondary/onSecondary = Native Dark Secondary/Native Dark On Secondary; tertiary = Native Dark Tertiary; background = Native Dark Ground; surface = Native Dark Surface; surfaceVariant = Native Dark Variant; onBackground/onSurface = Native Dark Ink; onSurfaceVariant = Native Dark Muted; outline = Native Dark Outline; error = Native Dark Error. These are native theme roles, not an additional web accent palette. The theme leaves container and outlineVariant roles to Material defaults; their resolved colors are not invented here.
+The explicit dark roles are: primary = Native Dark Primary; onPrimary = Bulletin Blue Deep; secondary/onSecondary = Native Dark Secondary/Native Dark On Secondary; tertiary = Native Dark Tertiary; background = Native Dark Ground; surface = Native Dark Surface; surfaceVariant = Native Dark Variant; onBackground/onSurface = Native Dark Ink; onSurfaceVariant = Native Dark Muted; outline = Native Dark Outline; error = Native Dark Error. The website now shares the native blue and pink surface palette. Native container foregrounds are explicit: light primaryContainer/onPrimaryContainer = #eaf0fb/#002d72, secondaryContainer/onSecondaryContainer = #fff0f7/#a90059; dark primaryContainer/onPrimaryContainer = #10284d/#d4e4ff, secondaryContainer/onSecondaryContainer = #4b002b/#ffcde5. OutlineVariant is #dce4f2 in light mode and #475e7d in dark mode. Fixed light native panels supply dark foregrounds and light control roles even within a dark shell. Selected navigation icons use onSecondaryContainer, while labels use secondary against the navigation surface.
 
 **The Explicit State Rule.** Always pair outcome, unavailable, and protected color treatments with their existing translated labels.
 
@@ -258,3 +262,7 @@ Web placeholders use quiet paper, while empty/error states use bordered surfaces
 - **Don't** use outcome or market protection color as the only state cue.
 - **Don't** promote native inherited container colors, serif defaults, or the stake field's one-off border into new bulletin tokens.
 - **Don't** claim browser or emulator visual validation until recapture succeeds.
+
+## Color and contrast update ? 12 October 2026
+
+Customer web navigation, headings, wallet controls, account areas, and bulletin surfaces now use the native blue and pink palette. Body text remains navy on pale surfaces. Native fixed light cards and controls have explicit foregrounds; secondary transaction amounts no longer use pale text on white, and VIP progress icons use a darker blue. Shared native theme pairs have numerical contrast checks and regression coverage. Browser capture could not run because the connection timed out; device capture remains unavailable with no Android device connected.

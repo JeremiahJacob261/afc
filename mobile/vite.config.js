@@ -58,7 +58,7 @@ export default defineConfig(({ mode }) => {
       port: 5173,
       strictPort: true,
       fs: {
-        allow: [__dirname, resolve(__dirname, '../locales')],
+        allow: [__dirname, resolve(__dirname, '../locales'), resolve(__dirname, '../lib')],
       },
       watch: {
         usePolling,

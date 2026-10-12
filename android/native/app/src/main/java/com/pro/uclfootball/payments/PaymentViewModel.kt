@@ -26,9 +26,24 @@ data class PaymentUiState(
     val error: Int? = null, val uncertain: Boolean = false, val requiresSignIn: Boolean = false,
 ) {
     val method get() = data?.methods?.find { it.identity == methodId }
-    val destinations get() = data?.destinations.orEmpty().filter { destination ->
-        destination.name.equals(method?.name, true) || destination.currencyCode?.equals(method?.currencyCode, true) == true
-    }.filter { it.address.isNotBlank() }
+    val destinations get(): List<PaymentDestinationDto> {
+        val selected = method ?: return emptyList()
+        val name = selected.name.trim()
+        val available = data?.destinations.orEmpty().filter { it.address.isNotBlank() }
+        val named = available.filter { name.isNotBlank() && it.name.trim().equals(name, true) }
+        if (named.isNotEmpty()) return named
+        val matchingCurrency = available.filter { it.currencyCode?.trim()?.equals(selected.code.trim(), true) == true }
+        // Wave and KPay share MMK, but selecting one must only resolve its own account.
+        return if (selected.code.trim() in listOf("mmk", "fcfa", "idr") &&
+            name.isNotBlank() && !name.equals(selected.code.trim(), true)) {
+            matchingCurrency.filter { it.bank?.trim()?.equals(name, true) == true }
+        } else matchingCurrency
+    }
+    val requiresTransferOption get() = method?.let { selected ->
+        selected.code.trim() in listOf("mmk", "fcfa", "idr") &&
+            (selected.name.isBlank() || selected.name.trim().equals(selected.code.trim(), true)) &&
+            destinations.none { selected.name.isNotBlank() && it.name.trim().equals(selected.name.trim(), true) }
+    } ?: false
     val destination get() = destinations.find { it.id.textValue().ifBlank { it.address } == destinationId }
     val payoutWallet get() = data?.wallets?.find { it.id.textValue().ifBlank { it.wallet } == walletId }
     val hasPin get() = profile?.codeset.textValue().lowercase() in listOf("true", "1")
@@ -72,12 +87,7 @@ class PaymentViewModel(private val repository: PaymentRepository, private val se
     }
     fun chooseMethod(id: String) {
         if (state.value.busy) return
-        mutableState.update { it.copy(methodId = id, destinationId = "", amount = "", quote = null,
-            reviewed = false, receipt = null, receiptUrl = null, error = null) }
-        val method = state.value.method
-        if (method != null && method.code !in listOf("mmk", "fcfa", "idr")) {
-            state.value.destinations.firstOrNull()?.let { chooseDestination(it.id.textValue().ifBlank { it.address }) }
-        }
+        mutableState.update { selectDepositMethod(it, id) }
     }
     fun chooseDestination(id: String) { if (!state.value.busy) mutableState.update { it.copy(destinationId = id, reviewed = false, receiptUrl = null) } }
     fun chooseWallet(id: String) { if (!state.value.busy) mutableState.update { it.copy(walletId = id, withdrawalQuote = null) } }
@@ -218,6 +228,14 @@ class PaymentViewModel(private val repository: PaymentRepository, private val se
             }
         }
     }
+}
+
+internal fun selectDepositMethod(current: PaymentUiState, id: String): PaymentUiState {
+    if (current.busy) return current
+    val next = current.copy(methodId = id, destinationId = "", amount = "", quote = null,
+        reviewed = false, receipt = null, receiptUrl = null, error = null)
+    val destination = if (next.requiresTransferOption) null else next.destinations.firstOrNull()
+    return next.copy(destinationId = destination?.let { it.id.textValue().ifBlank { it.address } }.orEmpty())
 }
 
 /** Resume (including photo picker return) retains a draft unless the reviewed payment details changed. */

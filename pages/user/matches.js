@@ -9,17 +9,17 @@ import { supabase } from '@/pages/api/supabase'
 import { useClientMatchDisplay } from '@/lib/matchDisplay'
 import { upcomingFixtures, groupFixturesByDay } from '@/lib/fixtureDisplay'
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
-import { BulletinTeam, BulletinLoading, BulletinState } from '@/components/user/BulletinUI'
+import { BulletinTeam, BulletinLoading, BulletinState, CompanyGameBadge } from '@/components/user/BulletinUI'
 import styles from '@/styles/MatchdayBulletin.module.css'
 
 function MatchRow({ match }) {
   const { t } = useTranslation('common')
   const display = useClientMatchDisplay(match)
   const league = (match.league === 'others' ? match.otherl : match.league) || t('website.football')
-  return <Link href={`/user/match/${match.match_id}`} className={styles.fixture} aria-label={t('website.openMatchMarkets', { home: match.home || t('common.homeTeam'), away: match.away || t('common.away') })}>
-    <div className={styles.meta}><strong>{league}</strong><span>{display.time} · {t('website.localTime')}</span></div>
+  return <Link href={`/user/match/${match.match_id}`} className={styles.fixture} aria-label={(match.company === true ? `${t('mobile.match.companyGame')}, ` : '') + t('website.openMatchMarkets', { home: match.home || t('common.homeTeam'), away: match.away || t('common.away') })}>
+    <div className={styles.meta}><strong>{league}</strong><span>{display.time} · {t('website.localTime')}</span>{match.company === true && <CompanyGameBadge />}</div>
     <div className={styles.teams}><BulletinTeam name={match.home} image={match.ihome} /><BulletinTeam name={match.away} image={match.iaway} /></div>
-    <div className={styles.marketPreview} aria-label={t('website.featuredCorrectScore')}>{[['1–0', match.onenil], ['1–1', match.oneone], ['1–2', match.onetwo]].map(([score, odd]) => <span key={score}><small>{score}</small><strong>{Number(odd) > 0 ? `${odd}%` : '—'}</strong></span>)}</div>
+    <div className={styles.marketPreview} aria-label={t('website.featuredCorrectScore')}>{[['1–0', match.onenil, 'onenil'], ['1–1', match.oneone, 'oneone'], ['1–2', match.onetwo, 'onetwo']].map(([score, odd, key]) => <span key={score} className={match.company === true && match.comarket === key ? styles.companyPreview : ''}><small>{score}</small><strong>{Number(odd) > 0 ? `${odd}%` : '—'}</strong>{match.company === true && match.comarket === key && <CompanyGameBadge />}</span>)}</div>
     <ArrowUpRight className={styles.arrow} size={18} aria-hidden="true" />
   </Link>
 }

@@ -94,7 +94,7 @@ fun NotificationsRoute(
                     Surface(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
-                        color = Color.White,
+                        color = Color.White, contentColor = com.pro.uclfootball.ui.UclColors.ink,
                         border = BorderStroke(1.dp, Color(0x3D1BB6FF)),
                     ) {
                         Row(
@@ -156,7 +156,7 @@ private fun NotificationCard(item: NotificationDto, onClick: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = Color.White, contentColor = UclColors.ink),
         border = BorderStroke(1.dp, when (category) { "bonus" -> Color(0x470649FF); "bet" -> Color(0x47F8C14A); "admin" -> Color(0x47C7A6FF); "deposit" -> Color(0x4732D7FF); "withdrawal" -> Color(0x47FF9E7A); else -> Color(0x478CCBFF) }),
     ) {
         Row(Modifier.heightIn(min = 96.dp).padding(12.dp), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.Top) {
@@ -225,7 +225,7 @@ private fun NotificationMessage(message: String) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        color = Color.White,
+        color = Color.White, contentColor = com.pro.uclfootball.ui.UclColors.ink,
         border = BorderStroke(1.dp, UclColors.dashboardLine),
     ) { Text(message, modifier = Modifier.padding(20.dp), color = WebMuted) }
 }

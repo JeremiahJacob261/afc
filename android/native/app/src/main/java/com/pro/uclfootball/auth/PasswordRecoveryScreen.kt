@@ -13,6 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -82,18 +83,18 @@ private fun PasswordRecoveryScreen(
     onSendEmail: () -> Unit,
     onUpdatePassword: () -> Unit,
 ) {
-    Scaffold(contentWindowInsets = WindowInsets.statusBars, containerColor = UclColors.paper) { padding ->
+    Scaffold(contentWindowInsets = WindowInsets.statusBars, containerColor = MaterialTheme.colorScheme.background) { padding ->
         Column(
             modifier = Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState())
                 .imePadding().padding(horizontal = 24.dp, vertical = 28.dp),
             verticalArrangement = Arrangement.spacedBy(18.dp),
         ) {
             TextButton(onClick = onBackToLogin, modifier = Modifier.align(androidx.compose.ui.Alignment.Start)) {
-                Text(stringResource(R.string.reset_return_login), color = UclColors.accent)
+                Text(stringResource(R.string.reset_return_login), color = MaterialTheme.colorScheme.primary)
             }
             Text(
                 stringResource(R.string.reset_screen_title),
-                color = UclColors.ink,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontFamily = FontFamily.Serif,
                 fontWeight = FontWeight.Black,
                 fontSize = 32.sp,
@@ -134,7 +135,7 @@ private fun PasswordRecoveryScreen(
                     )
                 }
             } else {
-                Text(stringResource(R.string.reset_screen_subtitle), color = UclColors.body, fontSize = 15.sp, lineHeight = 23.sp)
+                Text(stringResource(R.string.reset_screen_subtitle), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 15.sp, lineHeight = 23.sp)
                 OutlinedTextField(
                     value = state.email,
                     onValueChange = onEmailChange,

@@ -76,7 +76,7 @@ internal fun WebAccountScreen(state: AccountUiState, onRetry: () -> Unit, onNavi
             }
         }
         Spacer(Modifier.height(16.dp))
-        Surface(color = UclColors.blueSurface, shape = RoundedCornerShape(16.dp)) {
+        Surface(color = UclColors.blueSurface, contentColor = UclColors.ink, shape = RoundedCornerShape(16.dp)) {
             Column(Modifier.fillMaxWidth().padding(20.dp)) {
                 AccountGroupHeading(webCopy("mobile.profile.referrals"), "users_round")
                 Row(Modifier.padding(top = 24.dp).fillMaxWidth().background(Color.White, RoundedCornerShape(10.dp)).border(1.dp, UclColors.dashboardLine, RoundedCornerShape(10.dp)).padding(start = 16.dp, end = 4.dp, top = 4.dp, bottom = 4.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -109,8 +109,8 @@ internal fun WebAccountScreen(state: AccountUiState, onRetry: () -> Unit, onNavi
         Spacer(Modifier.height(24.dp)); HorizontalDivider(color = UclColors.dashboardLine)
         Row(Modifier.fillMaxWidth().padding(vertical = 20.dp), horizontalArrangement = Arrangement.End) {
             OutlinedButton(onSignOut, shape = RoundedCornerShape(8.dp), border = BorderStroke(1.dp, UclColors.dashboardLine)) {
-                WebIcon("log_out"); Spacer(Modifier.width(12.dp)); Text(webCopy("common.signOut"), color = UclColors.ink, fontWeight = FontWeight.Bold)
-                Spacer(Modifier.width(24.dp)); WebIcon("chevron_right", tint = UclColors.secondary)
+                WebIcon("log_out"); Spacer(Modifier.width(12.dp)); Text(webCopy("common.signOut"), color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold)
+                Spacer(Modifier.width(24.dp)); WebIcon("chevron_right", tint = MaterialTheme.colorScheme.secondary)
             }
         }
     }

@@ -16,7 +16,7 @@ import com.pro.uclfootball.ui.UclColors
 @Composable
 fun NativeBottomBar(selectedTab: String, onSelectTab: (String) -> Unit) {
     if (com.pro.uclfootball.ui.LocalUserShell.current) return
-    NavigationBar(containerColor = Color.White) {
+    NavigationBar(containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surface) {
         val destinations = listOf(
             Triple("home", R.string.nav_home, R.drawable.ic_nav_home),
             Triple("matches", R.string.nav_matches, R.drawable.ic_nav_matches),
@@ -33,11 +33,16 @@ fun NativeBottomBar(selectedTab: String, onSelectTab: (String) -> Unit) {
                     Icon(
                         painter = painterResource(iconId),
                         contentDescription = null,
-                        tint = if (selectedTab == route) UclColors.accent else UclColors.muted,
+                        tint = if (selectedTab == route) androidx.compose.material3.MaterialTheme.colorScheme.onSecondaryContainer else androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 },
                 label = { Text(label, fontSize = 11.sp, fontWeight = FontWeight.SemiBold) },
                 alwaysShowLabel = true,
+                colors = androidx.compose.material3.NavigationBarItemDefaults.colors(
+                    indicatorColor = androidx.compose.material3.MaterialTheme.colorScheme.secondaryContainer,
+                    selectedTextColor = androidx.compose.material3.MaterialTheme.colorScheme.secondary,
+                    unselectedTextColor = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant,
+                ),
             )
         }
     }

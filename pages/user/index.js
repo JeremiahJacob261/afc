@@ -15,6 +15,7 @@ import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay'
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
 import ball from '@/public/simps/ball.png'
 import styles from '@/styles/UserDashboard.module.css'
+import { CompanyGameBadge } from '@/components/user/BulletinUI'
 
 const HOUR_MS = 60 * 60 * 1000
 const fallbackTelegram = 'https://t.me/+Giav1o1JVGNkYzNk'
@@ -91,14 +92,15 @@ function Fixture({ match }) {
   const { t, i18n } = useTranslation('common');
   const display = useClientMatchDisplay(match, { locale: i18n.language })
   const league = (match.league === 'others' ? match.otherl : match.league) || t('website.football')
-  const prices = [['1–0', match.onenil], ['1–1', match.oneone], ['1–2', match.onetwo]]
-  return <Link href={`/user/match/${match.match_id}`} className={styles.fixture} aria-label={t('website.openMatchMarkets', { home: match.home || t('common.homeTeam'), away: match.away || t('website.away') })}>
+  const prices = [['1–0', match.onenil, 'onenil'], ['1–1', match.oneone, 'oneone'], ['1–2', match.onetwo, 'onetwo']]
+  return <Link href={`/user/match/${match.match_id}`} className={styles.fixture} aria-label={(match.company === true ? `${t('mobile.match.companyGame')}, ` : '') + t('website.openMatchMarkets', { home: match.home || t('common.homeTeam'), away: match.away || t('website.away') })}>
     <div className={styles.fixtureMeta}><span>{league}</span><span><Clock3 size={14} aria-hidden="true" /> {display.dateTime} {t('website.localTime')}</span></div>
+    {match.company === true && <div className={styles.companyMarker}><CompanyGameBadge /></div>}
     <div className={styles.fixtureBody}>
       <div className={styles.teams}><Team name={match.home} image={match.ihome} /><Team name={match.away} image={match.iaway} /></div>
       <div className={styles.fixtureRight}>
         <div className={styles.prices} aria-label={t('website.featuredCorrectScoreOdds')}>
-          {prices.map(([score, price]) => <span className={styles.price} key={score}><span>{score}</span><strong>{price || '—'}</strong></span>)}
+          {prices.map(([score, price, key]) => <span className={`${styles.price} ${match.company === true && match.comarket === key ? styles.companyPrice : ''}`} key={score}><span>{score}</span><strong>{price || '—'}</strong>{match.company === true && match.comarket === key && <CompanyGameBadge />}</span>)}
         </div>
         <span className={styles.matchLink} aria-hidden="true"><ArrowUpRight size={18} /></span>
       </div>

@@ -16,6 +16,10 @@ export function BetBadge({ bet }) {
   const state = getBetState(bet)
   return <span className={styles.badge} data-state={state}>{t(`status.${state}`)}</span>
 }
+export function CompanyGameBadge() {
+  const { t } = useTranslation('common')
+  return <span className={styles.companyBadge}>{t('mobile.match.companyGame')}</span>
+}
 export function BulletinLoading({ label }) {
   return <div role="status" aria-busy="true"><span className={styles.skeletonLabel}>{label}</span>{[0, 1, 2].map((key) => <div className={styles.skeleton} aria-hidden="true" key={key} />)}</div>
 }

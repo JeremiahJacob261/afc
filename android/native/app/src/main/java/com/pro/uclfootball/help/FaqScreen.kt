@@ -41,7 +41,7 @@ fun FaqRoute(onBack: () -> Unit) {
         Text(com.pro.uclfootball.ui.webCopy("website.faqTitle"), Modifier.padding(top = 24.dp), color = UclColors.ink, fontFamily = FontFamily.Serif, fontSize = 32.sp, lineHeight = 35.sp)
         Text(com.pro.uclfootball.ui.webCopy("website.faqIntro"), Modifier.padding(top = 12.dp, bottom = 32.dp), color = com.pro.uclfootball.ui.WebMuted, fontSize = 16.sp, lineHeight = 25.sp)
         repeat(com.pro.uclfootball.ui.webItemCount("mobile.faq.items")) { index ->
-            Surface(Modifier.fillMaxWidth().padding(bottom = 12.dp), shape = RoundedCornerShape(12.dp), color = androidx.compose.ui.graphics.Color.White, border = BorderStroke(1.dp, UclColors.dashboardLine)) {
+            Surface(Modifier.fillMaxWidth().padding(bottom = 12.dp), shape = RoundedCornerShape(12.dp), color = androidx.compose.ui.graphics.Color.White, contentColor = com.pro.uclfootball.ui.UclColors.ink, border = BorderStroke(1.dp, UclColors.dashboardLine)) {
                 Column {
                     Row(Modifier.fillMaxWidth().clickable { expanded[index] = expanded[index] != true }.padding(horizontal = 20.dp, vertical = 16.dp), verticalAlignment = Alignment.CenterVertically) {
                         Text(com.pro.uclfootball.ui.webCopy("mobile.faq.items.$index.q"), Modifier.weight(1f), fontSize = 16.sp, fontWeight = FontWeight.Bold)

@@ -146,7 +146,7 @@ private fun BetDetailMessage(message: String) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
-        color = Color.White,
+        color = Color.White, contentColor = com.pro.uclfootball.ui.UclColors.ink,
         border = BorderStroke(1.dp, UclColors.dashboardLine),
     ) { Text(message, modifier = Modifier.padding(20.dp), color = WebMuted) }
 }

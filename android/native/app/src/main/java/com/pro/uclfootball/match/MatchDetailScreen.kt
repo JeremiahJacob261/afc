@@ -165,7 +165,7 @@ private fun MatchHeader(match: MatchDetailDto) {
             BulletinTeam(match.away, match.iaway.textValue(), large = true)
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             Text("$date · ${webCopy("website.localTime")}", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
-            if (match.company == true) Text(webCopy("mobile.match.companyGame"), color = MaterialTheme.colorScheme.primary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+            if (match.company == true) CompanyGameBadge()
         }
     }
 }
@@ -177,13 +177,15 @@ private fun MarketAvailabilityCard(match: MatchDetailDto, market: ScoreMarket, v
     val odd = base * (1 + bonus)
     val available = odd > 0 && match.verified != true && (matchStartMillis(match.tsgmt, match.date, match.time) ?: 0) > System.currentTimeMillis()
     val protected = match.company == true && match.comarket.textValue() == market.key
-    Surface(color = if (!available) MaterialTheme.colorScheme.surfaceVariant else if (isSelected || protected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
-        border = androidx.compose.foundation.BorderStroke(if (isSelected) 2.dp else 1.dp, if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant)) {
+    Surface(color = if (protected) MaterialTheme.colorScheme.secondaryContainer else if (!available) MaterialTheme.colorScheme.surfaceVariant else if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
+        contentColor = if (protected) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSurface,
+        border = androidx.compose.foundation.BorderStroke(if (isSelected) 2.dp else 1.dp, if (isSelected) MaterialTheme.colorScheme.primary else if (protected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.outlineVariant)) {
         Column(Modifier.fillMaxWidth().heightIn(min = 92.dp).semantics { selected = isSelected }.clickable(enabled = available, role = Role.Button, onClick = onSelect).padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(if (market.key == "otherscores") webCopy("mobile.markets.other") else market.label.replace("\u2013", "-"), fontFamily = WebInter, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            if (protected) CompanyGameBadge()
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(webCopy(if (!available) "mobile.match.marketUnavailable" else if (protected) "mobile.match.companyGame" else "landing.live.odds"), Modifier.weight(1f), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 10.sp)
-                Text(if (available) String.format(java.util.Locale.ROOT, "%.3f%%", odd) else "—", color = MaterialTheme.colorScheme.primary, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                Text(webCopy(if (!available) "mobile.match.marketUnavailable" else "landing.live.odds"), Modifier.weight(1f), color = if (protected) MaterialTheme.colorScheme.onSecondaryContainer else if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 10.sp)
+                Text(if (available) String.format(java.util.Locale.ROOT, "%.3f%%", odd) else "—", color = if (protected) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.primary, fontSize = 14.sp, fontWeight = FontWeight.Bold)
             }
         }
     }

@@ -11,6 +11,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+@Composable fun CompanyGameBadge(modifier: Modifier = Modifier) {
+    Surface(modifier, shape = RoundedCornerShape(4.dp), color = MaterialTheme.colorScheme.secondaryContainer,
+        contentColor = MaterialTheme.colorScheme.onSecondaryContainer) {
+        Text(webCopy("mobile.match.companyGame"), Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+            fontSize = 11.sp, lineHeight = 16.sp, fontWeight = FontWeight.Bold)
+    }
+}
+
 @Composable fun BulletinHeading(title: String, onBack: () -> Unit, description: String? = null) {
     Column {
         TextButton(onClick = onBack, contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp)) {

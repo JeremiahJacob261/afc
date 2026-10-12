@@ -37,29 +37,33 @@ private val championWheelColors = listOf(Color(0xFFDDEAFF), Color(0xFFA7C9FF), C
     val duration = webCopy("website.wheelDuration", "hours" to minutes / 60, "minutes" to (minutes % 60).toString().padStart(2,'0'))
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 32.dp)) {
         Row(Modifier.padding(bottom = 18.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-            Surface(onBack, Modifier.size(44.dp), shape = RoundedCornerShape(12.dp), color = Color.White) { Box(contentAlignment = Alignment.Center) { WebIcon("arrow_left", description = webCopy("common.back")) } }
+            Surface(onBack, Modifier.size(44.dp), shape = RoundedCornerShape(12.dp), color = Color.White, contentColor = com.pro.uclfootball.ui.UclColors.ink) { Box(contentAlignment = Alignment.Center) { WebIcon("arrow_left", description = webCopy("common.back")) } }
             Text(webCopy("website.wheelSpin"), fontFamily = FontFamily.Serif, fontSize = 26.sp, letterSpacing = (-.65).sp)
         }
-        Column(Modifier.fillMaxWidth().background(UclColors.blueSurface, RoundedCornerShape(16.dp)).padding(start = 5.dp, top = 22.dp, end = 5.dp, bottom = 26.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(22.dp)) {
-            WheelWebFrame(wheel?.items.orEmpty(), rotation, wheel?.canSpin == true && !state.isLoading && !state.isSpinning, onSpin)
-            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                val title = when {
-                    state.isSpinning -> webCopy("website.spinning")
-                    state.isLoading -> webCopy("website.checkingYourSpin")
-                    wheel == null -> webCopy("website.wheelVerificationFailed")
-                    state.result != null && wheel.lastAmount != null -> webCopy("website.wheelCashWon", "amount" to webMoney(wheel.lastAmount.textValue().toDoubleOrNull() ?: 0.0))
-                    wheel.eligible != true -> webCopy("website.wheelBalanceRequired", "amount" to webMoney(wheel.minimumBalance.textValue().toDoubleOrNull() ?: 0.0))
-                    wheel.canSpin != true -> if (wheel.lastAmount != null) webCopy("website.wheelLastSpin", "prize" to webMoney(wheel.lastAmount.textValue().toDoubleOrNull() ?: 0.0)) else webCopy("website.spinComplete")
-                    else -> webCopy("website.readyToSpin")
+        MaterialTheme(colorScheme = UclColorScheme) {
+            CompositionLocalProvider(LocalContentColor provides UclColors.ink) {
+                Column(Modifier.fillMaxWidth().background(UclColors.blueSurface, RoundedCornerShape(16.dp)).padding(start = 5.dp, top = 22.dp, end = 5.dp, bottom = 26.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(22.dp)) {
+                    WheelWebFrame(wheel?.items.orEmpty(), rotation, wheel?.canSpin == true && !state.isLoading && !state.isSpinning, onSpin)
+                    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        val title = when {
+                            state.isSpinning -> webCopy("website.spinning")
+                            state.isLoading -> webCopy("website.checkingYourSpin")
+                            wheel == null -> webCopy("website.wheelVerificationFailed")
+                            state.result != null && wheel.lastAmount != null -> webCopy("website.wheelCashWon", "amount" to webMoney(wheel.lastAmount.textValue().toDoubleOrNull() ?: 0.0))
+                            wheel.eligible != true -> webCopy("website.wheelBalanceRequired", "amount" to webMoney(wheel.minimumBalance.textValue().toDoubleOrNull() ?: 0.0))
+                            wheel.canSpin != true -> if (wheel.lastAmount != null) webCopy("website.wheelLastSpin", "prize" to webMoney(wheel.lastAmount.textValue().toDoubleOrNull() ?: 0.0)) else webCopy("website.spinComplete")
+                            else -> webCopy("website.readyToSpin")
+                        }
+                        Text(title, fontSize = if (state.isLoading || wheel == null) 14.sp else 18.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
+                        if (wheel != null) {
+                            if (wheel.eligible != true) Text(webCopy("website.wheelDeposit"), Modifier.clickable(onClick = onDeposit).padding(vertical = 8.dp), color = UclColors.accent, fontWeight = FontWeight.Bold)
+                            Text(if (wheel.canSpin == true) webCopy("website.wheelFreeDailySpin") else webCopy("website.wheelNextSpin", "time" to duration), color = WebMuted, fontSize = 14.sp, textAlign = TextAlign.Center)
+                            Text(webCopy("website.wheelCurrentBalance", "amount" to webMoney(wheel.balance.textValue().toDoubleOrNull() ?: 0.0)), color = WebMuted, fontSize = 14.sp, textAlign = TextAlign.Center)
+                        }
+                        if (state.error != null) Text(webCopy("website.unableToLoadTheWheelPleaseTryAgain"), color = Color(0xFFA32028), fontSize = 14.sp, textAlign = TextAlign.Center)
+                        if (!state.isLoading && wheel == null) OutlinedButton(onRetry, shape = RoundedCornerShape(10.dp)) { Text(webCopy("website.wheelReload")) }
+                    }
                 }
-                Text(title, fontSize = if (state.isLoading || wheel == null) 14.sp else 18.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
-                if (wheel != null) {
-                    if (wheel.eligible != true) Text(webCopy("website.wheelDeposit"), Modifier.clickable(onClick = onDeposit).padding(vertical = 8.dp), color = UclColors.accent, fontWeight = FontWeight.Bold)
-                    Text(if (wheel.canSpin == true) webCopy("website.wheelFreeDailySpin") else webCopy("website.wheelNextSpin", "time" to duration), color = WebMuted, fontSize = 14.sp, textAlign = TextAlign.Center)
-                    Text(webCopy("website.wheelCurrentBalance", "amount" to webMoney(wheel.balance.textValue().toDoubleOrNull() ?: 0.0)), color = WebMuted, fontSize = 14.sp, textAlign = TextAlign.Center)
-                }
-                if (state.error != null) Text(webCopy("website.unableToLoadTheWheelPleaseTryAgain"), color = Color(0xFFA32028), fontSize = 14.sp, textAlign = TextAlign.Center)
-                if (!state.isLoading && wheel == null) OutlinedButton(onRetry, shape = RoundedCornerShape(10.dp)) { Text(webCopy("website.wheelReload")) }
             }
         }
     }

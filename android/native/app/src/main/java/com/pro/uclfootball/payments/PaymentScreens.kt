@@ -125,7 +125,7 @@ private fun MethodChoices(state: PaymentUiState, vm: PaymentViewModel) {
 @Composable
 private fun DepositMethodScreen(state: PaymentUiState, vm: PaymentViewModel) {
     MethodChoices(state, vm)
-    if (state.method?.code in listOf("mmk", "fcfa", "idr")) {
+    if (state.requiresTransferOption) {
         Spacer(Modifier.height(20.dp))
         Text(webCopy("mobile.deposit.transferOption"), fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -137,6 +137,9 @@ private fun DepositMethodScreen(state: PaymentUiState, vm: PaymentViewModel) {
                     shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp), colors = ButtonDefaults.outlinedButtonColors(containerColor = if (selected) UclColors.accent else androidx.compose.ui.graphics.Color.White, contentColor = if (selected) androidx.compose.ui.graphics.Color.White else UclColors.ink)) { Text(bank) }
             }
         }
+    }
+    if (state.method != null && state.destinations.isEmpty()) {
+        Text(stringResource(R.string.journey_no_destinations))
     }
     Spacer(Modifier.height(20.dp))
     JourneyAction(webCopy("common.continue"), enabled = state.method != null && state.destination != null && !state.hasPending) { vm.go(PaymentPage.Amount) }
@@ -360,9 +363,9 @@ private fun SubmissionSuccessScreen(withdrawal: Boolean, onDone: () -> Unit) {
     }
     Spacer(Modifier.height(24.dp))
     Text(webCopy(if (withdrawal) "mobile.withdraw.successTitle" else "mobile.deposit.successTitle"), fontFamily = androidx.compose.ui.text.font.FontFamily.Serif, fontSize = 32.sp, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
-    Text(webCopy(if (withdrawal) "messages.withdrawalSent" else "messages.depositSubmitted"), Modifier.padding(top = 16.dp, bottom = 24.dp), color = UclColors.muted, fontSize = 16.sp, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+    Text(webCopy(if (withdrawal) "messages.withdrawalSent" else "messages.depositSubmitted"), Modifier.padding(top = 16.dp, bottom = 24.dp), color = WebMuted, fontSize = 16.sp, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
     Button(onClick = onDone, shape = androidx.compose.foundation.shape.RoundedCornerShape(24.dp), modifier = Modifier.heightIn(min = 48.dp)) {
-        Text(webCopy(if (withdrawal) "common.done" else "common.continue")); Spacer(Modifier.width(8.dp)); WebIcon("arrow_right", tint = androidx.compose.ui.graphics.Color.White)
+        Text(webCopy(if (withdrawal) "common.done" else "common.continue")); Spacer(Modifier.width(8.dp)); WebIcon("arrow_right", tint = LocalContentColor.current)
     }
 }
 

@@ -70,7 +70,7 @@ internal fun DashboardScreen(state: DashboardUiState, onNavigate: (String) -> Un
             Row(Modifier.fillMaxWidth().padding(top = 28.dp, bottom = 20.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Column {
                     Text(if (state.username.isNullOrBlank()) webCopy("website.yourMatchday") else webCopy("website.helloUser", "username" to state.username),
-                        color = UclColors.muted, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                        color = WebMuted, fontSize = 14.sp, fontWeight = FontWeight.Bold)
                     Row { Text(webCopy("website.matchdayAlt"), fontFamily = FontFamily.Serif, fontSize = 32.sp, letterSpacing = (-.8).sp)
                         Text(".", fontFamily = FontFamily.Serif, fontSize = 32.sp, color = UclColors.secondary) }
                 }
@@ -172,7 +172,7 @@ private fun DashboardCarousel(onNavigate: (String) -> Unit) {
         }
         Column(Modifier.padding(if (narrow) 20.dp else 24.dp).widthIn(max = if (narrow) 230.dp else 480.dp)) {
             Text(webCopy("website.${copy[0]}"), color = UclColors.blueInk, fontSize = 12.sp, fontWeight = FontWeight.Bold, letterSpacing = .96.sp)
-            Text(webCopy("website.${copy[1]}"), Modifier.padding(top = 12.dp, bottom = 8.dp), fontFamily = FontFamily.Serif, fontSize = 28.sp, lineHeight = 30.sp, letterSpacing = (-.56).sp)
+            Text(webCopy("website.${copy[1]}"), Modifier.padding(top = 12.dp, bottom = 8.dp), color = UclColors.ink, fontFamily = FontFamily.Serif, fontSize = 28.sp, lineHeight = 30.sp, letterSpacing = (-.56).sp)
             Text(webCopy("website.${copy[2]}"), color = Color(0xFF415F86), fontSize = if (narrow) 13.sp else 15.sp, lineHeight = if (narrow) 19.5.sp else 22.5.sp)
             WebTextLink(webCopy("website.${copy[3]}"), Color(0xFF0D49B5), Modifier.padding(top = 8.dp)) { onNavigate(copy[4]) }
         }
@@ -185,13 +185,13 @@ private fun DashboardCarousel(onNavigate: (String) -> Unit) {
 }
 
 @Composable private fun CarouselButton(icon: String, label: String, onClick: () -> Unit) {
-    Surface(onClick, Modifier.size(36.dp), shape = CircleShape, color = Color.White, border = BorderStroke(1.dp, Color(0xFFC7D8EE))) {
+    Surface(onClick, Modifier.size(36.dp), shape = CircleShape, color = Color.White, contentColor = com.pro.uclfootball.ui.UclColors.ink, border = BorderStroke(1.dp, Color(0xFFC7D8EE))) {
         Box(contentAlignment = Alignment.Center) { WebIcon(icon, Modifier.size(20.dp), Color(0xFF234C88), label) }
     }
 }
 
 @Composable private fun SpinInvitation(onClick: () -> Unit) {
-    Surface(shape = RoundedCornerShape(16.dp), color = UclColors.blueSurface, border = BorderStroke(1.dp, UclColors.dashboardLine)) {
+    Surface(shape = RoundedCornerShape(16.dp), color = UclColors.blueSurface, contentColor = UclColors.ink, border = BorderStroke(1.dp, UclColors.dashboardLine)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) {
                 Box(Modifier.size(76.dp), contentAlignment = Alignment.Center) {
@@ -208,14 +208,14 @@ private fun DashboardCarousel(onNavigate: (String) -> Unit) {
                     Text(webCopy("website.takeYourDailySpinOneSpinEvery24Hours"), Modifier.padding(top = 4.dp), color = UclColors.muted, fontSize = 13.sp, lineHeight = 18.sp)
                 }
             }
-            Button(onClick, Modifier.fillMaxWidth().heightIn(min = 44.dp), shape = RoundedCornerShape(8.dp), colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF102451))) {
+            Button(onClick, Modifier.fillMaxWidth().heightIn(min = 44.dp), shape = RoundedCornerShape(8.dp), colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF102451), contentColor = Color.White)) {
                 Text(webCopy("website.spinWheel"), fontSize = 14.sp, fontWeight = FontWeight.Bold); Spacer(Modifier.width(8.dp)); WebIcon("arrow_right", Modifier.size(18.dp), Color.White)
             }
         }
     }
 }
 
-@Composable fun WebTextLink(label: String, color: Color = UclColors.accent, modifier: Modifier = Modifier, onClick: () -> Unit) {
+@Composable fun WebTextLink(label: String, color: Color = WebAccent, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Row(modifier.heightIn(min = 44.dp).clickable(onClick = onClick), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(label, color = color, fontWeight = FontWeight.Bold, fontSize = 14.sp); WebIcon("arrow_right", Modifier.size(18.dp), color)
     }
@@ -232,6 +232,7 @@ private fun DashboardCarousel(onNavigate: (String) -> Unit) {
                 Text("$date ${webCopy("website.localTime")}", color = WebMuted, fontSize = if (compact) 11.sp else 12.sp, textAlign = androidx.compose.ui.text.style.TextAlign.End)
             }
         }
+        if (match.company == true) CompanyGameBadge(Modifier.padding(bottom = 12.dp))
         if (!compact) HorizontalDivider(color = UclColors.dashboardLine)
         if (compact) Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             FixtureTeams(match, true, Modifier.weight(1f))
@@ -264,11 +265,13 @@ private fun DashboardCarousel(onNavigate: (String) -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         if (!compact) Text(webCopy("website.featuredCorrectScore"), fontSize = 12.sp, color = WebMuted, fontWeight = FontWeight.Bold)
         Row(horizontalArrangement = Arrangement.spacedBy(if (compact) 4.dp else 6.dp)) {
-            listOf("1–0" to match.onenil, "1–1" to match.oneone, "1–2" to match.onetwo).forEach { (score, price) ->
-                Surface(shape = RoundedCornerShape(8.dp), color = UclColors.paper, border = BorderStroke(1.dp, UclColors.dashboardLine)) {
+            listOf(Triple("1–0", match.onenil, "onenil"), Triple("1–1", match.oneone, "oneone"), Triple("1–2", match.onetwo, "onetwo")).forEach { (score, price, key) ->
+                val protected = match.company == true && match.comarket.textValue() == key
+                Surface(shape = RoundedCornerShape(8.dp), color = if (protected) MaterialTheme.colorScheme.secondaryContainer else UclColors.paper, border = BorderStroke(1.dp, if (protected) MaterialTheme.colorScheme.secondary else UclColors.dashboardLine)) {
                     Column(Modifier.widthIn(min = if (compact) 42.dp else 56.dp).heightIn(min = 52.dp).padding(if (compact) 2.dp else 8.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically)) {
-                        Text(score, color = WebMuted, fontSize = 11.sp)
-                        Text(price.textValue().ifBlank { "—" } + if (!compact && (price.textValue().toDoubleOrNull() ?: 0.0) > 0) "%" else "", fontWeight = FontWeight.Bold, fontSize = if (compact) 12.sp else 14.sp)
+                        Text(score, color = if (protected) MaterialTheme.colorScheme.onSecondaryContainer else WebMuted, fontSize = 11.sp)
+                        Text(price.textValue().ifBlank { "—" } + if (!compact && (price.textValue().toDoubleOrNull() ?: 0.0) > 0) "%" else "", color = if (protected) MaterialTheme.colorScheme.onSecondaryContainer else LocalContentColor.current, fontWeight = FontWeight.Bold, fontSize = if (compact) 12.sp else 14.sp)
+                        if (protected) CompanyGameBadge(Modifier.widthIn(max = 72.dp))
                     }
                 }
             }

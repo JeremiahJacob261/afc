@@ -6,6 +6,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -46,11 +47,19 @@ object UclSpacing {
     val cardRadius = 16.dp
 }
 
-private val UclColorScheme = lightColorScheme(
+internal val UclColorScheme = lightColorScheme(
     primary = UclColors.accent,
     onPrimary = UclColors.paper,
+    primaryContainer = UclColors.blueSurface,
+    onPrimaryContainer = UclColors.accentDeep,
     secondary = UclColors.secondary,
     onSecondary = Color.White,
+    secondaryContainer = UclColors.pinkSurface,
+    onSecondaryContainer = UclColors.pinkInk,
+    tertiary = UclColors.blueInk,
+    onTertiary = Color.White,
+    tertiaryContainer = UclColors.blueSurface,
+    onTertiaryContainer = UclColors.accentDeep,
     background = UclColors.paper,
     onBackground = UclColors.ink,
     surface = UclColors.paper,
@@ -58,15 +67,26 @@ private val UclColorScheme = lightColorScheme(
     surfaceVariant = UclColors.surface,
     onSurfaceVariant = UclColors.body,
     outline = UclColors.line,
+    outlineVariant = UclColors.dashboardLine,
     error = UclColors.error,
+    onError = Color.White,
+    errorContainer = UclColors.errorSurface,
+    onErrorContainer = UclColors.error,
 )
 
-private val UclDarkColorScheme = darkColorScheme(
+internal val UclDarkColorScheme = darkColorScheme(
     primary = Color(0xFF8DB8FF),
     onPrimary = Color(0xFF002D72),
+    primaryContainer = Color(0xFF10284D),
+    onPrimaryContainer = Color(0xFFD4E4FF),
     secondary = Color(0xFFFF8AC4),
     onSecondary = Color(0xFF4B002B),
+    secondaryContainer = Color(0xFF4B002B),
+    onSecondaryContainer = Color(0xFFFFCDE5),
     tertiary = Color(0xFF7CEBFF),
+    onTertiary = Color(0xFF003641),
+    tertiaryContainer = Color(0xFF004D5B),
+    onTertiaryContainer = Color(0xFFA9EDFF),
     background = Color(0xFF000A1E),
     onBackground = Color(0xFFF2F5FA),
     surface = Color(0xFF091B34),
@@ -74,7 +94,11 @@ private val UclDarkColorScheme = darkColorScheme(
     surfaceVariant = Color(0xFF10284D),
     onSurfaceVariant = Color(0xFFD4DEEF),
     outline = Color(0xFF8293B0),
+    outlineVariant = Color(0xFF475E7D),
     error = Color(0xFFFFB4AB),
+    onError = Color(0xFF690005),
+    errorContainer = Color(0xFF93000A),
+    onErrorContainer = Color(0xFFFFDAD6),
 )
 
 private val UclTypography = Typography(
@@ -93,4 +117,11 @@ private val UclTypography = Typography(
 fun UclTheme(content: @Composable () -> Unit) {
     val colorScheme = if (androidx.compose.foundation.isSystemInDarkTheme()) UclDarkColorScheme else UclColorScheme
     MaterialTheme(colorScheme = colorScheme, typography = UclTypography, content = content)
+}
+
+/** Pick the strongest foreground for an opaque, explicitly colored panel. */
+internal fun readableContentColor(background: Color): Color {
+    val lightContrast = 1.05f / (background.luminance() + .05f)
+    val darkContrast = (background.luminance() + .05f) / (UclColors.ink.luminance() + .05f)
+    return if (darkContrast >= lightContrast) UclColors.ink else Color.White
 }

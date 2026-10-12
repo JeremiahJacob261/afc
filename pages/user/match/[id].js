@@ -21,6 +21,7 @@ import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay';
 import { waitForPaint } from '@/lib/uiFeedback';
 import { useTranslation } from 'next-i18next';
 import styles from '@/styles/UserMatch.module.css';
+import { CompanyGameBadge } from '@/components/user/BulletinUI';
 
 
 
@@ -242,7 +243,7 @@ export default function Match({ matchDat }) {
                         </div>
                         <span className={styles.teamCrest}><Image src={matches.iaway || Ims} width={64} height={64} alt="" unoptimized /></span>
                     </div>
-                    {matches.company === true && <p className={styles.company}>{t('mobile.match.companyGame')}</p>}
+                    {matches.company === true && <div className={styles.companyMarker}><CompanyGameBadge /></div>}
                 </section>
 
                 <section className={styles.markets} aria-labelledby="markets-title">
@@ -263,12 +264,12 @@ export default function Match({ matchDat }) {
                                 className={`${styles.marketCard} ${isProtected ? styles.protectedMarket : ''} ${picked === market.word ? styles.selectedMarket : ''}`}
                                 disabled={odd <= 0 || matches.verified === true || (getMatchStartMs(matches) || 0) <= Date.now()}
                                 aria-pressed={picked === market.word}
-                                aria-label={odd > 0 ? `${label}, ${formatOdd(odd)}%. ${t('mobile.match.choose')}` : `${label}, ${t('mobile.match.marketUnavailable')}`}
+                                aria-label={`${isProtected ? `${t('mobile.match.companyGame')}, ` : ''}${odd > 0 ? `${label}, ${formatOdd(odd)}%. ${t('mobile.match.choose')}` : `${label}, ${t('mobile.match.marketUnavailable')}`}`}
                                 onClick={() => { setPicked(market.word); setBottom(true) }}
                             >
                                 <span className={styles.marketScore}>{label}</span>
                                 <span className={styles.marketBottom}>
-                                    <span>{isProtected ? t('mobile.match.companyGame') : t('landing.live.odds')}</span>
+                                    {isProtected ? <CompanyGameBadge /> : <span className={styles.marketLabel}>{t('landing.live.odds')}</span>}
                                     <strong>{odd > 0 ? `${formatOdd(odd)}%` : '—'}</strong>
                                     <ChevronRight size={18} aria-hidden="true" />
                                 </span>

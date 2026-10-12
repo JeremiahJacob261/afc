@@ -21,6 +21,13 @@
   --ucl-blue-tint: #eaf0fb;
   --ucl-pink-tint: #fff0f7;
   --ucl-focus: #00409e;
+  /* Customer surfaces share the native app's blue and pink palette. */
+  --ucl-canvas: #eaf0fb;
+  --ucl-paper: #f8faff;
+  --ucl-panel: #f1f4fb;
+  --ucl-ink: #080f32;
+  --ucl-muted: #536583;
+  --ucl-border: #c5d5ed;
   --ucl-cyan: #00c2f3;
   --ucl-cyan-soft: #29e0ff;
 

@@ -81,12 +81,14 @@ internal fun MatchesContent(state: FixturesUiState, onBack: () -> Unit, onMatch:
             }
             WebIcon("arrow_up_right", tint = MaterialTheme.colorScheme.primary)
         }
+        if (match.company == true) CompanyGameBadge()
         Row(Modifier.fillMaxWidth()) {
-            listOf("1–0" to match.onenil, "1–1" to match.oneone, "1–2" to match.onetwo).forEachIndexed { index, (score, odd) ->
+            listOf(Triple("1–0", match.onenil, "onenil"), Triple("1–1", match.oneone, "oneone"), Triple("1–2", match.onetwo, "onetwo")).forEachIndexed { index, (score, odd, key) ->
                 if (index > 0) VerticalDivider(Modifier.height(44.dp), color = MaterialTheme.colorScheme.outlineVariant)
                 Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(score, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
                     Text(if ((odd.textValue().toDoubleOrNull() ?: 0.0) > 0) "${odd.textValue()}%" else "—", color = MaterialTheme.colorScheme.primary, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    if (match.company == true && match.comarket.textValue() == key) CompanyGameBadge(Modifier.padding(top = 4.dp))
                 }
             }
         }

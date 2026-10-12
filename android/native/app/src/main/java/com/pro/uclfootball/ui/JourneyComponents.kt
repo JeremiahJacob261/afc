@@ -23,11 +23,11 @@ fun JourneyPage(title: String, onBack: () -> Unit, content: @Composable ColumnSc
         }
         return
     }
-    Scaffold(containerColor = UclColors.paper, contentWindowInsets = WindowInsets.safeDrawing) { padding ->
+    Scaffold(containerColor = MaterialTheme.colorScheme.background, contentWindowInsets = WindowInsets.safeDrawing) { padding ->
         Column(Modifier.fillMaxSize().padding(padding).imePadding().verticalScroll(rememberScrollState()).padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(18.dp)) {
             TextButton(onClick = onBack) { Text(stringResource(R.string.journey_back)) }
-            Text(title, style = MaterialTheme.typography.headlineLarge, color = UclColors.ink)
+            Text(title, style = MaterialTheme.typography.headlineLarge, color = MaterialTheme.colorScheme.onSurface)
             content()
         }
     }
@@ -38,11 +38,11 @@ fun JourneyField(label: String, value: String, onChange: (String) -> Unit,
     keyboard: KeyboardType = KeyboardType.Text, secret: Boolean = false, enabled: Boolean = true, floatingLabel: String? = null) {
     if (LocalUserShell.current) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(label, fontSize = 12.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.Medium, color = UclColors.ink)
+            Text(label, fontSize = 12.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface)
             OutlinedTextField(value, onChange, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp),
                 label = floatingLabel?.let { { Text(it) } }, singleLine = true, enabled = enabled,
                 shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp),
-                colors = OutlinedTextFieldDefaults.colors(unfocusedBorderColor = UclColors.ink, focusedBorderColor = UclColors.accent),
+                colors = OutlinedTextFieldDefaults.colors(unfocusedBorderColor = MaterialTheme.colorScheme.outline, focusedBorderColor = MaterialTheme.colorScheme.primary),
                 keyboardOptions = KeyboardOptions(keyboardType = keyboard),
                 visualTransformation = if (secret) PasswordVisualTransformation() else VisualTransformation.None)
         }
@@ -60,7 +60,7 @@ fun JourneyField(label: String, value: String, onChange: (String) -> Unit,
 @Composable
 fun JourneyAction(label: String, enabled: Boolean = true, busy: Boolean = false, onClick: () -> Unit) {
     Button(onClick, enabled = enabled && !busy, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp), shape = androidx.compose.foundation.shape.RoundedCornerShape(if (LocalUserShell.current) 10.dp else 26.dp)) {
-        if (busy) CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp)
+        if (busy) CircularProgressIndicator(Modifier.size(20.dp), color = LocalContentColor.current, strokeWidth = 2.dp)
         else Text(label)
     }
 }
@@ -68,7 +68,7 @@ fun JourneyAction(label: String, enabled: Boolean = true, busy: Boolean = false,
 @Composable
 fun JourneyChoice(label: String, selected: Boolean, enabled: Boolean = true, onClick: () -> Unit) {
     OutlinedButton(onClick, enabled = enabled, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
-        colors = ButtonDefaults.outlinedButtonColors(containerColor = if (selected) UclColors.blueSurface else UclColors.paper)) {
+        colors = ButtonDefaults.outlinedButtonColors(containerColor = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface, contentColor = if (selected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface)) {
         Text(label, modifier = Modifier.weight(1f))
         RadioButton(selected, onClick = null, enabled = enabled)
     }
@@ -76,13 +76,13 @@ fun JourneyChoice(label: String, selected: Boolean, enabled: Boolean = true, onC
 
 @Composable
 fun JourneyFeedback(resource: Int?) {
-    resource?.let { Text(stringResource(it), color = UclColors.error, style = MaterialTheme.typography.bodyMedium) }
+    resource?.let { Text(stringResource(it), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium) }
 }
 
 @Composable
 fun JourneyFact(label: String, value: String) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(label, color = UclColors.muted, style = MaterialTheme.typography.labelMedium)
-        Text(value, color = UclColors.ink, style = MaterialTheme.typography.titleMedium)
+        Text(label, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.labelMedium)
+        Text(value, color = MaterialTheme.colorScheme.onSurface, style = MaterialTheme.typography.titleMedium)
     }
 }

@@ -1,10 +1,10 @@
 .page{width:100%;max-width:1120px;margin:0 auto;padding:8px 0 48px;color:#080f32;font-family:'DM Sans',Arial,sans-serif}
 .page *{box-sizing:border-box}
 .page :is(h1,h2,p){margin:0}
-.page :is(a,button):focus-visible{outline:2px solid #0649ff;outline-offset:3px}
+.page :is(a,button):focus-visible{outline:2px solid #00409e;outline-offset:3px}
 .page button{font:inherit}
 .topline{display:flex;align-items:center;justify-content:space-between;gap:16px}
-.back{display:inline-flex;align-items:center;gap:8px;min-height:44px;color:#0649ff;font-size:14px;font-weight:700;text-decoration:none}
+.back{display:inline-flex;align-items:center;gap:8px;min-height:44px;color:#00409e;font-size:14px;font-weight:700;text-decoration:none}
 .back:hover{text-decoration:underline;text-underline-offset:4px}
 .pageTitle{margin:24px 0 32px!important;font:400 clamp(36px,4.5vw,56px)/1.08 Georgia,serif;letter-spacing:-.025em}
 .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,.8fr);gap:40px;min-height:272px;padding:40px;border-radius:16px;background:#102451;color:#fff}
@@ -27,31 +27,31 @@
 .secondaryAction:hover{background:#223a67}
 .contentGrid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr);gap:24px;margin-top:32px}
 .mainColumn,.sideColumn{display:grid;align-content:start;gap:24px;min-width:0}
-.group{min-width:0;padding:24px;border:1px solid #dfe5df;border-radius:16px;background:#fff}
+.group{min-width:0;padding:24px;border:1px solid #c5d5ed;border-radius:16px;background:#fff}
 .groupHeading,.referralHeading{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:16px}
 .groupHeading h2,.referralHeading h2{font:400 28px/1.15 Georgia,serif;letter-spacing:-.02em}
-.groupHeading svg{color:#75886b}
-.rows{border-top:1px solid #dfe5df}
-.row{display:flex;align-items:center;gap:16px;min-height:64px;padding:8px 0;border-bottom:1px solid #dfe5df;color:#080f32;text-decoration:none;transition:color .18s ease-out,transform .18s ease-out}
+.groupHeading svg{color:#31588f}
+.rows{border-top:1px solid #c5d5ed}
+.row{display:flex;align-items:center;gap:16px;min-height:64px;padding:8px 0;border-bottom:1px solid #c5d5ed;color:#080f32;text-decoration:none;transition:color .18s ease-out,transform .18s ease-out}
 .row:last-child{border-bottom:0}
-.row:hover{color:#0649ff;transform:translateX(3px)}
-.rowIcon{display:grid;place-items:center;flex:none;width:40px;height:40px;border-radius:8px;background:#eef2e9;color:#315841}
+.row:hover{color:#00409e;transform:translateX(3px)}
+.rowIcon{display:grid;place-items:center;flex:none;width:40px;height:40px;border-radius:8px;background:#eaf0fb;color:#31588f}
 .rowLabel{flex:1;min-width:0;font-size:16px;font-weight:700;line-height:1.35}
-.rowArrow{flex:none;color:#75886b}
-.referral{min-width:0;padding:24px;border-radius:16px;background:#e8eee7}
+.rowArrow{flex:none;color:#31588f}
+.referral{min-width:0;padding:24px;border-radius:16px;background:#fff0f7}
 .referralHeading{padding:0}
-.referralHeading svg{color:#315841}
+.referralHeading svg{color:#31588f}
 .referralCode{display:flex;align-items:center;gap:8px;min-height:56px;margin-top:24px;padding:4px 4px 4px 16px;border:1px solid #b9c9b9;border-radius:10px;background:#fff}
 .referralCode span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:700}
 .referralCode button{display:grid;place-items:center;flex:none;width:44px;height:44px;border:0;border-radius:8px;background:#102451;color:#fff;cursor:pointer}
-.referralCode button:hover{background:#0649ff}
+.referralCode button:hover{background:#00409e}
 .referralCode button:disabled{opacity:.5;cursor:not-allowed}
-.referralLink{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin-top:16px;color:#0649ff;font-size:14px;font-weight:700;text-decoration:none}
+.referralLink{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin-top:16px;color:#00409e;font-size:14px;font-weight:700;text-decoration:none}
 .referralLink:hover{text-decoration:underline;text-underline-offset:4px}
-.signOut{display:flex;align-items:center;justify-content:flex-end;gap:24px;margin-top:32px;padding:24px;border-top:1px solid #dfe5df;color:#52685d}
+.signOut{display:flex;align-items:center;justify-content:flex-end;gap:24px;margin-top:32px;padding:24px;border-top:1px solid #c5d5ed;color:#536583}
 .signOut button{display:inline-flex;align-items:center;gap:12px;min-height:44px;padding:8px 16px;border:1px solid #bdcbbf;border-radius:8px;background:#fff;color:#080f32;font-size:14px;font-weight:700;cursor:pointer}
-.signOut button svg:last-child{margin-left:12px;color:#75886b}
-.signOut button:hover{background:#f1f4ef}
+.signOut button svg:last-child{margin-left:12px;color:#31588f}
+.signOut button:hover{background:#eaf0fb}
 .signOut button:disabled{opacity:.6;cursor:wait}
 .error{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:160px;padding:32px;border:1px solid #e4b8af;border-radius:16px;background:#fbe9e7;color:#8b1c13;font-size:16px}
 .error button{min-height:44px;padding:8px 20px;border:0;border-radius:8px;background:#102451;color:#fff;cursor:pointer}
