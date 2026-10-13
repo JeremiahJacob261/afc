@@ -7,7 +7,7 @@ const ts = require('typescript')
 
 function load(file, mocks = {}, globals = {}) {
   const filename = path.resolve(__dirname, '..', file)
-  const code = ts.transpileModule(fs.readFileSync(filename, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText
+  const code = ts.transpileModule(fs.readFileSync(filename, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX } }).outputText
   const module = { exports: {} }
   const actualRequire = createRequire(filename)
   new Function('require', 'module', 'exports', ...Object.keys(globals), code)(
@@ -193,4 +193,24 @@ test('static translation pages send only their requested sections', async () => 
   })
   const result=await props.getI18nServerSideProps('en',['legal'])
   assert.deepEqual(Object.keys(result._nextI18Next.initialI18nStore.en.common),['common','legal'])
+})
+
+test('performance links use localized native anchors, preserve modified clicks and navigate through Next', () => {
+  const pushes = [], warmed = []
+  const router = { locale:'en', defaultLocale:'my', basePath:'', push:(...args)=>pushes.push(args) }
+  const Link = load('components/PerformanceLink.js', {
+    'next/router': { useRouter:()=>router },
+    '@/lib/backgroundPrefetch': { prefetchRoute:(_router, href)=>warmed.push(href) },
+    'react/jsx-runtime': { jsx:(type,props)=>({type,props}) },
+  }).default
+  const anchor = Link({href:'/user/bets',children:'Bets'})
+  assert.equal(anchor.type,'a')
+  assert.equal(anchor.props.href,'/en/user/bets')
+  anchor.props.onMouseEnter({}); assert.deepEqual(warmed,['/user/bets'])
+  anchor.props.onClick({button:0,ctrlKey:true}); assert.equal(pushes.length,0)
+  let prevented=false
+  anchor.props.onClick({button:0,preventDefault:()=>{prevented=true}})
+  assert.equal(prevented,true)
+  assert.equal(pushes[0][0],'/user/bets')
+  assert.equal(pushes[0][2].locale,'en')
 })
