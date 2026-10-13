@@ -136,7 +136,7 @@ class SupabaseAuthClient(
                 val authError = runCatching { json.decodeFromString<SupabaseAuthError>(body) }.getOrNull()
                 throw SupabaseAuthException(
                     httpStatus = result.code,
-                    code = authError?.error,
+                    code = authError?.errorCode ?: authError?.error,
                     message = authError?.errorDescription ?: authError?.msg ?: authError?.message,
                 )
             }

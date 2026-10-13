@@ -64,7 +64,7 @@ class RegistrationViewModel(private val repository: RegistrationRepository, refe
             catch (error: SupabaseAuthException) {
                 val message = error.message.orEmpty().lowercase()
                 val resource = when {
-                    error.code == "user_already_exists" || "already registered" in message -> R.string.registration_email_taken
+                    error.code in setOf("user_already_exists", "email_exists") || "already registered" in message -> R.string.registration_email_taken
                     error.code == "email_address_invalid" || "invalid email" in message -> R.string.registration_enter_email
                     error.code == "weak_password" || "password should be" in message -> R.string.registration_password_short
                     current.awaitingConfirmation -> R.string.registration_confirmation_failed

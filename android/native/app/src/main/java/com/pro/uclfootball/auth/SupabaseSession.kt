@@ -34,6 +34,7 @@ internal data class RefreshGrantRequest(
 
 @Serializable
 internal data class SupabaseAuthError(
+    @SerialName("error_code") val errorCode: String? = null,
     val error: String? = null,
     @SerialName("error_description") val errorDescription: String? = null,
     val msg: String? = null,

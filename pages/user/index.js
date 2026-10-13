@@ -47,6 +47,7 @@ const dashboardSlides = [
   { src: '/promotions/ucl-welcome.jpg', altKey: 'website.carouselWelcomeBanner' },
   { src: '/promotions/ucl-commissions.jpg', altKey: 'website.carouselCommissionBanner' },
   { src: '/promotions/ucl-referral-rewards.jpg', altKey: 'website.carouselReferralBanner' },
+  { src: '/promotions/ucl-agent-salary.jpg', altKey: 'website.carouselAgentSalaryBanner' },
 ]
 
 function DashboardCarousel() {

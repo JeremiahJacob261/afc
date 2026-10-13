@@ -1787,13 +1787,14 @@ DECLARE
   v_refer text := nullif(trim(p_refer), '');
   v_constraint text;
 BEGIN
-  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE id::text=p_userid
-      AND lower(email)=lower(p_email)) THEN
+  -- The server-only API verifies the bearer token with Auth before calling this RPC.
+  -- Keep SECURITY INVOKER: service_role deliberately cannot read auth.users.
+  IF nullif(trim(p_userid),'') IS NULL OR nullif(trim(p_email),'') IS NULL THEN
     RAISE EXCEPTION 'Account identity required';
   END IF;
   IF nullif(trim(p_username),'') IS NULL OR length(trim(p_username)) > 64
-      OR trim(p_username) ~ '\s' OR length(coalesce(p_phone,'')) > 40
-      OR trim(p_countrycode) !~ '^\+[0-9]{1,4}$' THEN
+      OR trim(p_username) ~ '[[:space:]]' OR length(coalesce(p_phone,'')) > 40
+      OR p_countrycode IS NULL OR trim(p_countrycode) !~ '^[+][0-9]{1,4}$' THEN
     RAISE EXCEPTION 'Invalid signup fields';
   END IF;
   PERFORM pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(p_userid, 8124));

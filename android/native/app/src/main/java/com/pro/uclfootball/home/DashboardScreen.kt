@@ -168,6 +168,7 @@ private fun DashboardCarousel() {
         R.drawable.ucl_welcome to "website.carouselWelcomeBanner",
         R.drawable.ucl_commissions to "website.carouselCommissionBanner",
         R.drawable.ucl_referral_rewards to "website.carouselReferralBanner",
+        R.drawable.ucl_agent_salary to "website.carouselAgentSalaryBanner",
     )
     Surface(shape = RoundedCornerShape(16.dp), color = MaterialTheme.colorScheme.surface,
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)) {

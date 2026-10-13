@@ -17,7 +17,22 @@ class RegistrationRepository(private val api: NativeApiClient, private val auth:
     suspend fun register(email: String, password: String, profile: SignupProfileRequest): Boolean {
         val available = api.postJson<UsernameCheckRequest, UsernameCheckResponse>("api/check-username", UsernameCheckRequest(profile.username))
         if (!available.available) throw UsernameUnavailable()
-        val response = auth.signUp(email, password)
+        val response = try {
+            auth.signUp(email, password)
+        } catch (error: SupabaseAuthException) {
+            if (error.code !in setOf("user_already_exists", "email_exists") &&
+                !error.message.orEmpty().contains("already registered", ignoreCase = true)) throw error
+            // A failed profile request can leave a valid Auth account behind. Require
+            // its password before retrying the idempotent, authenticated profile API.
+            val session = try {
+                auth.signInWithPassword(email, password)
+            } catch (loginError: SupabaseAuthException) {
+                if (loginError.code == "invalid_credentials") throw error
+                throw loginError
+            }
+            createProfile(session.accessToken, profile)
+            return true
+        }
         val token = response.accessToken?.takeIf(String::isNotBlank) ?: return false
         createProfile(token, profile)
         return true
