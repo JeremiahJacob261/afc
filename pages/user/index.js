@@ -243,8 +243,10 @@ export default function Home() {
         </div>
         {!nativeApp && <div className={styles.downloadAction}>
           {appRelease ? <a href={appRelease.downloadUrl} className={styles.downloadButton}><Download size={18} aria-hidden="true" />{t('dashboard.downloadApp')}</a>
-            : <button type="button" className={styles.downloadButton} disabled><Download size={18} aria-hidden="true" />{t('dashboard.downloadApp')}</button>}
-          <span>{t(appRelease ? 'dashboard.androidApp' : releaseLoaded ? 'dashboard.downloadUnavailable' : 'dashboard.checkingDownload')}</span>
+            : <button type="button" className={styles.downloadButton} disabled>
+              <Download size={18} aria-hidden="true" />{t('dashboard.downloadApp')}</button>}
+          {/* <span>{t(appRelease ? 'dashboard.androidApp' : releaseLoaded ? 'dashboard.downloadUnavailable' : 'dashboard.checkingDownload')}</span>
+        */}
         </div>}
       </section>
       <section className={styles.spinInvite} aria-labelledby="spin-invite-heading">
