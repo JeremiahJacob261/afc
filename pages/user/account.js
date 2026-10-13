@@ -97,7 +97,7 @@ export default function Account() {
   const copyReferral = async () => {
     if (!profile?.newrefer) return
     try {
-      await navigator.clipboard.writeText('https://europeanfc01.com/register/' + profile.newrefer)
+      await navigator.clipboard.writeText('https://ucl01.com/register/' + profile.newrefer)
       setCopied(true)
       toast.success(t('messages.inviteLinkCopied'))
       window.setTimeout(() => setCopied(false), 2000)

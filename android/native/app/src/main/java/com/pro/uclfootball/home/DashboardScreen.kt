@@ -67,8 +67,8 @@ internal fun DashboardScreen(state: DashboardUiState, onNavigate: (String) -> Un
         }
     }.sortedBy { matchStartMillis(it.tsgmt, it.date, it.time) }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 32.dp)) {
-        item { DashboardAccountActions(state.referralCode) { onNavigate("deposit") }; Spacer(Modifier.height(16.dp)) }
         item { DashboardCarousel() }
+        item { Spacer(Modifier.height(16.dp)); DashboardAccountActions(state.referralCode) { onNavigate("deposit") } }
         item { Spacer(Modifier.height(16.dp)); SpinInvitation { onNavigate("wheel") } }
         item {
             Row(Modifier.fillMaxWidth().padding(top = 28.dp, bottom = 20.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
@@ -293,7 +293,7 @@ private fun sameDay(a: Long, b: Long): Boolean {
 private fun DashboardAccountActions(referralCode: String?, onDeposit: () -> Unit) {
     val context = LocalContext.current
     var copied by remember(referralCode) { mutableStateOf(false) }
-    val referralLink = referralCode?.takeIf { it.isNotBlank() }?.let { "https://europeanfc01.com/register/${Uri.encode(it)}" }.orEmpty()
+    val referralLink = referralCode?.takeIf { it.isNotBlank() }?.let { "https://ucl01.com/register/${Uri.encode(it)}" }.orEmpty()
     LaunchedEffect(copied) { if (copied) { delay(2000); copied = false } }
     WebPanel(color = MaterialTheme.colorScheme.surface) {
         Button(onClick = onDeposit, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp), shape = RoundedCornerShape(8.dp)) {

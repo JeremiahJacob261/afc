@@ -1,7 +1,7 @@
 param(
     [Parameter(Mandatory = $true)][ValidatePattern('^1:[0-9]+:android:[a-f0-9]+$')][string]$FirebaseAppId,
     [Parameter(Mandatory = $true)][string]$FirebaseApiKey,
-    [string]$ApiBaseUrl = 'https://www.europeanfc01.com',
+    [string]$ApiBaseUrl = 'https://www.ucl01.com',
     [string]$FirebaseProjectId = 'atalanta-77824',
     [string]$FirebaseSenderId = '99712962887'
 )

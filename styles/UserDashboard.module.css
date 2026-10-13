@@ -163,7 +163,7 @@
 .carousel{padding:0;min-height:0;background:var(--ucl-paper)}
 .carouselImage{aspect-ratio:16/9;background:#002d72}
 .carouselImage img{display:block;width:100%;height:100%;object-fit:contain}
-.quickActions{display:flex;align-items:center;gap:24px;margin-bottom:24px;padding:20px;border:1px solid var(--ucl-border);border-radius:16px;background:var(--ucl-paper)}
+.quickActions{display:flex;align-items:center;gap:24px;margin:24px 0;padding:20px;border:1px solid var(--ucl-border);border-radius:16px;background:var(--ucl-paper)}
 .depositAction,.downloadButton{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:12px 18px;border-radius:8px;font-family:inherit;font-size:14px;font-weight:700;line-height:1.5;text-decoration:none;white-space:nowrap}
 .depositAction{background:var(--ucl-blue-accent,#00409e);color:#fff}
 .depositAction:hover{background:#002d72;color:#fff}
@@ -177,7 +177,7 @@
 .downloadButton{border:1px solid var(--ucl-border);background:transparent;color:var(--ucl-ink);cursor:pointer}
 .downloadAction>span{font-size:12px;color:var(--ucl-muted);text-align:center;max-width:24ch}
 .quickActions button:disabled{opacity:.55;cursor:not-allowed}
-@media(max-width:767px){.quickActions{flex-wrap:wrap;gap:16px;padding:16px;margin-bottom:16px}.depositAction{flex:1}.downloadAction{flex:1}.downloadButton{width:100%}.referralAction{flex-basis:100%;order:3}}
+@media(max-width:767px){.quickActions{flex-wrap:wrap;gap:16px;padding:16px;margin:16px 0}.depositAction{flex:1}.downloadAction{flex:1}.downloadButton{width:100%}.referralAction{flex-basis:100%;order:3}}
 .carouselControls{position:static;justify-content:center;gap:12px;padding:6px 12px;background:var(--ucl-paper)}
 .carouselControls button{width:44px;height:44px}
 

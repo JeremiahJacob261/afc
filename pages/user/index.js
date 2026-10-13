@@ -114,7 +114,7 @@ export default function Home() {
   const [nativeApp, setNativeApp] = useState(true)
   const [appRelease, setAppRelease] = useState(null)
   const [releaseLoaded, setReleaseLoaded] = useState(false)
-  const referralLink = referralCode ? `https://europeanfc01.com/register/${encodeURIComponent(referralCode)}` : ''
+  const referralLink = referralCode ? `https://ucl01.com/register/${encodeURIComponent(referralCode)}` : ''
 
   useEffect(() => {
     const native = Boolean(window.Capacitor?.isNativePlatform?.())
@@ -229,6 +229,7 @@ export default function Home() {
     <Head><title>{t('website.uclMatchday')}</title><link rel="icon" href="/european.ico" /><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
     <Toaster position="bottom-center" />
     <main className={styles.dashboard}>
+      <DashboardCarousel />
       <section className={styles.quickActions} aria-label={t('website.yourAccountAlt')}>
         <Link href="/user/fund" className={styles.depositAction}><Plus size={20} aria-hidden="true" />{t('common.deposit')}</Link>
         <div className={styles.referralAction}>
@@ -246,7 +247,6 @@ export default function Home() {
           <span>{t(appRelease ? 'dashboard.androidApp' : releaseLoaded ? 'dashboard.downloadUnavailable' : 'dashboard.checkingDownload')}</span>
         </div>}
       </section>
-      <DashboardCarousel />
       <section className={styles.spinInvite} aria-labelledby="spin-invite-heading">
         <span className={styles.spinInviteWheel} aria-hidden="true"><span>{t('website.go')}</span></span>
         <div className={styles.spinInviteCopy}>

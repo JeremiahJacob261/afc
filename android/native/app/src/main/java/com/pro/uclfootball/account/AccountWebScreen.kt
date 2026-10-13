@@ -80,7 +80,7 @@ internal fun WebAccountScreen(state: AccountUiState, onRetry: () -> Unit, onNavi
             Column(Modifier.fillMaxWidth().padding(20.dp)) {
                 AccountGroupHeading(webCopy("mobile.profile.referrals"), "users_round")
                 Row(Modifier.padding(top = 24.dp).fillMaxWidth().background(Color.White, RoundedCornerShape(10.dp)).border(1.dp, UclColors.dashboardLine, RoundedCornerShape(10.dp)).padding(start = 16.dp, end = 4.dp, top = 4.dp, bottom = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                    val referralUrl = profile?.newrefer?.let { "https://europeanfc01.com/register/$it" }.orEmpty()
+                    val referralUrl = profile?.newrefer?.let { "https://ucl01.com/register/$it" }.orEmpty()
                     Text(referralUrl.ifBlank { "â€”" }, Modifier.weight(1f), fontSize = 14.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis)
                     var copied by remember { mutableStateOf(false) }
                     LaunchedEffect(copied) { if (copied) { kotlinx.coroutines.delay(2000); copied = false } }
