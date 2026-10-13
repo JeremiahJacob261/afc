@@ -1,3 +1,4 @@
+import PaginationButton from '@/components/PaginationButton'
 import { Box, CircularProgress, Stack, Typography } from '@mui/material'
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined'
 import { Icon } from '@iconify/react'
@@ -68,6 +69,8 @@ function formatDate(value, locale, t) {
 
 function normalizeNotification(item, fallbackTitle) {
   return {
+    sourceTable: item.sourceTable || '',
+    sourceId: item.sourceId || '',
     id: item.id || `${item.timestamp || item.time}-${item.message}`,
     title: item.title || fallbackTitle,
     titleKey: item.titleKey || '',
@@ -213,6 +216,8 @@ export default function Notification() {
   const [notifications, setNotifications] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [nextCursor, setNextCursor] = useState(null)
+  const [loadingMore, setLoadingMore] = useState(false)
 
   useEffect(() => {
     let active = true
@@ -224,7 +229,7 @@ export default function Notification() {
 
       try {
         setError('')
-        const response = await authFetch('/api/notify')
+        const response = await authFetch('/api/notify?page=1')
 
         if (response.status === 401 || response.status === 404) {
           router.push('/login')
@@ -238,7 +243,8 @@ export default function Notification() {
         const result = await response.json()
         if (!active) return
 
-        setNotifications(Array.isArray(result) ? result.map((item) => normalizeNotification(item, t('mobile.notifications.fallbackTitle'))) : [])
+        setNextCursor(result.nextCursor)
+        setNotifications((result.notifications || []).map(item => normalizeNotification(item, t('mobile.notifications.fallbackTitle'))))
       } catch (err) {
         if (active) setError(err.message || t('messages.unableLoadNotifications'))
       } finally {
@@ -252,6 +258,24 @@ export default function Notification() {
       active = false
     }
   }, [router, t])
+
+  async function loadMore() {
+    if (!nextCursor || loadingMore) return
+    setLoadingMore(true)
+    try {
+      const response = await authFetch(`/api/notify?page=1&cursor=${encodeURIComponent(nextCursor)}`)
+      const result = await response.json()
+      if (!response.ok) throw new Error(t('messages.unableLoadNotifications'))
+      setNotifications(current => {
+        const combined = [...new Map([...current, ...(result.notifications || []).map(item => normalizeNotification(item, t('mobile.notifications.fallbackTitle')))].map(item => [item.id, item])).values()]
+        const sources = new Set(combined.filter(item => item.sourceTable).map(item => `${item.sourceTable}:${item.sourceId}`))
+        return combined.filter(item => !item.id.startsWith('notification-') || !sources.has(`notification:${item.id.replace('notification-', '')}`))
+          .sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0))
+      })
+      setNextCursor(result.nextCursor)
+    } catch (err) { setError(err.message) }
+    finally { setLoadingMore(false) }
+  }
 
   return (
     <Cover>
@@ -339,6 +363,7 @@ export default function Notification() {
         ) : (
           <EmptyState t={t} />
         )}
+        <PaginationButton cursor={nextCursor} loading={loadingMore} onClick={loadMore} />
       </Box>
     </Cover>
   )

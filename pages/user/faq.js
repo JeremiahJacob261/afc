@@ -22,6 +22,6 @@ export default function Faq() {
 }
 
 export async function getStaticProps(context) {
-  const i18nProps = await getI18nServerSideProps(context.locale)
+  const i18nProps = await getI18nServerSideProps(context.locale, ['website', 'mobile', 'faq'])
   return { props: { ...i18nProps } }
 }

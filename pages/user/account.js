@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import Link from 'next/link'
+import Link from '@/components/PerformanceLink'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
@@ -17,6 +17,7 @@ import { waitForPaint } from '@/lib/uiFeedback'
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
 import AppLoadingOverlay from '@/components/AppLoadingOverlay'
 import styles from '@/styles/UserAccount.module.css'
+import { cachedPublicFetch } from '@/lib/requestCache'
 
 const defaultLinks = {
   telegramGroupUrl: 'https://t.me/+Giav1o1JVGNkYzNk',
@@ -50,7 +51,7 @@ export default function Account() {
   const [copied, setCopied] = useState(false)
 
   useEffect(() => {
-    fetch('/api/platform-settings')
+    cachedPublicFetch('/api/platform-settings')
       .then((response) => response.ok ? response.json() : null)
       .then((result) => {
         if (result?.links) setLinks((current) => ({
@@ -71,7 +72,7 @@ export default function Account() {
       if (!session || !active) return
       clearLegacyAuthStorage()
       try {
-        const response = await authFetch('/api/me')
+        const response = await authFetch('/api/me', { fresh: retryKey > 0 })
         if (response.status === 401 || response.status === 404) {
           await supabase.auth.signOut()
           router.replace('/login')
@@ -127,7 +128,7 @@ export default function Account() {
   const balance = Number(profile?.balance || 0).toLocaleString(undefined, { maximumFractionDigits: 3 })
   const initials = (profile?.username || 'U').slice(0, 2).toUpperCase()
 
-  return <Cover>
+  return <Cover ready={!loading}>
     <Head>
       <title>{username + ' · UCL'}</title>
       <link rel="icon" href="/european.ico" />
@@ -228,5 +229,5 @@ export default function Account() {
 }
 
 export async function getStaticProps(context) {
-  return { props: await getI18nServerSideProps(context.locale) }
+  return { props: await getI18nServerSideProps(context.locale, ['website', 'mobile', 'status', 'messages', 'emptyStates']) }
 }

@@ -9,7 +9,7 @@ import styles from '@/styles/MatchdayBulletin.module.css'
 export function BulletinTeam({ name, image, size = 28 }) {
   const { t } = useTranslation('common')
   const [failed, setFailed] = useState(false)
-  return <div className={styles.team}><Image src={failed || !image ? ball : image} width={size} height={size} alt="" unoptimized onError={() => setFailed(true)} /><span>{name || t('common.team')}</span></div>
+  return <div className={styles.team}><Image src={failed || !image ? ball : image} width={size} height={size} sizes={`${size}px`} alt="" onError={() => setFailed(true)} /><span>{name || t('common.team')}</span></div>
 }
 export function BetBadge({ bet }) {
   const { t } = useTranslation('common')

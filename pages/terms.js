@@ -24,6 +24,6 @@ export default function Terms() {
   )
 }
 
-export async function getServerSideProps(context) {
-  return { props: await getI18nServerSideProps(context.locale) }
+export async function getStaticProps(context) {
+  return { props: await getI18nServerSideProps(context.locale, ['legal']) }
 }

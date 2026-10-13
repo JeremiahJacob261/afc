@@ -2,7 +2,7 @@ import { translateApiMessage } from '@/lib/translateApiMessage'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
-import Link from 'next/link'
+import Link from '@/components/PerformanceLink'
 import { useRouter } from 'next/router'
 import { ArrowRight, ArrowUpRight, Check, Copy, Download, Plus, ChevronLeft, ChevronRight, Clock3, MessageCircle, Send, Trophy } from 'lucide-react'
 import { useTranslation } from 'next-i18next'
@@ -16,6 +16,7 @@ import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
 import ball from '@/public/simps/ball.png'
 import styles from '@/styles/UserDashboard.module.css'
 import { CompanyGameBadge } from '@/components/user/BulletinUI'
+import { cachedPublicFetch } from '@/lib/requestCache'
 
 const HOUR_MS = 60 * 60 * 1000
 const fallbackTelegram = 'https://t.me/+Giav1o1JVGNkYzNk'
@@ -80,7 +81,7 @@ function DashboardCarousel() {
 function Team({ name, image }) {
   const { t } = useTranslation('common');
   return <span className={styles.team}>
-    <span className={styles.crest}><Image src={image || ball} width={28} height={28} alt="" unoptimized /></span>
+    <span className={styles.crest}><Image src={image || ball} width={28} height={28} sizes="28px" alt="" /></span>
     <strong>{name || t('website.team')}</strong>
   </span>
 }
@@ -146,6 +147,7 @@ export default function Home() {
   }
   const [matches, setMatches] = useState([])
   const [openBets, setOpenBets] = useState([])
+  const [totalOpenBets, setTotalOpenBets] = useState(0)
   const [betsStatus, setBetsStatus] = useState('loading')
   const [filter, setFilter] = useState('today')
   const [now, setNow] = useState(null)
@@ -171,45 +173,48 @@ export default function Home() {
       const session = await requireSession(router)
       if (!session || !active) return
       clearLegacyAuthStorage()
-      const [profileResult, matchResult, betsResult] = await Promise.allSettled([
-        authFetch('/api/me', {}, session.access_token),
-        supabase.from('bets').select('*').eq('verified', false).gt('tsgmt', Date.now()).order('tsgmt', { ascending: true }).limit(50),
-        authFetch('/api/my-bets', {}, session.access_token),
-      ])
-      if (!active) return
-
-      if (profileResult.status === 'fulfilled') {
-        if (profileResult.value.status === 401 || profileResult.value.status === 404) {
-          router.push('/login')
-          return
-        }
+      const profileTask = async () => {
         try {
-          const result = await profileResult.value.json()
+          const response = await authFetch('/api/me', {}, session.access_token)
+          if (!active) return
+          if (response.status === 401 || response.status === 404) { router.push('/login'); return }
+          const result = await response.json()
+          if (!active) return
           if (result.status === 'success') {
             setUsername(result.profile?.username || '')
             setReferralCode(result.profile?.newrefer || '')
           }
           else toast.error(translateApiMessage(result, t, 'messages.unableRefreshAccount'))
         } catch (error) {
-          toast.error(t('messages.unableRefreshAccount'))
+          if (active) toast.error(t('messages.unableRefreshAccount'))
         }
-      } else {
-        toast.error(t('messages.unableRefreshAccount'))
       }
-
-      if (matchResult.status === 'fulfilled' && !matchResult.value.error) setMatches(matchResult.value.data || [])
-      else setMatchError(true)
-      setLoadingMatches(false)
-      if (betsResult.status === 'fulfilled' && betsResult.value.ok) {
+      const matchTask = async () => {
         try {
-          const result = await betsResult.value.json()
-          if (active && result.status === 'success') { setOpenBets(result.unsettled || []); setBetsStatus('ready') }
+          const { data, error } = await supabase.from('bets')
+            .select('match_id,tsgmt,date,time,home,away,ihome,iaway,league,otherl,company,comarket,onenil,oneone,onetwo')
+            .eq('verified', false).gt('tsgmt', Date.now()).order('tsgmt', { ascending: true }).limit(50)
+          if (!active) return
+          if (error) throw error
+          setMatches(data || [])
+          markAuthLogin('dashboard-matches-ready')
+          measureAuthLogin('submit-to-matches-ready', 'submit', 'dashboard-matches-ready')
+        } catch { if (active) setMatchError(true) }
+        finally { if (active) setLoadingMatches(false) }
+      }
+      const betsTask = async () => {
+        try {
+          const response = await authFetch('/api/my-bets?summary=1', {}, session.access_token)
+          if (!response.ok) throw new Error('Unable to load open bets')
+          const result = await response.json()
+          if (active && result.status === 'success') { setOpenBets(result.unsettled || []); setTotalOpenBets(result.totalUnsettled || 0); setBetsStatus('ready') }
           else if (active) setBetsStatus('error')
         } catch (error) { if (active) setBetsStatus('error') }
-      } else setBetsStatus('error')
+      }
+      profileTask(); matchTask(); betsTask()
     }
     load()
-    fetch('/api/platform-settings').then((response) => response.ok ? response.json() : null).then((result) => {
+    cachedPublicFetch('/api/platform-settings').then((response) => response.ok ? response.json() : null).then((result) => {
       if (!active || !result?.links) return
       setLinks({ telegram: result.links.telegramGroupUrl || fallbackTelegram, whatsapp: result.links.whatsappGroupUrl || fallbackWhatsapp })
     }).catch(() => {})
@@ -226,7 +231,7 @@ export default function Home() {
   ]
   const latestBet = openBets[0]
 
-  return <Cover dashboard>
+  return <Cover dashboard ready={!loadingMatches}>
     <Head><title>{t('website.uclMatchday')}</title><link rel="icon" href="/european.ico" /><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
     <Toaster position="bottom-center" />
     <main className={styles.dashboard}>
@@ -272,7 +277,7 @@ export default function Home() {
           {shownMatches.length ? shownMatches.map((match) => <Fixture match={match} key={match.match_id} />) : <div className={styles.empty}><Trophy size={28} aria-hidden="true" /><strong>{loadingMatches ? t('website.loadingFixtures') : matchError ? t('website.fixturesUnavailable') : t('website.noMatchesInThisWindow')}</strong><p>{loadingMatches ? t('website.checkingTheLatestSchedule') : matchError ? t('website.pleaseTryTheFullMatchesPage') : t('website.tryAnotherTimeWindowOrSeeEveryMatch')}</p>{!loadingMatches && <Link href="/user/matches">{t('website.browseAllMatches')} <ArrowRight size={16} /></Link>}</div>}
         </section>
         <aside className={styles.account} aria-label={t('website.yourAccountAlt')}>
-          <section className={styles.bets} aria-labelledby="bets-heading"><div className={styles.betsHead}><h2 id="bets-heading">{t('website.openBets')} <span>{betsStatus === 'ready' ? openBets.length : '—'}</span></h2><Link href="/user/bets" aria-label={t('website.viewAllBets')}><ArrowRight size={19} /></Link></div>{latestBet ? <Link href={`/user/viewbet/${latestBet.betid}`} className={styles.betLink}><strong>{latestBet.home} — {latestBet.away}</strong><span>{latestBet.market || t('website.matchSelection')} · {Number(latestBet.stake || 0).toLocaleString(i18n.language, { maximumFractionDigits: 3 })} {t('website.mmkStake')}</span><span>{t('website.viewBet')} <ArrowUpRight size={16} aria-hidden="true" /></span></Link> : <p className={styles.noBets}>{betsStatus === 'loading' ? t('website.loadingOpenBets') : betsStatus === 'error' ? t('website.unableToLoadOpenBetsOpenYourBetsToTryAgain') : t('website.noOpenBetsRightNowYourNextSelectionWillAppearHere')}</p>}</section>
+          <section className={styles.bets} aria-labelledby="bets-heading"><div className={styles.betsHead}><h2 id="bets-heading">{t('website.openBets')} <span>{betsStatus === 'ready' ? totalOpenBets : '—'}</span></h2><Link href="/user/bets" aria-label={t('website.viewAllBets')}><ArrowRight size={19} /></Link></div>{latestBet ? <Link href={`/user/viewbet/${latestBet.betid}`} className={styles.betLink}><strong>{latestBet.home} — {latestBet.away}</strong><span>{latestBet.market || t('website.matchSelection')} · {Number(latestBet.stake || 0).toLocaleString(i18n.language, { maximumFractionDigits: 3 })} {t('website.mmkStake')}</span><span>{t('website.viewBet')} <ArrowUpRight size={16} aria-hidden="true" /></span></Link> : <p className={styles.noBets}>{betsStatus === 'loading' ? t('website.loadingOpenBets') : betsStatus === 'error' ? t('website.unableToLoadOpenBetsOpenYourBetsToTryAgain') : t('website.noOpenBetsRightNowYourNextSelectionWillAppearHere')}</p>}</section>
           <section className={styles.community} aria-label={t('website.community')}><h2>{t('website.community')}</h2><div><a href={links.telegram} target="_blank" rel="noopener noreferrer"><Send size={18} aria-hidden="true" /> Telegram <ArrowUpRight size={16} aria-hidden="true" /></a><a href={links.whatsapp} target="_blank" rel="noopener noreferrer"><MessageCircle size={18} aria-hidden="true" /> WhatsApp <ArrowUpRight size={16} aria-hidden="true" /></a></div></section>
         </aside>
       </div>
@@ -281,6 +286,6 @@ export default function Home() {
 }
 
 export async function getStaticProps(context) {
-  const i18nProps = await getI18nServerSideProps(context.locale)
+  const i18nProps = await getI18nServerSideProps(context.locale, ['website', 'mobile', 'dashboard', 'status', 'messages', 'emptyStates', 'landing'])
   return { props: { ...i18nProps } }
 }

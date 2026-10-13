@@ -57,7 +57,9 @@
     "done": "ပြီးပါပြီ",
     "information": "အချက်အလက်",
     "loading": "UCL ကို ရယူနေသည်…",
-    "timeToBeConfirmed": "အချိန် အတည်ပြုရန် စောင့်ဆိုင်းဆဲ"
+    "timeToBeConfirmed": "အချိန် အတည်ပြုရန် စောင့်ဆိုင်းဆဲ",
+    "loadMore": "ထပ်မံကြည့်ရှုရန်",
+    "showingRecords": "မှတ်တမ်း {{count}} ခု ပြသထားသည်"
   },
   "auth": {
     "login": {

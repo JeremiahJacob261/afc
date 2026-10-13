@@ -145,7 +145,7 @@ export default function Match({ matchDat }) {
             clearLegacyAuthStorage();
 
             try {
-                const response = await authFetch('/api/me');
+                const response = await authFetch('/api/me', { fresh: true });
                 if (response.status === 401 || response.status === 404) {
                     await supabase.auth.signOut();
                     router.push('/login');

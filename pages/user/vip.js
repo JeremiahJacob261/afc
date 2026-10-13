@@ -206,7 +206,7 @@ export default function Vip() {
 }
 
 export async function getStaticProps(context) {
-  const i18nProps = await getI18nServerSideProps(context.locale)
+  const i18nProps = await getI18nServerSideProps(context.locale, ['website', 'mobile', 'status', 'messages', 'emptyStates', 'vip'])
   return {
     props: { ...i18nProps },
     revalidate: 3600,

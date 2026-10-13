@@ -1,4 +1,5 @@
 import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
+import { applyCursor, cursorPage, decodeCursor, encodeCursor, pageSize } from '@/lib/pagination'
 import {
   displayPaymentCurrency,
   fetchPaymentMethods,
@@ -240,18 +241,22 @@ export default async function handler(req, res) {
   try {
     const requestedType = normalizePaymentCode(Array.isArray(req.query.type) ? req.query.type[0] : req.query.type)
     const filter = allowedFilters.has(requestedType) ? requestedType : 'all'
-    const { profile, supabase } = await getCurrentProfile(req, 'username,totald')
+    res.setHeader('Cache-Control', 'private, no-store')
+    const paged = req.query?.page === '1'
+    const limit = pageSize(req.query?.limit)
+    const cursor = decodeCursor(req.query?.cursor)
+    const { profile, supabase } = await getCurrentProfile(req, 'username,totald,totalw')
+    let query = supabase.from('notification').select('*', { count: paged ? 'exact' : undefined }).eq('username', profile.username).in('type', ['deposit', 'withdraw', 'withdrawer'])
+    if (filter !== 'all') query = query.in('type', filter === 'withdraw' ? ['withdraw', 'withdrawer'] : ['deposit'])
 
-    const [{ data, error }, methods] = await Promise.all([
-      supabase
-        .from('notification')
-        .select('*')
-        .eq('username', profile.username)
-        .order('id', { ascending: false }),
+    const [result, methods] = await Promise.all([
+      paged ? applyCursor(query, cursor, 'transactions', limit) : query.order('id', { ascending: false }),
       fetchPaymentMethods(supabase),
     ])
 
-    if (error) throw error
+    if (result.error) throw result.error
+    const page = paged ? cursorPage(result.data || [], limit) : { data: result.data || [] }
+    const data = page.data
 
     const allTransactions = sortTransactions((data || [])
       .filter((row) => paymentTypes.has(normalizePaymentCode(row.type)))
@@ -263,10 +268,11 @@ export default async function handler(req, res) {
     return res.status(200).json({
       status: 'success',
       transactions,
-      data: transactions,
+      ...(!paged ? { data: transactions } : { nextCursor: page.next ? encodeCursor({ transactions: page.next }) : null }),
       summary: {
         ...summary,
-        count: transactions.length,
+        count: paged ? result.count || 0 : transactions.length,
+        ...(paged ? { totalWithdrawalsMmk: amountValue(profile.totalw) } : {}),
       },
       user: {
         username: profile.username,

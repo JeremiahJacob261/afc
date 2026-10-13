@@ -1,4 +1,5 @@
 import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
+import { applyCursor, cursorPage, decodeCursor, encodeCursor, pageSize } from '@/lib/pagination'
 
 function amountValue(value) {
   const amount = Number(value || 0)
@@ -247,106 +248,50 @@ export default async function handler(req, res) {
       return res.status(200).json({ status: 'success' })
     }
 
-    const { data: appRows, error: appError } = await supabase
-      .from('app_notifications')
-      .select('*')
-      .eq('recipient_username', profile.username)
-      .order('created_at', { ascending: false })
-
-    if (appError) throw appError
-
+    res.setHeader('Cache-Control', 'private, no-store')
+    const paged = req.query?.page === '1'
+    const cursor = decodeCursor(req.query?.cursor)
+    const limit = pageSize(req.query?.limit, 25, 50)
+    const sources = [
+      ['app', supabase.from('app_notifications').select('*').eq('recipient_username', profile.username)],
+      ['bonus', profile.newrefer ? supabase.from('activa').select().eq('code', profile.newrefer) : null],
+      ['broadcast', supabase.from('activa').select().eq('code', 'broadcast')],
+      ['bet', supabase.from('activa').select().match({ username: profile.username, code: 'bet' })],
+      ['firstDeposit', supabase.from('activa').select().match({ username: profile.username, code: 'firstdepositbonus' })],
+      ['transaction', supabase.from('notification').select().eq('username', profile.username).in('sent', ['success', 'failed'])],
+      ['reward', supabase.from('notification').select().match({ username: profile.username, address: 'admin' })],
+    ]
+    const results = await Promise.all(sources.map(([key, query]) => !query
+      ? Promise.resolve({ data: [], error: null })
+      : paged ? applyCursor(query, cursor, key, limit) : query.order('id', { ascending: false })))
+    const next = {}
+    const rows = results.map((result, index) => {
+      if (result.error) throw result.error
+      const page = paged ? cursorPage(result.data || [], limit) : { data: result.data || [] }
+      next[sources[index][0]] = page.next
+      return page.data
+    })
+    const [appRows, bonusRows, broadcastRows, betRows, firstDepositBonuses, transactionRows, adminRewardRows] = rows
     const appSourceKeys = new Set()
-    ;(appRows || []).forEach((item) => {
+    appRows.forEach(item => {
       notifications.push(appNotification(item))
       const key = notificationSourceKey(item.source_table, item.source_id)
       if (key) appSourceKeys.add(key)
     })
-
-    if (profile.newrefer) {
-      const { data: bonusRows, error: bonusError } = await supabase
-        .from('activa')
-        .select()
-        .eq('code', profile.newrefer)
-        .order('id', { ascending: false })
-
-      if (bonusError) throw bonusError
-
-      ;(bonusRows || []).forEach((item) => {
-        notifications.push(bonusNotification(item, profile))
-      })
-    }
-
-    const { data: broadcastRows, error: broadcastError } = await supabase
-      .from('activa')
-      .select()
-      .eq('code', 'broadcast')
-      .order('id', { ascending: false })
-
-    if (broadcastError) throw broadcastError
-
-    ;(broadcastRows || []).forEach((item) => {
-      notifications.push(broadcastNotification(item))
+    bonusRows.forEach(item => notifications.push(bonusNotification(item, profile)))
+    broadcastRows.forEach(item => notifications.push(broadcastNotification(item)))
+    betRows.forEach(item => notifications.push(betWinNotification(item)))
+    firstDepositBonuses.forEach(item => notifications.push(firstDepositBonusNotification(item)))
+    transactionRows.forEach(item => {
+      const keys = [notificationSourceKey('notification', item.id), notificationSourceKey('notification', item.uid)].filter(Boolean)
+      if (item.address !== 'admin' && !keys.some(key => appSourceKeys.has(key))) notifications.push(transactionNotification(item))
     })
-
-    const { data: betRows, error: betError } = await supabase
-      .from('activa')
-      .select()
-      .match({ username: profile.username, code: 'bet' })
-      .order('id', { ascending: false })
-
-    if (betError) throw betError
-
-    ;(betRows || []).forEach((item) => {
-      notifications.push(betWinNotification(item))
-    })
-
-    const { data: firstDepositBonuses, error: firstDepositBonusError } = await supabase
-      .from('activa')
-      .select()
-      .match({ username: profile.username, code: 'firstdepositbonus' })
-      .order('id', { ascending: false })
-
-    if (firstDepositBonusError) throw firstDepositBonusError
-
-    ;(firstDepositBonuses || []).forEach((item) => {
-      notifications.push(firstDepositBonusNotification(item))
-    })
-
-    const { data: transactionRows, error: transactionError } = await supabase
-      .from('notification')
-      .select()
-      .eq('username', profile.username)
-      .in('sent', ['success', 'failed'])
-      .order('id', { ascending: false })
-
-    if (transactionError) throw transactionError
-
-    ;(transactionRows || []).forEach((item) => {
-      const sourceKeys = [
-        notificationSourceKey('notification', item.id),
-        notificationSourceKey('notification', item.uid),
-      ].filter(Boolean)
-      const hasAppNotification = sourceKeys.some((key) => appSourceKeys.has(key))
-
-      if (item.address !== 'admin' && !hasAppNotification) {
-        notifications.push(transactionNotification(item))
-      }
-    })
-
-    const { data: adminRewardRows, error: adminRewardError } = await supabase
-      .from('notification')
-      .select()
-      .match({ username: profile.username, address: 'admin' })
-      .order('id', { ascending: false })
-
-    if (adminRewardError) throw adminRewardError
-
-    ;(adminRewardRows || []).forEach((item) => {
-      notifications.push(adminRewardNotification(item))
-    })
+    adminRewardRows.forEach(item => notifications.push(adminRewardNotification(item)))
 
     const sorted = sortNotifications(notifications)
     const unreadCount = (appRows || []).filter((item) => !item.read_at).length
+
+    if (paged) return res.status(200).json({ notifications: sorted, unreadCount, nextCursor: Object.values(next).some(Boolean) ? encodeCursor(next) : null })
 
     if (req.query?.summary === '1') {
       return res.status(200).json({ notifications: sorted, unreadCount })

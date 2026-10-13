@@ -1,11 +1,12 @@
 import { useTranslation } from 'next-i18next';
 import { useEffect, useRef, useState } from 'react'
-import Link from 'next/link'
+import Link from '@/components/PerformanceLink'
 import { useRouter } from 'next/router'
 import { Bell, History, Home, Menu, Trophy, Wallet } from 'lucide-react'
 import { clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth'
 import LocaleSwitcher from '@/components/LocaleSwitcher'
 import styles from '@/styles/UserDashboard.module.css'
+import { useBackgroundPrefetch } from '@/lib/backgroundPrefetch'
 
 function getNavigation(t) { return [
   { href: '/user', label: t('website.home'), icon: Home },
@@ -15,10 +16,11 @@ function getNavigation(t) { return [
   { href: '/user/account', label: t('website.more'), icon: Menu },
 ] }
 
-export default function Cover({ children, dashboard = false }) {
+export default function Cover({ children, dashboard = false, ready = false }) {
   const { t } = useTranslation('common');
   const navigation = getNavigation(t);
   const router = useRouter()
+  useBackgroundPrefetch(router, ready)
   const contentRef = useRef(null)
   const [offline, setOffline] = useState(false)
   const [visible, setVisible] = useState(true)

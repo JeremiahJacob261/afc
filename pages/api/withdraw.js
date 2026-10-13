@@ -23,8 +23,7 @@ export default async function handler(req, res) {
 
   try {
     const body = req.body || {}
-    const { supabase: currencySupabase } = await getCurrentProfile(req, 'userid')
-    const currencySettings = await getCurrencySettings(currencySupabase)
+    const currencySettings = await getCurrencySettings()
     const amount = parseCurrency(body.amount)
 
     if (!Number.isFinite(amount) || amount <= 0) {
