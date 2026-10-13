@@ -2980,3 +2980,24 @@ button.list-card {
     transform: translateX(-50%);
   }
 }
+.registration-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(6, 16, 31, .66);
+}
+
+.registration-dialog {
+  width: min(100%, 420px);
+  padding: 24px;
+  border-radius: 16px;
+  background: #fff;
+  color: #06101f;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, .22);
+}
+
+.registration-dialog h2 { margin: 0 0 12px; font-size: 22px; }
+.registration-dialog p { margin: 0 0 24px; line-height: 1.5; }

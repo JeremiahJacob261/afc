@@ -45,9 +45,9 @@ import countryData from '../../pages/api/codeswithflag.json'
 import { findDestination, needsTransferOption, transferOptions } from '../../lib/depositFlow'
 
 const registrationCountries = [
-  ...countryData.countries.filter((country) => country.countryCode === 'US'),
+  ...countryData.countries.filter((country) => country.countryCode === 'MM'),
   ...countryData.countries.filter((country) => country.countryCode === 'RU'),
-  ...countryData.countries.filter((country) => country.countryCode !== 'US' && country.countryCode !== 'RU'),
+  ...countryData.countries.filter((country) => country.countryCode !== 'MM' && country.countryCode !== 'RU'),
 ]
 
 const referralCode = '000208'
@@ -792,7 +792,7 @@ function RegisterScreen({ onBack, onLogin, onSignedIn }) {
   const [form, setForm] = useState({
     username: '',
     email: '',
-    countrycode: '+1',
+    countrycode: '+95',
     phone: '',
     referral: referralCode,
     password: '',
@@ -802,7 +802,10 @@ function RegisterScreen({ onBack, onLogin, onSignedIn }) {
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
-  const [selectedCountry, setSelectedCountry] = useState('US')
+  const dialogClose = useRef(null)
+  const [selectedCountry, setSelectedCountry] = useState('MM')
+
+  useEffect(() => { if (message) dialogClose.current?.focus() }, [message])
 
   function updateField(name, value) {
     setForm((current) => ({ ...current, [name]: value }))
@@ -818,17 +821,22 @@ function RegisterScreen({ onBack, onLogin, onSignedIn }) {
     }
 
     if (form.phone.length < 9) {
-      notifyMessage(setMessage, 'error', t('messages.phoneIncomplete'))
+      setMessage({ type: 'error', text: t('messages.phoneIncomplete') })
+      return
+    }
+
+    if (form.password.length < 6) {
+      setMessage({ type: 'error', text: t('messages.strongerPasswordMessage') })
       return
     }
 
     if (form.password !== form.confirmPassword) {
-      notifyMessage(setMessage, 'error', t('messages.passwordsMustMatch'))
+      setMessage({ type: 'error', text: t('messages.passwordsMustMatch') })
       return
     }
 
     if (!form.accepted) {
-      notifyMessage(setMessage, 'error', t('messages.acceptTerms'))
+      setMessage({ type: 'error', text: t('messages.acceptTerms') })
       return
     }
 
@@ -840,7 +848,10 @@ function RegisterScreen({ onBack, onLogin, onSignedIn }) {
         body: { username: form.username.trim() },
       })
 
-      if (!usernameResult.available) throw new Error(t('messages.usernameExists'))
+      if (!usernameResult.available) {
+        setMessage({ type: 'error', text: t('messages.usernameExists') })
+        return
+      }
 
       const { data, error } = await supabase.auth.signUp({
         email: form.email.trim(),
@@ -867,9 +878,17 @@ function RegisterScreen({ onBack, onLogin, onSignedIn }) {
         },
       })
 
-      onSignedIn()
+      setMessage({ type: 'success', text: t('messages.accountCreated') })
     } catch (error) {
-      notifyMessage(setMessage, 'error', error?.message || t('messages.unableCreateAccount'))
+      const detail = (error?.message || '').toLowerCase()
+      const text = detail.includes('already registered') || detail.includes('user already exists')
+        ? t('messages.emailExists')
+        : detail.includes('invalid email') || detail.includes('invalid format')
+          ? t('messages.invalidEmailMessage')
+          : detail.includes('password should be') || detail.includes('weak password')
+            ? t('messages.strongerPasswordMessage')
+            : t('messages.checkConnectionTryAgain')
+      setMessage({ type: 'error', text })
     } finally {
       setLoading(false)
     }
@@ -877,6 +896,16 @@ function RegisterScreen({ onBack, onLogin, onSignedIn }) {
 
   return (
     <AuthFrame title={t('auth.register.title')} subtitle={t('auth.register.subtitle')} onBack={onBack}>
+      {message && <div className="registration-dialog-backdrop" role="presentation">
+        <div className="registration-dialog" role="alertdialog" aria-modal="true" aria-labelledby="registration-dialog-title" aria-describedby="registration-dialog-message">
+          <h2 id="registration-dialog-title">{message.type === 'success' ? t('messages.welcomeToEfc') : t('auth.register.title')}</h2>
+          <p id="registration-dialog-message">{message.text}</p>
+          <button ref={dialogClose} type="button" className="primary-button" onClick={() => {
+            if (message.type === 'success') onSignedIn()
+            else setMessage(null)
+          }}>{message.type === 'success' ? t('common.continue') : t('common.close')}</button>
+        </div>
+      </div>}
       <form className="form-stack" onSubmit={submit}>
         <InputShell icon={<User size={18} />} label={t('auth.register.username')}>
           <input
@@ -957,7 +986,6 @@ function RegisterScreen({ onBack, onLogin, onSignedIn }) {
           />
           <span>{t('auth.register.terms')}</span>
         </label>
-        <Message value={message} />
         <button className="primary-button" type="submit" disabled={loading}>
           {loading ? t('auth.register.submitting') : t('auth.register.submit')}
           <ArrowRight size={18} />
