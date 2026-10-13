@@ -1053,5 +1053,14 @@
   "errors": {
     "generic": "Что-то пошло не так.",
     "unableToLoad": "Не удалось загрузить этот контент."
+  },
+  "dashboard": {
+      "referralLink": "Your referral link",
+      "copyReferralLink": "Copy referral link",
+      "referralUnavailable": "Referral link unavailable",
+      "downloadApp": "Download app",
+      "androidApp": "Android app",
+      "downloadUnavailable": "Download not available yet",
+      "checkingDownload": "Checking app availability?"
   }
 }

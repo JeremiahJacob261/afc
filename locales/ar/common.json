@@ -1044,5 +1044,14 @@
   "errors": {
     "generic": "حدث خطأ ما.",
     "unableToLoad": "تعذر تحميل هذا المحتوى."
+  },
+  "dashboard": {
+      "referralLink": "Your referral link",
+      "copyReferralLink": "Copy referral link",
+      "referralUnavailable": "Referral link unavailable",
+      "downloadApp": "Download app",
+      "androidApp": "Android app",
+      "downloadUnavailable": "Download not available yet",
+      "checkingDownload": "Checking app availability?"
   }
 }

@@ -4,7 +4,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Clock3, MessageCircle, Send, Trophy } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Check, Copy, Download, Plus, ChevronLeft, ChevronRight, Clock3, MessageCircle, Send, Trophy } from 'lucide-react'
 import { useTranslation } from 'next-i18next'
 import { Toaster, toast } from 'react-hot-toast'
 import Cover from './cover'
@@ -108,6 +108,41 @@ export default function Home() {
   const router = useRouter()
   const { t, i18n } = useTranslation('common')
   const [username, setUsername] = useState('')
+  const [referralCode, setReferralCode] = useState('')
+  const [copied, setCopied] = useState(false)
+  const [copying, setCopying] = useState(false)
+  const [nativeApp, setNativeApp] = useState(true)
+  const [appRelease, setAppRelease] = useState(null)
+  const [releaseLoaded, setReleaseLoaded] = useState(false)
+  const referralLink = referralCode ? `https://europeanfc01.com/register/${encodeURIComponent(referralCode)}` : ''
+
+  useEffect(() => {
+    const native = Boolean(window.Capacitor?.isNativePlatform?.())
+    setNativeApp(native)
+    if (native) return
+    let active = true
+    fetch('/api/mobile/release').then(response => response.ok ? response.json() : null)
+      .then(release => { if (active) setAppRelease(release?.versionCode > 0 ? release : null) })
+      .catch(() => {}).finally(() => { if (active) setReleaseLoaded(true) })
+    return () => { active = false }
+  }, [])
+
+  useEffect(() => {
+    if (!copied) return
+    const timeout = setTimeout(() => setCopied(false), 2000)
+    return () => clearTimeout(timeout)
+  }, [copied])
+
+  async function copyReferral() {
+    if (!referralLink || copying) return
+    setCopying(true)
+    try {
+      await navigator.clipboard.writeText(referralLink)
+      setCopied(true)
+      toast.success(t('messages.inviteLinkCopied'))
+    } catch (_) { toast.error(t('messages.unableCopy')) }
+    finally { setCopying(false) }
+  }
   const [matches, setMatches] = useState([])
   const [openBets, setOpenBets] = useState([])
   const [betsStatus, setBetsStatus] = useState('loading')
@@ -149,7 +184,10 @@ export default function Home() {
         }
         try {
           const result = await profileResult.value.json()
-          if (result.status === 'success') setUsername(result.profile?.username || '')
+          if (result.status === 'success') {
+            setUsername(result.profile?.username || '')
+            setReferralCode(result.profile?.newrefer || '')
+          }
           else toast.error(translateApiMessage(result, t, 'messages.unableRefreshAccount'))
         } catch (error) {
           toast.error(t('messages.unableRefreshAccount'))
@@ -191,6 +229,23 @@ export default function Home() {
     <Head><title>{t('website.uclMatchday')}</title><link rel="icon" href="/european.ico" /><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
     <Toaster position="bottom-center" />
     <main className={styles.dashboard}>
+      <section className={styles.quickActions} aria-label={t('website.yourAccountAlt')}>
+        <Link href="/user/fund" className={styles.depositAction}><Plus size={20} aria-hidden="true" />{t('common.deposit')}</Link>
+        <div className={styles.referralAction}>
+          <label htmlFor="dashboard-referral">{t('dashboard.referralLink')}</label>
+          <div className={styles.referralControl}>
+            <input id="dashboard-referral" className="notranslate" readOnly value={referralLink} placeholder={t('dashboard.referralUnavailable')} onFocus={event => event.target.select()} />
+            <button type="button" onClick={copyReferral} disabled={!referralLink || copying} aria-label={t('dashboard.copyReferralLink')}>
+              {copied ? <Check size={18} aria-hidden="true" /> : <Copy size={18} aria-hidden="true" />}<span>{t(copied ? 'messages.copiedToClipboard' : 'common.copy')}</span>
+            </button>
+          </div>
+        </div>
+        {!nativeApp && <div className={styles.downloadAction}>
+          {appRelease ? <a href={appRelease.downloadUrl} className={styles.downloadButton}><Download size={18} aria-hidden="true" />{t('dashboard.downloadApp')}</a>
+            : <button type="button" className={styles.downloadButton} disabled><Download size={18} aria-hidden="true" />{t('dashboard.downloadApp')}</button>}
+          <span>{t(appRelease ? 'dashboard.androidApp' : releaseLoaded ? 'dashboard.downloadUnavailable' : 'dashboard.checkingDownload')}</span>
+        </div>}
+      </section>
       <DashboardCarousel />
       <section className={styles.spinInvite} aria-labelledby="spin-invite-heading">
         <span className={styles.spinInviteWheel} aria-hidden="true"><span>{t('website.go')}</span></span>

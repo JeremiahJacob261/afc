@@ -67,6 +67,7 @@ internal fun DashboardScreen(state: DashboardUiState, onNavigate: (String) -> Un
         }
     }.sortedBy { matchStartMillis(it.tsgmt, it.date, it.time) }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 32.dp)) {
+        item { DashboardAccountActions(state.referralCode) { onNavigate("deposit") }; Spacer(Modifier.height(16.dp)) }
         item { DashboardCarousel() }
         item { Spacer(Modifier.height(16.dp)); SpinInvitation { onNavigate("wheel") } }
         item {
@@ -75,10 +76,10 @@ internal fun DashboardScreen(state: DashboardUiState, onNavigate: (String) -> Un
                     Text(if (state.username.isNullOrBlank()) webCopy("website.yourMatchday") else webCopy("website.helloUser", "username" to state.username),
                         color = WebMuted, fontSize = 14.sp, fontWeight = FontWeight.Bold)
                     Row { Text(webCopy("website.matchdayAlt"), fontFamily = FontFamily.Serif, fontSize = 32.sp, letterSpacing = (-.8).sp)
-                        Text(".", fontFamily = FontFamily.Serif, fontSize = 32.sp, color = UclColors.secondary) }
+                        Text(".", fontFamily = FontFamily.Serif, fontSize = 32.sp, color = MaterialTheme.colorScheme.secondary) }
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(Modifier.width(1.dp).height(48.dp).background(UclColors.dashboardLine))
+                    Box(Modifier.width(1.dp).height(48.dp).background(MaterialTheme.colorScheme.outlineVariant))
                     Column(Modifier.widthIn(min = 64.dp).padding(start = 16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(SimpleDateFormat("dd", locale).format(Date(now)), fontFamily = FontFamily.Serif, fontSize = 32.sp)
                         Text(SimpleDateFormat("MMM", locale).format(Date(now)).uppercase(locale), color = WebMuted, fontSize = 11.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.1.sp)
@@ -87,31 +88,31 @@ internal fun DashboardScreen(state: DashboardUiState, onNavigate: (String) -> Un
             }
         }
         item {
-            WebPanel {
+            WebPanel(color = MaterialTheme.colorScheme.surface) {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Column(Modifier.weight(1f)) {
                         Text(webCopy("website.fixtures"), fontFamily = FontFamily.Serif, fontSize = 30.sp, letterSpacing = (-.75).sp)
                         Text(webCopy("website.kickoffTimesShownInYourLocalTime"), Modifier.padding(top = 8.dp), color = WebMuted, fontSize = 14.sp)
                     }
                     Row(Modifier.heightIn(min = 44.dp).clickable { onNavigate("matches") }, verticalAlignment = Alignment.CenterVertically) {
-                        Text(webCopy("website.viewAll"), color = UclColors.accent, fontSize = 14.sp, fontWeight = FontWeight.Bold)
-                        WebIcon("arrow_up_right", Modifier.size(18.dp), UclColors.accent)
+                        Text(webCopy("website.viewAll"), color = MaterialTheme.colorScheme.primary, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                        WebIcon("arrow_up_right", Modifier.size(18.dp), MaterialTheme.colorScheme.primary)
                     }
                 }
-                Row(Modifier.padding(top = 20.dp, bottom = 24.dp).fillMaxWidth().background(UclColors.surface, RoundedCornerShape(12.dp)).padding(4.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                Row(Modifier.padding(top = 20.dp, bottom = 24.dp).fillMaxWidth().background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(12.dp)).padding(4.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                     listOf("today", "next3h", "next12h", "tomorrow").forEach { key ->
                         Box(Modifier.weight(1f).heightIn(min = 44.dp).clip(RoundedCornerShape(8.dp))
-                            .background(if (filter == key) Color(0xFF102451) else Color.Transparent).clickable { filter = key }.padding(horizontal = 2.dp), contentAlignment = Alignment.Center) {
+                            .background(if (filter == key) MaterialTheme.colorScheme.primary else Color.Transparent).clickable { filter = key }.padding(horizontal = 2.dp), contentAlignment = Alignment.Center) {
                             Text(webCopy("mobile.filters.$key"), fontSize = 12.sp, fontWeight = FontWeight.Bold,
-                                color = if (filter == key) Color.White else WebMuted, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+                                color = if (filter == key) MaterialTheme.colorScheme.onPrimary else WebMuted, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
                         }
                     }
                 }
                 Row(Modifier.fillMaxWidth().padding(bottom = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(webCopy("website.footballFixtures"), Modifier.weight(1f), color = WebMuted, fontSize = 11.sp, fontWeight = FontWeight.Bold, letterSpacing = .55.sp)
-                    Text(webCopy("website.featuredCorrectScore"), Modifier.weight(1f), color = Color(0xFF3B608E), fontSize = 11.sp, fontWeight = FontWeight.Bold, textAlign = androidx.compose.ui.text.style.TextAlign.End)
+                    Text(webCopy("website.featuredCorrectScore"), Modifier.weight(1f), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 11.sp, fontWeight = FontWeight.Bold, textAlign = androidx.compose.ui.text.style.TextAlign.End)
                 }
-                HorizontalDivider(color = UclColors.dashboardLine)
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                 if (shown.isEmpty()) {
                     Column(Modifier.fillMaxWidth().padding(vertical = 48.dp, horizontal = 16.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         WebIcon("trophy", Modifier.size(28.dp), WebMuted)
@@ -121,21 +122,21 @@ internal fun DashboardScreen(state: DashboardUiState, onNavigate: (String) -> Un
                     }
                 } else shown.forEachIndexed { index, match ->
                     WebFixture(match, compact = true) { match.matchId.textValue().takeIf(String::isNotBlank)?.let(onMatch) }
-                    if (index < shown.lastIndex) HorizontalDivider(color = UclColors.dashboardLine)
+                    if (index < shown.lastIndex) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                 }
             }
         }
         item {
             Spacer(Modifier.height(24.dp))
-            WebPanel {
+            WebPanel(color = MaterialTheme.colorScheme.surface) {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                         Text(webCopy("website.openBets"), fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                        Box(Modifier.size(24.dp).background(UclColors.surface, CircleShape), contentAlignment = Alignment.Center) {
+                        Box(Modifier.size(24.dp).background(MaterialTheme.colorScheme.surfaceVariant, CircleShape), contentAlignment = Alignment.Center) {
                             Text(if (state.betsLoading || state.betsError) "—" else state.openBets.size.toString(), color = WebMuted, fontSize = 12.sp)
                         }
                     }
-                    IconButton(onClick = { onNavigate("bets") }) { WebIcon("arrow_right", Modifier.size(19.dp), UclColors.accent, webCopy("website.viewAllBets")) }
+                    IconButton(onClick = { onNavigate("bets") }) { WebIcon("arrow_right", Modifier.size(19.dp), MaterialTheme.colorScheme.primary, webCopy("website.viewAllBets")) }
                 }
                 val bet = state.openBets.firstOrNull()
                 if (bet != null) Column(Modifier.padding(top = 16.dp).clickable { bet.betId?.let(onBet) }, verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -145,14 +146,14 @@ internal fun DashboardScreen(state: DashboardUiState, onNavigate: (String) -> Un
                 } else Text(webCopy(if (state.betsLoading) "website.loadingOpenBets" else if (state.betsError) "website.unableToLoadOpenBetsOpenYourBetsToTryAgain" else "website.noOpenBetsRightNowYourNextSelectionWillAppearHere"), Modifier.padding(top = 16.dp), color = WebMuted, fontSize = 14.sp, lineHeight = 21.sp)
             }
             Spacer(Modifier.height(16.dp))
-            WebPanel {
+            WebPanel(color = MaterialTheme.colorScheme.surface) {
                 Text(webCopy("website.community"), fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(16.dp))
                 val context = LocalContext.current
                 listOf(Triple("Telegram", "send", state.links.telegramGroupUrl), Triple("WhatsApp", "message_circle", state.links.whatsappGroupUrl)).forEach { (label, icon, url) ->
                     Row(Modifier.fillMaxWidth().heightIn(min = 44.dp).clickable { runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) } }, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         WebIcon(icon, Modifier.size(18.dp)); Text(label, Modifier.weight(1f), fontSize = 14.sp, fontWeight = FontWeight.Bold)
-                        WebIcon("arrow_up_right", Modifier.size(16.dp), UclColors.accent)
+                        WebIcon("arrow_up_right", Modifier.size(16.dp), MaterialTheme.colorScheme.primary)
                     }
                 }
             }
@@ -168,8 +169,8 @@ private fun DashboardCarousel() {
         R.drawable.ucl_commissions to "website.carouselCommissionBanner",
         R.drawable.ucl_referral_rewards to "website.carouselReferralBanner",
     )
-    Surface(shape = RoundedCornerShape(16.dp), color = UclColors.paper,
-        border = BorderStroke(1.dp, UclColors.dashboardLine)) {
+    Surface(shape = RoundedCornerShape(16.dp), color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)) {
         Column(Modifier.fillMaxWidth()) {
             Image(painter = painterResource(slides[slide].first), contentDescription = webCopy(slides[slide].second),
                 contentScale = ContentScale.Fit,
@@ -181,7 +182,7 @@ private fun DashboardCarousel() {
             Row(Modifier.fillMaxWidth().padding(6.dp), verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)) {
                 CarouselButton("chevron_left", webCopy("website.previousHighlight")) { slide = (slide + slides.size - 1) % slides.size }
-                Text("${slide + 1} / ${slides.size}", color = UclColors.blueInk, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                Text("${slide + 1} / ${slides.size}", color = MaterialTheme.colorScheme.primary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                 CarouselButton("chevron_right", webCopy("website.nextHighlight")) { slide = (slide + 1) % slides.size }
             }
         }
@@ -189,13 +190,13 @@ private fun DashboardCarousel() {
 }
 
 @Composable private fun CarouselButton(icon: String, label: String, onClick: () -> Unit) {
-    Surface(onClick, Modifier.size(44.dp), shape = CircleShape, color = Color.White, contentColor = com.pro.uclfootball.ui.UclColors.ink, border = BorderStroke(1.dp, Color(0xFFC7D8EE))) {
-        Box(contentAlignment = Alignment.Center) { WebIcon(icon, Modifier.size(20.dp), Color(0xFF234C88), label) }
+    Surface(onClick, Modifier.size(44.dp), shape = CircleShape, color = MaterialTheme.colorScheme.surfaceVariant, contentColor = MaterialTheme.colorScheme.onSurface, border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)) {
+        Box(contentAlignment = Alignment.Center) { WebIcon(icon, Modifier.size(20.dp), MaterialTheme.colorScheme.primary, label) }
     }
 }
 
 @Composable private fun SpinInvitation(onClick: () -> Unit) {
-    Surface(shape = RoundedCornerShape(16.dp), color = UclColors.blueSurface, contentColor = UclColors.ink, border = BorderStroke(1.dp, UclColors.dashboardLine)) {
+    Surface(shape = RoundedCornerShape(16.dp), color = MaterialTheme.colorScheme.primaryContainer, contentColor = MaterialTheme.colorScheme.onPrimaryContainer, border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) {
                 Box(Modifier.size(76.dp), contentAlignment = Alignment.Center) {
@@ -205,15 +206,15 @@ private fun DashboardCarousel() {
                             drawArc(Color(c), -112.5f + i * 45, 45f, true, topLeft = androidx.compose.ui.geometry.Offset(8.dp.toPx(), 8.dp.toPx()), size = androidx.compose.ui.geometry.Size(size.width - 16.dp.toPx(), size.height - 16.dp.toPx()))
                         }
                     }
-                    Box(Modifier.size(32.dp).background(UclColors.accent, CircleShape).padding(4.dp), contentAlignment = Alignment.Center) { Text(webCopy("website.go"), color = Color.White, fontWeight = FontWeight.Black, fontSize = 10.sp) }
+                    Box(Modifier.size(32.dp).background(MaterialTheme.colorScheme.primary, CircleShape).padding(4.dp), contentAlignment = Alignment.Center) { Text(webCopy("website.go"), color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Black, fontSize = 10.sp) }
                 }
                 Column(Modifier.weight(1f)) {
                     Text(webCopy("website.wheelSpin"), fontFamily = FontFamily.Serif, fontSize = 24.sp, lineHeight = 28.sp)
-                    Text(webCopy("website.takeYourDailySpinOneSpinEvery24Hours"), Modifier.padding(top = 4.dp), color = UclColors.muted, fontSize = 13.sp, lineHeight = 18.sp)
+                    Text(webCopy("website.takeYourDailySpinOneSpinEvery24Hours"), Modifier.padding(top = 4.dp), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 13.sp, lineHeight = 18.sp)
                 }
             }
-            Button(onClick, Modifier.fillMaxWidth().heightIn(min = 44.dp), shape = RoundedCornerShape(8.dp), colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF102451), contentColor = Color.White)) {
-                Text(webCopy("website.spinWheel"), fontSize = 14.sp, fontWeight = FontWeight.Bold); Spacer(Modifier.width(8.dp)); WebIcon("arrow_right", Modifier.size(18.dp), Color.White)
+            Button(onClick, Modifier.fillMaxWidth().heightIn(min = 44.dp), shape = RoundedCornerShape(8.dp), colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary, contentColor = MaterialTheme.colorScheme.onPrimary)) {
+                Text(webCopy("website.spinWheel"), fontSize = 14.sp, fontWeight = FontWeight.Bold); Spacer(Modifier.width(8.dp)); WebIcon("arrow_right", Modifier.size(18.dp), MaterialTheme.colorScheme.onPrimary)
             }
         }
     }
@@ -237,11 +238,11 @@ private fun DashboardCarousel() {
             }
         }
         if (match.company == true) CompanyGameBadge(Modifier.padding(bottom = 12.dp))
-        if (!compact) HorizontalDivider(color = UclColors.dashboardLine)
+        if (!compact) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         if (compact) Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             FixtureTeams(match, true, Modifier.weight(1f))
             Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                FixturePrices(match, true); Box(Modifier.size(32.dp), contentAlignment = Alignment.Center) { WebIcon("arrow_up_right", Modifier.size(18.dp), UclColors.accent) }
+                FixturePrices(match, true); Box(Modifier.size(32.dp), contentAlignment = Alignment.Center) { WebIcon("arrow_up_right", Modifier.size(18.dp), MaterialTheme.colorScheme.primary) }
             }
         } else Column(Modifier.padding(top = 16.dp, bottom = 16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             FixtureTeams(match, false, Modifier.fillMaxWidth()); FixturePrices(match, false)
@@ -249,8 +250,8 @@ private fun DashboardCarousel() {
     }
     if (compact) Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).clickable(onClick = onClick).padding(16.dp), content = content)
     else Box {
-        WebPanel(Modifier.clickable(onClick = onClick), padding = 16) { Column(Modifier.padding(end = 24.dp), content = content) }
-        WebIcon("arrow_up_right", Modifier.align(Alignment.CenterEnd).padding(end = 12.dp).size(20.dp), UclColors.accent)
+        WebPanel(Modifier.clickable(onClick = onClick), color = MaterialTheme.colorScheme.surface, padding = 16) { Column(Modifier.padding(end = 24.dp), content = content) }
+        WebIcon("arrow_up_right", Modifier.align(Alignment.CenterEnd).padding(end = 12.dp).size(20.dp), MaterialTheme.colorScheme.primary)
     }
 }
 
@@ -258,7 +259,7 @@ private fun DashboardCarousel() {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(if (compact) 8.dp else 12.dp)) {
         listOf(match.home to match.ihome, match.away to match.iaway).forEach { (name, image) ->
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Surface(Modifier.size(if (compact) 32.dp else 36.dp), color = UclColors.paper, shape = CircleShape, border = BorderStroke(1.dp, UclColors.dashboardLine)) { WebRemoteImage(image.textValue(), Modifier.padding(2.dp)) }
+                Surface(Modifier.size(if (compact) 32.dp else 36.dp), color = MaterialTheme.colorScheme.surface, shape = CircleShape, border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)) { WebRemoteImage(image.textValue(), Modifier.padding(2.dp)) }
                 Text(name ?: webCopy("common.team"), fontSize = if (compact) 13.sp else 16.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         }
@@ -271,7 +272,7 @@ private fun DashboardCarousel() {
         Row(horizontalArrangement = Arrangement.spacedBy(if (compact) 4.dp else 6.dp)) {
             listOf(Triple("1–0", match.onenil, "onenil"), Triple("1–1", match.oneone, "oneone"), Triple("1–2", match.onetwo, "onetwo")).forEach { (score, price, key) ->
                 val protected = match.company == true && match.comarket.textValue() == key
-                Surface(shape = RoundedCornerShape(8.dp), color = if (protected) MaterialTheme.colorScheme.secondaryContainer else UclColors.paper, border = BorderStroke(1.dp, if (protected) MaterialTheme.colorScheme.secondary else UclColors.dashboardLine)) {
+                Surface(shape = RoundedCornerShape(8.dp), color = if (protected) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surface, border = BorderStroke(1.dp, if (protected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.outlineVariant)) {
                     Column(Modifier.widthIn(min = if (compact) 42.dp else 56.dp).heightIn(min = 52.dp).padding(if (compact) 2.dp else 8.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically)) {
                         Text(score, color = if (protected) MaterialTheme.colorScheme.onSecondaryContainer else WebMuted, fontSize = 11.sp)
                         Text(price.textValue().ifBlank { "—" } + if (!compact && (price.textValue().toDoubleOrNull() ?: 0.0) > 0) "%" else "", color = if (protected) MaterialTheme.colorScheme.onSecondaryContainer else LocalContentColor.current, fontWeight = FontWeight.Bold, fontSize = if (compact) 12.sp else 14.sp)
@@ -286,4 +287,36 @@ private fun DashboardCarousel() {
 private fun sameDay(a: Long, b: Long): Boolean {
     val first = Calendar.getInstance().apply { timeInMillis = a }; val second = Calendar.getInstance().apply { timeInMillis = b }
     return first.get(Calendar.YEAR) == second.get(Calendar.YEAR) && first.get(Calendar.DAY_OF_YEAR) == second.get(Calendar.DAY_OF_YEAR)
+}
+
+@Composable
+private fun DashboardAccountActions(referralCode: String?, onDeposit: () -> Unit) {
+    val context = LocalContext.current
+    var copied by remember(referralCode) { mutableStateOf(false) }
+    val referralLink = referralCode?.takeIf { it.isNotBlank() }?.let { "https://europeanfc01.com/register/${Uri.encode(it)}" }.orEmpty()
+    LaunchedEffect(copied) { if (copied) { delay(2000); copied = false } }
+    WebPanel(color = MaterialTheme.colorScheme.surface) {
+        Button(onClick = onDeposit, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp), shape = RoundedCornerShape(8.dp)) {
+            WebIcon("wallet", Modifier.size(20.dp), MaterialTheme.colorScheme.onPrimary)
+            Spacer(Modifier.width(8.dp))
+            Text(webCopy("common.deposit"), fontWeight = FontWeight.Bold)
+        }
+        Text(webCopy("dashboard.referralLink"), Modifier.padding(top = 20.dp, bottom = 8.dp), color = WebMuted, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+            androidx.compose.foundation.text.selection.SelectionContainer(Modifier.weight(1f)) {
+                Text(referralLink.ifBlank { webCopy("dashboard.referralUnavailable") }, fontSize = 13.sp, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            }
+            OutlinedButton(onClick = {
+                val clipboard = context.getSystemService(android.content.ClipboardManager::class.java)
+                if (clipboard != null) {
+                    clipboard.setPrimaryClip(android.content.ClipData.newPlainText("Invite link", referralLink))
+                    copied = true
+                }
+            }, enabled = referralLink.isNotBlank(), modifier = Modifier.heightIn(min = 48.dp), shape = RoundedCornerShape(8.dp)) {
+                WebIcon(if (copied) "check" else "copy", Modifier.size(18.dp), description = webCopy("dashboard.copyReferralLink"))
+                Spacer(Modifier.width(8.dp))
+                Text(webCopy(if (copied) "messages.copiedToClipboard" else "common.copy"), fontSize = 12.sp)
+            }
+        }
+    }
 }

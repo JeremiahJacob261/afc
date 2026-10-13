@@ -1053,5 +1053,14 @@
   "errors": {
     "generic": "Algo salió mal.",
     "unableToLoad": "No se puede cargar este contenido."
+  },
+  "dashboard": {
+      "referralLink": "Your referral link",
+      "copyReferralLink": "Copy referral link",
+      "referralUnavailable": "Referral link unavailable",
+      "downloadApp": "Download app",
+      "androidApp": "Android app",
+      "downloadUnavailable": "Download not available yet",
+      "checkingDownload": "Checking app availability?"
   }
 }

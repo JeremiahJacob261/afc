@@ -1376,5 +1376,14 @@
     "closed": "Betting closed",
     "marketInfo": "Returns are a percentage of your stake. Review your selection before confirming.",
     "allMarkets": "All score markets"
+  },
+  "dashboard": {
+      "referralLink": "Your referral link",
+      "copyReferralLink": "Copy referral link",
+      "referralUnavailable": "Referral link unavailable",
+      "downloadApp": "Download app",
+      "androidApp": "Android app",
+      "downloadUnavailable": "Download not available yet",
+      "checkingDownload": "Checking app availability?"
   }
 }

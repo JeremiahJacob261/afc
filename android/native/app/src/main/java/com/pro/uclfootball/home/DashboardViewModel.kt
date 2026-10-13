@@ -24,6 +24,7 @@ import java.io.IOException
 data class DashboardUiState(
     val isLoading: Boolean = true,
     val username: String? = null,
+    val referralCode: String? = null,
     val matches: List<MatchSummaryDto> = emptyList(),
     val errorMessage: String? = null,
     val requiresSignIn: Boolean = false,
@@ -88,11 +89,11 @@ class DashboardViewModel(
                 val userId = authSessionRepository.currentSession()?.user?.id
                 mutableState.update { it.copy(username = identityCache.username(userId)) }
                 val profile = apiClient.getJson<MeResponse>("api/me", authenticated = true, oncePerForeground = force, onCached = { saved ->
-                    mutableState.update { it.copy(username = saved.profile.username) }
+                    mutableState.update { it.copy(username = saved.profile.username, referralCode = saved.profile.newrefer) }
                 }).profile
                 if (authSessionRepository.currentSession()?.user?.id == userId) {
                     identityCache.update(userId, profile.username)
-                    mutableState.update { it.copy(username = profile.username) }
+                    mutableState.update { it.copy(username = profile.username, referralCode = profile.newrefer) }
                 }
             } catch (e: CancellationException) { throw e }
             catch (e: ApiException) { if (e.httpStatus == 401) mutableState.update { it.copy(requiresSignIn = true) } }

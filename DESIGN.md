@@ -266,3 +266,7 @@ Web placeholders use quiet paper, while empty/error states use bordered surfaces
 ## Color and contrast update ? 12 October 2026
 
 Customer web navigation, headings, wallet controls, account areas, and bulletin surfaces now use the native blue and pink palette. Body text remains navy on pale surfaces. Native fixed light cards and controls have explicit foregrounds; secondary transaction amounts no longer use pale text on white, and VIP progress icons use a darker blue. Shared native theme pairs have numerical contrast checks and regression coverage. Browser capture could not run because the connection timed out; device capture remains unavailable with no Android device connected.
+
+## Dashboard account actions
+
+The website and native Android dashboard place deposit and a selectable, copyable referral link before the promotion carousel. The website alone offers the Android app download from the deployment-owned release manifest, with loading and unavailable states when no release is advertised. The native customer shell uses the dark palette independently of the system setting; dashboard panels, fixture odds, filters, carousel controls, and the spin invitation resolve colors from MaterialTheme. Other explicitly light panels retain their existing light control roles.

@@ -99,7 +99,7 @@ fun UserWebShell(route: String, onNavigate: (String) -> Unit, content: @Composab
     CompositionLocalProvider(LocalUserShell provides true, LocalUserNavSelectionOverride provides navigationOverride, LocalContext provides localizedContext, LocalConfiguration provides configuration) {
         val base = MaterialTheme.typography
         fun TextStyle.webStyle() = copy(platformStyle = PlatformTextStyle(includeFontPadding = false), letterSpacing = 0.sp, lineHeight = 1.5.em)
-        MaterialTheme(typography = base.copy(bodyLarge = base.bodyLarge.webStyle(), bodyMedium = base.bodyMedium.webStyle(),
+        MaterialTheme(colorScheme = UclDarkColorScheme, typography = base.copy(bodyLarge = base.bodyLarge.webStyle(), bodyMedium = base.bodyMedium.webStyle(),
             bodySmall = base.bodySmall.webStyle(), headlineLarge = base.headlineLarge.webStyle(), titleMedium = base.titleMedium.webStyle(),
             labelLarge = base.labelLarge.webStyle(), labelMedium = base.labelMedium.webStyle())) {
             Scaffold(containerColor = MaterialTheme.colorScheme.background, contentWindowInsets = WindowInsets.safeDrawing,
@@ -113,8 +113,8 @@ fun UserWebShell(route: String, onNavigate: (String) -> Unit, content: @Composab
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                                 var expanded by remember { mutableStateOf(false) }
                                 Box {
-                                    Surface(onClick = { expanded = true }, modifier = Modifier.heightIn(min = 48.dp), shape = RoundedCornerShape(8.dp), color = UclColors.surface, contentColor = UclColors.ink,
-                                        border = BorderStroke(1.dp, UclColors.dashboardLine)) {
+                                    Surface(onClick = { expanded = true }, modifier = Modifier.heightIn(min = 48.dp), shape = RoundedCornerShape(8.dp), color = MaterialTheme.colorScheme.surfaceVariant, contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)) {
                                         Row(Modifier.padding(horizontal = 12.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                                             Text(if (language == "my") "မြန်မာ" else "English", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
                                             WebIcon("chevron_down", Modifier.size(14.dp), WebMuted)
@@ -131,13 +131,13 @@ fun UserWebShell(route: String, onNavigate: (String) -> Unit, content: @Composab
                                     }
                                 }
                                 Surface(onClick = { onNavigate("notifications") }, modifier = Modifier.size(48.dp), shape = CircleShape,
-                                    color = Color.Transparent, border = BorderStroke(1.dp, UclColors.dashboardLine)) {
+                                    color = Color.Transparent, border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)) {
                                     Box(contentAlignment = Alignment.Center) { WebIcon("bell", Modifier.size(21.dp),
                                         MaterialTheme.colorScheme.onSurface, webCopy("website.notifications")) }
                                 }
                             }
                         }
-                        HorizontalDivider(color = UclColors.dashboardLine, thickness = 1.dp)
+                        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant, thickness = 1.dp)
                         SavedDataIndicator(route)
                     }
                 }, bottomBar = { UserBottomNavigation(navigationOverride.value ?: route, onNavigate) }) { padding ->
@@ -158,7 +158,7 @@ fun UserBottomNavigation(route: String, onNavigate: (String) -> Unit) {
     val destinations = listOf(Triple("home", "website.home", "home"), Triple("matches", "website.matches", "trophy"),
         Triple("bets", "website.bets", "history"), Triple("wallet", "website.recharge", "wallet"), Triple("account", "website.more", "menu"))
     Column(Modifier.background(MaterialTheme.colorScheme.surface).windowInsetsPadding(WindowInsets.navigationBars)) {
-        HorizontalDivider(color = UclColors.dashboardLine, thickness = 1.dp)
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant, thickness = 1.dp)
         Row(Modifier.fillMaxWidth().height(71.dp).padding(horizontal = 8.dp, vertical = 4.dp)) {
             destinations.forEach { (destination, key, icon) ->
                 val selected = route == destination
@@ -202,7 +202,7 @@ fun WebPageHeading(title: String, onBack: () -> Unit, bordered: Boolean = false)
         horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         Surface(onClick = onBack, modifier = Modifier.size(if (bordered) 44.dp else 24.dp),
             color = if (bordered) MaterialTheme.colorScheme.surface else Color.Transparent, contentColor = MaterialTheme.colorScheme.onSurface, shape = RoundedCornerShape(8.dp),
-            border = if (bordered) BorderStroke(1.dp, UclColors.dashboardLine) else null) {
+            border = if (bordered) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant) else null) {
             Box(contentAlignment = Alignment.Center) { WebIcon("chevron_left", Modifier.size(24.dp), description = webCopy("common.back")) }
         }
         Text(title, fontFamily = FontFamily.Serif, fontSize = 32.sp, color = MaterialTheme.colorScheme.onSurface, lineHeight = 36.sp)
@@ -212,10 +212,9 @@ fun WebPageHeading(title: String, onBack: () -> Unit, bordered: Boolean = false)
 @Composable
 fun WebPanel(modifier: Modifier = Modifier, color: Color = UclColors.paper, radius: Int = 16, padding: Int = 20,
     content: @Composable ColumnScope.() -> Unit) {
-    // These web-parity panels have fixed light backgrounds. Their nested controls
-    // need the matching light roles even when the surrounding shell is dark.
+    // Explicit light panels retain matching control roles inside the dark customer shell.
     MaterialTheme(colorScheme = if (color.luminance() > .5f) UclColorScheme else MaterialTheme.colorScheme) {
-        Surface(modifier.fillMaxWidth(), color = color, contentColor = readableContentColor(color), shape = RoundedCornerShape(radius.dp), border = BorderStroke(1.dp, UclColors.dashboardLine)) {
+        Surface(modifier.fillMaxWidth(), color = color, contentColor = readableContentColor(color), shape = RoundedCornerShape(radius.dp), border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)) {
             Column(Modifier.padding(padding.dp), content = content)
         }
     }

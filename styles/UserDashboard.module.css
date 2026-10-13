@@ -163,6 +163,21 @@
 .carousel{padding:0;min-height:0;background:var(--ucl-paper)}
 .carouselImage{aspect-ratio:16/9;background:#002d72}
 .carouselImage img{display:block;width:100%;height:100%;object-fit:contain}
+.quickActions{display:flex;align-items:center;gap:24px;margin-bottom:24px;padding:20px;border:1px solid var(--ucl-border);border-radius:16px;background:var(--ucl-paper)}
+.depositAction,.downloadButton{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:12px 18px;border-radius:8px;font-family:inherit;font-size:14px;font-weight:700;line-height:1.5;text-decoration:none;white-space:nowrap}
+.depositAction{background:var(--ucl-blue-accent,#00409e);color:#fff}
+.depositAction:hover{background:#002d72;color:#fff}
+.referralAction{flex:1;min-width:0}
+.referralAction label{display:block;margin-bottom:8px;font-size:13px;font-weight:700;color:var(--ucl-muted)}
+.referralControl{display:flex;align-items:center;gap:8px}
+.referralControl input{width:100%;min-width:0;min-height:48px;padding:10px 12px;border:1px solid var(--ucl-border);border-radius:8px;background:var(--ucl-panel);color:var(--ucl-ink);font:inherit;font-size:14px}
+.referralControl button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:10px 12px;border:1px solid var(--ucl-border);border-radius:8px;background:var(--ucl-panel);color:var(--ucl-ink);font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.referralControl button:hover:not(:disabled),.downloadButton:hover:not(:disabled){border-color:var(--ucl-blue-accent);background:var(--ucl-panel)}
+.downloadAction{display:grid;gap:6px;justify-items:center}
+.downloadButton{border:1px solid var(--ucl-border);background:transparent;color:var(--ucl-ink);cursor:pointer}
+.downloadAction>span{font-size:12px;color:var(--ucl-muted);text-align:center;max-width:24ch}
+.quickActions button:disabled{opacity:.55;cursor:not-allowed}
+@media(max-width:767px){.quickActions{flex-wrap:wrap;gap:16px;padding:16px;margin-bottom:16px}.depositAction{flex:1}.downloadAction{flex:1}.downloadButton{width:100%}.referralAction{flex-basis:100%;order:3}}
 .carouselControls{position:static;justify-content:center;gap:12px;padding:6px 12px;background:var(--ucl-paper)}
 .carouselControls button{width:44px;height:44px}
 

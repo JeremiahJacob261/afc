@@ -395,7 +395,7 @@
     <string name="bet_slip_submission_failed">We could not identify why your bet failed. Refresh the match and check the stake and market. If the problem continues, contact support.</string>
     <string name="bet_slip_minimum_stake">Your stake is below the minimum allowed. Increase it and try again.</string>
     <string name="bet_slip_insufficient_balance">Your balance is too low to place this bet. Lower your stake or add funds, then try again.</string>
-    <string name="bet_slip_maximum_reached">You have reached today&apos;s limit for placing bets. Try again after the daily limit resets.</string>
+    <string name="bet_slip_maximum_reached">The daily limit for placing bets has been reached. Try again after it resets.</string>
     <string name="bet_slip_match_settled">This match has already been settled, so new bets are closed.</string>
     <string name="bet_slip_market_unavailable">This market is no longer available for this match. Choose another available market.</string>
     <string name="bet_slip_market_closed">This match is no longer open for betting. Choose another available match.</string>
