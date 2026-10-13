@@ -192,7 +192,7 @@ export default function Home() {
       const matchTask = async () => {
         try {
           const { data, error } = await supabase.from('bets')
-            .select('match_id,tsgmt,timest,date,time,home,away,ihome,iaway,league,otherl,company,comarket,onenil,oneone,onetwo')
+            .select('match_id,tsgmt,date,time,home,away,ihome,iaway,league,otherl,company,comarket,onenil,oneone,onetwo')
             .eq('verified', false).gt('tsgmt', Date.now()).order('tsgmt', { ascending: true }).limit(50)
           if (!active) return
           if (error) throw error
