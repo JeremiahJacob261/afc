@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-import Link from 'next/link'
+import Link from '@/components/PerformanceLink'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
 import Cover from './cover'
 import { supabase } from '@/pages/api/supabase'
@@ -40,7 +40,7 @@ export default function Matches({ footDat = [], loadError = false }) {
     </main></Cover>
 }
 export async function getServerSideProps(context) {
-  const i18nProps = await getI18nServerSideProps(context.locale)
+  const i18nProps = await getI18nServerSideProps(context.locale, ['website', 'mobile', 'bulletin', 'status', 'messages', 'emptyStates'])
   const { data, error } = await supabase.from('bets').select('*').eq('verified', false).gt('tsgmt', Date.now()).limit(50).order('tsgmt', { ascending: true })
   return { props: { ...i18nProps, footDat: data || [], loadError: Boolean(error) } }
 }

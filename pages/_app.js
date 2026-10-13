@@ -11,11 +11,12 @@ import Footer from './footeras';
 import { BetContext } from '@/pages/api/Context'
 import { useRouter } from 'next/router'
 import { appWithTranslation } from 'next-i18next'
-import AdminShell from '@/components/admin/AdminShell'
+import dynamic from 'next/dynamic'
 import AppLoadingOverlay from '@/components/AppLoadingOverlay'
 import nextI18NextConfig from '../next-i18next.config'
 import { ThemeProvider } from '@mui/material/styles'
 import { customerTheme, defaultTheme } from '@/lib/customerTheme'
+const AdminShell = dynamic(() => import('@/components/admin/AdminShell'))
 function MyApp({ Component, pageProps }) {
 
   const [cookie, setCookie] = useCookies(["user"])
@@ -67,7 +68,7 @@ function MyApp({ Component, pageProps }) {
 
     const registerServiceWorker = () => {
       navigator.serviceWorker
-        .register('/sw.js', { scope: '/' })
+        .register(`/sw.js?build=${encodeURIComponent(window.__NEXT_DATA__?.buildId || 'local')}`, { scope: '/' })
         .then((registration) => registration.update())
         .catch((error) => {
           console.error('Service worker registration failed:', error)

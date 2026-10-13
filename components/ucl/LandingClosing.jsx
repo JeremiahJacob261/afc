@@ -1,3 +1,4 @@
+import { cachedPublicFetch } from '@/lib/requestCache';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
@@ -32,15 +33,15 @@ export default function LandingClosing({ children }) {
   const dialogHeading = useRef(null);
   const returnFocus = useRef(null);
   useEffect(() => {
-    const controller = new AbortController();
-    fetch('/api/platform-settings', { signal: controller.signal })
+    let active = true;
+    cachedPublicFetch('/api/platform-settings')
       .then(response => response.ok ? response.json() : null)
       .then(result => {
         const url = result?.links?.customerSupportUrl;
-        if (url && /^https:\/\//i.test(url)) setSupportUrl(url);
+        if (active && url && /^https:\/\//i.test(url)) setSupportUrl(url);
       })
       .catch(() => {});
-    return () => controller.abort();
+    return () => { active = false; };
   }, []);
   useEffect(() => {
     if (activeGuide && !dialog.current.open) {

@@ -10,6 +10,7 @@ import { ArrowLeft, ArrowRight, Check, Copy, CreditCard, FileImage, RefreshCw, U
 import Cover from '@/pages/user/cover'
 import { supabase } from '@/pages/api/supabase'
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth'
+import { readPaymentConfiguration } from '@/lib/paymentConfiguration'
 import { waitForPaint } from '@/lib/uiFeedback'
 import {
   DEPOSIT_DRAFT_KEY, DEPOSIT_SUCCESS_KEY, EMPTY_DEPOSIT_DRAFT,
@@ -88,18 +89,15 @@ export default function DepositFlow({ step }) {
       setReceipt(receiptInMemory)
 
       try {
-        const [{ data: methodRows, error: methodError }, { data: destinationRows, error: destinationError }, pendingResponse] = await Promise.all([
-          supabase.from('walle').select('*').eq('available', true),
-          supabase.from('depositwallet').select('*'),
+        const [configuration, pendingResponse] = await Promise.all([
+          readPaymentConfiguration({ fresh: reloadKey > 0 }),
           authFetch('/api/pending-payment-request'),
         ])
-        if (methodError) throw methodError
-        if (destinationError) throw destinationError
         if (!pendingResponse.ok) throw new Error('Unable to check pending requests')
         const pendingResult = await pendingResponse.json()
         if (!active) return
-        setMethods(Array.isArray(methodRows) ? methodRows : [])
-        setDestinations(Array.isArray(destinationRows) ? destinationRows : [])
+        setMethods(configuration.methods)
+        setDestinations(configuration.destinations)
         setPendingRequest(Boolean(pendingResult.pending))
       } catch (_) {
         if (active) setLoadError(true)

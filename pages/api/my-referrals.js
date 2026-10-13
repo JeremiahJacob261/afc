@@ -1,4 +1,5 @@
 import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
+import { applyCursor, cursorPage, decodeCursor, encodeCursor, pageSize } from '@/lib/pagination'
 import { getMembershipBalanceThreshold } from '@/lib/adminSettings'
 import { isActiveMember } from '@/lib/membership'
 
@@ -36,15 +37,13 @@ function normalizeReferral(row, level, membershipBalanceThreshold) {
   }
 }
 
-async function fetchReferralRows(supabase, referCode, columns, membershipBalanceThreshold) {
+async function fetchReferralRows(supabase, referCode, columns, membershipBalanceThreshold, pagination) {
   const results = await Promise.all(
     REFERRAL_LEVELS.map(async (level) => {
-      const { data, error } = await supabase
-        .from('users')
-        .select(columns)
-        .eq(level.column, referCode)
-
-      return { ...level, data: data || [], error }
+      const query = supabase.from('users').select(columns).eq(level.column, referCode)
+      const { data, error } = await (pagination ? applyCursor(query, pagination.cursor, level.column, pagination.limit) : query)
+      const page = pagination ? cursorPage(data || [], pagination.limit) : { data: data || [] }
+      return { ...level, data: page.data, next: page.next, error }
     })
   )
 
@@ -70,7 +69,8 @@ async function fetchReferralRows(supabase, referCode, columns, membershipBalance
     return bDate - aDate
   })
 
-  return { data, error: null }
+  const next = Object.fromEntries(results.map(result => [result.column, result.next]))
+  return { data, error: null, nextCursor: pagination && Object.values(next).some(Boolean) ? encodeCursor(next) : null }
 }
 
 export default async function handler(req, res) {
@@ -79,6 +79,8 @@ export default async function handler(req, res) {
   }
 
   try {
+    res.setHeader('Cache-Control', 'private, no-store')
+    const pagination = req.query?.page === '1' ? { cursor: decodeCursor(req.query.cursor), limit: pageSize(req.query.limit, 20) } : null
     const { profile, supabase } = await getCurrentProfile(req, 'newrefer')
     const membershipBalanceThreshold = await getMembershipBalanceThreshold(supabase)
 
@@ -91,9 +93,9 @@ export default async function handler(req, res) {
       })
     }
 
-    let result = await fetchReferralRows(supabase, profile.newrefer, MODERN_COLUMNS, membershipBalanceThreshold)
+    let result = await fetchReferralRows(supabase, profile.newrefer, MODERN_COLUMNS, membershipBalanceThreshold, pagination)
     if (result.error && isMissingColumnError(result.error)) {
-      result = await fetchReferralRows(supabase, profile.newrefer, LEGACY_COLUMNS, membershipBalanceThreshold)
+      result = await fetchReferralRows(supabase, profile.newrefer, LEGACY_COLUMNS, membershipBalanceThreshold, pagination)
     }
 
     if (result.error) throw result.error
@@ -102,6 +104,7 @@ export default async function handler(req, res) {
       status: 'success',
       refer: profile.newrefer,
       referrals: result.data || [],
+      ...(pagination ? { nextCursor: result.nextCursor } : {}),
       membershipBalanceThreshold,
     })
   } catch (error) {

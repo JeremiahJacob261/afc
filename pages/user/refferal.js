@@ -1,3 +1,4 @@
+import PaginationButton from '@/components/PaginationButton'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
@@ -50,6 +51,8 @@ export default function Refferal() {
   const [filter, setFilter] = useState('All')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [nextCursor, setNextCursor] = useState(null)
+  const [loadingMore, setLoadingMore] = useState(false)
 
   const loadReferrals = useCallback(async () => {
     if (mountedRef.current) {
@@ -66,7 +69,7 @@ export default function Refferal() {
     clearLegacyAuthStorage()
 
     try {
-      const response = await authFetch('/api/my-referrals')
+      const response = await authFetch('/api/my-referrals?page=1', { fresh: true })
       const result = await response.json().catch(() => ({}))
 
       if (response.status === 401 || response.status === 404) {
@@ -79,6 +82,7 @@ export default function Refferal() {
       }
 
       if (!mountedRef.current) return
+      setNextCursor(result.nextCursor)
       setReferCode(result.refer || '')
       setReferrals(Array.isArray(result.referrals) ? result.referrals : [])
     } catch (err) {
@@ -100,6 +104,20 @@ export default function Refferal() {
       mountedRef.current = false
     }
   }, [loadReferrals])
+
+  async function loadMore() {
+    if (!nextCursor || loadingMore) return
+    setLoadingMore(true)
+    try {
+      const response = await authFetch(`/api/my-referrals?page=1&cursor=${encodeURIComponent(nextCursor)}`)
+      const result = await response.json()
+      if (!response.ok) throw new Error(t('messages.unableLoadReferrals'))
+      if (!mountedRef.current) return
+      setReferrals(current => [...new Map([...current, ...(result.referrals || [])].map(row => [String(row.id), row])).values()])
+      setNextCursor(result.nextCursor)
+    } catch (err) { if (mountedRef.current) setError(err.message) }
+    finally { if (mountedRef.current) setLoadingMore(false) }
+  }
 
   const visibleReferrals = useMemo(() => {
     if (filter === 'All') return referrals
@@ -282,6 +300,8 @@ export default function Refferal() {
             </Stack>
           )}
         </Stack>
+        <Typography>{t('common.showingRecords', { count: referrals.length })}</Typography>
+        <PaginationButton cursor={nextCursor} loading={loadingMore} onClick={loadMore} />
       </Box>
     </Cover>
   )

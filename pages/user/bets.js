@@ -1,6 +1,7 @@
+import PaginationButton from '@/components/PaginationButton'
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
-import Link from 'next/link'
+import Link from '@/components/PerformanceLink'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { ArrowLeft, ChevronRight, Trophy } from 'lucide-react'
@@ -32,6 +33,8 @@ export default function Bets() {
   const [error, setError] = useState(false)
   const [retry, setRetry] = useState(0)
   const [tab, setTab] = useState('unsettled')
+  const [nextCursor, setNextCursor] = useState(null)
+  const [loadingMore, setLoadingMore] = useState(false)
   useEffect(() => {
     let active = true
     async function load() {
@@ -40,11 +43,11 @@ export default function Bets() {
         const session = await requireSession(router)
         if (!session) return
         clearLegacyAuthStorage()
-        const response = await authFetch('/api/my-bets')
+        const response = await authFetch('/api/my-bets?page=1', { fresh: retry > 0 })
         if (response.status === 401 || response.status === 404) { router.push('/login'); return }
         const result = await response.json()
         if (!response.ok || result.status !== 'success') throw new Error('Unable to load bets')
-        if (active) setData({ unsettled: result.unsettled || [], settled: result.settled || [] })
+        if (active) { setData({ unsettled: result.unsettled || [], settled: result.settled || [] }); setNextCursor(result.nextCursor) }
       } catch { if (active) setError(true) }
       finally { if (active) setLoading(false) }
     }
@@ -58,7 +61,19 @@ export default function Bets() {
     [t('status.refunded'), settled.filter((bet) => getBetOutcome(bet) === 'refunded').length],
     [t('mobile.bets.stake'), betMoney([...unsettled, ...settled].reduce((sum, bet) => sum + betNumber(bet.stake), 0), i18n.language)],
   ]
-  const rows = (data?.[tab] || []).slice().reverse()
+  const rows = data?.[tab] || []
+  async function loadMore() {
+    if (!nextCursor || loadingMore) return
+    setLoadingMore(true)
+    try {
+      const response = await authFetch(`/api/my-bets?page=1&cursor=${encodeURIComponent(nextCursor)}`)
+      const result = await response.json()
+      if (!response.ok) throw new Error('Unable to load bets')
+      setData(current => ({ unsettled: [...current.unsettled, ...(result.unsettled || [])], settled: [...current.settled, ...(result.settled || [])] }))
+      setNextCursor(result.nextCursor)
+    } catch { setError(true) }
+    finally { setLoadingMore(false) }
+  }
   function handleTabKey(event) {
     if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
     event.preventDefault()
@@ -70,6 +85,7 @@ export default function Bets() {
     <main className={styles.page}>
       <Link className={styles.back} href="/user"><ArrowLeft size={18} aria-hidden="true" />{t('website.backToDashboard')}</Link>
       <div className={styles.heading}><div><h1>{t('common.myBets')}</h1><p>{t('bulletin.betsIntro')}</p></div><Trophy size={24} className={styles.arrow} aria-hidden="true" /></div>
+      {data && <p>{t('common.showingRecords', { count: unsettled.length + settled.length })}</p>}
       {data && <dl className={styles.summary}>{summary.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>}
       <div className={styles.tabs} role="tablist" aria-label={t('common.myBets')}>{['unsettled', 'settled'].map((value) => <button key={value} type="button" id={`tab-${value}`} role="tab" tabIndex={tab === value ? 0 : -1} aria-selected={tab === value} aria-controls="bet-ledger" onKeyDown={handleTabKey} onClick={() => setTab(value)}>{t(`status.${value}`)}{data && <span className={styles.tabCount}>{data[value].length}</span>}</button>)}</div>
       {error && data && <div className={styles.notice} role="status">{t('bulletin.refreshFailed')}<button type="button" onClick={() => setRetry((value) => value + 1)}>{t('bulletin.retry')}</button></div>}
@@ -79,6 +95,7 @@ export default function Bets() {
           {rows.map((bet) => <BetRow key={bet.betid} bet={bet} />)}
         </div> : <BulletinState title={t('emptyStates.noBets')} description={t('emptyStates.betsComing')}><Link className={styles.action} href="/user/matches">{t('website.browseAllMatches')}</Link></BulletinState>}
       </div>
+      <PaginationButton cursor={nextCursor} loading={loadingMore} onClick={loadMore} />
     </main></Cover>
 }
-export async function getServerSideProps(context) { return { props: await getI18nServerSideProps(context.locale) } }
+export async function getServerSideProps(context) { return { props: await getI18nServerSideProps(context.locale, ['website', 'mobile', 'bulletin', 'status', 'messages', 'emptyStates']) } }

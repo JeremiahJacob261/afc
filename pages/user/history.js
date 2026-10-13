@@ -1,3 +1,4 @@
+import PaginationButton from '@/components/PaginationButton'
 import { translateApiMessage } from '@/lib/translateApiMessage'
 import { Box, CircularProgress, Stack, Typography } from '@mui/material'
 import { Icon } from '@iconify/react'
@@ -369,6 +370,8 @@ export default function TransactionHistory() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [reloadKey, setReloadKey] = useState(0)
+  const [nextCursor, setNextCursor] = useState(null)
+  const [loadingMore, setLoadingMore] = useState(false)
 
   const filteredTransactions = useMemo(() => (
     selected === 'all'
@@ -388,7 +391,7 @@ export default function TransactionHistory() {
         setLoading(true)
         setError('')
 
-        const response = await authFetch('/api/my-transactions?type=all')
+        const response = await authFetch('/api/my-transactions?type=all&page=1', { fresh: reloadKey > 0 })
         const result = await response.json().catch(() => ({}))
 
         if (response.status === 401 || response.status === 404) {
@@ -404,6 +407,7 @@ export default function TransactionHistory() {
 
         setTransactions(Array.isArray(result.transactions) ? result.transactions : Array.isArray(result.data) ? result.data : [])
         setSummary(result.summary || emptySummary)
+        setNextCursor(result.nextCursor)
       } catch (err) {
         if (active) setError(err.message || t('messages.unableLoadTransactions'))
       } finally {
@@ -417,6 +421,19 @@ export default function TransactionHistory() {
       active = false
     }
   }, [router, reloadKey, t])
+
+  async function loadMore() {
+    if (!nextCursor || loadingMore) return
+    setLoadingMore(true)
+    try {
+      const response = await authFetch(`/api/my-transactions?type=all&page=1&cursor=${encodeURIComponent(nextCursor)}`)
+      const result = await response.json()
+      if (!response.ok) throw new Error(t('messages.unableLoadTransactions'))
+      setTransactions(current => [...current, ...(result.transactions || [])])
+      setNextCursor(result.nextCursor)
+    } catch (err) { setError(err.message) }
+    finally { setLoadingMore(false) }
+  }
 
   return (
     <Cover>
@@ -595,6 +612,7 @@ export default function TransactionHistory() {
         ) : (
           <EmptyState selected={selected} t={t} />
         )}
+        <PaginationButton cursor={nextCursor} loading={loadingMore} onClick={loadMore} />
       </Box>
     </Cover>
   )

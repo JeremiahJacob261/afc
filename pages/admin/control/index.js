@@ -1,3 +1,4 @@
+import { invalidatePublicData } from '@/lib/requestCache'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -68,7 +69,8 @@ export default function Controls() {
         const response = await fetch('/api/admin/settings')
         const result = await response.json()
 
-        if (!response.ok) {
+        if (response.ok) invalidatePublicData()
+      if (!response.ok) {
           if (response.status === 401) router.push('/admin')
           throw new Error(result.message || 'Unable to load settings')
         }
@@ -121,6 +123,7 @@ export default function Controls() {
       })
       const result = await response.json()
 
+      if (response.ok) invalidatePublicData()
       if (!response.ok) {
         if (response.status === 401) router.push('/admin')
         throw new Error(result.message || 'Unable to update withdrawal availability')
@@ -221,6 +224,7 @@ export default function Controls() {
       })
       const result = await response.json()
 
+      if (response.ok) invalidatePublicData()
       if (!response.ok) {
         if (response.status === 401) router.push('/admin')
         throw new Error(result.message || 'Unable to save settings')

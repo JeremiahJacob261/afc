@@ -9,6 +9,7 @@ export default async function handler(req, res) {
 
   try {
     const links = await getPlatformLinks(getSupabaseAdmin(), { allowDefaultOnMissingTable: true })
+    res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=300, stale-while-revalidate=60')
     return res.status(200).json({ status: 'success', links })
   } catch (error) {
     console.error('Platform settings error:', error)

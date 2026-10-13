@@ -23,7 +23,7 @@ export default async function handler(req, res) {
 
     const { data: match, error: matchError } = await supabase
       .from('bets')
-      .select('*')
+      .select('match_id,tsgmt,date,time,league,otherl,home,away,ihome,iaway')
       .eq('match_id', bet.match_id)
       .maybeSingle()
 

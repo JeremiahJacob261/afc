@@ -57,7 +57,9 @@
     "done": "Done",
     "information": "Information",
     "loading": "Loading UCL…",
-    "timeToBeConfirmed": "Time to be confirmed"
+    "timeToBeConfirmed": "Time to be confirmed",
+    "loadMore": "Load more",
+    "showingRecords": "Showing {{count}} records"
   },
   "auth": {
     "login": {

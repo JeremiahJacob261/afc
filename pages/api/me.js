@@ -3,6 +3,7 @@ import { calculateVipProgress } from '@/lib/vip'
 import { getCurrencySettings } from '@/lib/currency'
 import { getMembershipBalanceThreshold } from '@/lib/adminSettings'
 import { isActiveMember } from '@/lib/membership'
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 
 const PROFILE_COLUMNS = 'userid,uid,username,email,phone,countrycode,balance,totald,totalw,newrefer,refer,lvla,lvlb,firstd,dailywl,codeset'
 
@@ -12,8 +13,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { profile, supabase } = await getCurrentProfile(req, PROFILE_COLUMNS)
-    const membershipBalanceThreshold = await getMembershipBalanceThreshold(supabase)
+    res.setHeader('Cache-Control', 'private, no-store')
+    const [{ profile, supabase }, membershipBalanceThreshold] = await Promise.all([
+      getCurrentProfile(req, PROFILE_COLUMNS),
+      getMembershipBalanceThreshold(getSupabaseAdmin()),
+    ])
     const [{ count, error }, currency] = await Promise.all([
       supabase
       .from('users')
