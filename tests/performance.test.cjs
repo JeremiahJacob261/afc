@@ -59,17 +59,21 @@ test('cache failures are retriable and cached responses can be read independentl
 
 test('auth cache is isolated by user, cleared after mutations, and excludes eligibility', async () => {
   let session = { user: { id: 'a' }, access_token: 'token-a' }, listener, reads = 0
+  const shellMessages = []
   const cache = load('lib/requestCache.js')
   const client = load('lib/clientAuth.js', {
     '@/pages/api/supabase': { supabase: { auth: {
       getSession: async () => ({ data: { session } }),
       onAuthStateChange: callback => { listener = callback },
     } } }, './requestCache': cache,
-  }, { window: {}, navigator: {}, fetch: async () => { reads++; return new Response(JSON.stringify({ read: reads })) } })
+  }, { window: {}, navigator: { serviceWorker: { controller: { postMessage:message=>shellMessages.push(message) } } }, fetch: async () => { reads++; return new Response(JSON.stringify({ read: reads })) } })
+  listener('INITIAL_SESSION', session)
+  assert.equal(shellMessages.length,0)
   assert.equal((await (await client.authFetch('/api/me')).json()).read, 1)
   assert.equal((await (await client.authFetch('/api/me')).json()).read, 1)
   session = { user: { id: 'b' }, access_token: 'token-b' }
   listener('SIGNED_IN', session)
+  assert.equal(shellMessages.length,1)
   assert.equal((await (await client.authFetch('/api/me')).json()).read, 2)
   await client.authFetch('/api/place-bet', { method: 'POST' })
   assert.equal((await (await client.authFetch('/api/me')).json()).read, 4)
