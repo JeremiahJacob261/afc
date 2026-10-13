@@ -18,7 +18,68 @@ import { toast, Toaster } from "react-hot-toast";
 import Cover from './cover'
 import { motion } from "framer-motion";
 import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay'
-export default function Bets({ bets }) {
+function DisplayDialog({ open, matchId, onClose }) {
+    const [matches, setMatches] = useState([])
+    const [status, setStatus] = useState('loading')
+    const [attempt, setAttempt] = useState(0)
+
+    useEffect(() => {
+        if (!open || matchId === null || matchId === undefined || matchId === '') return
+
+        let active = true
+        setMatches([])
+        setStatus('loading')
+
+        const getData = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('placed')
+                    .select()
+                    .eq('match_id', matchId)
+                if (error) throw error
+                if (!active) return
+                setMatches(Array.isArray(data) ? data : [])
+                setStatus('ready')
+            } catch (error) {
+                if (!active) return
+                setMatches([])
+                setStatus('error')
+            }
+        }
+
+        getData()
+        return () => { active = false }
+    }, [open, matchId, attempt])
+
+    return (
+        <Dialog open={open} onClose={onClose} aria-labelledby="placed-bets-title">
+            <DialogTitle id="placed-bets-title">List of Bets Placed</DialogTitle>
+            <DialogContent>
+                <DialogContentText>
+                    This dialog shows the list of people who placed the Bets
+                </DialogContentText>
+                <Stack>
+                    {status === 'loading' && <Typography role="status">Loading placed bets…</Typography>}
+                    {status === 'error' && <Typography role="alert">Unable to load placed bets. Try again.</Typography>}
+                    {status === 'ready' && matches.length === 0 && <Typography>No bets placed for this match.</Typography>}
+                    {matches.map((m) => (
+                        <Stack key={m.betid}>
+                            <Typography variant="caption">{m.betid}</Typography>
+                            <Typography>{m.username}</Typography>
+                        </Stack>
+                    ))}
+                </Stack>
+            </DialogContent>
+            <DialogActions>
+                {status === 'error' && <Button onClick={() => setAttempt((value) => value + 1)}>Try again</Button>}
+                <Button onClick={onClose}>Close</Button>
+            </DialogActions>
+        </Dialog>
+    )
+}
+
+export default function Bets({ bets, betsError = false }) {
+    const matchList = Array.isArray(bets) ? bets : []
     const [open, setOpen] = useState(false);
     const [quest, setQuest] = useState(false)
     const [display, setDisplay] = useState({})
@@ -188,45 +249,6 @@ export default function Bets({ bets }) {
         }
         updateBalance(id, market)
     }
-    useEffect(() => {
-
-    }, [])
-    function DisplayDialog() {
-        const [match, setMatch] = useState([])
-        const getData = async () => {
-            const { data, error } = await supabase
-                .from('placed')
-                .select()
-                .eq('match_id', display.match)
-            setMatch(data)
-        }
-        getData()
-        let matchs = match
-        return (
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>List of Bets Placed</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        This dialog shows the list of people who placed the Bets</DialogContentText>
-                    <Stack>
-                        {
-                            matchs.map((m) => {
-                                return (
-                                    <Stack key={m.betid}>
-                                        <Typography variant="caption">{m.betid}</Typography>
-                                        <Typography>{m.username}</Typography>
-                                    </Stack>
-                                )
-                            })
-                        }
-                    </Stack>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Close</Button>
-                </DialogActions>
-            </Dialog>
-        )
-    }
     //end-of-dialog
     function Question() {
 
@@ -284,7 +306,9 @@ export default function Bets({ bets }) {
     return (
         <Cover>
             <Stack sx={{ background: "inherit", width: "100%", height: "100%", marginTop: '100px' }} justifyContent="center" alignItems='center'>
-                <DisplayDialog />
+                {open && display.match !== null && display.match !== undefined && display.match !== '' && (
+                    <DisplayDialog key={display.match} open={open} matchId={display.match} onClose={handleClose} />
+                )}
                 <Toaster position="bottom-center" />
                 <Backdrop
                     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -309,9 +333,16 @@ export default function Bets({ bets }) {
 
                 <Typography variant="h6" color="#DDDDDD" sx={{ fontFamily: 'IBM Plex Sans Devanagari, sans-serif', fontSize: "35px" }}>All Bets</Typography>
                 <Typography variant="subtitle2" sx={{ fontFamily: 'Overpass, sans-serif' }} color="#DDDDDD">View and Have Access to Edit all Bets.</Typography>
+                {betsError && (
+                    <Stack alignItems="center">
+                        <Typography role="alert" color="#DDDDDD">Unable to load matches. Try again.</Typography>
+                        <Button onClick={() => window.location.reload()}>Try again</Button>
+                    </Stack>
+                )}
+                {!betsError && matchList.length === 0 && <Typography color="#DDDDDD">No unsettled matches.</Typography>}
                 <Stack direction="column-reverse">
                     {
-                        bets.map((b) => {
+                        matchList.map((b) => {
                             const stams = getMatchStartMs(b);
                             const curren = Date.now();
                             if (stams > curren) {
@@ -468,16 +499,17 @@ function MatchTime({ match }) {
 }
 
 export async function getServerSideProps(context) {
-  const i18nProps = await getI18nServerSideProps(context.locale)
-    const { data, error } = await supabase
-        .from('bets')
-        .select()
-        .eq('verified', false)
-        .order('id', { ascending: true });
-    let bets = data
-    console.log(error)
-    return {
-        props: {
-      ...i18nProps, bets }, // will be passed to the page component as props
+    const i18nProps = await getI18nServerSideProps(context.locale)
+    try {
+        const { data, error } = await supabase
+            .from('bets')
+            .select()
+            .eq('verified', false)
+            .order('id', { ascending: true });
+        if (error) throw error
+        return { props: { ...i18nProps, bets: Array.isArray(data) ? data : [], betsError: false } }
+    } catch (error) {
+        console.error('Unable to load admin matches:', error)
+        return { props: { ...i18nProps, bets: [], betsError: true } }
     }
 }
