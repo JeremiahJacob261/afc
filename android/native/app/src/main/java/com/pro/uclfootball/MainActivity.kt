@@ -626,6 +626,8 @@ private fun LoginScreen(
                                 LoginError.InvalidCredentials -> R.string.login_error_invalid_credentials
                                 LoginError.Network -> R.string.login_error_network
                                 LoginError.General -> R.string.login_error_general
+                                LoginError.EmailUnconfirmed -> R.string.login_error_email_unconfirmed
+                                LoginError.RateLimited -> R.string.login_error_rate_limited
                             },
                         ),
                         color = Color(0xFF9A1B1B),

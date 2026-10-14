@@ -1,3 +1,4 @@
+import { adminErrorMessage } from '@/lib/adminErrorMessage'
 import { Stack, Typography, Box, Button, TextField } from "@mui/material";
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { callAdminRpc } from '@/lib/adminRpcClient';
@@ -60,7 +61,7 @@ function DisplayDialog({ open, matchId, onClose }) {
                 </DialogContentText>
                 <Stack>
                     {status === 'loading' && <Typography role="status">Loading placed bets…</Typography>}
-                    {status === 'error' && <Typography role="alert">Unable to load placed bets. Try again.</Typography>}
+                    {status === 'error' && <Typography role="alert">We could not load placed bets. Refresh and try again.</Typography>}
                     {status === 'ready' && matches.length === 0 && <Typography>No bets placed for this match.</Typography>}
                     {matches.map((m) => (
                         <Stack key={m.betid}>
@@ -292,7 +293,7 @@ export default function Bets({ bets, betsError = false }) {
             })
             const result = await response.json().catch(() => ({}))
             if (!response.ok) {
-                throw new Error(result.message || 'Unable to settle match')
+                throw new Error(adminErrorMessage(result, 'We could not confirm settlement. Refresh the match and settlement records before trying again.'))
             }
             const summary = result.summary
             toast.success(summary ? `Settled: ${summary.won} won, ${summary.lost} lost, ${summary.refunded} refunded` : "Bet settled")
@@ -335,7 +336,7 @@ export default function Bets({ bets, betsError = false }) {
                 <Typography variant="subtitle2" sx={{ fontFamily: 'Overpass, sans-serif' }} color="#DDDDDD">View and Have Access to Edit all Bets.</Typography>
                 {betsError && (
                     <Stack alignItems="center">
-                        <Typography role="alert" color="#DDDDDD">Unable to load matches. Try again.</Typography>
+                        <Typography role="alert" color="#DDDDDD">We could not load matches. Refresh and try again.</Typography>
                         <Button onClick={() => window.location.reload()}>Try again</Button>
                     </Stack>
                 )}

@@ -409,7 +409,7 @@ export default function TransactionHistory() {
         setSummary(result.summary || emptySummary)
         setNextCursor(result.nextCursor)
       } catch (err) {
-        if (active) setError(err.message || t('messages.unableLoadTransactions'))
+        if (active) setError(translateApiMessage(err, t, 'messages.unableLoadTransactions'))
       } finally {
         if (active) setLoading(false)
       }
@@ -431,7 +431,7 @@ export default function TransactionHistory() {
       if (!response.ok) throw new Error(t('messages.unableLoadTransactions'))
       setTransactions(current => [...current, ...(result.transactions || [])])
       setNextCursor(result.nextCursor)
-    } catch (err) { setError(err.message) }
+    } catch (err) { setError(translateApiMessage(err, t, 'messages.unableLoadTransactions')) }
     finally { setLoadingMore(false) }
   }
 

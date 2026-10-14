@@ -182,7 +182,7 @@ export default function DepositFlow({ step }) {
       if (mounted.current && receiptUpload === task) setUploadState(state)
     })
     receiptUpload = task
-    task.start().catch(error => { if (mounted.current && receiptUpload === task) setSubmitError(translateApiMessage(error, t, 'messages.depositFailed')) })
+    task.start().catch(error => { if (mounted.current && receiptUpload === task) setSubmitError(translateApiMessage(error, t, 'mobile.deposit.uploadFailed')) })
   }
 
   const submit = async () => {
@@ -216,7 +216,7 @@ export default function DepositFlow({ step }) {
         }),
       })
       const result = await response.json().catch(() => ({}))
-      if (!response.ok) {
+      if (!response.ok || result.status !== 'success') {
         if (result.code === 'rate_changed') {
           updateDraft({ reviewedRate: null, reviewedSignature: '' })
           setReloadKey(key => key + 1)
@@ -225,7 +225,7 @@ export default function DepositFlow({ step }) {
           receiptUpload = createReceiptUpload(receipt, draft.userId, setUploadState)
           receiptUpload.start().catch(() => {})
         }
-        throw new Error(translateApiMessage(result, t, 'messages.depositFailed'))
+        throw Object.assign(new Error(result.message), { payload: result, status: response.status })
       }
 
       task.accepted = true
@@ -237,7 +237,7 @@ export default function DepositFlow({ step }) {
       toast.success(t('messages.depositSubmitted'))
       router.push('/user/depositsuccess')
     } catch (error) {
-      const message = translateApiMessage(error, t, 'messages.depositFailed')
+      const message = translateApiMessage(error, t, receiptUpload?.submitted ? 'messages.depositFailed' : 'mobile.deposit.uploadFailed')
       setSubmitError(message)
       toast.error(message)
     } finally {

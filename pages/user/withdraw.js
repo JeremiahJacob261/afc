@@ -107,7 +107,7 @@ export default function Deposit() {
             })
           })
           let test = await response.json();
-          if (!response.ok && !Array.isArray(test)) throw new Error(test.message || 'Withdrawal failed');
+          if (!response.ok && !Array.isArray(test)) throw Object.assign(new Error(test.message), { payload: test, status: response.status });
           if (response.status === 401 || response.status === 404) {
             router.push('/login');
             return;
@@ -134,7 +134,7 @@ export default function Deposit() {
           }
       } catch (e) {
         console.log(e);
-        toast.error(t('messages.unableSubmitWithdrawal'))
+        toast.error(translateApiMessage(e, t, 'messages.unableSubmitWithdrawal'))
         handleClosex();
       }
 
@@ -195,7 +195,7 @@ export default function Deposit() {
         const result = await response.json();
         if (!active) return;
         if (!response.ok || result.status !== 'success') {
-          throw new Error(result.message || 'Unable to load withdrawal data');
+          throw Object.assign(new Error(result.message), { payload: result, status: response.status });
         }
 
         setWallet(result.wallets ?? []);
@@ -215,7 +215,7 @@ export default function Deposit() {
         setWithdrawalEligibility(result.withdrawalEligibility ?? { canWithdraw: true, reason: null, retryAt: null });
       } catch (e) {
         console.log(e)
-        toast.error(t('mobile.withdraw.connectionError'))
+        toast.error(translateApiMessage(e, t, 'messages.unableLoadPaymentData'))
       }
     }
 

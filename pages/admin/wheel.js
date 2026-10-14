@@ -1,3 +1,4 @@
+import { adminErrorMessage } from '@/lib/adminErrorMessage'
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -42,7 +43,7 @@ export default function WheelEditor() {
       const response = await fetch('/api/admin/wheel-items', { cache: 'no-store' })
       if (response.status === 401) { router.push('/admin'); return }
       const result = await response.json()
-      if (!response.ok) throw new Error(result.message || 'Could not load wheel items')
+      if (!response.ok) throw new Error(adminErrorMessage(result, 'Could not load wheel items'))
       setItems(result.items)
       setSavedItems(result.items)
       setRevision(result.revision)
@@ -91,7 +92,7 @@ export default function WheelEditor() {
       })
       if (response.status === 401) { router.push('/admin'); return }
       const result = await response.json()
-      if (!response.ok) throw new Error(result.message || 'Could not upload image')
+      if (!response.ok) throw new Error(adminErrorMessage(result, 'Could not upload image'))
       change(id, 'imageUrl', result.imageUrl)
       toast.success('Image uploaded. Save the wheel to publish it.')
     } catch (caught) { toast.error(caught.message) }
@@ -112,7 +113,7 @@ export default function WheelEditor() {
       })
       if (response.status === 401) { router.push('/admin'); return }
       const result = await response.json()
-      if (!response.ok) throw new Error(result.message || 'Could not save wheel items')
+      if (!response.ok) throw new Error(adminErrorMessage(result, 'Could not save wheel items'))
       setItems(result.items)
       setSavedItems(result.items)
       setRevision(result.revision)

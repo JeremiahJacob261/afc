@@ -35,7 +35,7 @@ class LoginRepository(
         try {
             authSessionRepository.signIn(email, password)
         } catch (error: SupabaseAuthException) {
-            if (error.httpStatus == 400 || error.httpStatus == 401) {
+            if (error.code == "invalid_credentials") {
                 throw InvalidLoginCredentialsException()
             }
             throw error

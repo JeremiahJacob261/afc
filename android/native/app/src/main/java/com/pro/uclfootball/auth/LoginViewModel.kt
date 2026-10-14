@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
+import com.pro.uclfootball.network.ApiException
 
 data class LoginUiState(
     val identity: String = "",
@@ -25,6 +26,8 @@ enum class LoginError {
     InvalidCredentials,
     Network,
     General,
+    EmailUnconfirmed,
+    RateLimited,
 }
 
 class LoginViewModel(private val repository: LoginRepository) : ViewModel() {
@@ -72,6 +75,15 @@ class LoginViewModel(private val repository: LoginRepository) : ViewModel() {
                 mutableState.update {
                     it.copy(isSubmitting = false, error = LoginError.Network)
                 }
+            } catch (error: SupabaseAuthException) {
+                mutableState.update { it.copy(isSubmitting = false, error = when {
+                    error.code == "email_not_confirmed" -> LoginError.EmailUnconfirmed
+                    error.httpStatus == 429 -> LoginError.RateLimited
+                    error.code == "invalid_credentials" -> LoginError.InvalidCredentials
+                    else -> LoginError.General
+                }) }
+            } catch (error: ApiException) {
+                mutableState.update { it.copy(isSubmitting = false, error = if (error.httpStatus == 429) LoginError.RateLimited else LoginError.General) }
             } catch (error: Exception) {
                 mutableState.update {
                     it.copy(isSubmitting = false, error = LoginError.General)
@@ -98,7 +110,7 @@ class LoginViewModel(private val repository: LoginRepository) : ViewModel() {
                     it.copy(
                         isCheckingSession = false,
                         sessionRecoveryFailed = true,
-                        error = LoginError.Network,
+                        error = if (error is IOException) LoginError.Network else LoginError.General,
                     )
                 }
             }

@@ -51,6 +51,7 @@ class BetSlipViewModel(private val api: NativeApiClient, private val sessions: A
     private val matchId: String, private val market: String) : ViewModel() {
     private val mutableState = MutableStateFlow(BetSlipState())
     val state = mutableState.asStateFlow()
+    private var submissionStarted = false
     init {
         viewModelScope.launch {
             try {
@@ -64,10 +65,11 @@ class BetSlipViewModel(private val api: NativeApiClient, private val sessions: A
             catch (e: ApiException) {
                 mutableState.update { it.copy(
                     requiresSignIn = e.httpStatus == 401,
-                    error = if (e.httpStatus == 401) null else submissionFailureMessage(e.failure?.message, e.failure?.code, e.httpStatus, SubmissionFlow.BET),
+                    error = if (e.httpStatus == 401) null else submissionFailureMessage(e.failure?.message, e.failure?.code, e.httpStatus, SubmissionFlow.BET, submitted = false),
                 ) }
             }
-            catch (_: Exception) { mutableState.update { it.copy(error = R.string.journey_offline) } }
+            catch (_: IOException) { mutableState.update { it.copy(error = R.string.journey_offline) } }
+            catch (_: Exception) { mutableState.update { it.copy(error = R.string.bet_slip_load_failed) } }
         }
     }
     fun stake(value: String) {
@@ -75,27 +77,29 @@ class BetSlipViewModel(private val api: NativeApiClient, private val sessions: A
         mutableState.update { it.copy(stake = value, quote = null, error = null, attempt = UUID.randomUUID().toString()) }
     }
     fun invalidateQuote() { mutableState.update { it.copy(quote = null) } }
-    fun quote() = work(false) {
+    fun quote() = work {
         val current = state.value
         if (current.stake.toBigDecimalOrNull()?.signum() != 1) return@work fail(R.string.journey_valid_amount)
         val quote = api.getJson<BetQuoteDto>("api/mobile/bet-quote?match_id=${encode(matchId)}&picked=${encode(market)}&stake=${encode(current.stake)}", true)
         mutableState.update { it.copy(quote = quote) }
     }
-    fun submit() = work(true) {
+    fun submit() = work {
         val current = state.value
         if (current.uncertain || current.result != null) return@work fail(R.string.journey_uncertain)
         if (current.stake.toBigDecimalOrNull()?.signum() != 1) return@work fail(R.string.journey_valid_amount)
         val quote = try { current.quote ?: api.getJson<BetQuoteDto>("api/mobile/bet-quote?match_id=${encode(matchId)}&picked=${encode(market)}&stake=${encode(current.stake)}", true) }
         catch (_: IOException) { return@work fail(R.string.journey_offline) }
         mutableState.update { it.copy(quote = quote) }
+        submissionStarted = true
         val result = api.postJson<PlaceBetRequest, PlacedBetResult>("api/place-bet", PlaceBetRequest(matchId, market, current.stake, current.attempt, quote.odd), true)
         check(result.betid.textValue().isNotBlank())
         mutableState.update { it.copy(result = result) }
     }
     private fun fail(resource: Int) { mutableState.update { it.copy(error = resource) } }
     private fun encode(value: String) = URLEncoder.encode(value, "UTF-8")
-    private fun work(mutation: Boolean, block: suspend () -> Unit) {
+    private fun work(block: suspend () -> Unit) {
         if (state.value.busy) return
+        submissionStarted = false
         mutableState.update { it.copy(busy = true, error = null) }
         viewModelScope.launch {
             try { block() }
@@ -108,14 +112,15 @@ class BetSlipViewModel(private val api: NativeApiClient, private val sessions: A
                 }
                 mutableState.update { it.copy(
                     quote = null,
-                    error = submissionFailureMessage(error.failure?.message, error.failure?.code, error.httpStatus, SubmissionFlow.BET),
+                    uncertain = it.uncertain || submissionStarted && (error.httpStatus >= 500 || error.failure?.code == "SUBMISSION_UNCONFIRMED"),
+                    error = submissionFailureMessage(error.failure?.message, error.failure?.code, error.httpStatus, SubmissionFlow.BET, submitted = submissionStarted),
                 ) }
             }
-            catch (error: IOException) { mutableState.update { it.copy(uncertain = it.uncertain || mutation, error = if (mutation) R.string.journey_uncertain else R.string.journey_offline) } }
+            catch (error: IOException) { mutableState.update { it.copy(uncertain = it.uncertain || submissionStarted, error = if (submissionStarted) R.string.journey_uncertain else R.string.journey_offline) } }
             catch (error: Exception) {
                 mutableState.update { it.copy(
-                    uncertain = it.uncertain || mutation,
-                    error = if (mutation) R.string.journey_uncertain else submissionFailureMessage(flow = SubmissionFlow.BET),
+                    uncertain = it.uncertain || submissionStarted,
+                    error = if (submissionStarted) R.string.journey_uncertain else R.string.bet_slip_load_failed,
                 ) }
             }
             finally { mutableState.update { it.copy(busy = false) } }
@@ -152,8 +157,8 @@ internal fun BetSlipContent(state: BetSlipState, matchId: String, market: String
     ModalBottomSheet(onDismissRequest = onBack, sheetState = sheet, containerColor = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp), dragHandle = null) {
         Column(Modifier.fillMaxWidth().heightIn(max = 720.dp).verticalScroll(rememberScrollState()).padding(start = 16.dp, top = 20.dp, end = 16.dp, bottom = 24.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             BulletinHeading(webCopy("mobile.match.placeBet"), onBack)
-            JourneyFeedback(state.error?.takeUnless { state.uncertain && it == R.string.journey_uncertain })
-            if (state.uncertain) { Text(stringResource(R.string.journey_uncertain)); JourneyAction(webCopy("common.myBets"), onClick = onBets); return@Column }
+            JourneyFeedback(state.error?.takeUnless { state.uncertain })
+            if (state.uncertain) { Text(stringResource(R.string.bet_slip_submission_failed)); JourneyAction(webCopy("common.myBets"), onClick = onBets); return@Column }
             if (state.result != null) return@Column
             Text((if (match?.league == "others") match.otherl else match?.league).orEmpty(), Modifier.fillMaxWidth(), fontSize = 12.sp, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
             WebPanel(padding = 12) {

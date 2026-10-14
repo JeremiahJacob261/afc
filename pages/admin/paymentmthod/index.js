@@ -1,3 +1,4 @@
+import { adminErrorMessage } from '@/lib/adminErrorMessage'
 import Head from 'next/head'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
@@ -76,7 +77,7 @@ function fileToDataUrl(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.onload = () => resolve(reader.result)
-    reader.onerror = () => reject(new Error('Unable to read logo file'))
+    reader.onerror = () => reject(new Error('We could not read this logo image. Choose it again.'))
     reader.readAsDataURL(file)
   })
 }
@@ -138,7 +139,7 @@ export default function PaymentMethodManager() {
 
       if (!response.ok) {
         if (response.status === 401) router.push('/admin')
-        throw new Error(result.message || 'Unable to load payment methods')
+        throw new Error(adminErrorMessage(result, 'We could not load payment methods. Refresh and try again.'))
       }
 
       const nextMethods = Array.isArray(result.methods) ? result.methods : []
@@ -150,7 +151,7 @@ export default function PaymentMethodManager() {
       ))
     } catch (error) {
       console.log(error)
-      toast.error(error.message || 'Unable to load payment methods')
+      toast.error(adminErrorMessage(error, 'We could not load payment methods. Refresh and try again.'))
     } finally {
       if (!silent) setLoading(false)
     }
@@ -224,7 +225,7 @@ export default function PaymentMethodManager() {
 
       if (!response.ok) {
         if (response.status === 401) router.push('/admin')
-        throw new Error(result.message || 'Unable to save payment method')
+        throw new Error(adminErrorMessage(result, 'We could not confirm the payment method was saved. Refresh the list before saving again.'))
       }
 
       const savedMethod = result.method
@@ -240,7 +241,7 @@ export default function PaymentMethodManager() {
       resetForm()
     } catch (saveError) {
       console.log(saveError)
-      toast.error(saveError.message || 'Unable to save payment method')
+      toast.error(adminErrorMessage(saveError, 'We could not confirm the payment method was saved. Refresh the list before saving again.'))
     } finally {
       setSaving(false)
     }
@@ -258,7 +259,7 @@ export default function PaymentMethodManager() {
 
       if (!response.ok) {
         if (response.status === 401) router.push('/admin')
-        throw new Error(result.message || 'Unable to delete payment method')
+        throw new Error(adminErrorMessage(result, 'We could not confirm the payment method was deleted. Refresh the list before trying again.'))
       }
 
       setMethods((current) => current.filter((item) => item.id !== method.id))
@@ -270,7 +271,7 @@ export default function PaymentMethodManager() {
       toast.success('Method deleted')
     } catch (deleteError) {
       console.log(deleteError)
-      toast.error(deleteError.message || 'Unable to delete payment method')
+      toast.error(adminErrorMessage(deleteError, 'We could not confirm the payment method was deleted. Refresh the list before trying again.'))
     } finally {
       setDeletingId(null)
     }
@@ -293,7 +294,7 @@ export default function PaymentMethodManager() {
 
       if (!response.ok) {
         if (response.status === 401) router.push('/admin')
-        throw new Error(result.message || 'Unable to update availability')
+        throw new Error(adminErrorMessage(result, 'We could not confirm the availability change. Refresh to check the current setting.'))
       }
 
       setMethods((current) => current.map((item) => (
@@ -302,7 +303,7 @@ export default function PaymentMethodManager() {
       toast.success(method.available ? 'Method disabled' : 'Method enabled')
     } catch (toggleError) {
       console.log(toggleError)
-      toast.error(toggleError.message || 'Unable to update availability')
+      toast.error(adminErrorMessage(toggleError, 'We could not confirm the availability change. Refresh to check the current setting.'))
     } finally {
       setTogglingId(null)
     }

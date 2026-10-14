@@ -26,6 +26,50 @@ function response() {
   return { headers: {}, statusCode: 200, setHeader(k,v) { this.headers[k]=v }, end() {},
     status(code) { this.statusCode=code; return this }, json(body) { this.body=body; this.end(); return this } }
 }
+
+test('admin actions retain their recovery guidance when a server returns generic errors', () => {
+  const { adminErrorMessage } = load('lib/adminErrorMessage.js')
+  const fallback = 'Check the transaction status before trying again.'
+  assert.equal(adminErrorMessage({ message: 'Server error' }, fallback), fallback)
+  assert.equal(adminErrorMessage(new TypeError('Failed to fetch'), fallback), fallback)
+  assert.equal(adminErrorMessage({ message: 'Invalid admin credentials' }, fallback), 'Invalid admin credentials')
+  assert.match(adminErrorMessage({ status: 401 }, fallback), /session expired/)
+})
+
+test('bet validation returns the correct reason through the real API handler', async () => {
+  const { handler, calls } = fixture('pages/api/place-bet.js')
+  const valid = { match_id: 'match-1', picked: 'nilnil', stake: 2500, expected_odd: 1.5 }
+  for (const [change, expected] of [
+    [{ stake: 2000 }, 'BET_MINIMUM_STAKE'],
+    [{ stake: 'abc' }, 'BET_INVALID_STAKE'],
+    [{ expected_odd: null }, 'BET_INVALID_DETAILS'],
+    [{ picked: 'invalid' }, 'BET_SELECTION_REQUIRED'],
+    [{ client_bet_id: 'bad-id' }, 'BET_REQUEST_CONFLICT'],
+  ]) {
+    const res = response()
+    await handler({ method: 'POST', body: { ...valid, ...change } }, res)
+    assert.equal(res.statusCode, 400)
+    assert.equal(res.body.code, expected)
+  }
+  assert.equal(calls.length, 0)
+})
+
+test('bet RPC errors retain actionable reasons without exposing server internals', async () => {
+  for (const [message, code, status] of [
+    ['This Match has expired', 'BET_CLOSED', 400],
+    ['You do not have enough MMK to complete this bet', 'BET_INSUFFICIENT_BALANCE', 400],
+    ['Duplicate bet id', 'BET_REQUEST_CONFLICT', 409],
+    ['Odds changed', 'BET_ODDS_CHANGED', 409],
+    ['private database diagnostic', 'SUBMISSION_UNCONFIRMED', 500],
+  ]) {
+    const { handler } = fixture('pages/api/place-bet.js', { error: { message } })
+    const res = response()
+    await handler({ method: 'POST', body: { match_id: 'match-1', picked: 'nilnil', stake: 2500, expected_odd: 1.5 } }, res)
+    assert.equal(res.statusCode, status)
+    assert.equal(res.body.code, code)
+    assert.doesNotMatch(res.body.message, /private database/)
+  }
+})
 const id = '00000000-0000-4000-8000-000000000001'
 const requestId = '00000000-0000-4000-8000-000000000002'
 function fixture(file, outcome = { data: { status: 'success', notificationId: 1, balance: 50000 } }, authenticated = true) {

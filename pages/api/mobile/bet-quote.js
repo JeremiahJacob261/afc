@@ -1,6 +1,7 @@
 import { getCurrentUser, sendApiError } from '@/lib/apiAuth'
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 import { parseCurrency } from '@/lib/currency'
+import { betError } from '@/lib/betErrors'
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ status: 'error', message: 'Method not allowed' })
@@ -9,7 +10,8 @@ export default async function handler(req, res) {
     const user = await getCurrentUser(req)
     const supabase = getSupabaseAdmin()
     const stake = parseCurrency(req.query.stake)
-    if (!Number.isFinite(stake) || stake < 2500) return res.status(400).json({ status: 'error', message: 'Invalid bet details' })
+    if (!Number.isFinite(stake) || stake <= 0) return res.status(400).json({ status: 'error', code: 'BET_INVALID_STAKE', message: 'Enter a valid stake amount.' })
+    if (stake < 2500) return res.status(400).json({ status: 'error', code: 'BET_MINIMUM_STAKE', message: 'Minimum stake is 2,500 MMK', details: { minimum: '2,500 MMK' } })
     const { data, error } = await supabase.rpc('native_bet_quote', {
       p_userid: user.id,
       p_match_id: String(req.query.match_id || ''),
@@ -17,7 +19,10 @@ export default async function handler(req, res) {
       p_stake: stake,
     })
     if (error) {
-      if (error.code === 'P0001') return res.status(400).json({ status: 'error', message: error.message })
+      if (error.code === 'P0001') {
+        const { status, ...body } = betError(error)
+        if (body.code !== 'SUBMISSION_UNCONFIRMED') return res.status(status).json({ status: 'error', ...body })
+      }
       throw error
     }
     // Database numeric rounding and VIP/member predicates match atomic placement.

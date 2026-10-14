@@ -1,3 +1,4 @@
+import { adminErrorMessage } from '@/lib/adminErrorMessage'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
@@ -149,7 +150,7 @@ export default function UserDetailModal() {
             router.push('/admin')
             return
           }
-          throw new Error(result.message || 'Unable to load user')
+          throw new Error(adminErrorMessage(result, 'We could not load this user. Refresh and try again.'))
         }
 
         if (!active) return
@@ -163,7 +164,7 @@ export default function UserDetailModal() {
         setTotalDeposits(result.user?.totald ?? '')
       } catch (error) {
         console.log(error)
-        toast.error(error.message || 'Unable to load user')
+        toast.error(adminErrorMessage(error, 'We could not load this user. Refresh and try again.'))
       } finally {
         if (active) setLoading(false)
       }
@@ -181,7 +182,7 @@ export default function UserDetailModal() {
       toast.success(message)
     } catch (error) {
       console.log(error)
-      toast.error('Unable to copy')
+      toast.error('We could not copy this automatically. Select the text and copy it manually.')
     }
   }
 
@@ -197,7 +198,7 @@ export default function UserDetailModal() {
         }),
       })
       const result = await response.json().catch(() => ({}))
-      if (!response.ok) throw new Error(result.message || 'Balance update failed')
+      if (!response.ok) throw new Error(adminErrorMessage(result, 'Balance update failed'))
       setDatas((current) => ({
         ...current,
         balance: parseFloat(balance),
@@ -207,7 +208,7 @@ export default function UserDetailModal() {
       toast.success('Balance updated')
     } catch (error) {
       console.log(error)
-      toast.error(error.message || 'An error occurred')
+      toast.error(adminErrorMessage(error, 'We could not confirm this account update. Reload the user record before trying again.'))
     }
   }
 
@@ -230,7 +231,7 @@ export default function UserDetailModal() {
         }),
       })
       const result = await response.json().catch(() => ({}))
-      if (!response.ok) throw new Error(result.message || 'Total deposit update failed')
+      if (!response.ok) throw new Error(adminErrorMessage(result, 'Total deposit update failed'))
       const savedAmount = Number(result.totald)
       setDatas((current) => ({ ...current, totald: savedAmount }))
       setTotalDeposits(String(savedAmount))
@@ -238,7 +239,7 @@ export default function UserDetailModal() {
       toast.success('Total deposits updated')
     } catch (error) {
       console.log(error)
-      toast.error(error.message || 'An error occurred')
+      toast.error(adminErrorMessage(error, 'We could not confirm this account update. Reload the user record before trying again.'))
     } finally {
       setSavingTotalDeposits(false)
     }
@@ -252,11 +253,11 @@ export default function UserDetailModal() {
         body: JSON.stringify({ action: 'delete-wallet', username: datas?.username, uid: datas?.uid }),
       })
       const result = await response.json().catch(() => ({}))
-      if (!response.ok) throw new Error(result.message || 'Wallet delete failed')
-      toast.success(result.message || 'Wallet deleted successfully')
+      if (!response.ok) throw new Error(adminErrorMessage(result, 'Wallet delete failed'))
+      toast.success(adminErrorMessage(result, 'Wallet deleted successfully'))
     } catch (error) {
       console.log(error)
-      toast.error(error.message || 'An error occurred')
+      toast.error(adminErrorMessage(error, 'We could not confirm this account update. Reload the user record before trying again.'))
     }
   }
 
@@ -278,15 +279,15 @@ export default function UserDetailModal() {
         }),
       })
       const result = await response.json().catch(() => ({}))
-      if (!response.ok) throw new Error(result.message || 'Referral switch failed')
+      if (!response.ok) throw new Error(adminErrorMessage(result, 'Referral switch failed'))
       setDatas((current) => ({ ...current, ...(result.user || {}) }))
       setReferredby(result.referrerUsername || requestedReferral)
       setSwitchOpen(false)
       setNewRefer('')
-      toast.success(result.message || 'Referral switched successfully')
+      toast.success(adminErrorMessage(result, 'Referral switched successfully'))
     } catch (error) {
       console.log(error)
-      toast.error(error.message || 'Error occurred')
+      toast.error(adminErrorMessage(error, 'We could not confirm this account update. Reload the user record before trying again.'))
     } finally {
       setSwitchingReferral(false)
     }
@@ -312,7 +313,7 @@ export default function UserDetailModal() {
           router.push('/admin')
           return
         }
-        throw new Error(result.message || 'Login-as-user failed')
+        throw new Error(adminErrorMessage(result, 'Login-as-user failed'))
       }
 
       if (!result?.session?.access_token || !result?.session?.refresh_token) {
@@ -332,7 +333,7 @@ export default function UserDetailModal() {
       router.push('/user')
     } catch (error) {
       console.log(error)
-      toast.error(error.message || 'Unable to login as user')
+      toast.error(adminErrorMessage(error, 'We could not start a session as this user. Refresh the user record and try again.'))
       setImpersonating(false)
     }
   }
@@ -366,7 +367,7 @@ export default function UserDetailModal() {
           router.push('/admin')
           return
         }
-        throw new Error(result.message || 'Password reset failed')
+        throw new Error(adminErrorMessage(result, 'We could not confirm the password reset. Check the operation status before resetting it again.'))
       }
 
       setDatas((current) => ({ ...current, password }))
@@ -374,7 +375,7 @@ export default function UserDetailModal() {
       toast.success('Password reset')
     } catch (error) {
       console.log(error)
-      toast.error(error.message || 'Password reset failed')
+      toast.error(adminErrorMessage(error, 'We could not confirm the password reset. Check the operation status before resetting it again.'))
     } finally {
       setCredentialSaving(null)
     }
@@ -409,7 +410,7 @@ export default function UserDetailModal() {
           router.push('/admin')
           return
         }
-        throw new Error(result.message || 'PIN reset failed')
+        throw new Error(adminErrorMessage(result, 'We could not confirm the PIN reset. Check the operation status before resetting it again.'))
       }
 
       setDatas((current) => ({ ...current, pin, codeset: true }))
@@ -417,7 +418,7 @@ export default function UserDetailModal() {
       toast.success('Transaction PIN reset')
     } catch (error) {
       console.log(error)
-      toast.error(error.message || 'PIN reset failed')
+      toast.error(adminErrorMessage(error, 'We could not confirm the PIN reset. Check the operation status before resetting it again.'))
     } finally {
       setCredentialSaving(null)
     }
@@ -463,7 +464,7 @@ export default function UserDetailModal() {
               <UserDetailSkeleton />
             ) : !datas ? (
               <div className="rounded-[28px] border border-white/10 bg-white/[0.06] p-10 text-center">
-                <p className="text-lg font-semibold text-white">Unable to load this user.</p>
+                <p className="text-lg font-semibold text-white">We could not load this user. Refresh and try again.</p>
                 <button
                   type="button"
                   onClick={close}

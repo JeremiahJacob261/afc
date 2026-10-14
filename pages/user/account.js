@@ -119,7 +119,7 @@ export default function Account() {
       setCookie('authed', '', { path: '/', expires: new Date(0) })
       router.replace('/login')
     } catch (_) {
-      toast.error(t('messages.anErrorOccurred'))
+      toast.error(t('messages.signOutUnconfirmed'))
       setSigningOut(false)
     }
   }

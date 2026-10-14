@@ -1,3 +1,4 @@
+import { adminErrorMessage } from '@/lib/adminErrorMessage'
 import { invalidatePublicData } from '@/lib/requestCache'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -72,7 +73,7 @@ export default function Controls() {
         if (response.ok) invalidatePublicData()
       if (!response.ok) {
           if (response.status === 401) router.push('/admin')
-          throw new Error(result.message || 'Unable to load settings')
+          throw new Error(adminErrorMessage(result, 'We could not load settings. Refresh and try again.'))
         }
 
         if (active) {
@@ -91,7 +92,7 @@ export default function Controls() {
         }
       } catch (error) {
         console.log(error)
-        toast.error(error.message || 'Unable to load settings')
+        toast.error(adminErrorMessage(error, 'We could not load settings. Refresh and try again.'))
       } finally {
         if (active) setLoadingSettings(false)
       }
@@ -126,7 +127,7 @@ export default function Controls() {
       if (response.ok) invalidatePublicData()
       if (!response.ok) {
         if (response.status === 401) router.push('/admin')
-        throw new Error(result.message || 'Unable to update withdrawal availability')
+        throw new Error(adminErrorMessage(result, 'We could not confirm the withdrawal setting was saved. Reload settings to check its current status.'))
       }
 
       setWithdrawalsEnabled(result.settings?.withdrawalsEnabled ?? enabled)
@@ -135,7 +136,7 @@ export default function Controls() {
       return true
     } catch (error) {
       console.log(error)
-      toast.error(error.message || 'Unable to update withdrawal availability')
+      toast.error(adminErrorMessage(error, 'We could not confirm the withdrawal setting was saved. Reload settings to check its current status.'))
       return false
     } finally {
       setSavingAvailability(false)
@@ -227,7 +228,7 @@ export default function Controls() {
       if (response.ok) invalidatePublicData()
       if (!response.ok) {
         if (response.status === 401) router.push('/admin')
-        throw new Error(result.message || 'Unable to save settings')
+        throw new Error(adminErrorMessage(result, 'We could not confirm the settings were saved. Reload settings before saving again.'))
       }
 
       setBonusPercent(String(result.settings?.firstDepositBonusPercent ?? firstDepositBonusPercent))
@@ -245,7 +246,7 @@ export default function Controls() {
       toast.success('Settings saved successfully')
     } catch (error) {
       console.log(error)
-      toast.error(error.message || 'Unable to save settings')
+      toast.error(adminErrorMessage(error, 'We could not confirm the settings were saved. Reload settings before saving again.'))
     } finally {
       setSavingSettings(false)
     }

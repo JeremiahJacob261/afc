@@ -1,3 +1,4 @@
+import { adminErrorMessage } from '@/lib/adminErrorMessage'
 import Head from 'next/head'
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { useState } from 'react'
@@ -27,7 +28,7 @@ function formatBalance(value) {
 
 function isMissingColumnError(error, column) {
   if (!error) return false
-  const message = `${error.message || ''} ${error.details || ''} ${error.hint || ''}`.toLowerCase()
+  const message = `${adminErrorMessage(error, '')} ${error.details || ''} ${error.hint || ''}`.toLowerCase()
   return error.code === '42703' || message.includes(column.toLowerCase())
 }
 

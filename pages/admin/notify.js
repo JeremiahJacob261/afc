@@ -1,3 +1,4 @@
+import { adminErrorMessage } from '@/lib/adminErrorMessage'
 import { Button, Typography, Paper, Stack, Box, Divider } from "@mui/material"
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import React,{ useEffect, useState,useContext } from "react"
@@ -120,7 +121,7 @@ export default function Noti({ notiS }) {
         if (response.status === 401 && typeof window !== 'undefined') {
           window.sessionStorage.removeItem('adminActionPassword');
         }
-        setMessages(result.message || 'Unable to process transaction');
+        setMessages(adminErrorMessage(result, 'We could not confirm the transaction update. Refresh its status before approving or rejecting it again.'));
         handleClick();
         return;
       }
@@ -130,7 +131,7 @@ export default function Noti({ notiS }) {
       handleClick();
     } catch (error) {
       console.log(error);
-      setMessages('Unknown error occurred, please try again');
+      setMessages('We could not confirm the transaction update. Refresh its status before trying again.');
       handleClick();
     }
   }

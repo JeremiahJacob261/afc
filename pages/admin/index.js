@@ -1,3 +1,4 @@
+import { adminErrorMessage } from '@/lib/adminErrorMessage'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -26,7 +27,7 @@ export default function Home() {
       const result = await response.json().catch(() => ({}))
 
       if (!response.ok) {
-        alert(result.message || 'login failed')
+        alert(adminErrorMessage(result, 'We could not sign you in. Check your admin credentials and try again.'))
         return
       }
 
@@ -34,7 +35,7 @@ export default function Home() {
       router.push(typeof router.query.next === 'string' ? router.query.next : '/admin/home')
     } catch (error) {
       console.log(error)
-      alert('login failed')
+      alert('We could not sign you in. Check your admin credentials and try again.')
     } finally {
       setLoading(false)
     }

@@ -132,7 +132,7 @@ class PaymentViewModel(private val repository: PaymentRepository, private val se
         if (!state.value.busy && !state.value.uncertain) mutableState.update { it.copy(receipt = null, receiptName = "", receiptUrl = null) }
     }
     fun selectReceipt(resolver: ContentResolver, uri: Uri) = work {
-        val pair = withContext(Dispatchers.IO) {
+        val pair = try { withContext(Dispatchers.IO) {
             val mime = resolver.getType(uri).orEmpty()
             require(mime in listOf("image/jpeg", "image/png", "image/webp"))
             val bytes = resolver.openInputStream(uri)?.use { stream ->
@@ -148,6 +148,12 @@ class PaymentViewModel(private val repository: PaymentRepository, private val se
             } ?: throw IOException()
             require(bytes.isNotEmpty())
             bytes to mime
+        } } catch (_: IllegalArgumentException) {
+            return@work fail(R.string.journey_receipt_file_invalid)
+        } catch (_: IOException) {
+            return@work fail(R.string.journey_receipt_read_failed)
+        } catch (_: SecurityException) {
+            return@work fail(R.string.journey_receipt_read_failed)
         }
         val name = withContext(Dispatchers.IO) {
             resolver.query(uri, arrayOf(android.provider.OpenableColumns.DISPLAY_NAME), null, null, null)?.use { cursor ->
@@ -233,7 +239,12 @@ class PaymentViewModel(private val repository: PaymentRepository, private val se
             catch (error: ApiException) {
                 if (error.httpStatus == 401) {
                     mutableState.update { it.copy(requiresSignIn = true) }
-                } else fail(submissionFailureMessage(error.failure?.message, error.failure?.code, error.httpStatus, flow))
+                } else {
+                    if (mutation && error.httpStatus >= 500 && flow in listOf(SubmissionFlow.DEPOSIT, SubmissionFlow.WITHDRAWAL)) {
+                        mutableState.update { it.copy(uncertain = true) }
+                    }
+                    fail(submissionFailureMessage(error.failure?.message, error.failure?.code, error.httpStatus, flow))
+                }
             }
             catch (error: IOException) {
                 mutableState.update { it.copy(uncertain = it.uncertain || mutation, error = if (mutation) R.string.journey_uncertain else R.string.journey_offline) }
@@ -241,7 +252,7 @@ class PaymentViewModel(private val repository: PaymentRepository, private val se
             catch (error: Exception) {
                 if (mutation && flow in listOf(SubmissionFlow.DEPOSIT, SubmissionFlow.WITHDRAWAL)) {
                     mutableState.update { it.copy(uncertain = true, error = R.string.journey_uncertain) }
-                } else fail(submissionFailureMessage(flow = flow))
+                } else fail(if (!mutation && flow == SubmissionFlow.GENERAL) R.string.journey_payment_load_failed else submissionFailureMessage(flow = flow))
             }
             finally {
                 if (background) refreshRunning = false

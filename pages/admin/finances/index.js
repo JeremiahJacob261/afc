@@ -1,3 +1,4 @@
+import { adminErrorMessage } from '@/lib/adminErrorMessage'
 import Head from 'next/head'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
@@ -82,14 +83,14 @@ export default function Finances() {
       const data = await response.json()
       if (!response.ok) {
         if (response.status === 401) window.location.href = '/admin'
-        toast.error(data.message || 'Unable to load transactions')
+        toast.error(adminErrorMessage(data, 'We could not load transactions. Refresh and try again.'))
         return
       }
       setNotifications(data || [])
       if (!find) setAllNotifications(data || [])
     } catch (error) {
       console.log(error)
-      toast.error('Unable to load transactions')
+      toast.error('We could not load transactions. Refresh and try again.')
     } finally {
       ref.current?.complete()
     }
@@ -117,7 +118,7 @@ export default function Finances() {
 
       if (!response.ok) {
         if (response.status === 401) window.location.href = '/admin'
-        toast.error(result.message || 'Unable to process transaction')
+        toast.error(adminErrorMessage(result, 'We could not confirm the transaction update. Refresh its status before approving or rejecting it again.'))
         return
       }
 
@@ -129,7 +130,7 @@ export default function Finances() {
       }
     } catch (error) {
       console.log(error)
-      toast.error('Unknown error occurred, please try again')
+      toast.error('We could not confirm the transaction update. Refresh its status before trying again.')
     } finally {
       ref.current?.complete()
     }

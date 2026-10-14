@@ -1,3 +1,4 @@
+import { adminErrorMessage } from '@/lib/adminErrorMessage'
 import Head from 'next/head'
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { useMemo, useState } from 'react'
@@ -204,7 +205,7 @@ export default function UserTransactions({ user, ledger = [] }) {
       toast.success('Copied to clipboard')
     } catch (error) {
       console.log(error)
-      toast.error('Unable to copy')
+      toast.error('We could not copy this automatically. Select the text and copy it manually.')
     }
   }
 
@@ -485,7 +486,7 @@ async function readUser(supabaseAdmin, uid) {
   const result = await queryUser('username,newrefer,uid,balance,totald,totalw')
   if (!result.error) return result
 
-  const message = `${result.error.message || ''} ${result.error.details || ''} ${result.error.hint || ''}`.toLowerCase()
+  const message = `${result.adminErrorMessage(error, '')} ${result.error.details || ''} ${result.error.hint || ''}`.toLowerCase()
   if (result.error.code !== '42703' && !message.includes('totalw')) return result
 
   return queryUser('username,newrefer,uid,balance,totald')

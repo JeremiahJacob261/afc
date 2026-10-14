@@ -1,3 +1,4 @@
+import { adminErrorMessage } from '@/lib/adminErrorMessage'
 import { Stack, Paper, Typography, Button, TextField, Divider, Box, Backdrop } from '@mui/material';
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { callAdminRpc } from '@/lib/adminRpcClient';
@@ -152,7 +153,7 @@ export default function Users({ refs, membershipBalanceThreshold = 1000 }) {
         })
         if (!response.ok) {
           const result = await response.json().catch(() => ({}))
-          throw new Error(result.message || 'Password update failed')
+          throw new Error(adminErrorMessage(result, 'Password update failed'))
         }
         toast.success("Password Changed")
         handleClosep();

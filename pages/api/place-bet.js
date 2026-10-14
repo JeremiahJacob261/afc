@@ -2,6 +2,7 @@ import { getCurrentUser } from '@/lib/apiAuth'
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 import { withApiTiming, timedRpc } from '@/lib/apiTiming'
 import { formatCurrency, getCurrencySettings, parseCurrency } from '@/lib/currency'
+import { sendBetError } from '@/lib/betErrors'
 
 const markets = {
   nilnil: '0 - 0',
@@ -23,31 +24,6 @@ const markets = {
   otherscores: 'Other',
 }
 
-function getRpcStatus(error) {
-  const message = String(error?.message || '')
-
-  if (message.includes('Profile not found') || message.includes('Match not found')) return 404
-  if (message.includes('already settled') || message.includes('Odds changed')) return 409
-  if (
-    message.includes('Invalid bet details')
-    || message.includes('enough MMK')
-    || message.includes('maximum number of bets')
-    || message.includes('expired')
-    || message.includes('market is not available')
-    || message.includes('Duplicate bet id')
-  ) {
-    return 400
-  }
-
-  return error?.statusCode || 500
-}
-
-function sendBetRpcError(res, error) {
-  const status = getRpcStatus(error)
-  const message = status === 500 ? 'Server error' : error.message
-  return res.status(status).json({ status: 'error', message })
-}
-
 export default withApiTiming(async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ status: 'error', message: 'Method not allowed' })
@@ -61,17 +37,17 @@ export default withApiTiming(async function handler(req, res) {
     const amount = parseCurrency(stake)
     const expectedOdd = Number(expected_odd)
 
-    if (
-      !match_id
-      || !markets[picked]
-      || !Number.isFinite(amount)
-      || amount < 2500
-      || !Number.isFinite(expectedOdd)
-      || expectedOdd <= 0
-      || (client_bet_id && !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(client_bet_id)))
-    ) {
-      const message = `Minimum stake is ${formatCurrency(2500, currencySettings)}`
-      return res.status(400).json({ status: 'error', message })
+    const reject = (code, message, details) => res.status(400).json({ status: 'error', code, message, ...(details ? { details } : {}) })
+    if (!match_id) return reject('BET_INVALID_DETAILS', 'Reopen the match to load the latest bet details.')
+    if (!Object.prototype.hasOwnProperty.call(markets, picked)) return reject('BET_SELECTION_REQUIRED', 'Choose an available score option before placing your bet.')
+    if (!Number.isFinite(amount) || amount <= 0) return reject('BET_INVALID_STAKE', 'Enter a valid stake amount.')
+    if (amount < 2500) {
+      const minimum = formatCurrency(2500, currencySettings)
+      return reject('BET_MINIMUM_STAKE', `Minimum stake is ${minimum}`, { minimum })
+    }
+    if (!Number.isFinite(expectedOdd) || expectedOdd <= 0) return reject('BET_INVALID_DETAILS', 'Reopen the match to load the latest odds.')
+    if (client_bet_id && !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(client_bet_id))) {
+      return reject('BET_REQUEST_CONFLICT', 'This bet request could not be verified. Check My Bets before starting a new bet.')
     }
 
     // Requests with an attempt ID check a stored acceptance before current balance/expiry.
@@ -88,6 +64,6 @@ export default withApiTiming(async function handler(req, res) {
 
     return res.status(200).json(data)
   } catch (error) {
-    return sendBetRpcError(res, error)
+    return sendBetError(res, error)
   }
 })

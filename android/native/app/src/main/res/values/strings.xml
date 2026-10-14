@@ -16,7 +16,7 @@
     <string name="login_checking_session">Checking your account…</string>
     <string name="login_error_invalid_credentials">The email, username, or password you entered is incorrect.</string>
     <string name="login_error_network">Please check your connection and try again.</string>
-    <string name="login_error_general">Unable to sign in. Check your connection and details.</string>
+    <string name="login_error_general">We could not sign you in right now. Try again in a moment.</string>
     <string name="common_retry">Retry</string>
     <string name="native_next_step_title">Native screen in progress</string>
     <string name="native_register_pending">Registration is the next journey in the native port.</string>
@@ -95,7 +95,7 @@
     <string name="notifications_count">%1$d notifications</string>
     <string name="notifications_loading">Loading notifications…</string>
     <string name="notifications_error_network">You’re offline. Reconnect and retry to load notifications.</string>
-    <string name="notifications_error_general">Unable to load notifications. Please retry.</string>
+    <string name="notifications_error_general">We could not load your notifications. Try again.</string>
     <string name="notifications_empty_title">No notifications</string>
     <string name="notifications_empty_message">New account updates will appear here.</string>
     <string name="notifications_fallback_title">Notification</string>
@@ -153,7 +153,7 @@
     <string name="transactions_filter_withdrawals">Withdrawals</string>
     <string name="transactions_loading">Loading transactions…</string>
     <string name="transactions_error_network">You’re offline. Reconnect and retry to load transactions.</string>
-    <string name="transactions_error_general">Unable to load transactions. Please retry.</string>
+    <string name="transactions_error_general">We could not load your transaction history. Refresh before submitting another payment request.</string>
     <string name="transactions_empty_title">No transactions</string>
     <string name="transactions_empty_all">Your transaction history will appear here.</string>
     <string name="transactions_empty_deposits">No deposits to show.</string>
@@ -172,7 +172,7 @@
     <string name="account_profile_title">Profile</string>
     <string name="account_loading">Loading account…</string>
     <string name="account_error_network">You’re offline. Reconnect and retry to load your account.</string>
-    <string name="account_error_general">Unable to load your account. Please retry.</string>
+    <string name="account_error_general">We could not load your account details. Try again.</string>
     <string name="account_unknown_user">Account</string>
     <string name="account_greeting">Welcome back</string>
     <string name="account_vip_referrals">VIP %1$d · %2$d active referrals</string>
@@ -199,7 +199,7 @@
     <string name="referrals_filter_level">Level %1$d</string>
     <string name="referrals_loading">Loading referrals…</string>
     <string name="referrals_error_network">You’re offline. Reconnect and retry to load referrals.</string>
-    <string name="referrals_error_general">Unable to load referrals. Please retry.</string>
+    <string name="referrals_error_general">We could not load your referrals. Try again.</string>
     <string name="referrals_empty_title">No referrals yet</string>
     <string name="referrals_empty_message">Share your invite code to build your team.</string>
     <string name="referrals_empty_filtered">No referrals in this level.</string>
@@ -296,13 +296,13 @@
     <string name="journey_payment_pending">You already have a deposit or withdrawal request waiting to be processed. Check its status in Transactions, then submit another request after it is resolved.</string>
     <string name="journey_pin_required">Set a transaction PIN before withdrawing.</string>
     <string name="journey_receipt_required">Select a receipt image.</string>
-    <string name="journey_submission_failed">We could not identify why this request failed. Try again in a moment. If it still fails, contact support.</string>
-    <string name="journey_transaction_failed_unknown">We could not identify why this request failed. Check Transactions before trying again. If no request is listed, try again later or contact support.</string>
+    <string name="journey_submission_failed">We could not complete this action. Try again in a moment.</string>
+    <string name="journey_transaction_failed_unknown">We could not confirm your payment request. Check Transactions before submitting it again.</string>
     <string name="journey_withdrawal_pending">Your previous withdrawal is still being processed. Check Transactions and wait until it is completed or declined before submitting another withdrawal.</string>
     <string name="journey_withdrawal_cooldown">You can submit another withdrawal 24 hours after your last successful withdrawal.</string>
     <string name="journey_withdrawal_eligibility_unknown">We could not confirm whether you can withdraw right now. Refresh your withdrawal details and try again.</string>
     <string name="journey_payment_rate_changed">The payment rate changed while you were submitting. Review the updated amount and payment details, then submit again.</string>
-    <string name="journey_receipt_used">This receipt has already been used for another deposit. Choose a different receipt image and submit again.</string>
+    <string name="journey_receipt_used">This receipt is already linked to a deposit. Check Transactions before submitting another receipt.</string>
     <string name="journey_payment_method_unavailable">This payment method is no longer available. Go back, choose another method, and review the payment details.</string>
     <string name="journey_destination_unavailable">This payment destination is no longer available. Go back and choose an available destination before submitting.</string>
     <string name="journey_deposit_minimum_rejected">Your deposit is below the 25,000 MMK minimum after conversion. Go back to the amount step, increase it to the minimum shown there, then submit the receipt again.</string>
@@ -321,8 +321,8 @@
     <string name="journey_pin_locked">Your transaction PIN is already set. Contact support to reset or change it.</string>
     <string name="journey_pin_mismatch">Enter matching four-digit PINs.</string>
     <string name="journey_data_changed">The details changed. Refresh and review them before submitting.</string>
-    <string name="journey_uncertain">We lost the connection before we could confirm whether your request went through. Check its status before retrying to avoid submitting it twice.</string>
-    <string name="journey_offline">Unable to connect. Reconnect and retry.</string>
+    <string name="journey_uncertain">We could not confirm whether your request went through. Check its status before trying again.</string>
+    <string name="journey_offline">We could not connect. Check your internet connection and try again.</string>
     <string name="journey_wallet">Wallet</string>
     <string name="journey_deposit_method">Payment method</string>
     <string name="journey_deposit_amount">Deposit amount</string>
@@ -394,7 +394,7 @@
     <string name="registration_accept_terms">Confirm your age and accept the Terms and Privacy Policy.</string>
     <string name="registration_password_mismatch">The passwords do not match. Enter the same password twice.</string>
     <string name="registration_username_taken">This username is taken. Choose another one.</string>
-    <string name="registration_failed">We could not create your account. Please try again in a moment.</string>
+    <string name="registration_failed">We could not confirm account creation. Try signing in before registering again.</string>
     <string name="bet_slip_title">Bet slip</string>
     <string name="bet_slip_stake">Stake (MMK)</string>
     <string name="bet_slip_server_quote">Review the current rate and profit before placing your bet.</string>
@@ -405,12 +405,12 @@
     <string name="bet_slip_success">Your bet was accepted.</string>
     <string name="bet_slip_view_bet">View bet</string>
     <string name="bet_slip_odds_changed">The odds changed. Request a new quote and confirm it again.</string>
-    <string name="bet_slip_submission_failed">We could not identify why your bet failed. Refresh the match and check the stake and market. If the problem continues, contact support.</string>
-    <string name="bet_slip_minimum_stake">Your stake is below the minimum allowed. Increase it and try again.</string>
+    <string name="bet_slip_submission_failed">We could not confirm whether your bet was placed. Check My Bets before trying again.</string>
+    <string name="bet_slip_minimum_stake">The minimum stake is 2,500 MMK. Enter this amount or more.</string>
     <string name="bet_slip_insufficient_balance">Your balance is too low to place this bet. Lower your stake or add funds, then try again.</string>
-    <string name="bet_slip_maximum_reached">The daily limit for placing bets has been reached. Try again after it resets.</string>
+    <string name="bet_slip_maximum_reached">You have reached your daily bet limit. Try again after the limit resets.</string>
     <string name="bet_slip_match_settled">This match has already been settled, so new bets are closed.</string>
-    <string name="bet_slip_market_unavailable">This market is no longer available for this match. Choose another available market.</string>
+    <string name="bet_slip_market_unavailable">This score option is no longer available. Refresh the match to see available options.</string>
     <string name="bet_slip_market_closed">This match is no longer open for betting. Choose another available match.</string>
     <string name="journey_support">Help and support</string>
     <string name="journey_contact_support">Contact customer support</string>
@@ -427,6 +427,28 @@
     <string name="update_message">Version %1$s is available. Download the APK and follow Android’s installation prompt.</string>
     <string name="update_download">Download update</string>
     <string name="update_later">Later</string>
+    <string name="bet_slip_invalid_details">The bet details could not be verified. Reopen the match to load the latest details.</string>
+    <string name="bet_slip_request_conflict">This request conflicts with an earlier bet attempt. Check My Bets before starting a new bet.</string>
+    <string name="bet_slip_match_missing">This match is no longer available. Return to the match list.</string>
+    <string name="journey_session_expired">Your session expired. Please sign in again.</string>
+    <string name="journey_permission_denied">Your account does not have permission to do this.</string>
+    <string name="journey_too_many_requests">Too many attempts. Please wait and try again.</string>
+    <string name="journey_profile_missing">We could not find your account profile. Sign in again. If this continues, contact support.</string>
+    <string name="journey_wallet_unconfirmed">We could not confirm whether the wallet was linked. Check your wallet list before adding it again.</string>
+    <string name="journey_pin_unconfirmed">We could not confirm whether your PIN was saved. Refresh to check its status.</string>
+    <string name="journey_fee_changed">The withdrawal fee changed. Review the updated fee before submitting.</string>
+    <string name="journey_receipt_expired">Receipt upload expired. Please upload it again</string>
+    <string name="journey_receipt_invalid">This receipt upload could not be verified. Upload the image again.</string>
+    <string name="journey_deposit_details_invalid">Check the deposit amount, payment method, and receipt before submitting.</string>
+    <string name="journey_payment_details_invalid">This payment request could not be verified. Check Transactions and the amount before trying again.</string>
+    <string name="journey_receipt_file_invalid">Choose a JPEG, PNG, or WebP receipt image up to 8 MB.</string>
+    <string name="journey_receipt_read_failed">We could not read this receipt image. Choose it again.</string>
+    <string name="journey_payment_load_failed">We could not load payment details. Refresh before continuing.</string>
+    <string name="login_error_email_unconfirmed">Confirm your email before signing in.</string>
+    <string name="login_error_rate_limited">Too many sign-in attempts. Wait a few minutes before trying again.</string>
+    <string name="registration_invalid_details">Check your registration details and referral code, then try again.</string>
+    <string name="registration_account_exists">This username or email is already registered. Try signing in, or use different registration details.</string>
+    <string name="bet_slip_load_failed">We could not load the details needed for this bet. Refresh the match and try again.</string>
 </resources>
 
 

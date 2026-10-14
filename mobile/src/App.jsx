@@ -36,6 +36,8 @@ import {
   WifiOff,
 } from 'lucide-react'
 import { apiFetch } from './lib/api.js'
+import { translateApiMessage } from '../../lib/translateApiMessage'
+import { v4 as uuidv4 } from 'uuid'
 import { hasSupabaseConfig, mobileConfig } from './lib/config.js'
 import { setupPushNotifications, unregisterPushToken, updateStoredPushTokenLanguage } from './lib/push.js'
 import { getStoredSession, supabase } from './lib/supabase.js'
@@ -619,7 +621,7 @@ function AuthFrame({ title, subtitle, children, onBack }) {
 
 function Message({ value }) {
   if (!value) return null
-  return <div className={`message ${value.type || 'info'}`}>{value.text}</div>
+  return <div className={`message ${value.type || 'info'}`} role={value.type === 'error' ? 'alert' : 'status'}>{value.text}</div>
 }
 
 function notifyMessage(setMessage, type, text) {
@@ -668,7 +670,7 @@ function LoginScreen({ onBack, onReset, onRegister, onSignedIn }) {
 
       onSignedIn()
     } catch (error) {
-      notifyMessage(setMessage, 'error', error?.message || t('messages.unableSignIn'))
+      notifyMessage(setMessage, 'error', translateApiMessage(error, t, 'messages.unableSignIn'))
     } finally {
       setLoading(false)
     }
@@ -1023,7 +1025,7 @@ function ResetScreen({ onBack }) {
       if (error) throw error
       notifyMessage(setMessage, 'success', t('messages.resetEmailSent'))
     } catch (error) {
-      notifyMessage(setMessage, 'error', error?.message || t('messages.unableSendReset'))
+      notifyMessage(setMessage, 'error', translateApiMessage(error, t, 'messages.unableSendReset'))
     } finally {
       setLoading(false)
     }
@@ -1411,7 +1413,7 @@ function MatchesScreen({ navigate }) {
       const payload = await apiFetch('/api/mobile/matches?limit=50')
       setMatches(payload.matches || [])
     } catch (error) {
-      setMessage({ type: 'error', text: error?.message || t('messages.unableLoadMatches') })
+      setMessage({ type: 'error', text: translateApiMessage(error, t, 'messages.unableLoadMatches') })
     } finally {
       setLoading(false)
     }
@@ -1445,6 +1447,7 @@ function MatchDetailScreen({ matchId, navigate }) {
   const [loading, setLoading] = useState(true)
   const [placing, setPlacing] = useState(false)
   const [message, setMessage] = useState(null)
+  const betAttempt = useRef({ signature: '', id: '' })
 
   useEffect(() => {
     let active = true
@@ -1463,7 +1466,7 @@ function MatchDetailScreen({ matchId, navigate }) {
         setMatch(nextMatch)
         setProfile({ ...me.profile, vip: me.vip })
       } catch (error) {
-        if (active) setMessage({ type: 'error', text: error?.message || t('messages.unableLoadMatch') })
+        if (active) setMessage({ type: 'error', text: translateApiMessage(error, t, 'messages.unableLoadMatch') })
       } finally {
         if (active) setLoading(false)
       }
@@ -1490,7 +1493,9 @@ function MatchDetailScreen({ matchId, navigate }) {
     setPlacing(true)
     setMessage(null)
     try {
-      const clientBetId = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : null
+      const signature = JSON.stringify([matchId, picked, amount])
+      if (betAttempt.current.signature !== signature) betAttempt.current = { signature, id: uuidv4() }
+      const clientBetId = betAttempt.current.id
       const payload = await apiFetch('/api/place-bet', {
         auth: true,
         method: 'POST',
@@ -1502,9 +1507,9 @@ function MatchDetailScreen({ matchId, navigate }) {
           expected_odd: Number((Number(match?.[picked] || 0) * (1 + Number(vipBonus[level] || 0))).toFixed(3)),
         },
       })
-      const nextBetId = payload?.betid || clientBetId
-      if (!nextBetId) {
-        throw new Error(t('messages.unableLoadBet'))
+      const nextBetId = payload?.betid
+      if (payload?.status !== 'success' || !nextBetId) {
+        throw new Error('Unverified bet response')
       }
       notifyMessage(setMessage, 'success', t('messages.betPlaced'))
       setStake('')
@@ -1512,9 +1517,8 @@ function MatchDetailScreen({ matchId, navigate }) {
       navigate('bet', { id: nextBetId })
     } catch (error) {
       const errorMessage = String(error?.message || '')
-      const isInsufficientBalance = /insufficient|not enough|enough\s+(?:MMK|USDT|FCFA)/i.test(errorMessage)
-      notifyMessage(setMessage, 'error', isInsufficientBalance ? t('mobile.match.insufficientBalance') : (errorMessage || t('messages.unablePlaceBet')))
-      if (/odds changed/i.test(errorMessage)) {
+      notifyMessage(setMessage, 'error', translateApiMessage(error, t, 'messages.unablePlaceBet'))
+      if (error?.code === 'BET_ODDS_CHANGED' || /odds changed/i.test(errorMessage)) {
         try {
           const [matchPayload, me] = await Promise.all([
             apiFetch(`/api/mobile/match?id=${encodeURIComponent(matchId)}`),
@@ -1657,7 +1661,7 @@ function BetsScreen({ navigate }) {
           settled: payload.settled || [],
         })
       } catch (error) {
-        if (active) setMessage({ type: 'error', text: error?.message || t('messages.unableLoadBets') })
+        if (active) setMessage({ type: 'error', text: translateApiMessage(error, t, 'messages.unableLoadBets') })
       } finally {
         if (active) setLoading(false)
       }
@@ -1722,7 +1726,7 @@ function BetDetailScreen({ betId, navigate }) {
         setBet(payload.bet || {})
         setMatch(payload.match || {})
       } catch (error) {
-        if (active) setMessage({ type: 'error', text: error?.message || t('messages.unableLoadBet') })
+        if (active) setMessage({ type: 'error', text: translateApiMessage(error, t, 'messages.unableLoadBet') })
       } finally {
         if (active) setLoading(false)
       }
@@ -1806,7 +1810,7 @@ function ProfileScreen({ navigate, onLogout }) {
         setVip(payload.vip)
         setReferralCount(payload.referralCount || 0)
       } catch (error) {
-        if (active) setMessage({ type: 'error', text: error?.message || t('messages.unableLoadProfile') })
+        if (active) setMessage({ type: 'error', text: translateApiMessage(error, t, 'messages.unableLoadProfile') })
       }
     }
 
@@ -1999,7 +2003,7 @@ function DepositScreen({ navigate, setSuccessAmount }) {
   const [message, setMessage] = useState(null)
 
   useEffect(() => {
-    loadPaymentData(setData, setLoading, setMessage, t('messages.unableLoadPaymentData'))
+    loadPaymentData(setData, setLoading, setMessage, t)
   }, [])
 
   const code = normalizeCode(selectedMethod)
@@ -2072,10 +2076,13 @@ function DepositScreen({ navigate, setSuccessAmount }) {
       const fileName = `${crypto.randomUUID?.() || Date.now()}-${file.name.replace(/\s+/g, '-')}`
       const receiptPath = `public/${fileName}`
       const { error: uploadError } = await supabase.storage.from('trcreceipt').upload(receiptPath, file)
-      if (uploadError) throw uploadError
+      if (uploadError) {
+        notifyMessage(setMessage, 'error', translateApiMessage(uploadError, t, 'mobile.deposit.uploadFailed'))
+        return
+      }
 
       const { data: publicFile } = supabase.storage.from('trcreceipt').getPublicUrl(receiptPath)
-      await apiFetch('/api/create-deposit', {
+      const submitted = await apiFetch('/api/create-deposit', {
         auth: true,
         method: 'POST',
         body: {
@@ -2087,11 +2094,13 @@ function DepositScreen({ navigate, setSuccessAmount }) {
         },
       })
 
+      if (submitted?.status !== 'success') throw Object.assign(new Error(submitted?.message), { payload: submitted })
+
       setSuccessAmount(formatMoney(numericAmount / rate * MMK_PER_USDT))
       toast.success(t('messages.depositSubmitted'))
       navigate('deposit-success')
     } catch (error) {
-      notifyMessage(setMessage, 'error', error?.message || t('messages.depositFailed'))
+      notifyMessage(setMessage, 'error', translateApiMessage(error, t, 'messages.depositFailed'))
     } finally {
       setSubmitting(false)
     }
@@ -2323,7 +2332,7 @@ function WithdrawScreen({ navigate }) {
   const [withdrawalDisabledDialogOpen, setWithdrawalDisabledDialogOpen] = useState(false)
 
   useEffect(() => {
-    loadPaymentData(setData, setLoading, setMessage, t('messages.unableLoadPaymentData'))
+    loadPaymentData(setData, setLoading, setMessage, t)
   }, [])
 
   const wallet = data.wallets.find((item) => String(item.id ?? item.wallid) === String(walletId))
@@ -2379,21 +2388,16 @@ function WithdrawScreen({ navigate }) {
       })
 
       const row = Array.isArray(result) ? result[0] : result
-      if (String(row?.status).toLowerCase() === 'failed') {
-        const message = row.code === 'PAYMENT_REQUEST_PENDING'
-          ? t('messages.paymentRequestPending')
-          : row.code === 'WITHDRAWAL_PENDING'
-          ? t('messages.withdrawalPending')
-          : row.code === 'WITHDRAWAL_COOLDOWN'
-            ? t('messages.withdrawalCooldown')
-            : row.message
-        const retryAt = row.retryAt ? ` ${t('messages.withdrawalAvailableAt', { time: new Date(row.retryAt).toLocaleString() })}` : ''
-        throw new Error(`${message}${retryAt}`)
+      if (String(row?.status).toLowerCase() !== 'success') {
+        const message = translateApiMessage(row, t, 'messages.unableSubmitWithdrawal')
+        const retryAt = row?.retryAt ? ` ${t('messages.withdrawalAvailableAt', { time: new Date(row.retryAt).toLocaleString() })}` : ''
+        notifyMessage(setMessage, 'error', `${message}${retryAt}`)
+        return
       }
       toast.success(t('messages.withdrawalSent'))
       navigate('withdraw-success')
     } catch (error) {
-      notifyMessage(setMessage, 'error', error?.message || t('messages.unableSubmitWithdrawal'))
+      notifyMessage(setMessage, 'error', translateApiMessage(error, t, 'messages.unableSubmitWithdrawal'))
     } finally {
       setSubmitting(false)
     }
@@ -2465,7 +2469,7 @@ function BindWalletScreen({ navigate }) {
   const [message, setMessage] = useState(null)
 
   useEffect(() => {
-    loadPaymentData(setData, setLoading, setMessage, t('messages.unableLoadPaymentData'))
+    loadPaymentData(setData, setLoading, setMessage, t)
   }, [])
 
   const method = data.methods.find((item) => String(item.id ?? item.name) === String(methodId))
@@ -2491,11 +2495,11 @@ function BindWalletScreen({ navigate }) {
           name: isLocal ? name.trim() : '',
         },
       })
-      if (payload.status !== 'success') throw new Error(payload.message || t('messages.unableBindWallet'))
+      if (payload.status !== 'success') throw Object.assign(new Error(payload.message), { payload })
       notifyMessage(setMessage, 'success', t('messages.walletBindSuccess'))
       setTimeout(() => navigate('profile'), 500)
     } catch (error) {
-      notifyMessage(setMessage, 'error', error?.message || t('messages.unableBindWallet'))
+      notifyMessage(setMessage, 'error', translateApiMessage(error, t, 'messages.unableBindWallet'))
     } finally {
       setSubmitting(false)
     }
@@ -2552,7 +2556,7 @@ function TransactionsScreen({ navigate }) {
         const payload = await apiFetch(`/api/my-transactions?type=${filter}`, { auth: true })
         if (active) setTransactions(payload.transactions || payload.data || [])
       } catch (error) {
-        if (active) setMessage({ type: 'error', text: error?.message || t('messages.unableLoadTransactions') })
+        if (active) setMessage({ type: 'error', text: translateApiMessage(error, t, 'messages.unableLoadTransactions') })
       } finally {
         if (active) setLoading(false)
       }
@@ -2610,7 +2614,7 @@ function ReferralsScreen({ navigate }) {
     } catch (error) {
       if (isActive()) {
         setPayload({ refer: '', referrals: [] })
-        setMessage({ type: 'error', text: error?.message || t('messages.unableLoadReferrals') })
+        setMessage({ type: 'error', text: translateApiMessage(error, t, 'messages.unableLoadReferrals') })
       }
     } finally {
       if (isActive()) setLoading(false)
@@ -2752,7 +2756,7 @@ function VipScreen({ navigate }) {
         if (active) setVip(payload.vip)
       })
       .catch((error) => {
-        if (active) setMessage({ type: 'error', text: error?.message || t('messages.unableLoadVip') })
+        if (active) setMessage({ type: 'error', text: translateApiMessage(error, t, 'messages.unableLoadVip') })
       })
     return () => {
       active = false
@@ -2792,7 +2796,7 @@ function PinScreen({ navigate }) {
         if (hasPin) notifyMessage(setMessage, 'info', t('messages.pinAlreadySet'))
       })
       .catch((error) => {
-        if (active) setMessage({ type: 'error', text: error?.message || t('messages.unableLoadPin') })
+        if (active) setMessage({ type: 'error', text: translateApiMessage(error, t, 'messages.unableLoadPin') })
       })
       .finally(() => {
         if (active) setLoading(false)
@@ -2813,10 +2817,11 @@ function PinScreen({ navigate }) {
     }
     try {
       const payload = await apiFetch('/api/set-pin', { auth: true, method: 'POST', body: { pin } })
+      if (payload?.status !== 'success') throw Object.assign(new Error(payload?.message), { payload })
       setLocked(true)
-      notifyMessage(setMessage, 'success', payload.message || t('messages.pinSet'))
+      notifyMessage(setMessage, 'success', t('messages.pinSet'))
     } catch (error) {
-      notifyMessage(setMessage, 'error', error?.message || t('messages.unableSetPin'))
+      notifyMessage(setMessage, 'error', translateApiMessage(error, t, 'messages.unableSetPin'))
     }
   }
 
@@ -2926,7 +2931,7 @@ function NotificationsScreen({ navigate, onRead }) {
         }
       })
       .catch((error) => {
-        if (active) setMessage({ type: 'error', text: error?.message || t('messages.unableLoadNotifications') })
+        if (active) setMessage({ type: 'error', text: translateApiMessage(error, t, 'messages.unableLoadNotifications') })
       })
       .finally(() => {
         if (active) setLoading(false)
@@ -3219,14 +3224,14 @@ function EmptyState({ icon, title, text }) {
   )
 }
 
-async function loadPaymentData(setData, setLoading, setMessage, fallbackMessage) {
+async function loadPaymentData(setData, setLoading, setMessage, t) {
   setLoading(true)
   setMessage(null)
   try {
     const payload = await apiFetch('/api/mobile/payment-data', { auth: true })
     setData(payload)
   } catch (error) {
-    setMessage({ type: 'error', text: error?.message || fallbackMessage })
+    setMessage({ type: 'error', text: translateApiMessage(error, t, 'messages.unableLoadPaymentData') })
   } finally {
     setLoading(false)
   }

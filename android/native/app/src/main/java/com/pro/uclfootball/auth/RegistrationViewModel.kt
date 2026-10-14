@@ -6,6 +6,7 @@ import com.pro.uclfootball.R
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import java.io.IOException
+import com.pro.uclfootball.network.ApiException
 
 data class RegistrationUiState(val username: String = "", val email: String = "", val phone: String = "",
     val country: String = "MM", val dialCode: String = "+95", val referral: String = "", val password: String = "", val confirmation: String = "",
@@ -67,7 +68,19 @@ class RegistrationViewModel(private val repository: RegistrationRepository, refe
                     error.code in setOf("user_already_exists", "email_exists") || "already registered" in message -> R.string.registration_email_taken
                     error.code == "email_address_invalid" || "invalid email" in message -> R.string.registration_enter_email
                     error.code == "weak_password" || "password should be" in message -> R.string.registration_password_short
-                    current.awaitingConfirmation -> R.string.registration_confirmation_failed
+                    error.httpStatus == 429 -> R.string.journey_too_many_requests
+                    error.code == "email_not_confirmed" -> R.string.registration_confirmation_failed
+                    else -> R.string.registration_failed
+                }
+                mutableState.update { it.copy(error = resource) }
+            }
+            catch (error: ApiException) {
+                val reason = error.failure?.message.orEmpty().lowercase()
+                val resource = when {
+                    error.httpStatus == 401 -> R.string.journey_session_expired
+                    error.httpStatus == 429 -> R.string.journey_too_many_requests
+                    "username or email already exists" in reason -> R.string.registration_account_exists
+                    "invalid registration details or referral code" in reason -> R.string.registration_invalid_details
                     else -> R.string.registration_failed
                 }
                 mutableState.update { it.copy(error = resource) }

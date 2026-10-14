@@ -77,7 +77,7 @@ export default function Login() {
         console.error(error)
         setFeedback({
           type: 'error',
-          title: t('messages.unableSignIn'),
+          title: t('common.login'),
           message: translateApiMessage(error, t, 'messages.unableSignIn'),
         })
         return
@@ -93,8 +93,8 @@ export default function Login() {
       console.error(error)
       setFeedback({
         type: 'error',
-        title: t('messages.connectionProblem'),
-        message: t('messages.checkConnectionTryAgain'),
+        title: t('common.login'),
+        message: translateApiMessage(error, t, 'messages.unableSignIn'),
       })
     } finally {
       if (!navigating) setLoading(false)

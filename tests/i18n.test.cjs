@@ -17,6 +17,39 @@ const loaded = { exports: {} }
 new Function('require', 'module', 'exports', output)(createRequire(filename), loaded, loaded.exports)
 const { translateApiMessage } = loaded.exports
 
+test('bet rejections explain the specific cause instead of the generic fallback', async () => {
+  const instance = await translator('en')
+  assert.equal(translateApiMessage('This bet has expired', instance.t, 'messages.unablePlaceBet'), instance.t('mobile.match.matchExpired'))
+  assert.equal(translateApiMessage('Match not found', instance.t, 'messages.unablePlaceBet'), instance.t('messages.matchNotFound'))
+  assert.equal(translateApiMessage('Invalid or expired session', instance.t, 'messages.unablePlaceBet'), instance.t('messages.sessionExpired'))
+})
+
+test('bet stake and service errors never acquire an unrelated withdrawal explanation', async () => {
+  const instance = await translator('en')
+  const minimum = translateApiMessage('Minimum stake is 3,000 MMK', instance.t, 'messages.unablePlaceBet')
+  assert.match(minimum, /stake/i)
+  assert.match(minimum, /3,000/)
+  assert.doesNotMatch(translateApiMessage('Service temporarily unavailable', instance.t, 'messages.unablePlaceBet'), /withdrawal/i)
+})
+
+test('structured bet reasons are localized and preserve safe structured amounts', async () => {
+  for (const language of ['en', 'my']) {
+    const instance = await translator(language)
+    assert.equal(translateApiMessage({ code: 'BET_MINIMUM_STAKE', details: { minimum: '2,500 MMK' } }, instance.t, 'messages.unablePlaceBet'), instance.t('messages.betMinimum', { minimum: '2,500 MMK' }))
+    assert.equal(translateApiMessage({ code: 'BET_INVALID_DETAILS' }, instance.t, 'messages.unablePlaceBet'), instance.t('messages.betInvalidDetails'))
+    assert.equal(translateApiMessage({ status: 409, message: 'Unknown conflict' }, instance.t, 'messages.unablePlaceBet'), instance.t('messages.unablePlaceBet'))
+    assert.equal(translateApiMessage({ status: 401 }, instance.t, 'messages.unablePlaceBet'), instance.t('messages.sessionExpired'))
+  }
+})
+
+test('lost responses use outcome-check instructions even for exact dictionary matches', async () => {
+  const instance = await translator('en')
+  for (const fallback of ['messages.unablePlaceBet', 'messages.depositFailed', 'messages.unableSubmitWithdrawal', 'messages.unableSetPin', 'messages.unableBindWallet']) {
+    assert.equal(translateApiMessage(new Error('Network error'), instance.t, fallback), instance.t(fallback))
+  }
+  assert.equal(translateApiMessage({ status: 400, payload: { code: 'BET_CLOSED', message: 'legacy' } }, instance.t, 'messages.unablePlaceBet'), instance.t('mobile.match.matchExpired'))
+})
+
 test('dashboard date filters work without component translation state', () => {
   const dashboard = fs.readFileSync(path.resolve(__dirname, '../pages/user/index.js'), 'utf8')
   const source = ts.createSourceFile('dashboard.js', dashboard, ts.ScriptTarget.Latest, true, ts.ScriptKind.JSX)

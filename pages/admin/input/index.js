@@ -1,3 +1,4 @@
+import { adminErrorMessage } from '@/lib/adminErrorMessage'
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -106,12 +107,12 @@ export default function Input({ datas }) {
                 })
                 const result = await response.json().catch(() => ({}))
                 if (!response.ok) {
-                    throw new Error(result.message || 'Unable to upload bet')
+                    throw new Error(adminErrorMessage(result, 'We could not confirm this match was added. Check the match list before trying again.'))
                 }
                 alert("bet uploaded")
             } catch (e) {
                 console.log(e);
-                alert(e.message || 'Unable to upload bet')
+                alert(adminErrorMessage(e, 'We could not confirm this match was added. Check the match list before trying again.'))
             } finally {
                 setDrop(false)
             }

@@ -1,3 +1,4 @@
+import { adminErrorMessage } from '@/lib/adminErrorMessage'
 import Head from 'next/head'
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { useRouter } from 'next/router'
@@ -76,7 +77,7 @@ export default function Reward({ id = '', uid = '' }) {
       router.push('/admin/users')
     } catch (error) {
       console.log(error)
-      toast.error(error.message || 'Unable to send reward')
+      toast.error(adminErrorMessage(error, 'We could not confirm the reward was credited. Check the user transaction history before sending it again.'))
     } finally {
       setLoading(false)
     }

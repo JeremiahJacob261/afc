@@ -19,6 +19,7 @@ export async function apiFetch(path, options = {}) {
     if (!token) {
       const error = new Error('Please sign in again.')
       error.status = 401
+      error.code = 'SESSION_EXPIRED'
       throw error
     }
     requestHeaders.Authorization = `Bearer ${token}`
@@ -33,11 +34,15 @@ export async function apiFetch(path, options = {}) {
   const payload = await response.json().catch(() => null)
 
   if (!response.ok) {
-    const error = new Error(payload?.message || 'Network request failed.')
+    const failure = Array.isArray(payload) ? payload[0] : payload
+    const error = new Error(failure?.message || 'Request could not be completed.')
     error.status = response.status
-    error.payload = payload
+    error.code = failure?.code
+    error.payload = failure
     throw error
   }
+
+  if (payload == null) throw new Error('Response could not be verified')
 
   return payload
 }

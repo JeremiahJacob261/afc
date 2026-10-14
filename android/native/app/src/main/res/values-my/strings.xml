@@ -17,7 +17,7 @@
     <string name="login_checking_session">သင့်အကောင့်ကို စစ်ဆေးနေသည်…</string>
     <string name="login_error_invalid_credentials">သင်ရိုက်ထည့်ထားသော အီးမေးလ်၊ အသုံးပြုသူအမည် သို့မဟုတ် စကားဝှက် မှားနေသည်။</string>
     <string name="login_error_network">သင့်ချိတ်ဆက်မှုကို စစ်ဆေးပြီး ထပ်မံကြိုးစားပါ။</string>
-    <string name="login_error_general">လက်မှတ်ထိုးဝင်၍ မရနိုင်ပါ။ ချိတ်ဆက်မှုနှင့် အသေးစိတ်အချက်အလက်များကို စစ်ဆေးပါ။</string>
+    <string name="login_error_general">ယခု အကောင့်ဝင်၍ မရသေးပါ။ ခဏအကြာတွင် ထပ်ကြိုးစားပါ။</string>
     <string name="common_retry">ထပ်မံကြိုးစားရန်</string>
     <string name="native_next_step_title">နောက်လုပ်ဆောင်ရန်အဆင့်</string>
     <string name="native_register_pending">အကောင့်ဖွင့်ခြင်းသည် Native အက်ပ်တွင် နောက်တစ်ဆင့်ဖြစ်သည်။</string>
@@ -96,7 +96,7 @@
     <string name="notifications_count">အသိပေးချက် %1$d ခု</string>
     <string name="notifications_loading">အသိပေးချက်များကို ဖွင့်နေသည်…</string>
     <string name="notifications_error_network">အင်တာနက်မရှိပါ။ ပြန်လည်ချိတ်ဆက်ပြီး ထပ်ကြိုးစားပါ။</string>
-    <string name="notifications_error_general">အသိပေးချက်များကို ဖွင့်မရပါ။ ထပ်ကြိုးစားပါ။</string>
+    <string name="notifications_error_general">အသိပေးချက်များကို ရယူ၍ မရပါ။ ထပ်ကြိုးစားပါ။</string>
     <string name="notifications_empty_title">အသိပေးချက်မရှိပါ</string>
     <string name="notifications_empty_message">အကောင့်အသစ်အချက်အလက်များကို ဤနေရာတွင် ပြသပါမည်။</string>
     <string name="notifications_fallback_title">အသိပေးချက်</string>
@@ -154,7 +154,7 @@
     <string name="transactions_filter_withdrawals">ငွေထုတ်မှု</string>
     <string name="transactions_loading">ငွေစာရင်းများကို ဖွင့်နေသည်…</string>
     <string name="transactions_error_network">အင်တာနက်မရှိပါ။ ပြန်လည်ချိတ်ဆက်ပြီး ထပ်ကြိုးစားပါ။</string>
-    <string name="transactions_error_general">ငွေစာရင်းများကို ဖွင့်မရပါ။ ထပ်ကြိုးစားပါ။</string>
+    <string name="transactions_error_general">ငွေလွှဲမှတ်တမ်းကို ရယူ၍ မရပါ။ နောက်တောင်းဆိုချက် မတင်မီ ပြန်တင်ပါ။</string>
     <string name="transactions_empty_title">ငွေစာရင်းမရှိပါ</string>
     <string name="transactions_empty_all">ငွေစာရင်းမှတ်တမ်းကို ဤနေရာတွင် ပြသပါမည်။</string>
     <string name="transactions_empty_deposits">ပြသရန် ငွေသွင်းမှုမရှိပါ။</string>
@@ -174,7 +174,7 @@
     <string name="account_profile_title">ပရိုဖိုင်</string>
     <string name="account_loading">အကောင့်ကို ဖွင့်နေသည်…</string>
     <string name="account_error_network">အင်တာနက်မရှိပါ။ ပြန်လည်ချိတ်ဆက်ပြီး ထပ်ကြိုးစားပါ။</string>
-    <string name="account_error_general">အကောင့်ကို ဖွင့်မရပါ။ ထပ်ကြိုးစားပါ။</string>
+    <string name="account_error_general">အကောင့်အသေးစိတ်ကို ရယူ၍ မရပါ။ ထပ်ကြိုးစားပါ။</string>
     <string name="account_unknown_user">အကောင့်</string>
     <string name="account_greeting">ပြန်လည်ကြိုဆိုပါသည်</string>
     <string name="account_vip_referrals">VIP %1$d · တက်ကြွသော ရည်ညွှန်းသူ %2$d ဦး</string>
@@ -201,7 +201,7 @@
     <string name="referrals_filter_level">အဆင့် %1$d</string>
     <string name="referrals_loading">ရည်ညွှန်းသူများကို ဖွင့်နေသည်…</string>
     <string name="referrals_error_network">အင်တာနက်မရှိပါ။ ပြန်လည်ချိတ်ဆက်ပြီး ထပ်ကြိုးစားပါ။</string>
-    <string name="referrals_error_general">ရည်ညွှန်းသူများကို ဖွင့်မရပါ။ ထပ်ကြိုးစားပါ။</string>
+    <string name="referrals_error_general">သင့်ဖိတ်ခေါ်ထားသူများကို ရယူ၍ မရပါ။ ထပ်ကြိုးစားပါ။</string>
     <string name="referrals_empty_title">ရည်ညွှန်းသူ မရှိသေးပါ</string>
     <string name="referrals_empty_message">အသင်းတည်ဆောက်ရန် သင့်ဖိတ်ခေါ်ကုဒ်ကို မျှဝေပါ။</string>
     <string name="referrals_empty_filtered">ဤအဆင့်တွင် ရည်ညွှန်းသူမရှိပါ။</string>
@@ -273,13 +273,13 @@
     <string name="journey_payment_pending">သင့်တွင် ဆောင်ရွက်ရန် စောင့်ဆိုင်းနေသော ငွေသွင်း သို့မဟုတ် ငွေထုတ်တောင်းဆိုချက် ရှိပါသည်။ Transactions တွင် အခြေအနေကို စစ်ဆေးပြီး ယခင်တောင်းဆိုချက် ပြီးဆုံးမှ နောက်တစ်ခု တင်သွင်းပါ။</string>
     <string name="journey_pin_required">ငွေမထုတ်မီ ငွေပေးချေမှု PIN သတ်မှတ်ပါ။</string>
     <string name="journey_receipt_required">ပြေစာပုံကို ရွေးပါ။</string>
-    <string name="journey_submission_failed">ဤတောင်းဆိုချက် မအောင်မြင်သည့် အကြောင်းရင်းကို မသိနိုင်ပါ။ ခဏနေပြီး ထပ်ကြိုးစားပါ။ ထပ်မံမအောင်မြင်ပါက အကူအညီဌာနကို ဆက်သွယ်ပါ။</string>
-    <string name="journey_transaction_failed_unknown">ဤတောင်းဆိုချက် မအောင်မြင်သည့် အကြောင်းရင်းကို မသိနိုင်ပါ။ ထပ်မကြိုးစားမီ Transactions ကို စစ်ဆေးပါ။ တောင်းဆိုချက် မတွေ့ပါက နောက်မှ ထပ်ကြိုးစားပါ သို့မဟုတ် အကူအညီဌာနကို ဆက်သွယ်ပါ။</string>
+    <string name="journey_submission_failed">ဤလုပ်ဆောင်ချက်ကို မပြီးစီးနိုင်ပါ။ ခဏအကြာတွင် ထပ်ကြိုးစားပါ။</string>
+    <string name="journey_transaction_failed_unknown">ငွေပေးချေမှုတောင်းဆိုချက်ကို အတည်မပြုနိုင်ပါ။ ထပ်မတင်မီ ငွေလွှဲမှတ်တမ်းကို စစ်ဆေးပါ။</string>
     <string name="journey_withdrawal_pending">သင့်ယခင် ငွေထုတ်တောင်းဆိုချက်ကို ဆောင်ရွက်နေဆဲဖြစ်သည်။ Transactions တွင် အခြေအနေကို စစ်ဆေးပြီး ပြီးဆုံးခြင်း သို့မဟုတ် ငြင်းပယ်ခြင်း မဖြစ်မချင်း နောက်ထပ် ငွေထုတ်မတင်ပါနှင့်။</string>
     <string name="journey_withdrawal_cooldown">နောက်ဆုံးအောင်မြင်သော ငွေထုတ်ပြီးနောက် ၂၄ နာရီကြာမှ နောက်ထပ် ငွေထုတ်တင်နိုင်ပါသည်။</string>
     <string name="journey_withdrawal_eligibility_unknown">ယခု ငွေထုတ်နိုင်ခြင်း ရှိမရှိ အတည်မပြုနိုင်ပါ။ ငွေထုတ်အချက်အလက်များကို ပြန်ဖွင့်ပြီး ထပ်ကြိုးစားပါ။</string>
     <string name="journey_payment_rate_changed">တင်သွင်းနေစဉ် ငွေလဲနှုန်း ပြောင်းလဲသွားသည်။ အသစ်ပြထားသော ပမာဏနှင့် ငွေပေးချေမှုအချက်အလက်များကို စစ်ဆေးပြီး ပြန်တင်သွင်းပါ။</string>
-    <string name="journey_receipt_used">ဤပြေစာပုံကို အခြားငွေသွင်းမှုအတွက် အသုံးပြုပြီးဖြစ်သည်။ အခြားပြေစာပုံကို ရွေးပြီး ပြန်တင်ပါ။</string>
+    <string name="journey_receipt_used">ဤပြေစာကို ငွေသွင်းမှုတစ်ခုနှင့် ချိတ်ဆက်ပြီးပါပြီ။ နောက်ပြေစာ မတင်မီ ငွေလွှဲမှတ်တမ်းကို စစ်ဆေးပါ။</string>
     <string name="journey_payment_method_unavailable">ဤငွေပေးချေနည်းလမ်းကို မရရှိနိုင်တော့ပါ။ နောက်သို့ပြန်သွားပြီး အခြားနည်းလမ်းကို ရွေးကာ အချက်အလက်များကို စစ်ဆေးပါ။</string>
     <string name="journey_destination_unavailable">ဤငွေပေးချေရမည့် လိပ်စာကို မရရှိနိုင်တော့ပါ။ နောက်သို့ပြန်သွားပြီး ရရှိနိုင်သော လိပ်စာကို ရွေးကာ ပြန်တင်ပါ။</string>
     <string name="journey_deposit_minimum_rejected">ငွေလဲနှုန်းတွက်ပြီးနောက် ငွေသွင်းပမာဏသည် အနည်းဆုံး MMK ၂၅,၀၀၀ ထက် နည်းနေသည်။ ပမာဏထည့်သည့်အဆင့်သို့ ပြန်သွားပြီး ထိုနေရာတွင် ပြထားသော အနည်းဆုံးပမာဏအထိ တိုးပါ။ ထို့နောက် ပြေစာကို ပြန်တင်ပါ။</string>
@@ -298,8 +298,8 @@
     <string name="journey_pin_locked">PIN သတ်မှတ်ပြီးဖြစ်သည်။ ပြောင်းရန် သို့မဟုတ် ပြန်သတ်မှတ်ရန် အကူအညီဌာနကို ဆက်သွယ်ပါ။</string>
     <string name="journey_pin_mismatch">တူညီသော ဂဏန်းလေးလုံး PIN များကို ဖြည့်ပါ။</string>
     <string name="journey_data_changed">အချက်အလက်များ ပြောင်းလဲသွားသည်။ ပြန်ဖွင့်ပြီး မတင်သွင်းမီ စစ်ဆေးပါ။</string>
-    <string name="journey_uncertain">တောင်းဆိုချက် လက်ခံရရှိခြင်း ရှိမရှိ အတည်မပြုမီ ချိတ်ဆက်မှု ပြတ်တောက်သွားသည်။ နှစ်ကြိမ်မတင်မိစေရန် ထပ်မကြိုးစားမီ အခြေအနေကို စစ်ဆေးပါ။</string>
-    <string name="journey_offline">ချိတ်ဆက်မရပါ။ ပြန်ချိတ်ဆက်ပြီး ထပ်ကြိုးစားပါ။</string>
+    <string name="journey_uncertain">တောင်းဆိုချက် အောင်မြင်ခြင်းရှိမရှိ အတည်မပြုနိုင်ပါ။ ထပ်မကြိုးစားမီ အခြေအနေကို စစ်ဆေးပါ။</string>
+    <string name="journey_offline">ချိတ်ဆက်၍ မရပါ။ အင်တာနက်ချိတ်ဆက်မှုကို စစ်ဆေးပြီး ထပ်ကြိုးစားပါ။</string>
     <string name="journey_wallet">ပိုက်ဆံအိတ်</string>
     <string name="journey_deposit_method">ငွေပေးချေမှုနည်းလမ်း</string>
     <string name="journey_deposit_amount">ငွေသွင်းပမာဏ</string>
@@ -371,7 +371,7 @@
     <string name="registration_accept_terms">အသက်ကို အတည်ပြုပြီး စည်းမျဉ်းများနှင့် ကိုယ်ရေးအချက်အလက်မူဝါဒကို သဘောတူပါ။</string>
     <string name="registration_password_mismatch">စကားဝှက်နှစ်ခု မတူပါ။ တူညီသော စကားဝှက်ကို နှစ်ကြိမ်ဖြည့်ပါ။</string>
     <string name="registration_username_taken">ဤအသုံးပြုသူအမည်ကို သုံးထားပြီးပါပြီ။ အခြားအမည်ကို ရွေးပါ။</string>
-    <string name="registration_failed">အကောင့်ဖွင့်၍ မရသေးပါ။ ခဏအကြာတွင် ထပ်ကြိုးစားပါ။</string>
+    <string name="registration_failed">အကောင့်ဖွင့်ပြီးကြောင်း အတည်မပြုနိုင်ပါ။ ထပ်မံစာရင်းမသွင်းမီ အကောင့်ဝင်ကြည့်ပါ။</string>
     <string name="bet_slip_title">လောင်းကြေးစာရွက်</string>
     <string name="bet_slip_stake">လောင်းကြေး (MMK)</string>
     <string name="bet_slip_server_quote">လောင်းကြေးမတင်မီ လက်ရှိနှုန်းနှင့် အမြတ်ကို စစ်ဆေးပါ။</string>
@@ -382,12 +382,12 @@
     <string name="bet_slip_success">လောင်းကြေးကို လက်ခံပြီးပါပြီ။</string>
     <string name="bet_slip_view_bet">လောင်းကြေးကြည့်ရန်</string>
     <string name="bet_slip_odds_changed">နှုန်းထား ပြောင်းလဲသွားသည်။ နှုန်းအသစ်ကို စစ်ပြီး ပြန်အတည်ပြုပါ။</string>
-    <string name="bet_slip_submission_failed">လောင်းကြေး မအောင်မြင်သည့် အကြောင်းရင်းကို မသိနိုင်ပါ။ ပွဲစဉ်ကို ပြန်ဖွင့်ပြီး လောင်းကြေးပမာဏနှင့် ဈေးကွက်ကို စစ်ဆေးပါ။ ထပ်မံမအောင်မြင်ပါက အကူအညီဌာနကို ဆက်သွယ်ပါ။</string>
-    <string name="bet_slip_minimum_stake">လောင်းကြေးပမာဏသည် အနည်းဆုံးပမာဏထက် နည်းနေသည်။ ပမာဏတိုးပြီး ထပ်ကြိုးစားပါ။</string>
+    <string name="bet_slip_submission_failed">လောင်းကြေးတင်ပြီးခြင်းရှိမရှိ အတည်မပြုနိုင်ပါ။ ထပ်မကြိုးစားမီ မိမိလောင်းကြေးများကို စစ်ဆေးပါ။</string>
+    <string name="bet_slip_minimum_stake">အနည်းဆုံးလောင်းကြေးမှာ 2,500 MMK ဖြစ်သည်။ ဤပမာဏ သို့မဟုတ် ပိုများသောပမာဏကို ထည့်ပါ။</string>
     <string name="bet_slip_insufficient_balance">ဤလောင်းကြေးအတွက် လက်ကျန်ငွေ မလုံလောက်ပါ။ လောင်းကြေးလျှော့ပါ သို့မဟုတ် ငွေထပ်ဖြည့်ပြီး ထပ်ကြိုးစားပါ။</string>
-    <string name="bet_slip_maximum_reached">ယနေ့ လောင်းကြေးတင်နိုင်သည့် အများဆုံးအရေအတွက် ပြည့်သွားပါပြီ။ နေ့စဉ်ကန့်သတ်ချက် ပြန်လည်စတင်ပြီးမှ ထပ်ကြိုးစားပါ။</string>
+    <string name="bet_slip_maximum_reached">နေ့စဉ်လောင်းကြေးအရေအတွက် ကန့်သတ်ချက်သို့ ရောက်ရှိပါပြီ။ ကန့်သတ်ချက် ပြန်စပြီးနောက် ထပ်ကြိုးစားပါ။</string>
     <string name="bet_slip_match_settled">ဤပွဲစဉ်ကို ဆုံးဖြတ်ပြီးဖြစ်သောကြောင့် လောင်းကြေးအသစ်များ ပိတ်ထားပါသည်။</string>
-    <string name="bet_slip_market_unavailable">ဤပွဲစဉ်အတွက် ဤဈေးကွက်ကို မရရှိနိုင်တော့ပါ။ ရရှိနိုင်သော အခြားဈေးကွက်ကို ရွေးပါ။</string>
+    <string name="bet_slip_market_unavailable">ဤရမှတ်ရွေးချယ်မှုကို မရနိုင်တော့ပါ။ ရရှိနိုင်သော ရွေးချယ်မှုများကို ကြည့်ရန် ပွဲစဉ်ကို ပြန်တင်ပါ။</string>
     <string name="bet_slip_market_closed">ဤပွဲစဉ်တွင် လောင်းကြေးတင်ရန် အချိန်မရတော့ပါ။ ရရှိနိုင်သော အခြားပွဲစဉ်ကို ရွေးပါ။</string>
     <string name="journey_support">အကူအညီ</string>
     <string name="journey_contact_support">အကူအညီဌာနကို ဆက်သွယ်ရန်</string>
@@ -404,6 +404,28 @@
     <string name="update_message">ဗားရှင်း %1$s ကို ရရှိနိုင်ပါပြီ။ APK ကို ဒေါင်းလုဒ်လုပ်ပြီး Android တပ်ဆင်မှုညွှန်ကြားချက်အတိုင်း ဆက်လုပ်ပါ။</string>
     <string name="update_download">အပ်ဒိတ် ဒေါင်းလုဒ်လုပ်ရန်</string>
     <string name="update_later">နောက်မှ</string>
+    <string name="bet_slip_invalid_details">လောင်းကြေးအချက်အလက်ကို အတည်မပြုနိုင်ပါ။ နောက်ဆုံးအချက်အလက်ကို ရယူရန် ပွဲစဉ်ကို ပြန်ဖွင့်ပါ။</string>
+    <string name="bet_slip_request_conflict">ဤတောင်းဆိုချက်သည် အစောပိုင်းလောင်းကြေးတစ်ခုနှင့် မကိုက်ညီပါ။ အသစ်မတင်မီ မိမိလောင်းကြေးများကို စစ်ဆေးပါ။</string>
+    <string name="bet_slip_match_missing">ဤပွဲစဉ်ကို မရရှိနိုင်တော့ပါ။ ပွဲစဉ်စာရင်းသို့ ပြန်သွားပါ။</string>
+    <string name="journey_session_expired">သင့်အကောင့်အချိန်ကုန်သွားပါပြီ။ ထပ်မံလော့ဂ်အင်ဝင်ပါ။</string>
+    <string name="journey_permission_denied">သင့်အကောင့်တွင် ဤလုပ်ဆောင်ချက်အတွက် ခွင့်ပြုချက် မရှိပါ။</string>
+    <string name="journey_too_many_requests">ကြိုးစားမှုများလွန်းပါသည်။ ခဏစောင့်ပြီး ထပ်ကြိုးစားပါ။</string>
+    <string name="journey_profile_missing">သင့်အကောင့်ပရိုဖိုင်ကို ရှာမတွေ့ပါ။ ပြန်ဝင်ပါ။ ပြဿနာ ဆက်ရှိပါက အကူအညီဌာနကို ဆက်သွယ်ပါ။</string>
+    <string name="journey_wallet_unconfirmed">ပိုက်ဆံအိတ်ချိတ်ဆက်ပြီးခြင်းရှိမရှိ အတည်မပြုနိုင်ပါ။ ထပ်မထည့်မီ ပိုက်ဆံအိတ်စာရင်းကို စစ်ဆေးပါ။</string>
+    <string name="journey_pin_unconfirmed">PIN သိမ်းဆည်းပြီးခြင်းရှိမရှိ အတည်မပြုနိုင်ပါ။ အခြေအနေကို စစ်ဆေးရန် ပြန်တင်ပါ။</string>
+    <string name="journey_fee_changed">ငွေထုတ်ဝန်ဆောင်ခ ပြောင်းလဲသွားပါပြီ။ မတင်မီ ဝန်ဆောင်ခအသစ်ကို စစ်ဆေးပါ။</string>
+    <string name="journey_receipt_expired">ငွေလွှဲပြေစာပုံ၏ သက်တမ်းကုန်ဆုံးသွားပါပြီ။ ပြန်တင်ပေးပါ။</string>
+    <string name="journey_receipt_invalid">ဤပြေစာတင်မှုကို အတည်မပြုနိုင်ပါ။ ပုံကို ပြန်တင်ပါ။</string>
+    <string name="journey_deposit_details_invalid">မတင်မီ ငွေသွင်းပမာဏ၊ ငွေပေးချေနည်းနှင့် ပြေစာကို စစ်ဆေးပါ။</string>
+    <string name="journey_payment_details_invalid">ဤငွေပေးချေမှုတောင်းဆိုချက်ကို အတည်မပြုနိုင်ပါ။ ထပ်မကြိုးစားမီ ငွေလွှဲမှတ်တမ်းနှင့် ပမာဏကို စစ်ဆေးပါ။</string>
+    <string name="journey_receipt_file_invalid">8 MB ထက်မကြီးသော JPEG၊ PNG သို့မဟုတ် WebP ပြေစာပုံကို ရွေးပါ။</string>
+    <string name="journey_receipt_read_failed">ဤပြေစာပုံကို ဖတ်၍ မရပါ။ ပြန်ရွေးပါ။</string>
+    <string name="journey_payment_load_failed">ငွေပေးချေမှုအချက်အလက်ကို ရယူ၍ မရပါ။ ရှေ့မဆက်မီ ပြန်တင်ပါ။</string>
+    <string name="login_error_email_unconfirmed">အကောင့်မဝင်မီ သင့်အီးမေးလ်ကို အတည်ပြုပါ။</string>
+    <string name="login_error_rate_limited">အကောင့်ဝင်ရန် ကြိုးစားမှုများလွန်းပါသည်။ မိနစ်အနည်းငယ် စောင့်ပြီးမှ ထပ်ကြိုးစားပါ။</string>
+    <string name="registration_invalid_details">စာရင်းသွင်းအချက်အလက်နှင့် ဖိတ်ခေါ်ကုဒ်ကို စစ်ဆေးပြီး ထပ်ကြိုးစားပါ။</string>
+    <string name="registration_account_exists">ဤအသုံးပြုသူအမည် သို့မဟုတ် အီးမေးလ်ကို စာရင်းသွင်းပြီးပါပြီ။ အကောင့်ဝင်ကြည့်ပါ သို့မဟုတ် အခြားအချက်အလက်ကို သုံးပါ။</string>
+    <string name="bet_slip_load_failed">ဤလောင်းကြေးအတွက် လိုအပ်သော အချက်အလက်ကို ရယူ၍ မရပါ။ ပွဲစဉ်ကို ပြန်တင်ပြီး ထပ်ကြိုးစားပါ။</string>
 </resources>
 
 

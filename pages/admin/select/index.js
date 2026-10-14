@@ -1,3 +1,4 @@
+import { adminErrorMessage } from '@/lib/adminErrorMessage'
 import Head from 'next/head'
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { useRouter } from 'next/router'
@@ -192,7 +193,7 @@ export default function Select({ initialPage = {}, initialFilters = {}, dateKeys
 
       if (!response.ok) {
         if (response.status === 401) router.push('/admin')
-        throw new Error(result.message || 'Unable to load fixtures')
+        throw new Error(adminErrorMessage(result, 'We could not load fixtures. Refresh and try again.'))
       }
 
       const nextPage = normalizeMatchResponse(result)
@@ -209,7 +210,7 @@ export default function Select({ initialPage = {}, initialFilters = {}, dateKeys
     } catch (fetchError) {
       if (fetchError.name !== 'AbortError') {
         console.log(fetchError)
-        setError(fetchError.message || 'Unable to load fixtures')
+        setError(adminErrorMessage(fetchError, 'We could not load fixtures. Refresh and try again.'))
       }
     } finally {
       if (append) {

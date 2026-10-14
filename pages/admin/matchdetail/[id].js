@@ -1,3 +1,4 @@
+import { adminErrorMessage } from '@/lib/adminErrorMessage'
 import Head from 'next/head'
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { useMemo, useState } from 'react'
@@ -184,7 +185,7 @@ export default function MatchDetail({ datas = {}, mist = [] }) {
 
     setDrop(false)
     if (error) {
-      toast.error(error.message || 'Unable to update odd')
+      toast.error(adminErrorMessage(error, 'We could not confirm the odds update. Reload the match to check the current odds.'))
       return
     }
 
@@ -213,7 +214,7 @@ export default function MatchDetail({ datas = {}, mist = [] }) {
       const result = await response.json().catch(() => ({}))
 
       if (!response.ok) {
-        throw new Error(result.message || 'Unable to settle match')
+        throw new Error(adminErrorMessage(result, 'We could not confirm settlement. Refresh the match and settlement records before trying again.'))
       }
 
       const summary = result.summary
