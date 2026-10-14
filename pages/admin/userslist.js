@@ -19,7 +19,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import Diversity1Icon from '@mui/icons-material/Diversity1';
 import Modal from '@mui/material/Modal';
 import Cover from './cover'
-import { toast, Toaster } from "react-hot-toast";
+import { toast, Toaster } from "@/lib/webToast";
 import codesData from '@/pages/api/codes.json'
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import CancelIcon from '@mui/icons-material/Cancel';

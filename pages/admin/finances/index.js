@@ -2,7 +2,7 @@ import { adminErrorMessage } from '@/lib/adminErrorMessage'
 import Head from 'next/head'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
-import toast, { Toaster } from 'react-hot-toast'
+import toast, { Toaster } from '@/lib/webToast'
 import LoadingBar from 'react-top-loading-bar'
 import {
   Check,

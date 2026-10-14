@@ -11,7 +11,7 @@ import Big from '@/public/icon/badge.png'
 import Modal from '@mui/material/Modal';
 import Wig from '@/public/icon/wig.png'
 import Image from 'next/image'
-import toast, { Toaster } from 'react-hot-toast'
+import toast, { Toaster } from '@/lib/webToast'
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 import { useTranslation } from 'next-i18next';
 

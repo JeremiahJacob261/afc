@@ -5,7 +5,7 @@ import { Button } from "@mui/material"
 import { useState } from "react"
 import { useRouter } from 'next/router'
 import { motion } from "framer-motion"
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from '@/lib/webToast';
 import { useEffect } from "react"
 import { Icon } from "@iconify/react"
 import Modal from "@mui/material/Modal"

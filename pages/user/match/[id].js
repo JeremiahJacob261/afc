@@ -12,7 +12,7 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Cover from '../cover'
 import { Drawer } from '@mui/material'
-import toast, { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "@/lib/webToast";
 import Image from 'next/image'
 import Loading from "../../components/loading";
 import Ims from '@/public/simps/ball.png'

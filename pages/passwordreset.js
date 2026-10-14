@@ -10,7 +10,7 @@ import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import AppLoadingOverlay from '@/components/AppLoadingOverlay';
 import FeedbackDialog from '@/components/FeedbackDialog';
 import { waitForPaint } from '@/lib/uiFeedback';
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from '@/lib/webToast';
 import { useTranslation } from 'next-i18next';
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 export default function PasswordReset() {

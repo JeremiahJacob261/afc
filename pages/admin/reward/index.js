@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import toast, { Toaster } from 'react-hot-toast'
+import toast, { Toaster } from '@/lib/webToast'
 import { ArrowRight, BadgeDollarSign, Bell, Check, LockKeyhole, ReceiptText, UserRound, Wallet } from 'lucide-react'
 import { supabase } from '@/pages/api/supabase'
 

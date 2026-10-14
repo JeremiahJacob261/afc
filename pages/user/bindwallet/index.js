@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import Cover from '../cover'
 import FormControl from '@mui/material/FormControl';
 import Loading from "@/pages/components/loading";
-import toast, { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "@/lib/webToast";
 import IDRBANK from '@/pages/api/idrbanks.json';
 import { motion } from "framer-motion";
 import NativeSelect from '@mui/material/NativeSelect';
@@ -99,16 +99,7 @@ export default function Home() {
             const bankValue = normalize(bank);
 
             if (!selectedMethodId || walletValue.length < 3 || (isLocal && (accountNameValue.length < 3 || bankValue.length < 2))) {
-                toast(t('messages.walletDetailsInvalid'),
-                    {
-                        icon: '🤦‍♀️',
-                        style: {
-                            borderRadius: '10px',
-                            background: '#DE1A1A',
-                            color: '#fff',
-                        },
-                    }
-                );
+                toast.error(t('messages.walletDetailsInvalid'));
                 return;
             }
 

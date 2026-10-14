@@ -8,6 +8,7 @@ import { useRouter } from 'next/router'
 import { appWithTranslation } from 'next-i18next'
 import dynamic from 'next/dynamic'
 import AppLoadingOverlay from '@/components/AppLoadingOverlay'
+import GlobalErrorDialog from '@/components/GlobalErrorDialog'
 import nextI18NextConfig from '../next-i18next.config'
 const MaterialTheme = dynamic(() => import('@/components/MaterialTheme'))
 const PlainTheme = ({ children }) => children
@@ -111,6 +112,7 @@ function MyApp({ Component, pageProps }) {
       )}
       <div className="champions-doodle-layer" aria-hidden="true" />
       <AppLoadingOverlay open={routeLoading} title="" message="" />
+      <GlobalErrorDialog />
       
 </div>
     </Theme>

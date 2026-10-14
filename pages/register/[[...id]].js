@@ -10,7 +10,7 @@ import { clearLegacyAuthStorage } from "@/lib/clientAuth";
 import AppLoadingOverlay from "@/components/AppLoadingOverlay";
 import FeedbackDialog from "@/components/FeedbackDialog";
 import { waitForPaint } from "@/lib/uiFeedback";
-import toast, { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "@/lib/webToast";
 import { useTranslation } from "next-i18next";
 import LandingImage from "@/components/ucl/LandingImage";
 import landing from "@/styles/LandingSystem.module.css";

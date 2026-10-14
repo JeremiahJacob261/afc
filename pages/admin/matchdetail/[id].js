@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
 import { useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
-import { toast, Toaster } from 'react-hot-toast'
+import { toast, Toaster } from '@/lib/webToast'
 import {
   AlertTriangle,
   BarChart3,

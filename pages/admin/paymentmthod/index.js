@@ -2,7 +2,7 @@ import { adminErrorMessage } from '@/lib/adminErrorMessage'
 import Head from 'next/head'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
-import toast, { Toaster } from 'react-hot-toast'
+import toast, { Toaster } from '@/lib/webToast'
 import {
   ArrowLeft,
   BadgeDollarSign,

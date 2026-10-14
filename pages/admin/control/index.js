@@ -3,7 +3,7 @@ import { invalidatePublicData } from '@/lib/requestCache'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import toast, { Toaster } from 'react-hot-toast'
+import toast, { Toaster } from '@/lib/webToast'
 import { ArrowUpRight, Bell, Disc3, KeyRound, Link2, Lock, Percent, Save, ShieldCheck, WalletCards } from 'lucide-react'
 
 const tools = [

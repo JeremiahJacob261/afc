@@ -14,7 +14,7 @@ import Modal from '@mui/material/Modal';
 import Cover from './cover'
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
 import { useTranslation } from 'next-i18next'
-import toast, { Toaster} from 'react-hot-toast'
+import toast, { Toaster} from '@/lib/webToast'
 import Loading from "@/pages/components/loading";
 import FormControl from '@mui/material/FormControl';
 import { motion } from 'framer-motion'

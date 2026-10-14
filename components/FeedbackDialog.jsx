@@ -16,6 +16,7 @@ export default function FeedbackDialog({ open, type = 'info', title, message, ac
   const id = useId()
   const content = contentByType[type] || contentByType.info
   const Icon = content.icon
+  const description = message || t(content.titleKey)
   useEffect(() => {
     const element = dialog.current
     if (open && !element.open) element.showModal()
@@ -28,7 +29,7 @@ export default function FeedbackDialog({ open, type = 'info', title, message, ac
     <div className="feedback-dialog-content">
       <div className="feedback-dialog-logo"><Image src={LOGO} width={44} height={44} alt="UCL" /><Icon size={25} aria-hidden="true" /></div>
       <h2 id={`${id}-title`}>{title || t(content.titleKey)}</h2>
-      <p id={`${id}-description`}>{message}</p>
+      <p id={`${id}-description`}>{description}</p>
       <button type="button" onClick={onClose} autoFocus>{actionLabel ?? t('common.okay')}</button>
     </div>
   </dialog>

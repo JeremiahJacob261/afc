@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { useCookies } from 'react-cookie'
-import toast, { Toaster } from 'react-hot-toast'
+import toast, { Toaster } from '@/lib/webToast'
 import {
   ArrowDownToLine, ArrowLeft, ArrowRight, ArrowUpFromLine, Check,
   ChevronRight, CircleHelp, Copy, History, Link2, LockKeyhole,

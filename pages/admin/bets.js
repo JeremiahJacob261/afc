@@ -15,7 +15,7 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import AddIcon from '@mui/icons-material/Add';
 import Link from "next/link";
-import { toast, Toaster } from "react-hot-toast";
+import { toast, Toaster } from "@/lib/webToast";
 import Cover from './cover'
 import { motion } from "framer-motion";
 import { getMatchStartMs, useClientMatchDisplay } from '@/lib/matchDisplay'
