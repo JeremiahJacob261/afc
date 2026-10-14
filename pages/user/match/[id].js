@@ -394,7 +394,7 @@ export default function Match({ matchDat }) {
                                 if (!picked || tofal <= 0) {
                                     toast.error(t('messages.chooseScoreMarket'))
                                 } else if (stakeAmount <= availableStake) {
-                                    if (stakeAmount < 5000) {
+                                    if (stakeAmount < 2500) {
                                         toast.error(t('messages.stakeMinimum'))
 
                                     }

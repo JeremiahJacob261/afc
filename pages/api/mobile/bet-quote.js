@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     const user = await getCurrentUser(req)
     const supabase = getSupabaseAdmin()
     const stake = parseCurrency(req.query.stake)
-    if (!Number.isFinite(stake) || stake < 5000) return res.status(400).json({ status: 'error', message: 'Invalid bet details' })
+    if (!Number.isFinite(stake) || stake < 2500) return res.status(400).json({ status: 'error', message: 'Invalid bet details' })
     const { data, error } = await supabase.rpc('native_bet_quote', {
       p_userid: user.id,
       p_match_id: String(req.query.match_id || ''),

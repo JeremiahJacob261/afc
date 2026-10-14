@@ -259,7 +259,7 @@ BEGIN
     RAISE EXCEPTION 'Match not found';
   END IF;
 
-  IF p_stake IS NULL OR p_stake < 5000 THEN
+  IF p_stake IS NULL OR p_stake < 2500 THEN
     RAISE EXCEPTION 'Invalid bet details';
   END IF;
 
@@ -730,7 +730,7 @@ DECLARE
   v_user public.users%ROWTYPE; v_existing public.placed%ROWTYPE; v_market text; v_result jsonb;
 BEGIN
   v_market := public.score_market_label(p_picked);
-  IF p_client_bet_id IS NULL OR v_market IS NULL OR p_stake IS NULL OR p_stake<5000
+  IF p_client_bet_id IS NULL OR v_market IS NULL OR p_stake IS NULL OR p_stake<2500
       OR p_stake::text IN ('NaN','Infinity','-Infinity') OR p_expected_odd IS NULL
       OR p_expected_odd<=0 OR p_expected_odd::text IN ('NaN','Infinity','-Infinity') THEN
     RAISE EXCEPTION 'Invalid bet details';

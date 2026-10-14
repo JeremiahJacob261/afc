@@ -65,12 +65,12 @@ export default withApiTiming(async function handler(req, res) {
       !match_id
       || !markets[picked]
       || !Number.isFinite(amount)
-      || amount < 5000
+      || amount < 2500
       || !Number.isFinite(expectedOdd)
       || expectedOdd <= 0
       || (client_bet_id && !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(client_bet_id)))
     ) {
-      const message = `Minimum stake is ${formatCurrency(5000, currencySettings)}`
+      const message = `Minimum stake is ${formatCurrency(2500, currencySettings)}`
       return res.status(400).json({ status: 'error', message })
     }
 

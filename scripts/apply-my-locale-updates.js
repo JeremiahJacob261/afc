@@ -56,7 +56,7 @@ setValue('messages.unableLoadMatch', 'ဂိမ်းကို ဖတ်ရှ�
 setValue('messages.unableLoadBets', 'လောင်းကြေးများကို ဖတ်ရှု၍ မရနိုင်ပါ။');
 setValue('messages.unableLoadBet', 'လောင်းကြေးကို ဖတ်ရှု၍ မရနိုင်ပါ။');
 setValue('messages.unableLoadProfile', 'ပရိုဖိုင်ကို ဖတ်ရှု၍ မရနိုင်ပါ။');
-setValue('messages.stakeMinimum', 'စတော့အား အနည်းဆုံး 5,000 MMK ဖြစ်ရပါမည်။');
+setValue('messages.stakeMinimum', 'စတော့အား အနည်းဆုံး 2,500 MMK ဖြစ်ရပါမည်။');
 setValue('messages.minimumWithdrawal', 'အနည်းဆုံး ထုတ်ယူမှုမှာ {{amount}} MMK ဖြစ်ပါသည်။');
 setValue('messages.depositSubmittedWithAmount', 'သင်၏ {{amount}} MMK အတွက် ငွေသွင်းအထောက်အထား တင်သွင်းပြီးဖြစ်ပြီး အုပ်ချုပ်သူ၏ အတည်ပြုချက်ကို စောင့်ဆိုင်းနေပါသည်။');
 setValue('messages.unableLoadVip', 'VIP တိုးတက်မှုကို ဖတ်ရှု၍ မရနိုင်ပါ။');

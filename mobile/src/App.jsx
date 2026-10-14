@@ -1482,7 +1482,7 @@ function MatchDetailScreen({ matchId, navigate }) {
     }
 
     const amount = Math.floor(Number(stake))
-    if (!Number.isFinite(amount) || amount < 5000) {
+    if (!Number.isFinite(amount) || amount < 2500) {
       notifyMessage(setMessage, 'error', t('messages.stakeMinimum'))
       return
     }
