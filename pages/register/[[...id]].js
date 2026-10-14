@@ -128,6 +128,21 @@ export default function Register({ refer }) {
   const [agecheck, setAgecheck] = useState(false);
   const [email, setEmail] = useState('')
   const [feedback, setFeedback] = useState(null)
+  const [availability, setAvailability] = useState({ username: '', available: null })
+  useEffect(() => {
+    const name = username.trim()
+    if (!name) return
+    const controller = new AbortController()
+    const timer = setTimeout(async () => {
+      try {
+        const response = await fetch('/api/check-username', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: name }), signal: controller.signal })
+        const data = await response.json()
+        if (response.ok && !controller.signal.aborted) setAvailability({ username: name, available: data.available })
+      } catch { /* Availability is a hint; the Auth transaction enforces uniqueness. */ }
+    }, 350)
+    return () => { clearTimeout(timer); controller.abort() }
+  }, [username])
 
   const [values, setValues] = React.useState({
     amount: '',
@@ -157,6 +172,10 @@ export default function Register({ refer }) {
 
   const handleRegister = async () => {
     if (loading) return
+    if (availability.username === username.trim() && availability.available === false) {
+      toast.error(t('messages.usernameExists'))
+      return
+    }
 
     if (phone.length < 9) {
       toast.error(t('messages.phoneNineDigits'))
@@ -177,28 +196,15 @@ export default function Register({ refer }) {
     await waitForPaint()
 
     try {
-      const response = await fetch('/api/check-username', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username }),
-      })
-      const result = await response.json().catch(() => ({}))
-      if (!response.ok) {
-        toast.error(t('messages.unableValidateUsername'))
-        return
-      }
-
-      if (!result.available) {
-        toast.error(t('messages.usernameExists'))
-        return
-      }
-
       const { data, error } = await supabase.auth.signUp({
         email: email,
         password: values.password,
         options: {
           data: {
-            displayName: username,
+            displayName: username.trim(),
+            profile_version: 2,
+            countrycode: codes.countries.find((item) => item.countryCode === country)?.code || country,
+            refer: idR || null,
             phoneNumber: phone,
           }
         }
@@ -206,30 +212,15 @@ export default function Register({ refer }) {
 
       if (error) throw error;
 
-      const profileResponse = await fetch('/api/signup-profile', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userid: data.user.id,
-          username,
-          email,
-          phone,
-          countrycode: codes.countries.find((item) => item.countryCode === country)?.code || country,
-          refer: idR,
-        }),
-      })
-      const profileResult = await profileResponse.json().catch(() => ({}))
-
-      if (!profileResponse.ok || profileResult.status !== 'success') {
-        throw new Error(profileResult.message || t('messages.unableCreateProfile'))
-      }
+      if (!data.user || data.user.identities?.length === 0) throw new Error('User already registered')
 
       clearLegacyAuthStorage();
       setLoading(false)
       setFeedback({
         type: 'success',
         title: t('messages.welcomeToEfc'),
-        message: t('messages.accountCreated'),
+        message: t(data.session ? 'messages.accountCreated' : 'messages.checkEmailToConfirm'),
+        requiresConfirmation: !data.session,
       })
     } catch (error) {
       console.error('Error signing up:', error);
@@ -270,7 +261,7 @@ export default function Register({ refer }) {
         onClose={() => {
           const shouldGoHome = feedback?.type === 'success'
           setFeedback(null)
-          if (shouldGoHome) route.push('/user')
+          if (shouldGoHome) route.push(feedback?.requiresConfirmation ? '/login' : '/user')
         }}
       />
       <Toaster position="bottom-center" reverseOrder={false} />
@@ -465,10 +456,14 @@ export default function Register({ refer }) {
   );
 }
 
-export async function getServerSideProps(context) {
-  const i18nProps = await getI18nServerSideProps(context.locale)
+export async function getStaticProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale, ['website', 'auth', 'forms', 'landing', 'messages'])
   const { params } = context;
   const id = params?.id?.[0] ?? null;  // catch-all gives array; grab first element
   return { props: {
       ...i18nProps, refer: id } }
+}
+
+export async function getStaticPaths() {
+  return { paths: ['en', 'my'].map(locale => ({ params: { id: [] }, locale })), fallback: 'blocking' }
 }

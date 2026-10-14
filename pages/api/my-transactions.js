@@ -1,4 +1,6 @@
-import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
+import { withApiTiming, timedRpc } from '@/lib/apiTiming'
+import { getCurrentUser, sendApiError } from '@/lib/apiAuth'
 import { applyCursor, cursorPage, decodeCursor, encodeCursor, pageSize } from '@/lib/pagination'
 import {
   displayPaymentCurrency,
@@ -233,7 +235,7 @@ function buildSummary(profile, transactions) {
   }
 }
 
-export default async function handler(req, res) {
+export default withApiTiming(async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ status: 'error', message: 'Method not allowed' })
   }
@@ -245,16 +247,13 @@ export default async function handler(req, res) {
     const paged = req.query?.page === '1'
     const limit = pageSize(req.query?.limit)
     const cursor = decodeCursor(req.query?.cursor)
-    const { profile, supabase } = await getCurrentProfile(req, 'username,totald,totalw')
-    let query = supabase.from('notification').select('*', { count: paged ? 'exact' : undefined }).eq('username', profile.username).in('type', ['deposit', 'withdraw', 'withdrawer'])
-    if (filter !== 'all') query = query.in('type', filter === 'withdraw' ? ['withdraw', 'withdrawer'] : ['deposit'])
-
-    const [result, methods] = await Promise.all([
-      paged ? applyCursor(query, cursor, 'transactions', limit) : query.order('id', { ascending: false }),
-      fetchPaymentMethods(supabase),
-    ])
-
-    if (result.error) throw result.error
+    const user = await getCurrentUser(req)
+    const { data: records, error } = await timedRpc(req, getSupabaseAdmin(), 'read_transaction_history', {
+      p_userid: user.id, p_filter: filter, p_limit: paged ? limit + 1 : 1000, p_cursor: cursor,
+    })
+    if (error) throw error
+    const { profile, methods } = records
+    const result = { data: records.rows, count: records.count }
     const page = paged ? cursorPage(result.data || [], limit) : { data: result.data || [] }
     const data = page.data
 
@@ -282,4 +281,4 @@ export default async function handler(req, res) {
   } catch (error) {
     return sendApiError(res, error)
   }
-}
+})

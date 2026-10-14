@@ -473,7 +473,7 @@ export default function Match({ matchDat }) {
 }
 
 export async function getServerSideProps(context) {
-  const i18nProps = await getI18nServerSideProps(context.locale)
+  const i18nProps = await getI18nServerSideProps(context.locale, ['website', 'mobile', 'bulletin', 'forms', 'status', 'messages', 'emptyStates'])
     try {
         const id = context.params?.id;
         if (!id) {

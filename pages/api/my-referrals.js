@@ -1,114 +1,33 @@
-import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
-import { applyCursor, cursorPage, decodeCursor, encodeCursor, pageSize } from '@/lib/pagination'
-import { getMembershipBalanceThreshold } from '@/lib/adminSettings'
+import { getCurrentUser, sendApiError } from '@/lib/apiAuth'
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
+import { withApiTiming, timedRpc } from '@/lib/apiTiming'
+import { cursorPage, decodeCursor, encodeCursor, pageSize } from '@/lib/pagination'
 import { isActiveMember } from '@/lib/membership'
 
-const MODERN_COLUMNS = 'id,username,totald,balance,firstd,refer,lvla,lvlb,created_at'
-const LEGACY_COLUMNS = 'id,keyf,username,totald,balance,firstd,refer,lvla,lvlb,crdate,date_cr'
-
-const REFERRAL_LEVELS = [
-  { column: 'refer', level: 1, label: 'Level 1' },
-  { column: 'lvla', level: 2, label: 'Level 2' },
-  { column: 'lvlb', level: 3, label: 'Level 3' },
-]
-
-function isMissingColumnError(error) {
-  if (!error) return false
-  const text = `${error.message || ''} ${error.details || ''} ${error.hint || ''}`.toLowerCase()
-  return error.code === '42703' || text.includes('column') || text.includes('schema cache')
-}
-
-function normalizeReferral(row, level, membershipBalanceThreshold) {
-  const joinedAt = row.created_at || row.crdate || row.date_cr || null
-  const id = row.id ?? row.keyf ?? `${level.level}-${row.username || 'referral'}`
-
-  return {
-    ...row,
-    id,
-    key: row.keyf ?? row.id ?? id,
-    username: row.username || 'Unknown user',
-    totald: Number(row.totald || 0),
-    balance: Number(row.balance || 0),
-    firstd: Boolean(row.firstd),
-    isActive: isActiveMember(row.balance, membershipBalanceThreshold),
-    joinedAt,
-    level: level.level,
-    levelLabel: level.label,
-  }
-}
-
-async function fetchReferralRows(supabase, referCode, columns, membershipBalanceThreshold, pagination) {
-  const results = await Promise.all(
-    REFERRAL_LEVELS.map(async (level) => {
-      const query = supabase.from('users').select(columns).eq(level.column, referCode)
-      const { data, error } = await (pagination ? applyCursor(query, pagination.cursor, level.column, pagination.limit) : query)
-      const page = pagination ? cursorPage(data || [], pagination.limit) : { data: data || [] }
-      return { ...level, data: page.data, next: page.next, error }
-    })
-  )
-
-  const firstError = results.find((result) => result.error)?.error
-  if (firstError) return { data: [], error: firstError }
-
-  const seen = new Set()
-  const data = results.flatMap((result) =>
-    result.data
-      .map((row) => normalizeReferral(row, result, membershipBalanceThreshold))
-      .filter((row) => {
-        const key = String(row.id ?? row.key ?? `${row.level}-${row.username}`)
-        if (seen.has(key)) return false
-        seen.add(key)
-        return true
-      })
-  )
-
-  data.sort((a, b) => {
-    if (a.level !== b.level) return a.level - b.level
-    const aDate = a.joinedAt ? new Date(a.joinedAt).getTime() : 0
-    const bDate = b.joinedAt ? new Date(b.joinedAt).getTime() : 0
-    return bDate - aDate
-  })
-
-  const next = Object.fromEntries(results.map(result => [result.column, result.next]))
-  return { data, error: null, nextCursor: pagination && Object.values(next).some(Boolean) ? encodeCursor(next) : null }
-}
-
-export default async function handler(req, res) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ status: 'error', message: 'Method not allowed' })
-  }
-
+export default withApiTiming(async function handler(req, res) {
+  if (req.method !== 'GET') return res.status(405).json({ status: 'error', message: 'Method not allowed' })
   try {
-    res.setHeader('Cache-Control', 'private, no-store')
-    const pagination = req.query?.page === '1' ? { cursor: decodeCursor(req.query.cursor), limit: pageSize(req.query.limit, 20) } : null
-    const { profile, supabase } = await getCurrentProfile(req, 'newrefer')
-    const membershipBalanceThreshold = await getMembershipBalanceThreshold(supabase)
-
-    if (!profile.newrefer) {
-      return res.status(200).json({
-        status: 'success',
-        refer: '',
-        referrals: [],
-        membershipBalanceThreshold,
-      })
-    }
-
-    let result = await fetchReferralRows(supabase, profile.newrefer, MODERN_COLUMNS, membershipBalanceThreshold, pagination)
-    if (result.error && isMissingColumnError(result.error)) {
-      result = await fetchReferralRows(supabase, profile.newrefer, LEGACY_COLUMNS, membershipBalanceThreshold, pagination)
-    }
-
-    if (result.error) throw result.error
-
-    return res.status(200).json({
-      status: 'success',
-      refer: profile.newrefer,
-      referrals: result.data || [],
-      ...(pagination ? { nextCursor: result.nextCursor } : {}),
-      membershipBalanceThreshold,
+    const user = await getCurrentUser(req)
+    const paged = req.query?.page === '1', limit = pageSize(req.query?.limit, 20)
+    const { data, error } = await timedRpc(req, getSupabaseAdmin(), 'read_referral_history', {
+      p_userid: user.id, p_limit: paged ? limit + 1 : 1000, p_cursor: decodeCursor(req.query?.cursor),
     })
-  } catch (error) {
-    console.error('My referrals error:', error)
-    return sendApiError(res, error)
-  }
-}
+    if (error) throw error
+    const next = {}, seen = new Set(), referrals = []
+    for (const [index, column] of ['refer', 'lvla', 'lvlb'].entries()) {
+      const page = paged ? cursorPage(data.levels[column], limit) : { data: data.levels[column] }
+      next[column] = page.next
+      for (const row of page.data) {
+        if (seen.has(row.id)) continue
+        seen.add(row.id)
+        referrals.push({ ...row, key: row.id, totald: Number(row.totald || 0), balance: Number(row.balance || 0),
+          firstd: Boolean(row.firstd), isActive: isActiveMember(row.balance, data.membershipBalanceThreshold),
+          joinedAt: row.created_at, level: index + 1, levelLabel: `Level ${index + 1}` })
+      }
+    }
+    return res.status(200).json({ status: 'success', refer: data.refer, referrals,
+      membershipBalanceThreshold: data.membershipBalanceThreshold,
+      ...(paged ? { nextCursor: Object.values(next).some(Boolean) ? encodeCursor(next) : null } : {}),
+    })
+  } catch (error) { return sendApiError(res, error) }
+})

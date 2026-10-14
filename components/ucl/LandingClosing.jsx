@@ -74,7 +74,7 @@ export default function LandingClosing({ children }) {
     <section className={`${styles.container} ${styles.cta} ${styles.section}`} aria-labelledby="closing-heading">
       <h2 id="closing-heading">{t('website.followFootball')}<br />{t('website.findYourMarket')}<br />{t('website.stayInControl')}</h2>
       <p>{t('website.compareOddsFollowLiveMatchesAndManageYourBetsWithUcl')}</p>
-      <div className={styles.ctaActions}><Link href="/register/000208" className={styles.createAccount}>{t('website.createAccount')}</Link><Link href="/login" className={styles.login}>{t('website.logIn')} <ArrowRight size={24} strokeWidth={2} aria-hidden="true" /></Link></div>
+      <div className={styles.ctaActions}><Link href="/register" className={styles.createAccount}>{t('website.createAccount')}</Link><Link href="/login" className={styles.login}>{t('website.logIn')} <ArrowRight size={24} strokeWidth={2} aria-hidden="true" /></Link></div>
       <small>{t('website.18PlayResponsibly')}</small>
     </section>
 
@@ -84,7 +84,7 @@ export default function LandingClosing({ children }) {
         <div className={styles.footerTop}>
           <div className={styles.brandBlock}><a href="#home" className={styles.wordmark} aria-label={t('website.uclHome')}>UCL</a><p className={styles.tagline}>{t('website.footballBettingMadeSimple')}</p><p className={styles.brandDescription}>{t('website.clearMarketsLiveUpdatesSecureWalletControls')}</p></div>
           <nav className={styles.footerNav} aria-label={t('website.footerNavigation')}>
-            <div><h3>{t('website.platform')}</h3><a href="#find-market">{t('website.footballMarketsAlt')}</a><a href="#football-moments">{t('website.liveBetting')}</a><a href="#how-it-works">{t('website.howItWorks')}</a><Link href="/register/000208">{t('website.bonuses')}</Link></div>
+            <div><h3>{t('website.platform')}</h3><a href="#find-market">{t('website.footballMarketsAlt')}</a><a href="#football-moments">{t('website.liveBetting')}</a><a href="#how-it-works">{t('website.howItWorks')}</a><Link href="/register">{t('website.bonuses')}</Link></div>
             <div><h3>{t('website.support')}</h3><Link href="/user/faq">{t('website.helpCenter')}</Link><button type="button" onClick={() => setActiveGuide('wallet')} aria-haspopup="dialog">{t('website.walletGuide')}</button><a href={supportUrl} target="_blank" rel="noopener noreferrer">{t('website.contactUs')}</a></div>
             <div><h3>{t('website.legal')}</h3><Link href="/terms">{t('website.termsOfService')}</Link><Link href="/privacy">{t('website.privacyPolicy')}</Link><button type="button" onClick={() => setActiveGuide('responsible')} aria-haspopup="dialog">{t('website.responsibleGamingAlt')}</button></div>
           </nav>

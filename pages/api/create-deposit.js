@@ -1,106 +1,38 @@
-import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
-import { getPendingPaymentRequest, isPendingPaymentConflict, PENDING_PAYMENT_MESSAGE } from '@/lib/pendingPaymentRequest'
-import {
-  displayPaymentCurrency,
-  getPaymentMethod,
-  getPaymentRate,
-  isUsdtPaymentCode,
-  methodCodeFromRow,
-  normalizePaymentCode,
-  toLedgerAmount,
-} from '@/lib/paymentMethods'
+import { getCurrentUser } from '@/lib/apiAuth'
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
+import { withApiTiming, timedRpc } from '@/lib/apiTiming'
+import { requestIdPattern, transactionError } from '@/lib/transactionErrors'
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ status: 'error', message: 'Method not allowed' })
-  }
-
+export default withApiTiming(async function handler(req, res) {
+  if (req.method !== 'POST') return res.status(405).json({ status: 'error', message: 'Method not allowed' })
   try {
-    const { amount, method, methodName, address, adminaddress, expectedRate } = req.body || {}
-    const numericAmount = Number(amount)
-    const requestedMethod = normalizePaymentCode(methodName || method)
-    const requestedCode = normalizePaymentCode(method)
-
-    if (!Number.isFinite(numericAmount) || numericAmount <= 0 || !requestedMethod || !requestedCode || !address || !adminaddress) {
+    const { amount, method, methodName, address, adminaddress, expectedRate, client_request_id } = req.body || {}
+    if (!Number.isFinite(Number(amount)) || Number(amount) <= 0 || !method || !address || !adminaddress
+      || expectedRate != null && (!Number.isFinite(Number(expectedRate)) || Number(expectedRate) <= 0)
+      || client_request_id && !requestIdPattern.test(client_request_id)) {
       return res.status(400).json({ status: 'error', message: 'Invalid deposit details' })
     }
-
-    const { profile, supabase } = await getCurrentProfile(req, 'username')
-    // The receipt URL is reused by this flow on retry. Resolve a previous
-    // accepted submission before checking today's method, rate, or destination.
-    const { data: priorDeposits, error: lookupError } = await supabase
-      .from('notification')
-      .select('amount, method, adminaddress')
-      .eq('username', profile.username)
-      .eq('type', 'deposit')
-      .eq('address', address)
-      .limit(1)
-    if (lookupError) throw lookupError
-    if (priorDeposits?.length) {
-      const prior = priorDeposits[0]
-      if (Number(prior.amount) === numericAmount && normalizePaymentCode(prior.method) === requestedCode && prior.adminaddress === adminaddress) {
-        return res.status(200).json({ status: 'success', reused: true })
-      }
-      return res.status(409).json({ status: 'error', message: 'This receipt was already used for another deposit' })
+    const user = await getCurrentUser(req)
+    let receipt
+    try { receipt = new URL(String(address)) }
+    catch { return res.status(400).json({ status: 'error', message: 'Invalid receipt URL' }) }
+    const bucketPrefix = '/storage/v1/object/public/trcreceipt/'
+    const path = decodeURIComponent(receipt.pathname.slice(bucketPrefix.length))
+    if (receipt.origin !== new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).origin || !receipt.pathname.startsWith(bucketPrefix)
+      || path.startsWith('web/') && !path.startsWith(`web/${user.id}/`)
+      || path.startsWith('public/web/') && !path.startsWith(`public/web/${user.id}/`)
+      || path.startsWith('native/') && !path.startsWith(`native/${user.id}/`)) {
+      return res.status(400).json({ status: 'error', message: 'Invalid receipt URL' })
     }
-
-    const pendingRequest = await getPendingPaymentRequest(supabase, profile.username)
-    if (pendingRequest) {
-      return res.status(409).json({ status: 'error', code: 'PAYMENT_REQUEST_PENDING', message: PENDING_PAYMENT_MESSAGE })
-    }
-
-    const savedMethod = await getPaymentMethod(supabase, requestedMethod, { requireAvailable: true })
-    if (!savedMethod) {
-      return res.status(400).json({ status: 'error', message: 'Unknown or unavailable deposit method' })
-    }
-
-    const notificationMethod = methodCodeFromRow(savedMethod) || requestedCode
-    const rate = getPaymentRate(savedMethod, isUsdtPaymentCode(notificationMethod) ? 1 : 0)
-    if (!rate) {
-      return res.status(400).json({ status: 'error', message: 'Minimum deposit is 25,000 MMK equivalent' })
-    }
-    if (expectedRate != null && Number(expectedRate) !== rate) {
-      return res.status(409).json({ status: 'error', code: 'rate_changed', message: 'Payment rate changed. Review the amount and payment details again.' })
-    }
-    if (toLedgerAmount(numericAmount, rate) < 25000) {
-      return res.status(400).json({ status: 'error', message: 'Minimum deposit is 25,000 MMK equivalent' })
-    }
-
-    const { data: savedDestinations, error: destinationError } = await supabase
-      .from('depositwallet')
-      .select('name, currency_code, address')
-      .eq('address', adminaddress)
-      .limit(10)
-    if (destinationError) throw destinationError
-    const matchingDestination = savedDestinations?.some((destination) => (
-      normalizePaymentCode(destination.name) === normalizePaymentCode(savedMethod.name)
-      || normalizePaymentCode(destination.currency_code) === notificationMethod
-    ))
-    if (!matchingDestination) {
-      return res.status(400).json({ status: 'error', message: 'Payment destination is no longer available' })
-    }
-
-    const { error } = await supabase
-      .from('notification')
-      .insert({
-        username: profile.username,
-        amount: numericAmount,
-        type: 'deposit',
-        sent: 'pending',
-        method: notificationMethod,
-        method_currency: displayPaymentCurrency(notificationMethod),
-        method_rate: rate,
-        address,
-        adminaddress,
-      })
-
-    if (isPendingPaymentConflict(error)) {
-      return res.status(409).json({ status: 'error', code: 'PAYMENT_REQUEST_PENDING', message: PENDING_PAYMENT_MESSAGE })
-    }
+    const { data, error } = await timedRpc(req, getSupabaseAdmin(), 'create_deposit_request_atomic', {
+      p_userid: user.id, p_amount: Number(amount), p_method: String(method), p_method_name: String(methodName || method),
+      p_receipt: String(address), p_destination: String(adminaddress),
+      p_expected_rate: expectedRate == null ? null : Number(expectedRate), p_request_id: client_request_id || null,
+    })
     if (error) throw error
-
-    return res.status(200).json({ status: 'success' })
+    return res.status(200).json(data)
   } catch (error) {
-    return sendApiError(res, error)
+    const result = transactionError(error)
+    return res.status(result.status).json({ status: 'error', message: result.message, ...(result.code ? { code: result.code } : {}) })
   }
-}
+})

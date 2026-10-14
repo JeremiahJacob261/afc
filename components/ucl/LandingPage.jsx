@@ -20,13 +20,13 @@ export default function Home() {
       <div className={styles.heroArtwork} aria-hidden="true"><LandingImage name="hero" eager sizes="100vw" /></div>
       <nav className={`${styles.container} ${styles.nav}`} aria-label={t('website.mainNavigation')}>
         <a className={styles.brand} href="#home" aria-label={t('website.uclHome')}>UCL</a>
-        <div className={styles.navLinks}><a href="#markets">{t('website.markets')}</a><a href="#football-moments">{t('website.liveBetting')}</a><a href="#how-it-works">{t('website.howItWorks')}</a><Link href="/register/000208">{t('website.bonuses')}</Link></div>
-        <div className={styles.navActions}><LocaleSwitcher compact /><Link className={styles.join} href="/register/000208">{t('website.joinNow')}</Link></div>
+        <div className={styles.navLinks}><a href="#markets">{t('website.markets')}</a><a href="#football-moments">{t('website.liveBetting')}</a><a href="#how-it-works">{t('website.howItWorks')}</a><Link href="/register">{t('website.bonuses')}</Link></div>
+        <div className={styles.navActions}><LocaleSwitcher compact /><Link className={styles.join} href="/register">{t('website.joinNow')}</Link></div>
       </nav>
       <div className={`${styles.container} ${styles.heroCopy}`}>
         <h1>{t('website.footballBetting')}<br />{t('website.madeSimple')}</h1>
         <p>{t('website.pickFootballMatchesCompareOddsPlaceSecureBetsAndFollowEveryResultFromOneClearUclBetti')}</p>
-        <div className={styles.actions}><Link className={styles.create} href="/register/000208">{t('website.createAccount')}</Link><Link className={styles.login} href="/login">{t('website.logIn')}</Link></div>
+        <div className={styles.actions}><Link className={styles.create} href="/register">{t('website.createAccount')}</Link><Link className={styles.login} href="/login">{t('website.logIn')}</Link></div>
       </div>
     </header>
     <LandingClosing>
@@ -41,7 +41,7 @@ export default function Home() {
           <p className={styles.eyebrow}>{t('website.footballMarketsAlt')}</p><h2 id="market-heading">{t('website.betOnTheMomentsThatDecideAMatch')}</h2><p>{t('website.chooseSimpleFootballMarketsBeforeKickoffOrFollowLiveOddsWhileTheMatchIsRunning')}</p>
           <div className={styles.marketDetails}><article><h3>{t('website.1x2MatchResult')}</h3><p>{t('website.pickTheMatchWinnerOrBackTheDrawBeforeKickoff')}</p></article><article><h3>{t('website.bothTeamsToScore')}</h3><p>{t('website.backBothSidesToFindTheNetInTheSameMatch')}</p></article></div>
         </div>
-        <figure className={styles.phoneFigure}><div className={styles.phone}><div className={styles.phoneTop}><Trophy size={32} strokeWidth={2} aria-hidden="true" /><span className={styles.odds}>2.18</span></div><div className={styles.phoneCopy}><p className={styles.phoneLabel}>{t('website.homeDrawAway')}</p><h3>{t('website.1x2MatchResult')}</h3><p>{t('website.pickTheMatchWinnerOrBackTheDrawBeforeKickoff')}</p><Link href="/register/000208" className={styles.pick}>{t('website.pickMarket')} <ArrowRight size={24} strokeWidth={2} aria-hidden="true" /></Link></div></div><figcaption>{t('website.actualUclWebsiteScreenshot')}</figcaption></figure>
+        <figure className={styles.phoneFigure}><div className={styles.phone}><div className={styles.phoneTop}><Trophy size={32} strokeWidth={2} aria-hidden="true" /><span className={styles.odds}>2.18</span></div><div className={styles.phoneCopy}><p className={styles.phoneLabel}>{t('website.homeDrawAway')}</p><h3>{t('website.1x2MatchResult')}</h3><p>{t('website.pickTheMatchWinnerOrBackTheDrawBeforeKickoff')}</p><Link href="/register" className={styles.pick}>{t('website.pickMarket')} <ArrowRight size={24} strokeWidth={2} aria-hidden="true" /></Link></div></div><figcaption>{t('website.actualUclWebsiteScreenshot')}</figcaption></figure>
       </section>
       <FootballSections />
     </LandingClosing>

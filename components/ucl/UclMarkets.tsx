@@ -51,7 +51,7 @@ export function UclMarkets() {
               </div>
 
               <Link
-                href="/register/000208"
+                href="/register"
                 className="mt-6 inline-flex items-center gap-2 text-sm font-black text-magenta-300 transition group-hover:gap-3"
               >
                 {t("landing.markets.pickMarket")}

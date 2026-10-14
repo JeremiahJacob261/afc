@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { v4 as uuidv4 } from 'uuid'
+import { createReceiptUpload } from '@/lib/receiptUpload'
 import toast, { Toaster } from 'react-hot-toast'
 import { ArrowLeft, ArrowRight, Check, Copy, CreditCard, FileImage, RefreshCw, Upload, X } from 'lucide-react'
 import Cover from '@/pages/user/cover'
@@ -23,7 +24,7 @@ import styles from '@/styles/UserFund.module.css'
 const routes = ['/user/fund', '/user/fund/amount', '/user/fund/payment', '/user/fund/receipt']
 let receiptInMemory = null
 let receiptOwnerId = ''
-let uploadedReceipt = { file: null, url: '' }
+let receiptUpload = null
 
 function methodLabel(method, t) {
   return method?.name || method?.currency_code?.toUpperCase() || t('mobile.deposit.methodFallback')
@@ -54,6 +55,10 @@ export default function DepositFlow({ step }) {
   const [methods, setMethods] = useState([])
   const [destinations, setDestinations] = useState([])
   const [receipt, setReceipt] = useState(null)
+  const [uploadState, setUploadState] = useState({ stage: 'idle', percent: 0 })
+  const mounted = useRef(true)
+  const submissionAttempt = useRef({ signature: '', id: '' })
+  useEffect(() => { mounted.current = true; return () => { mounted.current = false } }, [])
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState(false)
   const [reloadKey, setReloadKey] = useState(0)
@@ -83,10 +88,15 @@ export default function DepositFlow({ step }) {
       setDraft(stored)
       if (receiptOwnerId !== userId) {
         receiptInMemory = null
-        uploadedReceipt = { file: null, url: '' }
+        receiptUpload?.discard()
+        receiptUpload = null
         receiptOwnerId = userId
       }
       setReceipt(receiptInMemory)
+      if (receiptUpload) {
+        receiptUpload.onProgress = state => { if (mounted.current) setUploadState(state) }
+        setUploadState(receiptUpload.progress)
+      }
 
       try {
         const [configuration, pendingResponse] = await Promise.all([
@@ -107,7 +117,7 @@ export default function DepositFlow({ step }) {
     }
     load()
     return () => { active = false }
-  }, [router, reloadKey])
+  }, [reloadKey])
 
   const selectedMethod = useMemo(
     () => methods.find((method) => methodIdentity(method) === draft.methodIdentity) || null,
@@ -134,20 +144,17 @@ export default function DepositFlow({ step }) {
     const identity = methodIdentity(method)
     if (identity === draft.methodIdentity) return
     updateDraft({ methodIdentity: identity, transferKey: '', destination: null, reviewedRate: null, reviewedSignature: '' })
-    uploadedReceipt = { file: null, url: '' }
     setSubmitError('')
   }
 
   const chooseTransfer = (key) => {
     if (key === draft.transferKey) return
     updateDraft({ transferKey: key, destination: null, reviewedRate: null, reviewedSignature: '' })
-    uploadedReceipt = { file: null, url: '' }
     setSubmitError('')
   }
 
   const changeAmount = (value) => {
     updateDraft({ amount: value, reviewedRate: null, reviewedSignature: '' })
-    uploadedReceipt = { file: null, url: '' }
     setSubmitError('')
   }
 
@@ -161,14 +168,21 @@ export default function DepositFlow({ step }) {
   }
 
   const chooseReceipt = (file) => {
+    if (submitting) return
     if (file && !file.type.startsWith('image/')) {
       toast.error(t('mobile.deposit.receiptHint'))
       return
     }
+    receiptUpload?.discard()
     receiptInMemory = file
-    uploadedReceipt = { file: null, url: '' }
     setReceipt(file)
     setSubmitError('')
+    if (!file) { receiptUpload = null; setUploadState({ stage: 'idle', percent: 0 }); return }
+    const task = createReceiptUpload(file, draft.userId, state => {
+      if (mounted.current && receiptUpload === task) setUploadState(state)
+    })
+    receiptUpload = task
+    task.start().catch(error => { if (mounted.current && receiptUpload === task) setSubmitError(translateApiMessage(error, t, 'messages.depositFailed')) })
   }
 
   const submit = async () => {
@@ -177,16 +191,17 @@ export default function DepositFlow({ step }) {
     setSubmitting(true)
     await waitForPaint()
     try {
-      let receiptUrl = uploadedReceipt.file === receipt ? uploadedReceipt.url : ''
-      if (!receiptUrl) {
-        const path = `public/${uuidv4()}-${receipt.name.replace(/\s+/g, '-')}`
-        const { error } = await supabase.storage.from('trcreceipt').upload(path, receipt)
-        if (error) throw error
-        receiptUrl = supabase.storage.from('trcreceipt').getPublicUrl(path).data?.publicUrl || ''
-        if (!receiptUrl) throw new Error(t('messages.depositFailed'))
-        uploadedReceipt = { file: receipt, url: receiptUrl }
+      if (!receiptUpload || receiptUpload.file !== receipt) {
+        receiptUpload = createReceiptUpload(receipt, draft.userId, setUploadState)
       }
+      const task = receiptUpload
+      const receiptUrl = await task.start()
+      const signature = JSON.stringify([draft.amount, code, selectedMethod.name, receiptUrl, destination.address])
+      if (submissionAttempt.current.signature !== signature) submissionAttempt.current = { signature, id: uuidv4() }
 
+      // A lost response may follow a committed request. Leave its receipt for
+      // the durable cleanup job to check before deletion.
+      task.submitted = true
       const response = await authFetch('/api/create-deposit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -197,19 +212,28 @@ export default function DepositFlow({ step }) {
           address: receiptUrl,
           adminaddress: destination.address,
           expectedRate: draft.reviewedRate,
+          client_request_id: submissionAttempt.current.id,
         }),
       })
       const result = await response.json().catch(() => ({}))
       if (!response.ok) {
-        if (result.code === 'rate_changed') updateDraft({ reviewedRate: null, reviewedSignature: '' })
+        if (result.code === 'rate_changed') {
+          updateDraft({ reviewedRate: null, reviewedSignature: '' })
+          setReloadKey(key => key + 1)
+        }
+        if (result.code === 'receipt_expired') {
+          receiptUpload = createReceiptUpload(receipt, draft.userId, setUploadState)
+          receiptUpload.start().catch(() => {})
+        }
         throw new Error(translateApiMessage(result, t, 'messages.depositFailed'))
       }
 
+      task.accepted = true
       sessionStorage.setItem(DEPOSIT_SUCCESS_KEY, JSON.stringify({ userId: draft.userId, mmkAmount: equivalent }))
       sessionStorage.removeItem(DEPOSIT_DRAFT_KEY)
       draftRef.current = { ...EMPTY_DEPOSIT_DRAFT, userId: draft.userId }
       receiptInMemory = null
-      uploadedReceipt = { file: null, url: '' }
+      receiptUpload = null
       toast.success(t('messages.depositSubmitted'))
       router.push('/user/depositsuccess')
     } catch (error) {
@@ -318,9 +342,10 @@ export default function DepositFlow({ step }) {
                     <div><span>{t('common.amount')}</span><strong>{draft.amount} {code.toUpperCase()}</strong></div>
                     <div><span>{t('mobile.deposit.paymentDestination')}</span><strong>{destination.address}</strong></div>
                   </div>
-                  <input id="deposit-receipt" ref={fileInputRef} type="file" accept="image/*" className={styles.fileInput} onChange={(event) => chooseReceipt(event.target.files?.[0] || null)} />
+                  <input id="deposit-receipt" ref={fileInputRef} type="file" accept="image/jpeg,image/png,image/webp" disabled={submitting} className={styles.fileInput} onChange={(event) => chooseReceipt(event.target.files?.[0] || null)} />
                   <label htmlFor="deposit-receipt" className={styles.uploadZone}><Upload size={24} strokeWidth={1.8} aria-hidden="true" /><span>{t('mobile.deposit.browseReceiptImage')}</span></label>
                   {receipt ? <div className={styles.selectedFile}><FileImage size={20} aria-hidden="true" /><span><strong>{receipt.name}</strong><small>{(receipt.size / 1024 / 1024).toFixed(2)} MB</small></span><button type="button" aria-label={t('mobile.deposit.removeReceipt')} onClick={() => { chooseReceipt(null); if (fileInputRef.current) fileInputRef.current.value = '' }}><X size={18} aria-hidden="true" /></button></div> : <p className={styles.helpText}>{t('mobile.deposit.uploadRequired')}</p>}
+                  {receipt && uploadState.stage !== 'idle' && <p className={styles.helpText} role="status">{t(`mobile.deposit.uploadStages.${uploadState.stage}`, { percent: uploadState.percent })}</p>}
                   {submitError && <p className={styles.submitError} role="alert">{submitError}</p>}
                   <button type="button" className={styles.primaryAction} disabled={!receipt || submitting} onClick={submit}>{submitting ? t('mobile.deposit.submitting') : submitError ? t('mobile.transactions.retry') : t('mobile.deposit.submit')}<ArrowRight size={18} aria-hidden="true" /></button>
                 </>}

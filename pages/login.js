@@ -61,49 +61,6 @@ export default function Login() {
     try {
       let loginEmail = email.trim()
 
-      if (!loginEmail.includes("@")) {
-        markAuthLogin('username-lookup-start')
-        let response
-        let result
-        try {
-          response = await fetch('/api/login-email', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: loginEmail })
-          })
-          result = await response.json().catch(() => ({}))
-        } finally {
-          markAuthLogin('username-lookup-end')
-          measureAuthLogin('username-lookup', 'username-lookup-start', 'username-lookup-end')
-        }
-
-        if (result?.message === 'TypeError: fetch failed') {
-          setFeedback({
-            type: 'error',
-            title: t('messages.networkError'),
-            message: t('messages.checkConnectionTryAgain'),
-          })
-          return
-        } else if (result?.message === 'Invalid login credentials') {
-          setFeedback({
-            type: 'error',
-            title: t('messages.incorrectDetails'),
-            message: t('messages.loginDetailsIncorrect'),
-          })
-          return
-        } else {
-          if (!response.ok || result.status !== 'success') {
-            setFeedback({
-              type: 'error',
-              title: t('messages.unableSignIn'),
-              message: t('messages.anErrorOccurred'),
-            })
-            return
-          }
-        }
-        loginEmail = result.email
-      }
-
       markAuthLogin('supabase-auth-start')
       let error
       try {
@@ -170,7 +127,7 @@ export default function Login() {
         <div className={`${styles.container} ${styles.bandInner} ${styles.darkInner}`}>
           <div className={styles.brandRow}>
             <Link href="/" className={styles.brand} aria-label={t('website.uclHome')}>UCL</Link>
-            <Link href="/register/000208" className={styles.pill}>{t('common.joinNow')}</Link>
+            <Link href="/register" className={styles.pill}>{t('common.joinNow')}</Link>
           </div>
           <div className={styles.bandCopy}>
             <h1 id="login-heading">{t('auth.login.title')}</h1>
@@ -240,7 +197,7 @@ export default function Login() {
 
           <div className={styles.switch}>
             {t('auth.login.newAccount')}{' '}
-            <Link href="/register/000208" className={styles.link}>{t('common.createAccount')}</Link>
+            <Link href="/register" className={styles.link}>{t('common.createAccount')}</Link>
           </div>
         </div>
       </div>
@@ -251,7 +208,7 @@ export default function Login() {
 export async function getStaticProps({ locale }) {
   return {
     props: {
-      ...(await getI18nServerSideProps(locale)),
+      ...(await getI18nServerSideProps(locale, ['website', 'mobile', 'forms', 'auth', 'landing', 'messages', 'status', 'emptyStates'])),
     },
   }
 }

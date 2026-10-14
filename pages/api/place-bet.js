@@ -1,4 +1,6 @@
-import { getCurrentProfile } from '@/lib/apiAuth'
+import { getCurrentUser } from '@/lib/apiAuth'
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
+import { withApiTiming, timedRpc } from '@/lib/apiTiming'
 import { formatCurrency, getCurrencySettings, parseCurrency } from '@/lib/currency'
 
 const markets = {
@@ -46,14 +48,15 @@ function sendBetRpcError(res, error) {
   return res.status(status).json({ status: 'error', message })
 }
 
-export default async function handler(req, res) {
+export default withApiTiming(async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ status: 'error', message: 'Method not allowed' })
   }
 
   try {
     const { match_id, picked, stake, client_bet_id, expected_odd } = req.body || {}
-    const { user, supabase } = await getCurrentProfile(req, 'userid')
+    const user = await getCurrentUser(req)
+    const supabase = getSupabaseAdmin()
     const currencySettings = await getCurrencySettings(supabase)
     const amount = parseCurrency(stake)
     const expectedOdd = Number(expected_odd)
@@ -72,7 +75,7 @@ export default async function handler(req, res) {
     }
 
     // Requests with an attempt ID check a stored acceptance before current balance/expiry.
-    const { data, error } = await supabase.rpc(client_bet_id ? 'place_native_bet_atomic' : 'place_bet_with_expected_odd_atomic', {
+    const { data, error } = await timedRpc(req, supabase, client_bet_id ? 'place_native_bet_atomic' : 'place_bet_with_expected_odd_atomic', {
       p_userid: user.id,
       p_match_id: match_id,
       p_picked: picked,
@@ -87,4 +90,4 @@ export default async function handler(req, res) {
   } catch (error) {
     return sendBetRpcError(res, error)
   }
-}
+})

@@ -1,11 +1,13 @@
-import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
+import { getCurrentUser, sendApiError } from '@/lib/apiAuth'
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 import { parseCurrency } from '@/lib/currency'
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ status: 'error', message: 'Method not allowed' })
   res.setHeader('Cache-Control', 'no-store')
   try {
-    const { user, supabase } = await getCurrentProfile(req, 'userid')
+    const user = await getCurrentUser(req)
+    const supabase = getSupabaseAdmin()
     const stake = parseCurrency(req.query.stake)
     if (!Number.isFinite(stake) || stake < 5000) return res.status(400).json({ status: 'error', message: 'Invalid bet details' })
     const { data, error } = await supabase.rpc('native_bet_quote', {

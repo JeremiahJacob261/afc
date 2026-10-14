@@ -81,7 +81,7 @@ test('GET gates below, at, and above the threshold and respects existing cooldow
   assert.equal(response.body.lastAmount, null)
 })
 
-test('each server-selected prize returns its award and pushes only the committed notification', async () => {
+test('each server-selected prize returns its committed award without waiting for push delivery', async () => {
   for (let prizeIndex = 0; prizeIndex < amounts.length; prizeIndex++) {
     const amount = amounts[prizeIndex]
     const outcome = {
@@ -95,8 +95,7 @@ test('each server-selected prize returns its award and pushes only the committed
     assert.equal(response.body.balance, 100000 + amount)
     assert.equal(response.body.notification, undefined)
     assert.deepEqual(calls[1], { name: 'spin_wheel_atomic', parameters: { p_user_id: 'session-user', p_expected_revision: 3, p_prize_index: prizeIndex } })
-    assert.equal(calls[2].message.data.notificationId, 42)
-    assert.equal(calls[2].message.data.eventType, 'wheel_reward')
+    assert.equal(calls.some(call => call.name === 'push'), false)
   }
 })
 

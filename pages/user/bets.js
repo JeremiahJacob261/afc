@@ -98,4 +98,4 @@ export default function Bets() {
       <PaginationButton cursor={nextCursor} loading={loadingMore} onClick={loadMore} />
     </main></Cover>
 }
-export async function getServerSideProps(context) { return { props: await getI18nServerSideProps(context.locale, ['website', 'mobile', 'bulletin', 'status', 'messages', 'emptyStates']) } }
+export async function getStaticProps(context) { return { props: await getI18nServerSideProps(context.locale, ['website', 'mobile', 'bulletin', 'status', 'messages', 'emptyStates']) } }

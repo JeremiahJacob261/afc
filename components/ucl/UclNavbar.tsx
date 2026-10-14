@@ -86,7 +86,7 @@ export function UclNavbar() {
           </Link>
 
           <Link
-            href="/register/000208"
+            href="/register"
             className="inline-flex min-h-[44px] items-center rounded-lg bg-ucl-ribbon px-5 text-sm font-black uppercase tracking-[0.08em] text-[#000A1E] shadow-ucl-cyan transition hover:brightness-110"
           >
             {t("common.joinNow")}

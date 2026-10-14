@@ -1,5 +1,4 @@
 import { requireAdmin } from '@/lib/adminAuth'
-import { ensureUpcomingMatchesCurrent } from '@/lib/apiFootballSync'
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 
 const DISPLAY_TIME_ZONE = 'Africa/Lagos'
@@ -237,7 +236,8 @@ export async function loadAdminMatches(supabase, {
 } = {}) {
   if (refresh) {
     try {
-      await ensureUpcomingMatchesCurrent(supabase)
+      const { error } = await supabase.rpc('enqueue_match_sync')
+      if (error) throw error
     } catch (syncError) {
       console.error('Unable to refresh upcoming matches:', syncError)
     }

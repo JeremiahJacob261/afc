@@ -1,19 +1,9 @@
+@font-face { font-family: 'Inter'; src: url('/fonts/inter.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 
-@import url('https://fonts.googleapis.com/css2?family=Poor+Story&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Marhey&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&family=Solway&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Spectral:wght@200&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Devanagari:wght@700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Overpass:ital,wght@1,300&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
 
 
 :root {
@@ -59,16 +49,11 @@ a {
   text-wrap: balance;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Nerko+One&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:wght@500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
 
 @font-face {
   font-family: 'Poppins';
-  src: url('popreg.ttf') format('truetype');
+  src: url('/fonts/inter.woff2') format('woff2');
+  font-display: swap;
   font-weight: normal;
   font-style: normal;
 }

@@ -63,4 +63,6 @@ export default function ViewBet() {
       </>}
     </main></Cover>
 }
-export async function getServerSideProps(context) { return { props: await getI18nServerSideProps(context.locale, ['website', 'mobile', 'bulletin', 'status', 'messages', 'emptyStates']) } }
+export async function getStaticProps(context) { return { props: await getI18nServerSideProps(context.locale, ['website', 'mobile', 'bulletin', 'status', 'messages', 'emptyStates']) } }
+
+export async function getStaticPaths() { return { paths: [], fallback: 'blocking' } }
