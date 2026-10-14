@@ -295,7 +295,12 @@ export default function Refferal() {
           ) : (
             <Stack spacing={1}>
               {visibleReferrals.map((item) => (
-                <ReferralRow item={item} key={`${item.level}-${item.key || item.id || item.username}`} t={t} />
+                <ReferralRow
+                  item={item}
+                  key={`${item.level}-${item.key || item.id || item.username}`}
+                  locale={i18n.language}
+                  t={t}
+                />
               ))}
             </Stack>
           )}
@@ -350,7 +355,7 @@ function StatePanel({ children }) {
   )
 }
 
-function ReferralRow({ item, t }) {
+function ReferralRow({ item, locale, t }) {
   const tone =
     item.level === 1
       ? { color: 'var(--ucl-success)', bg: 'var(--ucl-success-tint)' }
@@ -405,7 +410,7 @@ function ReferralRow({ item, t }) {
           </Stack>
           <Stack direction="row" alignItems="center" spacing={0.75} sx={{ mt: 0.5 }}>
             <Typography sx={{ color: 'var(--ucl-muted)', fontFamily: 'Arial,sans-serif', fontSize: 12 }}>
-              {formatJoinedAt(item.joinedAt || item.created_at || item.crdate, i18n.language, t)}
+              {formatJoinedAt(item.joinedAt || item.created_at || item.crdate, locale, t)}
             </Typography>
             <Typography
               sx={{
