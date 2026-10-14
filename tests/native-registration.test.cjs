@@ -23,7 +23,7 @@ function handlerFor(user, calls) {
         return { data: { created: false, newrefer: '1234567' }, error: null }
       } }),
     },
-    '@/lib/pushNotifications': { notifyTeamMemberJoined: async () => {} },
+    '@/lib/apiTiming': { withApiTiming: handler => handler, timedRpc: (_req, db, name, args) => db.rpc(name, args) },
   }
   const loaded = { exports: {} }
   new Function('require', 'module', 'exports', output)(name => mocks[name], loaded, loaded.exports)

@@ -130,7 +130,7 @@ export function UclRewards() {
             </div>
 
             <Link
-              href="/register/000208"
+              href="/register"
               className="ucl-btn ucl-btn-magenta group"
             >
               {t("landing.bonuses.viewOffers")}

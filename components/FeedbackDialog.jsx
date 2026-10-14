@@ -1,104 +1,35 @@
-import Dialog from '@mui/material/Dialog'
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
-import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded'
-import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded'
-import InfoRoundedIcon from '@mui/icons-material/InfoRounded'
+import { useEffect, useId, useRef } from 'react'
+import { CircleCheck, CircleAlert, Info } from 'lucide-react'
 import Image from 'next/image'
 import LOGO from '@/public/champions-league-logo.png'
 import { useTranslation } from 'next-i18next'
 
 const contentByType = {
-  success: {
-    icon: CheckCircleRoundedIcon,
-    color: '#2ECFC4',
-    titleKey: 'status.success',
-  },
-  error: {
-    icon: ErrorRoundedIcon,
-    color: '#FFB4AB',
-    titleKey: 'errors.generic',
-  },
-  info: {
-    icon: InfoRoundedIcon,
-    color: '#1BB6FF',
-    titleKey: 'common.information',
-  },
+  success: { icon: CircleCheck, color: '#2ECFC4', titleKey: 'status.success' },
+  error: { icon: CircleAlert, color: '#FFB4AB', titleKey: 'messages.anErrorOccurred' },
+  info: { icon: Info, color: '#1BB6FF', titleKey: 'common.information' },
 }
 
-export default function FeedbackDialog({
-  open,
-  type = 'info',
-  title,
-  message,
-  actionLabel,
-  onClose,
-}) {
+export default function FeedbackDialog({ open, type = 'info', title, message, actionLabel, onClose }) {
   const { t } = useTranslation('common')
+  const dialog = useRef(null)
+  const id = useId()
   const content = contentByType[type] || contentByType.info
   const Icon = content.icon
-  const dialogTitle = title || t(content.titleKey)
-
-  return (
-    <Dialog
-      open={Boolean(open)}
-      onClose={onClose}
-      aria-labelledby="feedback-dialog-title"
-      aria-describedby="feedback-dialog-description"
-      PaperProps={{
-        sx: {
-          width: 'min(90vw, 360px)',
-          m: 2,
-          borderRadius: 2,
-          bgcolor: '#10284D',
-          color: '#E9E5DA',
-          border: '1px solid rgba(27, 182, 255, 0.24)',
-          overflow: 'hidden',
-        },
-      }}
-    >
-      <Box sx={{ height: 4, bgcolor: content.color }} />
-      <Stack spacing={2} alignItems="center" sx={{ p: 3 }}>
-        <Box sx={{ position: 'relative', width: 82, height: 82, display: 'grid', placeItems: 'center' }}>
-          <Box
-            sx={{
-              position: 'absolute',
-              inset: 0,
-              borderRadius: '50%',
-              bgcolor: `${content.color}22`,
-              border: `1px solid ${content.color}55`,
-            }}
-          />
-          <Image src={LOGO} width={44} height={44} alt="EFC" />
-          <Icon sx={{ position: 'absolute', right: -2, bottom: 2, color: content.color, bgcolor: '#10284D', borderRadius: '50%' }} />
-        </Box>
-        <Typography id="feedback-dialog-title" sx={{ fontFamily: 'Poppins,sans-serif', fontSize: 20, fontWeight: 700, textAlign: 'center', color: '#ecedf5' }}>
-          {dialogTitle}
-        </Typography>
-        <Typography id="feedback-dialog-description" sx={{ fontFamily: 'Inter,sans-serif', fontSize: 14, lineHeight: 1.55, color: 'rgb(241, 239, 250)', textAlign: 'center' }}>
-          {message}
-        </Typography>
-        <Button
-          fullWidth
-          variant="contained"
-          onClick={onClose}
-          sx={{
-            mt: 1,
-            height: 44,
-            borderRadius: 1.5,
-            bgcolor: '#1BB6FF',
-            color: '#06101F',
-            fontFamily: 'Poppins,sans-serif',
-            fontWeight: 700,
-            textTransform: 'none',
-            '&:hover': { bgcolor: '#2ECFC4' },
-          }}
-        >
-          {actionLabel ?? t('common.okay')}
-        </Button>
-      </Stack>
-    </Dialog>
-  )
+  useEffect(() => {
+    const element = dialog.current
+    if (open && !element.open) element.showModal()
+    else if (!open && element.open) element.close()
+  }, [open])
+  return <dialog ref={dialog} className="feedback-dialog" style={{ '--feedback-accent': content.color }}
+    aria-labelledby={`${id}-title`} aria-describedby={`${id}-description`}
+    onCancel={event => { event.preventDefault(); onClose?.() }}
+    onClick={event => { if (event.target === dialog.current) onClose?.() }}>
+    <div className="feedback-dialog-content">
+      <div className="feedback-dialog-logo"><Image src={LOGO} width={44} height={44} alt="UCL" /><Icon size={25} aria-hidden="true" /></div>
+      <h2 id={`${id}-title`}>{title || t(content.titleKey)}</h2>
+      <p id={`${id}-description`}>{message}</p>
+      <button type="button" onClick={onClose} autoFocus>{actionLabel ?? t('common.okay')}</button>
+    </div>
+  </dialog>
 }

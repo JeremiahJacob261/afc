@@ -40,7 +40,7 @@ export default function DepositSuccess() {
   </Cover>
 }
 
-export async function getServerSideProps(context) {
-  const i18nProps = await getI18nServerSideProps(context.locale)
+export async function getStaticProps(context) {
+  const i18nProps = await getI18nServerSideProps(context.locale, ['website', 'mobile', 'forms', 'messages', 'status', 'emptyStates'])
   return { props: { ...i18nProps } }
 }

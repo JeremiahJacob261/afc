@@ -1,11 +1,9 @@
 import { translateApiMessage } from '@/lib/translateApiMessage'
 import { Button, Stack, TextField, Typography, MenuItem, Divider } from "@mui/material";
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { AppContext } from '@/pages/api/Context'
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import { app } from '@/pages/api/firebase';
-import { onAuthStateChanged } from "firebase/auth";
 import { useRouter } from 'next/router'
 import CloseIcon from '@mui/icons-material/Close';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -20,7 +18,6 @@ import toast, { Toaster} from 'react-hot-toast'
 import Loading from "@/pages/components/loading";
 import FormControl from '@mui/material/FormControl';
 import { motion } from 'framer-motion'
-import { getAuth, signOut } from "firebase/auth";
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import Wig from '@/public/icon/wig.png'
 import Image from 'next/image'
@@ -72,7 +69,6 @@ export default function Deposit() {
   const [warnab, setWarnab] = useState("");
   const [method, setMethod] = useState('');
   const [open, setOpen] = useState(false)
-  const auth = getAuth(app);
   const router = useRouter();
   const [ale, setAle] = useState('')
   const [aleT, setAleT] = useState(false)
@@ -88,9 +84,12 @@ export default function Deposit() {
     return wallets.find(obj => obj.wallet === id);
   }
 
+  const attemptRef = useRef({ signature: null, id: null })
   const testRoute = () => {
     const aayncer = async () => {
       try {
+          const signature = JSON.stringify([address, amount, currency, bank, swallet])
+          if (attemptRef.current.signature !== signature) attemptRef.current = { signature, id: crypto.randomUUID() }
           let response = await authFetch('/api/withdraw', {
             method: 'POST',
             headers: {
@@ -98,6 +97,8 @@ export default function Deposit() {
             },
             body: JSON.stringify({
               pass: pin,
+              client_request_id: attemptRef.current.id,
+              expectedFeePercent: withdrawalFeePercent,
               wallet: address,
               amount: parseFloat(amount),
               method: currency,
@@ -106,12 +107,12 @@ export default function Deposit() {
             })
           })
           let test = await response.json();
-          console.log(test);
+          if (!response.ok && !Array.isArray(test)) throw new Error(test.message || 'Withdrawal failed');
           if (response.status === 401 || response.status === 404) {
             router.push('/login');
             return;
           }
-          if (test[0].status === 'Failed') {
+          if (!response.ok || test[0].status !== 'Success') {
             const message = test[0].code === 'PAYMENT_REQUEST_PENDING'
               ? t('messages.paymentRequestPending')
               : test[0].code === 'WITHDRAWAL_PENDING'
@@ -481,7 +482,7 @@ export default function Deposit() {
 }
 
 export async function getStaticProps({ locale }) {
-  const i18nProps = await getI18nServerSideProps(locale)
+  const i18nProps = await getI18nServerSideProps(locale, ['website', 'mobile', 'forms', 'auth', 'messages', 'status', 'emptyStates'])
   return {
     props: {
       ...i18nProps,

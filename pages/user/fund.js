@@ -6,5 +6,5 @@ export default function FundMethodPage() {
 }
 
 export async function getStaticProps(context) {
-  return { props: await getI18nServerSideProps(context.locale) }
+  return { props: await getI18nServerSideProps(context.locale, ['website', 'mobile', 'forms', 'auth', 'messages', 'status', 'emptyStates']) }
 }

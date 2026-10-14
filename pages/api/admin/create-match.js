@@ -1,5 +1,4 @@
 import { requireAdmin } from '@/lib/adminAuth'
-import { notifyCompanyMatchPosted } from '@/lib/pushNotifications'
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 
 function normalizeBoolean(value) {
@@ -47,14 +46,6 @@ export default async function handler(req, res) {
       .single()
 
     if (insertError) throw insertError
-
-    if (match?.company) {
-      try {
-        await notifyCompanyMatchPosted(supabase, match)
-      } catch (pushError) {
-        console.warn('Company match push notification failed:', pushError)
-      }
-    }
 
     return res.status(200).json({ status: 'success', match })
   } catch (error) {

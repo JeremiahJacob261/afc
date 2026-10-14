@@ -1,30 +1,25 @@
 import '@/styles/globals.css'
 import '@/styles/ucl.css'
 import '@/styles/bind.css';
-import { AppContext, SlipContext } from '@/pages/api/Context'
 import { useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useCookies } from "react-cookie"
-import { Stack } from '@mui/material';
 import Head from 'next/head'
-import Footer from './footeras';
-import { BetContext } from '@/pages/api/Context'
 import { useRouter } from 'next/router'
 import { appWithTranslation } from 'next-i18next'
 import dynamic from 'next/dynamic'
 import AppLoadingOverlay from '@/components/AppLoadingOverlay'
 import nextI18NextConfig from '../next-i18next.config'
-import { ThemeProvider } from '@mui/material/styles'
-import { customerTheme, defaultTheme } from '@/lib/customerTheme'
+const MaterialTheme = dynamic(() => import('@/components/MaterialTheme'))
+const PlainTheme = ({ children }) => children
+const DepositFlow = dynamic(() => import('@/components/user/DepositFlow'))
+const depositRoutes = ['/user/fund', '/user/fund/amount', '/user/fund/payment', '/user/fund/receipt']
 const AdminShell = dynamic(() => import('@/components/admin/AdminShell'))
 function MyApp({ Component, pageProps }) {
 
-  const [cookie, setCookie] = useCookies(["user"])
-  const [info, setInfo] = useState({ "logged": false, "username": "", "phone": "", "password": "" })
-  const [bets, setBets] = useState([])
-  const [slip, setSlip] = useState(0)
   const [routeLoading, setRouteLoading] = useState(false)
   const router = useRouter()
+  const needsMaterial = router.pathname.startsWith('/admin') || /^\/user\/(withdraw|codesetting|bindwallet|match|history|notification|refferal|vip)(?:\/|$)/.test(router.pathname) || router.pathname === '/passwordreset'
+  const Theme = needsMaterial ? MaterialTheme : PlainTheme
   const shouldUseAdminShell = router.pathname.startsWith('/admin') && router.pathname !== '/admin'
 
   useEffect(() => {
@@ -85,7 +80,7 @@ function MyApp({ Component, pageProps }) {
   }, [])
 
   return (
-    <ThemeProvider theme={router.pathname.startsWith('/admin') ? defaultTheme : customerTheme}>
+    <Theme admin={router.pathname.startsWith('/admin')}>
     <div style={{background: "var(--ucl-canvas)",height:'100%'}}>
       <Head>
         <title>EFC</title>
@@ -110,15 +105,15 @@ function MyApp({ Component, pageProps }) {
           <Component {...pageProps} style={{ background: "#06101F" ,width:"100%",display:'flex'}} />
         </AdminShell>
       ) : (
-        <div key={router.asPath} className={!router.pathname.startsWith('/admin') ? 'customer-route-enter' : undefined}>
-          <Component {...pageProps} style={{ background: "#06101F" ,width:"100%",display:'flex'}} />
+        <div className={!router.pathname.startsWith('/admin') ? 'customer-route-enter' : undefined}>
+          <>{depositRoutes.includes(router.pathname) ? <DepositFlow step={depositRoutes.indexOf(router.pathname) + 1} /> : <Component {...pageProps} style={{ background: "#06101F", width: "100%", display: "flex" }} />}</>
         </div>
       )}
       <div className="champions-doodle-layer" aria-hidden="true" />
       <AppLoadingOverlay open={routeLoading} title="" message="" />
       
 </div>
-    </ThemeProvider>
+    </Theme>
   )
 }
 

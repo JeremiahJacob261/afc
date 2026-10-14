@@ -155,12 +155,12 @@ export default function Wheel() {
         || !Number.isFinite(result.balance)) throw new Error('Invalid spin result')
       setNextSpinAt(result.nextSpinAt)
       setLastPrize({ amount: result.amount })
+      setWonPrize(result.amount)
+      setBalance(result.balance)
       setNow(Date.now())
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
       setRotation(current => wheelRotation(current, result.prizeIndex, items.length, reducedMotion))
       spinTimer.current = window.setTimeout(() => {
-        setWonPrize(result.amount)
-        setBalance(result.balance)
         setSpinning(false)
         spinLock.current = false
       }, reducedMotion ? 0 : 5200)

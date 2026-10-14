@@ -226,7 +226,8 @@
     "withdrawalsUnavailable": "Withdrawals are temporarily unavailable. Please try again later.",
     "dailyWithdrawalLimitReached": "Your daily withdrawal limit has been reached.",
     "annualWithdrawalLimitReached": "Your annual withdrawal limit has been reached.",
-    "oddsChanged": "The odds changed. Review the updated odds before placing your bet."
+    "oddsChanged": "The odds changed. Review the updated odds before placing your bet.",
+    "checkEmailToConfirm": "Check your email to confirm your account, then sign in."
   },
   "status": {
     "active": "Active",
@@ -863,7 +864,17 @@
       "receiptHint": "PNG, JPG, or screenshot",
       "noFileSelected": "No file selected",
       "uploadRequired": "Upload required",
-      "removeReceipt": "Remove receipt"
+      "removeReceipt": "Remove receipt",
+      "uploadStages": {
+        "preparing": "Preparing receipt…",
+        "uploading": "Uploading receipt: {{percent}}%",
+        "ready": "Receipt uploaded. Ready to submit.",
+        "error": "Upload failed. Submit to retry."
+      },
+      "receiptTooLarge": "The receipt is too large. Choose a smaller image",
+      "receiptFormats": "Use a JPEG, PNG or WebP receipt up to 20 MB",
+      "uploadFailed": "Unable to upload receipt",
+      "receiptExpired": "Receipt upload expired. Please upload it again"
     },
     "withdraw": {
       "title": "Withdraw",
@@ -1381,12 +1392,12 @@
     "allMarkets": "All score markets"
   },
   "dashboard": {
-      "referralLink": "Your referral link",
-      "copyReferralLink": "Copy referral link",
-      "referralUnavailable": "Referral link unavailable",
-      "downloadApp": "Download app",
-      "androidApp": "Android app",
-      "downloadUnavailable": "Download not available yet",
-      "checkingDownload": "Checking app availability?"
+    "referralLink": "Your referral link",
+    "copyReferralLink": "Copy referral link",
+    "referralUnavailable": "Referral link unavailable",
+    "downloadApp": "Download app",
+    "androidApp": "Android app",
+    "downloadUnavailable": "Download not available yet",
+    "checkingDownload": "Checking app availability?"
   }
 }

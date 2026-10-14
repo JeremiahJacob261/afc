@@ -79,7 +79,7 @@ export function UclHero() {
           </p>
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Link href="/register/000208" className="ucl-btn ucl-btn-primary group">
+            <Link href="/register" className="ucl-btn ucl-btn-primary group">
               {t("landing.hero.createAccount")}
               <ArrowRight
                 className="h-5 w-5 transition-transform group-hover:translate-x-1"

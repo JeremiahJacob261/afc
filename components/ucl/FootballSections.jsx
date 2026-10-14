@@ -5,7 +5,7 @@ import { ArrowLeft, ArrowRight, ChevronRight } from 'lucide-react';
 import LandingImage from './LandingImage';
 import styles from '@/styles/LandingSystem.module.css';
 
-const register = '/register/000208';
+const register = '/register';
 function getMarkets(t) { return [
   { name: t('website.liveBetting'), image: 'carousel-live', icon: 'market-stopwatch', detail: t('website.liveMatchUpdates') },
   { name: t('website.overUnderGoals'), image: 'carousel-goals', icon: 'market-goal', detail: t('website.totalGoals') },

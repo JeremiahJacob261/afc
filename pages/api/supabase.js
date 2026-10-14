@@ -1,12 +1,13 @@
 import { createClient } from '@supabase/supabase-js'
 import { WebSocket } from 'ws'
+import { createAuthTransport } from '@/lib/authTransport'
 
 
 if (!globalThis.WebSocket) {
   globalThis.WebSocket = WebSocket
 }
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://example.supabase.co'
+const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://example.supabase.co').replace(/\/+$/, '')
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'missing-anon-key'
 
 function decodeJwtPayload(token) {
@@ -40,6 +41,7 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
     detectSessionInUrl: true,
   },
   global: {
+    fetch: createAuthTransport(supabaseUrl),
     headers: { 'x-my-custom-header': 'my-app-name' },
   },
   

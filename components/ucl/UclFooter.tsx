@@ -67,7 +67,7 @@ export function UclFooter() {
           </p>
 
           <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
-            <Link href="/register/000208" className="ucl-btn ucl-btn-primary group">
+            <Link href="/register" className="ucl-btn ucl-btn-primary group">
               {t("common.createAccount")}
               <ArrowRight
                 className="h-5 w-5 transition-transform group-hover:translate-x-1"

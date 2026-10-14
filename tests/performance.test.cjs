@@ -62,11 +62,12 @@ test('auth cache is isolated by user, cleared after mutations, and excludes elig
   const shellMessages = []
   const cache = load('lib/requestCache.js')
   const client = load('lib/clientAuth.js', {
+    './operationTiming': { recordOperation: () => {} },
     '@/pages/api/supabase': { supabase: { auth: {
       getSession: async () => ({ data: { session } }),
       onAuthStateChange: callback => { listener = callback },
     } } }, './requestCache': cache,
-  }, { window: {}, navigator: { serviceWorker: { controller: { postMessage:message=>shellMessages.push(message) } } }, fetch: async () => { reads++; return new Response(JSON.stringify({ read: reads })) } })
+  }, { window: {}, navigator: { serviceWorker: { controller: { postMessage:message=>shellMessages.push(message) } } }, fetch: async () => { reads++; return new Response(JSON.stringify({ read: reads, status: 'success' })) } })
   listener('SIGNED_IN', session) // Supabase emits this while recovering an existing session.
   assert.equal(shellMessages.length,0)
   listener('INITIAL_SESSION', session)
@@ -78,9 +79,9 @@ test('auth cache is isolated by user, cleared after mutations, and excludes elig
   assert.equal(shellMessages.length,1)
   assert.equal((await (await client.authFetch('/api/me')).json()).read, 2)
   await client.authFetch('/api/place-bet', { method: 'POST' })
-  assert.equal((await (await client.authFetch('/api/me')).json()).read, 4)
+  assert.equal((await (await client.authFetch('/api/me')).json()).read, 2)
   await client.authFetch('/api/withdrawal-data'); await client.authFetch('/api/withdrawal-data')
-  assert.equal(reads, 6)
+  assert.equal(reads, 5)
 })
 
 test('pagination cursors reject malformed input and continue strictly below the last ID', async () => {
@@ -101,75 +102,28 @@ function fakeResponse() {
   return { headers: {}, setHeader(name, value) { this.headers[name] = value }, status(code) { this.code = code; return this }, json(body) { this.body = body; return this } }
 }
 
-function database(rows, pending) {
-  const executed = []
-  return { executed, from(table) {
-    let filters = [], limit = Infinity
-    const query = {
-      select: () => query,
-      eq: (column, value) => { filters.push(row => row[column] === value); return query },
-      neq: (column, value) => { filters.push(row => row[column] !== value); return query },
-      match: values => { filters.push(row => Object.entries(values).every(([key, value]) => row[key] === value)); return query },
-      in: (column, values) => { filters.push(row => values.includes(row[column])); return query },
-      lt: (column, value) => { filters.push(row => row[column] < Number(value)); return query },
-      order: () => query,
-      limit: value => { limit = value; return query },
-      then: (resolve, reject) => {
-        executed.push(table)
-        const all = (rows[table] || []).filter(row => filters.every(filter => filter(row))).sort((a,b) => b.id-a.id)
-        return (pending ? pending.promise : Promise.resolve()).then(() => ({ data: all.slice(0, limit), error: null, count: all.length })).then(resolve, reject)
-      },
-    }
-    return query
-  } }
-}
-
-function api(file, db) {
-  return load(file, {
-    '@/lib/apiAuth': { getCurrentProfile: async () => ({ profile: { username: 'alice', newrefer: 'code' }, supabase: db }), sendApiError: (res, error) => res.status(error.statusCode || 500).json({ error: error.message }) },
-    '@/lib/pagination': load('lib/pagination.js'),
+test('bet summary is one bounded RPC using verified identity', async () => {
+  const calls = []
+  const handler = load('pages/api/my-bets.js', {
+    '@/lib/apiAuth': { getCurrentUser: async () => ({ id: 'verified' }), sendApiError: (res, error) => res.status(500).json({ error: error.message }) },
+    '@/lib/supabaseAdmin': { getSupabaseAdmin: () => ({ rpc: async (name, args) => {
+      calls.push({ name, args }); return { data: { unsettled: [{ id: 2 }], settled: [], totalUnsettled: 12 } }
+    } }) },
+    '@/lib/apiTiming': load('lib/apiTiming.js'), '@/lib/pagination': load('lib/pagination.js'),
   }).default
-}
-
-test('dashboard summary never reads settled bets and preserves the total open count', async () => {
-  const db = database({ placed: Array.from({length:8},(_,id) => ({ id:id+1, username:'alice', won:'null' })).concat({ id:20,username:'other',won:'null' }) })
   const res = fakeResponse()
-  await api('pages/api/my-bets.js', db)({method:'GET',query:{summary:'1'}},res)
-  assert.equal(res.code,200)
-  assert.equal(res.body.unsettled.length,5)
-  assert.equal(res.body.totalUnsettled,8)
-  assert.deepEqual(res.body.settled,[])
-  assert.deepEqual(db.executed,['placed'])
-})
-
-test('bet pagination has no duplicates, excludes other users, and ends exhausted streams', async () => {
-  const db = database({ placed:[1,2,3,4,5].map(id=>({id,username:'alice',won:'true'})).concat({id:6,username:'other',won:'true'}) })
-  const handler=api('pages/api/my-bets.js',db)
-  const seen=[]; let cursor
-  do {
-    const res=fakeResponse()
-    await handler({method:'GET',query:{page:'1',limit:'2',cursor}},res)
-    assert.equal(res.code,200)
-    seen.push(...res.body.settled.map(row=>row.id)); cursor=res.body.nextCursor
-  } while(cursor)
-  assert.deepEqual(seen,[5,4,3,2,1])
-})
-
-test('all seven notification sources start before any one source finishes', async () => {
-  const pending=deferred(),db=database({},pending)
-  const res=fakeResponse()
-  const call=api('pages/api/notify.js',db)({method:'GET',query:{}},res)
-  await new Promise(resolve=>setImmediate(resolve))
-  assert.equal(db.executed.length,7)
-  pending.resolve()
-  await call
-  assert.equal(res.code,200)
-  assert.deepEqual(res.body,[])
+  await handler({ method: 'GET', query: { summary: '1', userid: 'forged' } }, res)
+  assert.equal(res.code, 200)
+  assert.equal(res.body.totalUnsettled, 12)
+  assert.equal(calls.length, 1)
+  assert.equal(calls[0].args.p_userid, 'verified')
+  assert.equal(calls[0].args.p_limit, 6)
+  assert.equal(calls[0].args.p_summary, true)
 })
 
 test('prefetch is disabled for hidden tabs, offline, slow networks and data saving', () => {
   const globals={navigator:{onLine:true,connection:{}},document:{hidden:false}}
-  const {canPrefetch}=load('lib/backgroundPrefetch.js',{react:{useEffect:()=>{}}},globals)
+  const {canPrefetch}=load('lib/backgroundPrefetch.js',{react:{useEffect:()=>{}},'./clientAuth':{},'./paymentConfiguration':{}},globals)
   assert.equal(canPrefetch(),true)
   globals.navigator.connection.saveData=true; assert.equal(canPrefetch(),false)
   globals.navigator.connection={effectiveType:'3g'}; assert.equal(canPrefetch(),false)

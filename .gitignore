@@ -52,3 +52,6 @@ anon-cadb6-c070d66a07fb.json
 
 # Local visual QA captures and emulator preparation
 /.impeccable/review/
+
+# Supabase CLI scratch state
+/supabase/.temp/

@@ -1,4 +1,5 @@
-import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
+import { getCurrentUser, sendApiError } from '@/lib/apiAuth'
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 
 export const config = { api: { bodyParser: { sizeLimit: '12mb' } } }
 const MAX_BYTES = 8 * 1024 * 1024
@@ -14,7 +15,8 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ status: 'error', message: 'Method not allowed' })
   res.setHeader('Cache-Control', 'no-store')
   try {
-    const { user, supabase } = await getCurrentProfile(req, 'userid')
+    const user = await getCurrentUser(req)
+    const supabase = getSupabaseAdmin()
     const { image, mimeType, uploadId } = req.body || {}
     if (typeof image !== 'string' || image.length > Math.ceil(MAX_BYTES / 3) * 4 || !/^[A-Za-z0-9+/]*={0,2}$/.test(image)
       || !/^[0-9a-f-]{36}$/i.test(String(uploadId || ''))) return res.status(400).json({ status: 'error', message: 'Invalid receipt' })

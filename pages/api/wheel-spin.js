@@ -1,6 +1,5 @@
 import { randomInt } from 'node:crypto'
 import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
-import { sendPushToUsername } from '@/lib/pushNotifications'
 import { WHEEL_INTERVAL_MS, WHEEL_MINIMUM_BALANCE } from '@/lib/wheel'
 
 const ORIGINAL_PRIZES = ['iPhone 17', 'K5,000', 'K20,000', 'K100,000', 'K10', 'K500', 'K1,000', 'K30,000']
@@ -53,15 +52,6 @@ export default async function handler(req, res) {
     if (result.status !== 'success') throw new Error('Invalid spin result')
 
     const { notification, ...award } = result
-    // The in-app notification already committed with the award. Never insert it again.
-    try {
-      await sendPushToUsername(supabase, notification.username, {
-        title: notification.title, body: notification.body,
-        data: { ...notification.data, eventType: 'wheel_reward', notificationId: notification.id },
-      })
-    } catch (pushError) {
-      console.warn('Wheel reward push delivery failed:', pushError.message)
-    }
     return res.status(200).json(award)
   } catch (error) {
     return sendApiError(res, error)

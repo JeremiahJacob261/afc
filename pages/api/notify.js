@@ -1,4 +1,6 @@
-import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
+import { withApiTiming, timedRpc } from '@/lib/apiTiming'
+import { getCurrentUser, sendApiError } from '@/lib/apiAuth'
 import { applyCursor, cursorPage, decodeCursor, encodeCursor, pageSize } from '@/lib/pagination'
 
 function amountValue(value) {
@@ -222,29 +224,25 @@ function adminRewardNotification(item) {
   }
 }
 
-export default async function handler(req, res) {
+export default withApiTiming(async function handler(req, res) {
   if (req.method !== 'GET' && req.method !== 'POST') {
     return res.status(405).json({ status: 'error', message: 'Method not allowed' })
   }
 
   try {
-    const { profile, supabase } = await getCurrentProfile(req, 'username,newrefer')
+    const user = await getCurrentUser(req)
+    const supabase = getSupabaseAdmin()
     const notifications = []
 
     if (req.method === 'POST' && req.body?.action === 'mark-read') {
-      let query = supabase
-        .from('app_notifications')
-        .update({ read_at: new Date().toISOString() })
-        .eq('recipient_username', profile.username)
-        .is('read_at', null)
-
-      if (Array.isArray(req.body.ids) && req.body.ids.length) {
-        query = query.in('id', req.body.ids)
+      const ids = req.body.ids
+      if (ids != null && (!Array.isArray(ids) || ids.length > 100 || ids.some(id => !/^\d+$/.test(String(id))))) {
+        return res.status(400).json({ status: 'error', message: 'Invalid notification ids' })
       }
-
-      const { error } = await query
+      const { error } = await timedRpc(req, supabase, 'mark_customer_notifications_read', {
+        p_userid: user.id, p_ids: ids?.length ? ids : null,
+      })
       if (error) throw error
-
       return res.status(200).json({ status: 'success' })
     }
 
@@ -252,18 +250,13 @@ export default async function handler(req, res) {
     const paged = req.query?.page === '1'
     const cursor = decodeCursor(req.query?.cursor)
     const limit = pageSize(req.query?.limit, 25, 50)
-    const sources = [
-      ['app', supabase.from('app_notifications').select('*').eq('recipient_username', profile.username)],
-      ['bonus', profile.newrefer ? supabase.from('activa').select().eq('code', profile.newrefer) : null],
-      ['broadcast', supabase.from('activa').select().eq('code', 'broadcast')],
-      ['bet', supabase.from('activa').select().match({ username: profile.username, code: 'bet' })],
-      ['firstDeposit', supabase.from('activa').select().match({ username: profile.username, code: 'firstdepositbonus' })],
-      ['transaction', supabase.from('notification').select().eq('username', profile.username).in('sent', ['success', 'failed'])],
-      ['reward', supabase.from('notification').select().match({ username: profile.username, address: 'admin' })],
-    ]
-    const results = await Promise.all(sources.map(([key, query]) => !query
-      ? Promise.resolve({ data: [], error: null })
-      : paged ? applyCursor(query, cursor, key, limit) : query.order('id', { ascending: false })))
+    const { data: records, error } = await timedRpc(req, supabase, 'read_notification_sources', {
+      p_userid: user.id, p_limit: paged ? limit + 1 : 1000, p_cursor: cursor,
+    })
+    if (error) throw error
+    const profile = records.profile
+    const sources = ['app', 'bonus', 'broadcast', 'bet', 'firstDeposit', 'transaction', 'reward'].map(key => [key])
+    const results = sources.map(([key]) => ({ data: records.sources[key] }))
     const next = {}
     const rows = results.map((result, index) => {
       if (result.error) throw result.error
@@ -289,7 +282,7 @@ export default async function handler(req, res) {
     adminRewardRows.forEach(item => notifications.push(adminRewardNotification(item)))
 
     const sorted = sortNotifications(notifications)
-    const unreadCount = (appRows || []).filter((item) => !item.read_at).length
+    const unreadCount = records.unreadCount
 
     if (paged) return res.status(200).json({ notifications: sorted, unreadCount, nextCursor: Object.values(next).some(Boolean) ? encodeCursor(next) : null })
 
@@ -301,4 +294,4 @@ export default async function handler(req, res) {
   } catch (error) {
     return sendApiError(res, error)
   }
-}
+})
