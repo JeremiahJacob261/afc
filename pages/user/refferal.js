@@ -235,7 +235,7 @@ export default function Refferal() {
               <Typography sx={{ fontSize: 13, color: '#00409e', fontFamily: 'Arial,sans-serif' }}>
                 {t('mobile.referrals.title')}: {visibleReferrals.length}
               </Typography>
-              <Typography sx={{ fontSize: 13, color: 'var(--ucl-ink)', fontWeight: 600, fontFamily: 'Arial,sans-serif' }}>
+              <Typography sx={{ fontSize: 13, color: '#00409e', fontWeight: 600, fontFamily: 'Arial,sans-serif' }}>
                 {money(filteredDeposit)} MMK
               </Typography>
             </Stack>
@@ -246,7 +246,7 @@ export default function Refferal() {
           {loading ? (
             <StatePanel>
               <CircularProgress size={28} sx={{ color: 'var(--ucl-blue-accent)' }} />
-              <Typography sx={{ mt: 1.5, fontSize: 14, color: '#00409es', fontFamily: 'Arial,sans-serif' }}>
+              <Typography sx={{ mt: 1.5, fontSize: 14, color: '#00409e', fontFamily: 'Arial,sans-serif' }}>
                 {t('status.pending')}...
               </Typography>
             </StatePanel>
@@ -321,7 +321,7 @@ function SummaryStat({ label, value }) {
       <Typography
         sx={{
           mt: 0.25,
-          color: 'var(--ucl-ink)',
+          color: '#00409e',
           fontSize: 16,
           fontWeight: 700,
           fontFamily: 'Arial,sans-serif',
@@ -379,7 +379,7 @@ function ReferralRow({ item, locale, t }) {
           <Stack direction="row" alignItems="center" spacing={0.75} sx={{ minWidth: 0 }}>
             <Typography
               sx={{
-                color: 'var(--ucl-ink)',
+                color: '#00409e',
                 fontFamily: 'Arial,sans-serif',
                 fontSize: 15,
                 fontWeight: 700,
