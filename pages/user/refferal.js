@@ -160,7 +160,7 @@ export default function Refferal() {
               <Typography component="h1" sx={{ fontSize: { xs: 32, sm: 48 }, fontFamily: 'Georgia,serif', fontWeight: 400, lineHeight: 1.1 }}>
                 {t('mobile.referrals.title')}
               </Typography>
-              <Typography sx={{ fontSize: 12, color: 'var(--ucl-muted)', fontFamily: 'Arial,sans-serif' }}>
+              <Typography sx={{ fontSize: 12, color: '#00409e', fontFamily: 'Arial,sans-serif' }}>
                 {t('mobile.referrals.inviteCode')}: {referCode || t('status.pending')}
               </Typography>
             </Box>
@@ -208,7 +208,7 @@ export default function Refferal() {
                     fontSize: 12,
                     fontWeight: 600,
                     fontFamily: 'Arial,sans-serif',
-                    color: selected ? '#f5f7fc' : 'var(--ucl-muted)',
+                    color: selected ? '#f5f7fc' : '#00409e',
                     bgcolor: selected ? '#00409e' : 'var(--ucl-panel)',
                     border: selected ? '1px solid #00409e' : '1px solid #d9e2f2',
                     '&:hover': {
@@ -232,7 +232,7 @@ export default function Refferal() {
             }}
           >
             <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
-              <Typography sx={{ fontSize: 13, color: 'var(--ucl-muted)', fontFamily: 'Arial,sans-serif' }}>
+              <Typography sx={{ fontSize: 13, color: '#00409e', fontFamily: 'Arial,sans-serif' }}>
                 {t('mobile.referrals.title')}: {visibleReferrals.length}
               </Typography>
               <Typography sx={{ fontSize: 13, color: 'var(--ucl-ink)', fontWeight: 600, fontFamily: 'Arial,sans-serif' }}>
@@ -246,7 +246,7 @@ export default function Refferal() {
           {loading ? (
             <StatePanel>
               <CircularProgress size={28} sx={{ color: 'var(--ucl-blue-accent)' }} />
-              <Typography sx={{ mt: 1.5, fontSize: 14, color: 'var(--ucl-muted)', fontFamily: 'Arial,sans-serif' }}>
+              <Typography sx={{ mt: 1.5, fontSize: 14, color: '#00409es', fontFamily: 'Arial,sans-serif' }}>
                 {t('status.pending')}...
               </Typography>
             </StatePanel>
@@ -255,7 +255,7 @@ export default function Refferal() {
               <Typography sx={{ fontSize: 15, fontWeight: 600, fontFamily: 'Arial,sans-serif' }}>
                 {t('messages.unableLoadReferrals')}
               </Typography>
-              <Typography sx={{ mt: 0.75, fontSize: 13, color: 'var(--ucl-muted)', fontFamily: 'Arial,sans-serif' }}>
+              <Typography sx={{ mt: 0.75, fontSize: 13, color: '#00409e', fontFamily: 'Arial,sans-serif' }}>
                 {error}
               </Typography>
               <Button
@@ -264,7 +264,7 @@ export default function Refferal() {
                 sx={{
                   mt: 1.5,
                   color: 'var(--ucl-ink)',
-                  bgcolor: 'var(--ucl-blue-accent)',
+                  bgcolor: '#00409e',
                   borderRadius: '8px',
                   textTransform: 'none',
                   fontWeight: 700,
@@ -279,7 +279,7 @@ export default function Refferal() {
               <Typography sx={{ fontSize: 15, fontWeight: 600, fontFamily: 'Arial,sans-serif' }}>
                 {t('emptyStates.noReferrals')}
               </Typography>
-              <Typography sx={{ mt: 0.75, fontSize: 13, color: 'var(--ucl-muted)', fontFamily: 'Arial,sans-serif' }}>
+              <Typography sx={{ mt: 0.75, fontSize: 13, color: '#00409e', fontFamily: 'Arial,sans-serif' }}>
                 {t('emptyStates.referralsComing')}
               </Typography>
             </StatePanel>
@@ -288,7 +288,7 @@ export default function Refferal() {
               <Typography sx={{ fontSize: 15, fontWeight: 600, fontFamily: 'Arial,sans-serif' }}>
                 {t('emptyStates.noReferrals')}
               </Typography>
-              <Typography sx={{ mt: 0.75, fontSize: 13, color: 'var(--ucl-muted)', fontFamily: 'Arial,sans-serif' }}>
+              <Typography sx={{ mt: 0.75, fontSize: 13, color: '#00409e', fontFamily: 'Arial,sans-serif' }}>
                 {t('emptyStates.referralsComing')}
               </Typography>
             </StatePanel>
@@ -315,7 +315,7 @@ export default function Refferal() {
 function SummaryStat({ label, value }) {
   return (
     <Box sx={{ flex: 1, minWidth: 0 }}>
-      <Typography sx={{ fontSize: 11, color: 'var(--ucl-muted)', fontFamily: 'Arial,sans-serif' }}>
+      <Typography sx={{ fontSize: 11, color: '#00409e', fontFamily: 'Arial,sans-serif' }}>
         {label}
       </Typography>
       <Typography
@@ -409,12 +409,12 @@ function ReferralRow({ item, locale, t }) {
             </Box>
           </Stack>
           <Stack direction="row" alignItems="center" spacing={0.75} sx={{ mt: 0.5 }}>
-            <Typography sx={{ color: 'var(--ucl-muted)', fontFamily: 'Arial,sans-serif', fontSize: 12 }}>
+            <Typography sx={{ color: '#00409e', fontFamily: 'Arial,sans-serif', fontSize: 12 }}>
               {formatJoinedAt(item.joinedAt || item.created_at || item.crdate, locale, t)}
             </Typography>
             <Typography
               sx={{
-                color: item.isActive ? '#9BE15D' : 'var(--ucl-muted)',
+                color: item.isActive ? '#9BE15D' : '#00409e',
                 fontFamily: 'Arial,sans-serif',
                 fontSize: 12,
                 fontWeight: 600,
@@ -428,7 +428,7 @@ function ReferralRow({ item, locale, t }) {
           <Typography sx={{ color: 'var(--ucl-ink)', fontFamily: 'Arial,sans-serif', fontSize: 14, fontWeight: 800 }}>
             {money(item.totald)}
           </Typography>
-          <Typography sx={{ color: 'var(--ucl-muted)', fontFamily: 'Arial,sans-serif', fontSize: 11 }}>
+          <Typography sx={{ color: '#00409e', fontFamily: 'Arial,sans-serif', fontSize: 11 }}>
             MMK
           </Typography>
         </Box>
