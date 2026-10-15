@@ -425,7 +425,7 @@ function ReferralRow({ item, locale, t }) {
           </Stack>
         </Box>
         <Box sx={{ flex: '0 0 auto', textAlign: 'right' }}>
-          <Typography sx={{ color: 'var(--ucl-ink)', fontFamily: 'Arial,sans-serif', fontSize: 14, fontWeight: 800 }}>
+          <Typography sx={{ color: '#000000', fontFamily: 'Arial,sans-serif', fontSize: 14, fontWeight: 800 }}>
             {money(item.totald)}
           </Typography>
           <Typography sx={{ color: '#00409e', fontFamily: 'Arial,sans-serif', fontSize: 11 }}>
