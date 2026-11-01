@@ -239,8 +239,8 @@ private fun amountLabel(amount: TransactionAmountDto?): String =
 @Composable
 private fun formatAmount(amount: TransactionAmountDto?): String {
     val value = scalar(amount?.value)?.toDoubleOrNull() ?: return webCopy("common.notAvailable")
-    val currency = amount?.currency?.uppercase() ?: "MMK"
-    val formatted = java.text.NumberFormat.getNumberInstance(androidx.compose.ui.platform.LocalConfiguration.current.locales[0]).apply { maximumFractionDigits = if (currency in listOf("MMK", "USDT")) 3 else 2 }.format(value)
+    val currency = amount?.currency?.uppercase() ?: AccountCurrency.code
+    val formatted = java.text.NumberFormat.getNumberInstance(androidx.compose.ui.platform.LocalConfiguration.current.locales[0]).apply { maximumFractionDigits = 6 }.format(value)
     return (if (amount?.approximate == true) "~ " else "") + if (currency in listOf("MMK", "USDT")) "$formatted $currency" else "$currency $formatted"
 }
 

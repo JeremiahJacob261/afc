@@ -9,6 +9,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
+import com.pro.uclfootball.ui.AccountCurrency
 import java.util.concurrent.TimeUnit
 import com.pro.uclfootball.cache.CustomerSnapshotStore
 import kotlinx.coroutines.*
@@ -52,6 +53,7 @@ class NativeApiClient(
 
     fun beginForeground() { synchronized(this) { foreground++; foregroundResponses.clear() } }
     fun clearPrivateState() {
+        AccountCurrency.reset()
         synchronized(this) { foreground++; foregroundResponses.clear() }
         mutableCacheStatus.value = emptyMap()
     }
@@ -84,6 +86,7 @@ class NativeApiClient(
             val decoded = saved?.let { runCatching { json.decodeFromString(serializer, it.payload) }.getOrNull() }
             if (decoded != null) {
                 checkAccount(owner, authenticated, generation)
+                AccountCurrency.read(saved.payload)
                 onCached(decoded)
                 mutableCacheStatus.update { it + (path to CachedDataStatus(saved.savedAt, true, true)) }
                 // Give Compose a frame to present restored content before token/network work.
@@ -99,7 +102,13 @@ class NativeApiClient(
             val success = status == null || status.lowercase() in setOf("success", "ok")
             val saved = if (eligible && success) withContext(Dispatchers.IO) {
                 // Persist only the decoded DTO, so future unknown server fields cannot cache secrets.
-                runCatching { snapshots?.write(owner, path, json.encodeToString(serializer, decoded), generation ?: 0) }.getOrNull()
+                runCatching {
+                    val encoded = json.encodeToString(serializer, decoded)
+                    val document = json.parseToJsonElement(encoded) as? kotlinx.serialization.json.JsonObject
+                    val currency = (json.parseToJsonElement(response) as? kotlinx.serialization.json.JsonObject)?.get("currency")
+                    val payload = if (document != null && currency != null) kotlinx.serialization.json.JsonObject(document + ("currency" to currency)).toString() else encoded
+                    snapshots?.write(owner, path, payload, generation ?: 0)
+                }.getOrNull()
             } else null
             checkAccount(owner, authenticated, generation)
             mutableCacheStatus.update { it + (path to CachedDataStatus(saved?.savedAt ?: System.currentTimeMillis(), false, false)) }
@@ -177,6 +186,7 @@ class NativeApiClient(
         }
 
         val requestBuilder = Request.Builder()
+            .header("X-Account-Currency-Contract", "1")
             .url(url)
             .header("Accept", "application/json")
         if (authenticated && tokenOverride == null) checkAccount(requestOwner, true, requestGeneration)
@@ -202,6 +212,10 @@ class NativeApiClient(
             response.use { result ->
                 if (authenticated && tokenOverride == null) checkAccount(requestOwner, true, requestGeneration)
                 val responseText = result.body.string()
+                val currencySupported = AccountCurrency.read(responseText)
+                if (result.isSuccessful && AccountCurrency.requiresContract(requestPath) && !currencySupported) {
+                    throw ApiException(409, ApiError(message = "The server needs the account currency update."), responseText)
+                }
                 if (!result.isSuccessful) {
                     if (result.code == 401 && authenticated && tokenOverride == null) {
                         onUnauthorized(requestOwner, requestGeneration)

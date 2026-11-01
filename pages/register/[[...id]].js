@@ -203,6 +203,7 @@ export default function Register({ refer }) {
           data: {
             displayName: username.trim(),
             profile_version: 2,
+            country_iso: country,
             countrycode: codes.countries.find((item) => item.countryCode === country)?.code || country,
             refer: idR || null,
             phoneNumber: phone,

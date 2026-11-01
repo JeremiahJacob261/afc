@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { hasSupabaseConfig, mobileConfig } from './config.js'
 import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from './storage.js'
+import { setAccountCurrency } from '../../../lib/accountCurrencyClient'
 
 const authStorageKey = 'efc-mobile-auth'
 const defaultSessionTimeoutMs = 6000
@@ -45,6 +46,13 @@ export const supabase = hasSupabaseConfig()
       },
     })
   : null
+
+let currencyOwner = null
+supabase?.auth.onAuthStateChange((_event, session) => {
+  const owner = session?.user?.id || null
+  if (owner !== currencyOwner || _event === 'SIGNED_OUT') setAccountCurrency('USDT')
+  currencyOwner = owner
+})
 
 export async function getStoredSession({ timeoutMs = defaultSessionTimeoutMs } = {}) {
   if (!supabase) return null

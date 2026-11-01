@@ -1,3 +1,4 @@
+import { accountCurrencyCode } from '@/lib/accountCurrencyClient'
 import PaginationButton from '@/components/PaginationButton'
 import { translateApiMessage } from '@/lib/translateApiMessage'
 import { Box, CircularProgress, Stack, Typography } from '@mui/material'
@@ -75,14 +76,14 @@ function formatNumber(value, currency, locale = 'en') {
 
   return new Intl.NumberFormat(locale, {
     minimumFractionDigits: 0,
-    maximumFractionDigits: isUsdt ? 3 : 2,
+    maximumFractionDigits: 6,
   }).format(numericValue)
 }
 
 function formatAmount(amount, t, locale) {
   if (!amount || amount.value === null || amount.value === undefined) return t('common.notAvailable')
 
-  const currency = String(amount.currency || 'MMK').toUpperCase()
+  const currency = String(amount.currency || accountCurrencyCode()).toUpperCase()
   const formatted = formatNumber(amount.value, currency, locale)
   const label = ['USDT', 'MMK'].includes(currency) ? `${formatted} ${currency}` : `${currency} ${formatted}`
 
@@ -90,7 +91,7 @@ function formatAmount(amount, t, locale) {
 }
 
 function formatMmk(value, locale) {
-  return `${formatNumber(value, 'MMK', locale)} MMK`
+  return `${formatNumber(value, accountCurrencyCode(), locale)} ${accountCurrencyCode()}`
 }
 
 function formatDate(value, locale, t) {

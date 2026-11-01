@@ -10,6 +10,7 @@ function handlerFor(user, calls) {
     compilerOptions: { module: ts.ModuleKind.CommonJS },
   }).outputText
   const mocks = {
+    '../codes.json': require('../pages/api/codes.json'),
     '@/lib/apiAuth': {
       getCurrentUser: async () => {
         if (!user) throw Object.assign(new Error('Authentication required'), { statusCode: 401 })
@@ -46,9 +47,9 @@ test('native provisioning binds identity to the verified bearer user', async () 
     },
   }, res)
   assert.equal(res.code, 200)
-  assert.deepEqual(calls, [{ name: 'provision_native_profile_atomic', args: {
+  assert.deepEqual(calls, [{ name: 'provision_country_profile_atomic', args: {
     p_userid: 'verified-id', p_email: 'verified@example.com', p_username: 'player',
-    p_phone: '9123456789', p_countrycode: '+95', p_refer: null,
+    p_phone: '9123456789', p_countrycode: '+95', p_refer: null, p_country_iso: null,
   } }])
 })
 
@@ -58,4 +59,16 @@ test('unauthenticated requests cannot reach profile provisioning', async () => {
   await handlerFor(null, calls)({ method: 'POST', body: { userid: 'forged-id' } }, res)
   assert.equal(res.code, 401)
   assert.equal(calls.length, 0)
+})
+
+
+test('country selection is validated and forwarded independently of the phone prefix', async () => {
+  const calls = [], res = response()
+  await handlerFor({id:'verified-id',email:'verified@example.com'},calls)({method:'POST',body:{username:'player',phone:'9123456789',countrycode:'+260',country_iso:'ZM'}},res)
+  assert.equal(res.code,200)
+  assert.equal(calls[0].args.p_country_iso,'ZM')
+  const rejected = response(), rejectedCalls = []
+  await handlerFor({id:'verified-id',email:'verified@example.com'},rejectedCalls)({method:'POST',body:{countrycode:'+95',country_iso:'ZM'}},rejected)
+  assert.equal(rejected.code,400)
+  assert.equal(rejectedCalls.length,0)
 })

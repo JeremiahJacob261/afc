@@ -1,6 +1,7 @@
+import { withAccountCurrency } from '@/lib/accountCurrencyApi'
 import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
 
-export default async function handler(req, res) {
+export default withAccountCurrency(async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ status: 'error', message: 'Method not allowed' })
   }
@@ -42,4 +43,4 @@ export default async function handler(req, res) {
   } catch (error) {
     return sendApiError(res, error)
   }
-}
+})

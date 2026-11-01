@@ -67,7 +67,7 @@ test('auth cache is isolated by user, cleared after mutations, and excludes elig
       getSession: async () => ({ data: { session } }),
       onAuthStateChange: callback => { listener = callback },
     } } }, './requestCache': cache,
-  }, { window: {}, navigator: { serviceWorker: { controller: { postMessage:message=>shellMessages.push(message) } } }, fetch: async () => { reads++; return new Response(JSON.stringify({ read: reads, status: 'success' })) } })
+  }, { window: {}, navigator: { serviceWorker: { controller: { postMessage:message=>shellMessages.push(message) } } }, fetch: async () => { reads++; return new Response(JSON.stringify({ read: reads, status: 'success', currency: {code:'MMK',contract:1} })) } })
   listener('SIGNED_IN', session) // Supabase emits this while recovering an existing session.
   assert.equal(shellMessages.length,0)
   listener('INITIAL_SESSION', session)

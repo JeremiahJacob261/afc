@@ -1,3 +1,4 @@
+import { accountCurrencyCode, accountAmountFromMmk } from '@/lib/accountCurrencyClient'
 import { translateApiMessage } from '@/lib/translateApiMessage'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -102,6 +103,7 @@ export default function DepositFlow({ step }) {
         const [configuration, pendingResponse] = await Promise.all([
           readPaymentConfiguration({ fresh: reloadKey > 0 }),
           authFetch('/api/pending-payment-request'),
+          authFetch('/api/me').then(response => { if (!response.ok) throw new Error('Unable to load account currency') }),
         ])
         if (!pendingResponse.ok) throw new Error('Unable to check pending requests')
         const pendingResult = await pendingResponse.json()
@@ -125,7 +127,8 @@ export default function DepositFlow({ step }) {
   )
   const code = methodCode(selectedMethod)
   const amountValid = validAmount(draft.amount, selectedMethod)
-  const equivalent = ledgerAmount(draft.amount, selectedMethod)
+  const rawEquivalent = ledgerAmount(draft.amount, selectedMethod)
+  const equivalent = rawEquivalent === null ? null : accountAmountFromMmk(rawEquivalent)
   const requiresTransfer = needsTransferOption(destinations, selectedMethod)
   const transferReady = !requiresTransfer || Boolean(draft.transferKey)
   const liveDestination = useMemo(
@@ -229,7 +232,7 @@ export default function DepositFlow({ step }) {
       }
 
       task.accepted = true
-      sessionStorage.setItem(DEPOSIT_SUCCESS_KEY, JSON.stringify({ userId: draft.userId, mmkAmount: equivalent }))
+      sessionStorage.setItem(DEPOSIT_SUCCESS_KEY, JSON.stringify({ userId: draft.userId, mmkAmount: rawEquivalent }))
       sessionStorage.removeItem(DEPOSIT_DRAFT_KEY)
       draftRef.current = { ...EMPTY_DEPOSIT_DRAFT, userId: draft.userId }
       receiptInMemory = null
@@ -317,7 +320,7 @@ export default function DepositFlow({ step }) {
                     <span>{code.toUpperCase()}</span>
                   </div>
                   <p id="deposit-minimum" className={styles.helpText} role={draft.amount !== '' && !amountValid ? 'alert' : undefined}>{draft.amount !== '' && !amountValid ? /^\d{1,11}(?:\.\d{1,4})?$/.test(draft.amount) ? t('messages.minimumDeposit', { amount: money(minimumAmount(selectedMethod)), currency: code.toUpperCase() }) : t('mobile.deposit.enterValidAmount') : t('mobile.deposit.minShort', { amount: money(minimumAmount(selectedMethod)), currency: code.toUpperCase() })}</p>
-                  <div id="deposit-equivalent" className={styles.equivalent}><span>{t('mobile.deposit.usdtEquivalent')}</span><strong>{draft.amount !== '' && equivalent !== null ? money(equivalent) : '—'} MMK</strong></div>
+                  <div id="deposit-equivalent" className={styles.equivalent}><span>{t('mobile.deposit.usdtEquivalent')}</span><strong>{draft.amount !== '' && equivalent !== null ? money(equivalent) : '—'} {accountCurrencyCode()}</strong></div>
                   <button type="button" className={styles.primaryAction} disabled={!canEnterPayment} onClick={() => router.push(routes[2])}>{t('common.continue')}<ArrowRight size={18} aria-hidden="true" /></button>
                 </>}
 

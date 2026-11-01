@@ -1,3 +1,4 @@
+import { accountCurrencyCode } from '@/lib/accountCurrencyClient'
 import PaginationButton from '@/components/PaginationButton'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Head from 'next/head'
@@ -177,7 +178,7 @@ export default function Refferal() {
             <Stack direction="row" spacing={1} sx={{ width: '100%' }}>
               <SummaryStat label={t('mobile.vip.total')} value={referrals.length} />
               <SummaryStat label={t('status.active')} value={activeCount} />
-              <SummaryStat label={t('mobile.transactions.deposits')} value={`${money(totalDeposit)} MMK`} />
+              <SummaryStat label={t('mobile.transactions.deposits')} value={`${money(totalDeposit)} ${accountCurrencyCode()}`} />
             </Stack>
           </Box>
 
@@ -236,7 +237,7 @@ export default function Refferal() {
                 {t('mobile.referrals.title')}: {visibleReferrals.length}
               </Typography>
               <Typography sx={{ fontSize: 13, color: '#00409e', fontWeight: 600, fontFamily: 'Arial,sans-serif' }}>
-                {money(filteredDeposit)} MMK
+                {money(filteredDeposit)} {accountCurrencyCode()}
               </Typography>
             </Stack>
           </Box>
@@ -429,7 +430,7 @@ function ReferralRow({ item, locale, t }) {
             {money(item.totald)}
           </Typography>
           <Typography sx={{ color: '#00409e', fontFamily: 'Arial,sans-serif', fontSize: 11 }}>
-            MMK
+            {accountCurrencyCode()}
           </Typography>
         </Box>
       </Stack>

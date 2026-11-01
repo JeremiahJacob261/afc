@@ -13,7 +13,7 @@ function loadModule(relativePath, mocks = {}) {
   const loaded = { exports: {} }
   const requireActual = createRequire(filename)
   new Function('require', 'module', 'exports', output)(
-    name => Object.hasOwn(mocks, name) ? mocks[name] : requireActual(name), loaded, loaded.exports,
+    name => Object.hasOwn(mocks, name) ? mocks[name] : requireActual(name.startsWith('@/') ? path.resolve(__dirname, '..', name.slice(2)) : name), loaded, loaded.exports,
   )
   return loaded.exports
 }

@@ -116,7 +116,7 @@ private fun title(page: PaymentPage): Int = when (page) {
 
 @Composable
 private fun WalletScreen(state: PaymentUiState, vm: PaymentViewModel, onHistory: () -> Unit) {
-    JourneyFact(stringResource(R.string.account_balance), "${state.profile?.balance.textValue()} MMK")
+    JourneyFact(stringResource(R.string.account_balance), "${state.profile?.balance.textValue()} ${AccountCurrency.code}")
     JourneyAction(stringResource(R.string.account_deposit), enabled = !state.hasPending) { vm.go(PaymentPage.Methods) }
     JourneyAction(stringResource(R.string.account_withdraw), enabled = !state.hasPending) { vm.go(PaymentPage.Withdraw) }
     TextButton(onClick = { vm.go(PaymentPage.BindWallet) }) { Text(stringResource(R.string.journey_bind_wallet)) }
@@ -169,7 +169,7 @@ private fun DepositAmountScreen(state: PaymentUiState, vm: PaymentViewModel) {
             Text(webCopy("mobile.deposit.usdtEquivalent"), Modifier.weight(1f), color = UclColors.muted)
             val amount = state.amount.toDoubleOrNull()
             val rate = state.method?.rates.textValue().toDoubleOrNull()
-            Text(if (amount != null && rate != null && rate > 0) webMoney(amount / rate * 5000.0) else "? MMK", fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
+            Text(if (amount != null && rate != null && rate > 0) webMoney(amount / rate * AccountCurrency.unitsPerUsdt) else "? ${AccountCurrency.code}", fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
         }
     }
     JourneyAction(webCopy("common.continue"), busy = state.busy, onClick = vm::quoteDeposit)
@@ -312,10 +312,10 @@ private fun WithdrawalScreen(state: PaymentUiState, vm: PaymentViewModel) {
                 }
             }
             val payoutMethod = state.data?.methods?.find { it.name.equals(state.payoutWallet?.walletnames, true) || it.code.equals(state.payoutWallet?.walletnames, true) }
-            if (payoutMethod != null && payoutMethod.code != "mmk") {
+            if (payoutMethod != null && !payoutMethod.code.equals(AccountCurrency.code, true)) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                     Text(webCopy("mobile.withdraw.youReceiveIn", "currency" to payoutMethod.code.uppercase()), fontSize = 12.sp)
-                    Text(String.format(java.util.Locale.ROOT, "%.2f %s", requested / 5000.0 * (payoutMethod.rates.textValue().toDoubleOrNull() ?: 1.0), payoutMethod.code.uppercase()), fontSize = 14.sp)
+                    Text(String.format(java.util.Locale.ROOT, "%.2f %s", requested / AccountCurrency.unitsPerUsdt * (payoutMethod.rates.textValue().toDoubleOrNull() ?: 1.0), payoutMethod.code.uppercase()), fontSize = 14.sp)
                 }
             }
             HorizontalDivider(color = UclColors.dashboardLine)
@@ -347,9 +347,9 @@ private fun WithdrawalScreen(state: PaymentUiState, vm: PaymentViewModel) {
 @Composable
 private fun WithdrawalReviewScreen(state: PaymentUiState, vm: PaymentViewModel) {
     state.withdrawalQuote?.let { quote ->
-        JourneyFact(stringResource(R.string.journey_requested), "${quote.requestedAmount.textValue()} MMK")
-        JourneyFact(stringResource(R.string.journey_fee), "${quote.feeAmount.textValue()} MMK")
-        JourneyFact(stringResource(R.string.journey_total_deduction), "${quote.totalAmount.textValue()} MMK")
+        JourneyFact(stringResource(R.string.journey_requested), "${quote.requestedAmount.textValue()} ${AccountCurrency.code}")
+        JourneyFact(stringResource(R.string.journey_fee), "${quote.feeAmount.textValue()} ${AccountCurrency.code}")
+        JourneyFact(stringResource(R.string.journey_total_deduction), "${quote.totalAmount.textValue()} ${AccountCurrency.code}")
     }
     JourneyFact(stringResource(R.string.journey_wallet_address), state.payoutWallet?.wallet.orEmpty())
     JourneyField(stringResource(R.string.journey_pin), state.pin, { vm.field("pin", it) }, KeyboardType.NumberPassword, secret = true, enabled = !state.busy)

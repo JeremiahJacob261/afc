@@ -1,3 +1,4 @@
+import { withAccountCurrency } from '@/lib/accountCurrencyApi'
 import { randomInt } from 'node:crypto'
 import { getCurrentProfile, sendApiError } from '@/lib/apiAuth'
 import { WHEEL_INTERVAL_MS, WHEEL_MINIMUM_BALANCE } from '@/lib/wheel'
@@ -8,7 +9,7 @@ function nextSpinAt(spunAt) {
   return spunAt ? new Date(new Date(spunAt).getTime() + WHEEL_INTERVAL_MS).toISOString() : null
 }
 
-export default async function handler(req, res) {
+export default withAccountCurrency(async function handler(req, res) {
   if (req.method !== 'GET' && req.method !== 'POST') {
     res.setHeader('Allow', 'GET, POST')
     return res.status(405).json({ status: 'error', message: 'Method not allowed' })
@@ -56,4 +57,4 @@ export default async function handler(req, res) {
   } catch (error) {
     return sendApiError(res, error)
   }
-}
+})

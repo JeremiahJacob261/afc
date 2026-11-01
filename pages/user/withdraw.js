@@ -1,3 +1,4 @@
+import { accountCurrencyCode, accountAmountFromMmk, accountUnitsPerUsdt } from '@/lib/accountCurrencyClient'
 import { translateApiMessage } from '@/lib/translateApiMessage'
 import { Button, Stack, TextField, Typography, MenuItem, Divider } from "@mui/material";
 import React, { useState, useContext, useEffect, useRef } from "react";
@@ -26,7 +27,6 @@ import DriveFileRenameOutlineRounded from '@mui/icons-material/DriveFileRenameOu
 import { authFetch, clearLegacyAuthStorage, requireSession } from '@/lib/clientAuth';
 import { waitForPaint } from '@/lib/uiFeedback';
 import { calculateWithdrawalAmounts } from '@/lib/withdrawalFee';
-import { MMK_PER_USDT } from '@/lib/currency';
 
 function isLocalMethod(type) {
   return ['local', 'local-transfer', 'bank', 'mobile-money'].includes(String(type || '').trim().toLowerCase());
@@ -48,8 +48,8 @@ export default function Deposit() {
   const [swallet,setSWallet] = useState({});
   const [bank,setBank] = useState('');
   //withdrawal settings
-  const [minWithdrawalAmount, setMinWithdrawalAmount] = useState(50000);
-  const [maxWithdrawalAmount, setMaxWithdrawalAmount] = useState(500000);
+  const [minWithdrawalAmount, setMinWithdrawalAmount] = useState(accountAmountFromMmk(50000));
+  const [maxWithdrawalAmount, setMaxWithdrawalAmount] = useState(accountAmountFromMmk(500000));
   const [withdrawalFeePercent, setWithdrawalFeePercent] = useState(7);
   const [withdrawalsEnabled, setWithdrawalsEnabled] = useState(true);
   const [withdrawalDisabledMessage, setWithdrawalDisabledMessage] = useState('Withdrawals are temporarily unavailable. Please try again later.');
@@ -204,8 +204,8 @@ export default function Deposit() {
         setBalance(Number(result.profile.balance || 0));
 
         if (result.settings) {
-          setMinWithdrawalAmount(result.settings.minWithdrawalAmount ?? 50000);
-          setMaxWithdrawalAmount(result.settings.maxWithdrawalAmount ?? 500000);
+          setMinWithdrawalAmount(result.settings.minWithdrawalAmount ?? accountAmountFromMmk(50000));
+          setMaxWithdrawalAmount(result.settings.maxWithdrawalAmount ?? accountAmountFromMmk(500000));
           setWithdrawalFeePercent(result.settings.withdrawalFeePercent ?? 7);
           const enabled = result.settings.withdrawalsEnabled ?? true;
           setWithdrawalsEnabled(enabled);
@@ -262,9 +262,9 @@ export default function Deposit() {
   }
   //end of snackbar2
   const { requestedAmount, feeAmount, totalAmount } = calculateWithdrawalAmounts(Number(amount || 0), withdrawalFeePercent);
-  const usdt = (value) => `${Number(value || 0).toLocaleString(i18n.language, { maximumFractionDigits: 3 })} MMK`;
+  const usdt = (value) => `${Number(value || 0).toLocaleString(i18n.language, { maximumFractionDigits: 6 })} ${accountCurrencyCode()}`;
   const currencyCode = String(currency || "USDT").toUpperCase();
-  const showConvertedPayout = currencyCode !== 'MMK';
+  const showConvertedPayout = currencyCode !== accountCurrencyCode();
   const feePercent = Number(withdrawalFeePercent.toFixed(2));
   return (
     <Cover style={{ minHeight: '95vh', paddingBottom: '100px' }}>
@@ -306,7 +306,7 @@ export default function Deposit() {
           {showConvertedPayout && (
             <Stack direction='row' alignItems='center' justifyContent='space-between'>
               <Typography sx={{ fontSize: '12px', fontWeight: '300', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)' }}>{t('mobile.withdraw.youReceiveIn', { currency: currencyCode })}</Typography>
-              <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)' }}>{parseFloat(requestedAmount / MMK_PER_USDT * rate).toFixed(2)} {currencyCode}</Typography>
+              <Typography sx={{ fontSize: '14px', fontWeight: '500', fontFamily: 'Arial,sans-serif', color: 'var(--ucl-ink)' }}>{parseFloat(requestedAmount / accountUnitsPerUsdt() * rate).toFixed(2)} {currencyCode}</Typography>
             </Stack>
           )}
           <Divider sx={{ borderColor: 'var(--ucl-border)' }} />

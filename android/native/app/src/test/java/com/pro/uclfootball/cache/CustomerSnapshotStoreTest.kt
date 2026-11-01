@@ -62,7 +62,7 @@ class CustomerSnapshotStoreTest {
         assertEquals(0, directory.listFiles()!!.size)
         store.write("alice", "api/me", "ok", store.generation())
         directory.listFiles()!!.single().writeBytes(cipher.encrypt(Json.encodeToString(
-            SavedSnapshot("alice", "api/me", "unsupported", 1, schemaVersion = 2)).encodeToByteArray()))
+            SavedSnapshot("alice", "api/me", "unsupported", 1, schemaVersion = 999)).encodeToByteArray()))
         assertNull(store.read("alice", "api/me"))
     }
 

@@ -13,7 +13,7 @@ interface SnapshotCipher {
 
 @Serializable
 data class SavedSnapshot(val owner: String, val path: String, val payload: String,
-    val savedAt: Long, val schemaVersion: Int = 1)
+    val savedAt: Long, val schemaVersion: Int = 2)
 
 /** Durable app data. Public catalogue snapshots never share a private account namespace. */
 class CustomerSnapshotStore(
@@ -48,7 +48,7 @@ class CustomerSnapshotStore(
         if (!file.isFile) return null
         return try {
             val snapshot = json.decodeFromString<SavedSnapshot>(cipher.decrypt(file.readBytes()).decodeToString())
-            if (snapshot.schemaVersion != 1 || snapshot.owner != owner || snapshot.path != path) {
+            if (snapshot.schemaVersion != 2 || snapshot.owner != owner || snapshot.path != path) {
                 file.delete(); null
             } else snapshot
         } catch (_: Exception) { file.delete(); null }

@@ -76,7 +76,7 @@ fun JourneyChoice(label: String, selected: Boolean, enabled: Boolean = true, onC
 
 @Composable
 fun JourneyFeedback(resource: Int?) {
-    resource?.let { Text(stringResource(it), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium) }
+    resource?.let { Text(AccountCurrency.copy(stringResource(it)), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium) }
 }
 
 @Composable

@@ -1,6 +1,7 @@
 import { getCurrentUser, sendApiError } from '@/lib/apiAuth'
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 import { withApiTiming, timedRpc } from '@/lib/apiTiming'
+import countryData from '../codes.json'
 
 export default withApiTiming(async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ status: 'error', message: 'Method not allowed' })
@@ -9,15 +10,20 @@ export default withApiTiming(async function handler(req, res) {
     const user = await getCurrentUser(req)
     if (!user.email) return res.status(400).json({ status: 'error', message: 'Account email is required' })
     const body = req.body || {}
+    const iso = String(body.country_iso || '').trim().toUpperCase()
+    if (iso && !countryData.countries.some(country => country.countryCode === iso && country.code === String(body.countrycode || '').trim())) {
+      return res.status(400).json({ status: 'error', message: 'Invalid signup country' })
+    }
     // Auth owns identity; the database creates the profile and referral record in one transaction.
     const supabase = getSupabaseAdmin()
-    const { data, error } = await timedRpc(req, supabase, 'provision_native_profile_atomic', {
+    const { data, error } = await timedRpc(req, supabase, 'provision_country_profile_atomic', {
       p_userid: user.id,
       p_email: user.email,
       p_username: String(body.username || '').trim(),
       p_phone: String(body.phone || '').trim(),
       p_countrycode: String(body.countrycode || '').trim(),
       p_refer: String(body.refer || '').trim() || null,
+      p_country_iso: iso || null,
     })
     if (error) {
       if (error.code === '23505') return res.status(409).json({ status: 'error', message: 'Username or email already exists' })

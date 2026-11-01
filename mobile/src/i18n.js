@@ -1,5 +1,6 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
+import { accountCurrencyPostProcessor } from '../../lib/accountCurrencyClient'
 
 import enCommon from '../../locales/en/common.json'
 import myCommon from '../../locales/my/common.json'
@@ -23,7 +24,8 @@ function getInitialLanguage() {
 }
 
 if (!i18n.isInitialized) {
-  i18n.use(initReactI18next).init({
+  i18n.use(accountCurrencyPostProcessor).use(initReactI18next).init({
+    postProcess: ['accountCurrency'],
     resources: {
       en: { common: enCommon },
       my: { common: myCommon },

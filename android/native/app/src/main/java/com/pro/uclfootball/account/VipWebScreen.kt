@@ -77,7 +77,7 @@ private val tierColors = listOf(0xFFA8C7FF, 0xFF56CCF2, 0xFFA78BFA, 0xFFFBBF24, 
                         Box(Modifier.size(40.dp).background(color.copy(alpha = .125f), RoundedCornerShape(8.dp)), contentAlignment = Alignment.Center) { Text("V${i + 1}", fontSize = 12.sp, fontWeight = FontWeight.Black, color = textTone) }
                         Column(Modifier.weight(1f)) {
                             Row(verticalAlignment = Alignment.CenterVertically) { Text("VIP ${i + 1}", fontSize = 13.sp, fontWeight = FontWeight.ExtraBold); if (current) Text(webCopy("website.currentTier"), Modifier.padding(start = 6.dp).background(UclColors.accent, RoundedCornerShape(20.dp)).padding(horizontal = 6.dp, vertical = 2.dp), color = Color.White, fontSize = 9.sp, fontWeight = FontWeight.Black) }
-                            Text(webCopy("website.vipTierRequirements", "amount" to java.text.NumberFormat.getIntegerInstance().format(deposits[i]), "count" to members[i]), Modifier.padding(top = 3.dp), color = WebMuted, fontSize = 11.sp)
+                            Text(webCopy("website.vipTierRequirements", "amount" to java.text.NumberFormat.getNumberInstance().format(AccountCurrency.fromMmk(deposits[i].toDouble())), "count" to members[i]), Modifier.padding(top = 3.dp), color = WebMuted, fontSize = 11.sp)
                         }
                         Text(String.format(java.util.Locale.ROOT, "%.2f%%", rates[i] * 100), fontSize = 14.sp, fontWeight = FontWeight.Black, color = textTone)
                     }

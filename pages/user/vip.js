@@ -1,3 +1,4 @@
+import { accountCurrencyCode, accountAmountFromMmk } from '@/lib/accountCurrencyClient'
 import { useEffect, useMemo, useState } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -142,7 +143,7 @@ export default function Vip() {
               <Wallet sx={{ color: accent, fontSize: 20 }} />
               <Box>
                 <Typography sx={{ color: '#d7e2ed', fontSize: 11 }}>{t('website.currentBalance')}</Typography>
-                <Typography sx={{ color: '#fff', fontSize: 17, fontWeight: 800 }}>{amount(profile?.balance, i18n.language)} MMK</Typography>
+                <Typography sx={{ color: '#fff', fontSize: 17, fontWeight: 800 }}>{amount(profile?.balance, i18n.language)} {accountCurrencyCode()}</Typography>
               </Box>
             </Stack>
             <Box sx={{ textAlign: 'right' }}>
@@ -191,7 +192,7 @@ export default function Vip() {
                         <Typography sx={{ color: 'var(--ucl-ink)', fontSize: 13, fontWeight: 800 }}>VIP {tier}</Typography>
                         {current && <Chip label={t('website.currentTier')} size="small" sx={{ height: 18, color: 'var(--ucl-ink)', background: tierColor, fontSize: 9, fontWeight: 900 }} />}
                       </Stack>
-                      <Typography sx={{ mt: 0.35, color: 'var(--ucl-muted)', fontSize: 11 }}>{t('website.vipTierRequirements', { amount: amount(vipDepositLimits[tier], i18n.language), count: vipReferralLimits[tier] })}</Typography>
+                      <Typography sx={{ mt: 0.35, color: 'var(--ucl-muted)', fontSize: 11 }}>{t('website.vipTierRequirements', { amount: amount(accountAmountFromMmk(vipDepositLimits[tier]), i18n.language), count: vipReferralLimits[tier] })}</Typography>
                     </Box>
                     <Typography sx={{ color: tierColor, fontSize: 14, fontWeight: 900 }}>{percent((vipDailyRates[tier] || 0) * 100)}</Typography>
                   </Stack>

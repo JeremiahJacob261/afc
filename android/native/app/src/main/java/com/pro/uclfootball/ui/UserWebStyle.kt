@@ -47,7 +47,7 @@ val WebAccent: Color
 val WebInter = FontFamily(Font(R.font.web_inter))
 
 @Composable
-fun webMoney(value: Double): String = java.text.NumberFormat.getNumberInstance(LocalConfiguration.current.locales[0]).apply { maximumFractionDigits = 3 }.format(value) + " MMK"
+fun webMoney(value: Double): String = java.text.NumberFormat.getNumberInstance(LocalConfiguration.current.locales[0]).apply { maximumFractionDigits = 6 }.format(value) + " ${AccountCurrency.code}"
 val UserContentInsets: WindowInsets @Composable get() = if (LocalUserShell.current) WindowInsets(0, 0, 0, 0) else WindowInsets.safeDrawing
 private val dictionaries = mutableMapOf<String, JSONObject>()
 
@@ -70,6 +70,8 @@ fun webCopy(key: String, vararg values: Pair<String, Any?>): String {
     }
     val count = values.firstOrNull { it.first == "count" }?.second?.toString()?.toDoubleOrNull()
     var result = (if (count != null) lookup(key + if (count == 1.0) "_one" else "_other") else null) ?: lookup(key) ?: key
+    result = AccountCurrency.copy(result)
+    if (key == "mobile.match.insufficientBalance") result = result.replace("FCFA", AccountCurrency.code)
     values.forEach { (name, value) -> result = result.replace("{{$name}}", value?.toString().orEmpty()) }
     return result
 }

@@ -1,3 +1,4 @@
+import { accountCurrencyCode, accountAmountFromMmk } from '@/lib/accountCurrencyClient'
 import { translateApiMessage } from '@/lib/translateApiMessage'
 import { Typography, Stack, Divider, Button, useMediaQuery } from "@mui/material"
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
@@ -285,11 +286,11 @@ export default function Match({ matchDat }) {
         const tofal = Number(getMatchOdd(matches, picked, viplevel).toFixed(3));
         const stakeFcfa = Number(stake || 0);
         const stakeAmount = stakeFcfa;
-        const profit = Number(((stakeAmount * tofal) / 100).toFixed(3));
-        const expext = Number((stakeAmount + profit).toFixed(3));
+        const profit = Number(((stakeAmount * tofal) / 100).toFixed(6));
+        const expext = Number((stakeAmount + profit).toFixed(6));
         let gcount = info.gcount ?? 0;
         const availableBalance = Math.max(0, Number(balance || 0));
-        const availableStake = Number(availableBalance.toFixed(3));
+        const availableStake = Number(availableBalance.toFixed(6));
         const useAllBalance = () => setStake(String(availableStake));
 
         let stamx = getMatchStartSeconds(matches);
@@ -359,7 +360,7 @@ export default function Match({ matchDat }) {
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '300', color: 'var(--ucl-ink)' }}>{t('common.currentBalance')}</Typography>
-                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: 'var(--ucl-ink)' }}>{availableStake.toLocaleString(i18n.language, { maximumFractionDigits: 3 })} MMK</Typography>
+                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: 'var(--ucl-ink)' }}>{availableStake.toLocaleString(i18n.language, { maximumFractionDigits: 6 })} {accountCurrencyCode()}</Typography>
                         </Stack>
                         <input placeholder={t('mobile.match.stakeAmount')} aria-label={t('mobile.match.stakeAmount')} type='text' inputMode="decimal"
                             style={{ fontFamily: 'Arial, sans-serif', padding: "10px", borderRadius: '8px', width: '100%', minHeight: '48px', fontSize: '16px', background: 'var(--ucl-paper)', color: 'var(--ucl-ink)', border: '1px solid #75886b' }}
@@ -381,11 +382,11 @@ export default function Match({ matchDat }) {
                         </Button>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '300', color: 'var(--ucl-ink)' }}>{t('mobile.match.profit')}</Typography>
-                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: 'var(--ucl-ink)' }}>{profit.toLocaleString(i18n.language, { maximumFractionDigits: 3 })} MMK</Typography>
+                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '500', color: 'var(--ucl-ink)' }}>{profit.toLocaleString(i18n.language, { maximumFractionDigits: 6 })} {accountCurrencyCode()}</Typography>
                         </Stack>
                         <Stack direction='row' justifyContent='space-between' alignItems='center'>
                             <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '600', color: 'var(--ucl-ink)' }}>{t('mobile.match.expectedReturn')}</Typography>
-                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '600', color: 'var(--ucl-ink)' }}>{expext.toLocaleString(i18n.language, { maximumFractionDigits: 3 })} MMK</Typography>
+                            <Typography sx={{ fontFamily: 'Arial,sans-serif', fontSize: '16', fontWeight: '600', color: 'var(--ucl-ink)' }}>{expext.toLocaleString(i18n.language, { maximumFractionDigits: 6 })} {accountCurrencyCode()}</Typography>
                         </Stack>
                         <Button disabled={openx} variant="contained" sx={{ fontFamily: 'Arial,sans-serif', minHeight: 48, fontSize: 16, fontWeight: 700, color: '#fff', background: "#00409e", padding: '10px 16px', textTransform: 'none', '&:hover': { background: '#002d72' } }}
                             onClick={() => {
@@ -394,7 +395,7 @@ export default function Match({ matchDat }) {
                                 if (!picked || tofal <= 0) {
                                     toast.error(t('messages.chooseScoreMarket'))
                                 } else if (stakeAmount <= availableStake) {
-                                    if (stakeAmount < 2500) {
+                                    if (stakeAmount < accountAmountFromMmk(2500)) {
                                         toast.error(t('messages.stakeMinimum'))
 
                                     }
@@ -432,7 +433,7 @@ export default function Match({ matchDat }) {
                                                 })
                                                 const result = await response.json().catch(() => ({}))
                                                 if (!response.ok || result.status !== 'success') {
-                                                    const isInsufficientBalance = /insufficient|not enough|enough\s+(?:MMK|USDT|FCFA)/i.test(String(result.message || ''))
+                                                    const isInsufficientBalance = /insufficient|not enough|enough\s+(?:MMK|USDT|FCFA|ZMW)/i.test(String(result.message || ''))
                                                     toast.error(isInsufficientBalance ? t('mobile.match.insufficientBalance') : translateApiMessage(result, t, 'messages.unablePlaceBet'))
                                                     handleClosex()
                                                     if (/odds changed/i.test(String(result.message || ''))) {

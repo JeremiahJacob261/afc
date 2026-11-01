@@ -44,7 +44,7 @@ internal fun WheelRewardDialog(reward: WheelReward, onDismiss: () -> Unit) {
         progress.animateTo(1f, tween(4_800, easing = LinearEasing))
     }
     val locale = LocalConfiguration.current.locales[0]
-    val amount = remember(reward.amount, locale) { java.text.NumberFormat.getNumberInstance(locale).apply { maximumFractionDigits = 3 }.format(reward.amount) }
+    val amount = remember(reward.amount, locale) { java.text.NumberFormat.getNumberInstance(locale).apply { maximumFractionDigits = 6 }.format(reward.amount) }
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
             Surface(Modifier.padding(20.dp).widthIn(max = 380.dp).fillMaxWidth(), shape = RoundedCornerShape(28.dp), color = UclColors.ink, shadowElevation = 12.dp) {
@@ -61,7 +61,7 @@ internal fun WheelRewardDialog(reward: WheelReward, onDismiss: () -> Unit) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite }) {
                             Text(amount, color = Color.White, fontSize = if (amount.length > 10) 36.sp else 48.sp,
                                 lineHeight = if (amount.length > 10) 42.sp else 54.sp, fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center)
-                            Text("MMK", color = Color(0xFFFFDA7A), fontSize = 16.sp, fontWeight = FontWeight.Bold, letterSpacing = 2.sp)
+                            Text(AccountCurrency.code, color = Color(0xFFFFDA7A), fontSize = 16.sp, fontWeight = FontWeight.Bold, letterSpacing = 2.sp)
                         }
                         Text(webCopy("website.wheelCashWon", "amount" to webMoney(reward.amount)), color = Color(0xFFD8E5FF), fontSize = 14.sp,
                             lineHeight = 21.sp, textAlign = TextAlign.Center)

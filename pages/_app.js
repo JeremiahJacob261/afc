@@ -5,7 +5,8 @@ import { useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { appWithTranslation } from 'next-i18next'
+import { appWithTranslation, useTranslation } from 'next-i18next'
+import { accountCurrencyPostProcessor } from '@/lib/accountCurrencyClient'
 import dynamic from 'next/dynamic'
 import AppLoadingOverlay from '@/components/AppLoadingOverlay'
 import GlobalErrorDialog from '@/components/GlobalErrorDialog'
@@ -16,9 +17,15 @@ const DepositFlow = dynamic(() => import('@/components/user/DepositFlow'))
 const depositRoutes = ['/user/fund', '/user/fund/amount', '/user/fund/payment', '/user/fund/receipt']
 const AdminShell = dynamic(() => import('@/components/admin/AdminShell'))
 function MyApp({ Component, pageProps }) {
+  const router = useRouter()
+  const { i18n } = useTranslation('common')
+  useEffect(() => {
+    i18n.use(accountCurrencyPostProcessor)
+    i18n.options.postProcess = router.pathname.startsWith('/admin') ? [] : ['accountCurrency']
+    i18n.emit('languageChanged', i18n.language)
+  }, [i18n, router.pathname])
 
   const [routeLoading, setRouteLoading] = useState(false)
-  const router = useRouter()
   const needsMaterial = router.pathname.startsWith('/admin') || /^\/user\/(withdraw|codesetting|bindwallet|match|history|notification|refferal|vip)(?:\/|$)/.test(router.pathname) || router.pathname === '/passwordreset'
   const Theme = needsMaterial ? MaterialTheme : PlainTheme
   const shouldUseAdminShell = router.pathname.startsWith('/admin') && router.pathname !== '/admin'

@@ -11,7 +11,7 @@ import kotlinx.serialization.json.Json
 )
 @Serializable private data class UsernameCheckRequest(val username: String)
 @Serializable private data class UsernameCheckResponse(val status: String, val available: Boolean)
-@Serializable data class SignupProfileRequest(val username: String, val phone: String, val countrycode: String, val refer: String)
+@Serializable data class SignupProfileRequest(val username: String, val phone: String, val countrycode: String, val refer: String, @SerialName("country_iso") val countryIso: String? = null)
 
 class RegistrationRepository(private val api: NativeApiClient, private val auth: SupabaseAuthClient) {
     suspend fun register(email: String, password: String, profile: SignupProfileRequest): Boolean {

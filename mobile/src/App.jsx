@@ -1,3 +1,4 @@
+import { accountCurrencyCode, accountAmountFromMmk, accountUnitsPerUsdt } from '../../lib/accountCurrencyClient'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { SplashScreen } from '@capacitor/splash-screen'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
@@ -59,7 +60,6 @@ const defaultCustomerSupportUrl = 'https://t.me/EFC_Support'
 const appReadyWaitMs = 1500
 const bootSplashDelayMs = 700
 const sessionBootTimeoutMs = 5000
-const MMK_PER_USDT = 5000
 const referralFilters = ['all', 1, 2, 3]
 const promotionSlides = [
   { src: '/promotions/ucl-welcome.jpg', altKey: 'website.carouselWelcomeBanner' },
@@ -863,6 +863,7 @@ function RegisterScreen({ onBack, onLogin, onSignedIn }) {
           data: {
             displayName: form.username.trim(),
             phoneNumber: form.phone.trim(),
+            country_iso: selectedCountry,
           },
         },
       })
@@ -870,6 +871,7 @@ function RegisterScreen({ onBack, onLogin, onSignedIn }) {
       if (error) throw error
 
       await apiFetch('/api/signup-profile', {
+        auth: true,
         method: 'POST',
         body: {
           userid: data.user.id,
@@ -877,6 +879,7 @@ function RegisterScreen({ onBack, onLogin, onSignedIn }) {
           email: form.email.trim(),
           phone: form.phone.trim(),
           countrycode: form.countrycode,
+          country_iso: selectedCountry,
           refer: form.referral.trim(),
         },
       })
@@ -1345,7 +1348,7 @@ function HomeScreen({ navigate, onLogout, online }) {
       <section className="balance-panel">
         <div>
           <span>{t('common.currentBalance')}</span>
-          <strong>{profile ? formatFcfa(profile.balance) : '-- MMK'}</strong>
+          <strong>{profile ? formatFcfa(profile.balance) : `-- ${accountCurrencyCode()}`}</strong>
         </div>
         <button className="mini-cta" type="button" onClick={() => navigate('deposit')}>
           {t('common.deposit')}
@@ -1484,8 +1487,8 @@ function MatchDetailScreen({ matchId, navigate }) {
       return
     }
 
-    const amount = Math.floor(Number(stake))
-    if (!Number.isFinite(amount) || amount < 2500) {
+    const amount = Number(stake)
+    if (!Number.isFinite(amount) || amount < accountAmountFromMmk(2500)) {
       notifyMessage(setMessage, 'error', t('messages.stakeMinimum'))
       return
     }
@@ -1539,7 +1542,7 @@ function MatchDetailScreen({ matchId, navigate }) {
   function useAllBalance() {
     const balance = Number(profile?.balance)
     if (!Number.isFinite(balance) || balance <= 0) return
-    setStake(String(Math.floor(balance)))
+    setStake(String(balance))
   }
 
   const display = formatMatchStart(match, t)
@@ -1617,7 +1620,7 @@ function MatchDetailScreen({ matchId, navigate }) {
               icon={<Ticket size={18} />}
               label={t('mobile.match.stakeAmount')}
               action={(
-                <button className="input-max-button" type="button" onClick={useAllBalance} disabled={Math.floor(Number(profile?.balance) || 0) <= 0}>
+                <button className="input-max-button" type="button" onClick={useAllBalance} disabled={Number(profile?.balance || 0) <= 0}>
                   {t('mobile.match.useAllBalance')}
                 </button>
               )}
@@ -2096,7 +2099,7 @@ function DepositScreen({ navigate, setSuccessAmount }) {
 
       if (submitted?.status !== 'success') throw Object.assign(new Error(submitted?.message), { payload: submitted })
 
-      setSuccessAmount(formatMoney(numericAmount / rate * MMK_PER_USDT))
+      setSuccessAmount(formatMoney(numericAmount / rate * accountUnitsPerUsdt()))
       toast.success(t('messages.depositSubmitted'))
       navigate('deposit-success')
     } catch (error) {
@@ -2200,7 +2203,7 @@ function DepositScreen({ navigate, setSuccessAmount }) {
           <div className="deposit-web-progress">
             <span>
               <small>{t('mobile.deposit.usdtEquivalent')}</small>
-              <b>{formatMoney(numericAmount / rate * MMK_PER_USDT)} MMK</b>
+              <b>{formatMoney(numericAmount / rate * accountUnitsPerUsdt())} {accountCurrencyCode()}</b>
             </span>
             <i><em className={amountIsValid ? 'valid' : ''} style={{ width: `${progressValue}%` }} /></i>
           </div>
@@ -2366,8 +2369,8 @@ function WithdrawScreen({ navigate }) {
       notifyMessage(setMessage, 'error', t('messages.enterTransactionPin'))
       return
     }
-    if (requested < Number(settings.minWithdrawalAmount || 50000)) {
-      notifyMessage(setMessage, 'error', t('messages.minimumWithdrawal', { amount: settings.minWithdrawalAmount || 50000 }))
+    if (requested < Number(settings.minWithdrawalAmount || accountAmountFromMmk(50000))) {
+      notifyMessage(setMessage, 'error', t('messages.minimumWithdrawal', { amount: settings.minWithdrawalAmount || accountAmountFromMmk(50000) }))
       return
     }
 
@@ -2446,7 +2449,7 @@ function WithdrawScreen({ navigate }) {
         </InputShell>
         <div className="fee-note">
           <span>{t('mobile.withdraw.fee', { percent: feePercent })}</span>
-          <b>{t('mobile.withdraw.totalDebit', { amount: `${formatMoney(total)} MMK` })}</b>
+          <b>{t('mobile.withdraw.totalDebit', { amount: `${formatMoney(total)} ${accountCurrencyCode()}` })}</b>
         </div>
         <button className="primary-button full" type="button" onClick={submitWithdraw} disabled={submitting || !canWithdraw}>
           {submitting ? t('mobile.deposit.submitting') : t('mobile.withdraw.submit')}
@@ -3443,16 +3446,16 @@ function methodLabel(method, t) {
 function formatMoney(value) {
   const number = Number(value)
   if (!Number.isFinite(number)) return '0'
-  return number.toLocaleString(undefined, { maximumFractionDigits: 3 })
+  return number.toLocaleString(undefined, { maximumFractionDigits: 6 })
 }
 
 function formatFcfa(value) {
   const amount = Number(value || 0)
-  return `${amount.toLocaleString(undefined, { maximumFractionDigits: 3 })} MMK`
+  return `${amount.toLocaleString(undefined, { maximumFractionDigits: 6 })} ${accountCurrencyCode()}`
 }
 
 function formatFcfaLedger(value) {
-  return `${Number(value || 0).toLocaleString(undefined, { maximumFractionDigits: 3 })} MMK`
+  return `${Number(value || 0).toLocaleString(undefined, { maximumFractionDigits: 6 })} ${accountCurrencyCode()}`
 }
 
 function formatDate(value, t) {

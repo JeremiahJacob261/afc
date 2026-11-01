@@ -19,12 +19,22 @@ import java.util.concurrent.atomic.AtomicInteger
 class OfflineDataTest {
     @get:Rule val temporary = TemporaryFolder()
     private val config = NativeApiConfig("https://example.com/".toHttpUrl(), "https://example.com/".toHttpUrl(), "public-test-key")
-    private val savedProfile = """{"status":"success","profile":{"username":"Alice","balance":123}}"""
+    private val savedProfile = """{"status":"success","currency":{"code":"MMK","contract":1},"profile":{"username":"Alice","balance":123}}"""
     private fun http(block: (Interceptor.Chain) -> Response) = OkHttpClient.Builder().addInterceptor(block).build()
     private fun response(chain: Interceptor.Chain, body: String, code: Int = 200) = Response.Builder()
         .request(chain.request()).protocol(Protocol.HTTP_1_1).code(code).message("test")
         .body(body.toResponseBody("application/json".toMediaType())).build()
     private fun store() = CustomerSnapshotStore(temporary.newFolder(), TestSnapshotCipher()).also { it.selectAccount("alice") }
+
+    @Test fun unversionedFinancialResponsesCannotBeDisplayedAsAccountCurrency() = runBlocking {
+        val store = store()
+        val api = NativeApiClient(config, { "token" }, httpClient = http {
+            response(it, """{"status":"success","profile":{"username":"Alice","balance":5000}}""")
+        }, snapshots = store, accountId = { "alice" })
+        try { api.getJson<MeResponse>("api/me", true); fail("Old server contract must be rejected") }
+        catch (error: ApiException) { assertEquals(409, error.httpStatus) }
+        assertNull(store.read("alice", "api/me"))
+    }
 
     @Test fun expiredStoredLoginRestoresWithoutAnyNetworkOrRefresh() = runBlocking {
         val requests = AtomicInteger()
@@ -107,7 +117,7 @@ class OfflineDataTest {
 
     @Test fun quotesAndMutationsNeverUseOrSaveOfflineResponses() = runBlocking {
         val store = store()
-        val api = NativeApiClient(config, { "token" }, httpClient = http { response(it, """{"status":"success","rate":1,"ledgerAmount":1,"valid":true}""") }, snapshots = store, accountId = { "alice" })
+        val api = NativeApiClient(config, { "token" }, httpClient = http { response(it, """{"status":"success","currency":{"code":"MMK","contract":1},"rate":1,"ledgerAmount":1,"valid":true}""") }, snapshots = store, accountId = { "alice" })
         api.getJson<DepositQuoteDto>("api/mobile/deposit-quote?method=mmk&amount=1", true)
         assertNull(store.read("alice", "api/mobile/deposit-quote?method=mmk&amount=1"))
         val offline = NativeApiClient(config, { "token" }, httpClient = http { throw IOException("offline") }, snapshots = store, accountId = { "alice" })
@@ -156,7 +166,7 @@ class OfflineDataTest {
             if (chain.request().method == "GET") {
                 started.countDown(); check(release.await(5, TimeUnit.SECONDS))
                 response(chain, savedProfile.replace("Alice", "Old read"))
-            } else response(chain, """{"status":"success"}""")
+            } else response(chain, """{"status":"success","currency":{"code":"MMK","contract":1}}""")
         }, snapshots = store, accountId = { "alice" })
         supervisorScope {
             val reading = async { api.getJson<MeResponse>("api/me", true, onCached = {}) }

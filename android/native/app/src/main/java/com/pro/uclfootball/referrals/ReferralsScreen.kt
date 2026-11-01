@@ -211,8 +211,8 @@ private fun ReferralCard(item: ReferralDto) {
                 }
             }
             Column(horizontalAlignment = Alignment.End) {
-                Text(webMoney(item.totald.textValue().toDoubleOrNull() ?: 0.0).removeSuffix(" MMK"), fontSize = 14.sp, fontWeight = FontWeight.ExtraBold)
-                Text("MMK", color = WebMuted, fontSize = 11.sp)
+                Text(webMoney(item.totald.textValue().toDoubleOrNull() ?: 0.0).removeSuffix(" ${AccountCurrency.code}"), fontSize = 14.sp, fontWeight = FontWeight.ExtraBold)
+                Text(AccountCurrency.code, color = WebMuted, fontSize = 11.sp)
             }
         }
     }

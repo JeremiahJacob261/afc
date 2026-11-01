@@ -1,4 +1,4 @@
-﻿package com.pro.uclfootball.account
+package com.pro.uclfootball.account
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -54,7 +54,7 @@ internal fun WebAccountScreen(state: AccountUiState, onRetry: () -> Unit, onNavi
                 Text(webCopy("common.currentBalance"), color = Color(0xFFD7E2ED), fontSize = 14.sp)
                 Row(Modifier.padding(top = 8.dp), verticalAlignment = Alignment.Bottom) {
                     Text(if (profile == null) "—" else profile.balance.textValue(), color = Color.White, fontFamily = FontFamily.Serif, fontSize = 36.sp)
-                    if (profile != null) Text("MMK", Modifier.padding(start = 8.dp, bottom = 4.dp), color = Color(0xFFD7E2ED), fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                    if (profile != null) Text(AccountCurrency.code, Modifier.padding(start = 8.dp, bottom = 4.dp), color = Color(0xFFD7E2ED), fontSize = 14.sp, fontWeight = FontWeight.Bold)
                 }
                 Row(Modifier.padding(top = 24.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     AccountHeroAction(webCopy("common.deposit"), "arrow_down_to_line", true) { onNavigate("wallet") }

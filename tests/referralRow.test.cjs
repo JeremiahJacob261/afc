@@ -14,8 +14,8 @@ const functions = parsed.statements
 const compiled = ts.transpileModule(functions.join('\n'), {
   compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.React },
 }).outputText
-const ReferralRow = new Function('React', 'Box', 'Stack', 'Typography', 'Image', 'Rd', `${compiled}; return ReferralRow`)(
-  require('react'), 'div', 'div', 'span', 'img', '/rounds.png'
+const ReferralRow = new Function('React', 'Box', 'Stack', 'Typography', 'Image', 'Rd', 'accountCurrencyCode', `${compiled}; return ReferralRow`)(
+  require('react'), 'div', 'div', 'span', 'img', '/rounds.png', () => 'USDT'
 )
 
 function collectText(node, result = []) {

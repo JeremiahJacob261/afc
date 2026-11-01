@@ -7,6 +7,8 @@ import Cover from './cover'
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps'
 import { DEPOSIT_SUCCESS_KEY, formatMoney } from '@/lib/depositFlow'
 import { supabase } from '@/pages/api/supabase'
+import { authFetch } from '@/lib/clientAuth'
+import { accountAmountFromMmk } from '@/lib/accountCurrencyClient'
 import styles from '@/styles/UserSubpage.module.css'
 
 export default function DepositSuccess() {
@@ -18,9 +20,12 @@ export default function DepositSuccess() {
       try {
         const saved = JSON.parse(sessionStorage.getItem(DEPOSIT_SUCCESS_KEY) || 'null')
         const { data } = await supabase.auth.getSession()
+        if (data?.session?.user?.id !== saved?.userId) return
+        const profile = await authFetch('/api/me')
+        if (!profile.ok) return
         const value = Number(saved?.mmkAmount)
         if (active && data?.session?.user?.id === saved?.userId && Number.isFinite(value) && value > 0) {
-          setAmount(value)
+          setAmount(accountAmountFromMmk(value))
         }
       } catch (_) {
         // The generic success copy remains accurate without a stored summary.

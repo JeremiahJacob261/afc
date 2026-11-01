@@ -54,7 +54,7 @@ class RegistrationViewModel(private val repository: RegistrationRepository, refe
         mutableState.update { it.copy(busy = true, error = null) }
         viewModelScope.launch {
             try {
-                val profile = SignupProfileRequest(current.username.trim(), current.phone.trim(), current.dialCode.trim(), current.referral.trim())
+                val profile = SignupProfileRequest(current.username.trim(), current.phone.trim(), current.dialCode.trim(), current.referral.trim(), current.country)
                 val created = if (current.awaitingConfirmation) {
                     repository.completeAfterConfirmation(current.email.trim(), current.password, profile); true
                 } else repository.register(current.email.trim(), current.password, profile)

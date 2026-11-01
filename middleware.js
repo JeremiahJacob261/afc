@@ -23,7 +23,7 @@ function getCorsHeaders(request) {
     'Access-Control-Allow-Origin': origin,
     'Access-Control-Allow-Credentials': 'true',
     'Access-Control-Allow-Methods': 'GET,POST,PUT,PATCH,DELETE,OPTIONS',
-    'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Admin-Password, X-Internal-Secret',
+    'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Admin-Password, X-Internal-Secret, X-Account-Currency-Contract',
     'Access-Control-Max-Age': '86400',
     Vary: 'Origin',
   }

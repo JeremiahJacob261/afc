@@ -1,3 +1,4 @@
+import { accountCurrencyCode } from '@/lib/accountCurrencyClient'
 import Head from 'next/head'
 import Link from '@/components/PerformanceLink'
 import { useEffect, useState } from 'react'
@@ -125,7 +126,7 @@ export default function Account() {
   }
 
   const username = profile?.username || (loading ? t('status.pending') : t('common.account'))
-  const balance = Number(profile?.balance || 0).toLocaleString(undefined, { maximumFractionDigits: 3 })
+  const balance = Number(profile?.balance || 0).toLocaleString(undefined, { maximumFractionDigits: 6 })
   const initials = (profile?.username || 'U').slice(0, 2).toUpperCase()
 
   return <Cover ready={!loading}>
@@ -157,7 +158,7 @@ export default function Account() {
           </div>
           <div className={styles.heroBalance}>
             <span>{t('common.currentBalance')}</span>
-            <strong aria-live="polite">{loading ? '—' : balance}<small>MMK</small></strong>
+            <strong aria-live="polite">{loading ? '—' : balance}<small>{accountCurrencyCode()}</small></strong>
             <div className={styles.heroActions}>
               <Link href="/user/fund" className={styles.primaryAction}><ArrowDownToLine size={18} aria-hidden="true" />{t('common.deposit')}</Link>
               <Link href="/user/withdraw" className={styles.secondaryAction}><ArrowUpFromLine size={18} aria-hidden="true" />{t('common.withdraw')}</Link>
