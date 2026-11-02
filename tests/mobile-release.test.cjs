@@ -67,3 +67,15 @@ test('invalid release URLs, versions and checksums are not advertised', () => {
 test('release endpoint rejects writes', () => {
   assert.equal(request({}, release, 'POST').code, 405)
 })
+
+test('the website ships the advertised production APK with its matching checksum', () => {
+ const crypto=require('node:crypto')
+ const manifest=JSON.parse(fs.readFileSync(path.resolve(__dirname,'../data/android-release.json'),'utf8'))
+ const url=new URL(manifest.downloadUrl)
+ const apk=fs.readFileSync(path.resolve(__dirname,'../public',url.pathname.slice(1)))
+ assert.equal(crypto.createHash('sha256').update(apk).digest('hex'),manifest.sha256)
+ const response=request({},manifest)
+ assert.equal(response.body.versionCode,manifest.versionCode)
+ assert.equal(response.body.versionName,manifest.versionName)
+ assert.equal(response.body.downloadUrl,manifest.downloadUrl)
+})
