@@ -10,7 +10,7 @@ The database retains its existing MMK accounting unit. User-facing amounts are c
 
 The migration adds country_iso and currency_code to users, assigns existing users from saved signup metadata or existing calling codes, and provisions new profiles atomically. Missing non-special country information defaults to USDT. Existing country data is used instead of IP location or device language. Retrying profile creation cannot change the account's currency. Authenticated profile edits cannot change these currency fields.
 
-The admin interface continues to report the shared accounting amounts in MMK.
+Transaction history leads with the account-currency equivalent. Original submitted/payment amounts remain separately labelled for reconciliation. The admin finance list displays both the assigned account amount and the original payment or ledger amount; approval actions continue to use the original data.
 
 ## API contract
 
@@ -19,6 +19,8 @@ Updated website, mobile web, and native clients send X-Account-Currency-Contract
 Versioned responses include currency.code, currency.unitsPerUsdt, currency.ledgerCode, and currency.contract. Updated clients reject a successful financial response that lacks this contract. Legacy clients retain their existing MMK API contract until updated. Native snapshots use schema version 2 and preserve response currency metadata; old snapshots are discarded.
 
 Submitted deposit and payout amounts remain in the payment method's currency. Method exchange rates, odds, percentages, IDs and counts are not account amounts. Admin-configured payment methods and destination accounts remain authoritative; this change does not invent payment destinations for ZMW or any other currency.
+
+Migration `20261102065619_transaction_account_currency_snapshot.sql` adds `account_currency`, `account_amount`, `account_units_per_usdt`, and `account_conversion_status` to notification records and backfills existing history. Triggers maintain these fields for new transactions and account-currency changes. Deposit equivalents use the saved payment-method rate; missing rates are flagged instead of guessed. A transaction-level assertion protects original payment records and user balances. The backfill never updates `sent`, so it cannot resend finance notifications.
 
 ## Rollout
 

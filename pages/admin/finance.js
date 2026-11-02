@@ -376,7 +376,10 @@ export default function Noti({ notiS }) {
                       <Typography style={{ fontSize: '12px', color: 'white', fontFamily: "Source Sans Pro,sans-serif", width: "80px" }}> {d.type}</Typography>
                     </Stack>
                     <Typography style={{ fontSize: '12px', color: 'white', fontFamily: "Source Sans Pro,sans-serif", width: "80px" }}>{d.username}</Typography>
-                    <Typography style={{ fontSize: '12px', color: 'white', fontFamily: "Source Sans Pro,sans-serif", width: "80px" }}>{d.amount}</Typography>
+                    <Typography style={{ fontSize: '12px', color: 'white', fontFamily: "Source Sans Pro,sans-serif", width: "80px" }}>
+                      {d.account_amount != null ? `${Number(d.account_amount).toLocaleString(undefined, { maximumFractionDigits: 8 })} ${d.account_currency}` : d.amount}
+                      {d.account_amount != null && <small style={{ display: 'block' }}>{d.type === 'deposit' ? 'Payment' : 'Ledger'}: {d.amount} {d.type === 'deposit' ? (d.method_currency || d.method) : 'MMK'}</small>}
+                    </Typography>
                     <div style={{ background: '#EFEFD0', padding: "5px", borderRadius: '6px' }}>
                       <Typography style={{ fontSize: '12px', color: '#F1A208', fontFamily: "Source Sans Pro,sans-serif" }}>PENDING</Typography>
                     </div>

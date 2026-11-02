@@ -83,3 +83,16 @@ test('settlement event templates receive account amounts, while payment events p
  assert.equal(payment.messageValues.amount,25000)
  assert.equal(payment.messageValues.method,'MMK')
 })
+
+test('history leads with the assigned account amount while retaining actual payment amounts', () => {
+ for (const [code,amount] of [['USDT',5],['MMK',25000],['FCFA',3000],['ZMW',100]]) {
+  const result=accountPayload({type:'deposit',accountingAmountMmk:25000,primaryAmount:{value:25000,currency:'MMK',labelKey:'mobile.transactions.submittedAmount'},secondaryAmount:{value:25000,currency:'MMK'}},code)
+  assert.equal(result.primaryAmount.value,amount)
+  assert.equal(result.primaryAmount.currency,code)
+  assert.equal(result.secondaryAmount.value,25000)
+  assert.equal(result.secondaryAmount.currency,'MMK')
+ }
+ const withdrawal=accountPayload({type:'withdraw',accountingAmountMmk:50000,primaryAmount:{value:10,currency:'USDT',labelKey:'mobile.transactions.payoutAmount'}},'USDT')
+ assert.equal(withdrawal.primaryAmount.value,10)
+ assert.equal(withdrawal.secondaryAmount.value,10)
+})
