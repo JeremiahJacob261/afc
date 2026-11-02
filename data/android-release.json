@@ -1,8 +1,8 @@
 {
   "applicationId": "com.pro.uclfootball",
-  "versionCode": 11,
-  "versionName": "1.0.10",
-  "downloadUrl": "https://www.ucl01.com/downloads/ucl-1.0.10-11.apk",
-  "sha256": "7bf808b1fd3b2870dad0af5db97da8ed41b09040ba45539a2b5c150e11984b79",
+  "versionCode": 12,
+  "versionName": "1.0.11",
+  "downloadUrl": "https://www.ucl01.com/downloads/ucl-1.0.11-12.apk",
+  "sha256": "42dd23845129a92f0ae8688dbddfaa1f16b5b8a9ee2382a55293529d91a6d993",
   "releaseOrigin": "https://www.ucl01.com"
 }
