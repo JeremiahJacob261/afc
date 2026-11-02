@@ -1,10 +1,8 @@
+import languageConfig from '@/lib/languages.json'
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 
-const languageOptions = [
-  { code: "en", label: "English" },
-  { code: "my", label: "မြန်မာ" },
-];
+const languageOptions = languageConfig.languages;
 
 export default function LocaleSwitcher({ className = "", compact = false }) {
   const { t, i18n } = useTranslation("common");
@@ -14,7 +12,7 @@ export default function LocaleSwitcher({ className = "", compact = false }) {
     router.push(router.pathname, router.asPath, { locale, scroll: false });
   };
 
-  const currentLocale = router.locale || i18n.language || "my";
+  const currentLocale = router.locale || i18n.language || "en";
   const selectPadding = compact ? "pr-4" : "pr-6";
   const selectWidth = compact ? "max-w-[72px]" : "";
 

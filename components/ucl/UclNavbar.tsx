@@ -1,4 +1,5 @@
 "use client";
+import languageConfig from '@/lib/languages.json'
 
 import Image from "next/image";
 import Link from "next/link";
@@ -7,10 +8,7 @@ import { useTranslation } from "next-i18next";
 import Logo from "@/public/champions-league-logo.png";
 import { Star } from "./Starball";
 
-const languageOptions = [
-  { code: "en", label: "English" },
-  { code: "my", label: "မြန်မာ" },
-];
+const languageOptions = languageConfig.languages;
 
 export function UclNavbar() {
   const { t } = useTranslation("common");
@@ -60,7 +58,7 @@ export function UclNavbar() {
             <span className="sr-only">{t("common.changeLanguage")}</span>
             <select
               aria-label={t("common.changeLanguage")}
-              value={router.locale || "my"}
+              value={router.locale || "en"}
               onChange={(event) => changeLanguage(event.target.value)}
               className="min-h-[42px] cursor-pointer appearance-none bg-transparent pr-5 text-sm font-bold text-silver-200 outline-none"
             >

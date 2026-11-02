@@ -149,7 +149,7 @@ dependencies {
 // Customer copy is shared with the website on every build, including direct Gradle builds.
 val syncNativeWebCopy = tasks.register<Copy>("syncNativeWebCopy") {
     from(rootProject.file("../../locales")) {
-        include("en/common.json", "my/common.json")
+        include("en/common.json", "my/common.json", "ar/common.json", "es/common.json", "fr/common.json", "it/common.json", "ru/common.json")
         eachFile { path = "web-copy/${relativePath.segments.first()}.json" }
         includeEmptyDirs = false
     }

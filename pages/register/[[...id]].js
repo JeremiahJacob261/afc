@@ -1,3 +1,4 @@
+import languageConfig from '@/lib/languages.json'
 import React, { useState, useEffect } from "react";
 import { getI18nServerSideProps } from "@/lib/i18nServerSideProps";
 import Head from "next/head";
@@ -466,5 +467,5 @@ export async function getStaticProps(context) {
 }
 
 export async function getStaticPaths() {
-  return { paths: ['en', 'my'].map(locale => ({ params: { id: [] }, locale })), fallback: 'blocking' }
+  return { paths: languageConfig.languages.map(({ code: locale }) => ({ params: { id: [] }, locale })), fallback: 'blocking' }
 }

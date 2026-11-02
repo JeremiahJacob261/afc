@@ -1,3 +1,4 @@
+import languageConfig from '../../lib/languages.json'
 import { accountCurrencyCode, accountAmountFromMmk, accountUnitsPerUsdt } from '../../lib/accountCurrencyClient'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { SplashScreen } from '@capacitor/splash-screen'
@@ -69,10 +70,7 @@ const promotionSlides = [
 ]
 const ballImage = '/simps/ball.png'
 const languageStorageKey = 'efc-language'
-const languageOptions = [
-  { code: "en", label: "English" },
-  { code: "my", label: "မြန်မာ" },
-]
+const languageOptions = languageConfig.languages
 
 const markets = [
   ['nilnil', '0 - 0'],
@@ -318,7 +316,7 @@ export default function App() {
         hasSeenLanguagePrompt = getLocalStorageItem('efc-language-prompt-shown', '') === 'true'
 
         if (session) {
-          updateStoredPushTokenLanguage(storedLanguage || 'my').catch((error) => {
+          updateStoredPushTokenLanguage(storedLanguage || 'en').catch((error) => {
             console.warn('Unable to sync push notification language:', error)
           })
         }
@@ -501,13 +499,13 @@ function InAppSplash() {
 function FirstLaunchLanguageDialog({ open, onSelect, onDismiss }) {
   const { t, i18n } = useTranslation('common')
   const [selectedLanguage, setSelectedLanguage] = useState(() => {
-    return languageOptions.some((language) => language.code === i18n.language) ? i18n.language : 'my'
+    return languageOptions.some((language) => language.code === i18n.language) ? i18n.language : 'en'
   })
 
   useEffect(() => {
     if (!open) return
 
-    setSelectedLanguage(languageOptions.some((language) => language.code === i18n.language) ? i18n.language : 'my')
+    setSelectedLanguage(languageOptions.some((language) => language.code === i18n.language) ? i18n.language : 'en')
   }, [open, i18n.language])
 
   if (!open) return null
@@ -1825,7 +1823,7 @@ function ProfileScreen({ navigate, onLogout }) {
 
   const inviteCode = profile?.newrefer || referralCode
   const inviteLink = `${mobileConfig.apiBaseUrl}/register/${inviteCode}`
-  const currentLanguage = languageOptions.some((language) => language.code === i18n.language) ? i18n.language : 'my'
+  const currentLanguage = languageOptions.some((language) => language.code === i18n.language) ? i18n.language : 'en'
 
   const changeLanguage = (language) => {
     i18n.changeLanguage(language)

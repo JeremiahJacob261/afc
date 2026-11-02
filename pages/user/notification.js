@@ -212,7 +212,7 @@ function EmptyState({ t }) {
 export default function Notification() {
   const { t } = useTranslation('common')
   const router = useRouter()
-  const locale = router.locale || 'my'
+  const locale = router.locale || 'en'
   const [notifications, setNotifications] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')

@@ -109,6 +109,13 @@ private val Line = UclColors.line
 private val DarkGround = UclColors.darkGround
 
 class MainActivity : ComponentActivity() {
+    override fun attachBaseContext(base: android.content.Context) {
+        val language = com.pro.uclfootball.ui.AppLanguages.resolve(base.getSharedPreferences("customer_ui", android.content.Context.MODE_PRIVATE).getString("language", "en"))
+        val locale = java.util.Locale.forLanguageTag(language)
+        val config = android.content.res.Configuration(base.resources.configuration).apply { setLocale(locale); setLayoutDirection(locale) }
+        super.attachBaseContext(base.createConfigurationContext(config))
+    }
+
     private val incomingAuthLink = mutableStateOf<Uri?>(null)
     private val incomingNotification = mutableStateOf(false)
 

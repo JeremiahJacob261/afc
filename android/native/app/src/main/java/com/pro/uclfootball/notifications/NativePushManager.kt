@@ -83,7 +83,7 @@ class NativePushManager(private val context: Context, private val container: Ucl
         val deviceId = preferences.getString("device_id", null) ?: UUID.randomUUID().toString().also {
             preferences.edit().putString("device_id", it).apply()
         }
-        val language = if (Locale.getDefault().language == "en") "en" else "my"
+        val language = com.pro.uclfootball.ui.AppLanguages.resolve(context.getSharedPreferences("customer_ui", android.content.Context.MODE_PRIVATE).getString("language", "en"))
         if (preferences.getString("registered_token", null) == token &&
             preferences.getString("registered_user", null) == userId &&
             preferences.getString("registered_language", null) == language) return

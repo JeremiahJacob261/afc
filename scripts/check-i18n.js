@@ -21,8 +21,10 @@ function flatten(value, prefix = '', result = {}) {
 const base = flatten(catalogs.en)
 for (const [locale, catalog] of Object.entries(catalogs)) {
   const entries = flatten(catalog)
-  assert.deepEqual(Object.keys(entries).sort(), Object.keys(base).sort(), `${locale}: catalog keys differ`)
+  // Optional catalogs use English for untranslated keys.
+  if (locale === 'en' || locale === 'my') assert.deepEqual(Object.keys(entries).sort(), Object.keys(base).sort(), `${locale}: catalog keys differ`)
   for (const [key, value] of Object.entries(entries)) {
+    if (!(key in base)) continue
     assert.equal(typeof value, typeof base[key], `${locale}: ${key} has the wrong type`)
     if (typeof value !== 'string') continue
     assert.ok(value.trim(), `${locale}: ${key} is empty`)
@@ -44,7 +46,7 @@ function hasKey(catalog, key) {
 function checkKeys(argument, source) {
   if (ts.isStringLiteral(argument) || ts.isNoSubstitutionTemplateLiteral(argument)) {
     for (const [locale, catalog] of Object.entries(catalogs)) {
-      assert.ok(hasKey(catalog, argument.text), `${source.fileName}: ${locale} missing ${argument.text}`)
+      assert.ok(hasKey(catalog, argument.text) || (i18n.defaultLocale === 'en' && hasKey(catalogs.en, argument.text)), `${source.fileName}: ${locale} missing ${argument.text}`)
     }
     references++
   } else if (ts.isConditionalExpression(argument)) {

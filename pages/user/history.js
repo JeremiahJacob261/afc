@@ -364,7 +364,7 @@ function EmptyState({ selected, t }) {
 export default function TransactionHistory() {
   const { t } = useTranslation('common')
   const router = useRouter()
-  const locale = router.locale || 'my'
+  const locale = router.locale || 'en'
   const [selected, setSelected] = useState('all')
   const [transactions, setTransactions] = useState([])
   const [summary, setSummary] = useState(emptySummary)

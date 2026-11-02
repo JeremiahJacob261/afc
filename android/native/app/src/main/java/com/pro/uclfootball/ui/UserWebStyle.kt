@@ -55,12 +55,13 @@ private val dictionaries = mutableMapOf<String, JSONObject>()
 @Composable
 fun webCopy(key: String, vararg values: Pair<String, Any?>): String {
     val context = LocalContext.current
-    val language = LocalConfiguration.current.locales[0].language.let { if (it == "my") "my" else "en" }
+    val language = LocalConfiguration.current.locales[0].language.let(AppLanguages::resolve)
     val dictionary = remember(language) {
         dictionaries.getOrPut(language) { context.assets.open("web-copy/$language.json").bufferedReader().use { JSONObject(it.readText()) } }
     }
-    fun lookup(path: String): String? {
-        var node: Any = dictionary
+    val english = remember { dictionaries.getOrPut("en") { context.assets.open("web-copy/en.json").bufferedReader().use { JSONObject(it.readText()) } } }
+    fun lookup(path: String, catalog: JSONObject = dictionary): String? {
+        var node: Any = catalog
         for (part in path.split('.')) node = when (node) {
             is JSONObject -> node.opt(part)
             is org.json.JSONArray -> part.toIntOrNull()?.let(node::opt)
@@ -69,7 +70,7 @@ fun webCopy(key: String, vararg values: Pair<String, Any?>): String {
         return node as? String
     }
     val count = values.firstOrNull { it.first == "count" }?.second?.toString()?.toDoubleOrNull()
-    var result = (if (count != null) lookup(key + if (count == 1.0) "_one" else "_other") else null) ?: lookup(key) ?: key
+    var result = (if (count != null) lookup(key + if (count == 1.0) "_one" else "_other") else null) ?: lookup(key) ?: (if (count != null) lookup(key + if (count == 1.0) "_one" else "_other", english) else null) ?: lookup(key, english) ?: key
     result = AccountCurrency.copy(result)
     if (key == "mobile.match.insufficientBalance") result = result.replace("FCFA", AccountCurrency.code)
     values.forEach { (name, value) -> result = result.replace("{{$name}}", value?.toString().orEmpty()) }
@@ -79,10 +80,14 @@ fun webCopy(key: String, vararg values: Pair<String, Any?>): String {
 @Composable
 fun webItemCount(key: String): Int {
     val context = LocalContext.current
-    val language = LocalConfiguration.current.locales[0].language.let { if (it == "my") "my" else "en" }
+    val language = LocalConfiguration.current.locales[0].language.let(AppLanguages::resolve)
     return remember(key, language) {
         var node: Any? = dictionaries.getOrPut(language) { context.assets.open("web-copy/$language.json").bufferedReader().use { JSONObject(it.readText()) } }
         key.split('.').forEach { node = (node as? JSONObject)?.opt(it) }
+        if (node !is org.json.JSONArray) {
+            node = dictionaries.getOrPut("en") { context.assets.open("web-copy/en.json").bufferedReader().use { JSONObject(it.readText()) } }
+            key.split('.').forEach { node = (node as? JSONObject)?.opt(it) }
+        }
         (node as? org.json.JSONArray)?.length() ?: 0
     }
 }
@@ -95,10 +100,10 @@ fun UserWebShell(route: String, onNavigate: (String) -> Unit, content: @Composab
     val navigationOverride = remember(route) { mutableStateOf<String?>(null) }
     val baseContext = LocalContext.current
     val preferences = remember { baseContext.getSharedPreferences("customer_ui", Context.MODE_PRIVATE) }
-    var language by remember { mutableStateOf(preferences.getString("language", "my").let { if (it == "my") "my" else "en" }) }
-    val configuration = Configuration(LocalConfiguration.current).apply { setLocale(Locale.forLanguageTag(language)) }
+    var language by remember { mutableStateOf(AppLanguages.resolve(preferences.getString("language", "en"))) }
+    val configuration = Configuration(LocalConfiguration.current).apply { setLocale(Locale.forLanguageTag(language)); setLayoutDirection(Locale.forLanguageTag(language)) }
     val localizedContext = remember(language, baseContext) { baseContext.createConfigurationContext(configuration) }
-    CompositionLocalProvider(LocalUserShell provides true, LocalUserNavSelectionOverride provides navigationOverride, LocalContext provides localizedContext, LocalConfiguration provides configuration) {
+    CompositionLocalProvider(androidx.compose.ui.platform.LocalLayoutDirection provides (if (language == "ar") androidx.compose.ui.unit.LayoutDirection.Rtl else androidx.compose.ui.unit.LayoutDirection.Ltr), LocalUserShell provides true, LocalUserNavSelectionOverride provides navigationOverride, LocalContext provides localizedContext, LocalConfiguration provides configuration) {
         val base = MaterialTheme.typography
         fun TextStyle.webStyle() = copy(platformStyle = PlatformTextStyle(includeFontPadding = false), letterSpacing = 0.sp, lineHeight = 1.5.em)
         MaterialTheme(colorScheme = UclDarkColorScheme, typography = base.copy(bodyLarge = base.bodyLarge.webStyle(), bodyMedium = base.bodyMedium.webStyle(),
@@ -118,12 +123,12 @@ fun UserWebShell(route: String, onNavigate: (String) -> Unit, content: @Composab
                                     Surface(onClick = { expanded = true }, modifier = Modifier.heightIn(min = 48.dp), shape = RoundedCornerShape(8.dp), color = MaterialTheme.colorScheme.surfaceVariant, contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)) {
                                         Row(Modifier.padding(horizontal = 12.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                                            Text(if (language == "my") "မြန်မာ" else "English", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                                            Text(AppLanguages.options.first { it.first == language }.second, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
                                             WebIcon("chevron_down", Modifier.size(14.dp), WebMuted)
                                         }
                                     }
                                     DropdownMenu(expanded, onDismissRequest = { expanded = false }) {
-                                        listOf("en" to "English", "my" to "မြန်မာ").forEach { (code, label) ->
+                                        AppLanguages.options.forEach { (code, label) ->
                                             DropdownMenuItem(text = { Text(label) }, onClick = {
                                                 language = code
                                                 preferences.edit().putString("language", code).apply()
