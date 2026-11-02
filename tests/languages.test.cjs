@@ -31,10 +31,23 @@ test('all seven existing translations are available and saved choices survive in
  }
  assert.equal(mobile('unknown').instance.language,'en')
 })
-test('partial translations use their translated strings and fall back to English for missing content',()=>{
+test('translated views use completed catalogs and retain English as a defensive fallback',()=>{
  const {instance}=mobile('ru')
  const ru=require('../locales/ru/common.json'),en=require('../locales/en/common.json')
  assert.equal(instance.t('common.signIn'),ru.common.signIn)
- assert.equal(instance.t('website.mmkStake'),en.website.mmkStake)
+ assert.equal(instance.t('website.mmkStake'),ru.website.mmkStake)
+ instance.addResource('en','common','testOnlyFallback','English fallback')
+ assert.equal(instance.t('testOnlyFallback'),'English fallback')
  assert.notEqual(instance.t('website.mmkStake'),'website.mmkStake')
+})
+
+
+test('payment recovery instructions are present in each completed translation', () => {
+ const expected={ar:'المعاملات',es:'transacciones',fr:'transactions',it:'transazioni',ru:'историю операций'}
+ for(const [language,term] of Object.entries(expected)) {
+  const catalog=require(`../locales/${language}/common.json`)
+  assert.ok(catalog.messages.receiptAlreadyUsed.includes(term),`${language}: receipt recovery instructions missing`)
+  assert.ok(catalog.messages.betMinimum.includes('{{minimum}}'))
+  assert.ok(catalog.website.vipTierRequirements.includes('{{amount}}'))
+ }
 })

@@ -35,7 +35,7 @@ fun SavedDataIndicator(route: String) {
     val oldest = saved.minOfOrNull { it.savedAt!! } ?: return
     val locale = LocalConfiguration.current.locales[0]
     val date = remember(oldest, locale) { DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale).format(Date(oldest)) }
-    val text = if (locale.language == "my") "သိမ်းထားသောဒေတာ · နောက်ဆုံးအပ်ဒိတ် $date" else "Saved data · last updated $date"
+    val text = webCopy("common.savedDataUpdated", "date" to date)
     Text(text, color = UclColors.muted, fontSize = 11.sp,
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp))
 }

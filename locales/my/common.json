@@ -59,7 +59,8 @@
     "loading": "UCL ကို ရယူနေသည်…",
     "timeToBeConfirmed": "အချိန် အတည်ပြုရန် စောင့်ဆိုင်းဆဲ",
     "loadMore": "ထပ်မံကြည့်ရှုရန်",
-    "showingRecords": "မှတ်တမ်း {{count}} ခု ပြသထားသည်"
+    "showingRecords": "မှတ်တမ်း {{count}} ခု ပြသထားသည်",
+    "savedDataUpdated": "သိမ်းထားသောဒေတာ · နောက်ဆုံးအပ်ဒိတ် {{date}}"
   },
   "auth": {
     "login": {

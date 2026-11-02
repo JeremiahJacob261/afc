@@ -59,7 +59,8 @@
     "loading": "Loading UCL…",
     "timeToBeConfirmed": "Time to be confirmed",
     "loadMore": "Load more",
-    "showingRecords": "Showing {{count}} records"
+    "showingRecords": "Showing {{count}} records",
+    "savedDataUpdated": "Saved data · last updated {{date}}"
   },
   "auth": {
     "login": {
@@ -842,7 +843,7 @@
       "transactions": "Transactions",
       "referrals": "Referrals",
       "transactionPin": "Transaction PIN",
-      "languageValue": "Burmese"
+      "languageValue": "English"
     },
     "deposit": {
       "title": "Deposit",

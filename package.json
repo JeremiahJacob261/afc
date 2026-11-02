@@ -17,9 +17,10 @@
     "android:native:debug": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-native-debug.ps1",
     "check:native-ui-assets": "node scripts/check-native-ui-assets.mjs",
     "android:native:release": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-native-release.ps1",
-    "check:i18n": "node scripts/check-i18n.js",
+    "check:i18n": "node scripts/check-i18n.js && node scripts/check-native-translations.cjs",
     "test:i18n": "node --test tests/i18n.test.cjs",
-    "test:wheel": "node --test tests/wheel.test.cjs"
+    "test:wheel": "node --test tests/wheel.test.cjs",
+    "check:translations": "node scripts/check-i18n.js && node scripts/check-native-translations.cjs"
   },
   "dependencies": {
     "@capacitor/android": "6.2.1",
