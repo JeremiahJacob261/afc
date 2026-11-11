@@ -59,6 +59,7 @@ export default async function handler(req, res) {
         payload.membershipBalanceThreshold ?? membershipBalanceThreshold
       )
       const nextWithdrawalSettings = await saveWithdrawalSettings(supabase, {
+        currencyLimits: payload.currencyLimits ?? currentWithdrawalSettings.currencyLimits,
         minWithdrawalAmount: payload.minWithdrawalAmount ?? currentWithdrawalSettings.minWithdrawalAmount,
         annualWithdrawalLimit: payload.annualWithdrawalLimit ?? payload.maxWithdrawalAmount ?? currentWithdrawalSettings.annualWithdrawalLimit,
         dailyWithdrawalLimit: payload.dailyWithdrawalLimit ?? currentWithdrawalSettings.dailyWithdrawalLimit,
