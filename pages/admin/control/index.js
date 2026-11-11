@@ -48,6 +48,7 @@ export default function Controls() {
   const router = useRouter()
   const [bonusPercent, setBonusPercent] = useState('3')
   const [membershipBalanceThreshold, setMembershipBalanceThreshold] = useState('8335')
+  const [currencyLimits, setCurrencyLimits] = useState(null)
   const [minWithdrawalAmount, setMinWithdrawalAmount] = useState('50000')
   const [dailyWithdrawalLimit, setDailyWithdrawalLimit] = useState('500000')
   const [annualWithdrawalLimit, setAnnualWithdrawalLimit] = useState('500000000')
@@ -79,6 +80,7 @@ export default function Controls() {
         if (active) {
           setBonusPercent(String(result.settings?.firstDepositBonusPercent ?? 3))
           setMembershipBalanceThreshold(String(result.settings?.membershipBalanceThreshold ?? 8335))
+          setCurrencyLimits(result.settings?.currencyLimits ?? null)
           setMinWithdrawalAmount(String(result.settings?.minWithdrawalAmount ?? 50000))
           setDailyWithdrawalLimit(String(result.settings?.dailyWithdrawalLimit ?? 500000))
           setAnnualWithdrawalLimit(String(result.settings?.annualWithdrawalLimit ?? 500000000))
@@ -153,9 +155,9 @@ export default function Controls() {
   const saveSettings = async () => {
     const firstDepositBonusPercent = Number(bonusPercent)
     const activeMemberThreshold = Number(membershipBalanceThreshold)
-    const minAmount = Number(minWithdrawalAmount)
-    const dailyLimit = Number(dailyWithdrawalLimit)
-    const annualLimit = Number(annualWithdrawalLimit)
+    const minAmount = Number(currencyLimits?.MMK?.minimum ?? minWithdrawalAmount)
+    const dailyLimit = Number(currencyLimits?.MMK?.daily ?? dailyWithdrawalLimit)
+    const annualLimit = Number(currencyLimits?.MMK?.annual ?? annualWithdrawalLimit)
     const feePercent = Number(withdrawalFeePercent)
 
     if (!Number.isFinite(firstDepositBonusPercent) || firstDepositBonusPercent < 0 || firstDepositBonusPercent > 100) {
@@ -170,11 +172,6 @@ export default function Controls() {
 
     if (!Number.isFinite(minAmount) || minAmount < 0) {
       toast.error('Minimum withdrawal amount must be zero or greater')
-      return
-    }
-
-    if (minAmount > 500000) {
-      toast.error('Minimum withdrawal amount cannot exceed the 500,000 MMK hard limit')
       return
     }
 
@@ -211,6 +208,7 @@ export default function Controls() {
         body: JSON.stringify({ 
           firstDepositBonusPercent,
           membershipBalanceThreshold: activeMemberThreshold,
+          currencyLimits,
           minWithdrawalAmount: minAmount,
           dailyWithdrawalLimit: dailyLimit,
           annualWithdrawalLimit: annualLimit,
@@ -233,6 +231,7 @@ export default function Controls() {
 
       setBonusPercent(String(result.settings?.firstDepositBonusPercent ?? firstDepositBonusPercent))
       setMembershipBalanceThreshold(String(result.settings?.membershipBalanceThreshold ?? activeMemberThreshold))
+      setCurrencyLimits(result.settings?.currencyLimits ?? currencyLimits)
       setMinWithdrawalAmount(String(result.settings?.minWithdrawalAmount ?? minAmount))
       setDailyWithdrawalLimit(String(result.settings?.dailyWithdrawalLimit ?? dailyLimit))
       setAnnualWithdrawalLimit(String(result.settings?.annualWithdrawalLimit ?? annualLimit))
@@ -388,7 +387,7 @@ export default function Controls() {
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-white">Withdrawal Settings</h3>
-                <p className="text-sm text-zinc-500">Each request is capped at 500,000 MMK. Set daily and annual totals below.</p>
+                <p className="text-sm text-zinc-500">Set a minimum and limits for each account currency below.</p>
               </div>
             </div>
 
@@ -446,49 +445,28 @@ export default function Controls() {
                 ) : null}
               </div>
 
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold text-white">Minimum Withdrawal Amount (MMK)</label>
-                <label className="flex h-12 items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4">
-                  <input
-                    type="number"
-                    inputMode="decimal"
-                    min="0"
-                    step="0.001"
-                    value={minWithdrawalAmount}
-                    disabled={loadingSettings || savingSettings}
-                    onChange={(event) => setMinWithdrawalAmount(event.target.value)}
-                    className="min-w-0 flex-1 bg-transparent text-lg font-semibold text-white outline-none disabled:text-zinc-500"
-                  />
-                </label>
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold text-white">Daily Withdrawal Limit (MMK)</label>
-                <label className="flex h-12 items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4">
-                  <input
-                    type="number"
-                    inputMode="decimal"
-                    min="0"
-                    step="0.001"
-                    value={dailyWithdrawalLimit}
-                    disabled={loadingSettings || savingSettings}
-                    onChange={(event) => setDailyWithdrawalLimit(event.target.value)}
-                    className="min-w-0 flex-1 bg-transparent text-lg font-semibold text-white outline-none disabled:text-zinc-500"
-                  />
-                </label>
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold text-white">Annual Withdrawal Limit (MMK)</label>
-                <label className="flex h-12 items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4">
-                  <input type="number" inputMode="decimal" min="0" step="0.001" value={annualWithdrawalLimit} disabled={loadingSettings || savingSettings} onChange={(event) => setAnnualWithdrawalLimit(event.target.value)} className="min-w-0 flex-1 bg-transparent text-lg font-semibold text-white outline-none disabled:text-zinc-500" />
-                </label>
+              <div className="space-y-4">
+                <div><h3 className="text-sm font-semibold text-white">Withdrawal limits by account currency</h3><p className="mt-1 text-xs text-zinc-400">Set separate limits for each currency. Daily and annual limits apply to each user.</p></div>
+                {currencyLimits && Object.entries(currencyLimits).map(([code, limits]) => (
+                  <fieldset key={code} className="rounded-2xl border border-white/10 p-4">
+                    <legend className="px-2 text-sm font-semibold text-white">{code}</legend>
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                      {Object.entries({ minimum: 'Minimum', perRequest: 'Per request maximum', daily: 'Daily limit', annual: 'Annual limit' }).map(([field, label]) => (
+                        <label key={field} className="flex flex-col gap-2 text-sm text-white">{label} ({code})
+                          <input type="number" inputMode="decimal" min="0" step="any" value={limits[field]} disabled={loadingSettings || savingSettings}
+                            onChange={event => setCurrencyLimits(current => ({ ...current, [code]: { ...current[code], [field]: event.target.value } }))}
+                            className="h-12 min-w-0 rounded-full border border-white/10 bg-white/[0.06] px-4 text-lg font-semibold text-white outline-none disabled:text-zinc-500" />
+                        </label>
+                      ))}
+                    </div>
+                  </fieldset>
+                ))}
               </div>
 
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-semibold text-white">Daily & Annual Limit Exemptions</label>
                 <textarea value={withdrawalLimitExemptUsernames} disabled={loadingSettings || savingSettings} onChange={(event) => setWithdrawalLimitExemptUsernames(event.target.value)} placeholder="One username per line" className="min-h-[96px] rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm text-white outline-none disabled:text-zinc-500" />
-                <p className="text-xs text-zinc-500">Enter one username per line. Exemptions do not bypass the 500,000 MMK limit per request.</p>
+                <p className="text-xs text-zinc-500">Enter one username per line. Exemptions do not bypass the per-request limit.</p>
               </div>
 
               <div className="flex flex-col gap-2">
