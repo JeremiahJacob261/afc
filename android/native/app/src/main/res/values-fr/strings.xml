@@ -382,7 +382,7 @@
     <string name="bet_slip_view_bet">Voir le pari</string>
     <string name="bet_slip_odds_changed">Les cotes ont changé. Demandez une nouvelle estimation et confirmez à nouveau.</string>
     <string name="bet_slip_submission_failed">Impossible de placer le pari.</string>
-    <string name="bet_slip_minimum_stake">La mise minimale est de 2,500 MMK. Saisissez ce montant ou un montant supérieur.</string>
+    <string name="bet_slip_minimum_stake">La mise minimale est de 5,000 MMK. Saisissez ce montant ou un montant supérieur.</string>
     <string name="bet_slip_insufficient_balance">Votre solde est insuffisant pour ce pari. Réduisez la mise ou ajoutez des fonds, puis réessayez.</string>
     <string name="bet_slip_maximum_reached">Vous avez atteint le nombre maximum de paris pour aujourd\'hui.</string>
     <string name="bet_slip_match_settled">Ce match a déjà été réglé, donc les nouveaux paris sont fermés.</string>

@@ -382,7 +382,7 @@
     <string name="bet_slip_view_bet">Посмотреть ставку</string>
     <string name="bet_slip_odds_changed">Коэффициенты изменились. Обновите расчёт и подтвердите ставку заново.</string>
     <string name="bet_slip_submission_failed">Не удалось сделать ставку.</string>
-    <string name="bet_slip_minimum_stake">Минимальная ставка — 2,500 MMK. Введите эту сумму или больше.</string>
+    <string name="bet_slip_minimum_stake">Минимальная ставка — 5,000 MMK. Введите эту сумму или больше.</string>
     <string name="bet_slip_insufficient_balance">Недостаточно средств для этой ставки. Уменьшите сумму или пополните баланс и попробуйте снова.</string>
     <string name="bet_slip_maximum_reached">Вы достигли максимального количества ставок на сегодня.</string>
     <string name="bet_slip_match_settled">Этот матч уже урегулирован, так что новые ставки закрыты.</string>

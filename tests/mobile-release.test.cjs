@@ -77,5 +77,18 @@ test('the website ships the advertised production APK with its matching checksum
  const response=request({},manifest)
  assert.equal(response.body.versionCode,manifest.versionCode)
  assert.equal(response.body.versionName,manifest.versionName)
- assert.equal(response.body.downloadUrl,manifest.downloadUrl)
+  assert.equal(response.body.downloadUrl,manifest.downloadUrl)
+})
+
+test('dashboard download appears above the carousel without duplicating account actions', () => {
+  const dashboard = fs.readFileSync(path.resolve(__dirname, '../pages/user/index.js'), 'utf8')
+  assert.ok(dashboard.indexOf('className={styles.appDownload}') < dashboard.indexOf('<DashboardCarousel />'))
+  assert.equal((dashboard.match(/href=\{appRelease\.downloadUrl\}/g) || []).length, 1)
+  assert.match(dashboard, /!nativeApp && <aside/)
+  assert.match(dashboard, /href=\{appRelease\.downloadUrl\} download/)
+  assert.match(dashboard, /role="status"/)
+  for (const locale of ['en', 'my', 'ar', 'es', 'fr', 'it', 'ru']) {
+    const copy = JSON.parse(fs.readFileSync(path.resolve(__dirname, `../locales/${locale}/common.json`), 'utf8'))
+    assert.ok(copy.dashboard.reinstallApp, `${locale} must explain the signing-key change`)
+  }
 })

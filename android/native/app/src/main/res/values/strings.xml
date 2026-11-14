@@ -406,7 +406,7 @@
     <string name="bet_slip_view_bet">View bet</string>
     <string name="bet_slip_odds_changed">The odds changed. Request a new quote and confirm it again.</string>
     <string name="bet_slip_submission_failed">We could not confirm whether your bet was placed. Check My Bets before trying again.</string>
-    <string name="bet_slip_minimum_stake">The minimum stake is 2,500 MMK. Enter this amount or more.</string>
+    <string name="bet_slip_minimum_stake">The minimum stake is 5,000 MMK. Enter this amount or more.</string>
     <string name="bet_slip_insufficient_balance">Your balance is too low to place this bet. Lower your stake or add funds, then try again.</string>
     <string name="bet_slip_maximum_reached">You have reached your daily bet limit. Try again after the limit resets.</string>
     <string name="bet_slip_match_settled">This match has already been settled, so new bets are closed.</string>

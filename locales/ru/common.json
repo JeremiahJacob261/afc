@@ -173,7 +173,7 @@
     "unableLoadMatches": "Не удалось загрузить матчи.",
     "unableLoadMatch": "Не удалось загрузить матч.",
     "chooseScoreMarket": "Сначала выберите рынок по счёту.",
-    "stakeMinimum": "Ставка должна быть не менее 2,500 MMK.",
+    "stakeMinimum": "Ставка должна быть не менее 5,000 MMK.",
     "betPlaced": "Ставка успешно размещена.",
     "unablePlaceBet": "Не удалось сделать ставку.",
     "unableLoadBets": "Не удалось загрузить ставки.",
@@ -1415,6 +1415,7 @@
     "copyReferralLink": "Ссылка на копию",
     "referralUnavailable": "Ссылка не доступна",
     "downloadApp": "Скачать приложение",
+    "reinstallApp": "Уже установлено? Сначала удалите приложение.",
     "androidApp": "Приложение для Android",
     "downloadUnavailable": "Скачать еще не доступно",
     "checkingDownload": "Проверяешь доступность приложения?"

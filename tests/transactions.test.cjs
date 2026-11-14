@@ -38,7 +38,7 @@ test('admin actions retain their recovery guidance when a server returns generic
 
 test('bet validation returns the correct reason through the real API handler', async () => {
   const { handler, calls } = fixture('pages/api/place-bet.js')
-  const valid = { match_id: 'match-1', picked: 'nilnil', stake: 2500, expected_odd: 1.5 }
+  const valid = { match_id: 'match-1', picked: 'nilnil', stake: 5000, expected_odd: 1.5 }
   for (const [change, expected] of [
     [{ stake: 2000 }, 'BET_MINIMUM_STAKE'],
     [{ stake: 'abc' }, 'BET_INVALID_STAKE'],
@@ -64,7 +64,7 @@ test('bet RPC errors retain actionable reasons without exposing server internals
   ]) {
     const { handler } = fixture('pages/api/place-bet.js', { error: { message } })
     const res = response()
-    await handler({ method: 'POST', body: { match_id: 'match-1', picked: 'nilnil', stake: 2500, expected_odd: 1.5 } }, res)
+    await handler({ method: 'POST', body: { match_id: 'match-1', picked: 'nilnil', stake: 5000, expected_odd: 1.5 } }, res)
     assert.equal(res.statusCode, status)
     assert.equal(res.body.code, code)
     assert.doesNotMatch(res.body.message, /private database/)
@@ -72,14 +72,44 @@ test('bet RPC errors retain actionable reasons without exposing server internals
 })
 const id = '00000000-0000-4000-8000-000000000001'
 const requestId = '00000000-0000-4000-8000-000000000002'
-function fixture(file, outcome = { data: { status: 'success', notificationId: 1, balance: 50000 } }, authenticated = true) {
+function fixture(file, outcome = { data: { status: 'success', notificationId: 1, balance: 50000 } }, authenticated = true, currency = 'USDT') {
   const calls = []
+  const apiAuth = {
+    getCurrentUser: async () => { if (!authenticated) throw Object.assign(new Error('Authentication required'), { statusCode:401 }); return { id } },
+    getCurrentProfile: async () => ({ profile: { currency_code: currency } }),
+  }
   const handler = load(file, {
-    '@/lib/apiAuth': { getCurrentUser: async () => { if (!authenticated) throw Object.assign(new Error('Authentication required'), { statusCode:401 }); return { id } } },
+    '@/lib/apiAuth': apiAuth,
+    './apiAuth.js': apiAuth,
     '@/lib/supabaseAdmin': { getSupabaseAdmin: () => ({ rpc: async (name,args) => { calls.push({ name,args }); return outcome } }) },
   }).default
   return { calls, handler }
 }
+
+test('placement and quotes enforce one USD equivalent in every account currency', async () => {
+  for (const [currency, minimum] of [['USDT', 1], ['MMK', 5000], ['FCFA', 600], ['ZMW', 20]]) {
+    for (const route of ['place-bet', 'mobile/bet-quote']) {
+      const { handler, calls } = fixture(`pages/api/${route}.js`, undefined, true, currency)
+      for (const [stake, accepted] of [[minimum / 2, false], [minimum - 0.01, false], [minimum, true]]) {
+        const res = response()
+        await handler({
+          method: route === 'place-bet' ? 'POST' : 'GET',
+          url: `/api/${route}`,
+          headers: { 'x-account-currency-contract': '1' },
+          body: { match_id: 'match-1', picked: 'nilnil', stake, expected_odd: 1.5 },
+          query: { match_id: 'match-1', picked: 'nilnil', stake },
+        }, res)
+        assert.equal(res.statusCode, accepted ? 200 : 400, `${route} ${currency} ${stake}`)
+        if (accepted) assert.equal(calls.at(-1).args.p_stake, 5000)
+        else {
+          assert.equal(res.body.code, 'BET_MINIMUM_STAKE')
+          assert.equal(res.body.details.minimum, `${minimum.toLocaleString('en')} ${currency}`)
+        }
+      }
+      assert.equal(calls.length, 1)
+    }
+  }
+})
 
 test('withdrawal is one atomic RPC, binds identity to Auth and preserves native response shape', async () => {
   const { calls,handler }=fixture('pages/api/withdraw.js'); const res=response()

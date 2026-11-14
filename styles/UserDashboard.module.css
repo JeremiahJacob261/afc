@@ -173,11 +173,16 @@
 .referralControl input{width:100%;min-width:0;min-height:48px;padding:10px 12px;border:1px solid var(--ucl-border);border-radius:8px;background:var(--ucl-panel);color:var(--ucl-ink);font:inherit;font-size:14px}
 .referralControl button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:10px 12px;border:1px solid var(--ucl-border);border-radius:8px;background:var(--ucl-panel);color:var(--ucl-ink);font:inherit;font-size:13px;font-weight:700;cursor:pointer}
 .referralControl button:hover:not(:disabled),.downloadButton:hover:not(:disabled){border-color:var(--ucl-blue-accent);background:var(--ucl-panel)}
-.downloadAction{display:grid;gap:6px;justify-items:center}
-.downloadButton{border:1px solid var(--ucl-border);background:transparent;color:var(--ucl-ink);cursor:pointer}
-.downloadAction>span{font-size:12px;color:var(--ucl-muted);text-align:center;max-width:24ch}
+.appDownload{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:64px;margin-bottom:12px;padding:8px 0 12px;border-bottom:1px solid var(--ucl-border)}
+.appDownloadCopy{display:grid;gap:2px;min-width:0}
+.appDownloadLabel{color:var(--ucl-ink);font-size:13px;font-weight:700;line-height:1.5}
+.appDownloadLabel>span{color:var(--ucl-muted);font-size:12px;font-weight:400}
+.appDownloadStatus{color:var(--ucl-muted);font-size:12px;line-height:1.5;overflow-wrap:anywhere}
+.appDownload .downloadButton{flex-shrink:0;gap:6px;min-height:44px;max-width:50%;padding:8px 12px;border:1px solid var(--ucl-border);border-radius:6px;background:transparent;color:var(--ucl-ink);font-size:13px;white-space:normal;text-align:center;cursor:pointer}
+.appDownload .downloadButton svg{flex-shrink:0}
+.appDownload .downloadButton:disabled{opacity:.55;cursor:not-allowed}
 .quickActions button:disabled{opacity:.55;cursor:not-allowed}
-@media(max-width:767px){.quickActions{flex-wrap:wrap;gap:16px;padding:16px;margin:16px 0}.depositAction{flex:1}.downloadAction{flex:1}.downloadButton{width:100%}.referralAction{flex-basis:100%;order:3}}
+@media(max-width:767px){.quickActions{flex-wrap:wrap;gap:16px;padding:16px;margin:16px 0}.depositAction{flex:1}.referralAction{flex-basis:100%;order:3}}
 .carouselControls{position:static;justify-content:center;gap:12px;padding:6px 12px;background:var(--ucl-paper)}
 .carouselControls button{width:44px;height:44px}
 

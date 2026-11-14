@@ -382,7 +382,7 @@
     <string name="bet_slip_view_bet">نظرة الرهان</string>
     <string name="bet_slip_odds_changed">تغيّرت معاملات الرهان. اطلب عرضًا محدّثًا وراجعه قبل التأكيد مجددًا.</string>
     <string name="bet_slip_submission_failed">تعذر وضع الرهان.</string>
-    <string name="bet_slip_minimum_stake">الحد الأدنى لمبلغ الرهان هو 2,500 MMK. أدخل هذا المبلغ أو أكثر.</string>
+    <string name="bet_slip_minimum_stake">الحد الأدنى لمبلغ الرهان هو 5,000 MMK. أدخل هذا المبلغ أو أكثر.</string>
     <string name="bet_slip_insufficient_balance">رصيدك غير كافٍ لوضع هذا الرهان. خفّض مبلغ الرهان أو أودع رصيدًا، ثم حاول مجددًا.</string>
     <string name="bet_slip_maximum_reached">لقد وصلت إلى الحد الأقصى لعدد الرهانات اليوم.</string>
     <string name="bet_slip_match_settled">هذه المباراة تم تسويةها بالفعل، لذا تم إغلاق الرهانات الجديدة.</string>

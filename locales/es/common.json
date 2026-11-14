@@ -173,7 +173,7 @@
     "unableLoadMatches": "No se pueden cargar los partidos.",
     "unableLoadMatch": "No se puede cargar el partido.",
     "chooseScoreMarket": "Elija primero un mercado de puntuación.",
-    "stakeMinimum": "La apuesta debe ser al menos de 2,500 MMK.",
+    "stakeMinimum": "La apuesta debe ser al menos de 5,000 MMK.",
     "betPlaced": "Apuesta realizada con éxito.",
     "unablePlaceBet": "No se puede realizar la apuesta.",
     "unableLoadBets": "No se pueden cargar las apuestas.",
@@ -1415,6 +1415,7 @@
     "copyReferralLink": "Enlace de referencia de copia",
     "referralUnavailable": "Enlace de referencia no disponible",
     "downloadApp": "Descargar la aplicación",
+    "reinstallApp": "¿Ya está instalada? Desinstálala primero.",
     "androidApp": "Aplicación para Android",
     "downloadUnavailable": "Descarga aún no disponible",
     "checkingDownload": "¿Verificar la disponibilidad de la aplicación?"

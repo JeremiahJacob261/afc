@@ -45,7 +45,7 @@ function filteredMatches(matches, filter, now) {
 }
 
 const dashboardSlides = [
-  { src: '/promotions/ucl-welcome-20261102.jpg', altKey: 'website.carouselWelcomeBanner' },
+  { src: '/promotions/ucl-welcome-20261114.jpg', altKey: 'website.carouselWelcomeBanner' },
   { src: '/promotions/ucl-commissions-20261102.jpg', altKey: 'website.carouselCommissionBanner' },
   { src: '/promotions/ucl-referral-rewards-20261102.jpg', altKey: 'website.carouselReferralBanner' },
   { src: '/promotions/ucl-agent-salary-20261102.jpg', altKey: 'website.carouselAgentSalaryBanner' },
@@ -113,7 +113,7 @@ export default function Home() {
   const [referralCode, setReferralCode] = useState('')
   const [copied, setCopied] = useState(false)
   const [copying, setCopying] = useState(false)
-  const [nativeApp, setNativeApp] = useState(true)
+  const [nativeApp, setNativeApp] = useState(false)
   const [appRelease, setAppRelease] = useState(null)
   const [releaseLoaded, setReleaseLoaded] = useState(false)
   const referralLink = referralCode ? `https://ucl01.com/register/${encodeURIComponent(referralCode)}` : ''
@@ -235,6 +235,16 @@ export default function Home() {
     <Head><title>{t('website.uclMatchday')}</title><link rel="icon" href="/european.ico" /><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
     <Toaster position="bottom-center" />
     <main className={styles.dashboard}>
+      {!nativeApp && <aside className={styles.appDownload} aria-label={t('dashboard.androidApp')}>
+        <div className={styles.appDownloadCopy}>
+          <span className={styles.appDownloadLabel}>{t('dashboard.androidApp')}{appRelease && <span className="notranslate"> · {appRelease.versionName}</span>}</span>
+          <span className={styles.appDownloadStatus} role="status">
+            {t(appRelease ? 'dashboard.reinstallApp' : releaseLoaded ? 'dashboard.downloadUnavailable' : 'dashboard.checkingDownload')}
+          </span>
+        </div>
+        {appRelease ? <a href={appRelease.downloadUrl} download className={styles.downloadButton}><Download size={16} aria-hidden="true" />{t('dashboard.downloadApp')}</a>
+          : <button type="button" className={styles.downloadButton} disabled><Download size={16} aria-hidden="true" />{t('dashboard.downloadApp')}</button>}
+      </aside>}
       <DashboardCarousel />
       <section className={styles.quickActions} aria-label={t('website.yourAccountAlt')}>
         <Link href="/user/fund" className={styles.depositAction}><Plus size={20} aria-hidden="true" />{t('common.deposit')}</Link>
@@ -247,13 +257,6 @@ export default function Home() {
             </button>
           </div>
         </div>
-        {!nativeApp && <div className={styles.downloadAction}>
-          {appRelease ? <a href={appRelease.downloadUrl} className={styles.downloadButton}><Download size={18} aria-hidden="true" />{t('dashboard.downloadApp')}</a>
-            : <button type="button" className={styles.downloadButton} disabled>
-              <Download size={18} aria-hidden="true" />{t('dashboard.downloadApp')}</button>}
-          {/* <span>{t(appRelease ? 'dashboard.androidApp' : releaseLoaded ? 'dashboard.downloadUnavailable' : 'dashboard.checkingDownload')}</span>
-        */}
-        </div>}
       </section>
       <section className={styles.spinInvite} aria-labelledby="spin-invite-heading">
         <span className={styles.spinInviteWheel} aria-hidden="true"><span>{t('website.go')}</span></span>

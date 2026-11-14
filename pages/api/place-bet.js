@@ -41,8 +41,8 @@ export default withApiTiming(async function handler(req, res) {
     if (!match_id) return reject('BET_INVALID_DETAILS', 'Reopen the match to load the latest bet details.')
     if (!Object.prototype.hasOwnProperty.call(markets, picked)) return reject('BET_SELECTION_REQUIRED', 'Choose an available score option before placing your bet.')
     if (!Number.isFinite(amount) || amount <= 0) return reject('BET_INVALID_STAKE', 'Enter a valid stake amount.')
-    if (amount < 2500) {
-      const minimum = formatCurrency(2500, currencySettings)
+    if (amount < 5000) {
+      const minimum = formatCurrency(5000, currencySettings)
       return reject('BET_MINIMUM_STAKE', `Minimum stake is ${minimum}`, { minimum })
     }
     if (!Number.isFinite(expectedOdd) || expectedOdd <= 0) return reject('BET_INVALID_DETAILS', 'Reopen the match to load the latest odds.')

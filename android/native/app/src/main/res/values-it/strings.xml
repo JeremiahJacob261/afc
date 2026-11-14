@@ -382,7 +382,7 @@
     <string name="bet_slip_view_bet">Visto scommessa</string>
     <string name="bet_slip_odds_changed">Le quote sono cambiate. Richiedi un nuovo preventivo e conferma di nuovo.</string>
     <string name="bet_slip_submission_failed">Impossibile piazzare la scommessa.</string>
-    <string name="bet_slip_minimum_stake">La puntata minima è di 2,500 MMK. Inserisci questo importo o uno superiore.</string>
+    <string name="bet_slip_minimum_stake">La puntata minima è di 5,000 MMK. Inserisci questo importo o uno superiore.</string>
     <string name="bet_slip_insufficient_balance">Il saldo non basta per questa scommessa. Riduci la puntata o aggiungi fondi, poi riprova.</string>
     <string name="bet_slip_maximum_reached">Hai raggiunto il numero massimo di scommesse per oggi.</string>
     <string name="bet_slip_match_settled">Questa partita è già stata stabilita, quindi le nuove scommesse sono chiuse.</string>

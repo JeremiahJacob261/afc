@@ -383,7 +383,7 @@
     <string name="bet_slip_view_bet">လောင်းကြေးကြည့်ရန်</string>
     <string name="bet_slip_odds_changed">နှုန်းထား ပြောင်းလဲသွားသည်။ နှုန်းအသစ်ကို စစ်ပြီး ပြန်အတည်ပြုပါ။</string>
     <string name="bet_slip_submission_failed">လောင်းကြေးတင်ပြီးခြင်းရှိမရှိ အတည်မပြုနိုင်ပါ။ ထပ်မကြိုးစားမီ မိမိလောင်းကြေးများကို စစ်ဆေးပါ။</string>
-    <string name="bet_slip_minimum_stake">အနည်းဆုံးလောင်းကြေးမှာ 2,500 MMK ဖြစ်သည်။ ဤပမာဏ သို့မဟုတ် ပိုများသောပမာဏကို ထည့်ပါ။</string>
+    <string name="bet_slip_minimum_stake">အနည်းဆုံးလောင်းကြေးမှာ 5,000 MMK ဖြစ်သည်။ ဤပမာဏ သို့မဟုတ် ပိုများသောပမာဏကို ထည့်ပါ။</string>
     <string name="bet_slip_insufficient_balance">ဤလောင်းကြေးအတွက် လက်ကျန်ငွေ မလုံလောက်ပါ။ လောင်းကြေးလျှော့ပါ သို့မဟုတ် ငွေထပ်ဖြည့်ပြီး ထပ်ကြိုးစားပါ။</string>
     <string name="bet_slip_maximum_reached">နေ့စဉ်လောင်းကြေးအရေအတွက် ကန့်သတ်ချက်သို့ ရောက်ရှိပါပြီ။ ကန့်သတ်ချက် ပြန်စပြီးနောက် ထပ်ကြိုးစားပါ။</string>
     <string name="bet_slip_match_settled">ဤပွဲစဉ်ကို ဆုံးဖြတ်ပြီးဖြစ်သောကြောင့် လောင်းကြေးအသစ်များ ပိတ်ထားပါသည်။</string>

@@ -382,7 +382,7 @@
     <string name="bet_slip_view_bet">Vea la apuesta</string>
     <string name="bet_slip_odds_changed">Las cuotas han cambiado. Solicita una cotización actualizada y vuelve a confirmar.</string>
     <string name="bet_slip_submission_failed">No se puede realizar la apuesta.</string>
-    <string name="bet_slip_minimum_stake">La apuesta mínima es de 2,500 MMK. Introduce ese importe o uno superior.</string>
+    <string name="bet_slip_minimum_stake">La apuesta mínima es de 5,000 MMK. Introduce ese importe o uno superior.</string>
     <string name="bet_slip_insufficient_balance">Tu saldo no es suficiente para esta apuesta. Reduce el importe o añade fondos e inténtalo de nuevo.</string>
     <string name="bet_slip_maximum_reached">Has alcanzado el número máximo de apuestas por hoy.</string>
     <string name="bet_slip_match_settled">Este partido ya ha sido resuelto, así que las nuevas apuestas están cerradas.</string>

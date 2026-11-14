@@ -173,7 +173,7 @@
     "unableLoadMatches": "Impossible de charger les matchs.",
     "unableLoadMatch": "Impossible de charger le match.",
     "chooseScoreMarket": "Choisissez d'abord un marché de score.",
-    "stakeMinimum": "La mise doit être d'au moins 2,500 MMK.",
+    "stakeMinimum": "La mise doit être d'au moins 5,000 MMK.",
     "betPlaced": "Pari placé avec succès.",
     "unablePlaceBet": "Impossible de placer le pari.",
     "unableLoadBets": "Impossible de charger les paris.",
@@ -1415,6 +1415,7 @@
     "copyReferralLink": "Lien de références de copie",
     "referralUnavailable": "Lien de référence non disponible",
     "downloadApp": "Télécharger l'application",
+    "reinstallApp": "Déjà installée ? Désinstallez-la d'abord.",
     "androidApp": "Application pour Android",
     "downloadUnavailable": "Téléchargement pas encore disponible",
     "checkingDownload": "Vérifiez la disponibilité de l'application ?"

@@ -173,7 +173,7 @@
     "unableLoadMatches": "We could not load the match list. Try again.",
     "unableLoadMatch": "We could not load this match. Refresh or return to the match list.",
     "chooseScoreMarket": "Choose a score market first.",
-    "stakeMinimum": "Stake must be at least 2,500 MMK.",
+    "stakeMinimum": "Stake must be at least 5,000 MMK.",
     "betPlaced": "Bet placed successfully.",
     "unablePlaceBet": "We could not confirm whether your bet was placed. Check My Bets before trying again.",
     "unableLoadBets": "We could not load your bets. Refresh to check their status.",
@@ -1415,6 +1415,7 @@
     "copyReferralLink": "Copy referral link",
     "referralUnavailable": "Referral link unavailable",
     "downloadApp": "Download app",
+    "reinstallApp": "Already installed? Uninstall first.",
     "androidApp": "Android app",
     "downloadUnavailable": "Download not available yet",
     "checkingDownload": "Checking app availability?"

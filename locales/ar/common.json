@@ -173,7 +173,7 @@
     "unableLoadMatches": "تعذر تحميل المباريات.",
     "unableLoadMatch": "تعذر تحميل المباراة.",
     "chooseScoreMarket": "اختر سوق النتيجة أولاً.",
-    "stakeMinimum": "يجب ألا يقل الرهان عن 2,500 MMK.",
+    "stakeMinimum": "يجب ألا يقل الرهان عن 5,000 MMK.",
     "betPlaced": "تم وضع الرهان بنجاح.",
     "unablePlaceBet": "تعذر وضع الرهان.",
     "unableLoadBets": "تعذر تحميل الرهانات.",
@@ -1415,6 +1415,7 @@
     "copyReferralLink": "رابط إحالة النسخ",
     "referralUnavailable": "لا توجد رابط إحالة",
     "downloadApp": "تنزيل التطبيق",
+    "reinstallApp": "مثبّت بالفعل؟ أزل النسخة الحالية أولاً.",
     "androidApp": "تطبيق أندرويد",
     "downloadUnavailable": "التنزيل غير متوفر بعد",
     "checkingDownload": "التحقق من توافر التطبيق؟"

@@ -63,7 +63,7 @@ const bootSplashDelayMs = 700
 const sessionBootTimeoutMs = 5000
 const referralFilters = ['all', 1, 2, 3]
 const promotionSlides = [
-  { src: '/promotions/ucl-welcome.jpg', altKey: 'website.carouselWelcomeBanner' },
+  { src: '/promotions/ucl-welcome-20261114.jpg', altKey: 'website.carouselWelcomeBanner' },
   { src: '/promotions/ucl-commissions.jpg', altKey: 'website.carouselCommissionBanner' },
   { src: '/promotions/ucl-referral-rewards.jpg', altKey: 'website.carouselReferralBanner' },
   { src: '/promotions/ucl-agent-salary.jpg', altKey: 'website.carouselAgentSalaryBanner' },
@@ -1486,7 +1486,7 @@ function MatchDetailScreen({ matchId, navigate }) {
     }
 
     const amount = Number(stake)
-    if (!Number.isFinite(amount) || amount < accountAmountFromMmk(2500)) {
+    if (!Number.isFinite(amount) || amount < accountAmountFromMmk(5000)) {
       notifyMessage(setMessage, 'error', t('messages.stakeMinimum'))
       return
     }
