@@ -9,6 +9,7 @@ test('initial currency limits preserve the existing MMK value', () => {
   assert.deepEqual(limits.USDT, { minimum: 10, perRequest: 100, daily: 100, annual: 100000 })
   assert.equal(limits.FCFA.minimum, 6000)
   assert.equal(limits.ZMW.minimum, 200)
+  assert.equal(limits.NGN.minimum, 13500)
   assert.deepEqual(validateCurrencyLimits(limits), limits)
 })
 
@@ -68,4 +69,21 @@ test('admin save validates all currencies and stores the MMK compatibility field
   assert.equal(result.currencyLimits.MMK.perRequest, 700000)
   limits.FCFA.daily = ''
   await assert.rejects(moduleObj.exports.saveWithdrawalSettings(database, { currencyLimits: limits }), /FCFA daily/)
+})
+
+test('missing NGN settings derive from custom MMK limits without altering existing currencies', () => {
+  const source = fs.readFileSync(require.resolve('../lib/adminSettings.js'), 'utf8')
+  const js = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText
+  const moduleObj = { exports: {} }
+  const mocks = {
+    './withdrawalCurrencyLimits.cjs': require('../lib/withdrawalCurrencyLimits.cjs'),
+    './membership': { DEFAULT_MEMBERSHIP_BALANCE_THRESHOLD: 0, normalizeMembershipBalanceThreshold: Number },
+  }
+  new Function('require', 'module', 'exports', js)(id => mocks[id], moduleObj, moduleObj.exports)
+  const old = defaultCurrencyLimits({ minWithdrawalAmount: 50000, maxWithdrawalAmount: 500000, dailyWithdrawalLimit: 500000, annualWithdrawalLimit: 500000000 })
+  old.MMK.perRequest = 700000
+  delete old.NGN
+  const result = moduleObj.exports.normalizeWithdrawalSettings({ withdrawal_currency_limits: old })
+  assert.equal(result.currencyLimits.NGN.perRequest, 189000)
+  assert.deepEqual(result.currencyLimits.MMK, old.MMK)
 })

@@ -18,9 +18,9 @@ import landing from "@/styles/LandingSystem.module.css";
 import styles from "@/styles/Auth.module.css";
 
 const registrationCountries = [
-  ...codes.countries.filter((country) => country.countryCode === 'MM'),
-  ...codes.countries.filter((country) => country.countryCode === 'RU'),
-  ...codes.countries.filter((country) => country.countryCode !== 'MM' && country.countryCode !== 'RU'),
+  ...codes.countries.filter((country) => country.countryCode === 'US'),
+  ...codes.countries.filter((country) => country.countryCode === 'GB'),
+  ...codes.countries.filter((country) => country.countryCode !== 'US' && country.countryCode !== 'GB'),
 ];
 
 function CountryFlag({ country, eager = false }) {
@@ -122,7 +122,7 @@ export default function Register({ refer }) {
   const route = useRouter();
   const [phone, setPhone] = useState("")
   const [username, setUsername] = useState("")
-  const [country, setCountry] = useState("MM");
+  const [country, setCountry] = useState("US");
 
   const [loading, setLoading] = useState(false);
   const [idR, setidR] = useState(refer);

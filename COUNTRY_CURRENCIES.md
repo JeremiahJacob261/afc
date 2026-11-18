@@ -1,8 +1,8 @@
 # Country account currencies
 
-The selected ISO country code determines an account's currency. Myanmar uses MMK; Zambia uses ZMW. The 14 countries in the West and Central African CFA franc zones use FCFA: BJ, BF, CI, GW, ML, NE, SN, TG, CM, CF, TD, CG, GQ, GA. All other countries use USDT.
+The selected ISO country code determines an account's currency. Myanmar uses MMK; Zambia uses ZMW; Nigeria uses NGN. The 14 countries in the West and Central African CFA franc zones use FCFA: BJ, BF, CI, GW, ML, NE, SN, TG, CM, CF, TD, CG, GQ, GA. All other countries use USDT.
 
-Fixed account rates: 1 USDT = 5,000 MMK = 600 FCFA = 20 ZMW. USD is not a separate account currency.
+Fixed account rates: 1 USDT = 5,000 MMK = 600 FCFA = 20 ZMW = 1,350 NGN. USD is not a separate account currency.
 
 ## Accounting and existing accounts
 
@@ -14,7 +14,7 @@ Transaction history leads with the account-currency equivalent. Original submitt
 
 ## API contract
 
-Updated website, mobile web, and native clients send X-Account-Currency-Contract: 1. The server derives the currency from the verified profile, converts account amounts in responses, and converts stake/withdrawal input back to the accounting unit before the existing atomic operations run. It does not accept a caller-selected exchange rate or denomination.
+Updated website, mobile web, and native clients send X-Account-Currency-Contract: 2. Older contract 1 clients receive USDT-equivalent values for Nigerian accounts until upgraded. The server derives the currency from the verified profile, converts account amounts in responses, and converts stake/withdrawal input back to the accounting unit before the existing atomic operations run. It does not accept a caller-selected exchange rate or denomination.
 
 Versioned responses include currency.code, currency.unitsPerUsdt, currency.ledgerCode, and currency.contract. Updated clients reject a successful financial response that lacks this contract. Legacy clients retain their existing MMK API contract until updated. Native snapshots use schema version 2 and preserve response currency metadata; old snapshots are discarded.
 
@@ -39,3 +39,7 @@ Do not deploy the signup API before its new provisioning RPC exists. Rolling bac
 - Database: tests/country-currency.sql (transactional fixture test; rolls back)
 
 The migration was also exercised in an isolated PostgreSQL runtime for backfill, value conservation, server-role provisioning, retry behavior, and RPC access grants. These local checks do not apply the migration to the live database.
+
+## Naira rollout
+
+Apply `20261118090156_prepare_naira.sql` first, then deploy the website and API with contract 2 support. After verifying the deployment, apply `20261118090201_activate_naira.sql` to assign NGN to Nigerian accounts and initialize its withdrawal limits. Existing MMK-denominated ledger balances and original payment amounts remain unchanged. Older installed app versions continue using USDT-equivalent amounts through contract 1; the updated native app must be built and distributed for those users to see NGN. US and UK appear first in registration, with US selected by default.

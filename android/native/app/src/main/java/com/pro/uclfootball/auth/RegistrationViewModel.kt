@@ -9,7 +9,7 @@ import java.io.IOException
 import com.pro.uclfootball.network.ApiException
 
 data class RegistrationUiState(val username: String = "", val email: String = "", val phone: String = "",
-    val country: String = "MM", val dialCode: String = "+95", val referral: String = "", val password: String = "", val confirmation: String = "",
+    val country: String = "US", val dialCode: String = "+1", val referral: String = "", val password: String = "", val confirmation: String = "",
     val acceptedTerms: Boolean = false, val busy: Boolean = false, val awaitingConfirmation: Boolean = false,
     val created: Boolean = false, val error: Int? = null, val confirmationNotice: Boolean = false)
 

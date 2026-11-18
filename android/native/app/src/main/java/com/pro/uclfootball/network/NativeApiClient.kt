@@ -186,7 +186,7 @@ class NativeApiClient(
         }
 
         val requestBuilder = Request.Builder()
-            .header("X-Account-Currency-Contract", "1")
+            .header("X-Account-Currency-Contract", "2")
             .url(url)
             .header("Accept", "application/json")
         if (authenticated && tokenOverride == null) checkAccount(requestOwner, true, requestGeneration)

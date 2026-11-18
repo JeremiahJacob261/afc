@@ -57,6 +57,17 @@ test('legacy clients retain the MMK contract',async()=>{
  const req={url:'/api/place-bet',headers:{},body:{stake:2500}}
  await withAccountCurrency(async r=>assert.equal(r.body.stake,2500))(req,{})
 })
+test('Nigerian accounts use naira with current clients and equivalent USDT with older apps',async()=>{
+ for(const [version,code,input] of [['1','USDT',1],['2','NGN',1350]]) {
+  const req={url:'/api/withdraw',headers:{'x-account-currency-contract':version},profile:{country_iso:'NG',currency_code:'NGN'},body:{amount:input}}
+  let payload
+  const res={json:body=>{payload=body;return body}}
+  await withAccountCurrency(async (r,s)=>{assert.equal(r.body.amount,5000);s.json({balance:5000})})(req,res)
+  assert.equal(payload.currency.code,code)
+  assert.equal(payload.currency.contract,Number(version))
+  assert.equal(payload.balance,input)
+ }
+})
 test('withdrawal quote input converts but deposit input stays in the payment currency',async()=>{
  for(const route of ['withdrawal','deposit']) {
   const req={url:`/api/mobile/${route}-quote`,headers:{'x-account-currency-contract':'1'},profile:{countrycode:'+260'},query:{amount:'100'}}

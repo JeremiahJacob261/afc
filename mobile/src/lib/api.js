@@ -10,7 +10,7 @@ function toApiUrl(path) {
 export async function apiFetch(path, options = {}) {
   const { auth = false, body, headers, ...rest } = options
   const requestHeaders = {
-    'x-account-currency-contract': '1',
+    'x-account-currency-contract': '2',
     Accept: 'application/json',
     ...(body ? { 'Content-Type': 'application/json' } : {}),
     ...(headers || {}),

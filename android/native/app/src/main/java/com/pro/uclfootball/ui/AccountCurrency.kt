@@ -8,7 +8,7 @@ import kotlinx.serialization.json.*
 object AccountCurrency {
     var code by mutableStateOf("USDT")
         private set
-    val unitsPerUsdt: Double get() = when(code) { "MMK" -> 5000.0; "FCFA" -> 600.0; "ZMW" -> 20.0; else -> 1.0 }
+    val unitsPerUsdt: Double get() = when(code) { "MMK" -> 5000.0; "FCFA" -> 600.0; "ZMW" -> 20.0; "NGN" -> 1350.0; else -> 1.0 }
     fun fromMmk(amount: Double): Double = amount / 5000.0 * unitsPerUsdt
     fun reset() { code = "USDT" }
     private fun convertedText(raw: String): String {
@@ -29,7 +29,7 @@ object AccountCurrency {
         val root = if (document is JsonArray) document.firstOrNull()?.jsonObject else document.jsonObject
         val currency = root?.get("currency")?.jsonObject ?: return false
         val candidate = currency["code"]?.jsonPrimitive?.content
-        if (currency["contract"]?.jsonPrimitive?.intOrNull != 1 || candidate !in setOf("USDT", "MMK", "FCFA", "ZMW")) return false
+        if (currency["contract"]?.jsonPrimitive?.intOrNull !in setOf(1, 2) || candidate !in setOf("USDT", "MMK", "FCFA", "ZMW", "NGN")) return false
         code = candidate!!
         true
     }.getOrDefault(false)
