@@ -22,7 +22,7 @@ function apiFixture(tokens) {
 test('mobile requests opt into account currency and consume a response owned by the same session',async()=>{
  const f=apiFixture(['token-a'])
  await f.api('/api/me',{auth:true})
- assert.equal(f.headers()['x-account-currency-contract'],'1')
+ assert.equal(f.headers()['x-account-currency-contract'],'2')
  assert.equal(f.observed(),1)
 })
 test('a response from a previous mobile session cannot overwrite the account currency',async()=>{

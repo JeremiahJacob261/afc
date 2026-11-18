@@ -49,9 +49,9 @@ import countryData from '../../pages/api/codeswithflag.json'
 import { findDestination, needsTransferOption, transferOptions } from '../../lib/depositFlow'
 
 const registrationCountries = [
-  ...countryData.countries.filter((country) => country.countryCode === 'MM'),
-  ...countryData.countries.filter((country) => country.countryCode === 'RU'),
-  ...countryData.countries.filter((country) => country.countryCode !== 'MM' && country.countryCode !== 'RU'),
+  ...countryData.countries.filter((country) => country.countryCode === 'US'),
+  ...countryData.countries.filter((country) => country.countryCode === 'GB'),
+  ...countryData.countries.filter((country) => country.countryCode !== 'US' && country.countryCode !== 'GB'),
 ]
 
 const referralCode = '000208'
@@ -793,7 +793,7 @@ function RegisterScreen({ onBack, onLogin, onSignedIn }) {
   const [form, setForm] = useState({
     username: '',
     email: '',
-    countrycode: '+95',
+    countrycode: '+1',
     phone: '',
     referral: referralCode,
     password: '',
@@ -804,7 +804,7 @@ function RegisterScreen({ onBack, onLogin, onSignedIn }) {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
   const dialogClose = useRef(null)
-  const [selectedCountry, setSelectedCountry] = useState('MM')
+  const [selectedCountry, setSelectedCountry] = useState('US')
 
   useEffect(() => { if (message) dialogClose.current?.focus() }, [message])
 

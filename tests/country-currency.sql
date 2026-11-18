@@ -11,7 +11,7 @@ SET LOCAL ROLE service_role;
 DO $$
 DECLARE fixture record; identity text; username text; result jsonb; code text; iso text;
 BEGIN
- FOR fixture IN SELECT * FROM (VALUES ('MM','+95','MMK'),('CI','+225','FCFA'),('CM','+237','FCFA'),('ZM','+260','ZMW'),('US','+1','USDT')) AS cases(country,dial,currency) LOOP
+ FOR fixture IN SELECT * FROM (VALUES ('MM','+95','MMK'),('CI','+225','FCFA'),('CM','+237','FCFA'),('ZM','+260','ZMW'),('NG','+234','NGN'),('US','+1','USDT'),('GB','+44','USDT')) AS cases(country,dial,currency) LOOP
   identity := gen_random_uuid()::text;
   username := 'currency_test_' || replace(identity,'-','');
   result := public.provision_country_profile_atomic(identity,username || '@example.invalid',username,'9123456789',fixture.dial,NULL,fixture.country);

@@ -34,7 +34,7 @@ private fun RegistrationCountryPicker(countryCode: String, enabled: Boolean, onS
         (0 until data.length()).map { index ->
             val item = data.getJSONObject(index)
             RegistrationCountry(item.getString("name"), item.getString("code"), item.getString("countryCode"))
-        }.sortedWith(compareBy<RegistrationCountry> { it.countryCode != "MM" }.thenBy { it.name })
+        }.sortedWith(compareBy<RegistrationCountry> { when (it.countryCode) { "US" -> 0; "GB" -> 1; else -> 2 } }.thenBy { it.name })
     }
     val selected = countries.firstOrNull { it.countryCode == countryCode } ?: countries.first()
     var open by remember { mutableStateOf(false) }

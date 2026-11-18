@@ -10,6 +10,7 @@ const { currencyForCountry, convertCurrency } = moduleObj.exports
 test('maps signup countries to their currencies', () => {
   assert.equal(currencyForCountry('mm'), 'MMK')
   assert.equal(currencyForCountry('ZM'), 'ZMW')
+  assert.equal(currencyForCountry('NG'), 'NGN')
   for (const code of ['BJ', 'BF', 'CI', 'GW', 'ML', 'NE', 'SN', 'TG', 'CM', 'CF', 'TD', 'CG', 'GQ', 'GA']) assert.equal(currencyForCountry(code), 'FCFA')
   assert.equal(currencyForCountry('US'), 'USDT')
 })
@@ -17,5 +18,6 @@ test('converts using the specified fixed rates', () => {
   assert.equal(convertCurrency(5000, 'MMK', 'USDT'), 1)
   assert.equal(convertCurrency(1, 'USDT', 'FCFA'), 600)
   assert.equal(convertCurrency(20, 'ZMW', 'MMK'), 5000)
+  assert.equal(convertCurrency(1, 'USDT', 'NGN'), 1350)
   assert.equal(convertCurrency(1, 'UNKNOWN', 'USDT'), null)
 })
