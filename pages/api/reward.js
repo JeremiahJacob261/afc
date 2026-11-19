@@ -1,4 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
+import { requireAdmin } from '@/lib/adminAuth';
+import { accountCurrency, convertCurrency } from '@/lib/currencyPolicy';
 import { NextResponse } from 'next/server';
 import axios from 'axios';
 import { headers } from 'next/headers'
@@ -43,7 +46,7 @@ export default async function handler(req, res) {
                 error: serializeError(rpcError),
             });
         }
-        if (checked) {
+        if (!error && checked) {
             console.log('[reward] notification:start', logContext);
             const { data: nata, error: nerror } = await supabase
                 .from('notification')
@@ -86,6 +89,16 @@ export default async function handler(req, res) {
             console.warn('[reward] request:unauthorized', logContext);
             res.status(401).json({ error: 'Unauthorized' });
             return;
+        }
+        requireAdmin(req);
+        if (body.amountCurrency) {
+            const { data: user, error } = await getSupabaseAdmin().from('users').select('currency_code,country_iso,countrycode').eq('username', id).maybeSingle();
+            if (error) throw error;
+            if (!user) return res.status(404).json({ error: 'User not found' });
+            const currency = body.amountCurrency === 'USD' ? 'USDT' : body.amountCurrency;
+            if (!['USDT', accountCurrency(user)].includes(currency) || !Number.isFinite(parsedReward) || parsedReward <= 0) return res.status(400).json({ error: 'Invalid reward amount or currency' });
+            reward = convertCurrency(parsedReward, currency, 'MMK');
+            if (!Number.isFinite(reward) || reward <= 0) return res.status(400).json({ error: 'Invalid reward amount' });
         }
         await inBal();
 

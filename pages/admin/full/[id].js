@@ -1,3 +1,4 @@
+import { accountCurrency, convertCurrency } from '@/lib/currencyPolicy'
 import { adminErrorMessage } from '@/lib/adminErrorMessage'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -63,6 +64,11 @@ function UserDetailSkeleton() {
 function formatNumber(value) {
   const number = Number(value || 0)
   return Number.isFinite(number) ? number.toFixed(2) : '0.00'
+}
+
+function formatCurrencyAmount(value) {
+  const number = Number(value)
+  return Number.isFinite(number) ? number.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 6 }) : '—'
 }
 
 function countryName(countryCode) {
@@ -160,7 +166,7 @@ export default function UserDetailModal() {
         setWonbet(result.wonbet || [])
         setLostbet(result.lostbet || [])
         setReferredby(result.referredby)
-        setBalance(result.user?.balance ?? '')
+        setBalance(result.user?.balance == null ? '' : String(convertCurrency(result.user.balance, 'MMK', 'USDT')))
         setTotalDeposits(result.user?.totald ?? '')
       } catch (error) {
         console.log(error)
@@ -187,6 +193,10 @@ export default function UserDetailModal() {
   }
 
   const updateBalance = async () => {
+    if (!balance.toString().trim() || !Number.isFinite(Number(balance)) || Number(balance) < 0) {
+      toast.error('Enter a valid balance in USD')
+      return
+    }
     try {
       const response = await fetch('/api/admin/user-action', {
         method: 'POST',
@@ -195,14 +205,15 @@ export default function UserDetailModal() {
           action: 'update-balance',
           username: datas?.username,
           newBalance: parseFloat(balance),
+          amountCurrency: 'USD',
         }),
       })
       const result = await response.json().catch(() => ({}))
       if (!response.ok) throw new Error(adminErrorMessage(result, 'Balance update failed'))
       setDatas((current) => ({
         ...current,
-        balance: parseFloat(balance),
-        isActive: isActiveMember(parseFloat(balance), current?.membershipBalanceThreshold),
+        balance: convertCurrency(parseFloat(balance), 'USDT', 'MMK'),
+        isActive: isActiveMember(convertCurrency(parseFloat(balance), 'USDT', 'MMK'), current?.membershipBalanceThreshold),
       }))
       setEditbal(false)
       toast.success('Balance updated')
@@ -518,18 +529,21 @@ export default function UserDetailModal() {
                   <div className="mt-5 rounded-3xl border border-white/10 bg-white/[0.06] p-4">
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                       <div>
-                        <p className="text-xs font-medium uppercase tracking-[0.14em] text-zinc-500">Balance</p>
+                        <p className="text-xs font-medium uppercase tracking-[0.14em] text-zinc-500">Balance (USD)</p>
                         {editbal ? (
                           <input
                             type="number"
                             value={balance}
+                            aria-label="Balance in USD"
+                            placeholder="Amount in USD"
                             onChange={(event) => setBalance(event.target.value)}
                             className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-lg font-semibold text-white outline-none focus:border-[#1BB6FF] sm:w-44"
                           />
                         ) : (
-                          <p className="mt-2 text-2xl font-semibold text-[#1BB6FF]">{formatNumber(datas.balance)} MMK</p>
+                          <p className="mt-2 text-2xl font-semibold text-[#1BB6FF]">{formatCurrencyAmount(convertCurrency(datas.balance, 'MMK', 'USDT'))} USD</p>
                         )}
                       </div>
+                      <p className="text-sm text-zinc-400">{formatCurrencyAmount(convertCurrency(editbal ? Number(balance) * 5000 : datas.balance, 'MMK', accountCurrency(datas)))} {accountCurrency(datas)}</p>
                       <div className="flex gap-2">
                         {editbal && (
                           <button

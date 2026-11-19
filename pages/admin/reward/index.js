@@ -1,3 +1,4 @@
+import { accountCurrency, convertCurrency } from '@/lib/currencyPolicy'
 import { adminErrorMessage } from '@/lib/adminErrorMessage'
 import Head from 'next/head'
 import { getI18nServerSideProps } from '@/lib/i18nServerSideProps';
@@ -5,11 +6,11 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import toast, { Toaster } from '@/lib/webToast'
 import { ArrowRight, BadgeDollarSign, Bell, Check, LockKeyhole, ReceiptText, UserRound, Wallet } from 'lucide-react'
-import { supabase } from '@/pages/api/supabase'
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 
 function formatAmount(value) {
   const number = Number(value || 0)
-  return Number.isFinite(number) ? number.toFixed(2) : '0.00'
+  return Number.isFinite(number) ? number.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 6 }) : '0.00'
 }
 
 function getRewardErrorMessage(result, response) {
@@ -18,9 +19,12 @@ function getRewardErrorMessage(result, response) {
   return status ? `${message} (${status})` : message
 }
 
-export default function Reward({ id = '', uid = '' }) {
+export default function Reward({ id = '', uid = '', currencyCode = 'USDT' }) {
   const router = useRouter()
   const [amount, setAmount] = useState('')
+  const [amountCurrency, setAmountCurrency] = useState('USD')
+  const currency = accountCurrency({ currency_code: currencyCode })
+  const amountMmk = convertCurrency(Number(amount || 0), amountCurrency === 'USD' ? 'USDT' : currency, 'MMK')
   const [reason, setReason] = useState('')
   const [password, setPassword] = useState('')
   const [checked, setChecked] = useState(true)
@@ -58,6 +62,7 @@ export default function Reward({ id = '', uid = '' }) {
         },
         body: JSON.stringify({
           reward: amount,
+          amountCurrency,
           reason,
           password,
           id,
@@ -136,7 +141,7 @@ export default function Reward({ id = '', uid = '' }) {
                       <p className="text-sm text-zinc-500">Reward amount</p>
                       <Wallet className="h-4 w-4 text-[#B96CFF]" />
                     </div>
-                    <p className="mt-3 text-2xl font-semibold text-white">{formatAmount(amount)} MMK</p>
+                    <p className="mt-3 text-2xl font-semibold text-white">{formatAmount(convertCurrency(amountMmk, 'MMK', 'USDT'))} USD<br /><span className="text-sm text-zinc-400">{formatAmount(convertCurrency(amountMmk, 'MMK', currency))} {currency}</span></p>
                   </article>
                   <article className="rounded-[22px] border border-white/10 bg-white/[0.05] p-4">
                     <div className="flex items-center justify-between gap-3">
@@ -171,7 +176,7 @@ export default function Reward({ id = '', uid = '' }) {
                         placeholder="0.00"
                         className="min-w-0 flex-1 bg-transparent text-lg font-semibold text-white outline-none placeholder:text-zinc-700"
                       />
-                      <span className="shrink-0 text-sm font-semibold text-zinc-500">MMK</span>
+                      <select aria-label="Reward currency" value={amountCurrency} onChange={event => setAmountCurrency(event.target.value)} className="bg-black text-white"><option value="USD">USD</option>{currency !== 'USDT' && <option value={currency}>{currency}</option>}</select>
                     </div>
                   </label>
 
@@ -278,9 +283,9 @@ export async function getServerSideProps(context) {
     }
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await getSupabaseAdmin()
     .from('users')
-    .select('username')
+    .select('username,currency_code,country_iso,countrycode')
     .eq('uid', uid)
     .limit(1)
 
@@ -293,6 +298,7 @@ export async function getServerSideProps(context) {
       ...i18nProps,
       id: data?.[0]?.username || '',
       uid,
+      currencyCode: accountCurrency(data?.[0] || {}),
     },
   }
 }
