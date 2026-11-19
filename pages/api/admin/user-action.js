@@ -1,3 +1,4 @@
+import { convertCurrency } from '@/lib/currencyPolicy'
 import { requireAdmin } from '@/lib/adminAuth'
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin'
 
@@ -39,8 +40,12 @@ export default async function handler(req, res) {
     const supabase = getSupabaseAdmin()
 
     if (action === 'update-balance') {
-      const amount = Number(newBalance)
-      if (!username || !Number.isFinite(amount)) {
+      if (req.body?.amountCurrency && req.body.amountCurrency !== 'USD') {
+        return res.status(400).json({ status: 'error', message: 'Unsupported balance currency' })
+      }
+      const input = Number(newBalance)
+      const amount = req.body?.amountCurrency === 'USD' ? convertCurrency(input, 'USDT', 'MMK') : input
+      if (!username || newBalance == null || String(newBalance).trim() === '' || !Number.isFinite(amount) || amount < 0) {
         return res.status(400).json({ status: 'error', message: 'Invalid balance update' })
       }
 
